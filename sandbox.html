@@ -6,11 +6,18 @@
 				function () {
 			
 			require(['src/rekapi.core.js'], function () {
+				var sandbox
+						,rekapi;
 				
+				sandbox = document.getElementById('sandbox');
+				rekapi = new Rekapi(sandbox);
+				
+				console.log(rekapi);
 			});
 		});
 	</script>
 </head>
 <body>
+	<canvas id="sandbox"></canvas>
 </body>
 </html>
