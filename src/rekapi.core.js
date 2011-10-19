@@ -1,14 +1,15 @@
 ;(function rekapiCore (global) {
   
   if (!_) {
-    throw 'underscore.js is required for Rekapi.';
+    throw 'underscore.js is required for Kapi.';
   }
   
   if (!Tweenable) {
-    throw 'shifty.js is required for Rekapi.';
+    throw 'shifty.js is required for Kapi.';
   }
   
-  var gr;
+  var gk
+      ,defaultConfig;
   
   /**
    * @param {HTMLCanvas} canvas
@@ -25,32 +26,44 @@
     return canvas[dimension];
   }
   
+  function noop () {
+    // NOOP!
+  }
+  
+  defaultConfig = {
+    'fps': 30
+  };
+  
   /**
    * @param {HTMLCanvas} canvas
-   * @param {Object} params
+   * @param {Object} config
    * @param {Object} events
    */
-  gr = global.Rekapi || function Rekapi (canvas, params, events) {
+  gk = global.Kapi || function Kapi (canvas, config, events) {
     this.canvas = canvas;
     this.canvas_context = canvas.getContext('2d');
+    
+    this.config = {};
+    _.extend(this.config, config);
+    _.defaults(this.config, defaultConfig);
     
     return this;
   };
   
-  gr.prototype.height = function (opt_height) {
+  gk.prototype.height = function (opt_height) {
     return canvas_dimension(this.canvas, 'height', opt_height);
   };
   
-  gr.prototype.width = function (opt_width) {
+  gk.prototype.width = function (opt_width) {
     return canvas_dimension(this.canvas, 'width', opt_width);
   };
   
   /**
-   * Get or set a style on the Rekapi canvas.
+   * Get or set a style on the Kapi canvas.
    * @param {string} styleName
    * @param {number|string} opt_styleValue The value to set for `styleName`
    */
-  gr.prototype.canvas_style = function (styleName, opt_styleValue) {
+  gk.prototype.canvas_style = function (styleName, opt_styleValue) {
     if (typeof opt_styleValue !== 'undefined') {
       this.canvas.style[styleName] = opt_styleValue;
     }
@@ -59,12 +72,25 @@
   }
   
   /**
-   * Gets the 2d context of the Rekapi's canvas.
+   * Gets the 2d context of the Kapi's canvas.
    */
-  gr.prototype.context = function () {
+  gk.prototype.context = function () {
     return this.canvas_context;
   };
   
-  global.Rekapi = gr;
+  
+  /**
+   * @param {Kapi.Actor} actor
+   * @param {Object} initialState
+   */
+  gk.prototype.add = function (actor, initialState) {
+    actor.set(initialState);
+  }
+  
+  _.extend(gk, {
+    'noop': noop
+  });
+  
+  global.Kapi = gk;
   
 } (this));

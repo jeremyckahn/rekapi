@@ -2,22 +2,35 @@
 <html>
 <head>
 	<script src="lib/require.js"></script><script>
-		require(['lib/underscore/underscore.js', 'lib/shifty/shifty.js'], 
+		require([
+		    'lib/underscore/underscore.js'
+		    ,'lib/shifty/shifty.js'], 
 				function () {
-			
+				  
 			require(['src/rekapi.core.js'], function () {
-				var sandbox
-						,rekapi;
-				
-				sandbox = document.getElementById('sandbox');
-				rekapi = new Rekapi(sandbox);
-				
-				rekapi.canvas_style('background', '#ddd');
-				rekapi.height(300);
-				rekapi.width(500);
-				
-				console.log(rekapi);
+			  require(['src/rekapi.actor.js'], function () {
+  				var sandbox
+  						,kapi
+  						,actor;
+
+  				sandbox = document.getElementById('sandbox');
+  				kapi = new Kapi(sandbox);
+
+  				kapi.canvas_style('background', '#ddd');
+  				kapi.height(300);
+  				kapi.width(500);
+  				
+  				actor = new Kapi.Actor(kapi);
+  				kapi.add(actor, {
+  				  x: 0
+  				  ,y: 0
+  				});
+
+  				console.log(kapi);
+  				console.log(actor);
+  			});
 			});
+			
 		});
 	</script>
 </head>
