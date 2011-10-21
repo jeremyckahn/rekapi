@@ -26,6 +26,17 @@
     return canvas[dimension];
   }
   
+  /**
+	 * Sorts an array numerically, from smallest to largest.
+	 * @param {Array} array The Array to sort.
+	 * @returns {Array} The sorted Array.
+	 */
+  function sortNumerically (array) {
+		return array.sort(function (a, b) {
+			return a - b;
+		});
+	}
+  
   function noop () {
     // NOOP!
   }
@@ -44,6 +55,8 @@
     this.canvas_context = canvas.getContext('2d');
     
     this.config = {};
+    this._actors = {};
+    this._drawOrder = [];
     _.extend(this.config, config);
     _.defaults(this.config, defaultConfig);
     
@@ -80,16 +93,37 @@
   
   
   /**
+   * @param {number} millisecond
+   */
+  gk.prototype.render = function (millisecond) {
+    var i, len
+        ,currentActor;
+    
+    len = this._drawOrder.length;
+    
+    for (i = 0; i < len; i++) {
+      currentActor = this._drawOrder[i];
+    }
+  };
+  
+  
+  /**
    * @param {Kapi.Actor} actor
    * @param {Object} initialState
    */
   gk.prototype.add = function (actor, initialState) {
     actor.set(initialState);
-  }
+    this._actors[actor.id] = actor;
+    this._drawOrder.push(actor.id);
+  };
   
-  _.extend(gk, {
+  gk.util = {};
+  
+  _.extend(gk.util, {
     'noop': noop
+    ,'sortNumerically': sortNumerically
   });
+  
   
   global.Kapi = gk;
   
