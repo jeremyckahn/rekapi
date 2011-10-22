@@ -97,22 +97,25 @@
    */
   gk.prototype.render = function (millisecond) {
     var i, len
-        ,currentActor;
+        ,currentActor
+        ,curr;
     
     len = this._drawOrder.length;
+    curr = Tweenable.util.now();
     
     for (i = 0; i < len; i++) {
-      currentActor = this._drawOrder[i];
+      currentActor = this._actors[this._drawOrder[i]];
+      currentActor.calculatePosition(millisecond);
     }
   };
   
   
   /**
    * @param {Kapi.Actor} actor
-   * @param {Object} initialState
+   * @param {Object} opt_initialState
    */
-  gk.prototype.add = function (actor, initialState) {
-    actor.set(initialState);
+  gk.prototype.add = function (actor, opt_initialState) {
+    actor.set(opt_initialState);
     this._actors[actor.id] = actor;
     this._drawOrder.push(actor.id);
   };

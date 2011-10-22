@@ -6,9 +6,29 @@
   gk = global.Kapi;
   actorCount = 0;
   
+  
   function getUniqueActorId () {
     return actorCount++;
   }
+  
+  
+  //TODO:  Oh noes, this is a linear search!  Maybe optimize it?
+  function getCurrentMillisecondRangeIndex (actor, millisecond) {
+    var i, len
+        ,list;
+    
+    list = actor._keyframeList;
+    len = list.length;
+    
+    for (i = 1; i < len; i++) {
+      if (list[i] > millisecond) {
+        return (i - 1);
+      }
+    }
+    
+    return -1;
+  }
+  
   
   gk.Actor = function Actor (kapi, opt_config) {
     opt_config = opt_config || {};
@@ -45,43 +65,38 @@
     return this;
   };
   
-  function getCurrentTimeRangeIndex (actor, millisecond) {
-    var i, len
-        ,list;
-    
-    list = actor._keyframeList;
-    len = list.length;
-    
-    for (i = 1; i < len; i++) {
-      if (list[i] > millisecond) {
-        return (i - 1);
-      }
-    }
-    
-    return -1;
-  }
   
-  
-  gk.Actor.calculatePosition = function (millisecond) {
-    var list
+  gk.Actor.prototype.calculatePosition = function (forMillisecond) {
+    var keyframeList
+        ,keyframes
+        ,delta
+        ,interpolatedPosition
         ,startMs
         ,endMs
-        ,timeRangeIndex
+        ,timeRangeIndexStart
         ,rangeFloor
-        ,rangeCeil;
+        ,rangeCeil
+        ,currentPosition;
         
-    list = this._keyframeList;
-    startMs = _.first(list);
-    endMs = _.last(list);
+    keyframeList = this._keyframeList;
+    startMs = _.first(keyframeList);
+    endMs = _.last(keyframeList);
     
-    if (startMs <= millisecond && millisecond <= endMs) {
-      timeRangeIndex = getCurrentTimeRangeIndex(this, millisecond);
-      rangeFloor = list[timeRangeIndex];
-      rangeCeil = list[timeRangeIndex + 1];
+    if (startMs <= forMillisecond && forMillisecond <= endMs) {
+      keyframes = this._keyframes;
+      timeRangeIndexStart = getCurrentMillisecondRangeIndex(this, 
+          forMillisecond);
+      rangeFloor = keyframeList[timeRangeIndexStart];
+      rangeCeil = keyframeList[timeRangeIndexStart + 1];
+      delta = rangeCeil - rangeFloor;
+      interpolatedPosition = (forMillisecond - rangeFloor) / delta;
       
-      if (rangeCeil) {
-        // Calculate the current position...
-      }
+      currentPosition = Tweenable.util.interpolate(
+          keyframes[keyframeList[timeRangeIndexStart]]
+          ,keyframes[keyframeList[timeRangeIndexStart + 1]]
+          ,interpolatedPosition);
+          
+      this.set(currentPosition);
       
     } else {
       this.set({});
