@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script src="lib/require.js"></script><script>
+	function onLoadAll () {
+	  var sandbox
+				,kapi
+				,actor;
+
+		sandbox = document.getElementById('sandbox');
+		kapi = new Kapi(sandbox);
+
+		kapi.canvas_style('background', '#ddd');
+		kapi.height(300);
+		kapi.width(500);
+		
+		actor = new Kapi.Actor(kapi, {
+		  'draw': function (canvas_context, state) {
+        canvas_context.beginPath();
+          canvas_context.arc(
+            this.x || 0,
+            this.y || 0,
+            this.radius || 0,
+            0,
+            Math.PI*2, 
+            true);
+          canvas_context.fillStyle = this.color || '#f0f';
+          canvas_context.fill();
+          canvas_context.closePath();
+
+          return this;
+		  }
+		});
+		
+		kapi.add(actor);
+		
+		actor.keyframe(0, {
+		  'x': 0
+		  ,'y': 0
+		}).keyframe(1000, {
+		  'x': 100
+		  ,'y':100
+		});
+		
+		console.log(kapi);
+		//kapi.render(500)
+		//console.log(actor.get());
+	}
+	
+		require([
+		    'lib/underscore/underscore.js'
+		    ,'lib/shifty/shifty.js'
+		    ,'lib/qunit/qunit/qunit.js'], 
+				function () {
+				  
+			require(['src/rekapi.core.js'], function () {
+			  require(['src/rekapi.actor.js'], function () {
+  				setTimeout(onLoadAll, 1);
+  			});
+			});
+			
+		});
+	</script>
+</head>
+<body>
+	<canvas id="sandbox"></canvas>
+</body>
+</html>
