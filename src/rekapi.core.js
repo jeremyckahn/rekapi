@@ -72,7 +72,7 @@
   
   
   defaultConfig = {
-    'fps': 20
+    'fps': 30
   };
   
   now = Tweenable.util.now;
@@ -192,10 +192,20 @@
     this._drawOrder.push(actor.id);
   };
   
+  
   gk.prototype.play = function () {
     this._loopTimestamp = now();
     tick(this);
   };
+  
+  gk.prototype.stop = function (alsoClear) {
+    clearTimeout(this._loopId);
+    
+    if (alsoClear === true) {
+      this.canvas_clear();
+    }
+  };
+  
   
   gk.util = {};
   

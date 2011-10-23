@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+	<script src="../lib/require.js"></script><script>
+	
+	require([
+	    '../lib/underscore/underscore.js'
+	    ,'../lib/shifty/shifty.js'
+	    ,'../lib/jquery.js'], 
+			function () {
+			  
+		require(['../src/rekapi.core.js'], function () {
+		  require(['../src/rekapi.actor.js'], function () {
+				setTimeout(setupTests, 1);
+			});
+		});
+		
+	});
+	
+	
+	
+	function setupTestKapi () {
+	  var sandbox
+				,kapi
+				,actor;
+
+		sandbox = document.getElementById('sandbox');
+		kapi = new Kapi(sandbox, {
+		  'fps': 60
+		});
+
+		kapi.canvas_style('background', '#ddd');
+		kapi.height(300);
+		kapi.width(500);
+		
+		return kapi;
+	}
+	
+	function  setupTestActor (forKapi) {
+	  var actor;
+	  
+	  actor = new Kapi.Actor(forKapi, {
+		  'draw': function (canvas_context, state) {
+        canvas_context.beginPath();
+          canvas_context.arc(
+            state.x || 0,
+            state.y || 0,
+            state.radius || 50,
+            0,
+            Math.PI*2, 
+            true);
+          canvas_context.fillStyle = state.color || '#f0f';
+          canvas_context.fill();
+          canvas_context.closePath();
+
+          return this;
+		  }
+		});
+		
+		forKapi.add(actor);
+		return actor;
+	}
+	
+	function setupTests () {
+	  
+	  var kapi;
+	  
+	  function killTest () {
+	    kapi && kapi.stop(true);
+	  }
+	  
+	  $('#kill-test').click(killTest);
+	  
+	  $('#basic-linear-tween').click(function () {
+	    var actor;
+
+      killTest();
+  	  kapi = setupTestKapi();
+  	  actor = setupTestActor(kapi);
+  	  
+  	  actor
+  		  .keyframe(0, {
+  		    'x': 0
+  		    ,'y': 0
+  		  })
+  		  .keyframe(1000, {
+  		    'x': 150
+  		    ,'y': 150
+  		  });
+
+  		kapi.play();
+	  });
+	};
+	
+	</script>
+</head>
+<body>
+	<canvas id="sandbox" style="background: #ddd; height: 300px; width: 500px; float: left;"></canvas>
+	<ul style="float: left;">
+	  <li><button id="kill-test">Kill test</button></li>
+	  <li><button id="basic-linear-tween">Basic linear tween</button></li>
+  </ul>
+</body>
+</html>
