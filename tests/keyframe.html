@@ -151,7 +151,7 @@
   	
   	
   	
-  	test('Correctly interpolate Actor positions at various positions mid-frame with non-related keyframes.', 
+  	test('Correctly interpolate Actor positions at various positions mid-frame with multiple keyframe ranges.', 
 	  function () {
 	    var testKapi
   	      ,testActor;
@@ -168,7 +168,18 @@
     		}).keyframe(2000, {
   		  'x': 100
   		  ,'y':100
+  		}).keyframe(3000, {
+  		  'x': 200
+  		  ,'y':200
   		});
+  		
+  		testActor.calculatePosition(500);
+
+  		equals(testActor.get().x, -50, 
+  		  'Value "x" was properly interpolated at position 0.5.');
+  		equals(testActor.get().y, -50, 
+  		  'Value "y" was properly interpolated at position 0.5.');
+  		
 
   		testActor.calculatePosition(1000);
 
@@ -191,7 +202,15 @@
   		equals(testActor.get().x, 100, 
   		  'Value "x" was properly interpolated at position 1.');
   		equals(testActor.get().y, 100, 
-  		  'Value "y" was properly interpolated at position 1.');	  
+  		  'Value "y" was properly interpolated at position 1.');
+  		  
+  		
+		  testActor.calculatePosition(2500);
+
+  		equals(testActor.get().x, 150, 
+  		  'Value "x" was properly interpolated at position 0.5.');
+  		equals(testActor.get().y, 150, 
+  		  'Value "y" was properly interpolated at position 0.5.');
   	});
 	}
 	</script>
