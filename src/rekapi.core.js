@@ -27,29 +27,29 @@
   }
   
   /**
-	 * Sorts an array numerically, from smallest to largest.
-	 * @param {Array} array The Array to sort.
-	 * @returns {Array} The sorted Array.
-	 */
+   * Sorts an array numerically, from smallest to largest.
+   * @param {Array} array The Array to sort.
+   * @returns {Array} The sorted Array.
+   */
   function sortNumerically (array) {
-		return array.sort(function (a, b) {
-			return a - b;
-		});
-	}
-	
-	function calculateCurrentMillisecond (kapi) {
-	  
-	}
-	
-	function renderCurrentMillisecond (kapi) {
-	  
-	}
-	
-	function tick (kapi) {
-	  kapi._loopId = setTimeout(function () {
-	    //kapi.render(now());
-	  }, 1000 / kapi.config.fps);
-	}
+    return array.sort(function (a, b) {
+      return a - b;
+    });
+  }
+  
+  function calculateCurrentMillisecond (kapi) {
+    
+  }
+  
+  function renderCurrentMillisecond (kapi) {
+    
+  }
+  
+  function tick (kapi) {
+    kapi._loopId = setTimeout(function () {
+      //kapi.render(now());
+    }, 1000 / kapi.config.fps);
+  }
   
   function noop () {
     // NOOP!
