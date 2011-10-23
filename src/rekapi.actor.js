@@ -21,7 +21,7 @@
     len = list.length;
     
     for (i = 1; i < len; i++) {
-      if (list[i] > millisecond) {
+      if (list[i] >= millisecond) {
         return (i - 1);
       }
     }
