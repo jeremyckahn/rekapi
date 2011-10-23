@@ -1,7 +1,8 @@
 ;(function rekapiActor (global) {
 
   var gk
-      ,actorCount;
+      ,actorCount
+      ,ActorMethods;
   
   gk = global.Kapi;
   actorCount = 0;
@@ -31,6 +32,7 @@
   
   
   gk.Actor = function Actor (kapi, opt_config) {
+    
     opt_config = opt_config || {};
     
     this.constructor.call(this, {
@@ -51,7 +53,10 @@
     return this;
   };
   
-  gk.Actor.prototype = Tweenable.prototype;
+  
+  ActorMethods = function () {};
+  ActorMethods.prototype = Tweenable.prototype;
+  gk.Actor.prototype = new ActorMethods();
   
   /**
    * @param {number} when
