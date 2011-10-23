@@ -9,7 +9,8 @@
   }
   
   var gk
-      ,defaultConfig;
+      ,defaultConfig
+      ,now;
   
   /**
    * @param {HTMLCanvas} canvas
@@ -71,8 +72,10 @@
   
   
   defaultConfig = {
-    'fps': 30
+    'fps': 20
   };
+  
+  now = Tweenable.util.now;
   
   /**
    * @param {HTMLCanvas} canvas
@@ -127,6 +130,11 @@
     return this.canvas.style[styleName];
   }
   
+  
+  gk.prototype.canvas_clear = function () {
+    this.context().clearRect(0, 0, this.width(), this.height());
+  };
+  
   /**
    * Gets the 2d context of the Kapi's canvas.
    */
@@ -141,16 +149,22 @@
   gk.prototype.render = function (millisecond) {
     var i, len
         ,currentActor
-        ,curr;
+        ,curr
+        ,canvas_context;
     
     len = this._drawOrder.length;
-    curr = Tweenable.util.now();
+    curr = now();
+    canvas_context = this.context();
+    this.canvas_clear();
     
     for (i = 0; i < len; i++) {
       currentActor = this._actors[this._drawOrder[i]];
-      currentActor.calculatePosition(millisecond);
+      currentActor
+        .calculatePosition(millisecond)
+        .draw(canvas_context, currentActor.get());
     }
   };
+  
   
   gk.prototype.updateInternalState = function () {
     var allKeyframeLists;

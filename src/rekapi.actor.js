@@ -112,6 +112,7 @@
       this.set({});
     }
     
+    return this;
   };
 
   

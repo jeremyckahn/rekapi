@@ -19,13 +19,13 @@
 		  'draw': function (canvas_context, state) {
         canvas_context.beginPath();
           canvas_context.arc(
-            this.x || 0,
-            this.y || 0,
-            this.radius || 0,
+            state.x || 0,
+            state.y || 0,
+            state.radius || 50,
             0,
             Math.PI*2, 
             true);
-          canvas_context.fillStyle = this.color || '#f0f';
+          canvas_context.fillStyle = state.color || '#f0f';
           canvas_context.fill();
           canvas_context.closePath();
 
@@ -36,6 +36,18 @@
 		kapi.add(actor);
 		window.kapi = kapi;
 		console.log(kapi);
+		
+		actor
+		  .keyframe(0, {
+		    'x': 0
+		    ,'y': 0
+		  })
+		  .keyframe(1000, {
+		    'x': 150
+		    ,'y': 150
+		  })
+		  
+		kapi.play()
 	}
 	
 		require([
