@@ -1,8 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<script src="lib/require.js"></script><script>
-	function onLoadAll () {
+  <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+	<script src="../lib/require.js"></script><script>
+	
+	require([
+	    '../lib/underscore/underscore.js'
+	    ,'../lib/shifty/shifty.js'], 
+			function () {
+			  
+		require(['../src/rekapi.core.js'], function () {
+		  require(['../src/rekapi.actor.js'], function () {
+				setTimeout(runTests, 1);
+			});
+		});
+		
+	});
+	
+	function setupTestKapi () {
 	  var sandbox
 				,kapi
 				,actor;
@@ -14,7 +30,13 @@
 		kapi.height(300);
 		kapi.width(500);
 		
-		actor = new Kapi.Actor(kapi, {
+		return kapi;
+	}
+	
+	function  setupTestActor (forKapi) {
+	  var actor;
+	  
+	  actor = new Kapi.Actor(forKapi, {
 		  'draw': function (canvas_context, state) {
         canvas_context.beginPath();
           canvas_context.arc(
@@ -32,37 +54,43 @@
 		  }
 		});
 		
-		kapi.add(actor);
-		
-		actor.keyframe(0, {
-		  'x': 0
-		  ,'y': 0
-		}).keyframe(1000, {
-		  'x': 100
-		  ,'y':100
-		});
-		
-		console.log(kapi);
-		//kapi.render(500)
-		//console.log(actor.get());
+		forKapi.add(actor);
+		return actor;
 	}
 	
-		require([
-		    'lib/underscore/underscore.js'
-		    ,'lib/shifty/shifty.js'
-		    ,'lib/qunit/qunit/qunit.js'], 
-				function () {
-				  
-			require(['src/rekapi.core.js'], function () {
-			  require(['src/rekapi.actor.js'], function () {
-  				setTimeout(onLoadAll, 1);
-  			});
-			});
-			
-		});
+	function runTests () {
+	  
+	  test('Correctly interpolate Actor positions mid-frame.', function () {
+	    var testKapi
+  	      ,testActor;
+
+  	  testKapi = setupTestKapi();
+  	  testActor = setupTestActor(testKapi);
+  	  
+  	  
+  	  testActor.keyframe(0, {
+  		  'x': 0
+  		  ,'y': 0
+  		}).keyframe(1000, {
+  		  'x': 100
+  		  ,'y':100
+  		});
+  		
+  		testActor.calculatePosition(500);
+  		
+  		equals(testActor.get().x, 50, 'Value "x" was properly interpolated to 0.5.');
+  		equals(testActor.get().y, 50, 'Value "y" was properly interpolated to 0.5.');
+	  });
+	}
 	</script>
 </head>
 <body>
+  <h1 id="qunit-header"><a href="https://github.com/jeremyckahn/shifty">Shifty</a></h1>
+   <h2 id="qunit-banner"></h2>
+   <div id="qunit-testrunner-toolbar"></div>
+   <h2 id="qunit-userAgent"></h2>
+   <ol id="qunit-tests"></ol>
+   <div id="qunit-fixture"></div>
 	<canvas id="sandbox"></canvas>
 </body>
 </html>
