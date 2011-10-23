@@ -76,14 +76,14 @@
         ,endMs
         ,timeRangeIndexStart
         ,rangeFloor
-        ,rangeCeil
-        ,currentPosition;
+        ,rangeCeil;
         
     keyframeList = this._keyframeList;
     startMs = _.first(keyframeList);
     endMs = _.last(keyframeList);
     
     if (startMs <= forMillisecond && forMillisecond <= endMs) {
+      
       keyframes = this._keyframes;
       timeRangeIndexStart = getCurrentMillisecondRangeIndex(this, 
           forMillisecond);
@@ -92,13 +92,11 @@
       delta = rangeCeil - rangeFloor;
       interpolatedPosition = (forMillisecond - rangeFloor) / delta;
       
-      currentPosition = Tweenable.util.interpolate(
-          keyframes[keyframeList[timeRangeIndexStart]]
-          ,keyframes[keyframeList[timeRangeIndexStart + 1]]
-          ,interpolatedPosition);
-          
-      this.set(currentPosition);
-      
+      this
+        .set(keyframes[keyframeList[timeRangeIndexStart]])
+        .interpolate(keyframes[keyframeList[timeRangeIndexStart + 1]],
+            interpolatedPosition);
+                
     } else {
       this.set({});
     }
