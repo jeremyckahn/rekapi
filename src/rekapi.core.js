@@ -143,6 +143,8 @@
     }, this);
     
     this._animationLength = Math.max.apply(Math, allKeyframeLists);
+    
+    return this;
   };
   
   

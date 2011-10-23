@@ -74,8 +74,6 @@
   	    .keyframe(1000, {})
   	    .keyframe(2000, {});
   	
-  	  testKapi.updateInternalState();
-  	  
   	  equals(testKapi.animationLength(), 2000, 
   	      'Length of the animation was calculated.');
 	  });
@@ -98,8 +96,6 @@
 	    testActor2
   	    .keyframe(0, {})
   	    .keyframe(5000, {});
-  	
-  	  testKapi.updateInternalState();
   	  
   	  equals(testKapi.animationLength(), 5000, 
   	      'Length of the animation was calculated.');

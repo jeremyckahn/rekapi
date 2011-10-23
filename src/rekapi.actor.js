@@ -61,6 +61,7 @@
     this._keyframes[when] = position;
     this._keyframeList.push(when);
     gk.util.sortNumerically(this._keyframeList);
+    this.kapi.updateInternalState();
     
     return this;
   };
