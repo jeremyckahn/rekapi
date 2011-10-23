@@ -35,6 +35,7 @@
     
     opt_config = opt_config || {};
     
+    // Steal the `Tweenable` constructor.
     this.constructor.call(this, {
       'fps': kapi.config.fps
       ,'initialState': opt_config.initialState
@@ -54,9 +55,14 @@
   };
   
   
+  // Kind of a fun way to set up an inheritance chain.  `ActorMethods` prevents
+  // methods on `Actor.prototype` from polluting `Tweenable`'s prototype with
+  // `Actor` specific methods.
   ActorMethods = function () {};
   ActorMethods.prototype = Tweenable.prototype;
   gk.Actor.prototype = new ActorMethods();
+  // But the magic doesn't stop here!  `Actor`'s constructor steals the
+  // `Tweenable` constuctor.
   
   /**
    * @param {number} when
