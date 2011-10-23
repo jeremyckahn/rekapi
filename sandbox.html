@@ -35,17 +35,7 @@
 		
 		kapi.add(actor);
 		
-		actor.keyframe(0, {
-		  'x': 0
-		  ,'y': 0
-		}).keyframe(1000, {
-		  'x': 100
-		  ,'y':100
-		});
-		
-		console.log(kapi);
-		//kapi.render(500)
-		//console.log(actor.get());
+		window.kapi = kapi;
 	}
 	
 		require([

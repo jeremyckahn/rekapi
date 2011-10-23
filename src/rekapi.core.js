@@ -74,6 +74,7 @@
     
     this._loopId = null;
     this._loopTimestamp = null;
+    this._animationLength = null;
     
     _.extend(this.config, config);
     _.defaults(this.config, defaultConfig);
@@ -125,6 +126,19 @@
       currentActor = this._actors[this._drawOrder[i]];
       currentActor.calculatePosition(millisecond);
     }
+  };
+  
+  gk.prototype.updateInternalState = function () {
+    var allKeyframeLists;
+        
+    allKeyframeLists = [];
+        
+    _.each(this._drawOrder, function (i) {
+      allKeyframeLists = allKeyframeLists.concat(allKeyframeLists,
+          this._actors[i]._keyframeList);
+    }, this);
+    
+    this._animationLength = Math.max.apply(Math, allKeyframeLists);
   };
   
   
