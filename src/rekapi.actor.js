@@ -114,4 +114,9 @@
     
   };
 
+  
+  gk.Actor.prototype.keyframeList = function () {
+    return this._keyframeList;
+  }
+
 } (this));

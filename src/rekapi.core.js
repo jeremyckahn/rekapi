@@ -26,6 +26,7 @@
     return canvas[dimension];
   }
   
+  
   /**
    * Sorts an array numerically, from smallest to largest.
    * @param {Array} array The Array to sort.
@@ -37,23 +38,37 @@
     });
   }
   
+  
   function calculateCurrentMillisecond (kapi) {
+    var currentMillisecond;
     
+    //TODO: Some more work needs to be done in order to prevent auto-looping.
+    currentMillisecond = (now() - kapi._loopTimestamp) % kapi._animationLength;
+    
+    return currentMillisecond;
   }
   
+  
   function renderCurrentMillisecond (kapi) {
+    var currentMillisecond;
     
+    currentMillisecond = calculateCurrentMillisecond(kapi);
+    kapi.render(currentMillisecond);
   }
+  
   
   function tick (kapi) {
     kapi._loopId = setTimeout(function () {
-      //kapi.render(now());
+      renderCurrentMillisecond(kapi);
+      tick(kapi);
     }, 1000 / kapi.config.fps);
   }
+  
   
   function noop () {
     // NOOP!
   }
+  
   
   defaultConfig = {
     'fps': 30
@@ -72,8 +87,13 @@
     this._actors = {};
     this._drawOrder = [];
     
+    // The setTimeout ID of `tick`
     this._loopId = null;
+    
+    // The UNIX time at which the animation loop started
     this._loopTimestamp = null;
+    
+    // Millisecond duration of the animation
     this._animationLength = null;
     
     _.extend(this.config, config);
@@ -139,7 +159,7 @@
         
     _.each(this._drawOrder, function (i) {
       allKeyframeLists = allKeyframeLists.concat(allKeyframeLists,
-          this._actors[i]._keyframeList);
+          this._actors[i].keyframeList());
     }, this);
     
     this._animationLength = Math.max.apply(Math, allKeyframeLists);
