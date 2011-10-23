@@ -36,6 +36,20 @@
 			return a - b;
 		});
 	}
+	
+	function calculateCurrentMillisecond (kapi) {
+	  
+	}
+	
+	function renderCurrentMillisecond (kapi) {
+	  
+	}
+	
+	function tick (kapi) {
+	  kapi._loopId = setTimeout(function () {
+	    //kapi.render(now());
+	  }, 1000 / kapi.config.fps);
+	}
   
   function noop () {
     // NOOP!
@@ -57,6 +71,10 @@
     this.config = {};
     this._actors = {};
     this._drawOrder = [];
+    
+    this._loopId = null;
+    this._loopTimestamp = null;
+    
     _.extend(this.config, config);
     _.defaults(this.config, defaultConfig);
     
@@ -118,6 +136,11 @@
     actor.set(opt_initialState);
     this._actors[actor.id] = actor;
     this._drawOrder.push(actor.id);
+  };
+  
+  gk.prototype.play = function () {
+    this._loopTimestamp = now();
+    tick(this);
   };
   
   gk.util = {};
