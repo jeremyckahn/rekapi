@@ -90,6 +90,10 @@
     return canvas_dimension(this.canvas, 'width', opt_width);
   };
   
+  gk.prototype.animationLength = function () {
+    return this._animationLength;
+  };
+  
   /**
    * Get or set a style on the Kapi canvas.
    * @param {string} styleName

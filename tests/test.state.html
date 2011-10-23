@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+	<script src="../lib/require.js"></script><script>
+	
+	require([
+	    '../lib/underscore/underscore.js'
+	    ,'../lib/shifty/shifty.js'], 
+			function () {
+			  
+		require(['../src/rekapi.core.js'], function () {
+		  require(['../src/rekapi.actor.js'], function () {
+				setTimeout(runTests, 1);
+			});
+		});
+		
+	});
+	
+	function setupTestKapi () {
+	  var sandbox
+				,kapi
+				,actor;
+
+		sandbox = document.getElementById('sandbox');
+		kapi = new Kapi(sandbox);
+
+		kapi.canvas_style('background', '#ddd');
+		kapi.height(300);
+		kapi.width(500);
+		
+		return kapi;
+	}
+	
+	function  setupTestActor (forKapi) {
+	  var actor;
+	  
+	  actor = new Kapi.Actor(forKapi, {
+		  'draw': function (canvas_context, state) {
+        canvas_context.beginPath();
+          canvas_context.arc(
+            this.x || 0,
+            this.y || 0,
+            this.radius || 0,
+            0,
+            Math.PI*2, 
+            true);
+          canvas_context.fillStyle = this.color || '#f0f';
+          canvas_context.fill();
+          canvas_context.closePath();
+
+          return this;
+		  }
+		});
+		
+		forKapi.add(actor);
+		return actor;
+	}
+	
+	function runTests () {
+	  
+	  module("Internal state");
+	  
+	  test('Calculate animation length with one Actor', function () {
+	    var testKapi
+  	      ,testActor1;
+
+  	  testKapi = setupTestKapi();
+  	  testActor1 = setupTestActor(testKapi);
+  	  
+  	  testActor1
+  	    .keyframe(0, {})
+  	    .keyframe(1000, {})
+  	    .keyframe(2000, {});
+  	
+  	  testKapi.updateInternalState();
+  	  
+  	  equals(testKapi.animationLength(), 2000, 
+  	      'Length of the animation was calculated.');
+	  });
+	  
+	  
+	  test('Calculate animation length with multiple Actors', function () {
+	    var testKapi
+  	      ,testActor1
+  	      ,testActor2;
+
+  	  testKapi = setupTestKapi();
+  	  testActor1 = setupTestActor(testKapi);
+  	  testActor2 = setupTestActor(testKapi);
+  	  
+  	  testActor1
+  	    .keyframe(0, {})
+  	    .keyframe(1000, {})
+  	    .keyframe(2000, {});
+  	    
+	    testActor2
+  	    .keyframe(0, {})
+  	    .keyframe(5000, {});
+  	
+  	  testKapi.updateInternalState();
+  	  
+  	  equals(testKapi.animationLength(), 5000, 
+  	      'Length of the animation was calculated.');
+	  });
+	}
+	</script>
+</head>
+<body>
+  <h1 id="qunit-header"><a href="https://github.com/jeremyckahn/shifty">Shifty</a></h1>
+   <h2 id="qunit-banner"></h2>
+   <div id="qunit-testrunner-toolbar"></div>
+   <h2 id="qunit-userAgent"></h2>
+   <ol id="qunit-tests"></ol>
+   <div id="qunit-fixture"></div>
+	<canvas id="sandbox"></canvas>
+</body>
+</html>
