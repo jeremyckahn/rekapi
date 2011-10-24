@@ -74,25 +74,33 @@
   gk.Actor.prototype.keyframe = function keyframe (when, position, easing) {
     var originalEasingString;
     
-    if (!easing) {
-      easing = DEFAULT_EASING;
-    }
+    // This code will be used.  Other work needs to be done beforehand, though.
+    //if (!easing) {
+    //  easing = DEFAULT_EASING;
+    //}
+    //
+    //if (typeof easing === 'string') {
+    //  originalEasingString = easing;
+    //  easing = {};
+    //  _.each(position, function (positionVal, positionName) {
+    //    easing[positionName] = originalEasingString;
+    //  });
+    //}
+    //
+    //
+    //// If `easing` was passed as an Object, this will fill in any missing
+    //// easing properties with the default equation.
+    //_.each(position, function (positionVal, positionName) {
+    //  easing[positionName] = easing[positionName] || DEFAULT_EASING;
+    //});
     
-    if (typeof easing === 'string') {
-      originalEasingString = easing;
-      easing = {};
-      _.each(position, function (positionVal, positionName) {
-        easing[positionName] = originalEasingString;
-      });
-    }
+    //TODO: Remove this and replace it with the above code when it is usable.
+    easing = easing || DEFAULT_EASING;
     
-    // If `easing` was passed as an Object, this will fill in any missing
-    // easing properties with the default equation.
-    _.each(position, function (positionVal, positionName) {
-      easing[positionName] = easing[positionName] || DEFAULT_EASING;
-    });
-    
-    this._keyframes[when] = position;
+    this._keyframes[when] = {
+      'position': position
+      ,'easing': easing
+    };
     this._keyframeList.push(when);
     gk.util.sortNumerically(this._keyframeList);
     this.kapi.updateInternalState();
@@ -133,9 +141,10 @@
       interpolatedPosition = (forMillisecond - rangeFloor) / delta;
       
       this
-        .set(keyframes[keyframeList[timeRangeIndexStart]])
-        .interpolate(keyframes[keyframeList[timeRangeIndexStart + 1]],
-            interpolatedPosition);
+        .set(keyframes[keyframeList[timeRangeIndexStart]].position)
+        .interpolate(keyframes[keyframeList[timeRangeIndexStart + 1]].position,
+            interpolatedPosition,
+            keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
                 
     } else {
       this.set({});
