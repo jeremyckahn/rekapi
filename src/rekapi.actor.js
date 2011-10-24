@@ -1,6 +1,7 @@
 ;(function rekapiActor (global) {
 
-  var gk
+  var DEFAULT_EASING = 'linear'
+      ,gk
       ,actorCount
       ,ActorMethods;
   
@@ -67,8 +68,30 @@
   /**
    * @param {number} when
    * @param {Object} position
+   * @param {string|Object} 
+   * @returns {Kapi.Actor} easing
    */
-  gk.Actor.prototype.keyframe = function keyframe (when, position) {
+  gk.Actor.prototype.keyframe = function keyframe (when, position, easing) {
+    var originalEasingString;
+    
+    if (!easing) {
+      easing = DEFAULT_EASING;
+    }
+    
+    if (typeof easing === 'string') {
+      originalEasingString = easing;
+      easing = {};
+      _.each(position, function (positionVal, positionName) {
+        easing[positionName] = originalEasingString;
+      });
+    }
+    
+    // If `easing` was passed as an Object, this will fill in any missing
+    // easing properties with the default equation.
+    _.each(position, function (positionVal, positionName) {
+      easing[positionName] = easing[positionName] || DEFAULT_EASING;
+    });
+    
     this._keyframes[when] = position;
     this._keyframeList.push(when);
     gk.util.sortNumerically(this._keyframeList);
@@ -78,6 +101,12 @@
   };
   
   
+  /**
+   * Calculates and sets the Actor's position at a particular millisecond in the
+   * animation.
+   * @param {number} forMillisecond
+   * @returns {Kapi.Actor}
+   */
   gk.Actor.prototype.calculatePosition = function (forMillisecond) {
     var keyframeList
         ,keyframes
@@ -116,6 +145,10 @@
   };
 
   
+  /**
+   * Exposes the Actor's ordered list of keyframe times.
+   * @returns {Array}
+   */
   gk.Actor.prototype.keyframeList = function () {
     return this._keyframeList;
   }
