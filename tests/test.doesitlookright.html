@@ -85,12 +85,12 @@
   	  
   	  actor
   		  .keyframe(0, {
-  		    'x': 0
-  		    ,'y': 0
+  		    'x': 50
+  		    ,'y': 50
   		  })
   		  .keyframe(1500, {
-  		    'x': 150
-  		    ,'y': 150
+  		    'x': 200
+  		    ,'y': 200
   		  });
 
   		kapi.play();
@@ -107,13 +107,41 @@
   	  
   	  actor
   		  .keyframe(0, {
-  		    'x': 0
-  		    ,'y': 0
+  		    'x': 50
+  		    ,'y': 50
   		  }, 'easeOutExpo')
   		  .keyframe(1500, {
-  		    'x': 150
-  		    ,'y': 150
+  		    'x': 200
+  		    ,'y': 200
   		  }, 'easeOutExpo');
+
+  		kapi.play();
+  		console.log(kapi);
+	  });
+	  
+	  
+	  $('#multi-eased-tween').click(function () {
+	    var actor;
+
+      killTest();
+  	  kapi = setupTestKapi();
+  	  actor = setupTestActor(kapi);
+  	  
+  	  actor
+  		  .keyframe(0, {
+  		    'x': 50
+  		    ,'y': 50
+  		  }, {
+  		    'x': 'easeOutExpo'
+  		    ,'y': 'easeInSine'
+  		  })
+  		  .keyframe(1500, {
+  		    'x': 200
+  		    ,'y': 200
+  		  }, {
+  		    'x': 'easeOutExpo'
+  		    ,'y': 'easeInSine'
+  		  });
 
   		kapi.play();
   		console.log(kapi);
@@ -128,6 +156,7 @@
 	  <li><button id="kill-test">Kill test</button></li>
 	  <li><button id="basic-linear-tween">Basic linear tween loop</button></li>
 	  <li><button id="basic-eased-tween">Basic eased tween loop</button></li>
+	  <li><button id="multi-eased-tween">Tween loop with multiple easings</button></li>
   </ul>
 </body>
 </html>

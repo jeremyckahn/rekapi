@@ -94,9 +94,6 @@
       easing[positionName] = easing[positionName] || DEFAULT_EASING;
     });
     
-    //TODO: Remove this and replace it with the above code when it is usable.
-    //easing = easing || DEFAULT_EASING;
-    
     this._keyframes[when] = {
       'position': position
       ,'easing': easing
