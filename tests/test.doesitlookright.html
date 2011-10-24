@@ -12,7 +12,8 @@
 			function () {
 			  
 		require(['../src/rekapi.core.js'], function () {
-		  require(['../src/rekapi.actor.js'], function () {
+		  require(['../src/rekapi.actor.js'
+		          ,'../src/rekapi.canvas.js'], function () {
 				setTimeout(setupTests, 1);
 			});
 		});
@@ -28,7 +29,7 @@
 
 		sandbox = document.getElementById('sandbox');
 		kapi = new Kapi(sandbox, {
-		  'fps': 60
+		  'fps': 30
 		});
 
 		kapi.canvas_style('background', '#ddd');
@@ -85,7 +86,7 @@
   		    'x': 0
   		    ,'y': 0
   		  })
-  		  .keyframe(1000, {
+  		  .keyframe(1500, {
   		    'x': 150
   		    ,'y': 150
   		  });
@@ -100,7 +101,7 @@
 	<canvas id="sandbox" style="background: #ddd; height: 300px; width: 500px; float: left;"></canvas>
 	<ul style="float: left;">
 	  <li><button id="kill-test">Kill test</button></li>
-	  <li><button id="basic-linear-tween">Basic linear tween</button></li>
+	  <li><button id="basic-linear-tween">Basic linear tween loop</button></li>
   </ul>
 </body>
 </html>
