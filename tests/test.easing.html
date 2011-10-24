@@ -61,46 +61,56 @@
 	
 	function runTests () {
 	  
-	  module("Internal state");
+	  module('Easing accuracy');
 	  
-	  test('Calculate animation length with one Actor', function () {
-	    var testKapi
-  	      ,testActor1;
-
-  	  testKapi = setupTestKapi();
-  	  testActor1 = setupTestActor(testKapi);
-  	  
-  	  testActor1
-  	    .keyframe(0, {})
-  	    .keyframe(1000, {})
-  	    .keyframe(2000, {});
-  	
-  	  equals(testKapi.animationLength(), 2000, 
-  	      'Length of the animation was calculated.');
+	  _.each(Tweenable.prototype.formula, function (fn, name) {
+	    test('Correctly calculate the key positions of Tweenable.prototype.formula.' + name, 
+  	  function () {
+  	    var testKapi
+    	      ,testActor
+    	      ,tweenableComparator;
+        
+    	  testKapi = setupTestKapi();
+    	  testActor = setupTestActor(testKapi);
+    	  
+    	  testActor.keyframe(0, {
+    	    'n': 0
+    	  }, name).keyframe(1000, {
+      	  'n': 100
+      	}, name);
+      	
+      	tweenableComparator = Tweenable.util.interpolate({
+      	  'n': 0
+      	}, {
+      	  'n': 100
+      	}, 0, name);
+      	
+    	  testActor.calculatePosition(0);
+    	  equal(testActor.get().n, tweenableComparator.n, 'Interpolated 0.0');
+      	
+      	
+      	tweenableComparator = Tweenable.util.interpolate({
+      	  'n': 0
+      	}, {
+      	  'n': 100
+      	}, 0.5, name);
+      	
+    	  testActor.calculatePosition(500);
+    	  equal(testActor.get().n, tweenableComparator.n, 'Interpolated 0.5');
+    	  
+    	  
+    	  tweenableComparator = Tweenable.util.interpolate({
+      	  'n': 0
+      	}, {
+      	  'n': 100
+      	}, 1, name);
+      	
+    	  testActor.calculatePosition(1000);
+    	  equal(testActor.get().n, tweenableComparator.n, 'Interpolated 1.0');
+    	  
+    	});
 	  });
 	  
-	  
-	  test('Calculate animation length with multiple Actors', function () {
-	    var testKapi
-  	      ,testActor1
-  	      ,testActor2;
-
-  	  testKapi = setupTestKapi();
-  	  testActor1 = setupTestActor(testKapi);
-  	  testActor2 = setupTestActor(testKapi);
-  	  
-  	  testActor1
-  	    .keyframe(0, {})
-  	    .keyframe(1000, {})
-  	    .keyframe(2000, {});
-  	    
-	    testActor2
-  	    .keyframe(0, {})
-  	    .keyframe(5000, {});
-  	  
-  	  equals(testKapi.animationLength(), 5000, 
-  	      'Length of the animation was calculated.');
-	  });
 	}
 	</script>
 </head>
