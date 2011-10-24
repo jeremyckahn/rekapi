@@ -75,27 +75,27 @@
     var originalEasingString;
     
     // This code will be used.  Other work needs to be done beforehand, though.
-    //if (!easing) {
-    //  easing = DEFAULT_EASING;
-    //}
-    //
-    //if (typeof easing === 'string') {
-    //  originalEasingString = easing;
-    //  easing = {};
-    //  _.each(position, function (positionVal, positionName) {
-    //    easing[positionName] = originalEasingString;
-    //  });
-    //}
-    //
-    //
-    //// If `easing` was passed as an Object, this will fill in any missing
-    //// easing properties with the default equation.
-    //_.each(position, function (positionVal, positionName) {
-    //  easing[positionName] = easing[positionName] || DEFAULT_EASING;
-    //});
+    if (!easing) {
+      easing = DEFAULT_EASING;
+    }
+    
+    if (typeof easing === 'string') {
+      originalEasingString = easing;
+      easing = {};
+      _.each(position, function (positionVal, positionName) {
+        easing[positionName] = originalEasingString;
+      });
+    }
+    
+    
+    // If `easing` was passed as an Object, this will fill in any missing
+    // easing properties with the default equation.
+    _.each(position, function (positionVal, positionName) {
+      easing[positionName] = easing[positionName] || DEFAULT_EASING;
+    });
     
     //TODO: Remove this and replace it with the above code when it is usable.
-    easing = easing || DEFAULT_EASING;
+    //easing = easing || DEFAULT_EASING;
     
     this._keyframes[when] = {
       'position': position

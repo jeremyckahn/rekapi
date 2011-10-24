@@ -7,15 +7,24 @@
   gk = global.Kapi;
 	
 	function getInterpolatedValues (from, current, to, position, easing) {
-		return global.Tweenable.util.tweenProps(position, {
-			'originalState': from
-			,'to': to
-			,'timestamp': 0
-			,'duration': 1
-			,'easingFunc': global.Tweenable.prototype.formula[easing] || global.Tweenable.prototype.formula.linear
-		}, {
-			'current': current
-		});
+	  
+	  var interpolatedValues;
+	  
+	  interpolatedValues = {};
+	  
+	  _.each(from, function (val, name) {
+	    interpolatedValues[name] = global.Tweenable.util.tweenProps(position, {
+  			'originalState': from
+  			,'to': to
+  			,'timestamp': 0
+  			,'duration': 1
+  			,'easingFunc': Tweenable.prototype.formula[easing[name]]
+  		}, {
+  			'current': current
+  		})[name];
+	  });
+	  
+		return interpolatedValues;
 	}
 
 	
@@ -36,7 +45,7 @@
 		// Call any data type filters
 		global.Tweenable.util.applyFilter('tweenCreated', current, [current, from, to]);
 		global.Tweenable.util.applyFilter('beforeTween', current, [current, from, to]);
-		interpolatedValues = getInterpolatedValues (from, current, to, position, easing);
+		interpolatedValues = getInterpolatedValues(from, current, to, position, easing);
 		global.Tweenable.util.applyFilter('afterTween', interpolatedValues, [interpolatedValues, from, to]);
 		
 		return interpolatedValues;
