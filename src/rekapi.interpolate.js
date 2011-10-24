@@ -32,14 +32,6 @@
 	  var current,
 			interpolatedValues;
 		
-		// Function was passed a configuration object, extract the values
-		if (from && from.from) {
-			to = from.to;
-			position = from.position;
-			easing = from.easing;
-			from = from.from;
-		}
-		
 		current = global.Tweenable.util.simpleCopy({}, from);
 		
 		// Call any data type filters
