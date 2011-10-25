@@ -122,7 +122,8 @@
 	  });
 	  
 	  
-	  module('Object easing parameter');
+	  
+	  module('Easing Object parameters');
 	  
 	  _.each(Tweenable.prototype.formula, function (fn, name) {
 	    test('Correctly calculate the key positions of Tweenable.prototype.formula.' + name, 
@@ -184,6 +185,73 @@
     	  testActor.calculatePosition(1000);
     	  equal(testActor.get().n, tweenableComparator.n, 'Interpolated 1.0');
     	  equal(testActor.get().m, tweenableComparator.m, 'Interpolated 1.0');
+    	  
+    	});
+	  });
+	  
+	  
+	  
+	  module('Mixed easing Object parameters');
+	  
+	  _.each(Tweenable.prototype.formula, function (fn, name) {
+	    test('Correctly calculate the key positions of Tweenable.prototype.formula.' + name, 
+  	  function () {
+  	    var testKapi
+    	      ,testActor
+    	      ,tweenableComparator;
+        
+    	  testKapi = setupTestKapi();
+    	  testActor = setupTestActor(testKapi);
+    	  
+    	  testActor.keyframe(0, {
+    	    'n': 0
+    	    ,'m': 0
+    	  }, {
+        	'n': name
+      	}).keyframe(1000, {
+      	  'n': 100
+      	  ,'m': 100
+      	}, {
+      	  'n': name
+      	  ,'m': 'linear'
+      	});
+      	
+      	
+      	tweenableComparator = Tweenable.util.interpolate({
+      	  'n': 0
+      	  ,'m': 0
+      	}, {
+      	  'n': 100
+      	  ,'m': 100
+      	}, 0, name);
+      	
+    	  testActor.calculatePosition(0);
+    	  equal(testActor.get().n, tweenableComparator.n, 'Interpolated 0.0');
+    	  equal(testActor.get().m, 0, 'Interpolated 0.0');
+      	
+      	
+      	tweenableComparator = Tweenable.util.interpolate({
+      	  'n': 0
+      	  ,'m': 0
+      	}, {
+      	  'n': 100
+      	  ,'m': 100
+      	}, 0.5, name);
+      	
+    	  testActor.calculatePosition(500);
+    	  equal(testActor.get().n, tweenableComparator.n, 'Interpolated 0.5');
+    	  equal(testActor.get().m, 50, 'Interpolated 0.5');
+    	  
+    	  
+    	  tweenableComparator = Tweenable.util.interpolate({
+      	  'n': 0
+      	}, {
+      	  'n': 100
+      	}, 1, name);
+      	
+    	  testActor.calculatePosition(1000);
+    	  equal(testActor.get().n, tweenableComparator.n, 'Interpolated 1.0');
+    	  equal(testActor.get().m, 100, 'Interpolated 1.0');
     	  
     	});
 	  });
