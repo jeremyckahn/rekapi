@@ -36,7 +36,7 @@
 
 		kapi.canvas_style('background', '#ddd');
 		kapi.height(300);
-		kapi.width(500);
+		kapi.width(300);
 		
 		return kapi;
 	}
@@ -146,17 +146,44 @@
   		kapi.play();
   		console.log(kapi);
 	  });
+	  
+	  
+	  $('#fancy-parameters-tween').click(function () {
+	    var actor;
+
+      killTest();
+  	  kapi = setupTestKapi();
+  	  actor = setupTestActor(kapi);
+  	  
+  	  actor
+  		  .keyframe(0, {
+  		    'x': 50
+  		    ,'y': 50
+  		    ,'radius': 50
+  		    ,'color': '#f0f'
+  		  }, 'easeOutExpo')
+  		  .keyframe(1500, {
+  		    'x': 200
+  		    ,'y': 200
+  		    ,'radius': 100
+  		    ,'color': '#0f0'
+  		  },'easeOutExpo');
+
+  		kapi.play();
+  		console.log(kapi);
+	  });
 	};
 	
 	</script>
 </head>
 <body>
-	<canvas id="sandbox" style="background: #ddd; height: 300px; width: 500px; float: left;"></canvas>
+	<canvas id="sandbox" style="background: #ddd; height: 300px; width: 300px; float: left;"></canvas>
 	<ul style="float: left;">
 	  <li><button id="kill-test">Kill test</button></li>
 	  <li><button id="basic-linear-tween">Basic linear tween loop</button></li>
 	  <li><button id="basic-eased-tween">Basic eased tween loop</button></li>
 	  <li><button id="multi-eased-tween">Tween loop with multiple easings</button></li>
+	  <li><button id="fancy-parameters-tween">Tween loop with fancy parameters</button></li>
   </ul>
 </body>
 </html>
