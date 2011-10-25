@@ -15,37 +15,26 @@
 	  
 	  _.each(from, function (val, name) {
 	    
-	    // This branching looks weird, but it's done because of the way Shifty
-	    // handles color, and how that interferes with Kapi's handling of 
-	    // multiple easings per tween.  Essentially, Shifty creates properties to 
-	    // tween that do not have corresponding easing strings.
-	    if (name.match(R_COLOR_COMPONENT)) {
-	      
-	      interpolatedValues[name] = global.Tweenable.util.tweenProps(position, {
-    			'originalState': from
-    			,'to': to
-    			,'timestamp': 0
-    			,'duration': 1
-    			// The call to `.slice` removes the __color__ prefix that was
-    			// put there by Shifty.  This causes non-modified color property's
-    			// easing to be used. 
-    			,'easingFunc': Tweenable.prototype.formula[easing[name.slice(5)]]
-    		}, {
-    			'current': current
-    		})[name];
-	      
-	    } else {
-	      interpolatedValues[name] = global.Tweenable.util.tweenProps(position, {
-    			'originalState': from
-    			,'to': to
-    			,'timestamp': 0
-    			,'duration': 1
-    			,'easingFunc': Tweenable.prototype.formula[easing[name]]
-    		}, {
-    			'current': current
-    		})[name];
-	    }
+	    var easingFunc;
 	    
+	    if (name.match(R_COLOR_COMPONENT)) {
+	      // The call to `.slice` removes the __color__ prefix that was
+      	// put there by Shifty.  This causes non-modified color property's
+      	// easing to be used.
+	      easingFunc = Tweenable.prototype.formula[easing[name.slice(5)]];
+      } else {
+        easingFunc = Tweenable.prototype.formula[easing[name]];
+      }
+	    
+	    interpolatedValues[name] = global.Tweenable.util.tweenProps(position, {
+  			'originalState': from
+  			,'to': to
+  			,'timestamp': 0
+  			,'duration': 1
+  			,'easingFunc': easingFunc
+  		}, {
+  			'current': current
+  		})[name];
 	    
 	  });
 	  
