@@ -137,13 +137,14 @@
     	  testActor.keyframe(0, {
     	    'n': 0
     	    ,'m': 0
-    	  }, name, {
+    	  }, {
         	'n': name
-        	}).keyframe(1000, {
+      	}).keyframe(1000, {
       	  'n': 100
       	  ,'m': 100
       	}, {
       	  'n': name
+      	  ,'m': name
       	});
       	
       	tweenableComparator = Tweenable.util.interpolate({
