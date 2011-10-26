@@ -60,7 +60,11 @@
     'fps': 30
   };
   
-  now = Tweenable.util.now;
+  if (KAPI_DEBUG === true && KAPI_DEBUG_NOW) {
+    now = KAPI_DEBUG_NOW;
+  } else {
+    now = Tweenable.util.now;
+  }
   
   /**
    * @param {HTMLCanvas} canvas
@@ -110,11 +114,18 @@
     canvas_context = this.context();
     this.canvas_clear();
     
+    // Having two loops here is horrifically inefficient, yes.  However, having
+    // position updates occur in tandem with draws could cause weird 
+    // synchronicity issues.  For example, if the `draw` method of one actor
+    // modifies the state of an actor that is drawn later in the loop.
     for (i = 0; i < len; i++) {
       currentActor = this._actors[this._drawOrder[i]];
-      currentActor
-        .calculatePosition(millisecond)
-        .draw(canvas_context, currentActor.get());
+      currentActor.calculatePosition(millisecond);
+    }
+    
+    for (i = 0; i < len; i++) {
+      currentActor = this._actors[this._drawOrder[i]];
+      currentActor.draw(canvas_context, currentActor.get());
     }
   };
   
@@ -167,6 +178,14 @@
     ,'sortNumerically': sortNumerically
   });
   
+  if (KAPI_DEBUG === true) {
+    gk._private = {
+      'sortNumerically': sortNumerically
+      ,'calculateCurrentMillisecond': calculateCurrentMillisecond
+      ,'renderCurrentMillisecond': renderCurrentMillisecond
+      ,'tick': tick
+    }
+  }
   
   global.Kapi = gk;
   
