@@ -111,7 +111,7 @@
 	  
 	  module('Multiple keyframes');
 	  
-	  test('Correctly interpolate Actor positions at various positions mid-frame.', 
+	  test('Interpolate Actor positions at various positions mid-frame.', 
 	  function () {
 	    var testKapi
   	      ,testActor;
@@ -154,67 +154,48 @@
   	
   	
   	
-  	test('Correctly interpolate Actor positions at various positions mid-frame with multiple keyframe ranges.', 
+  	test('Applied easing is taken from the destination frame', 
 	  function () {
 	    var testKapi
-  	      ,testActor;
+  	      ,testActor
+  	      ,tweenableComparator;
 
   	  testKapi = setupTestKapi();
   	  testActor = setupTestActor(testKapi);
   	  
       testActor.keyframe(0, {
-        'x': -100
-  		  ,'y':-100
-      }).keyframe(1000, {
-    		  'x': 0
-    		  ,'y':0
-    	}).keyframe(2000, {
-  		  'x': 100
-  		  ,'y':100
-  		}).keyframe(3000, {
+        'x': 0
+      }, 'linear').keyframe(1000, {
+    		'x': 100
+    	}, 'easeInSine').keyframe(2000, {
   		  'x': 200
-  		  ,'y':200
-  		});
+  		}, 'easeOutCirc');
   		
-  		testActor.calculatePosition(500);
-
-  		equals(testActor.get().x, -50, 
-  		  'Value "x" was properly interpolated at position 0.5.');
-  		equals(testActor.get().y, -50, 
-  		  'Value "y" was properly interpolated at position 0.5.');
+  		tweenableComparator = Tweenable.util.interpolate({
+    	  'x': 0
+    	}, {
+    	  'x': 100
+    	}, .5, 'easeInSine');
   		
-
-  		testActor.calculatePosition(1000);
-
-  		equals(testActor.get().x, 0, 
-  		  'Value "x" was properly interpolated at position 0.0.');
-  		equals(testActor.get().y, 0, 
-  		  'Value "y" was properly interpolated at position 0.0.');
-
-
-  		testActor.calculatePosition(1500);
-
-  		equals(testActor.get().x, 50, 
-  		  'Value "x" was properly interpolated at position 0.5.');
-  		equals(testActor.get().y, 50, 
-  		  'Value "y" was properly interpolated at position 0.5.');
-
-
-      testActor.calculatePosition(2000);
-
-  		equals(testActor.get().x, 100, 
-  		  'Value "x" was properly interpolated at position 1.0.');
-  		equals(testActor.get().y, 100, 
-  		  'Value "y" was properly interpolated at position 1.0.');
+  		testActor.calculatePosition(500);  		
+  		equals(testActor.get().x, tweenableComparator.x, 
+  		  'Value "x" was properly interpolated at position 0.5 with "easeInSine".');
   		  
   		
-		  testActor.calculatePosition(2500);
+		  tweenableComparator = Tweenable.util.interpolate({
+    	  'x': 100
+    	}, {
+    	  'x': 200
+    	}, .5, 'easeOutCirc');
 
-  		equals(testActor.get().x, 150, 
-  		  'Value "x" was properly interpolated at position 0.5.');
-  		equals(testActor.get().y, 150, 
-  		  'Value "y" was properly interpolated at position 0.5.');
+  		testActor.calculatePosition(1500);
+  		equals(testActor.get().x, tweenableComparator.x, 
+  		  'Value "x" was properly interpolated at position 0.5 with "easeOutCirc".');
+  		
   	});
+
+
+    test();
 	}
 	</script>
 </head>
