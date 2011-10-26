@@ -6,6 +6,7 @@
   
   
   /**
+   * Gets (and optionally sets) a style on a canvas.
    * @param {HTMLCanvas} canvas
    * @param {string} dimension The dimension (either "height" or "width") to
    *    get or set.
@@ -32,7 +33,7 @@
   
   
   /**
-   * Get or set a style on the Kapi canvas.
+   * Get (and optionally set) a style on the Kapi canvas.
    * @param {string} styleName
    * @param {number|string} opt_styleValue The value to set for `styleName`
    */

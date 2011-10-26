@@ -63,13 +63,25 @@
   ActorMethods.prototype = Tweenable.prototype;
   gk.Actor.prototype = new ActorMethods();
   // But the magic doesn't stop here!  `Actor`'s constructor steals the
-  // `Tweenable` constuctor.
+  // `Tweenable` constructor.
   
   /**
+   * Define a keyframe for an Actor.
    * @param {number} when
    * @param {Object} position
-   * @param {string|Object} 
-   * @returns {Kapi.Actor} easing
+   * @param {string|Object} easing If this is a string, the easing is applied
+   *    to all parameters of `position`.  You can also mix and match easings
+   *    for each parameter. So:
+   *  @codestart
+   *    actor.keyframe(1000, {
+   *      'x': 100
+   *      ,'y': 100
+   *    }, {
+   *      'x': 'easeOutSine'
+   *      ,'y': 'easeInSine'
+   *    });
+   *  @codeend
+   * @returns {Kapi.Actor} 
    */
   gk.Actor.prototype.keyframe = function keyframe (when, position, easing) {
     var originalEasingString;

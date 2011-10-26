@@ -25,6 +25,12 @@
   }
   
   
+  /**
+   * Calculate how far in the animation loop `kapi` is, in milliseconds, based 
+   * on the current time.  Also overflows into a new loop in necessary.
+   * @param {Kapi} kapi
+   * @returns {number}
+   */
   function calculateCurrentMillisecond (kapi) {
     var currentMillisecond;
     
@@ -35,6 +41,11 @@
   }
   
   
+  /**
+   * Calculate how far in the animation loop `kapi` is, in milliseconds, and
+   * render based on that time.
+   * @param {Kapi} kapi
+   */
   function renderCurrentMillisecond (kapi) {
     var currentMillisecond;
     
@@ -43,6 +54,11 @@
   }
   
   
+  /**
+   * This is the heartbeat of an animation.  Renders a frame and then calls
+   * itself based on the framerate of the supplied Kapi.
+   * @param {Kapi} kapi
+   */
   function tick (kapi) {
     kapi._loopId = setTimeout(function () {
       renderCurrentMillisecond(kapi);
@@ -51,6 +67,9 @@
   }
   
   
+  /**
+   * Does nothing.  Absolutely nothing at all.
+   */
   function noop () {
     // NOOP!
   }
@@ -60,7 +79,7 @@
     'fps': 30
   };
   
-  if (KAPI_DEBUG === true && KAPI_DEBUG_NOW) {
+  if (typeof KAPI_DEBUG !== 'undefined' && typeof KAPI_DEBUG_NOW !== 'undefined') {
     now = KAPI_DEBUG_NOW;
   } else {
     now = Tweenable.util.now;
@@ -130,6 +149,10 @@
   };
   
   
+  /**
+   * Performs a "refresh" of the internal state.
+   * @returns {Kapi}
+   */
   gk.prototype.updateInternalState = function () {
     var allKeyframeLists;
         
@@ -147,6 +170,7 @@
   
   
   /**
+   * Add an Actor to the Kapi.
    * @param {Kapi.Actor} actor
    * @param {Object} opt_initialState
    */
@@ -157,17 +181,31 @@
   };
   
   
+  /**
+   * Starts or resumes an animation.
+   * @returns {Kapi}
+   */
   gk.prototype.play = function () {
     this._loopTimestamp = now();
     tick(this);
+    
+    return this;
   };
   
+  
+  /**
+   * Stops an animation completely.
+   * @param {boolean} alsoClear Whether to also clear the canvas.
+   * @returns {Kapi}
+   */
   gk.prototype.stop = function (alsoClear) {
     clearTimeout(this._loopId);
     
     if (alsoClear === true) {
       this.canvas_clear();
     }
+    
+    return this;
   };
   
   
@@ -178,7 +216,7 @@
     ,'sortNumerically': sortNumerically
   });
   
-  if (KAPI_DEBUG === true) {
+  if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
     gk._private = {
       'sortNumerically': sortNumerically
       ,'calculateCurrentMillisecond': calculateCurrentMillisecond
