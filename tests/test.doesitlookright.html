@@ -72,9 +72,22 @@
 	  
 	  function killTest () {
 	    kapi && kapi.stop(true);
+	    kapi = undefined;
 	  }
 	  
 	  $('#kill-test').click(killTest);
+	  
+	  $('#play').click(function () {
+	    kapi && kapi.play();
+	  });
+	  
+	  $('#pause').click(function () {
+	    kapi && kapi.pause();
+	  });
+	  
+	  $('#stop').click(function () {
+	    kapi && kapi.stop(true);
+	  });
 	  
 	  $('#basic-linear-tween').click(function () {
 	    var actor;
@@ -179,7 +192,12 @@
 <body>
 	<canvas id="sandbox" style="background: #ddd; height: 300px; width: 300px; float: left;"></canvas>
 	<ul style="float: left;">
-	  <li><button id="kill-test">Kill test</button></li>
+	  <li>
+	    <button id="kill-test">Kill test</button>
+	    <button id="play">Play</button>
+	    <button id="pause">Pause</button>
+	    <button id="stop">Stop</button>
+	  </li>
 	  <li><button id="basic-linear-tween">Basic linear tween loop</button></li>
 	  <li><button id="basic-eased-tween">Basic eased tween loop</button></li>
 	  <li><button id="multi-eased-tween">Tween loop with multiple easings</button></li>

@@ -10,7 +10,8 @@
   
   var gk
       ,defaultConfig
-      ,now;
+      ,now
+      ,playState;
   
   
   /**
@@ -79,6 +80,12 @@
     'fps': 30
   };
   
+  playState = {
+    'STOPPED': 'stopped'
+    ,'PAUSED': 'paused'
+    ,'PLAYING': 'playing'
+  };
+  
   if (typeof KAPI_DEBUG !== 'undefined' && typeof KAPI_DEBUG_NOW !== 'undefined') {
     now = KAPI_DEBUG_NOW;
   } else {
@@ -97,6 +104,7 @@
     this.config = {};
     this._actors = {};
     this._drawOrder = [];
+    this._playState = playState.STOPPED;
     
     // The setTimeout ID of `tick`
     this._loopId = null;
@@ -106,6 +114,10 @@
     
     // Millisecond duration of the animation
     this._animationLength = null;
+    
+    // Used for maintaining position when the animation is paused. 
+    this._pausedAtTime = null;
+    
     
     _.extend(this.config, config);
     _.defaults(this.config, defaultConfig);
@@ -186,10 +198,23 @@
    * @returns {Kapi}
    */
   gk.prototype.play = function () {
-    this._loopTimestamp = now();
+    if (this._playState === playState.PAUSED) {
+      this._loopTimestamp += now() - this._pausedAtTime;
+    } else {
+      this._loopTimestamp = now();
+    }
+    
+    this._playState = playState.PLAYING;
     tick(this);
     
     return this;
+  };
+  
+  
+  gk.prototype.pause = function () {
+    this._playState = playState.PAUSED;
+    clearTimeout(this._loopId);
+    this._pausedAtTime = now();
   };
   
   
@@ -199,6 +224,7 @@
    * @returns {Kapi}
    */
   gk.prototype.stop = function (alsoClear) {
+    this._playState = playState.STOPPED;
     clearTimeout(this._loopId);
     
     if (alsoClear === true) {
