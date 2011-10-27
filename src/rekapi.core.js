@@ -185,11 +185,23 @@
    * Add an Actor to the Kapi.
    * @param {Kapi.Actor} actor
    * @param {Object} opt_initialState
+   * @returns {Kapi}
    */
   gk.prototype.addActor = function (actor, opt_initialState) {
     actor.set(opt_initialState);
     this._actors[actor.id] = actor;
     this._drawOrder.push(actor.id);
+    
+    return this;
+  };
+  
+  
+  
+  gk.prototype.removeActor = function (actor) {
+    delete this._actors[actor.id];
+    this._drawOrder = _.without(this._drawOrder, actor.id);
+    
+    return this;
   };
   
   
