@@ -63,7 +63,12 @@
 	
 	function runTests () {
 	  
-	  module("Internal state");
+	  //module('Actors and a Kapi');
+	  //
+	  //test('Actors added can be referenced.');
+	  
+	  
+	  module("Animation timeline");
 	  
 	  test('Calculate animation length with one Actor', function () {
 	    var testKapi
@@ -103,6 +108,7 @@
   	  equals(testKapi.animationLength(), 5000, 
   	      'Length of the animation was calculated.');
 	  });
+
 	}
 	</script>
 </head>
