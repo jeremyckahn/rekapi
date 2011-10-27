@@ -186,7 +186,7 @@
    * @param {Kapi.Actor} actor
    * @param {Object} opt_initialState
    */
-  gk.prototype.add = function (actor, opt_initialState) {
+  gk.prototype.addActor = function (actor, opt_initialState) {
     actor.set(opt_initialState);
     this._actors[actor.id] = actor;
     this._drawOrder.push(actor.id);
