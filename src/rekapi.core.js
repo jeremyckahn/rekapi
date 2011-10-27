@@ -198,6 +198,8 @@
    * @returns {Kapi}
    */
   gk.prototype.play = function () {
+    clearTimeout(this._loopId);
+    
     if (this._playState === playState.PAUSED) {
       this._loopTimestamp += now() - this._pausedAtTime;
     } else {

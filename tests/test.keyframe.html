@@ -11,11 +11,11 @@
 			function () {
 			  
 		require(['../src/rekapi.core.js'], function () {
-		  require(['../src/rekapi.actor.js'
-		          ,'../src/rekapi.canvas.js'
-		          ,'../src/rekapi.interpolate.js'
-		        ], function () {
-				setTimeout(runTests, 1);
+		  require(['../src/rekapi.actor.js'], function () {
+		    require(['../src/rekapi.canvas.js'
+		            ,'../src/rekapi.interpolate.js'], function () {
+		      setTimeout(runTests, 1);
+		    });
 			});
 		});
 		
@@ -194,8 +194,6 @@
   		
   	});
 
-
-    test();
 	}
 	</script>
 </head>
