@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+	<script src="../lib/require.js"></script><script>
+	
+	var KAPI_DEBUG = true
+	    ,internalDebugNow
+	    ,KAPI_DEBUG_NOW = function () {
+	      return internalDebugNow();
+	    };
+	
+	require([
+	    '../lib/underscore/underscore.js'
+	    ,'../lib/shifty/shifty.js'], 
+			function () {
+			  
+		require(['../src/rekapi.core.js'], function () {
+		  require(['../src/rekapi.actor.js'
+		          ,'../src/rekapi.canvas.js'
+		          ,'../src/rekapi.interpolate.js'
+		        ], function () {
+				setTimeout(runTests, 1);
+			});
+		});
+		
+	});
+	
+	function setupTestKapi () {
+	  var sandbox
+				,kapi
+				,actor;
+
+		sandbox = document.getElementById('sandbox');
+		kapi = new Kapi(sandbox);
+
+		kapi.canvas_style('background', '#ddd');
+		kapi.height(300);
+		kapi.width(500);
+		
+		return kapi;
+	}
+	
+	function  setupTestActor (forKapi) {
+	  var actor;
+	  
+	  actor = new Kapi.Actor(forKapi, {
+		  'draw': function (canvas_context, state) {
+        canvas_context.beginPath();
+          canvas_context.arc(
+            this.x || 0,
+            this.y || 0,
+            this.radius || 0,
+            0,
+            Math.PI*2, 
+            true);
+          canvas_context.fillStyle = this.color || '#f0f';
+          canvas_context.fill();
+          canvas_context.closePath();
+
+          return this;
+		  }
+		});
+		
+		forKapi.add(actor);
+		return actor;
+	}
+	
+	function runTests () {
+	  
+	  module("Playing");
+	  
+	  test('Check the state of a playing tween', function () {
+	    var testKapi
+  	      ,calculatedMillisecond;
+  	      
+  	  internalDebugNow = function () {
+  	    return new Date();
+  	  };
+
+  	  testKapi = setupTestKapi();
+  	  testKapi.play();
+  	  equals(testKapi.isPlaying(), true, 
+  	      '.play() causes .isPlaying() to be true.');
+  	      
+  	  testKapi.pause();
+  	  equals(testKapi.isPlaying(), false, 
+  	      '.pause() causes .isPlaying() to be false.');
+  	      
+      testKapi.stop();
+  	  equals(testKapi.isPlaying(), false, 
+  	      '.stop() causes .isPlaying() to be false.');
+	  });
+	  
+	  
+	}
+	</script>
+</head>
+<body>
+  <h1 id="qunit-header"><a href="https://github.com/jeremyckahn/rekapi">Rekapi</a></h1>
+   <h2 id="qunit-banner"></h2>
+   <div id="qunit-testrunner-toolbar"></div>
+   <h2 id="qunit-userAgent"></h2>
+   <ol id="qunit-tests"></ol>
+   <div id="qunit-fixture"></div>
+	<canvas id="sandbox"></canvas>
+</body>
+</html>

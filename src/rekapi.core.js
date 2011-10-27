@@ -211,10 +211,16 @@
   };
   
   
+  /**
+   * Pauses an animation.
+   * @returns {Kapi}
+   */
   gk.prototype.pause = function () {
     this._playState = playState.PAUSED;
     clearTimeout(this._loopId);
     this._pausedAtTime = now();
+    
+    return this;
   };
   
   
@@ -235,6 +241,16 @@
   };
   
   
+  /**
+   * Returns whether or not the animation is playing (meaning not paused or 
+   * stopped).
+   * @returns {boolean}
+   */
+  gk.prototype.isPlaying = function () {
+    return this._playState === playState.PLAYING;
+  };
+  
+  
   gk.util = {};
   
   _.extend(gk.util, {
@@ -242,6 +258,7 @@
     ,'sortNumerically': sortNumerically
   });
   
+  // Some hooks for testing.
   if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
     gk._private = {
       'sortNumerically': sortNumerically
