@@ -196,7 +196,6 @@
   };
   
   
-  
   /**
    * @param {number} actorId The Actor ID of the actor to fetch
    * @returns {Kapi.Actor}
@@ -204,7 +203,6 @@
   gk.prototype.getActor = function (actorId) {
     return this._actors[actorId];
   };
-  
   
   
   gk.prototype.removeActor = function (actor) {
