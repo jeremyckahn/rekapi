@@ -63,8 +63,6 @@
 	
 	function runTests () {
 	  
-	  module('Actors and a Kapi');
-
 	  module('Actor management');
 	  
 	  test('Actors are added successfully', function () {
@@ -81,6 +79,35 @@
   	  equals(testKapi._drawOrder[0], testActor1.id,
   	      'Actor is the first element in the internal _drawOrder array');
 	  });
+	  
+	  
+	  test('Actors can be retrieved from the Kapi', function () {
+	    var testKapi
+  	      ,testActor1;
+
+  	  testKapi = setupTestKapi();
+  	  testActor1 = setupTestActor(testKapi);
+  	  
+  	  equals(testKapi.getActor(testActor1.id), testActor1, 
+  	      'Can reference the Actor inside the Kapi via the actor ID.');
+	  });
+	  
+	  
+	  test('Actors are removed successfully', function () {
+	    var testKapi
+  	      ,testActor1;
+
+  	  testKapi = setupTestKapi();
+  	  testActor1 = setupTestActor(testKapi);
+  	  testKapi.removeActor(testActor1)
+  	  
+  	  equals(testKapi._actors[testActor1.id], undefined, 
+  	      'Actor is no longer in the internal _actors Object');
+  	      
+  	  equals(testKapi._drawOrder.indexOf(testActor1.id), -1,
+  	      'Actor is not in the internal _drawOrder array');
+	  });
+	  
 	  
 	  module("Animation timeline");
 	  
