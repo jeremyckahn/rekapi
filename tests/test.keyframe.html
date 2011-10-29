@@ -106,9 +106,29 @@
       equals(testActor.get().y, 100, 
         'Value "y" was properly interpolated at position 1.0');
     });
-    
-    
-    
+
+
+    test('Tweens are only valid if there is a start and end point',
+    function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0,{
+        'x': 100
+      }).keyframe(1000, {
+        // Nothing!
+      });
+
+      testActor.calculatePosition(500);
+      equals(testActor.get().x, undefined, 
+          'Value only has a start point, therefore a calculated midpoint is undefined.');
+    });
+
+
+
     module('Multiple keyframes');
     
     test('Interpolate Actor positions at various positions mid-frame',
