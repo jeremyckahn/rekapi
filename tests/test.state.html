@@ -3,44 +3,44 @@
 <head>
   <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script src="../lib/shifty/tests/qunit/qunit.js"></script>
-	<script src="../lib/require.js"></script><script>
-	
-	require([
-	    '../lib/underscore/underscore.js'
-	    ,'../lib/shifty/shifty.js'], 
-			function () {
-			  
+  <script src="../lib/require.js"></script><script>
+  
+  require([
+      '../lib/underscore/underscore.js'
+      ,'../lib/shifty/shifty.js'], 
+      function () {
+        
         require(['../src/rekapi.core.js'], function () {
-    		  require(['../src/rekapi.actor.js'], function () {
-    		    require(['../src/rekapi.canvas.js'
-    		            ,'../src/rekapi.interpolate.js'], function () {
-    		      setTimeout(runTests, 1);
-    		    });
-    			});
-    		});
-		
-	});
-	
-	function setupTestKapi () {
-	  var sandbox
-				,kapi
-				,actor;
+          require(['../src/rekapi.actor.js'], function () {
+            require(['../src/rekapi.canvas.js'
+                    ,'../src/rekapi.interpolate.js'], function () {
+              setTimeout(runTests, 1);
+            });
+          });
+        });
+    
+  });
+  
+  function setupTestKapi () {
+    var sandbox
+        ,kapi
+        ,actor;
 
-		sandbox = document.getElementById('sandbox');
-		kapi = new Kapi(sandbox);
+    sandbox = document.getElementById('sandbox');
+    kapi = new Kapi(sandbox);
 
-		kapi.canvas_style('background', '#ddd');
-		kapi.height(300);
-		kapi.width(500);
-		
-		return kapi;
-	}
-	
-	function  setupTestActor (forKapi) {
-	  var actor;
-	  
-	  actor = new Kapi.Actor(forKapi, {
-		  'draw': function (canvas_context, state) {
+    kapi.canvas_style('background', '#ddd');
+    kapi.height(300);
+    kapi.width(500);
+    
+    return kapi;
+  }
+  
+  function  setupTestActor (forKapi) {
+    var actor;
+    
+    actor = new Kapi.Actor(forKapi, {
+      'draw': function (canvas_context, state) {
         canvas_context.beginPath();
           canvas_context.arc(
             this.x || 0,
@@ -54,104 +54,104 @@
           canvas_context.closePath();
 
           return this;
-		  }
-		});
-		
-		forKapi.addActor(actor);
-		return actor;
-	}
-	
-	function runTests () {
-	  
-	  module('Actor management');
-	  
-	  test('Actors are added successfully', function () {
-	    var testKapi
-  	      ,testActor1;
+      }
+    });
+    
+    forKapi.addActor(actor);
+    return actor;
+  }
+  
+  function runTests () {
+    
+    module('Actor management');
+    
+    test('Actors are added successfully', function () {
+      var testKapi
+          ,testActor1;
 
-  	  testKapi = setupTestKapi();
-  	  // setupTestActor calls addActor
-  	  testActor1 = setupTestActor(testKapi);
-  	  
-  	  equals(testKapi._actors[testActor1.id], testActor1, 
-  	      'Actor is in the internal _actors Object');
-  	      
-  	  equals(testKapi._drawOrder[0], testActor1.id,
-  	      'Actor is the first element in the internal _drawOrder array');
-	  });
-	  
-	  
-	  test('Actors can be retrieved from the Kapi', function () {
-	    var testKapi
-  	      ,testActor1;
+      testKapi = setupTestKapi();
+      // setupTestActor calls addActor
+      testActor1 = setupTestActor(testKapi);
+      
+      equals(testKapi._actors[testActor1.id], testActor1, 
+          'Actor is in the internal _actors Object');
+          
+      equals(testKapi._drawOrder[0], testActor1.id,
+          'Actor is the first element in the internal _drawOrder array');
+    });
+    
+    
+    test('Actors can be retrieved from the Kapi', function () {
+      var testKapi
+          ,testActor1;
 
-  	  testKapi = setupTestKapi();
-  	  testActor1 = setupTestActor(testKapi);
-  	  
-  	  equals(testKapi.getActor(testActor1.id), testActor1, 
-  	      'Can reference the Actor inside the Kapi via the actor ID.');
-	  });
-	  
-	  
-	  test('Actors are removed successfully', function () {
-	    var testKapi
-  	      ,testActor1;
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      
+      equals(testKapi.getActor(testActor1.id), testActor1, 
+          'Can reference the Actor inside the Kapi via the actor ID.');
+    });
+    
+    
+    test('Actors are removed successfully', function () {
+      var testKapi
+          ,testActor1;
 
-  	  testKapi = setupTestKapi();
-  	  testActor1 = setupTestActor(testKapi);
-  	  testKapi.removeActor(testActor1)
-  	  
-  	  equals(testKapi._actors[testActor1.id], undefined, 
-  	      'Actor is no longer in the internal _actors Object');
-  	      
-  	  equals(testKapi._drawOrder.indexOf(testActor1.id), -1,
-  	      'Actor is not in the internal _drawOrder array');
-	  });
-	  
-	  
-	  module("Animation timeline");
-	  
-	  test('Calculate animation length with one Actor', function () {
-	    var testKapi
-  	      ,testActor1;
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      testKapi.removeActor(testActor1)
+      
+      equals(testKapi._actors[testActor1.id], undefined, 
+          'Actor is no longer in the internal _actors Object');
+          
+      equals(testKapi._drawOrder.indexOf(testActor1.id), -1,
+          'Actor is not in the internal _drawOrder array');
+    });
+    
+    
+    module("Animation timeline");
+    
+    test('Calculate animation length with one Actor', function () {
+      var testKapi
+          ,testActor1;
 
-  	  testKapi = setupTestKapi();
-  	  testActor1 = setupTestActor(testKapi);
-  	  
-  	  testActor1
-  	    .keyframe(0, {})
-  	    .keyframe(1000, {})
-  	    .keyframe(2000, {});
-  	
-  	  equals(testKapi.animationLength(), 2000, 
-  	      'Length of the animation was calculated');
-	  });
-	  
-	  
-	  test('Calculate animation length with multiple Actors', function () {
-	    var testKapi
-  	      ,testActor1
-  	      ,testActor2;
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      
+      testActor1
+        .keyframe(0, {})
+        .keyframe(1000, {})
+        .keyframe(2000, {});
+    
+      equals(testKapi.animationLength(), 2000, 
+          'Length of the animation was calculated');
+    });
+    
+    
+    test('Calculate animation length with multiple Actors', function () {
+      var testKapi
+          ,testActor1
+          ,testActor2;
 
-  	  testKapi = setupTestKapi();
-  	  testActor1 = setupTestActor(testKapi);
-  	  testActor2 = setupTestActor(testKapi);
-  	  
-  	  testActor1
-  	    .keyframe(0, {})
-  	    .keyframe(1000, {})
-  	    .keyframe(2000, {});
-  	    
-	    testActor2
-  	    .keyframe(0, {})
-  	    .keyframe(5000, {});
-  	  
-  	  equals(testKapi.animationLength(), 5000, 
-  	      'Length of the animation was calculated');
-	  });
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      testActor2 = setupTestActor(testKapi);
+      
+      testActor1
+        .keyframe(0, {})
+        .keyframe(1000, {})
+        .keyframe(2000, {});
+        
+      testActor2
+        .keyframe(0, {})
+        .keyframe(5000, {});
+      
+      equals(testKapi.animationLength(), 5000, 
+          'Length of the animation was calculated');
+    });
 
-	}
-	</script>
+  }
+  </script>
 </head>
 <body>
   <h1 id="qunit-header"><a href="https://github.com/jeremyckahn/rekapi">Rekapi</a></h1>
@@ -160,6 +160,6 @@
    <h2 id="qunit-userAgent"></h2>
    <ol id="qunit-tests"></ol>
    <div id="qunit-fixture"></div>
-	<canvas id="sandbox"></canvas>
+  <canvas id="sandbox"></canvas>
 </body>
 </html>

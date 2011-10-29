@@ -3,49 +3,49 @@
 <head>
   <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script src="../lib/shifty/tests/qunit/qunit.js"></script>
-	<script src="../lib/require.js"></script><script>
-	
-	require([
-	    '../lib/underscore/underscore.js'
-	    ,'../lib/shifty/shifty.js'
-	    ,'../lib/jquery.js'], 
-			function () {
-			  
-	    require(['../src/rekapi.core.js'], function () {
-  		  require(['../src/rekapi.actor.js'], function () {
-  		    require(['../src/rekapi.canvas.js'
-  		            ,'../src/rekapi.interpolate.js'], function () {
-  		      setTimeout(setupTests, 1);
-  		    });
-  			});
-  		});
-		
-	});
-	
-	
-	
-	function setupTestKapi () {
-	  var sandbox
-				,kapi
-				,actor;
+  <script src="../lib/require.js"></script><script>
+  
+  require([
+      '../lib/underscore/underscore.js'
+      ,'../lib/shifty/shifty.js'
+      ,'../lib/jquery.js'], 
+      function () {
+        
+      require(['../src/rekapi.core.js'], function () {
+        require(['../src/rekapi.actor.js'], function () {
+          require(['../src/rekapi.canvas.js'
+                  ,'../src/rekapi.interpolate.js'], function () {
+            setTimeout(setupTests, 1);
+          });
+        });
+      });
+    
+  });
+  
+  
+  
+  function setupTestKapi () {
+    var sandbox
+        ,kapi
+        ,actor;
 
-		sandbox = document.getElementById('sandbox');
-		kapi = new Kapi(sandbox, {
-		  'fps': 30
-		});
+    sandbox = document.getElementById('sandbox');
+    kapi = new Kapi(sandbox, {
+      'fps': 30
+    });
 
-		kapi.canvas_style('background', '#ddd');
-		kapi.height(300);
-		kapi.width(300);
-		
-		return kapi;
-	}
-	
-	function  setupTestActor (forKapi) {
-	  var actor;
-	  
-	  actor = new Kapi.Actor(forKapi, {
-		  'draw': function (canvas_context, state) {
+    kapi.canvas_style('background', '#ddd');
+    kapi.height(300);
+    kapi.width(300);
+    
+    return kapi;
+  }
+  
+  function  setupTestActor (forKapi) {
+    var actor;
+    
+    actor = new Kapi.Actor(forKapi, {
+      'draw': function (canvas_context, state) {
         canvas_context.beginPath();
           canvas_context.arc(
             state.x || 0,
@@ -59,149 +59,149 @@
           canvas_context.closePath();
 
           return this;
-		  }
-		});
-		
-		forKapi.addActor(actor);
-		return actor;
-	}
-	
-	function setupTests () {
-	  
-	  var kapi;
-	  
-	  function killTest () {
-	    kapi && kapi.stop(true);
-	    kapi = undefined;
-	  }
-	  
-	  $('#kill-test').click(killTest);
-	  
-	  $('#play').click(function () {
-	    kapi && kapi.play();
-	  });
-	  
-	  $('#pause').click(function () {
-	    kapi && kapi.pause();
-	  });
-	  
-	  $('#stop').click(function () {
-	    kapi && kapi.stop(true);
-	  });
-	  
-	  $('#basic-linear-tween').click(function () {
-	    var actor;
+      }
+    });
+    
+    forKapi.addActor(actor);
+    return actor;
+  }
+  
+  function setupTests () {
+    
+    var kapi;
+    
+    function killTest () {
+      kapi && kapi.stop(true);
+      kapi = undefined;
+    }
+    
+    $('#kill-test').click(killTest);
+    
+    $('#play').click(function () {
+      kapi && kapi.play();
+    });
+    
+    $('#pause').click(function () {
+      kapi && kapi.pause();
+    });
+    
+    $('#stop').click(function () {
+      kapi && kapi.stop(true);
+    });
+    
+    $('#basic-linear-tween').click(function () {
+      var actor;
 
       killTest();
-  	  kapi = setupTestKapi();
-  	  actor = setupTestActor(kapi);
-  	  
-  	  actor
-  		  .keyframe(0, {
-  		    'x': 50
-  		    ,'y': 50
-  		  })
-  		  .keyframe(1500, {
-  		    'x': 200
-  		    ,'y': 200
-  		  });
+      kapi = setupTestKapi();
+      actor = setupTestActor(kapi);
+      
+      actor
+        .keyframe(0, {
+          'x': 50
+          ,'y': 50
+        })
+        .keyframe(1500, {
+          'x': 200
+          ,'y': 200
+        });
 
-  		kapi.play();
-  		console.log(kapi);
-	  });
-	  
-	  
-	  $('#basic-eased-tween').click(function () {
-	    var actor;
-
-      killTest();
-  	  kapi = setupTestKapi();
-  	  actor = setupTestActor(kapi);
-  	  
-  	  actor
-  		  .keyframe(0, {
-  		    'x': 50
-  		    ,'y': 50
-  		  }, 'easeOutExpo')
-  		  .keyframe(1500, {
-  		    'x': 200
-  		    ,'y': 200
-  		  }, 'easeOutExpo');
-
-  		kapi.play();
-  		console.log(kapi);
-	  });
-	  
-	  
-	  $('#multi-eased-tween').click(function () {
-	    var actor;
+      kapi.play();
+      console.log(kapi);
+    });
+    
+    
+    $('#basic-eased-tween').click(function () {
+      var actor;
 
       killTest();
-  	  kapi = setupTestKapi();
-  	  actor = setupTestActor(kapi);
-  	  
-  	  actor
-  		  .keyframe(0, {
-  		    'x': 50
-  		    ,'y': 50
-  		  }, {
-  		    'x': 'easeOutExpo'
-  		    ,'y': 'easeInSine'
-  		  })
-  		  .keyframe(1500, {
-  		    'x': 200
-  		    ,'y': 200
-  		  }, {
-  		    'x': 'easeOutExpo'
-  		    ,'y': 'easeInSine'
-  		  });
+      kapi = setupTestKapi();
+      actor = setupTestActor(kapi);
+      
+      actor
+        .keyframe(0, {
+          'x': 50
+          ,'y': 50
+        }, 'easeOutExpo')
+        .keyframe(1500, {
+          'x': 200
+          ,'y': 200
+        }, 'easeOutExpo');
 
-  		kapi.play();
-  		console.log(kapi);
-	  });
-	  
-	  
-	  $('#fancy-parameters-tween').click(function () {
-	    var actor;
+      kapi.play();
+      console.log(kapi);
+    });
+    
+    
+    $('#multi-eased-tween').click(function () {
+      var actor;
 
       killTest();
-  	  kapi = setupTestKapi();
-  	  actor = setupTestActor(kapi);
-  	  
-  	  actor
-  		  .keyframe(0, {
-  		    'x': 50
-  		    ,'y': 50
-  		    ,'radius': 50
-  		    ,'color': '#f0f'
-  		  }, 'easeOutExpo')
-  		  .keyframe(1500, {
-  		    'x': 200
-  		    ,'y': 200
-  		    ,'radius': 100
-  		    ,'color': '#0f0'
-  		  },'easeOutExpo');
+      kapi = setupTestKapi();
+      actor = setupTestActor(kapi);
+      
+      actor
+        .keyframe(0, {
+          'x': 50
+          ,'y': 50
+        }, {
+          'x': 'easeOutExpo'
+          ,'y': 'easeInSine'
+        })
+        .keyframe(1500, {
+          'x': 200
+          ,'y': 200
+        }, {
+          'x': 'easeOutExpo'
+          ,'y': 'easeInSine'
+        });
 
-  		kapi.play();
-  		console.log(kapi);
-	  });
-	};
-	
-	</script>
+      kapi.play();
+      console.log(kapi);
+    });
+    
+    
+    $('#fancy-parameters-tween').click(function () {
+      var actor;
+
+      killTest();
+      kapi = setupTestKapi();
+      actor = setupTestActor(kapi);
+      
+      actor
+        .keyframe(0, {
+          'x': 50
+          ,'y': 50
+          ,'radius': 50
+          ,'color': '#f0f'
+        }, 'easeOutExpo')
+        .keyframe(1500, {
+          'x': 200
+          ,'y': 200
+          ,'radius': 100
+          ,'color': '#0f0'
+        },'easeOutExpo');
+
+      kapi.play();
+      console.log(kapi);
+    });
+  };
+  
+  </script>
 </head>
 <body>
-	<canvas id="sandbox" style="background: #ddd; height: 300px; width: 300px; float: left;"></canvas>
-	<ul style="float: left;">
-	  <li>
-	    <button id="kill-test">Kill test</button>
-	    <button id="play">Play</button>
-	    <button id="pause">Pause</button>
-	    <button id="stop">Stop</button>
-	  </li>
-	  <li><button id="basic-linear-tween">Basic linear tween loop</button></li>
-	  <li><button id="basic-eased-tween">Basic eased tween loop</button></li>
-	  <li><button id="multi-eased-tween">Tween loop with multiple easings</button></li>
-	  <li><button id="fancy-parameters-tween">Tween loop with fancy parameters</button></li>
+  <canvas id="sandbox" style="background: #ddd; height: 300px; width: 300px; float: left;"></canvas>
+  <ul style="float: left;">
+    <li>
+      <button id="kill-test">Kill test</button>
+      <button id="play">Play</button>
+      <button id="pause">Pause</button>
+      <button id="stop">Stop</button>
+    </li>
+    <li><button id="basic-linear-tween">Basic linear tween loop</button></li>
+    <li><button id="basic-eased-tween">Basic eased tween loop</button></li>
+    <li><button id="multi-eased-tween">Tween loop with multiple easings</button></li>
+    <li><button id="fancy-parameters-tween">Tween loop with fancy parameters</button></li>
   </ul>
 </body>
 </html>

@@ -3,44 +3,44 @@
 <head>
   <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script src="../lib/shifty/tests/qunit/qunit.js"></script>
-	<script src="../lib/require.js"></script><script>
-	
-	require([
-	    '../lib/underscore/underscore.js'
-	    ,'../lib/shifty/shifty.js'], 
-			function () {
-			  
-		require(['../src/rekapi.core.js'], function () {
-		  require(['../src/rekapi.actor.js'], function () {
-		    require(['../src/rekapi.canvas.js'
-		            ,'../src/rekapi.interpolate.js'], function () {
-		      setTimeout(runTests, 1);
-		    });
-			});
-		});
-		
-	});
-	
-	function setupTestKapi () {
-	  var sandbox
-				,kapi
-				,actor;
+  <script src="../lib/require.js"></script><script>
+  
+  require([
+      '../lib/underscore/underscore.js'
+      ,'../lib/shifty/shifty.js'], 
+      function () {
+        
+    require(['../src/rekapi.core.js'], function () {
+      require(['../src/rekapi.actor.js'], function () {
+        require(['../src/rekapi.canvas.js'
+                ,'../src/rekapi.interpolate.js'], function () {
+          setTimeout(runTests, 1);
+        });
+      });
+    });
+    
+  });
+  
+  function setupTestKapi () {
+    var sandbox
+        ,kapi
+        ,actor;
 
-		sandbox = document.getElementById('sandbox');
-		kapi = new Kapi(sandbox);
+    sandbox = document.getElementById('sandbox');
+    kapi = new Kapi(sandbox);
 
-		kapi.canvas_style('background', '#ddd');
-		kapi.height(300);
-		kapi.width(500);
-		
-		return kapi;
-	}
-	
-	function  setupTestActor (forKapi) {
-	  var actor;
-	  
-	  actor = new Kapi.Actor(forKapi, {
-		  'draw': function (canvas_context, state) {
+    kapi.canvas_style('background', '#ddd');
+    kapi.height(300);
+    kapi.width(500);
+    
+    return kapi;
+  }
+  
+  function  setupTestActor (forKapi) {
+    var actor;
+    
+    actor = new Kapi.Actor(forKapi, {
+      'draw': function (canvas_context, state) {
         canvas_context.beginPath();
           canvas_context.arc(
             this.x || 0,
@@ -54,148 +54,148 @@
           canvas_context.closePath();
 
           return this;
-		  }
-		});
-		
-		forKapi.addActor(actor);
-		return actor;
-	}
-	
-	function runTests () {
-	  
-	  module('Single keyframe');
-	  
-	  test('Correctly interpolate Actor positions at various positions mid-frame.', 
-	  function () {
-	    var testKapi
-  	      ,testActor;
+      }
+    });
+    
+    forKapi.addActor(actor);
+    return actor;
+  }
+  
+  function runTests () {
+    
+    module('Single keyframe');
+    
+    test('Correctly interpolate Actor positions at various positions mid-frame.', 
+    function () {
+      var testKapi
+          ,testActor;
 
-  	  testKapi = setupTestKapi();
-  	  testActor = setupTestActor(testKapi);
-  	  
-  	  
-  	  testActor.keyframe(0, {
-  		  'x': 0
-  		  ,'y': 0
-  		}).keyframe(1000, {
-  		  'x': 100
-  		  ,'y':100
-  		});
-  		
-  		
-  		testActor.calculatePosition(0);
-  		
-  		equals(testActor.get().x, 0, 
-  		  'Value "x" was properly interpolated at position 0.0.');
-  		equals(testActor.get().y, 0, 
-  		  'Value "y" was properly interpolated at position 0.0.');
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
       
       
-  		testActor.calculatePosition(500);
-  		
-  		equals(testActor.get().x, 50, 
-  		  'Value "x" was properly interpolated at position 0.5.');
-  		equals(testActor.get().y, 50, 
-  		  'Value "y" was properly interpolated at position 0.5.');
+      testActor.keyframe(0, {
+        'x': 0
+        ,'y': 0
+      }).keyframe(1000, {
+        'x': 100
+        ,'y':100
+      });
+      
+      
+      testActor.calculatePosition(0);
+      
+      equals(testActor.get().x, 0, 
+        'Value "x" was properly interpolated at position 0.0.');
+      equals(testActor.get().y, 0, 
+        'Value "y" was properly interpolated at position 0.0.');
+      
+      
+      testActor.calculatePosition(500);
+      
+      equals(testActor.get().x, 50, 
+        'Value "x" was properly interpolated at position 0.5.');
+      equals(testActor.get().y, 50, 
+        'Value "y" was properly interpolated at position 0.5.');
 
 
       testActor.calculatePosition(1000);
 
-  		equals(testActor.get().x, 100, 
-  		  'Value "x" was properly interpolated at position 1.0.');
-  		equals(testActor.get().y, 100, 
-  		  'Value "y" was properly interpolated at position 1.0.');
-	  });
-	  
-	  
-	  
-	  module('Multiple keyframes');
-	  
-	  test('Interpolate Actor positions at various positions mid-frame.', 
-	  function () {
-	    var testKapi
-  	      ,testActor;
+      equals(testActor.get().x, 100, 
+        'Value "x" was properly interpolated at position 1.0.');
+      equals(testActor.get().y, 100, 
+        'Value "y" was properly interpolated at position 1.0.');
+    });
+    
+    
+    
+    module('Multiple keyframes');
+    
+    test('Interpolate Actor positions at various positions mid-frame.', 
+    function () {
+      var testKapi
+          ,testActor;
 
-  	  testKapi = setupTestKapi();
-  	  testActor = setupTestActor(testKapi);
-  	  
-  	  
-  	  testActor.keyframe(1000, {
-    		  'x': 0
-    		  ,'y':0
-    	}).keyframe(2000, {
-  		  'x': 100
-  		  ,'y':100
-  		});
-  		
-  		testActor.calculatePosition(1000);
-  		
-  		equals(testActor.get().x, 0, 
-  		  'Value "x" was properly interpolated at position 0.0.');
-  		equals(testActor.get().y, 0, 
-  		  'Value "y" was properly interpolated at position 0.0.');
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
       
       
-  		testActor.calculatePosition(1500);
-  		
-  		equals(testActor.get().x, 50, 
-  		  'Value "x" was properly interpolated at position 0.5.');
-  		equals(testActor.get().y, 50, 
-  		  'Value "y" was properly interpolated at position 0.5.');
+      testActor.keyframe(1000, {
+          'x': 0
+          ,'y':0
+      }).keyframe(2000, {
+        'x': 100
+        ,'y':100
+      });
+      
+      testActor.calculatePosition(1000);
+      
+      equals(testActor.get().x, 0, 
+        'Value "x" was properly interpolated at position 0.0.');
+      equals(testActor.get().y, 0, 
+        'Value "y" was properly interpolated at position 0.0.');
+      
+      
+      testActor.calculatePosition(1500);
+      
+      equals(testActor.get().x, 50, 
+        'Value "x" was properly interpolated at position 0.5.');
+      equals(testActor.get().y, 50, 
+        'Value "y" was properly interpolated at position 0.5.');
       
       
       testActor.calculatePosition(2000);
       
-  		equals(testActor.get().x, 100, 
-  		  'Value "x" was properly interpolated at position 1.0.');
-  		equals(testActor.get().y, 100, 
-  		  'Value "y" was properly interpolated at position 1.0.');
-  	});
-  	
-  	
-  	
-  	test('Applied easing is taken from the destination frame', 
-	  function () {
-	    var testKapi
-  	      ,testActor
-  	      ,tweenableComparator;
+      equals(testActor.get().x, 100, 
+        'Value "x" was properly interpolated at position 1.0.');
+      equals(testActor.get().y, 100, 
+        'Value "y" was properly interpolated at position 1.0.');
+    });
+    
+    
+    
+    test('Applied easing is taken from the destination frame', 
+    function () {
+      var testKapi
+          ,testActor
+          ,tweenableComparator;
 
-  	  testKapi = setupTestKapi();
-  	  testActor = setupTestActor(testKapi);
-  	  
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      
       testActor.keyframe(0, {
         'x': 0
       }, 'linear').keyframe(1000, {
-    		'x': 100
-    	}, 'easeInSine').keyframe(2000, {
-  		  'x': 200
-  		}, 'easeOutCirc');
-  		
-  		tweenableComparator = Tweenable.util.interpolate({
-    	  'x': 0
-    	}, {
-    	  'x': 100
-    	}, .5, 'easeInSine');
-  		
-  		testActor.calculatePosition(500);  		
-  		equals(testActor.get().x, tweenableComparator.x, 
-  		  'Value "x" was properly interpolated at position 0.5 with "easeInSine".');
-  		  
-  		
-		  tweenableComparator = Tweenable.util.interpolate({
-    	  'x': 100
-    	}, {
-    	  'x': 200
-    	}, .5, 'easeOutCirc');
+        'x': 100
+      }, 'easeInSine').keyframe(2000, {
+        'x': 200
+      }, 'easeOutCirc');
+      
+      tweenableComparator = Tweenable.util.interpolate({
+        'x': 0
+      }, {
+        'x': 100
+      }, .5, 'easeInSine');
+      
+      testActor.calculatePosition(500);     
+      equals(testActor.get().x, tweenableComparator.x, 
+        'Value "x" was properly interpolated at position 0.5 with "easeInSine".');
+        
+      
+      tweenableComparator = Tweenable.util.interpolate({
+        'x': 100
+      }, {
+        'x': 200
+      }, .5, 'easeOutCirc');
 
-  		testActor.calculatePosition(1500);
-  		equals(testActor.get().x, tweenableComparator.x, 
-  		  'Value "x" was properly interpolated at position 0.5 with "easeOutCirc".');
-  		
-  	});
+      testActor.calculatePosition(1500);
+      equals(testActor.get().x, tweenableComparator.x, 
+        'Value "x" was properly interpolated at position 0.5 with "easeOutCirc".');
+      
+    });
 
-	}
-	</script>
+  }
+  </script>
 </head>
 <body>
   <h1 id="qunit-header"><a href="https://github.com/jeremyckahn/rekapi">Rekapi</a></h1>
@@ -204,6 +204,6 @@
    <h2 id="qunit-userAgent"></h2>
    <ol id="qunit-tests"></ol>
    <div id="qunit-fixture"></div>
-	<canvas id="sandbox"></canvas>
+  <canvas id="sandbox"></canvas>
 </body>
 </html>
