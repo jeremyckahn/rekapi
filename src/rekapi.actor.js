@@ -117,6 +117,16 @@
   };
 
 
+  gk.Actor.prototype.liveCopy = function (when, source) {
+    var sourceKeyframeData;
+
+    sourceKeyframeData = this._keyframes[source];
+    this.keyframe(when, sourceKeyframeData.position, sourceKeyframeData.easing);
+
+    return this;
+  };
+
+
   /**
    * Remove a keyframe set on the actor.
    * @param {when} when the millisecond to remove the keyframe from.
@@ -133,12 +143,16 @@
   };
 
 
+  /**
+   * Removes all keyframes set on the actor.
+   * @returns {Kapi.Actor}
+   */
   gk.Actor.prototype.removeAllKeyframes = function () {
     var keyframeListCopy;
 
     keyframeListCopy = this._keyframeList.slice(0);
 
-    _.each(keyframeListCopy, function (when, i) {
+    _.each(keyframeListCopy, function (when) {
       this.removeKeyframe(when);
     }, this);
 
@@ -190,7 +204,7 @@
     return this;
   };
 
-  
+
   /**
    * Exposes the Actor's ordered list of keyframe times.
    * @returns {Array}

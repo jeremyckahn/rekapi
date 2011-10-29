@@ -160,6 +160,29 @@
     });
     
     
+    $('#live-copy-tween').click(function () {
+      var actor;
+
+      killTest();
+      kapi = setupTestKapi();
+      actor = setupTestActor(kapi);
+      
+      actor
+        .keyframe(0, {
+          'x': 50
+          ,'y': 50
+        }, 'easeOutExpo')
+        .keyframe(750, {
+          'x': 200
+          ,'y': 200
+        }, 'easeOutExpo')
+        .liveCopy(1500, 0);
+
+      kapi.play();
+      console.log(kapi);
+    });
+    
+    
     $('#removed-step-tween').click(function () {
       var actor;
 
@@ -257,6 +280,7 @@
     <li><button id="basic-linear-tween">Basic linear tween loop</button></li>
     <li><button id="basic-eased-tween">Basic eased tween loop</button></li>
     <li><button id="two-step-tween">Two-step tween loop</button></li>
+    <li><button id="live-copy-tween">Live copied tween loop</button></li>
     <li><button id="removed-step-tween">Tween loop with a step removed</button></li>
     <li><button id="multi-eased-tween">Tween loop with multiple easings</button></li>
     <li><button id="fancy-parameters-tween">Tween loop with fancy parameters</button></li>
