@@ -99,7 +99,6 @@
       });
     }
     
-    
     // If `easing` was passed as an Object, this will fill in any missing
     // easing properties with the default equation.
     _.each(position, function (positionVal, positionName) {
@@ -114,6 +113,17 @@
     gk.util.sortNumerically(this._keyframeList);
     this.kapi.updateInternalState();
     
+    return this;
+  };
+
+
+  gk.Actor.prototype.removeKeyframe = function (when) {
+    if (this._keyframeList.indexOf(when) !== -1) {
+      this._keyframeList = _.without(this._keyframeList, when);
+      delete this._keyframeList[when];
+      this.kapi.updateInternalState();
+    }
+
     return this;
   };
   

@@ -137,12 +137,17 @@
    */
   gk.prototype.render = function (millisecond) {
     this.calculateActorPositions(millisecond);
-    this.drawActors();
+    this.draw();
     
     return this;
   };
   
   
+  /**
+   * Updates the position (state) of all the actors.
+   * @param {number} millisecond The position in the animation to "go" to.
+   * @returns {Kapi}
+   */
   gk.prototype.calculateActorPositions = function (millisecond) {
     var i, len;
         
@@ -156,12 +161,16 @@
   };
   
   
-  gk.prototype.drawActors = function () {
+  /**
+   * Draws all the actors.
+   * @returns {Kapi}
+   */
+  gk.prototype.draw = function () {
     var i, len
         ,currentActor
         ,canvas_context;
     
-    this.canvas_clear();    
+    this.canvas_clear();
     len = this._drawOrder.length;
     canvas_context = this.context();
     
