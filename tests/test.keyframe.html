@@ -260,6 +260,32 @@
     
     });
 
+
+    module('Keyframe modification');
+
+    test('Original keyframe property is changed.' , function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      
+      testActor
+        .keyframe(0, {
+          'x': 100
+        }).keyframe(1000, {
+          'x': 200
+        });
+      
+      testActor.modifyKeyframe(0, {
+        'x': 0
+      });
+
+      testActor.calculatePosition(500);
+      equals(testActor.get().x, 100,
+          'First keyframe was modified and factored into the position calculation');
+    });
+
   }
   </script>
 </head>

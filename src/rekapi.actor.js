@@ -117,11 +117,44 @@
   };
 
 
+  /**
+   * Copies an existing keyframe into another keyframe.  If the original
+   * keyframe is modified by Kapi.Actor.modifyKeyframe, then the copy is
+   * modified as well.  If the original keyframe is deleted, the copy remains.
+   * If the original keyframe is overwritten with Kapi.Actor.keyframe, then the
+   * link between the frames is lost (although the copy remains as an
+   * independant keyframe).
+   * @param {number} when Where in the animation to make the new keyframe.
+   * @param {number} source The "when" of the target keyframe to copy.
+   * @returns {Kapi.Actor}
+   */
   gk.Actor.prototype.liveCopy = function (when, source) {
     var sourceKeyframeData;
 
-    sourceKeyframeData = this._keyframes[source];
-    this.keyframe(when, sourceKeyframeData.position, sourceKeyframeData.easing);
+    if (this._keyframes.hasOwnProperty(source)) {
+      sourceKeyframeData = this._keyframes[source];
+      this.keyframe(when, sourceKeyframeData.position,
+          sourceKeyframeData.easing);
+    }
+
+    return this;
+  };
+
+
+  gk.Actor.prototype.modifyKeyframe = function (when, stateModification,
+      opt_easingModification) {
+
+      var targetKeyframe;
+
+      targetKeyframe = this._keyframes[when];
+
+    _.each(stateModification, function (newState, propName) {
+      if (newState === undefined || newState === null) {
+        delete targetKeyframe.position[propName];
+      } else {
+        targetKeyframe.position[propName] = newState;
+      }
+    }, this);
 
     return this;
   };
