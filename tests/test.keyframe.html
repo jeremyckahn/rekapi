@@ -254,8 +254,9 @@
       
       testActor.removeAllKeyframes();
       
-      equals(testKapi._animationLength, 0,
-          'Animation length is 0');
+      equals(testKapi._animationLength, 0, 'Animation length is 0');
+      equals(testActor._keyframeList.length, 0, 
+          'There are no keyframes in the keyframe list');
     
     });
 
