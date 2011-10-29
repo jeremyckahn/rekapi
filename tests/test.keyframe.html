@@ -240,6 +240,25 @@
           'The animation length is shortened when the final keyframe is removed');
     });
 
+    test('.removeAllKeyframes removes all keyframes', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      
+      testActor
+        .keyframe(0, {})
+        .keyframe(1000, {})
+        .keyframe(2000, {});
+      
+      testActor.removeAllKeyframes();
+      
+      equals(testKapi._animationLength, 0,
+          'Animation length is 0');
+    
+    });
+
   }
   </script>
 </head>

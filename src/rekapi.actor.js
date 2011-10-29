@@ -81,7 +81,7 @@
    *      ,'y': 'easeInSine'
    *    });
    *  @codeend
-   * @returns {Kapi.Actor} 
+   * @returns {Kapi.Actor}
    */
   gk.Actor.prototype.keyframe = function keyframe (when, position, easing) {
     var originalEasingString;
@@ -117,12 +117,30 @@
   };
 
 
+  /**
+   * Remove a keyframe set on the actor.
+   * @param {when} when the millisecond to remove the keyframe from.
+   * @returns {Kapi.Actor}
+   */
   gk.Actor.prototype.removeKeyframe = function (when) {
     if (this._keyframeList.indexOf(when) !== -1) {
       this._keyframeList = _.without(this._keyframeList, when);
-      delete this._keyframeList[when];
+      delete this._keyframes[when];
       this.kapi.updateInternalState();
     }
+
+    return this;
+  };
+
+
+  gk.Actor.prototype.removeAllKeyframes = function () {
+    var keyframeListCopy;
+
+    keyframeListCopy = this._keyframeList.slice(0);
+
+    _.each(keyframeListCopy, function (when, i) {
+      this.removeKeyframe(when);
+    }, this);
 
     return this;
   };

@@ -106,18 +106,18 @@
     this._drawOrder = [];
     this._playState = playState.STOPPED;
     
+    // Millisecond duration of the animation
+    this._animationLength = 0;
+
     // The setTimeout ID of `tick`
     this._loopId = null;
     
     // The UNIX time at which the animation loop started
     this._loopTimestamp = null;
     
-    // Millisecond duration of the animation
-    this._animationLength = null;
     
     // Used for maintaining position when the animation is paused. 
     this._pausedAtTime = null;
-    
     
     _.extend(this.config, config);
     _.defaults(this.config, defaultConfig);
@@ -190,7 +190,7 @@
   gk.prototype.updateInternalState = function () {
     var allKeyframeLists;
         
-    allKeyframeLists = [];
+    allKeyframeLists = [0];
         
     _.each(this._drawOrder, function (i) {
       allKeyframeLists = allKeyframeLists.concat(allKeyframeLists,
