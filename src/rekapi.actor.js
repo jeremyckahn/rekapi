@@ -156,6 +156,8 @@
       }
     }, this);
 
+    //TODO: Add support for modifying the easing.
+
     return this;
   };
 

@@ -108,7 +108,7 @@
     });
 
 
-    test('Tweens are only valid if there is a start and end point',
+    test('Tweens are only valid if there is a start point',
     function () {
       var testKapi
           ,testActor;
@@ -125,6 +125,26 @@
       testActor.calculatePosition(500);
       equals(testActor.get().x, undefined, 
           'Value only has a start point, therefore a calculated midpoint is undefined.');
+    });
+    
+    
+    test('Tweens are only valid if there is an end point',
+    function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0,{
+        // Nothing!
+      }).keyframe(1000, {
+        'x': 100
+      });
+
+      testActor.calculatePosition(500);
+      equals(testActor.get().x, undefined, 
+          'Value only has an end point, therefore a calculated midpoint is undefined.');
     });
 
 
@@ -306,6 +326,55 @@
           'First keyframe was modified and factored into the position calculation');
     });
 
+
+    module('Live copies');
+
+    test('Live copy state and easing Objects point to the source keyframe\'s Objects.'
+    ,function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      
+      testActor
+        .keyframe(0, {
+          'x': 100
+        }).keyframe(1000, {
+          'x': 200
+        }).liveCopy(2000, 0);
+
+      ok(testActor._keyframes[0].position === testActor._keyframes[2000].position,
+          'Live copy position Object is a reference to the source postition Object');
+
+      ok(testActor._keyframes[0].easing === testActor._keyframes[2000].easing,
+          'Live copy easing Object is a reference to the source easing Object');
+    });
+
+
+    test('Modifiying the target keyframe modifies the live copy.'
+    ,function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      
+      testActor
+        .keyframe(0, {
+          'x': 100
+        }).keyframe(1000, {
+          'x': 200
+        }).liveCopy(2000, 0);
+
+      testActor.modifyKeyframe(0, {
+        'x': 50
+      });
+
+      equals(testActor._keyframes[0].position.x
+          ,testActor._keyframes[2000].position.x
+          ,'The live copy "x" property was modified when the original property was modified.');
+    });
   }
   </script>
 </head>
