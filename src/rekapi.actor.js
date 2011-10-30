@@ -156,7 +156,15 @@
       }
     }, this);
 
-    //TODO: Add support for modifying the easing.
+    if (opt_easingModification) {
+      _.each(opt_easingModification, function (newEasing, propName) {
+        if (newEasing === undefined || newEasing === null) {
+          delete targetKeyframe.easing[propName];
+        } else {
+          targetKeyframe.easing[propName] = newEasing;
+        }
+      }, this);
+    }
 
     return this;
   };

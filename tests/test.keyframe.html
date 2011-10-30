@@ -327,6 +327,9 @@
     });
 
 
+    //TODO: Add a test to check easing modification.
+
+
     module('Live copies');
 
     test('Live copy state and easing Objects point to the source keyframe\'s Objects.'
@@ -363,26 +366,34 @@
       testActor
         .keyframe(0, {
           'x': 100
+        }, {
+          'x': 'easeOutCirc'
         }).keyframe(1000, {
           'x': 200
         }).liveCopy(2000, 0);
 
       testActor.modifyKeyframe(0, {
         'x': 50
+      }, {
+        'x': 'easeOutSine'
       });
 
       equals(testActor._keyframes[0].position.x
           ,testActor._keyframes[2000].position.x
           ,'The live copy "x" property was modified when the original property was modified.');
+
+      equals(testActor._keyframes[0].easing.x
+          ,testActor._keyframes[2000].easing.x
+          ,'the live copy "x" easing was modified when the original easing was modified.');
     });
   }
   </script>
 </head>
 <body>
-  <h1 id="qunit-header"><a href="https://github.com/jeremyckahn/rekapi">Rekapi</a></h1>
+  <h1 id="qunit-header"><a href="https://github.com/jeremyckahn/rekapi">rekapi</a></h1>
    <h2 id="qunit-banner"></h2>
    <div id="qunit-testrunner-toolbar"></div>
-   <h2 id="qunit-userAgent"></h2>
+   <h2 id="qunit-useragent"></h2>
    <ol id="qunit-tests"></ol>
    <div id="qunit-fixture"></div>
   <canvas id="sandbox"></canvas>
