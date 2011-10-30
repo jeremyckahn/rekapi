@@ -86,7 +86,8 @@
     ,'PLAYING': 'playing'
   };
   
-  if (typeof KAPI_DEBUG !== 'undefined' && typeof KAPI_DEBUG_NOW !== 'undefined') {
+  if (typeof KAPI_DEBUG !== 'undefined' 
+      && typeof KAPI_DEBUG_NOW !== 'undefined') {
     now = KAPI_DEBUG_NOW;
   } else {
     now = Tweenable.util.now;

@@ -26,16 +26,14 @@
         easingFunc = Tweenable.prototype.formula[easing[name]];
       }
       
-      interpolatedValues[name] = global.Tweenable.util.tweenProps(position, {
-        'originalState': from
-        ,'to': to
-        ,'timestamp': 0
-        ,'duration': 1
-        ,'easingFunc': easingFunc
-      }, {
-        'current': current
-      })[name];
-      
+      if (typeof to[name] !== 'undefined') {
+        interpolatedValues[name] = global.Tweenable.util.tweenProp(
+            from[name]
+            ,to[name]
+            ,easingFunc
+            ,position);
+      }
+
     });
     
     return interpolatedValues;
