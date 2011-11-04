@@ -250,11 +250,22 @@
   
   
   /**
+   * Move this Actor to another layer in the owner Kapi isntance.
+   * @param {number} layer The 0-based layer to move to.
+   * @returns {Kapi.Actor|undefined} If successful, the actor is returned.  If
+   *    the operation fails, `undefined` is returned.
+   */
+  gk.Actor.prototype.moveToLayer = function (layer) {
+    return this.kapi.moveActorToLayer(this, layer);
+  };
+
+
+  /**
    * Exposes the Actor's ordered list of keyframe times.
    * @returns {Array}
    */
   gk.Actor.prototype.keyframeList = function () {
     return this._keyframeList;
-  }
+  };
 
 } (this));

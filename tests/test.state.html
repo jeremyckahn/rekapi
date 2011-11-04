@@ -149,6 +149,27 @@
     });
     
     
+    test('Actors can move themselves.', function () {
+      var testKapi
+          ,testActor1
+          ,testActor2;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      testActor2 = setupTestActor(testKapi);
+      testActor1.moveToLayer(1);
+
+      equals(testKapi._drawOrder[0], testActor2.id,
+          'Second actor was moved to the first position.');
+
+      equals(testKapi._drawOrder[1], testActor1.id,
+          'First actor was moved to the second position.');
+
+      equals(testKapi._drawOrder.length, 2,
+          'Draw list size did not change.');
+    });
+
+
     test('Actors can be retrieved from the Kapi', function () {
       var testKapi
           ,testActor1;
