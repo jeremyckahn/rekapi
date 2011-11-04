@@ -289,8 +289,16 @@
   };
 
 
+  /**
+   * Move an actor from one layer to another.  Higher layers are drawn later
+   *    (on top of lower layers).
+   * @param {Kapi.Actor} actor The actor to move within the list.
+   * @param {number} layer The 0-based layer to move `actor` to.
+   * @returns {Kapi.Actor|undefined} If successful, the actor is returned.  If
+   *    the operation fails, `undefined` is returned.
+   */
   gk.prototype.moveActorToLayer = function (actor, layer) {
-    if (layer <= this._drawOrder.length) {
+    if (layer < this._drawOrder.length) {
       this._drawOrder = _.without(this._drawOrder, actor.id);
       this._drawOrder.splice(layer, 0, actor.id);
 
