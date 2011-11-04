@@ -47,15 +47,15 @@
   
   
   gk.prototype.canvas_clear = function () {
-    this.context().clearRect(0, 0, this.canvas_width(), this.canvas_height());
+    this.canvas_context().clearRect(0, 0, this.canvas_width(), this.canvas_height());
   };
   
   
   /**
    * Gets the 2d context of the Kapi's canvas.
    */
-  gk.prototype.context = function () {
-    return this.canvas_context;
+  gk.prototype.canvas_context = function () {
+    return this._context;
   };
 
 } (this));
