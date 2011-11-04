@@ -54,8 +54,8 @@
     
     return this;
   };
-  
-  
+
+
   // Kind of a fun way to set up an inheritance chain.  `ActorMethods` prevents
   // methods on `Actor.prototype` from polluting `Tweenable`'s prototype with
   // `Actor` specific methods.
@@ -65,6 +65,52 @@
   // But the magic doesn't stop here!  `Actor`'s constructor steals the
   // `Tweenable` constructor.
   
+  
+  /**
+   * Calculates and sets the Actor's position at a particular millisecond in the
+   * animation.
+   * @param {number} forMillisecond
+   * @returns {Kapi.Actor}
+   */
+  gk.Actor.prototype.calculatePosition = function (forMillisecond) {
+    var keyframeList
+        ,keyframes
+        ,delta
+        ,interpolatedPosition
+        ,startMs
+        ,endMs
+        ,timeRangeIndexStart
+        ,rangeFloor
+        ,rangeCeil;
+        
+    keyframeList = this._keyframeList;
+    startMs = _.first(keyframeList);
+    endMs = _.last(keyframeList);
+    
+    if (startMs <= forMillisecond && forMillisecond <= endMs) {
+      
+      keyframes = this._keyframes;
+      timeRangeIndexStart = getCurrentMillisecondRangeIndex(this, 
+          forMillisecond);
+      rangeFloor = keyframeList[timeRangeIndexStart];
+      rangeCeil = keyframeList[timeRangeIndexStart + 1];
+      delta = rangeCeil - rangeFloor;
+      interpolatedPosition = (forMillisecond - rangeFloor) / delta;
+      
+      this
+        .set(keyframes[keyframeList[timeRangeIndexStart]].position)
+        .interpolate(keyframes[keyframeList[timeRangeIndexStart + 1]].position,
+            interpolatedPosition,
+            keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
+                
+    } else {
+      this.set({});
+    }
+    
+    return this;
+  };
+
+
   /**
    * Define a keyframe for an Actor.
    * @param {number} when
@@ -203,51 +249,6 @@
   };
   
   
-  /**
-   * Calculates and sets the Actor's position at a particular millisecond in the
-   * animation.
-   * @param {number} forMillisecond
-   * @returns {Kapi.Actor}
-   */
-  gk.Actor.prototype.calculatePosition = function (forMillisecond) {
-    var keyframeList
-        ,keyframes
-        ,delta
-        ,interpolatedPosition
-        ,startMs
-        ,endMs
-        ,timeRangeIndexStart
-        ,rangeFloor
-        ,rangeCeil;
-        
-    keyframeList = this._keyframeList;
-    startMs = _.first(keyframeList);
-    endMs = _.last(keyframeList);
-    
-    if (startMs <= forMillisecond && forMillisecond <= endMs) {
-      
-      keyframes = this._keyframes;
-      timeRangeIndexStart = getCurrentMillisecondRangeIndex(this, 
-          forMillisecond);
-      rangeFloor = keyframeList[timeRangeIndexStart];
-      rangeCeil = keyframeList[timeRangeIndexStart + 1];
-      delta = rangeCeil - rangeFloor;
-      interpolatedPosition = (forMillisecond - rangeFloor) / delta;
-      
-      this
-        .set(keyframes[keyframeList[timeRangeIndexStart]].position)
-        .interpolate(keyframes[keyframeList[timeRangeIndexStart + 1]].position,
-            interpolatedPosition,
-            keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
-                
-    } else {
-      this.set({});
-    }
-    
-    return this;
-  };
-
-
   /**
    * Exposes the Actor's ordered list of keyframe times.
    * @returns {Array}

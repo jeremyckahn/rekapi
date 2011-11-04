@@ -30,8 +30,8 @@
     kapi = new Kapi(sandbox);
 
     kapi.canvas_style('background', '#ddd');
-    kapi.height(300);
-    kapi.width(500);
+    kapi.canvas_height(300);
+    kapi.canvas_width(500);
     
     return kapi;
   }
@@ -338,7 +338,7 @@
         .keyframe(0, {
           'x': 0
         }, {
-          'x': 'linear'
+          'x': 'elastic'
         }).keyframe(1000, {
           'x': 100
         }, {

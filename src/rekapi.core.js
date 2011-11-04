@@ -284,6 +284,16 @@
     
     return this;
   };
+
+
+  // WIP
+  //gk.prototype.moveActorToLayer = function (actor, layer) {
+  //  if (layer < this._drawOrder.length) {
+
+  //  }
+
+  //  return undefined;
+  //};
   
   
   /**

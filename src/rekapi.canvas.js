@@ -22,12 +22,12 @@
   }
   
   
-  gk.prototype.height = function (opt_height) {
+  gk.prototype.canvas_height = function (opt_height) {
     return canvas_dimension(this.canvas, 'height', opt_height);
   };
   
   
-  gk.prototype.width = function (opt_width) {
+  gk.prototype.canvas_width = function (opt_width) {
     return canvas_dimension(this.canvas, 'width', opt_width);
   };
   
@@ -47,7 +47,7 @@
   
   
   gk.prototype.canvas_clear = function () {
-    this.context().clearRect(0, 0, this.width(), this.height());
+    this.context().clearRect(0, 0, this.canvas_width(), this.canvas_height());
   };
   
   
