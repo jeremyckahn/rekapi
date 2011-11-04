@@ -211,9 +211,11 @@
    * @returns {Kapi}
    */
   gk.prototype.addActor = function (actor, opt_initialState) {
-    actor.set(opt_initialState);
-    this._actors[actor.id] = actor;
-    this._drawOrder.push(actor.id);
+    if (!_.contains(this._actors, actor)) {
+      actor.set(opt_initialState);
+      this._actors[actor.id] = actor;
+      this._drawOrder.push(actor.id);
+    }
     
     return this;
   };
@@ -288,7 +290,8 @@
 
   // WIP
   //gk.prototype.moveActorToLayer = function (actor, layer) {
-  //  if (layer < this._drawOrder.length) {
+
+  //  if (layer <= this._drawOrder.length) {
 
   //  }
 

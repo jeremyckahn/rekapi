@@ -79,6 +79,20 @@
       equals(testKapi._drawOrder[0], testActor1.id,
           'Actor is the first element in the internal _drawOrder array');
     });
+
+
+    test('Actors can only be added once', function () {
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      
+      testKapi.addActor(testActor1);
+
+      equals(testKapi._drawOrder.length, 1,
+          'The actor was not added twice');
+    });
     
     
     test('Actors can be retrieved from the Kapi', function () {
