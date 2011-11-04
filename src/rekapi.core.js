@@ -211,6 +211,7 @@
    * @returns {Kapi}
    */
   gk.prototype.addActor = function (actor, opt_initialState) {
+    // You can't add an actor more than once.
     if (!_.contains(this._actors, actor)) {
       actor.set(opt_initialState);
       this._actors[actor.id] = actor;
@@ -288,15 +289,16 @@
   };
 
 
-  // WIP
-  //gk.prototype.moveActorToLayer = function (actor, layer) {
+  gk.prototype.moveActorToLayer = function (actor, layer) {
+    if (layer <= this._drawOrder.length) {
+      this._drawOrder = _.without(this._drawOrder, actor.id);
+      this._drawOrder.splice(layer, 0, actor.id);
 
-  //  if (layer <= this._drawOrder.length) {
+      return actor;
+    }
 
-  //  }
-
-  //  return undefined;
-  //};
+    return undefined;
+  };
   
   
   /**
