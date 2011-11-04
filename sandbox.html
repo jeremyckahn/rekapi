@@ -2,21 +2,21 @@
 <html>
 <head>
   
-	<script src="lib/require.js"></script><script>
-	function onLoadAll () {
-	  var sandbox
-				,kapi
-				,actor;
+  <script src="lib/require.js"></script><script>
+  function onLoadAll () {
+    var sandbox
+        ,kapi
+        ,actor;
 
-		sandbox = document.getElementById('sandbox');
-		kapi = new Kapi(sandbox);
+    sandbox = document.getElementById('sandbox');
+    kapi = new Kapi(sandbox);
 
-		kapi.canvas_style('background', '#ddd');
-		kapi.canvas_height(300);
-		kapi.canvas_width(500);
-		
-		actor = new Kapi.Actor(kapi, {
-		  'draw': function (canvas_context, state) {
+    kapi.canvas_style('background', '#ddd');
+    kapi.canvas_height(300);
+    kapi.canvas_width(500);
+    
+    actor = new Kapi.Actor(kapi, {
+      'draw': function (canvas_context, state) {
         canvas_context.beginPath();
           canvas_context.arc(
             state.x || 0,
@@ -30,32 +30,38 @@
           canvas_context.closePath();
 
           return this;
-		  }
-		});
-		
-		kapi.addActor(actor);
-		window.kapi = kapi;
-		console.log(kapi);
-	}
-	
-		require([
-		    'lib/underscore/underscore.js'
-		    ,'lib/shifty/shifty.js'], 
-				function () {
-				  
-			require(['src/rekapi.core.js'], function () {
-			  require(['src/rekapi.actor.js'
-			          ,'src/rekapi.canvas.js'
-			          ,'src/rekapi.interpolate.js'
-			    ], function () {
-  				setTimeout(onLoadAll, 1);
-  			});
-			});
-			
-		});
-	</script>
+      }
+    });
+    
+    kapi.addActor(actor, {
+      'x': 200
+      ,'y': 200
+      ,'radius': 50
+    });
+
+    window.kapi = kapi;
+    window.actor = actor;
+    console.log(kapi);
+  }
+  
+    require([
+        'lib/underscore/underscore.js'
+        ,'lib/shifty/shifty.js'], 
+        function () {
+          
+      require(['src/rekapi.core.js'], function () {
+        require(['src/rekapi.actor.js'
+                ,'src/rekapi.canvas.js'
+                ,'src/rekapi.interpolate.js'
+          ], function () {
+          setTimeout(onLoadAll, 1);
+        });
+      });
+      
+    });
+  </script>
 </head>
 <body>
-	<canvas id="sandbox"></canvas>
+  <canvas id="sandbox"></canvas>
 </body>
 </html>
