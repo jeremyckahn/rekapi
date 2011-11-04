@@ -50,6 +50,7 @@
       ,'setup': opt_config.setup || gk.noop
       ,'draw': opt_config.draw || gk.noop
       ,'teardown': opt_config.teardown || gk.noop
+      ,'_data': {}
     });
     
     return this;
@@ -267,5 +268,11 @@
   gk.Actor.prototype.keyframeList = function () {
     return this._keyframeList;
   };
+
+
+  // WIP
+  //gk.Actor.prototype.data = function (opt_newData) {
+  //  
+  //};
 
 } (this));
