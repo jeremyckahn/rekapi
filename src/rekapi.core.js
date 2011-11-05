@@ -130,6 +130,21 @@
   gk.prototype.animationLength = function () {
     return this._animationLength;
   };
+
+
+  /**
+   * Get or sets the framterate.  This is the rate per second at which the
+   *    animation updates.
+   * @param {number} opt_newFramerate The framerate to set
+   * @returns {number} The current framerate
+   */
+  gk.prototype.framerate = function (opt_newFramerate) {
+    if (opt_newFramerate) {
+      this.config.fps = opt_newFramerate;
+    }
+
+    return this.config.fps;
+  };
   
   
   /**
