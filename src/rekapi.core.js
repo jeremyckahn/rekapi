@@ -37,6 +37,10 @@
       kapi._playsRemaining--;
       kapi._loopTimestamp += kapi._animationLength;
     }
+
+    if (kapi._playsRemaining === 0) {
+      kapi.stop();
+    }
   }
   
   
@@ -63,19 +67,21 @@
    * @param {Kapi} kapi
    */
   function renderCurrentMillisecond (kapi) {
-    var currentMillisecond
+    var loopPosition
         ,millisecondToRender;
     
-    currentMillisecond = calculateLoopPosition(kapi);
+    loopPosition = calculateLoopPosition(kapi);
 
-    if (kapi._playsRemaining === 0) {
-      millisecondToRender = kapi._animationLength;
-      kapi.stop();
-    } else {
-      millisecondToRender = currentMillisecond;
-    }
+   // if (kapi._playsRemaining === 0) {
+   //   millisecondToRender = kapi._animationLength;
+   //   kapi.stop();
+   // } else {
+   //   millisecondToRender = loopPosition;
+   // }
+    millisecondToRender = kapi._playsRemaining === 0
+      ? kapi._animationLength : loopPosition;
 
-    kapi.render(currentMillisecond);
+    kapi.render(millisecondToRender);
   }
   
   
