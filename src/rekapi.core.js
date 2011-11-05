@@ -306,6 +306,13 @@
     this._playState = playState.PLAYING;
     tick(this);
     
+    // also resume any shifty tweens that are paused.
+    _.each(this._actors, function (actor) {
+      if (actor._state.isPaused ) {
+        actor.resume();
+      }
+    });
+
     return this;
   };
   
@@ -319,6 +326,11 @@
     clearTimeout(this._loopId);
     this._pausedAtTime = now();
     
+    // also pause any shifty tweens that are running.
+    _.each(this._actors, function (actor) {
+      actor.pause();
+    });
+
     return this;
   };
   
@@ -336,7 +348,7 @@
       this.canvas_clear();
     }
 
-    // Also kill any Shifty tweens that are running.
+    // also kill any shifty tweens that are running.
     _.each(this._actors, function (actor) {
       actor.stop();
     });
