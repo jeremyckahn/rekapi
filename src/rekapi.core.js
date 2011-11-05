@@ -30,7 +30,7 @@
    * Calculate how far in the animation loop `kapi` is, in milliseconds, based 
    * on the current time.  Also overflows into a new loop if necessary.
    * @param {Kapi} kapi
-   * @returns {number}
+   * @returns {number} 
    */
   function calculateCurrentMillisecond (kapi) {
     var currentMillisecond
@@ -46,13 +46,13 @@
 
     if (kapi._playsRemaining === 0) {
       kapi.stop();
+      return kapi._animationLength;
     }
     
-    //TODO: Some more work needs to be done in order to prevent auto-looping.
-    if (kapi._playsRemaining === -1) {
+    //if (kapi._playsRemaining === -1) {
       loopedMillisecond = currentMillisecond % kapi._animationLength;
       return loopedMillisecond;
-    }
+    //}
 
     return currentMillisecond;
   }
