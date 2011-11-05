@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+  <script src="../lib/require.js"></script><script>
+  
+  var KAPI_DEBUG = true
+      ,internalDebugNow
+      ,SHIFTY_DEBUG_NOW = function () {
+        return internalDebugNow();
+      };
+  
+  require([
+      '../lib/underscore/underscore.js'
+      ,'../lib/shifty/shifty.js'], 
+      function () {
+        
+        require(['../src/rekapi.core.js'], function () {
+          require(['../src/rekapi.actor.js'], function () {
+            require(['../src/rekapi.canvas.js'
+                    ,'../src/rekapi.interpolate.js'], function () {
+              setTimeout(runTests, 1);
+            });
+          });
+        });
+    
+  });
+  
+  function setupTestKapi () {
+    var sandbox
+        ,kapi
+        ,actor;
+
+    sandbox = document.getElementById('sandbox');
+    kapi = new Kapi(sandbox);
+
+    kapi.canvas_style('background', '#ddd');
+    kapi.canvas_height(300);
+    kapi.canvas_width(500);
+    
+    return kapi;
+  }
+  
+  function  setupTestActor (forKapi) {
+    var actor;
+    
+    actor = new Kapi.Actor(forKapi, {
+      'draw': function (canvas_context, state) {
+        canvas_context.beginPath();
+          canvas_context.arc(
+            this.x || 0,
+            this.y || 0,
+            this.radius || 0,
+            0,
+            Math.PI*2, 
+            true);
+          canvas_context.fillStyle = this.color || '#f0f';
+          canvas_context.fill();
+          canvas_context.closePath();
+
+          return this;
+      }
+    });
+    
+    forKapi.addActor(actor);
+    return actor;
+  }
+  
+  function runTests () {
+    
+    module("Shifty tweens");
+    
+    test('Actor.tween correctly calculates position based on time'
+      ,function () {
+      var testKapi
+          ,testActor
+          ,calculatedMillisecond;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      internalDebugNow = function () {
+        return 0;
+      };
+
+      testKapi.play();
+      testActor.tween({
+        'from': { 
+          'x': 0
+        }
+        ,'to': {
+          'x': 100
+        }
+        ,'duration': 1000
+        ,'easing': 'linear'
+      });
+     
+      // Calling resume() forces an update in Shifty.
+      testActor.resume();
+      equals(testActor.get().x, 0,
+          'Started a tween and correctly tweened to 0.0');
+      
+      internalDebugNow = function () {
+        return 500;
+      };
+     
+      testActor.resume();
+      equals(testActor.get().x, 50,
+          'Started a tween and correctly tweened to 0.5');
+      
+      internalDebugNow = function () {
+        return 1000;
+      };
+     
+      testActor.resume();
+      equals(testActor.get().x, 100,
+          'Started a tween and correctly tweened to 1.o');
+    });
+    
+    
+    test('Actor.tween correctly calculates position based on time'
+      ,function () {
+      var testKapi
+          ,testActor
+          ,calculatedMillisecond;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      internalDebugNow = function () {
+        return 0;
+      };
+
+      testKapi.play();
+      testActor
+        .set({ 'x': 0 })
+        .to({
+          'to': {
+            'x': 100
+          }
+          ,'duration': 1000
+          ,'easing': 'linear'
+        });
+     
+      testActor.resume();
+      equals(testActor.get().x, 0,
+          'Started a tween and correctly tweened to 0.0');
+      
+      internalDebugNow = function () {
+        return 500;
+      };
+     
+      testActor.resume();
+      equals(testActor.get().x, 50,
+          'Started a tween and correctly tweened to 0.5');
+      
+      internalDebugNow = function () {
+        return 1000;
+      };
+     
+      testActor.resume();
+      equals(testActor.get().x, 100,
+          'Started a tween and correctly tweened to 1.o');
+    });
+
+
+    test('A tweened actor stays in it\'s tweened-to positing after the tween completes'
+      ,function () {
+      var testKapi
+          ,testActor
+          ,calculatedMillisecond;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      internalDebugNow = function () {
+        return 0;
+      };
+
+      testKapi.play();
+      testActor.tween({
+        'from': {
+          'x': 0
+        }
+        ,'to': {
+          'x': 100
+        }
+        ,'duration': 1000
+        ,'easing': 'linear'
+      });
+
+      // Mock some far-off point in the future
+      internalDebugNow = function () {
+        return 123456789;
+      };
+
+      testActor.resume();
+      equals(testActor.get().x, 100,
+          'Actor remains in destination position after tween has expired');
+    });
+  }
+  </script>
+</head>
+<body>
+  <h1 id="qunit-header"><a href="https://github.com/jeremyckahn/rekapi">Rekapi</a></h1>
+   <h2 id="qunit-banner"></h2>
+   <div id="qunit-testrunner-toolbar"></div>
+   <h2 id="qunit-userAgent"></h2>
+   <ol id="qunit-tests"></ol>
+   <div id="qunit-fixture"></div>
+  <canvas id="sandbox"></canvas>
+</body>
+</html>
