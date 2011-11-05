@@ -103,11 +103,6 @@
         .interpolate(keyframes[keyframeList[timeRangeIndexStart + 1]].position,
             interpolatedPosition,
             keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
-                
-    } else {
-      if (this._state.isAnimating !== true) {
-        this.set({});
-      }
     }
     
     return this;

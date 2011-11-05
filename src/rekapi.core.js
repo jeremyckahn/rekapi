@@ -213,7 +213,7 @@
   gk.prototype.addActor = function (actor, opt_initialState) {
     // You can't add an actor more than once.
     if (!_.contains(this._actors, actor)) {
-      actor.set(opt_initialState);
+      actor.set(opt_initialState || {});
       this._actors[actor.id] = actor;
       this._drawOrder.push(actor.id);
     }
