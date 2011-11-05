@@ -24,6 +24,15 @@
       return a - b;
     });
   }
+
+
+  function enterNewLoop (kapi, currentMillisecond) {
+    if (currentMillisecond > kapi._animationLength
+        && kapi._playsRemaining > 0) {
+      kapi._playsRemaining--;
+      kapi._loopTimestamp += kapi._animationLength;
+    }
+  }
   
   
   /**
@@ -37,18 +46,7 @@
         ,loopedMillisecond;
 
     currentMillisecond = (now() - kapi._loopTimestamp);
-
-    if (currentMillisecond > kapi._animationLength
-        && kapi._playsRemaining > 0) {
-      kapi._playsRemaining--;
-      kapi._loopTimestamp += kapi._animationLength;
-    }
-
-    if (kapi._playsRemaining === 0) {
-      kapi.stop();
-      return kapi._animationLength;
-    }
-    
+    enterNewLoop(kapi, currentMillisecond);
     loopedMillisecond = currentMillisecond % kapi._animationLength;
     return loopedMillisecond;
   }
@@ -60,9 +58,18 @@
    * @param {Kapi} kapi
    */
   function renderCurrentMillisecond (kapi) {
-    var currentMillisecond;
+    var currentMillisecond
+        ,millisecondToRender;
     
     currentMillisecond = calculateCurrentMillisecond(kapi);
+
+    if (kapi._playsRemaining === 0) {
+      millisecondToRender = kapi._animationLength;
+      kapi.stop();
+    } else {
+      millisecondToRender = currentMillisecond;
+    }
+
     kapi.render(currentMillisecond);
   }
   
