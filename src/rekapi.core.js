@@ -26,8 +26,13 @@
   }
 
 
-  function enterNewLoop (kapi, currentMillisecond) {
-    if (currentMillisecond > kapi._animationLength
+  /**
+   * If necessary, enter a new loop and make necessary state tweaks.
+   * @param {Kapi} kapi
+   * @param {number} timeSinceStart
+   */
+  function attemptToEnterNewLoop (kapi, timeSinceStart) {
+    if (timeSinceStart > kapi._animationLength
         && kapi._playsRemaining > 0) {
       kapi._playsRemaining--;
       kapi._loopTimestamp += kapi._animationLength;
@@ -39,15 +44,15 @@
    * Calculate how far in the animation loop `kapi` is, in milliseconds, based 
    * on the current time.  Also overflows into a new loop if necessary.
    * @param {Kapi} kapi
-   * @returns {number} 
+   * @returns {number}
    */
-  function calculateCurrentMillisecond (kapi) {
-    var currentMillisecond
+  function calculateLoopPosition (kapi) {
+    var timeSinceStart
         ,loopedMillisecond;
 
-    currentMillisecond = (now() - kapi._loopTimestamp);
-    enterNewLoop(kapi, currentMillisecond);
-    loopedMillisecond = currentMillisecond % kapi._animationLength;
+    timeSinceStart = now() - kapi._loopTimestamp;
+    attemptToEnterNewLoop(kapi, timeSinceStart);
+    loopedMillisecond = timeSinceStart % kapi._animationLength;
     return loopedMillisecond;
   }
   
@@ -61,7 +66,7 @@
     var currentMillisecond
         ,millisecondToRender;
     
-    currentMillisecond = calculateCurrentMillisecond(kapi);
+    currentMillisecond = calculateLoopPosition(kapi);
 
     if (kapi._playsRemaining === 0) {
       millisecondToRender = kapi._animationLength;
@@ -383,7 +388,7 @@
   if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
     gk._private = {
       'sortNumerically': sortNumerically
-      ,'calculateCurrentMillisecond': calculateCurrentMillisecond
+      ,'calculateLoopPosition': calculateLoopPosition
       ,'renderCurrentMillisecond': renderCurrentMillisecond
       ,'tick': tick
     }

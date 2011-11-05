@@ -69,7 +69,7 @@
   
   function runTests () {
     
-    module("calculateCurrentMillisecond");
+    module("calculateLoopPosition");
     
     test('Calculate accurate position in the tween', function () {
       var testKapi
@@ -88,7 +88,7 @@
       };
       
       calculatedMillisecond = 
-          Kapi._private.calculateCurrentMillisecond(testKapi);
+          Kapi._private.calculateLoopPosition(testKapi);
     
       equals(calculatedMillisecond, 1000, 
           'Calculated a midpoint of the animation.');
@@ -112,7 +112,7 @@
       };
       
       calculatedMillisecond = 
-          Kapi._private.calculateCurrentMillisecond(testKapi);
+          Kapi._private.calculateLoopPosition(testKapi);
     
       equals(calculatedMillisecond, 500, 
           'Calculated an overflow position of the animation.');
