@@ -105,7 +105,9 @@
             keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
                 
     } else {
-      this.set({});
+      if (this._state.isAnimating !== true) {
+        this.set({});
+      }
     }
     
     return this;
