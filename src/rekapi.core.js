@@ -49,12 +49,8 @@
       return kapi._animationLength;
     }
     
-    //if (kapi._playsRemaining === -1) {
-      loopedMillisecond = currentMillisecond % kapi._animationLength;
-      return loopedMillisecond;
-    //}
-
-    return currentMillisecond;
+    loopedMillisecond = currentMillisecond % kapi._animationLength;
+    return loopedMillisecond;
   }
   
   
