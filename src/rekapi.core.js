@@ -110,12 +110,7 @@
     ,'PLAYING': 'playing'
   };
   
-  if (typeof KAPI_DEBUG !== 'undefined' 
-      && typeof KAPI_DEBUG_NOW !== 'undefined') {
-    now = KAPI_DEBUG_NOW;
-  } else {
-    now = Tweenable.util.now;
-  }
+  now = Tweenable.util.now;
   
   /**
    * @param {HTMLCanvas} canvas
@@ -328,7 +323,9 @@
     
     // also pause any shifty tweens that are running.
     _.each(this._actors, function (actor) {
-      actor.pause();
+      if (actor._state.isTweening) {
+        actor.pause();
+      }
     });
 
     return this;
