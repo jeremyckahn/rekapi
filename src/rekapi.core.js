@@ -71,16 +71,8 @@
         ,millisecondToRender;
     
     loopPosition = calculateLoopPosition(kapi);
-
-   // if (kapi._playsRemaining === 0) {
-   //   millisecondToRender = kapi._animationLength;
-   //   kapi.stop();
-   // } else {
-   //   millisecondToRender = loopPosition;
-   // }
     millisecondToRender = kapi._playsRemaining === 0
       ? kapi._animationLength : loopPosition;
-
     kapi.render(millisecondToRender);
   }
   
