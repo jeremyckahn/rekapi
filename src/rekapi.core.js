@@ -28,16 +28,32 @@
   
   /**
    * Calculate how far in the animation loop `kapi` is, in milliseconds, based 
-   * on the current time.  Also overflows into a new loop in necessary.
+   * on the current time.  Also overflows into a new loop if necessary.
    * @param {Kapi} kapi
    * @returns {number}
    */
   function calculateCurrentMillisecond (kapi) {
-    var currentMillisecond;
+    var currentMillisecond
+        ,loopedMillisecond;
+
+    currentMillisecond = (now() - kapi._loopTimestamp);
+
+    if (currentMillisecond > kapi._animationLength
+        && kapi._playsRemaining > 0) {
+      kapi._playsRemaining--;
+      kapi._loopTimestamp += kapi._animationLength;
+    }
+
+    if (kapi._playsRemaining === 0) {
+      kapi.stop();
+    }
     
     //TODO: Some more work needs to be done in order to prevent auto-looping.
-    currentMillisecond = (now() - kapi._loopTimestamp) % kapi._animationLength;
-    
+    if (kapi._playsRemaining === -1) {
+      loopedMillisecond = currentMillisecond % kapi._animationLength;
+      return loopedMillisecond;
+    }
+
     return currentMillisecond;
   }
   
@@ -62,8 +78,10 @@
    */
   function tick (kapi) {
     kapi._loopId = setTimeout(function () {
-      renderCurrentMillisecond(kapi);
+      // First, scedule the next update.  renderCurrentMillisecond can cancel
+      // the update if necessary.
       tick(kapi);
+      renderCurrentMillisecond(kapi);
     }, 1000 / kapi.config.fps);
   }
   
@@ -106,6 +124,9 @@
     this._actors = {};
     this._drawOrder = [];
     this._playState = playState.STOPPED;
+
+    // How many times to loop the animation before stopping.
+    this._playsRemaining = -1;
     
     // Millisecond duration of the animation
     this._animationLength = 0;
@@ -262,9 +283,11 @@
   
   /**
    * Starts or resumes an animation.
+   * @param {number} opt_howManyTimes How many times to loop the animation
+   *    before stopping.
    * @returns {Kapi}
    */
-  gk.prototype.play = function () {
+  gk.prototype.play = function (opt_howManyTimes) {
     clearTimeout(this._loopId);
     
     if (this._playState === playState.PAUSED) {
@@ -273,6 +296,7 @@
       this._loopTimestamp = now();
     }
     
+    this._playsRemaining = opt_howManyTimes || -1;
     this._playState = playState.PLAYING;
     tick(this);
     
@@ -305,6 +329,11 @@
     if (alsoClear === true) {
       this.canvas_clear();
     }
+
+    // Also kill any Shifty tweens that are running.
+    _.each(this._actors, function (actor) {
+      actor.stop();
+    });
     
     return this;
   };
