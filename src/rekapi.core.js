@@ -238,6 +238,7 @@
   
   
   /**
+   * Returns an Actor based on a given ID.
    * @param {number} actorId The Actor ID of the actor to fetch
    * @returns {Kapi.Actor}
    */
@@ -246,6 +247,11 @@
   };
   
   
+  /**
+   * Removes an Actor from the Kapi.
+   * @param {Kapi.Actor} actor A reference to the Actor to remove.
+   * @returns {Kapi}
+   */
   gk.prototype.removeActor = function (actor) {
     delete this._actors[actor.id];
     this._drawOrder = _.without(this._drawOrder, actor.id);
