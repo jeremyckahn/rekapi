@@ -239,6 +239,23 @@
           'Length of the animation was calculated');
     });
 
+
+    module('Actor data');
+
+    test('Can set arbitrary data on the Actor'
+    ,function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      testActor.data({
+        'test': 'hello'
+      });
+
+      equals(testActor._data.test, 'hello', 'Data was set.');
+    });
+
   }
   </script>
 </head>

@@ -270,9 +270,12 @@
   };
 
 
-  // WIP
-  //gk.Actor.prototype.data = function (opt_newData) {
-  //  
-  //};
+  gk.Actor.prototype.data = function (opt_newData) {
+    if (opt_newData) {
+      this._data = opt_newData;
+    }
+
+    return this._data;
+  };
 
 } (this));
