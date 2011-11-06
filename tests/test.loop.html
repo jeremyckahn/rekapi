@@ -69,7 +69,7 @@
   
   function runTests () {
     
-    module("Shifty tweens");
+    module("Finite loop interval calculation");
     
     test('Actor.tween correctly calculates position based on time'
       ,function () {
@@ -84,88 +84,49 @@
         return 0;
       };
 
-      testKapi.play();
-      testActor.tween({
-        'from': { 
-          'x': 0
-        }
-        ,'to': {
-          'x': 100
-        }
-        ,'duration': 1000
-        ,'easing': 'linear'
-      });
-     
-      // Calling resume() forces an update in Shifty.
-      testActor.resume();
-      equals(testActor.get().x, 0,
-          'Started a tween and correctly tweened to 0.0');
-      
-      internalDebugNow = function () {
-        return 500;
-      };
-     
-      testActor.resume();
-      equals(testActor.get().x, 50,
-          'Started a tween and correctly tweened to 0.5');
-      
-      internalDebugNow = function () {
-        return 1000;
-      };
-     
-      testActor.resume();
-      equals(testActor.get().x, 100,
-          'Started a tween and correctly tweened to 1.0');
-    });
-    
-    
-    test('Actor.tween correctly calculates position based on time'
-      ,function () {
-      var testKapi
-          ,testActor
-          ,calculatedMillisecond;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-
-      internalDebugNow = function () {
-        return 0;
-      };
-
-      testKapi.play();
       testActor
-        .set({ 'x': 0 })
-        .to({
-          'to': {
-            'x': 100
-          }
-          ,'duration': 1000
-          ,'easing': 'linear'
+        .keyframe(0, {
+          'x': 0
+        })
+        .keyframe(1000, {
+          'x': 100
         });
-     
-      testActor.resume();
-      equals(testActor.get().x, 0,
-          'Started a tween and correctly tweened to 0.0');
+      
+      internalDebugNow = function () {
+        return 0;
+      };
+      
+      testKapi.play(2);
       
       internalDebugNow = function () {
         return 500;
       };
-     
-      testActor.resume();
-      equals(testActor.get().x, 50,
-          'Started a tween and correctly tweened to 0.5');
       
+      Kapi._private.renderCurrentMillisecond(testKapi);
+      equals(testActor.get().x, 50,
+          'Actor property has the proper value for halfway between a loop iteration');
+        
       internalDebugNow = function () {
-        return 1000;
+        return 1500;
       };
-     
-      testActor.resume();
+
+      Kapi._private.renderCurrentMillisecond(testKapi);
+      equals(testActor.get().x, 50,
+          'Actor property has the proper value for halfway between a loop iteration');
+          
+      internalDebugNow = function () {
+        return 2500;
+      };
+
+      Kapi._private.renderCurrentMillisecond(testKapi);
       equals(testActor.get().x, 100,
-          'Started a tween and correctly tweened to 1.0');
+          'Loop sequence has completed, actor is locked at final position');
     });
-
-
-    test('A tweened actor stays in it\'s tweened-to positing after the tween completes'
+    
+    
+    module("Infinite loop interval calculation");
+    
+    test('Actor.tween correctly calculates position based on time'
       ,function () {
       var testKapi
           ,testActor
@@ -178,26 +139,43 @@
         return 0;
       };
 
-      testKapi.play();
-      testActor.tween({
-        'from': {
+      testActor
+        .keyframe(0, {
           'x': 0
-        }
-        ,'to': {
+        })
+        .keyframe(1000, {
           'x': 100
-        }
-        ,'duration': 1000
-        ,'easing': 'linear'
-      });
-
-      // Mock some far-off point in the future
+        });
+      
       internalDebugNow = function () {
-        return 123456789;
+        return 0;
+      };
+      
+      testKapi.play();
+      
+      internalDebugNow = function () {
+        return 500;
+      };
+      
+      Kapi._private.renderCurrentMillisecond(testKapi);
+      equals(testActor.get().x, 50,
+          'Actor property has the proper value for halfway between a loop iteration');
+        
+      internalDebugNow = function () {
+        return 1500;
       };
 
-      testActor.resume();
-      equals(testActor.get().x, 100,
-          'Actor remains in destination position after tween has expired');
+      Kapi._private.renderCurrentMillisecond(testKapi);
+      equals(testActor.get().x, 50,
+          'Actor property has the proper value for halfway between a loop iteration');
+          
+      internalDebugNow = function () {
+        return 10000000500;
+      };
+
+      Kapi._private.renderCurrentMillisecond(testKapi);
+      equals(testActor.get().x, 50,
+          'Loop sequence is still running at some distant point in the future');
     });
   }
   </script>
