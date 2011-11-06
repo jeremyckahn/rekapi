@@ -94,6 +94,13 @@
   }
   
   
+  /**
+   * Calculate the position and state for a given millisecond and render it.
+   * Also updates the state internally and accounts for how many loop 
+   * iterations the animation runs for.
+   * @param {Kapi} kapi
+   * @param {number} forMillisecond The millisecond to render
+   */
   function renderMillisecond (kapi, forMillisecond) {
     var currentIteration
         ,loopPosition;
@@ -209,6 +216,7 @@
   
   
   /**
+   * Render a given millisecond position inside the loop
    * @param {number} millisecond
    * @returns {Kapi}
    */
