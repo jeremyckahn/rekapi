@@ -34,8 +34,6 @@
   function determineCurrentLoopIteration (kapi, timeSinceStart) {
     var currentIteration;
     
-    // Nudge the _animationLength up one, so millisecond 0 of a loop is
-    // rounded into the correct iteration
     currentIteration = Math.floor((timeSinceStart) / kapi._animationLength);
     return currentIteration;
   }
@@ -442,6 +440,7 @@
       ,'determineCurrentLoopIteration': determineCurrentLoopIteration
       ,'calculateTimeSinceStart': calculateTimeSinceStart
       ,'isAnimationComplete': isAnimationComplete
+      ,'updatePlayState': updatePlayState
     }
   }
   

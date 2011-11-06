@@ -257,6 +257,33 @@
       equals(animationIsComplete, false,
           'The animation is not complete');
     });
+
+
+    module('updatePlayState');
+
+    test('Determine if the animation\'s internal state is "playing" after evaluating a given iteration'
+      ,function () {
+      var testKapi
+          ,testActor1;
+    
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      
+      testActor1
+        .keyframe(0, {})
+        .keyframe(2000, {});
+
+      testKapi.play(3);
+
+      Kapi._private.updatePlayState(testKapi, 0);
+      equals(testKapi.isPlaying(), true, 'The animation is still running');
+
+      Kapi._private.updatePlayState(testKapi, 2);
+      equals(testKapi.isPlaying(), true, 'The animation is still running');
+
+      Kapi._private.updatePlayState(testKapi, 3);
+      equals(testKapi.isPlaying(), false, 'The animation is still complete');
+    });
   }
   </script>
 </head>
