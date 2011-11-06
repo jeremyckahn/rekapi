@@ -87,7 +87,7 @@
         .calculateLoopPosition(testKapi, 1000, 0);
     
       equals(calculatedMillisecond, 1000, 
-          'Calculated a midpoint of the animation.');
+          'Calculated a midpoint of the animation');
     });
     
     
@@ -107,7 +107,64 @@
           Kapi._private.calculateLoopPosition(testKapi, 2500, 1);
     
       equals(calculatedMillisecond, 500, 
-          'Calculated an overflow position of the animation.');
+          'Calculated an overflow position of the animation');
+    });
+   
+
+    module("determineCurrentLoopIteration");
+    
+    test('Calculate a given iteration of a loop', function () {
+      var testKapi
+          ,testActor1
+          ,calculatedIteration;
+    
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      
+      testActor1
+        .keyframe(0, {})
+        .keyframe(2000, {});
+      
+      calculatedIteration = 
+          Kapi._private.determineCurrentLoopIteration(testKapi, 0);
+    
+      equals(calculatedIteration, 1, 
+          'Calculated the beginning of the first iteration');
+
+
+      calculatedIteration = 
+          Kapi._private.determineCurrentLoopIteration(testKapi, 1000);
+    
+      equals(calculatedIteration, 1, 
+          'Calculated the middle of the first iteration');
+
+
+      calculatedIteration = 
+          Kapi._private.determineCurrentLoopIteration(testKapi, 1999);
+    
+      equals(calculatedIteration, 1, 
+          'Calculated the end of the first iteration');
+
+
+      calculatedIteration = 
+          Kapi._private.determineCurrentLoopIteration(testKapi, 4000);
+    
+      equals(calculatedIteration, 3, 
+          'Calculated the beginning of an iteration greater than 1');
+
+
+      calculatedIteration = 
+          Kapi._private.determineCurrentLoopIteration(testKapi, 5000);
+    
+      equals(calculatedIteration, 3, 
+          'Calculated the middle of an iteration greater than 1');
+
+
+      calculatedIteration = 
+          Kapi._private.determineCurrentLoopIteration(testKapi, 5999);
+    
+      equals(calculatedIteration, 3, 
+          'Calculated the end of an iteration greater than 1');
     });
     
     

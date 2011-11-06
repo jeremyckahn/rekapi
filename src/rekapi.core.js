@@ -34,7 +34,9 @@
   function determineCurrentLoopIteration (kapi, timeSinceStart) {
     var currentIteration;
     
-    currentIteration = Math.ceil(timeSinceStart / kapi._animationLength);
+    // Nudge the _animationLength up one, so millisecond 0 of a loop is
+    // rounded into the correct iteration
+    currentIteration = Math.ceil((timeSinceStart + 1) / kapi._animationLength);
     return currentIteration;
   }
   
@@ -437,6 +439,7 @@
       ,'calculateLoopPosition': calculateLoopPosition
       ,'renderCurrentMillisecond': renderCurrentMillisecond
       ,'tick': tick
+      ,'determineCurrentLoopIteration': determineCurrentLoopIteration
     }
   }
   
