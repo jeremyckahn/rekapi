@@ -36,7 +36,7 @@
     
     // Nudge the _animationLength up one, so millisecond 0 of a loop is
     // rounded into the correct iteration
-    currentIteration = Math.ceil((timeSinceStart + 1) / kapi._animationLength);
+    currentIteration = Math.floor((timeSinceStart) / kapi._animationLength);
     return currentIteration;
   }
   
@@ -60,7 +60,7 @@
    * @param {number} currentLoopIteration
    */
   function isAnimationComplete (kapi, currentLoopIteration) {
-    return currentLoopIteration > kapi._timesToIterate
+    return currentLoopIteration >= kapi._timesToIterate
         && kapi._timesToIterate !== -1;
   }
   

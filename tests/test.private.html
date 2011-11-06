@@ -128,42 +128,42 @@
       calculatedIteration = 
           Kapi._private.determineCurrentLoopIteration(testKapi, 0);
     
-      equals(calculatedIteration, 1, 
+      equals(calculatedIteration, 0, 
           'Calculated the beginning of the first iteration');
 
 
       calculatedIteration = 
           Kapi._private.determineCurrentLoopIteration(testKapi, 1000);
     
-      equals(calculatedIteration, 1, 
+      equals(calculatedIteration, 0, 
           'Calculated the middle of the first iteration');
 
 
       calculatedIteration = 
           Kapi._private.determineCurrentLoopIteration(testKapi, 1999);
     
-      equals(calculatedIteration, 1, 
+      equals(calculatedIteration, 0, 
           'Calculated the end of the first iteration');
 
 
       calculatedIteration = 
           Kapi._private.determineCurrentLoopIteration(testKapi, 4000);
     
-      equals(calculatedIteration, 3, 
+      equals(calculatedIteration, 2, 
           'Calculated the beginning of an iteration greater than 1');
 
 
       calculatedIteration = 
           Kapi._private.determineCurrentLoopIteration(testKapi, 5000);
     
-      equals(calculatedIteration, 3, 
+      equals(calculatedIteration, 2, 
           'Calculated the middle of an iteration greater than 1');
 
 
       calculatedIteration = 
           Kapi._private.determineCurrentLoopIteration(testKapi, 5999);
     
-      equals(calculatedIteration, 3, 
+      equals(calculatedIteration, 2, 
           'Calculated the end of an iteration greater than 1');
     });
     
@@ -221,13 +221,13 @@
       equals(animationIsComplete, false,
           'The animation is not complete');
 
-      animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 3);
+      animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 2);
       equals(animationIsComplete, false,
-          'The animation is not complete');
+          'The last iteration of a loop is condsider to be not complete');
 
-      animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 4);
+      animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 3);
       equals(animationIsComplete, true,
-          'The animation is complete');
+          'An iteration after the specified amount of iterations is considered to be complete');
     });
     
     test('Determine if the animation has completed in an infinite loop'
