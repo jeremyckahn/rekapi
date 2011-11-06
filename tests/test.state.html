@@ -90,7 +90,7 @@
       
       testKapi.addActor(testActor1);
 
-      equals(testKapi._drawOrder.length, 1,
+      equals(testKapi.actorCount(), 1,
           'The actor was not added twice');
     });
     
@@ -123,7 +123,7 @@
       equals(testKapi._drawOrder[1], testActor1.id,
           'First actor was moved to the second position.');
 
-      equals(testKapi._drawOrder.length, 2,
+      equals(testKapi.actorCount(), 2,
           'Draw list size did not change.');
     });
 
@@ -144,7 +144,7 @@
       equals(testKapi._drawOrder[1], testActor1.id,
           'First actor was moved to the second position.');
 
-      equals(testKapi._drawOrder.length, 2,
+      equals(testKapi.actorCount(), 2,
           'Draw list size did not change.');
     });
     
@@ -165,7 +165,7 @@
       equals(testKapi._drawOrder[1], testActor1.id,
           'First actor was moved to the second position.');
 
-      equals(testKapi._drawOrder.length, 2,
+      equals(testKapi.actorCount(), 2,
           'Draw list size did not change.');
     });
 

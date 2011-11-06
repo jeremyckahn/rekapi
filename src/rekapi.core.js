@@ -199,11 +199,20 @@
   
   
   /**
-   * Returns the length of the animation, in milliseconds
+   * Returns the length of the animation, in milliseconds.
    * @returns {number}
    */
   gk.prototype.animationLength = function () {
     return this._animationLength;
+  };
+
+
+  /**
+   * Returns how many actors are currently in the animation.
+   * @returns {number}
+   */
+  gk.prototype.actorCount = function () {
+    return this._drawOrder.length;
   };
 
 
