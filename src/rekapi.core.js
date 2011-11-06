@@ -188,6 +188,9 @@
     // Used for maintaining position when the animation is paused. 
     this._pausedAtTime = null;
     
+    // The last millisecond position that was drawn
+    this._lastRenderedMillisecond = 0;
+    
     _.extend(this.config, config);
     _.defaults(this.config, defaultConfig);
     
@@ -195,6 +198,10 @@
   };
   
   
+  /**
+   * Returns the length of the animation, in milliseconds
+   * @returns {number}
+   */
   gk.prototype.animationLength = function () {
     return this._animationLength;
   };
@@ -202,7 +209,7 @@
 
   /**
    * Get or sets the framterate.  This is the rate per second at which the
-   *    animation updates.
+   * animation updates.
    * @param {number} opt_newFramerate The framerate to set
    * @returns {number} The current framerate
    */
@@ -223,6 +230,18 @@
   gk.prototype.render = function (millisecond) {
     this.calculateActorPositions(millisecond);
     this.draw();
+    this._lastRenderedMillisecond = millisecond;
+    
+    return this;
+  };
+  
+  
+  /**
+   * Re-draws the millisecond position that was drawn.
+   * @returns {Kapi}
+   */
+  gk.prototype.redraw = function () {
+    this.render(this._lastRenderedMillisecond);
     
     return this;
   };
