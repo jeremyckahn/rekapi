@@ -128,8 +128,8 @@
       
       testKapi.play();
       
-      equals(Kapi._private.calculateLoopPosition(testKapi), 500, 
-          '.pause() modifies the internal timestamp of the animation');
+      equals(Kapi._private.calculateLoopPositionAndUpdatePlayState(testKapi), 
+          500,'.pause() modifies the internal timestamp of the animation');
     });
     
     
@@ -166,7 +166,7 @@
       
       testKapi.play();
       
-      equals(Kapi._private.calculateLoopPosition(testKapi), 0, 
+      equals(Kapi._private.calculateLoopPositionAndUpdatePlayState(testKapi), 0, 
           '.stop() resets the timestamp of the animtion');
     });
     

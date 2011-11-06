@@ -24,21 +24,52 @@
       return a - b;
     });
   }
-
-
+  
+  
   /**
-   * If necessary, enter a new loop and make necessary state tweaks.
+   * Determines which iteration of the loop the animation is currently in.
    * @param {Kapi} kapi
    * @param {number} timeSinceStart
    */
-  function attemptToEnterNewLoop (kapi, timeSinceStart) {
-    if (timeSinceStart > kapi._animationLength
-        && kapi._playsRemaining > 0) {
-      kapi._playsRemaining--;
-      kapi._loopTimestamp += kapi._animationLength;
-    }
+  function determineCurrentLoopIteration (kapi, timeSinceStart) {
+    var currentIteration;
+    
+    currentIteration = Math.ceil(timeSinceStart / kapi._animationLength);
+    return currentIteration;
+  }
+  
+  
+  /**
+   * Calculate how many milliseconds since the animation began.
+   * @param {Kapi} kapi
+   * @returns {number}
+   */
+  function calculateTimeSinceStart (kapi) {
+    var timeSinceStart;
 
-    if (kapi._playsRemaining === 0) {
+    timeSinceStart = now() - kapi._loopTimestamp;
+    return timeSinceStart;
+  }
+  
+  
+  /**
+   * Determines is the animation is complete or not.
+   * @param {Kapi} kapi
+   * @param {number} currentLoopIteration
+   */
+  function isAnimationComplete (kapi, currentLoopIteration) {
+    return currentLoopIteration > kapi._timesToIterate 
+        && kapi._timesToIterate !== -1;
+  }
+  
+  
+  /**
+   * Stops the animation if the animation is complete.
+   * @param {Kapi} kapi
+   * @param {number} currentLoopIteration
+   */
+  function updatePlayState (kapi, currentLoopIteration) {
+    if (isAnimationComplete(kapi, currentLoopIteration)) {
       kapi.stop();
     }
   }
@@ -50,14 +81,22 @@
    * @param {Kapi} kapi
    * @returns {number}
    */
-  function calculateLoopPosition (kapi) {
+  function calculateLoopPositionAndUpdatePlayState (kapi) {
     var timeSinceStart
-        ,loopedMillisecond;
-
-    timeSinceStart = now() - kapi._loopTimestamp;
-    attemptToEnterNewLoop(kapi, timeSinceStart);
-    loopedMillisecond = timeSinceStart % kapi._animationLength;
-    return loopedMillisecond;
+        ,currentLoopPosition
+        ,currentLoopIteration;
+    
+    timeSinceStart = calculateTimeSinceStart(kapi);
+    currentLoopIteration = determineCurrentLoopIteration (kapi, timeSinceStart);
+    
+    if (isAnimationComplete(kapi, currentLoopIteration)) {
+      currentLoopPosition = kapi._animationLength;
+    } else {
+      currentLoopPosition = timeSinceStart % kapi._animationLength;
+    }
+    
+    updatePlayState(kapi, currentLoopIteration);
+    return currentLoopPosition;
   }
   
   
@@ -67,13 +106,7 @@
    * @param {Kapi} kapi
    */
   function renderCurrentMillisecond (kapi) {
-    var loopPosition
-        ,millisecondToRender;
-    
-    loopPosition = calculateLoopPosition(kapi);
-    millisecondToRender = kapi._playsRemaining === 0
-      ? kapi._animationLength : loopPosition;
-    kapi.render(millisecondToRender);
+    kapi.render(calculateLoopPositionAndUpdatePlayState(kapi));
   }
   
   
@@ -127,7 +160,7 @@
     this._playState = playState.STOPPED;
 
     // How many times to loop the animation before stopping.
-    this._playsRemaining = -1;
+    this._timesToIterate = -1;
     
     // Millisecond duration of the animation
     this._animationLength = 0;
@@ -297,7 +330,7 @@
       this._loopTimestamp = now();
     }
     
-    this._playsRemaining = opt_howManyTimes || -1;
+    this._timesToIterate = opt_howManyTimes || -1;
     this._playState = playState.PLAYING;
     tick(this);
     
@@ -395,7 +428,8 @@
   if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
     gk._private = {
       'sortNumerically': sortNumerically
-      ,'calculateLoopPosition': calculateLoopPosition
+      ,'calculateLoopPositionAndUpdatePlayState': 
+          calculateLoopPositionAndUpdatePlayState
       ,'renderCurrentMillisecond': renderCurrentMillisecond
       ,'tick': tick
     }

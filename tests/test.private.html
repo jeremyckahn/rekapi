@@ -88,7 +88,7 @@
       };
       
       calculatedMillisecond = 
-          Kapi._private.calculateLoopPosition(testKapi);
+          Kapi._private.calculateLoopPositionAndUpdatePlayState(testKapi);
     
       equals(calculatedMillisecond, 1000, 
           'Calculated a midpoint of the animation.');
@@ -112,7 +112,7 @@
       };
       
       calculatedMillisecond = 
-          Kapi._private.calculateLoopPosition(testKapi);
+          Kapi._private.calculateLoopPositionAndUpdatePlayState(testKapi);
     
       equals(calculatedMillisecond, 500, 
           'Calculated an overflow position of the animation.');
