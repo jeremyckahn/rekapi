@@ -75,7 +75,7 @@
       var testKapi
           ,testActor1
           ,calculatedMillisecond;
-
+    
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
       
@@ -83,12 +83,8 @@
         .keyframe(0, {})
         .keyframe(2000, {});
         
-      internalDebugNow = function () {
-        return 1000;
-      };
-      
-      calculatedMillisecond = 
-          Kapi._private.calculateLoopPositionAndUpdatePlayState(testKapi);
+      calculatedMillisecond =  Kapi._private
+        .calculateLoopPosition(testKapi, 1000, 0);
     
       equals(calculatedMillisecond, 1000, 
           'Calculated a midpoint of the animation.');
@@ -99,7 +95,7 @@
       var testKapi
           ,testActor1
           ,calculatedMillisecond;
-
+    
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
       
@@ -107,12 +103,8 @@
         .keyframe(0, {})
         .keyframe(2000, {});
         
-      internalDebugNow = function () {
-        return 2500;
-      };
-      
       calculatedMillisecond = 
-          Kapi._private.calculateLoopPositionAndUpdatePlayState(testKapi);
+          Kapi._private.calculateLoopPosition(testKapi, 2500, 1);
     
       equals(calculatedMillisecond, 500, 
           'Calculated an overflow position of the animation.');

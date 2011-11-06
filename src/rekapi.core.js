@@ -81,22 +81,28 @@
    * @param {Kapi} kapi
    * @returns {number}
    */
-  function calculateLoopPositionAndUpdatePlayState (kapi) {
-    var timeSinceStart
-        ,currentLoopPosition
-        ,currentLoopIteration;
-    
-    timeSinceStart = calculateTimeSinceStart(kapi);
-    currentLoopIteration = determineCurrentLoopIteration (kapi, timeSinceStart);
+  function calculateLoopPosition (kapi, forMillisecond, currentLoopIteration) {
+    var currentLoopPosition;
     
     if (isAnimationComplete(kapi, currentLoopIteration)) {
       currentLoopPosition = kapi._animationLength;
     } else {
-      currentLoopPosition = timeSinceStart % kapi._animationLength;
+      currentLoopPosition = forMillisecond % kapi._animationLength;
     }
     
-    updatePlayState(kapi, currentLoopIteration);
     return currentLoopPosition;
+  }
+  
+  
+  function renderMillisecond (kapi, forMillisecond) {
+    var currentIteration
+        ,loopPosition;
+    
+    currentIteration = determineCurrentLoopIteration(kapi, forMillisecond);
+    loopPosition = calculateLoopPosition(kapi, forMillisecond,
+        currentIteration);
+    updatePlayState(kapi, currentIteration);
+    kapi.render(loopPosition);
   }
   
   
@@ -106,7 +112,7 @@
    * @param {Kapi} kapi
    */
   function renderCurrentMillisecond (kapi) {
-    kapi.render(calculateLoopPositionAndUpdatePlayState(kapi));
+    renderMillisecond(kapi, calculateTimeSinceStart(kapi));
   }
   
   
@@ -428,8 +434,7 @@
   if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
     gk._private = {
       'sortNumerically': sortNumerically
-      ,'calculateLoopPositionAndUpdatePlayState': 
-          calculateLoopPositionAndUpdatePlayState
+      ,'calculateLoopPosition': calculateLoopPosition
       ,'renderCurrentMillisecond': renderCurrentMillisecond
       ,'tick': tick
     }
