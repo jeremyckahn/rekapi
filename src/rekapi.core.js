@@ -440,6 +440,7 @@
       ,'renderCurrentMillisecond': renderCurrentMillisecond
       ,'tick': tick
       ,'determineCurrentLoopIteration': determineCurrentLoopIteration
+      ,'calculateTimeSinceStart': calculateTimeSinceStart
     }
   }
   

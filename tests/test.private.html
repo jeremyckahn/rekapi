@@ -168,6 +168,36 @@
     });
     
     
+    module('calculateTimeSinceStart');
+
+    test('Calculate the delta of the current time and when the animation began'
+      ,function () {
+      var testKapi
+          ,testActor1
+          ,calculatedTime;
+    
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      
+      testActor1
+        .keyframe(0, {})
+        .keyframe(2000, {});
+
+      internalDebugNow = function () {
+        return 0;
+      };
+
+      testKapi.play();
+
+      internalDebugNow = function () {
+        return 500;
+      };
+      
+      calculatedTime = Kapi._private.calculateTimeSinceStart(testKapi);
+      equals(calculatedTime, 500, 
+          'The expected amount of time since beginning the animation was calculated');
+    
+    });
   }
   </script>
 </head>
