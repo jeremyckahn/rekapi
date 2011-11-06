@@ -60,7 +60,7 @@
    * @param {number} currentLoopIteration
    */
   function isAnimationComplete (kapi, currentLoopIteration) {
-    return currentLoopIteration > kapi._timesToIterate 
+    return currentLoopIteration > kapi._timesToIterate
         && kapi._timesToIterate !== -1;
   }
   
@@ -441,6 +441,7 @@
       ,'tick': tick
       ,'determineCurrentLoopIteration': determineCurrentLoopIteration
       ,'calculateTimeSinceStart': calculateTimeSinceStart
+      ,'isAnimationComplete': isAnimationComplete
     }
   }
   

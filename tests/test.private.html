@@ -198,6 +198,65 @@
           'The expected amount of time since beginning the animation was calculated');
     
     });
+
+
+    module('isAnimationComplete');
+
+    test('Determine if the animation has completed in a finite loop'
+      ,function () {
+      var testKapi
+          ,testActor1
+          ,animationIsComplete;
+    
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      
+      testActor1
+        .keyframe(0, {})
+        .keyframe(2000, {});
+
+      testKapi.play(3);
+
+      animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 1);
+      equals(animationIsComplete, false,
+          'The animation is not complete');
+
+      animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 3);
+      equals(animationIsComplete, false,
+          'The animation is not complete');
+
+      animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 4);
+      equals(animationIsComplete, true,
+          'The animation is complete');
+    });
+    
+    test('Determine if the animation has completed in an infinite loop'
+      ,function () {
+      var testKapi
+          ,testActor1
+          ,animationIsComplete;
+    
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      
+      testActor1
+        .keyframe(0, {})
+        .keyframe(2000, {});
+
+      testKapi.play();
+
+      animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 1);
+      equals(animationIsComplete, false,
+          'The animation is not complete');
+
+      animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 3);
+      equals(animationIsComplete, false,
+          'The animation is not complete');
+
+      animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 1000);
+      equals(animationIsComplete, false,
+          'The animation is not complete');
+    });
   }
   </script>
 </head>
