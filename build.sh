@@ -1,5 +1,5 @@
 # Call this script like this:
-# $: sh build.sh "versionNumber"
+# $: sh build.sh versionNumber
 
 echo \
 "/**
