@@ -3,9 +3,9 @@
 
 echo \
 "/**
- * Rekapi - Rewritten Kapi.
+ * Rekapi - Rewritten Kapi. v${1}
  *   By Jeremy Kahn - jeremyckahn@gmail.com
- *   v${1}
+ *   https://github.com/jeremyckahn/rekapi
  *
  * Make fun keyframe animations with JavaScript.
  * Dependencies: Underscore.js (https://github.com/documentcloud/underscore), Shifty.js (https://github.com/jeremyckahn/shifty)

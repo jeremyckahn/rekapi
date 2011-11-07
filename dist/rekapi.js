@@ -1,7 +1,7 @@
 /**
- * Rekapi - Rewritten Kapi.
+ * Rekapi - Rewritten Kapi. v0.1.0
  *   By Jeremy Kahn - jeremyckahn@gmail.com
- *   v0.1.0
+ *   https://github.com/jeremyckahn/rekapi
  *
  * Make fun keyframe animations with JavaScript.
  * Dependencies: Underscore.js (https://github.com/documentcloud/underscore), Shifty.js (https://github.com/jeremyckahn/shifty)
