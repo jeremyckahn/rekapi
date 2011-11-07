@@ -7,7 +7,7 @@ echo \
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   v${1}
  *
- * Make fun keyframe animations for the web with JavaScript.
+ * Make fun keyframe animations with JavaScript.
  * Dependencies: Underscore.js (https://github.com/documentcloud/underscore), Shifty.js (https://github.com/jeremyckahn/shifty)
  * MIT Lincense.  This code free to use, modify, distribute and enjoy.
  */" | cat > /tmp/rekapi.header.js
@@ -33,3 +33,6 @@ curl -s \
 cat /tmp/rekapi.header.js /tmp/rekapi.compiled.js > dist/rekapi.min.js
 cp lib/underscore/underscore-min.js dist/underscore.js
 cp lib/shifty/builds/shifty.min.js dist/shifty.js
+
+echo 'Yay!  Rekapi was built.  The file size, minified and gzipped, is:'
+echo `cat dist/rekapi.min.js | gzip -9f | wc -c` "bytes"
