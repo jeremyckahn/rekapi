@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.1.4
+ * Rekapi - Rewritten Kapi. v0.1.5
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -348,6 +348,7 @@
       actor.set(opt_initialState || {});
       this._actors[actor.id] = actor;
       this._drawOrder.push(actor.id);
+      actor.setup();
     }
     
     return this;
@@ -372,6 +373,7 @@
   gk.prototype.removeActor = function (actor) {
     delete this._actors[actor.id];
     this._drawOrder = _.without(this._drawOrder, actor.id);
+    actor.teardown();
     
     return this;
   };
@@ -552,9 +554,9 @@
       ,'_keyframeList': []
       ,'id': getUniqueActorId()
       ,'kapi': kapi
-      ,'setup': opt_config.setup || gk.noop
-      ,'draw': opt_config.draw || gk.noop
-      ,'teardown': opt_config.teardown || gk.noop
+      ,'setup': opt_config.setup || gk.util.noop
+      ,'draw': opt_config.draw || gk.util.noop
+      ,'teardown': opt_config.teardown || gk.util.noop
       ,'_data': {}
     });
     

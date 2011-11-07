@@ -47,9 +47,9 @@
       ,'_keyframeList': []
       ,'id': getUniqueActorId()
       ,'kapi': kapi
-      ,'setup': opt_config.setup || gk.noop
-      ,'draw': opt_config.draw || gk.noop
-      ,'teardown': opt_config.teardown || gk.noop
+      ,'setup': opt_config.setup || gk.util.noop
+      ,'draw': opt_config.draw || gk.util.noop
+      ,'teardown': opt_config.teardown || gk.util.noop
       ,'_data': {}
     });
     

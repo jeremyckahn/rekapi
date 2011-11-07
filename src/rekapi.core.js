@@ -339,6 +339,7 @@
       actor.set(opt_initialState || {});
       this._actors[actor.id] = actor;
       this._drawOrder.push(actor.id);
+      actor.setup();
     }
     
     return this;
@@ -363,6 +364,7 @@
   gk.prototype.removeActor = function (actor) {
     delete this._actors[actor.id];
     this._drawOrder = _.without(this._drawOrder, actor.id);
+    actor.teardown();
     
     return this;
   };
