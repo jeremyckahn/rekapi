@@ -148,6 +148,8 @@
   
   defaultConfig = {
     'fps': 30
+    ,'height': 150
+    ,'width': 300
   };
   
   playState = {

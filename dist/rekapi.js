@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.1.2
+ * Rekapi - Rewritten Kapi. v0.1.3
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -157,6 +157,8 @@
   
   defaultConfig = {
     'fps': 30
+    ,'height': 150
+    ,'width': 300
   };
   
   playState = {
