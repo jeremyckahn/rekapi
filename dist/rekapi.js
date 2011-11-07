@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.1.0
+ * Rekapi - Rewritten Kapi. v0.1.1
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -202,6 +202,15 @@
     
     _.extend(this.config, config);
     _.defaults(this.config, defaultConfig);
+    
+    // Apply the height and width if they were passed in the`config` Object.
+    // Also delete them from the internal config - we won't need them anymore.
+    _.each(['height', 'width'], function (dimension) {
+      if (this.config[dimension]) {
+        this['canvas_' + dimension](this.config[dimension]);
+        delete this.config[dimension];
+      }
+    }, this);
     
     return this;
   };

@@ -194,6 +194,15 @@
     _.extend(this.config, config);
     _.defaults(this.config, defaultConfig);
     
+    // Apply the height and width if they were passed in the`config` Object.
+    // Also delete them from the internal config - we won't need them anymore.
+    _.each(['height', 'width'], function (dimension) {
+      if (this.config[dimension]) {
+        this['canvas_' + dimension](this.config[dimension]);
+        delete this.config[dimension];
+      }
+    }, this);
+    
     return this;
   };
   
