@@ -62,7 +62,8 @@
    * @returns {Kapi}
    */
   gk.prototype.canvas_clear = function () {
-    this.canvas_context().clearRect(0, 0, this.canvas_width(), this.canvas_height());
+    this.canvas_context().clearRect(0, 0, this.canvas_width(),
+        this.canvas_height());
     
     return this;
   };

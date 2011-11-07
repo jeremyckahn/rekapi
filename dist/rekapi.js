@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.1.3
+ * Rekapi - Rewritten Kapi. v0.1.4
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -845,7 +845,8 @@
    * @returns {Kapi}
    */
   gk.prototype.canvas_clear = function () {
-    this.canvas_context().clearRect(0, 0, this.canvas_width(), this.canvas_height());
+    this.canvas_context().clearRect(0, 0, this.canvas_width(),
+        this.canvas_height());
     
     return this;
   };
