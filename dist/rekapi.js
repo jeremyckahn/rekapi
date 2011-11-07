@@ -1,3 +1,12 @@
+/**
+ * Rekapi - Rewritten Kapi.
+ *   By Jeremy Kahn - jeremyckahn@gmail.com
+ *   v0.1.0
+ *
+ * Make fun keyframe animations for the web with JavaScript.
+ * Dependencies: Underscore.js (https://github.com/documentcloud/underscore), Shifty.js (https://github.com/jeremyckahn/shifty)
+ * MIT Lincense.  This code free to use, modify, distribute and enjoy.
+ */
 ;(function rekapiCore (global) {
   
   if (!_) {

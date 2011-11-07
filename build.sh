@@ -1,10 +1,23 @@
-# All the files to build...
-cat src/rekapi.core.js \
+# Call this script like this:
+# $: sh build.sh "versionNumber"
+
+echo \
+"/**
+ * Rekapi - Rewritten Kapi.
+ *   By Jeremy Kahn - jeremyckahn@gmail.com
+ *   v${1}
+ *
+ * Make fun keyframe animations for the web with JavaScript.
+ * Dependencies: Underscore.js (https://github.com/documentcloud/underscore), Shifty.js (https://github.com/jeremyckahn/shifty)
+ * MIT Lincense.  This code free to use, modify, distribute and enjoy.
+ */" | cat > /tmp/rekapi.header.js
+
+cat /tmp/rekapi.header.js \
+  src/rekapi.core.js \
   src/rekapi.actor.js \
   src/rekapi.canvas.js \
   src/rekapi.interpolate.js \
   > dist/rekapi.js
-
 
 in=dist/rekapi.js
 out=/tmp/rekapi.compiled.js
@@ -17,4 +30,6 @@ curl -s \
   http://closure-compiler.appspot.com/compile \
    > $out
 
-cat /tmp/rekapi.compiled.js > dist/rekapi.min.js
+cat /tmp/rekapi.header.js /tmp/rekapi.compiled.js > dist/rekapi.min.js
+cp lib/underscore/underscore-min.js dist/underscore.js
+cp lib/shifty/builds/shifty.min.js dist/shifty.js
