@@ -199,6 +199,44 @@
       equals(testActor.get().x, 100,
           'Actor remains in destination position after tween has expired');
     });
+
+
+    test('An Actor has state after it\s tween completes'
+      ,function () {
+      var testKapi
+          ,testActor
+          ,calculatedMillisecond;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      internalDebugNow = function () {
+        return 0;
+      };
+
+      testKapi.play();
+      testActor.tween({
+        'from': {
+          'x': 0
+        }
+        ,'to': {
+          'x': 100
+        }
+        ,'duration': 1000
+        ,'easing': 'linear'
+      });
+
+      // Mock some far-off point in the future
+      internalDebugNow = function () {
+        return 10000;
+      };
+
+      testActor.resume();
+      testKapi.calculateActorPositions(10000);
+
+      equals(testActor._hasState, true,
+          'Actor has state after the tween is complete.');
+    });
   }
   </script>
 </head>

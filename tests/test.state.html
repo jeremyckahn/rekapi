@@ -255,13 +255,44 @@
       testKapi.calculateActorPositions(500);
       
       equals(testActor._hasState, false,
-          'Actor has not yet gotten state.');
+          'Actor has not yet gotten state');
       
       
       testKapi.calculateActorPositions(1500);
       
       equals(testActor._hasState, true,
-          'Actor has gotten state.');
+          'Actor has gotten state');
+    });
+
+
+    test('An Actor has no state after it passes its last keyframe'
+      ,function () {
+      var testKapi
+          ,testActor1
+          ,testActor2;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      testActor2 = setupTestActor(testKapi);
+      
+      testActor1
+        .keyframe(0, {})
+        .keyframe(2000, {});
+      
+      testActor2
+        .keyframe(500, {})
+        .keyframe(1500, {});
+      
+      testKapi.calculateActorPositions(1000);
+      
+      equals(testActor2._hasState, true,
+          'Actor has state');
+
+
+      testKapi.calculateActorPositions(1750);
+      
+      equals(testActor2._hasState, false,
+          'Actor no longer has state');
     });
 
 
