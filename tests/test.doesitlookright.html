@@ -131,6 +131,28 @@
       kapi.play(2);
       console.log(kapi);
     });
+    
+
+    $('#delayed-start').click(function () {
+      var actor;
+
+      killTest();
+      kapi = setupTestKapi();
+      actor = setupTestActor(kapi);
+      
+      actor
+        .keyframe(500, {
+          'x': 50
+          ,'y': 50
+        })
+        .keyframe(1500, {
+          'x': 200
+          ,'y': 200
+        });
+
+      kapi.play();
+      console.log(kapi);
+    });
 
 
     $('#basic-eased-tween').click(function () {
@@ -351,6 +373,7 @@
     </li>
     <li><button id="basic-linear-tween">Basic linear tween loop</button></li>
     <li><button id="loop-twice">Loop twice and then stop</button></li>
+    <li><button id="delayed-start">Delayed start</button></li>
     <li><button id="basic-eased-tween">Basic eased tween loop</button></li>
     <li><button id="two-step-tween">Two-step tween loop</button></li>
     <li><button id="live-copy-tween">Live copied tween loop</button></li>
