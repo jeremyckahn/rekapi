@@ -60,7 +60,7 @@
       '_keyframes': {}
       ,'_keyframeList': []
       ,'_data': {}
-      ,'_hasState': false
+      ,'_isShowing': false
       ,'id': getUniqueActorId()
       ,'setup': opt_config.setup || gk.util.noop
       ,'draw': opt_config.draw || gk.util.noop
@@ -102,10 +102,10 @@
     keyframeList = this._keyframeList;
     startMs = _.first(keyframeList);
     endMs = _.last(keyframeList);
-    this._hasState = false;
+    this.hide();
 
     if (startMs <= forMillisecond && forMillisecond <= endMs) {
-      this._hasState = true;
+      this.show();
       keyframes = this._keyframes;
       timeRangeIndexStart = getKeyframeForMillisecond(this, 
           forMillisecond);
@@ -122,7 +122,7 @@
     }
 
     if (this._state.isTweening) {
-      this._hasState = true;
+      this.show();
     }
 
     return this;
@@ -204,7 +204,8 @@
     return this;
   };
 
-
+  
+  //TODO: Document this!
   gk.Actor.prototype.modifyKeyframe = function (when, stateModification,
       opt_easingModification) {
 
@@ -275,6 +276,25 @@
    */
   gk.Actor.prototype.moveToLayer = function (layer) {
     return this.kapi.moveActorToLayer(this, layer);
+  };
+
+
+  gk.Actor.prototype.show = function () {
+    this._isShowing = true;
+    
+    return this;
+  };
+  
+  
+  gk.Actor.prototype.hide = function () {
+    this._isShowing = false;
+    
+    return this;
+  };
+  
+  
+  gk.Actor.prototype.isShowing = function () {
+    return this._isShowing;
   };
 
 
