@@ -14,8 +14,16 @@
   }
   
   
+  /**
+   * Finds the index of the keyframe that occurs for `millisecond`.
+   * @param {Kapi.Actor} actor The actor to find the keyframe during which
+   *    `millisecond` occurs.
+   * @param {number} millisecond
+   * @returns {number} The keyframe index for `millisecond`, or -1 if it was
+   *    not found.
+   */
   //TODO:  Oh noes, this is a linear search!  Maybe optimize it?
-  function getCurrentMillisecondRangeIndex (actor, millisecond) {
+  function getKeyframeForMillisecond (actor, millisecond) {
     var i, len
         ,list;
     
@@ -32,6 +40,10 @@
   }
   
   
+  /**
+   * `Kapi.Actor` constructor.  An Actor is an individual component of an
+   *  animation.
+   */
   gk.Actor = function Actor (kapi, opt_config) {
     
     opt_config = opt_config || {};
@@ -91,7 +103,7 @@
     if (startMs <= forMillisecond && forMillisecond <= endMs) {
       
       keyframes = this._keyframes;
-      timeRangeIndexStart = getCurrentMillisecondRangeIndex(this, 
+      timeRangeIndexStart = getKeyframeForMillisecond(this, 
           forMillisecond);
       rangeFloor = keyframeList[timeRangeIndexStart];
       rangeCeil = keyframeList[timeRangeIndexStart + 1];
