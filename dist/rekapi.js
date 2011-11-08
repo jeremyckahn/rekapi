@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.1.6
+ * Rekapi - Rewritten Kapi. v0.1.7
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -173,6 +173,7 @@
    * @param {HTMLCanvas} canvas
    * @param {Object} config
    * @param {Object} events
+   * @returns {Kapi}
    */
   gk = global.Kapi || function Kapi (canvas, config, events) {
     this.canvas = canvas;
@@ -309,7 +310,9 @@
     
     for (i = 0; i < len; i++) {
       currentActor = this._actors[this._drawOrder[i]];
-      currentActor.draw(canvas_context, currentActor.get());
+      if (currentActor._hasState) {
+        currentActor.draw(canvas_context, currentActor.get());
+      }
     }
     
     return this;
@@ -552,7 +555,10 @@
   
   /**
    * `Kapi.Actor` constructor.  An Actor is an individual component of an
-   *  animation.
+   * animation.
+   * @param {Object} opt_config An Object that may contain the `setup, `draw`
+   *    and `teardown` methods for the Actor.
+   * @returns {Actor.Kapi}
    */
   gk.Actor = function Actor (opt_config) {
     
@@ -566,11 +572,12 @@
     _.extend(this, {
       '_keyframes': {}
       ,'_keyframeList': []
+      ,'_data': {}
+      ,'_hasState': false
       ,'id': getUniqueActorId()
       ,'setup': opt_config.setup || gk.util.noop
       ,'draw': opt_config.draw || gk.util.noop
       ,'teardown': opt_config.teardown || gk.util.noop
-      ,'_data': {}
     });
     
     return this;
@@ -594,6 +601,7 @@
    * @returns {Kapi.Actor}
    */
   gk.Actor.prototype.calculatePosition = function (forMillisecond) {
+    //TODO: This function is too long!  It needs to be broken out somehow.
     var keyframeList
         ,keyframes
         ,delta
@@ -607,9 +615,10 @@
     keyframeList = this._keyframeList;
     startMs = _.first(keyframeList);
     endMs = _.last(keyframeList);
-    
+    this._hasState = false;
+
     if (startMs <= forMillisecond && forMillisecond <= endMs) {
-      
+      this._hasState = true;
       keyframes = this._keyframes;
       timeRangeIndexStart = getKeyframeForMillisecond(this, 
           forMillisecond);
@@ -624,7 +633,11 @@
             interpolatedPosition,
             keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
     }
-    
+
+    if (this._state.isTweening) {
+      this._hasState = true;
+    }
+
     return this;
   };
 

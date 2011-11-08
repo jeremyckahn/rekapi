@@ -60,6 +60,7 @@
       '_keyframes': {}
       ,'_keyframeList': []
       ,'_data': {}
+      ,'_hasState': false
       ,'id': getUniqueActorId()
       ,'setup': opt_config.setup || gk.util.noop
       ,'draw': opt_config.draw || gk.util.noop
@@ -87,6 +88,7 @@
    * @returns {Kapi.Actor}
    */
   gk.Actor.prototype.calculatePosition = function (forMillisecond) {
+    //TODO: This function is too long!  It needs to be broken out somehow.
     var keyframeList
         ,keyframes
         ,delta
@@ -100,9 +102,10 @@
     keyframeList = this._keyframeList;
     startMs = _.first(keyframeList);
     endMs = _.last(keyframeList);
-    
+    this._hasState = false;
+
     if (startMs <= forMillisecond && forMillisecond <= endMs) {
-      
+      this._hasState = true;
       keyframes = this._keyframes;
       timeRangeIndexStart = getKeyframeForMillisecond(this, 
           forMillisecond);
@@ -117,7 +120,11 @@
             interpolatedPosition,
             keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
     }
-    
+
+    if (this._state.isTweening) {
+      this._hasState = true;
+    }
+
     return this;
   };
 

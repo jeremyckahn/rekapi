@@ -301,7 +301,9 @@
     
     for (i = 0; i < len; i++) {
       currentActor = this._actors[this._drawOrder[i]];
-      currentActor.draw(canvas_context, currentActor.get());
+      if (currentActor._hasState) {
+        currentActor.draw(canvas_context, currentActor.get());
+      }
     }
     
     return this;
