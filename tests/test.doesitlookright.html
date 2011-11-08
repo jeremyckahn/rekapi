@@ -44,7 +44,7 @@
   function  setupTestActor (forKapi) {
     var actor;
     
-    actor = new Kapi.Actor(forKapi, {
+    actor = new Kapi.Actor({
       'draw': function (canvas_context, state) {
         canvas_context.beginPath();
           canvas_context.arc(

@@ -42,27 +42,28 @@
   
   /**
    * `Kapi.Actor` constructor.  An Actor is an individual component of an
-   *  animation.
+   * animation.
+   * @param {Object} opt_config An Object that may contain the `setup, `draw`
+   *    and `teardown` methods for the Actor.
+   * @returns {Actor.Kapi}
    */
-  gk.Actor = function Actor (kapi, opt_config) {
+  gk.Actor = function Actor (opt_config) {
     
     opt_config = opt_config || {};
     
     // Steal the `Tweenable` constructor.
     this.constructor.call(this, {
-      'fps': kapi.config.fps
-      ,'initialState': opt_config.initialState
+      'initialState': opt_config.initialState
     });
     
     _.extend(this, {
       '_keyframes': {}
       ,'_keyframeList': []
+      ,'_data': {}
       ,'id': getUniqueActorId()
-      ,'kapi': kapi
       ,'setup': opt_config.setup || gk.util.noop
       ,'draw': opt_config.draw || gk.util.noop
       ,'teardown': opt_config.teardown || gk.util.noop
-      ,'_data': {}
     });
     
     return this;

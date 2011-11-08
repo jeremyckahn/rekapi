@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.1.5
+ * Rekapi - Rewritten Kapi. v0.1.6
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -345,6 +345,8 @@
   gk.prototype.addActor = function (actor, opt_initialState) {
     // You can't add an actor more than once.
     if (!_.contains(this._actors, actor)) {
+      actor.kapi = this;
+      actor.fps = this.framerate();
       actor.set(opt_initialState || {});
       this._actors[actor.id] = actor;
       this._drawOrder.push(actor.id);
@@ -372,6 +374,7 @@
    */
   gk.prototype.removeActor = function (actor) {
     delete this._actors[actor.id];
+    delete actor.kapi;
     this._drawOrder = _.without(this._drawOrder, actor.id);
     actor.teardown();
     
@@ -521,8 +524,16 @@
   }
   
   
+  /**
+   * Finds the index of the keyframe that occurs for `millisecond`.
+   * @param {Kapi.Actor} actor The actor to find the keyframe during which
+   *    `millisecond` occurs.
+   * @param {number} millisecond
+   * @returns {number} The keyframe index for `millisecond`, or -1 if it was
+   *    not found.
+   */
   //TODO:  Oh noes, this is a linear search!  Maybe optimize it?
-  function getCurrentMillisecondRangeIndex (actor, millisecond) {
+  function getKeyframeForMillisecond (actor, millisecond) {
     var i, len
         ,list;
     
@@ -539,21 +550,23 @@
   }
   
   
-  gk.Actor = function Actor (kapi, opt_config) {
+  /**
+   * `Kapi.Actor` constructor.  An Actor is an individual component of an
+   *  animation.
+   */
+  gk.Actor = function Actor (opt_config) {
     
     opt_config = opt_config || {};
     
     // Steal the `Tweenable` constructor.
     this.constructor.call(this, {
-      'fps': kapi.config.fps
-      ,'initialState': opt_config.initialState
+      'initialState': opt_config.initialState
     });
     
     _.extend(this, {
       '_keyframes': {}
       ,'_keyframeList': []
       ,'id': getUniqueActorId()
-      ,'kapi': kapi
       ,'setup': opt_config.setup || gk.util.noop
       ,'draw': opt_config.draw || gk.util.noop
       ,'teardown': opt_config.teardown || gk.util.noop
@@ -598,7 +611,7 @@
     if (startMs <= forMillisecond && forMillisecond <= endMs) {
       
       keyframes = this._keyframes;
-      timeRangeIndexStart = getCurrentMillisecondRangeIndex(this, 
+      timeRangeIndexStart = getKeyframeForMillisecond(this, 
           forMillisecond);
       rangeFloor = keyframeList[timeRangeIndexStart];
       rangeCeil = keyframeList[timeRangeIndexStart + 1];

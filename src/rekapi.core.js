@@ -164,6 +164,7 @@
    * @param {HTMLCanvas} canvas
    * @param {Object} config
    * @param {Object} events
+   * @returns {Kapi}
    */
   gk = global.Kapi || function Kapi (canvas, config, events) {
     this.canvas = canvas;
@@ -336,6 +337,8 @@
   gk.prototype.addActor = function (actor, opt_initialState) {
     // You can't add an actor more than once.
     if (!_.contains(this._actors, actor)) {
+      actor.kapi = this;
+      actor.fps = this.framerate();
       actor.set(opt_initialState || {});
       this._actors[actor.id] = actor;
       this._drawOrder.push(actor.id);
@@ -363,6 +366,7 @@
    */
   gk.prototype.removeActor = function (actor) {
     delete this._actors[actor.id];
+    delete actor.kapi;
     this._drawOrder = _.without(this._drawOrder, actor.id);
     actor.teardown();
     
