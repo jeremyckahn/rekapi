@@ -238,6 +238,31 @@
       equals(testKapi.animationLength(), 5000, 
           'Length of the animation was calculated');
     });
+    
+    
+    test('An Actor has no state before it has reached its first keyframe'
+      ,function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      
+      testActor
+        .keyframe(1000, {})
+        .keyframe(2000, {});
+
+      testKapi.calculateActorPositions(500);
+      
+      equals(testActor._hasState, false,
+          'Actor has not yet gotten state.');
+      
+      
+      testKapi.calculateActorPositions(1500);
+      
+      equals(testActor._hasState, true,
+          'Actor has gotten state.');
+    });
 
 
     module('Actor data');
