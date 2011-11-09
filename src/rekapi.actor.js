@@ -61,6 +61,7 @@
       ,'_keyframeList': []
       ,'_data': {}
       ,'_isShowing': false
+      ,'_isPersisting': false
       ,'id': getUniqueActorId()
       ,'setup': opt_config.setup || gk.util.noop
       ,'draw': opt_config.draw || gk.util.noop
@@ -119,10 +120,6 @@
         .interpolate(keyframes[keyframeList[timeRangeIndexStart + 1]].position,
             interpolatedPosition,
             keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
-    }
-
-    if (this._state.isTweening) {
-      this.show();
     }
 
     return this;
@@ -279,22 +276,27 @@
   };
 
 
-  gk.Actor.prototype.show = function () {
+  gk.Actor.prototype.show = function (alsoPersist) {
     this._isShowing = true;
+    this._isPersisting = !!alsoPersist;
     
     return this;
   };
   
   
-  gk.Actor.prototype.hide = function () {
+  gk.Actor.prototype.hide = function (alsoUnpersist) {
     this._isShowing = false;
+
+    if (alsoUnpersist === true) {
+      this._isPersisting = false;
+    }
     
     return this;
   };
   
   
   gk.Actor.prototype.isShowing = function () {
-    return this._isShowing;
+    return this._isShowing || this._isPersisting;
   };
 
 
@@ -314,5 +316,21 @@
 
     return this._data;
   };
+
+
+  /**
+   * Start Shifty interoperability methods...
+   ******/
+
+  _.each(['tween', 'to'], function (shiftyMethodName) {
+    gk.Actor.prototype[shiftyMethodName] = function () {
+      this.show(true);
+      Tweenable.prototype[shiftyMethodName].apply(this, arguments);
+    }
+  }, this);
+
+  /******
+   * ...End Shifty interoperability methods.
+   */
 
 } (this));
