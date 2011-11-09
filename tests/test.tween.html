@@ -201,7 +201,7 @@
     });
 
 
-    test('An Actor has state after it\s tween completes'
+    test('An Actor is showing after it\s tween completes'
       ,function () {
       var testKapi
           ,testActor
@@ -234,7 +234,7 @@
       testActor.resume();
       testKapi.calculateActorPositions(10000);
 
-      equals(testActor._hasState, true,
+      equals(testActor.isShowing(), true,
           'Actor has state after the tween is complete.');
     });
   }
