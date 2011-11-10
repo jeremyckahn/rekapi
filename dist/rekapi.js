@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.1.7
+ * Rekapi - Rewritten Kapi. v0.1.8
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -310,7 +310,7 @@
     
     for (i = 0; i < len; i++) {
       currentActor = this._actors[this._drawOrder[i]];
-      if (currentActor._hasState) {
+      if (currentActor.isShowing()) {
         currentActor.draw(canvas_context, currentActor.get());
       }
     }
@@ -551,6 +551,24 @@
     
     return -1;
   }
+
+
+  /**
+   * Apply new values to an Object.  If the new value for a given property is
+   * `null` or `undefined`, the property is deleted from the original Object.
+   * @param {Object} targetObject The Object to modify.
+   * @param {Object} augmentation The Object containing properties to modify
+   *    `targetObject` with.
+   */
+  function augmentObject (targetObject, augmentation) {
+    _.each(augmentation, function (newVal, name) {
+      if (newVal === undefined || newVal === null) {
+        delete targetObject[name];
+      } else {
+        targetObject[name] = newVal;
+      }
+    });
+  }
   
   
   /**
@@ -573,7 +591,8 @@
       '_keyframes': {}
       ,'_keyframeList': []
       ,'_data': {}
-      ,'_hasState': false
+      ,'_isShowing': false
+      ,'_isPersisting': false
       ,'id': getUniqueActorId()
       ,'setup': opt_config.setup || gk.util.noop
       ,'draw': opt_config.draw || gk.util.noop
@@ -615,10 +634,10 @@
     keyframeList = this._keyframeList;
     startMs = _.first(keyframeList);
     endMs = _.last(keyframeList);
-    this._hasState = false;
+    this.hide();
 
     if (startMs <= forMillisecond && forMillisecond <= endMs) {
-      this._hasState = true;
+      this.show();
       keyframes = this._keyframes;
       timeRangeIndexStart = getKeyframeForMillisecond(this, 
           forMillisecond);
@@ -632,10 +651,6 @@
         .interpolate(keyframes[keyframeList[timeRangeIndexStart + 1]].position,
             interpolatedPosition,
             keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
-    }
-
-    if (this._state.isTweening) {
-      this._hasState = true;
     }
 
     return this;
@@ -718,29 +733,27 @@
   };
 
 
+  /**
+   * Augments the properties a preiexisting keyframe.
+   * @param {number} when Which keyframe to modify, as identified by it's 
+   * millisecond position in the animation.
+   * @param {Object} stateModification The properties to augment the keyframe's
+   *    state properties with.  If any properties in this Object are `null` or
+   *    `undefined`, those state properties are deleted from the keyframe.
+   * @param {Object} opt_easingModification The properties to augment the 
+   *    individual property easings of the keyframe.  Works the same way as
+   *    `stateModification`.
+   */
   gk.Actor.prototype.modifyKeyframe = function (when, stateModification,
       opt_easingModification) {
 
-      var targetKeyframe;
+    var targetKeyframe;
 
-      targetKeyframe = this._keyframes[when];
-
-    _.each(stateModification, function (newState, propName) {
-      if (newState === undefined || newState === null) {
-        delete targetKeyframe.position[propName];
-      } else {
-        targetKeyframe.position[propName] = newState;
-      }
-    }, this);
+    targetKeyframe = this._keyframes[when];
+    augmentObject(targetKeyframe.position, stateModification);
 
     if (opt_easingModification) {
-      _.each(opt_easingModification, function (newEasing, propName) {
-        if (newEasing === undefined || newEasing === null) {
-          delete targetKeyframe.easing[propName];
-        } else {
-          targetKeyframe.easing[propName] = newEasing;
-        }
-      }, this);
+      augmentObject(targetKeyframe.easing, opt_easingModification);
     }
 
     return this;
@@ -791,6 +804,30 @@
   };
 
 
+  gk.Actor.prototype.show = function (alsoPersist) {
+    this._isShowing = true;
+    this._isPersisting = !!alsoPersist;
+    
+    return this;
+  };
+  
+  
+  gk.Actor.prototype.hide = function (alsoUnpersist) {
+    this._isShowing = false;
+
+    if (alsoUnpersist === true) {
+      this._isPersisting = false;
+    }
+    
+    return this;
+  };
+  
+  
+  gk.Actor.prototype.isShowing = function () {
+    return this._isShowing || this._isPersisting;
+  };
+
+
   /**
    * Exposes the Actor's ordered list of keyframe times.
    * @returns {Array}
@@ -807,6 +844,22 @@
 
     return this._data;
   };
+
+
+  /**
+   * Start Shifty interoperability methods...
+   ******/
+
+  _.each(['tween', 'to'], function (shiftyMethodName) {
+    gk.Actor.prototype[shiftyMethodName] = function () {
+      this.show(true);
+      Tweenable.prototype[shiftyMethodName].apply(this, arguments);
+    }
+  }, this);
+
+  /******
+   * ...End Shifty interoperability methods.
+   */
 
 } (this));
 ;(function rekapiCanvas (global) {

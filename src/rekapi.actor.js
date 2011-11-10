@@ -38,6 +38,24 @@
     
     return -1;
   }
+
+
+  /**
+   * Apply new values to an Object.  If the new value for a given property is
+   * `null` or `undefined`, the property is deleted from the original Object.
+   * @param {Object} targetObject The Object to modify.
+   * @param {Object} augmentation The Object containing properties to modify
+   *    `targetObject` with.
+   */
+  function augmentObject (targetObject, augmentation) {
+    _.each(augmentation, function (newVal, name) {
+      if (newVal === undefined || newVal === null) {
+        delete targetObject[name];
+      } else {
+        targetObject[name] = newVal;
+      }
+    });
+  }
   
   
   /**
@@ -201,31 +219,28 @@
     return this;
   };
 
-  
-  //TODO: Document this!
+
+  /**
+   * Augments the properties a preiexisting keyframe.
+   * @param {number} when Which keyframe to modify, as identified by it's 
+   * millisecond position in the animation.
+   * @param {Object} stateModification The properties to augment the keyframe's
+   *    state properties with.  If any properties in this Object are `null` or
+   *    `undefined`, those state properties are deleted from the keyframe.
+   * @param {Object} opt_easingModification The properties to augment the 
+   *    individual property easings of the keyframe.  Works the same way as
+   *    `stateModification`.
+   */
   gk.Actor.prototype.modifyKeyframe = function (when, stateModification,
       opt_easingModification) {
 
-      var targetKeyframe;
+    var targetKeyframe;
 
-      targetKeyframe = this._keyframes[when];
-
-    _.each(stateModification, function (newState, propName) {
-      if (newState === undefined || newState === null) {
-        delete targetKeyframe.position[propName];
-      } else {
-        targetKeyframe.position[propName] = newState;
-      }
-    }, this);
+    targetKeyframe = this._keyframes[when];
+    augmentObject(targetKeyframe.position, stateModification);
 
     if (opt_easingModification) {
-      _.each(opt_easingModification, function (newEasing, propName) {
-        if (newEasing === undefined || newEasing === null) {
-          delete targetKeyframe.easing[propName];
-        } else {
-          targetKeyframe.easing[propName] = newEasing;
-        }
-      }, this);
+      augmentObject(targetKeyframe.easing, opt_easingModification);
     }
 
     return this;
