@@ -39,7 +39,7 @@ var canvas = document.getElementsByTagName('canvas')[0],
     kapi = new Kapi(canvas);
 ````
 
-You can also pass a configuration Object to tweak the Kapi instance - details of that can be found in forthcoming API documentation.
+You can also pass a configuration Object to tweak the Kapi instance - details on that can be found in forthcoming API documentation.
 
 So now we have a Kapi instance... but it won't do terribly much until you define and add some Actors.
 
@@ -66,7 +66,7 @@ var actor = new Kapi.Actor({
 });
 ````
 
-Continuing from before, here's a simple implementation for an Actor that we can use as an example:
+All of the methods described above are optional, but you should at least have a `draw` method.  Continuing from before, here's a simple implementation for an Actor that we can use as an example:
 
 ````javascript
 var canvas = document.getElementsByTagName('canvas')[0],
@@ -112,7 +112,7 @@ actor
   });
 ````
 
-`keyframe` is a method that takes two parameters - the first is how many milliseconds into the animation this keyframe is going start, and the second is an Object whose properties define the state that the Actor should have.  The previous snippet says, "at zero milliseconds into the animation, place `actor` at `x` 50, and `y` 50.  Continuing with the previous snippet, let's animate it to another point on the canvas:
+`keyframe` is a method that takes two or three parameters - the first is how many milliseconds into the animation this keyframe is going start, and the second is an Object whose properties define the state that the Actor should have.  The third parameter is a string that defines which Shifty easing formula to use - "linear" is the default.  The previous snippet says, "at zero milliseconds into the animation, place `actor` at `x` 50, and `y` 50.  Continuing with the previous snippet, let's animate it to another point on the canvas:
 
 ````javascript
 actor
@@ -214,4 +214,3 @@ sh build.sh <version>
 ````
 
 ...Where `<version>` is whatever version you want to call the build.  Rekapi uses the [SemVer](http://semver.org/) versioning scheme.  This will generate any files you need and place them into the `dist/` directory.  The build script requires Curl.  It will just work if you are on a Mac.  On Linux, you may need run `sudo apt-get install curl`.  It's also important to make sure you didn't break any tests in `tests/`.  You can take a quick look by opening `tests/test.all_unit_tests.html` in your browser.
-
