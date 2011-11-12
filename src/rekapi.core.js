@@ -162,11 +162,10 @@
   
   /**
    * @param {HTMLCanvas} canvas
-   * @param {Object} config
-   * @param {Object} events
+   * @param {Object} opt_config
    * @returns {Kapi}
    */
-  gk = global.Kapi || function Kapi (canvas, config, events) {
+  gk = global.Kapi || function Kapi (canvas, opt_config) {
     this.canvas = canvas;
     this._context = canvas.getContext('2d');
     
@@ -194,7 +193,7 @@
     // The last millisecond position that was drawn
     this._lastRenderedMillisecond = 0;
     
-    _.extend(this.config, config);
+    _.extend(this.config, opt_config);
     _.defaults(this.config, defaultConfig);
     
     // Apply the height and width if they were passed in the`config` Object.
@@ -207,6 +206,135 @@
     }, this);
     
     return this;
+  };
+  
+  
+  /**
+   * Add an Actor to the Kapi.
+   * @param {Kapi.Actor} actor
+   * @param {Object} opt_initialState
+   * @returns {Kapi}
+   */
+  gk.prototype.addActor = function (actor, opt_initialState) {
+    // You can't add an actor more than once.
+    if (!_.contains(this._actors, actor)) {
+      actor.kapi = this;
+      actor.fps = this.framerate();
+      actor.set(opt_initialState || {});
+      this._actors[actor.id] = actor;
+      this._drawOrder.push(actor.id);
+      actor.setup();
+    }
+    
+    return this;
+  };
+  
+  
+  /**
+   * Returns an Actor based on a given ID.
+   * @param {number} actorId The Actor ID of the actor to fetch
+   * @returns {Kapi.Actor}
+   */
+  gk.prototype.getActor = function (actorId) {
+    return this._actors[actorId];
+  };
+  
+  
+  /**
+   * Removes an Actor from the Kapi.
+   * @param {Kapi.Actor} actor A reference to the Actor to remove.
+   * @returns {Kapi}
+   */
+  gk.prototype.removeActor = function (actor) {
+    delete this._actors[actor.id];
+    delete actor.kapi;
+    this._drawOrder = _.without(this._drawOrder, actor.id);
+    actor.teardown();
+    this.updateInternalState();
+    
+    return this;
+  };
+  
+  
+  /**
+   * Starts or resumes an animation.
+   * @param {number} opt_howManyTimes How many times to loop the animation
+   *    before stopping.
+   * @returns {Kapi}
+   */
+  gk.prototype.play = function (opt_howManyTimes) {
+    clearTimeout(this._loopId);
+    
+    if (this._playState === playState.PAUSED) {
+      this._loopTimestamp += now() - this._pausedAtTime;
+    } else {
+      this._loopTimestamp = now();
+    }
+    
+    this._timesToIterate = opt_howManyTimes || -1;
+    this._playState = playState.PLAYING;
+    tick(this);
+    
+    // also resume any shifty tweens that are paused.
+    _.each(this._actors, function (actor) {
+      if (actor._state.isPaused ) {
+        actor.resume();
+      }
+    });
+
+    return this;
+  };
+  
+  
+  /**
+   * Pauses an animation.
+   * @returns {Kapi}
+   */
+  gk.prototype.pause = function () {
+    this._playState = playState.PAUSED;
+    clearTimeout(this._loopId);
+    this._pausedAtTime = now();
+    
+    // also pause any shifty tweens that are running.
+    _.each(this._actors, function (actor) {
+      if (actor._state.isTweening) {
+        actor.pause();
+      }
+    });
+
+    return this;
+  };
+  
+  
+  /**
+   * Stops an animation completely.
+   * @param {boolean} alsoClear Whether to also clear the canvas.
+   * @returns {Kapi}
+   */
+  gk.prototype.stop = function (alsoClear) {
+    this._playState = playState.STOPPED;
+    clearTimeout(this._loopId);
+    
+    if (alsoClear === true) {
+      this.canvas_clear();
+    }
+
+    // also kill any shifty tweens that are running.
+    _.each(this._actors, function (actor) {
+      actor.stop();
+    });
+    
+    return this;
+  };
+  
+  
+  /**
+   * Returns whether or not the animation is playing (meaning not paused or 
+   * stopped).
+   * @returns {boolean}
+   */
+  gk.prototype.isPlaying = function () {
+    return this._playState === playState.PLAYING;
   };
   
   
@@ -328,124 +456,6 @@
     
     return this;
   };
-  
-  
-  /**
-   * Add an Actor to the Kapi.
-   * @param {Kapi.Actor} actor
-   * @param {Object} opt_initialState
-   * @returns {Kapi}
-   */
-  gk.prototype.addActor = function (actor, opt_initialState) {
-    // You can't add an actor more than once.
-    if (!_.contains(this._actors, actor)) {
-      actor.kapi = this;
-      actor.fps = this.framerate();
-      actor.set(opt_initialState || {});
-      this._actors[actor.id] = actor;
-      this._drawOrder.push(actor.id);
-      actor.setup();
-    }
-    
-    return this;
-  };
-  
-  
-  /**
-   * Returns an Actor based on a given ID.
-   * @param {number} actorId The Actor ID of the actor to fetch
-   * @returns {Kapi.Actor}
-   */
-  gk.prototype.getActor = function (actorId) {
-    return this._actors[actorId];
-  };
-  
-  
-  /**
-   * Removes an Actor from the Kapi.
-   * @param {Kapi.Actor} actor A reference to the Actor to remove.
-   * @returns {Kapi}
-   */
-  gk.prototype.removeActor = function (actor) {
-    delete this._actors[actor.id];
-    delete actor.kapi;
-    this._drawOrder = _.without(this._drawOrder, actor.id);
-    actor.teardown();
-    
-    return this;
-  };
-  
-  
-  /**
-   * Starts or resumes an animation.
-   * @param {number} opt_howManyTimes How many times to loop the animation
-   *    before stopping.
-   * @returns {Kapi}
-   */
-  gk.prototype.play = function (opt_howManyTimes) {
-    clearTimeout(this._loopId);
-    
-    if (this._playState === playState.PAUSED) {
-      this._loopTimestamp += now() - this._pausedAtTime;
-    } else {
-      this._loopTimestamp = now();
-    }
-    
-    this._timesToIterate = opt_howManyTimes || -1;
-    this._playState = playState.PLAYING;
-    tick(this);
-    
-    // also resume any shifty tweens that are paused.
-    _.each(this._actors, function (actor) {
-      if (actor._state.isPaused ) {
-        actor.resume();
-      }
-    });
-
-    return this;
-  };
-  
-  
-  /**
-   * Pauses an animation.
-   * @returns {Kapi}
-   */
-  gk.prototype.pause = function () {
-    this._playState = playState.PAUSED;
-    clearTimeout(this._loopId);
-    this._pausedAtTime = now();
-    
-    // also pause any shifty tweens that are running.
-    _.each(this._actors, function (actor) {
-      if (actor._state.isTweening) {
-        actor.pause();
-      }
-    });
-
-    return this;
-  };
-  
-  
-  /**
-   * Stops an animation completely.
-   * @param {boolean} alsoClear Whether to also clear the canvas.
-   * @returns {Kapi}
-   */
-  gk.prototype.stop = function (alsoClear) {
-    this._playState = playState.STOPPED;
-    clearTimeout(this._loopId);
-    
-    if (alsoClear === true) {
-      this.canvas_clear();
-    }
-
-    // also kill any shifty tweens that are running.
-    _.each(this._actors, function (actor) {
-      actor.stop();
-    });
-    
-    return this;
-  };
 
 
   /**
@@ -465,16 +475,6 @@
     }
 
     return undefined;
-  };
-  
-  
-  /**
-   * Returns whether or not the animation is playing (meaning not paused or 
-   * stopped).
-   * @returns {boolean}
-   */
-  gk.prototype.isPlaying = function () {
-    return this._playState === playState.PLAYING;
   };
   
   

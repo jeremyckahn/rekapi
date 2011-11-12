@@ -70,9 +70,7 @@
     opt_config = opt_config || {};
     
     // Steal the `Tweenable` constructor.
-    this.constructor.call(this, {
-      'initialState': opt_config.initialState
-    });
+    this.constructor.call(this);
     
     _.extend(this, {
       '_keyframes': {}
@@ -98,50 +96,6 @@
   gk.Actor.prototype = new ActorMethods();
   // But the magic doesn't stop here!  `Actor`'s constructor steals the
   // `Tweenable` constructor.
-  
-  
-  /**
-   * Calculates and sets the Actor's position at a particular millisecond in the
-   * animation.
-   * @param {number} forMillisecond
-   * @returns {Kapi.Actor}
-   */
-  gk.Actor.prototype.calculatePosition = function (forMillisecond) {
-    //TODO: This function is too long!  It needs to be broken out somehow.
-    var keyframeList
-        ,keyframes
-        ,delta
-        ,interpolatedPosition
-        ,startMs
-        ,endMs
-        ,timeRangeIndexStart
-        ,rangeFloor
-        ,rangeCeil;
-        
-    keyframeList = this._keyframeList;
-    startMs = _.first(keyframeList);
-    endMs = _.last(keyframeList);
-    this.hide();
-
-    if (startMs <= forMillisecond && forMillisecond <= endMs) {
-      this.show();
-      keyframes = this._keyframes;
-      timeRangeIndexStart = getKeyframeForMillisecond(this, 
-          forMillisecond);
-      rangeFloor = keyframeList[timeRangeIndexStart];
-      rangeCeil = keyframeList[timeRangeIndexStart + 1];
-      delta = rangeCeil - rangeFloor;
-      interpolatedPosition = (forMillisecond - rangeFloor) / delta;
-      
-      this
-        .set(keyframes[keyframeList[timeRangeIndexStart]].position)
-        .interpolate(keyframes[keyframeList[timeRangeIndexStart + 1]].position,
-            interpolatedPosition,
-            keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
-    }
-
-    return this;
-  };
 
 
   /**
@@ -162,31 +116,31 @@
    *  @codeend
    * @returns {Kapi.Actor}
    */
-  gk.Actor.prototype.keyframe = function keyframe (when, position, easing) {
+  gk.Actor.prototype.keyframe = function keyframe (when, position, opt_easing) {
     var originalEasingString;
     
     // This code will be used.  Other work needs to be done beforehand, though.
-    if (!easing) {
-      easing = DEFAULT_EASING;
+    if (!opt_easing) {
+      opt_easing = DEFAULT_EASING;
     }
     
-    if (typeof easing === 'string') {
-      originalEasingString = easing;
-      easing = {};
+    if (typeof opt_easing === 'string') {
+      originalEasingString = opt_easing;
+      opt_easing = {};
       _.each(position, function (positionVal, positionName) {
-        easing[positionName] = originalEasingString;
+        opt_easing[positionName] = originalEasingString;
       });
     }
     
-    // If `easing` was passed as an Object, this will fill in any missing
-    // easing properties with the default equation.
+    // If `opt_easing` was passed as an Object, this will fill in any missing
+    // opt_easing properties with the default equation.
     _.each(position, function (positionVal, positionName) {
-      easing[positionName] = easing[positionName] || DEFAULT_EASING;
+      opt_easing[positionName] = opt_easing[positionName] || DEFAULT_EASING;
     });
     
     this._keyframes[when] = {
       'position': position
-      ,'easing': easing
+      ,'easing': opt_easing
     };
     this._keyframeList.push(when);
     gk.util.sortNumerically(this._keyframeList);
@@ -198,11 +152,11 @@
 
   /**
    * Copies an existing keyframe into another keyframe.  If the original
-   * keyframe is modified by Kapi.Actor.modifyKeyframe, then the copy is
+   * keyframe is modified by `Kapi.Actor.prototype.modifyKeyframe`, then the copy is
    * modified as well.  If the original keyframe is deleted, the copy remains.
-   * If the original keyframe is overwritten with Kapi.Actor.keyframe, then the
-   * link between the frames is lost (although the copy remains as an
-   * independant keyframe).
+   * If the original keyframe is overwritten with 
+   * `Kapi.Actor.prototype.keyframe`, then the link between the frames is lost 
+   * (although the copy remains as an independent keyframe).
    * @param {number} when Where in the animation to make the new keyframe.
    * @param {number} source The "when" of the target keyframe to copy.
    * @returns {Kapi.Actor}
@@ -221,7 +175,7 @@
 
 
   /**
-   * Augments the properties a preiexisting keyframe.
+   * Augments the properties of a pre-existing keyframe.
    * @param {number} when Which keyframe to modify, as identified by it's 
    * millisecond position in the animation.
    * @param {Object} stateModification The properties to augment the keyframe's
@@ -291,6 +245,13 @@
   };
 
 
+  /**
+   * Tell the Actor to draw itself for the next rendered frame.  If 
+   * `alsoPersist` is true, it continues to draw for every frame until
+   * `hide(true)` is called.
+   * @param {boolean} alsoPersist
+   * @returns {Kapi.Actor}
+   */
   gk.Actor.prototype.show = function (alsoPersist) {
     this._isShowing = true;
     this._isPersisting = !!alsoPersist;
@@ -299,6 +260,12 @@
   };
   
   
+  /**
+   * Tell the Actor not to draw itself for the next frame.  If`alsoUnpersist` is
+   * true, this undoes the persistence effect of `show(true)`.
+   * @param {boolean} alsoUnpersist
+   * @returns {Kapi.Actor}
+   */
   gk.Actor.prototype.hide = function (alsoUnpersist) {
     this._isShowing = false;
 
@@ -310,8 +277,57 @@
   };
   
   
+  /**
+   * Returns whether or not the Actor is showing for this frame or persisting
+   * across frames.
+   * @returns {boolean}
+   */
   gk.Actor.prototype.isShowing = function () {
     return this._isShowing || this._isPersisting;
+  };
+
+
+  /**
+   * Calculates and sets the Actor's position at a particular millisecond in the
+   * animation.
+   * @param {number} millisecond
+   * @returns {Kapi.Actor}
+   */
+  gk.Actor.prototype.calculatePosition = function (millisecond) {
+    //TODO: This function is too long!  It needs to be broken out somehow.
+    var keyframeList
+        ,keyframes
+        ,delta
+        ,interpolatedPosition
+        ,startMs
+        ,endMs
+        ,timeRangeIndexStart
+        ,rangeFloor
+        ,rangeCeil;
+        
+    keyframeList = this._keyframeList;
+    startMs = _.first(keyframeList);
+    endMs = _.last(keyframeList);
+    this.hide();
+
+    if (startMs <= millisecond && millisecond <= endMs) {
+      this.show();
+      keyframes = this._keyframes;
+      timeRangeIndexStart = getKeyframeForMillisecond(this, 
+          millisecond);
+      rangeFloor = keyframeList[timeRangeIndexStart];
+      rangeCeil = keyframeList[timeRangeIndexStart + 1];
+      delta = rangeCeil - rangeFloor;
+      interpolatedPosition = (millisecond - rangeFloor) / delta;
+      
+      this
+        .set(keyframes[keyframeList[timeRangeIndexStart]].position)
+        .interpolate(keyframes[keyframeList[timeRangeIndexStart + 1]].position,
+            interpolatedPosition,
+            keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
+    }
+
+    return this;
   };
 
 
@@ -324,6 +340,12 @@
   };
 
 
+  /**
+   * Retrieve and optionally bind arbitrary data to the Actor.
+   * @param {Object} opt_newData If this is set, it will overwrite whatever data
+   *    was bound previously.
+   * @returns {Object}
+   */
   gk.Actor.prototype.data = function (opt_newData) {
     if (opt_newData) {
       this._data = opt_newData;

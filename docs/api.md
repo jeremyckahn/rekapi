@@ -1,0 +1,437 @@
+# Public API
+
+This document is separated into 2 sections:
+
+1.  `Kapi` constructor and methods
+2.  `Kapi.Actor` constructor and methods
+
+__Note__: Parameters with a prefix of `opt_` are optional and may be omitted.
+
+## Kapi constructor and methods
+
+### Kapi
+
+````javascript
+/**
+ * @param {HTMLCanvas} canvas
+ * @param {Object} opt_config
+ * @returns {Kapi}
+ */
+Kapi (canvas, opt_config)
+````
+
+Create a `Kapi` instance.  `canvas` is an HTML 5 `<canvas>` from the DOM.  This `<canvas>` is where the animation is drawn.
+
+Valid properties of `opt_config`:
+
+* __fps__: The frames per second at which the animation updates.
+* __height__: The height to set upon `canvas`.
+* __width__: The width to set upon `canvas`.
+
+
+### addActor
+
+````javascript
+/**
+ * @param {Kapi.Actor} actor
+ * @param {Object} opt_initialState
+ * @returns {Kapi}
+ */
+Kapi.prototype.addActor (actor, opt_initialState)
+````
+
+Add a `Kapi.Actor` to a `Kapi` instance.  Optionally define the state at which the Actor will start from.
+
+
+### getActor
+
+````javascript
+/**
+ * @param {number} actorId
+ * @returns {Kapi.Actor}
+ */
+Kapi.prototype.getActor (actorId)
+````
+
+Retrieve an Actor from the `Kapi` instance by it's ID.  All 'Kapi.Actor''s have an `id` property.
+
+
+### removeActor
+
+````javascript
+/**
+ * @param {Kapi.Actor} actor
+ * @returns {Kapi}
+ */
+Kapi.prototype.removeActor (actor)
+````
+
+Remove `actor` from the animation.  This does not destroy `actor`, it only removes the link between `actor` and the `Kapi` instance.
+
+
+### play
+
+````javascript
+/**
+ * @param {number} opt_howManyTimes
+ * @returns {Kapi}
+ */
+Kapi.prototype.play (opt_howManyTimes)
+````
+
+Play the animation on a loop, either a set amount of times or infinitely.  If `opt_howManyTimes` is omitted, the animation will loop infinitely.
+
+
+### pause
+
+````javascript
+/**
+ * @returns {Kapi}
+ */
+Kapi.prototype.pause ()
+````
+
+Pauses an animation.  A "paused" animation can be resumed from where it left off with `play`.
+
+
+### stop
+
+````javascript
+/**
+ * @param {boolean} alsoClear
+ * @returns {Kapi}
+ */
+Kapi.prototype.stop (alsoClear)
+````
+
+Stops the animation.  A "stopped" animation will start from the beginning if `play` is called upon it again.  If `alsoClear` is true, the contents of the canvas will be cleared.  It is `false` by default.
+
+
+### isPlaying
+
+````javascript
+/**
+ * @returns {boolean}
+ */
+Kapi.prototype.isPlaying ()
+````
+
+Returns whether or not the animation is playing (meaning not paused or stopped).
+
+
+### animationLength
+
+````javascript
+/**
+ * @returns {number}
+ */
+Kapi.prototype.animationLength ()
+````
+
+Return the length of the animation, in milliseconds.
+
+
+### actorCount
+
+````javascript
+/**
+ * @returns {number}
+ */
+Kapi.prototype.actorCount ()
+````
+
+Return the number of Actors in the animation.
+
+
+### framerate
+
+````javascript
+/**
+ * @param {number} opt_newFramerate
+ * @returns {number}
+ */
+Kapi.prototype.framerate (opt_newFramerate)
+````
+
+Get and optionally set the framerate of the animation.  There's generally no point in going above 60.
+
+
+### render
+
+````javascript
+/**
+ * @param {number} millisecond
+ * @returns {Kapi}
+ */
+Kapi.prototype.render (millisecond)
+````
+ 
+Calculate the positions for all Actors at `millisecond`, and then draw them.  You can define any millisecond in the animation to render, so long as it is less than the length of the animation (see `animationLength`).
+
+### redraw
+
+````javascript
+/**
+ * @returns {Kapi}
+ */
+Kapi.prototype.redraw ()
+````
+
+Render the last frame that was rendered.
+
+
+### calculateActorPositions
+
+````javascript
+/**
+ * @param {number} millisecond
+ * @returns {Kapi}
+ */
+Kapi.prototype.calculateActorPositions (millisecond)
+````
+
+Update the position of all the Actors at `millisecond`, but do not draw them.
+
+
+### draw
+
+````javascript
+/**
+ * @returns {Kapi}
+ */
+Kapi.prototype.draw ()
+````
+
+Draw all the Actors at whatever position they are currently in.
+
+
+### updateInternalState
+
+````javascript
+/**
+ * @returns {Kapi}
+ */
+Kapi.prototype.updateInternalState ()
+````
+
+Invalidate and re-compute the internal state of the `Kapi`.
+
+
+### moveActorToLayer
+
+````javascript
+/**
+ * @param {Kapi.Actor} actor
+ * @param {number} layer
+ * @returns {Kapi|undefined}
+ */
+Kapi.prototype.moveActorToLayer (actor, layer)
+````
+
+Move an Actor around in the layer list.  Each layer has one Actor, and Actors are drawn in order of their layer.  Lower layers (starting with 0) are drawn earlier.  If `layer` is higher than the number of layers (will be equal to the result of `actorCount()`) or lower than 0, this method will return `undefined`.
+
+
+## Kapi.Actor
+
+````javascript
+/**
+ * @param {Object} opt_config
+ * @returns {Kapi.Actor}
+ */
+Kapi.Actor (opt_config)
+````
+
+Create a `Kapi.Actor` instance.
+
+Valid properties of `opt_config`:
+
+* __setup__: A function that gets called when the Actor is added to a `Kapi` instance (with `addActor`).
+* __draw__: A function that gets called every frame.  It receives two parameters, the first is a reference to a `<canvas>` context, and the second is an Object containing the current state properties.  _This method should draw the state properties to the screen with the canvas context.  There's no reason that this property should be omitted._
+* __teardown__: A function that gets called when the Actor is removed from the animation (with `removeActor`).
+
+
+### keyframe
+
+````javascript
+/**
+ * @param {number} when
+ * @param {Object} position
+ * @param {string|Object} opt_easing
+ * @returns {Kapi.Actor}
+ */
+Kapi.Actor.prototype.keyframe (when, position, opt_easing)
+````
+
+Create a keyframe for the Actor.  `when` defines where in the animation to place the keyframe, in milliseconds (assumes that `0` is when the animation began).  The animation length will automatically "grow" to accommodate any keyframe position.  
+
+`position` should contain all of the properties that define the keyframe's state.  These properties can be any value that can be tweened by [Shifty](https://github.com/jeremyckahn/shifty) (numbers, color strings, CSS properties).
+
+`opt_easing`, if specified, can be a string or an Object.  If it's a string, all properties in `position` will have the same easing formula applied to them.  Like this:
+
+````javascript
+actor.keyframe(1000, {
+    'x': 100,
+    'y': 100
+  }, 'easeOutSine');
+````
+
+Both `x` and `y` will have `easeOutSine` applied to them.  You can also specify multiple easing formulas with an Object:
+
+````javascript
+actor.keyframe(1000, {
+    'x': 100,
+    'y': 100
+  }, {
+    'x': 'easeinSine',
+    'y': 'easeOutSine'
+  });
+````
+
+`x` will transition with an easing of `easeInSine`, and `y` will transition with an easing of `easeOutSine`.  Any missing properties will transition with `linear`.  If the `opt_easing` property is omitted, all properties will default to `linear`.
+
+
+### liveCopy
+
+````javascript
+/**
+ * @param {number} when
+ * @param {number} source
+ * @returns {Kapi.Actor}
+ */
+Kapi.Actor.prototype.liveCopy (when, source)
+````
+
+Copy an existing keyframe into another keyframe.  If the original keyframe is modified by `Kapi.Actor.prototype.modifyKeyframe`, then the copy is modified as well.  If the original keyframe is deleted, the copy remains.  If the original keyframe is overwritten with `Kapi.Actor.prototype.keyframe`, then the link between the keyframes is lost (although the copy remains as an independent keyframe).
+
+`when` specifies where in the animation to place the liveCopy.  `source`  specifies which keyframe to use as the source to copy from (as defined by its millisecond position in the animation).
+
+
+### modifyKeyframe
+
+````javascript
+/**
+ * @param {number} when
+ * @param {Object} stateModification
+ * @param {Object} opt_easingModification
+ * @returns {Kapi.Actor}
+ */
+Kapi.Actor.prototype.modifyKeyframe (when, stateModification, opt_easingModification)
+````
+
+Augments the properties of a pre-existing keyframe.  `when` specifies the millisecond target keyframe to modify.  For `stateModification`, each property  will overwrite the target keyframe's corresponding property.  If the the  property in `stateModification` is `null` or `undefined`, then the property on the target will be deleted.
+
+If `opt_easingModification` is specified, it works identically to `stateModification`, but with the easing properties instead of the state properties.
+
+
+### removeKeyframe
+
+````javascript
+/**
+ * @param {number} when
+ * @returns {Kapi.Actor}
+ */
+Kapi.Actor.prototype.removeKeyframe (when)
+````
+
+Remove a keyframe set on the Actor.  `when` is the millisecond of the keyframe to remove.
+
+
+### removeAllKeyframes
+
+````javascript
+/**
+ * @returns {Kapi.Actor}
+ */
+Kapi.Actor.prototype.removeAllKeyframes ()
+````
+
+Removes all keyframes set on the Actor.
+
+
+### moveToLayer
+
+````javascript
+/**
+ * @param {number} layer
+ * @returns {Kapi.Actor|undefined}
+ */
+Kapi.Actor.prototype.moveToLayer (layer)
+````
+
+Move this actor to a different layer in the `Kapi` instance that controls it.  This returns `undefined` if the operation was successful
+
+
+### show
+
+````javascript
+/**
+ * @param {boolean} alsoPersist
+ * @returns {Kapi.Actor}
+ */
+Kapi.Actor.prototype.show (alsoPersist)
+````
+
+Tell the Actor to draw itself for the next rendered frame.  If `alsoPersist` is true, it continues to draw for every frame until `Kapi.Actor.prototype.hide(true)` is called.
+
+
+### hide
+
+````javascript
+/**
+ * @param {boolean} alsoUnpersist
+ * @returns {Kapi.Actor}
+ */
+Kapi.Actor.prototype.hide (alsoUnpersist)
+````
+
+Tell the Actor not to draw itself for the next frame.  If `alsoUnpersist` is true, this undoes the persistence effect of `Kapi.Actor.prototype.show(true)`.
+
+
+### isShowing
+
+````javascript
+/**
+ * @returns {boolean}
+ */
+Kapi.Actor.prototype.isShowing ()
+````
+
+Returns whether or not the Actor is showing for this frame or persisting across frames.
+
+
+### calculatePosition
+
+````javascript
+/**
+ * @param {number} millisecond
+ * @returns {Kapi.Actor}
+ */
+Kapi.Actor.prototype.calculatePosition (millisecond)
+````
+
+Calculates and sets the Actor's position at `millisecond` in the animation.
+
+
+### keyframeList
+
+````javascript
+/**
+ * @returns {Kapi.Actor}
+ */
+Kapi.Actor.prototype.keyframeList ()
+````
+
+Exposes the Actor's ordered list of keyframe times (as `number`s).
+
+
+### data
+
+````javascript
+/**
+ * @param {Object} opt_newData
+ * @returns {Kapi.Actor}
+ */
+Kapi.Actor.prototype.data (opt_newData)
+````
+
+Retrieve and optionally bind arbitrary data to the Actor.  If `opt_newData` is specified, it will overwrite the previous data that was bound with this method.
