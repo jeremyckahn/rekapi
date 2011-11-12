@@ -21,6 +21,15 @@
     return canvas[dimension];
   }
   
+  
+  /**
+   * Gets the 2d context of the Kapi's canvas.
+   * @returns {CanvasRenderingContext2D}
+   */
+  gk.prototype.canvas_context = function () {
+    return this._context;
+  };
+  
 
   /**
    * Get and/or set the height of the canvas.
@@ -66,15 +75,6 @@
         this.canvas_height());
     
     return this;
-  };
-  
-  
-  /**
-   * Gets the 2d context of the Kapi's canvas.
-   * @returns {CanvasRenderingContext2D}
-   */
-  gk.prototype.canvas_context = function () {
-    return this._context;
   };
 
 } (this));

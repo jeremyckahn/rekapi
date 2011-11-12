@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.1.9
+ * Rekapi - Rewritten Kapi. v1.1.10
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -907,6 +907,15 @@
     return canvas[dimension];
   }
   
+  
+  /**
+   * Gets the 2d context of the Kapi's canvas.
+   * @returns {CanvasRenderingContext2D}
+   */
+  gk.prototype.canvas_context = function () {
+    return this._context;
+  };
+  
 
   /**
    * Get and/or set the height of the canvas.
@@ -952,15 +961,6 @@
         this.canvas_height());
     
     return this;
-  };
-  
-  
-  /**
-   * Gets the 2d context of the Kapi's canvas.
-   * @returns {CanvasRenderingContext2D}
-   */
-  gk.prototype.canvas_context = function () {
-    return this._context;
   };
 
 } (this));

@@ -231,6 +231,63 @@ Kapi.prototype.moveActorToLayer (actor, layer)
 Move an Actor around in the layer list.  Each layer has one Actor, and Actors are drawn in order of their layer.  Lower layers (starting with 0) are drawn earlier.  If `layer` is higher than the number of layers (will be equal to the result of `actorCount()`) or lower than 0, this method will return `undefined`.
 
 
+### canvas_context
+
+````javascript
+/**
+ * @returns {CanvasRenderingContext2D}
+ */
+Kapi.prototype.canvas_context ()
+````
+
+Return the 2d context of the `<canvas>`.  This is needed for any and all drawing operations - it is also provided to an Actor's `draw` method.  See the [MDN](https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas) for more info on the `<canvas>` context.
+
+
+### canvas_height, canvas_width
+
+````javascript
+/**
+ * @param {number} opt_height
+ * @returns {number}
+ */
+Kapi.prototype.canvas_height (opt_height)
+
+/**
+ * @param {number} opt_width
+ * @returns {number}
+ */
+Kapi.prototype.canvas_width (opt_width)
+````
+
+These methods get and optionally set their respective dimensions on the canvas.
+
+
+### canvas_style
+
+````javascript
+/**
+ * @param {string} styleName
+ * @param {number|string} opt_styleValue
+ * @returns {number|string}
+ */
+Kapi.prototype.canvas_style (styleName, opt_styleValue)
+````
+
+Get and optionally set a style on the canvas.
+
+
+### canvas_clear
+
+````javascript
+/**
+ * @returns {Kapi}
+ */
+Kapi.prototype.canvas_clear ()
+````
+
+Erase the canvas.
+
+
 ## Kapi.Actor constructor and methods
 
 ````javascript
