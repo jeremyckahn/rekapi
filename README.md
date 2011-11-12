@@ -90,7 +90,7 @@ var actor = new Kapi.Actor({
 });
 ````
 
-The Actor's `draw` method can do whatever you want it to, really.  The idea is that the `canvas_context` and `state` parameters are managed by Rekapi, and then expressed visually on the `<canvas>` by the Actor's `draw` method.  `setup` and `teardown` are methods that get called when the Actor is added and removed from the Kapi instance, respectively.
+The Actor's `draw` method can do whatever you want it to, really.  The idea is that the `canvas_context` and `state` parameters are computed by Rekapi, and then expressed visually on the `<canvas>` by the Actor's `draw` method.  `setup` and `teardown` are methods that get called when the Actor is added and removed from the Kapi instance, respectively.
 
 Now that we have an Actor instance, we just need to add it to the Kapi:
 
@@ -126,7 +126,7 @@ actor
   }, 'easeOutExpo');
 ````
 
-So, a few things to note.  `keyframe`, like many methods of the `Kapi.Actor` Object, is chainable.  The animation defined here will last one second, as the the second `keyframe` is placed at 1000 milliseconds.  It will have a nice `easeOutExpo` easing formula applied to it, as we can see from the third parameter.  Rekapi inherits all of [Shifty's easing formulas](https://github.com/jeremyckahn/shifty/blob/master/src/shifty.formulas.js).  Also of note: individual tweens get their easing formula from the keyframe from they are animating to, not animating from.
+So, a few things to note.  `keyframe`, like many methods of the `Kapi.Actor` Object, is chainable.  The animation defined here will last one second, as the the second `keyframe` is placed at 1000 milliseconds.  It will have a nice `easeOutExpo` easing formula applied to it, as we can see from the third parameter.  Rekapi inherits all of [Shifty's easing formulas](https://github.com/jeremyckahn/shifty/blob/master/src/shifty.formulas.js).  Also of note: individual tweens get their easing formula from the keyframe they are animating to, not animating from.
 
 ## Playing the animation
 
