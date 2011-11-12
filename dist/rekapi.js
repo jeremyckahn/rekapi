@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.1.8
+ * Rekapi - Rewritten Kapi. v0.1.9
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -171,11 +171,10 @@
   
   /**
    * @param {HTMLCanvas} canvas
-   * @param {Object} config
-   * @param {Object} events
+   * @param {Object} opt_config
    * @returns {Kapi}
    */
-  gk = global.Kapi || function Kapi (canvas, config, events) {
+  gk = global.Kapi || function Kapi (canvas, opt_config) {
     this.canvas = canvas;
     this._context = canvas.getContext('2d');
     
@@ -203,7 +202,7 @@
     // The last millisecond position that was drawn
     this._lastRenderedMillisecond = 0;
     
-    _.extend(this.config, config);
+    _.extend(this.config, opt_config);
     _.defaults(this.config, defaultConfig);
     
     // Apply the height and width if they were passed in the`config` Object.
@@ -216,6 +215,135 @@
     }, this);
     
     return this;
+  };
+  
+  
+  /**
+   * Add an Actor to the Kapi.
+   * @param {Kapi.Actor} actor
+   * @param {Object} opt_initialState
+   * @returns {Kapi}
+   */
+  gk.prototype.addActor = function (actor, opt_initialState) {
+    // You can't add an actor more than once.
+    if (!_.contains(this._actors, actor)) {
+      actor.kapi = this;
+      actor.fps = this.framerate();
+      actor.set(opt_initialState || {});
+      this._actors[actor.id] = actor;
+      this._drawOrder.push(actor.id);
+      actor.setup();
+    }
+    
+    return this;
+  };
+  
+  
+  /**
+   * Returns an Actor based on a given ID.
+   * @param {number} actorId The Actor ID of the actor to fetch
+   * @returns {Kapi.Actor}
+   */
+  gk.prototype.getActor = function (actorId) {
+    return this._actors[actorId];
+  };
+  
+  
+  /**
+   * Removes an Actor from the Kapi.
+   * @param {Kapi.Actor} actor A reference to the Actor to remove.
+   * @returns {Kapi}
+   */
+  gk.prototype.removeActor = function (actor) {
+    delete this._actors[actor.id];
+    delete actor.kapi;
+    this._drawOrder = _.without(this._drawOrder, actor.id);
+    actor.teardown();
+    this.updateInternalState();
+    
+    return this;
+  };
+  
+  
+  /**
+   * Starts or resumes an animation.
+   * @param {number} opt_howManyTimes How many times to loop the animation
+   *    before stopping.
+   * @returns {Kapi}
+   */
+  gk.prototype.play = function (opt_howManyTimes) {
+    clearTimeout(this._loopId);
+    
+    if (this._playState === playState.PAUSED) {
+      this._loopTimestamp += now() - this._pausedAtTime;
+    } else {
+      this._loopTimestamp = now();
+    }
+    
+    this._timesToIterate = opt_howManyTimes || -1;
+    this._playState = playState.PLAYING;
+    tick(this);
+    
+    // also resume any shifty tweens that are paused.
+    _.each(this._actors, function (actor) {
+      if (actor._state.isPaused ) {
+        actor.resume();
+      }
+    });
+
+    return this;
+  };
+  
+  
+  /**
+   * Pauses an animation.
+   * @returns {Kapi}
+   */
+  gk.prototype.pause = function () {
+    this._playState = playState.PAUSED;
+    clearTimeout(this._loopId);
+    this._pausedAtTime = now();
+    
+    // also pause any shifty tweens that are running.
+    _.each(this._actors, function (actor) {
+      if (actor._state.isTweening) {
+        actor.pause();
+      }
+    });
+
+    return this;
+  };
+  
+  
+  /**
+   * Stops an animation completely.
+   * @param {boolean} alsoClear Whether to also clear the canvas.
+   * @returns {Kapi}
+   */
+  gk.prototype.stop = function (alsoClear) {
+    this._playState = playState.STOPPED;
+    clearTimeout(this._loopId);
+    
+    if (alsoClear === true) {
+      this.canvas_clear();
+    }
+
+    // also kill any shifty tweens that are running.
+    _.each(this._actors, function (actor) {
+      actor.stop();
+    });
+    
+    return this;
+  };
+  
+  
+  /**
+   * Returns whether or not the animation is playing (meaning not paused or 
+   * stopped).
+   * @returns {boolean}
+   */
+  gk.prototype.isPlaying = function () {
+    return this._playState === playState.PLAYING;
   };
   
   
@@ -337,124 +465,6 @@
     
     return this;
   };
-  
-  
-  /**
-   * Add an Actor to the Kapi.
-   * @param {Kapi.Actor} actor
-   * @param {Object} opt_initialState
-   * @returns {Kapi}
-   */
-  gk.prototype.addActor = function (actor, opt_initialState) {
-    // You can't add an actor more than once.
-    if (!_.contains(this._actors, actor)) {
-      actor.kapi = this;
-      actor.fps = this.framerate();
-      actor.set(opt_initialState || {});
-      this._actors[actor.id] = actor;
-      this._drawOrder.push(actor.id);
-      actor.setup();
-    }
-    
-    return this;
-  };
-  
-  
-  /**
-   * Returns an Actor based on a given ID.
-   * @param {number} actorId The Actor ID of the actor to fetch
-   * @returns {Kapi.Actor}
-   */
-  gk.prototype.getActor = function (actorId) {
-    return this._actors[actorId];
-  };
-  
-  
-  /**
-   * Removes an Actor from the Kapi.
-   * @param {Kapi.Actor} actor A reference to the Actor to remove.
-   * @returns {Kapi}
-   */
-  gk.prototype.removeActor = function (actor) {
-    delete this._actors[actor.id];
-    delete actor.kapi;
-    this._drawOrder = _.without(this._drawOrder, actor.id);
-    actor.teardown();
-    
-    return this;
-  };
-  
-  
-  /**
-   * Starts or resumes an animation.
-   * @param {number} opt_howManyTimes How many times to loop the animation
-   *    before stopping.
-   * @returns {Kapi}
-   */
-  gk.prototype.play = function (opt_howManyTimes) {
-    clearTimeout(this._loopId);
-    
-    if (this._playState === playState.PAUSED) {
-      this._loopTimestamp += now() - this._pausedAtTime;
-    } else {
-      this._loopTimestamp = now();
-    }
-    
-    this._timesToIterate = opt_howManyTimes || -1;
-    this._playState = playState.PLAYING;
-    tick(this);
-    
-    // also resume any shifty tweens that are paused.
-    _.each(this._actors, function (actor) {
-      if (actor._state.isPaused ) {
-        actor.resume();
-      }
-    });
-
-    return this;
-  };
-  
-  
-  /**
-   * Pauses an animation.
-   * @returns {Kapi}
-   */
-  gk.prototype.pause = function () {
-    this._playState = playState.PAUSED;
-    clearTimeout(this._loopId);
-    this._pausedAtTime = now();
-    
-    // also pause any shifty tweens that are running.
-    _.each(this._actors, function (actor) {
-      if (actor._state.isTweening) {
-        actor.pause();
-      }
-    });
-
-    return this;
-  };
-  
-  
-  /**
-   * Stops an animation completely.
-   * @param {boolean} alsoClear Whether to also clear the canvas.
-   * @returns {Kapi}
-   */
-  gk.prototype.stop = function (alsoClear) {
-    this._playState = playState.STOPPED;
-    clearTimeout(this._loopId);
-    
-    if (alsoClear === true) {
-      this.canvas_clear();
-    }
-
-    // also kill any shifty tweens that are running.
-    _.each(this._actors, function (actor) {
-      actor.stop();
-    });
-    
-    return this;
-  };
 
 
   /**
@@ -474,16 +484,6 @@
     }
 
     return undefined;
-  };
-  
-  
-  /**
-   * Returns whether or not the animation is playing (meaning not paused or 
-   * stopped).
-   * @returns {boolean}
-   */
-  gk.prototype.isPlaying = function () {
-    return this._playState === playState.PLAYING;
   };
   
   
@@ -583,9 +583,7 @@
     opt_config = opt_config || {};
     
     // Steal the `Tweenable` constructor.
-    this.constructor.call(this, {
-      'initialState': opt_config.initialState
-    });
+    this.constructor.call(this);
     
     _.extend(this, {
       '_keyframes': {}
@@ -611,50 +609,6 @@
   gk.Actor.prototype = new ActorMethods();
   // But the magic doesn't stop here!  `Actor`'s constructor steals the
   // `Tweenable` constructor.
-  
-  
-  /**
-   * Calculates and sets the Actor's position at a particular millisecond in the
-   * animation.
-   * @param {number} forMillisecond
-   * @returns {Kapi.Actor}
-   */
-  gk.Actor.prototype.calculatePosition = function (forMillisecond) {
-    //TODO: This function is too long!  It needs to be broken out somehow.
-    var keyframeList
-        ,keyframes
-        ,delta
-        ,interpolatedPosition
-        ,startMs
-        ,endMs
-        ,timeRangeIndexStart
-        ,rangeFloor
-        ,rangeCeil;
-        
-    keyframeList = this._keyframeList;
-    startMs = _.first(keyframeList);
-    endMs = _.last(keyframeList);
-    this.hide();
-
-    if (startMs <= forMillisecond && forMillisecond <= endMs) {
-      this.show();
-      keyframes = this._keyframes;
-      timeRangeIndexStart = getKeyframeForMillisecond(this, 
-          forMillisecond);
-      rangeFloor = keyframeList[timeRangeIndexStart];
-      rangeCeil = keyframeList[timeRangeIndexStart + 1];
-      delta = rangeCeil - rangeFloor;
-      interpolatedPosition = (forMillisecond - rangeFloor) / delta;
-      
-      this
-        .set(keyframes[keyframeList[timeRangeIndexStart]].position)
-        .interpolate(keyframes[keyframeList[timeRangeIndexStart + 1]].position,
-            interpolatedPosition,
-            keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
-    }
-
-    return this;
-  };
 
 
   /**
@@ -675,31 +629,31 @@
    *  @codeend
    * @returns {Kapi.Actor}
    */
-  gk.Actor.prototype.keyframe = function keyframe (when, position, easing) {
+  gk.Actor.prototype.keyframe = function keyframe (when, position, opt_easing) {
     var originalEasingString;
     
     // This code will be used.  Other work needs to be done beforehand, though.
-    if (!easing) {
-      easing = DEFAULT_EASING;
+    if (!opt_easing) {
+      opt_easing = DEFAULT_EASING;
     }
     
-    if (typeof easing === 'string') {
-      originalEasingString = easing;
-      easing = {};
+    if (typeof opt_easing === 'string') {
+      originalEasingString = opt_easing;
+      opt_easing = {};
       _.each(position, function (positionVal, positionName) {
-        easing[positionName] = originalEasingString;
+        opt_easing[positionName] = originalEasingString;
       });
     }
     
-    // If `easing` was passed as an Object, this will fill in any missing
-    // easing properties with the default equation.
+    // If `opt_easing` was passed as an Object, this will fill in any missing
+    // opt_easing properties with the default equation.
     _.each(position, function (positionVal, positionName) {
-      easing[positionName] = easing[positionName] || DEFAULT_EASING;
+      opt_easing[positionName] = opt_easing[positionName] || DEFAULT_EASING;
     });
     
     this._keyframes[when] = {
       'position': position
-      ,'easing': easing
+      ,'easing': opt_easing
     };
     this._keyframeList.push(when);
     gk.util.sortNumerically(this._keyframeList);
@@ -711,11 +665,11 @@
 
   /**
    * Copies an existing keyframe into another keyframe.  If the original
-   * keyframe is modified by Kapi.Actor.modifyKeyframe, then the copy is
+   * keyframe is modified by `Kapi.Actor.prototype.modifyKeyframe`, then the copy is
    * modified as well.  If the original keyframe is deleted, the copy remains.
-   * If the original keyframe is overwritten with Kapi.Actor.keyframe, then the
-   * link between the frames is lost (although the copy remains as an
-   * independant keyframe).
+   * If the original keyframe is overwritten with 
+   * `Kapi.Actor.prototype.keyframe`, then the link between the frames is lost 
+   * (although the copy remains as an independent keyframe).
    * @param {number} when Where in the animation to make the new keyframe.
    * @param {number} source The "when" of the target keyframe to copy.
    * @returns {Kapi.Actor}
@@ -734,7 +688,7 @@
 
 
   /**
-   * Augments the properties a preiexisting keyframe.
+   * Augments the properties of a pre-existing keyframe.
    * @param {number} when Which keyframe to modify, as identified by it's 
    * millisecond position in the animation.
    * @param {Object} stateModification The properties to augment the keyframe's
@@ -804,6 +758,13 @@
   };
 
 
+  /**
+   * Tell the Actor to draw itself for the next rendered frame.  If 
+   * `alsoPersist` is true, it continues to draw for every frame until
+   * `hide(true)` is called.
+   * @param {boolean} alsoPersist
+   * @returns {Kapi.Actor}
+   */
   gk.Actor.prototype.show = function (alsoPersist) {
     this._isShowing = true;
     this._isPersisting = !!alsoPersist;
@@ -812,6 +773,12 @@
   };
   
   
+  /**
+   * Tell the Actor not to draw itself for the next frame.  If`alsoUnpersist` is
+   * true, this undoes the persistence effect of `show(true)`.
+   * @param {boolean} alsoUnpersist
+   * @returns {Kapi.Actor}
+   */
   gk.Actor.prototype.hide = function (alsoUnpersist) {
     this._isShowing = false;
 
@@ -823,8 +790,57 @@
   };
   
   
+  /**
+   * Returns whether or not the Actor is showing for this frame or persisting
+   * across frames.
+   * @returns {boolean}
+   */
   gk.Actor.prototype.isShowing = function () {
     return this._isShowing || this._isPersisting;
+  };
+
+
+  /**
+   * Calculates and sets the Actor's position at a particular millisecond in the
+   * animation.
+   * @param {number} millisecond
+   * @returns {Kapi.Actor}
+   */
+  gk.Actor.prototype.calculatePosition = function (millisecond) {
+    //TODO: This function is too long!  It needs to be broken out somehow.
+    var keyframeList
+        ,keyframes
+        ,delta
+        ,interpolatedPosition
+        ,startMs
+        ,endMs
+        ,timeRangeIndexStart
+        ,rangeFloor
+        ,rangeCeil;
+        
+    keyframeList = this._keyframeList;
+    startMs = _.first(keyframeList);
+    endMs = _.last(keyframeList);
+    this.hide();
+
+    if (startMs <= millisecond && millisecond <= endMs) {
+      this.show();
+      keyframes = this._keyframes;
+      timeRangeIndexStart = getKeyframeForMillisecond(this, 
+          millisecond);
+      rangeFloor = keyframeList[timeRangeIndexStart];
+      rangeCeil = keyframeList[timeRangeIndexStart + 1];
+      delta = rangeCeil - rangeFloor;
+      interpolatedPosition = (millisecond - rangeFloor) / delta;
+      
+      this
+        .set(keyframes[keyframeList[timeRangeIndexStart]].position)
+        .interpolate(keyframes[keyframeList[timeRangeIndexStart + 1]].position,
+            interpolatedPosition,
+            keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
+    }
+
+    return this;
   };
 
 
@@ -837,6 +853,12 @@
   };
 
 
+  /**
+   * Retrieve and optionally bind arbitrary data to the Actor.
+   * @param {Object} opt_newData If this is set, it will overwrite whatever data
+   *    was bound previously.
+   * @returns {Object}
+   */
   gk.Actor.prototype.data = function (opt_newData) {
     if (opt_newData) {
       this._data = opt_newData;
