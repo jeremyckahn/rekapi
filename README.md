@@ -207,10 +207,18 @@ If you find any bugs, have suggestions or questions, please post them them to th
 
 ## Building and contributing
 
-If you make a change to the Rekapi source and would like to build, just run this from the Rekapi root directory on the command line:
+If you'd like to download entirety of this repo, please note that it uses Git submodules.  You will need to clone it like so:
+
+````
+$: git clone --recursive git@github.com:jeremyckahn/rekapi.git
+````
+
+The `--recursive` flag tells Git to download the submodules in addition to the Rekapi files.  You will need these submodules in order to build Rekapi or run the tests.
+
+If you make a change to the Rekapi source and would like to build the project, just run this from the Rekapi root directory on the command line:
 
 ````
 sh build.sh <version>
 ````
 
-...Where `<version>` is whatever version you want to call the build.  Rekapi uses the [SemVer](http://semver.org/) versioning scheme.  This will generate any files you need and place them into the `dist/` directory.  The build script requires Curl.  It will just work if you are on a Mac.  On Linux, you may need run `sudo apt-get install curl`.  It's also important to make sure you didn't break any tests in `tests/`.  You can take a quick look by opening `tests/test.all_unit_tests.html` in your browser.
+`<version>` is whatever version you want to call the build.  Rekapi uses the [SemVer](http://semver.org/) versioning scheme.  This will generate any files you need and place them into the `dist/` directory.  The build script requires Curl.  It will just work if you are on a Mac.  On Linux, you may need run `sudo apt-get install curl`.  It's also important to make sure you didn't break any tests in `tests/`.  You can take a quick look by opening `tests/test.all_unit_tests.html` in your browser.
