@@ -1,4 +1,4 @@
-# Public API
+# Rekapi Public API
 
 This document is separated into 2 sections:
 
@@ -53,7 +53,7 @@ Add a `Kapi.Actor` to a `Kapi` instance.  Optionally define the state at which t
 Kapi.prototype.getActor (actorId)
 ````
 
-Retrieve an Actor from the `Kapi` instance by it's ID.  All 'Kapi.Actor''s have an `id` property.
+Retrieve an Actor from the `Kapi` instance by its ID.  All `Kapi.Actor`'s have an `id` property.
 
 
 ### removeActor
@@ -91,7 +91,7 @@ Play the animation on a loop, either a set amount of times or infinitely.  If `o
 Kapi.prototype.pause ()
 ````
 
-Pauses an animation.  A "paused" animation can be resumed from where it left off with `play`.
+Pauses the animation.  A "paused" animation can be resumed from where it left off with `play()`.
 
 
 ### stop
@@ -104,7 +104,7 @@ Pauses an animation.  A "paused" animation can be resumed from where it left off
 Kapi.prototype.stop (alsoClear)
 ````
 
-Stops the animation.  A "stopped" animation will start from the beginning if `play` is called upon it again.  If `alsoClear` is true, the contents of the canvas will be cleared.  It is `false` by default.
+Stops the animation.  A "stopped" animation will start from the beginning if `play()` is called upon it again.  If `alsoClear` is `true`, the contents of the canvas will be cleared.  It is `false` by default.
 
 
 ### isPlaying
@@ -177,7 +177,7 @@ Calculate the positions for all Actors at `millisecond`, and then draw them.  Yo
 Kapi.prototype.redraw ()
 ````
 
-Render the last frame that was rendered.
+Re-`render()` the last frame that was `render()`ed.
 
 
 ### calculateActorPositions
@@ -228,7 +228,7 @@ Invalidate and re-compute the internal state of the `Kapi`.
 Kapi.prototype.moveActorToLayer (actor, layer)
 ````
 
-Move an Actor around in the layer list.  Each layer has one Actor, and Actors are drawn in order of their layer.  Lower layers (starting with 0) are drawn earlier.  If `layer` is higher than the number of layers (will be equal to the result of `actorCount()`) or lower than 0, this method will return `undefined`.
+Move an Actor around in the layer list.  Each layer has one Actor, and Actors are drawn in order of their layer.  Lower layers (starting with 0) are drawn earlier.  If `layer` is higher than the number of layers (which can be found with `actorCount()`) or lower than 0, this method will return `undefined`.
 
 
 ### canvas_context
