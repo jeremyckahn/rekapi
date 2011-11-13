@@ -59,10 +59,7 @@
   
   
   /**
-   * `Kapi.Actor` constructor.  An Actor is an individual component of an
-   * animation.
-   * @param {Object} opt_config An Object that may contain the `setup, `draw`
-   *    and `teardown` methods for the Actor.
+   * @param {Object} opt_config
    * @returns {Actor.Kapi}
    */
   gk.Actor = function Actor (opt_config) {
@@ -99,21 +96,9 @@
 
 
   /**
-   * Define a keyframe for an Actor.
    * @param {number} when
    * @param {Object} position
-   * @param {string|Object} easing If this is a string, the easing is applied
-   *    to all parameters of `position`.  You can also mix and match easings
-   *    for each parameter. So:
-   *  @codestart
-   *    actor.keyframe(1000, {
-   *      'x': 100
-   *      ,'y': 100
-   *    }, {
-   *      'x': 'easeOutSine'
-   *      ,'y': 'easeInSine'
-   *    });
-   *  @codeend
+   * @param {string|Object} easing
    * @returns {Kapi.Actor}
    */
   gk.Actor.prototype.keyframe = function keyframe (when, position, opt_easing) {
@@ -151,14 +136,8 @@
 
 
   /**
-   * Copies an existing keyframe into another keyframe.  If the original
-   * keyframe is modified by `Kapi.Actor.prototype.modifyKeyframe`, then the copy is
-   * modified as well.  If the original keyframe is deleted, the copy remains.
-   * If the original keyframe is overwritten with 
-   * `Kapi.Actor.prototype.keyframe`, then the link between the frames is lost 
-   * (although the copy remains as an independent keyframe).
-   * @param {number} when Where in the animation to make the new keyframe.
-   * @param {number} source The "when" of the target keyframe to copy.
+   * @param {number} when
+   * @param {number} source
    * @returns {Kapi.Actor}
    */
   gk.Actor.prototype.liveCopy = function (when, source) {
@@ -175,15 +154,9 @@
 
 
   /**
-   * Augments the properties of a pre-existing keyframe.
-   * @param {number} when Which keyframe to modify, as identified by it's 
-   * millisecond position in the animation.
-   * @param {Object} stateModification The properties to augment the keyframe's
-   *    state properties with.  If any properties in this Object are `null` or
-   *    `undefined`, those state properties are deleted from the keyframe.
-   * @param {Object} opt_easingModification The properties to augment the 
-   *    individual property easings of the keyframe.  Works the same way as
-   *    `stateModification`.
+   * @param {number} when
+   * @param {Object} stateModification
+   * @param {Object} opt_easingModification
    */
   gk.Actor.prototype.modifyKeyframe = function (when, stateModification,
       opt_easingModification) {
@@ -202,8 +175,7 @@
 
 
   /**
-   * Remove a keyframe set on the actor.
-   * @param {when} when the millisecond to remove the keyframe from.
+   * @param {when} when
    * @returns {Kapi.Actor}
    */
   gk.Actor.prototype.removeKeyframe = function (when) {
@@ -218,7 +190,6 @@
 
 
   /**
-   * Removes all keyframes set on the actor.
    * @returns {Kapi.Actor}
    */
   gk.Actor.prototype.removeAllKeyframes = function () {
@@ -235,10 +206,8 @@
   
   
   /**
-   * Move this Actor to another layer in the owner Kapi isntance.
-   * @param {number} layer The 0-based layer to move to.
-   * @returns {Kapi.Actor|undefined} If successful, the actor is returned.  If
-   *    the operation fails, `undefined` is returned.
+   * @param {number} layer
+   * @returns {Kapi.Actor|undefined}
    */
   gk.Actor.prototype.moveToLayer = function (layer) {
     return this.kapi.moveActorToLayer(this, layer);
@@ -246,9 +215,6 @@
 
 
   /**
-   * Tell the Actor to draw itself for the next rendered frame.  If 
-   * `alsoPersist` is true, it continues to draw for every frame until
-   * `hide(true)` is called.
    * @param {boolean} alsoPersist
    * @returns {Kapi.Actor}
    */
@@ -261,8 +227,6 @@
   
   
   /**
-   * Tell the Actor not to draw itself for the next frame.  If`alsoUnpersist` is
-   * true, this undoes the persistence effect of `show(true)`.
    * @param {boolean} alsoUnpersist
    * @returns {Kapi.Actor}
    */
@@ -278,8 +242,6 @@
   
   
   /**
-   * Returns whether or not the Actor is showing for this frame or persisting
-   * across frames.
    * @returns {boolean}
    */
   gk.Actor.prototype.isShowing = function () {
@@ -288,8 +250,6 @@
 
 
   /**
-   * Calculates and sets the Actor's position at a particular millisecond in the
-   * animation.
    * @param {number} millisecond
    * @returns {Kapi.Actor}
    */
@@ -332,7 +292,6 @@
 
 
   /**
-   * Exposes the Actor's ordered list of keyframe times.
    * @returns {Array}
    */
   gk.Actor.prototype.keyframeList = function () {
@@ -341,9 +300,7 @@
 
 
   /**
-   * Retrieve and optionally bind arbitrary data to the Actor.
-   * @param {Object} opt_newData If this is set, it will overwrite whatever data
-   *    was bound previously.
+   * @param {Object} opt_newData
    * @returns {Object}
    */
   gk.Actor.prototype.data = function (opt_newData) {

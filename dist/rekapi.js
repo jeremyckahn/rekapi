@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v1.1.10
+ * Rekapi - Rewritten Kapi. v0.1.11
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -219,7 +219,6 @@
   
   
   /**
-   * Add an Actor to the Kapi.
    * @param {Kapi.Actor} actor
    * @param {Object} opt_initialState
    * @returns {Kapi}
@@ -240,8 +239,7 @@
   
   
   /**
-   * Returns an Actor based on a given ID.
-   * @param {number} actorId The Actor ID of the actor to fetch
+   * @param {number} actorId
    * @returns {Kapi.Actor}
    */
   gk.prototype.getActor = function (actorId) {
@@ -250,8 +248,7 @@
   
   
   /**
-   * Removes an Actor from the Kapi.
-   * @param {Kapi.Actor} actor A reference to the Actor to remove.
+   * @param {Kapi.Actor} actor
    * @returns {Kapi}
    */
   gk.prototype.removeActor = function (actor) {
@@ -266,9 +263,7 @@
   
   
   /**
-   * Starts or resumes an animation.
-   * @param {number} opt_howManyTimes How many times to loop the animation
-   *    before stopping.
+   * @param {number} opt_howManyTimes
    * @returns {Kapi}
    */
   gk.prototype.play = function (opt_howManyTimes) {
@@ -296,7 +291,6 @@
   
   
   /**
-   * Pauses an animation.
    * @returns {Kapi}
    */
   gk.prototype.pause = function () {
@@ -316,8 +310,7 @@
   
   
   /**
-   * Stops an animation completely.
-   * @param {boolean} alsoClear Whether to also clear the canvas.
+   * @param {boolean} alsoClear
    * @returns {Kapi}
    */
   gk.prototype.stop = function (alsoClear) {
@@ -338,8 +331,6 @@
   
   
   /**
-   * Returns whether or not the animation is playing (meaning not paused or 
-   * stopped).
    * @returns {boolean}
    */
   gk.prototype.isPlaying = function () {
@@ -348,7 +339,6 @@
   
   
   /**
-   * Returns the length of the animation, in milliseconds.
    * @returns {number}
    */
   gk.prototype.animationLength = function () {
@@ -357,7 +347,6 @@
 
 
   /**
-   * Returns how many actors are currently in the animation.
    * @returns {number}
    */
   gk.prototype.actorCount = function () {
@@ -366,10 +355,8 @@
 
 
   /**
-   * Get or sets the framterate.  This is the rate per second at which the
-   * animation updates.
-   * @param {number} opt_newFramerate The framerate to set
-   * @returns {number} The current framerate
+   * @param {number} opt_newFramerate
+   * @returns {number}
    */
   gk.prototype.framerate = function (opt_newFramerate) {
     if (opt_newFramerate) {
@@ -381,7 +368,6 @@
   
   
   /**
-   * Render a given millisecond position inside the loop
    * @param {number} millisecond
    * @returns {Kapi}
    */
@@ -395,7 +381,6 @@
   
   
   /**
-   * Re-draws the millisecond position that was drawn.
    * @returns {Kapi}
    */
   gk.prototype.redraw = function () {
@@ -406,8 +391,7 @@
   
   
   /**
-   * Updates the position (state) of all the actors.
-   * @param {number} millisecond The position in the animation to "go" to.
+   * @param {number} millisecond
    * @returns {Kapi}
    */
   gk.prototype.calculateActorPositions = function (millisecond) {
@@ -424,7 +408,6 @@
   
   
   /**
-   * Draws all the actors.
    * @returns {Kapi}
    */
   gk.prototype.draw = function () {
@@ -448,7 +431,6 @@
   
   
   /**
-   * Performs a "refresh" of the internal state.
    * @returns {Kapi}
    */
   gk.prototype.updateInternalState = function () {
@@ -468,12 +450,9 @@
 
 
   /**
-   * Move an actor from one layer to another.  Higher layers are drawn later
-   *    (on top of lower layers).
-   * @param {Kapi.Actor} actor The actor to move within the list.
-   * @param {number} layer The 0-based layer to move `actor` to.
-   * @returns {Kapi.Actor|undefined} If successful, the actor is returned.  If
-   *    the operation fails, `undefined` is returned.
+   * @param {Kapi.Actor} actor
+   * @param {number} layer
+   * @returns {Kapi.Actor|undefined}
    */
   gk.prototype.moveActorToLayer = function (actor, layer) {
     if (layer < this._drawOrder.length) {
@@ -572,10 +551,7 @@
   
   
   /**
-   * `Kapi.Actor` constructor.  An Actor is an individual component of an
-   * animation.
-   * @param {Object} opt_config An Object that may contain the `setup, `draw`
-   *    and `teardown` methods for the Actor.
+   * @param {Object} opt_config
    * @returns {Actor.Kapi}
    */
   gk.Actor = function Actor (opt_config) {
@@ -612,21 +588,9 @@
 
 
   /**
-   * Define a keyframe for an Actor.
    * @param {number} when
    * @param {Object} position
-   * @param {string|Object} easing If this is a string, the easing is applied
-   *    to all parameters of `position`.  You can also mix and match easings
-   *    for each parameter. So:
-   *  @codestart
-   *    actor.keyframe(1000, {
-   *      'x': 100
-   *      ,'y': 100
-   *    }, {
-   *      'x': 'easeOutSine'
-   *      ,'y': 'easeInSine'
-   *    });
-   *  @codeend
+   * @param {string|Object} easing
    * @returns {Kapi.Actor}
    */
   gk.Actor.prototype.keyframe = function keyframe (when, position, opt_easing) {
@@ -664,14 +628,8 @@
 
 
   /**
-   * Copies an existing keyframe into another keyframe.  If the original
-   * keyframe is modified by `Kapi.Actor.prototype.modifyKeyframe`, then the copy is
-   * modified as well.  If the original keyframe is deleted, the copy remains.
-   * If the original keyframe is overwritten with 
-   * `Kapi.Actor.prototype.keyframe`, then the link between the frames is lost 
-   * (although the copy remains as an independent keyframe).
-   * @param {number} when Where in the animation to make the new keyframe.
-   * @param {number} source The "when" of the target keyframe to copy.
+   * @param {number} when
+   * @param {number} source
    * @returns {Kapi.Actor}
    */
   gk.Actor.prototype.liveCopy = function (when, source) {
@@ -688,15 +646,9 @@
 
 
   /**
-   * Augments the properties of a pre-existing keyframe.
-   * @param {number} when Which keyframe to modify, as identified by it's 
-   * millisecond position in the animation.
-   * @param {Object} stateModification The properties to augment the keyframe's
-   *    state properties with.  If any properties in this Object are `null` or
-   *    `undefined`, those state properties are deleted from the keyframe.
-   * @param {Object} opt_easingModification The properties to augment the 
-   *    individual property easings of the keyframe.  Works the same way as
-   *    `stateModification`.
+   * @param {number} when
+   * @param {Object} stateModification
+   * @param {Object} opt_easingModification
    */
   gk.Actor.prototype.modifyKeyframe = function (when, stateModification,
       opt_easingModification) {
@@ -715,8 +667,7 @@
 
 
   /**
-   * Remove a keyframe set on the actor.
-   * @param {when} when the millisecond to remove the keyframe from.
+   * @param {when} when
    * @returns {Kapi.Actor}
    */
   gk.Actor.prototype.removeKeyframe = function (when) {
@@ -731,7 +682,6 @@
 
 
   /**
-   * Removes all keyframes set on the actor.
    * @returns {Kapi.Actor}
    */
   gk.Actor.prototype.removeAllKeyframes = function () {
@@ -748,10 +698,8 @@
   
   
   /**
-   * Move this Actor to another layer in the owner Kapi isntance.
-   * @param {number} layer The 0-based layer to move to.
-   * @returns {Kapi.Actor|undefined} If successful, the actor is returned.  If
-   *    the operation fails, `undefined` is returned.
+   * @param {number} layer
+   * @returns {Kapi.Actor|undefined}
    */
   gk.Actor.prototype.moveToLayer = function (layer) {
     return this.kapi.moveActorToLayer(this, layer);
@@ -759,9 +707,6 @@
 
 
   /**
-   * Tell the Actor to draw itself for the next rendered frame.  If 
-   * `alsoPersist` is true, it continues to draw for every frame until
-   * `hide(true)` is called.
    * @param {boolean} alsoPersist
    * @returns {Kapi.Actor}
    */
@@ -774,8 +719,6 @@
   
   
   /**
-   * Tell the Actor not to draw itself for the next frame.  If`alsoUnpersist` is
-   * true, this undoes the persistence effect of `show(true)`.
    * @param {boolean} alsoUnpersist
    * @returns {Kapi.Actor}
    */
@@ -791,8 +734,6 @@
   
   
   /**
-   * Returns whether or not the Actor is showing for this frame or persisting
-   * across frames.
    * @returns {boolean}
    */
   gk.Actor.prototype.isShowing = function () {
@@ -801,8 +742,6 @@
 
 
   /**
-   * Calculates and sets the Actor's position at a particular millisecond in the
-   * animation.
    * @param {number} millisecond
    * @returns {Kapi.Actor}
    */
@@ -845,7 +784,6 @@
 
 
   /**
-   * Exposes the Actor's ordered list of keyframe times.
    * @returns {Array}
    */
   gk.Actor.prototype.keyframeList = function () {
@@ -854,9 +792,7 @@
 
 
   /**
-   * Retrieve and optionally bind arbitrary data to the Actor.
-   * @param {Object} opt_newData If this is set, it will overwrite whatever data
-   *    was bound previously.
+   * @param {Object} opt_newData
    * @returns {Object}
    */
   gk.Actor.prototype.data = function (opt_newData) {
@@ -909,7 +845,6 @@
   
   
   /**
-   * Gets the 2d context of the Kapi's canvas.
    * @returns {CanvasRenderingContext2D}
    */
   gk.prototype.canvas_context = function () {
@@ -918,9 +853,8 @@
   
 
   /**
-   * Get and/or set the height of the canvas.
    * @param {number} opt_height
-   * @returns {number} The height of the canvas
+   * @returns {number}
    */
   gk.prototype.canvas_height = function (opt_height) {
     return canvas_dimension(this.canvas, 'height', opt_height);
@@ -928,9 +862,8 @@
   
   
   /**
-   * Get and/or set the width of the canvas.
    * @param {number} opt_width
-   * @returns {number} The width of the canvas
+   * @returns {number}
    */
   gk.prototype.canvas_width = function (opt_width) {
     return canvas_dimension(this.canvas, 'width', opt_width);
@@ -938,10 +871,9 @@
   
   
   /**
-   * Get (and optionally set) a style on the Kapi canvas.
    * @param {string} styleName
-   * @param {number|string} opt_styleValue The value to set for `styleName`
-   * @return {number|string} The current value of `styleName`
+   * @param {number|string} opt_styleValue
+   * @return {number|string}
    */
   gk.prototype.canvas_style = function (styleName, opt_styleValue) {
     if (typeof opt_styleValue !== 'undefined') {
@@ -953,7 +885,6 @@
   
   
   /**
-   * Erases the canvas.
    * @returns {Kapi}
    */
   gk.prototype.canvas_clear = function () {
@@ -972,7 +903,7 @@
   
   gk = global.Kapi;
   
-  function getInterpolatedValues (from, current, to, position, easing) {
+  function getInterpolatedValues (from, to, position, easing) {
     
     var R_COLOR_COMPONENT = /^(__r__|__g__|__b__)/
         ,interpolatedValues;
@@ -985,7 +916,7 @@
       
       if (name.match(R_COLOR_COMPONENT)) {
         // The call to `.slice` removes the __color__ prefix that was
-        // put there by Shifty.  This causes non-modified color property's
+        // put there by Shifty.  This causes non-modified color properties
         // easing to be used.
         easingFunc = Tweenable.prototype.formula[easing[name.slice(5)]];
       } else {
@@ -1006,6 +937,13 @@
   }
 
   
+  /**
+   * @param {Object} from
+   * @param {Object} to
+   * @param {Object} position
+   * @param {Object} easing
+   * @returns {Object}
+   */
   function interpolate (from, to, position, easing) {
     var current,
       interpolatedValues;
@@ -1018,7 +956,7 @@
     global.Tweenable.util.applyFilter('beforeTween', current, 
         [current, from, to]);
     interpolatedValues = getInterpolatedValues(
-        from, current, to, position, easing);
+        from, to, position, easing);
     global.Tweenable.util.applyFilter('afterTween', interpolatedValues, 
         [interpolatedValues, from, to]);
     
@@ -1026,6 +964,12 @@
   }
   
   
+  /**
+   * @param {Object} to
+   * @param {Object} position
+   * @param {Object} easing
+   * @returns {Object}
+   */
   gk.Actor.prototype.interpolate = function (to, position, easing) {
     var interpolatedValues;
     

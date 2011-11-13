@@ -210,7 +210,6 @@
   
   
   /**
-   * Add an Actor to the Kapi.
    * @param {Kapi.Actor} actor
    * @param {Object} opt_initialState
    * @returns {Kapi}
@@ -231,8 +230,7 @@
   
   
   /**
-   * Returns an Actor based on a given ID.
-   * @param {number} actorId The Actor ID of the actor to fetch
+   * @param {number} actorId
    * @returns {Kapi.Actor}
    */
   gk.prototype.getActor = function (actorId) {
@@ -241,8 +239,7 @@
   
   
   /**
-   * Removes an Actor from the Kapi.
-   * @param {Kapi.Actor} actor A reference to the Actor to remove.
+   * @param {Kapi.Actor} actor
    * @returns {Kapi}
    */
   gk.prototype.removeActor = function (actor) {
@@ -257,9 +254,7 @@
   
   
   /**
-   * Starts or resumes an animation.
-   * @param {number} opt_howManyTimes How many times to loop the animation
-   *    before stopping.
+   * @param {number} opt_howManyTimes
    * @returns {Kapi}
    */
   gk.prototype.play = function (opt_howManyTimes) {
@@ -287,7 +282,6 @@
   
   
   /**
-   * Pauses an animation.
    * @returns {Kapi}
    */
   gk.prototype.pause = function () {
@@ -307,8 +301,7 @@
   
   
   /**
-   * Stops an animation completely.
-   * @param {boolean} alsoClear Whether to also clear the canvas.
+   * @param {boolean} alsoClear
    * @returns {Kapi}
    */
   gk.prototype.stop = function (alsoClear) {
@@ -329,8 +322,6 @@
   
   
   /**
-   * Returns whether or not the animation is playing (meaning not paused or 
-   * stopped).
    * @returns {boolean}
    */
   gk.prototype.isPlaying = function () {
@@ -339,7 +330,6 @@
   
   
   /**
-   * Returns the length of the animation, in milliseconds.
    * @returns {number}
    */
   gk.prototype.animationLength = function () {
@@ -348,7 +338,6 @@
 
 
   /**
-   * Returns how many actors are currently in the animation.
    * @returns {number}
    */
   gk.prototype.actorCount = function () {
@@ -357,10 +346,8 @@
 
 
   /**
-   * Get or sets the framterate.  This is the rate per second at which the
-   * animation updates.
-   * @param {number} opt_newFramerate The framerate to set
-   * @returns {number} The current framerate
+   * @param {number} opt_newFramerate
+   * @returns {number}
    */
   gk.prototype.framerate = function (opt_newFramerate) {
     if (opt_newFramerate) {
@@ -372,7 +359,6 @@
   
   
   /**
-   * Render a given millisecond position inside the loop
    * @param {number} millisecond
    * @returns {Kapi}
    */
@@ -386,7 +372,6 @@
   
   
   /**
-   * Re-draws the millisecond position that was drawn.
    * @returns {Kapi}
    */
   gk.prototype.redraw = function () {
@@ -397,8 +382,7 @@
   
   
   /**
-   * Updates the position (state) of all the actors.
-   * @param {number} millisecond The position in the animation to "go" to.
+   * @param {number} millisecond
    * @returns {Kapi}
    */
   gk.prototype.calculateActorPositions = function (millisecond) {
@@ -415,7 +399,6 @@
   
   
   /**
-   * Draws all the actors.
    * @returns {Kapi}
    */
   gk.prototype.draw = function () {
@@ -439,7 +422,6 @@
   
   
   /**
-   * Performs a "refresh" of the internal state.
    * @returns {Kapi}
    */
   gk.prototype.updateInternalState = function () {
@@ -459,12 +441,9 @@
 
 
   /**
-   * Move an actor from one layer to another.  Higher layers are drawn later
-   *    (on top of lower layers).
-   * @param {Kapi.Actor} actor The actor to move within the list.
-   * @param {number} layer The 0-based layer to move `actor` to.
-   * @returns {Kapi.Actor|undefined} If successful, the actor is returned.  If
-   *    the operation fails, `undefined` is returned.
+   * @param {Kapi.Actor} actor
+   * @param {number} layer
+   * @returns {Kapi.Actor|undefined}
    */
   gk.prototype.moveActorToLayer = function (actor, layer) {
     if (layer < this._drawOrder.length) {

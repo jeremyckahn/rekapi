@@ -23,7 +23,6 @@
   
   
   /**
-   * Gets the 2d context of the Kapi's canvas.
    * @returns {CanvasRenderingContext2D}
    */
   gk.prototype.canvas_context = function () {
@@ -32,9 +31,8 @@
   
 
   /**
-   * Get and/or set the height of the canvas.
    * @param {number} opt_height
-   * @returns {number} The height of the canvas
+   * @returns {number}
    */
   gk.prototype.canvas_height = function (opt_height) {
     return canvas_dimension(this.canvas, 'height', opt_height);
@@ -42,9 +40,8 @@
   
   
   /**
-   * Get and/or set the width of the canvas.
    * @param {number} opt_width
-   * @returns {number} The width of the canvas
+   * @returns {number}
    */
   gk.prototype.canvas_width = function (opt_width) {
     return canvas_dimension(this.canvas, 'width', opt_width);
@@ -52,10 +49,9 @@
   
   
   /**
-   * Get (and optionally set) a style on the Kapi canvas.
    * @param {string} styleName
-   * @param {number|string} opt_styleValue The value to set for `styleName`
-   * @return {number|string} The current value of `styleName`
+   * @param {number|string} opt_styleValue
+   * @return {number|string}
    */
   gk.prototype.canvas_style = function (styleName, opt_styleValue) {
     if (typeof opt_styleValue !== 'undefined') {
@@ -67,7 +63,6 @@
   
   
   /**
-   * Erases the canvas.
    * @returns {Kapi}
    */
   gk.prototype.canvas_clear = function () {

@@ -6,7 +6,7 @@
   
   gk = global.Kapi;
   
-  function getInterpolatedValues (from, current, to, position, easing) {
+  function getInterpolatedValues (from, to, position, easing) {
     
     var R_COLOR_COMPONENT = /^(__r__|__g__|__b__)/
         ,interpolatedValues;
@@ -19,7 +19,7 @@
       
       if (name.match(R_COLOR_COMPONENT)) {
         // The call to `.slice` removes the __color__ prefix that was
-        // put there by Shifty.  This causes non-modified color property's
+        // put there by Shifty.  This causes non-modified color properties
         // easing to be used.
         easingFunc = Tweenable.prototype.formula[easing[name.slice(5)]];
       } else {
@@ -40,6 +40,13 @@
   }
 
   
+  /**
+   * @param {Object} from
+   * @param {Object} to
+   * @param {Object} position
+   * @param {Object} easing
+   * @returns {Object}
+   */
   function interpolate (from, to, position, easing) {
     var current,
       interpolatedValues;
@@ -52,7 +59,7 @@
     global.Tweenable.util.applyFilter('beforeTween', current, 
         [current, from, to]);
     interpolatedValues = getInterpolatedValues(
-        from, current, to, position, easing);
+        from, to, position, easing);
     global.Tweenable.util.applyFilter('afterTween', interpolatedValues, 
         [interpolatedValues, from, to]);
     
@@ -60,6 +67,12 @@
   }
   
   
+  /**
+   * @param {Object} to
+   * @param {Object} position
+   * @param {Object} easing
+   * @returns {Object}
+   */
   gk.Actor.prototype.interpolate = function (to, position, easing) {
     var interpolatedValues;
     
