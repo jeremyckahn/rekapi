@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../dist/underscore.js"></script>
+  <script src="../dist/shifty.js"></script>
+  <script src="../dist/rekapi.min.js"></script>
+</head>
+<body>
+  <canvas></canvas>
+  <!-- This is the laziest image preload known to man. -->
+  <img src="img/meow.jpeg" style="position: absolute; left: -10000em;" />
+  <script>
+  (function (global) {
+
+    var catUrl = document.getElementsByTagName('img')[0].src,
+        catImg = new Image();
+
+    catImg.src = catUrl;
+
+    function makeCatActor () {
+      return new Kapi.Actor({
+        'draw': function (context, state) {
+          context.drawImage(
+            catImg, 
+            state.x, 
+            state.y, 
+            240, 
+            160);
+        }
+      });
+    }
+
+    var canvas = document.getElementsByTagName('canvas')[0]
+        ,kapi = new Kapi(canvas, {
+          'height': 500
+          ,'width': 600
+        })
+        ,cats = [];
+
+    kapi.canvas_style('background', '#ddd');
+    cats[0] = makeCatActor();
+    
+    _.each(cats, function (cat) {
+      kapi.addActor(cat);
+    });
+    
+    cats[0]
+      .keyframe(0, {
+        'x': -240
+        ,'y': -160
+      }).keyframe(2000, {
+        'x': 300
+        ,'y': 250
+      }, 'bouncePast')
+      .liveCopy(3000, 2000);
+
+    catImg.onload = function () {
+      kapi.play();
+    }
+  
+  } (this));
+  </script>
+</body>
+</html>
