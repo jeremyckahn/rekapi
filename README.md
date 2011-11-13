@@ -48,7 +48,7 @@ var canvas = document.getElementsByTagName('canvas')[0],
     kapi = new Kapi(canvas);
 ````
 
-You can also pass a configuration Object to tweak the Kapi instance - details on that can be found in forthcoming API documentation.
+You can also pass a configuration Object to tweak the Kapi instance - details in the [API documentation](https://github.com/jeremyckahn/rekapi/blob/master/docs/api.md).
 
 So now we have a Kapi instance... but it won't do terribly much until you define and add some Actors.
 
@@ -151,7 +151,7 @@ And the animation will just loop continuously.  We can also pass a `number` to `
 kapi.play(3);
 ````
 
-That will play the animation three times and stop.  When an animation stops, it will will just sit at the last frame that was rendered.  You can control the animation flow with `kapi.pause()` and `kapi.stop()`.  Further API documentation is forthcoming, but the source code is annotated.
+That will play the animation three times and stop.  When an animation stops, it will will just sit at the last frame that was rendered.  You can control the animation flow with `kapi.pause()` and `kapi.stop()`.  These methods are detailed in the [API documentation](https://github.com/jeremyckahn/rekapi/blob/master/docs/api.md).
 
 ## All together
 
@@ -208,7 +208,7 @@ Copy/paste/save this onto your machine to see a simple Rekapi animation:
 
 ````
 
-The API is thoroughly documented in the source, and browser-friendly documentation is coming soon.  
+To learn about the API methods not covered in this README, please view the [API documentation](https://github.com/jeremyckahn/rekapi/blob/master/docs/api.md).
 
 ## Support
 
