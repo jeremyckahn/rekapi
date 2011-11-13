@@ -22,18 +22,26 @@
 
     catImg.src = catUrl;
 
+    function degToRad (deg) {
+      return (deg / 180) * Math.PI;
+    }
+
+
     function makeCatActor () {
       return new Kapi.Actor({
         'draw': function (context, state) {
+          context.rotate(degToRad(state.rotate || 0));
           context.drawImage(
             catImg, 
             state.x, 
             state.y, 
             240, 
             160);
+          context.rotate(-degToRad(state.rotate || 0));
         }
       });
     }
+
 
     var canvas = document.getElementsByTagName('canvas')[0]
         ,kapi = new Kapi(canvas, {
@@ -61,8 +69,21 @@
       .keyframe(4000, {
         'x': 50
         ,'y': 250
-      }, 'easeInBack')
+        ,'rotate': 0
+      }, 'easeInOutBack')
       .liveCopy(5000)
+      .keyframe(6500, {
+        'x': -240
+        ,'y': 440
+        ,'rotate': -90
+      }, 'easeFromTo')
+      .liveCopy(6600)
+      .keyframe(7500, {
+        'x': -800
+        ,'y': 440
+        ,'rotate': -90
+      }, 'easeFrom')
+      .liveCopy(9000);
 
     catImg.onload = function () {
       kapi.play();
