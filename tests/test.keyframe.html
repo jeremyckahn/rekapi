@@ -303,7 +303,7 @@
 
     module('Keyframe modification');
 
-    test('Original keyframe position property is changed.' , function () {
+    test('Original keyframe position property is changed' , function () {
       var testKapi
           ,testActor;
 
@@ -327,7 +327,7 @@
     });
 
 
-    test('Original keyframe easing property is changed.' , function () {
+    test('Original keyframe easing property is changed' , function () {
       var testKapi
           ,testActor;
 
@@ -357,7 +357,7 @@
 
     module('Live copies');
 
-    test('Live copy state and easing Objects point to the source keyframe\'s Objects.'
+    test('Live copy state and easing Objects point to the source keyframe\'s Objects'
     ,function () {
       var testKapi
           ,testActor;
@@ -380,7 +380,7 @@
     });
 
 
-    test('Modifiying the target keyframe modifies the live copy.'
+    test('Modifiying the target keyframe modifies the live copy'
     ,function () {
       var testKapi
           ,testActor;
@@ -412,6 +412,30 @@
           ,'the live copy "x" easing was modified when the original easing was modified.');
     });
 
+
+    test('Omitting the liveCopy() opt_source parameter copies the last keyframe'
+    ,function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      
+      testActor
+        .keyframe(0, {
+          'x': 0
+        }, {
+          'x': 'easeOutCirc'
+        }).keyframe(1000, {
+          'x': 100
+        }).keyframe(2000, {
+          'x': 200
+        }).liveCopy(3000);
+
+      equals(testActor._keyframes[3000].position.x
+          ,200
+          ,'The live copy took the property from the last-added keyframe');
+    });
   }
   </script>
 </head>
