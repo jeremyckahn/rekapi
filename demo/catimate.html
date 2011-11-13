@@ -4,7 +4,11 @@
 <head>
   <script src="../dist/underscore.js"></script>
   <script src="../dist/shifty.js"></script>
-  <script src="../dist/rekapi.min.js"></script>
+  <!--<script src="../dist/rekapi.min.js"></script>-->
+  <script src="../src/rekapi.core.js"></script>
+  <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.interpolate.js"></script>
+  <script src="../src/rekapi.canvas.js"></script>
 </head>
 <body>
   <canvas></canvas>
@@ -53,7 +57,10 @@
         'x': 300
         ,'y': 250
       }, 'bouncePast')
-      .liveCopy(3000);
+      .liveCopy(3000)
+      .keyframe(4000, {
+        'x': 100
+      }, 'easeInBack')
 
     catImg.onload = function () {
       kapi.play();
