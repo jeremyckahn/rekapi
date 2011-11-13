@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.1.12
+ * Rekapi - Rewritten Kapi. v0.1.13
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -548,8 +548,37 @@
       }
     });
   }
+
   
-  
+  /**
+   * Compute a keyframe's positions and easing from all of the keyframes that
+   * came before it.
+   * @param {Kapi} kapi
+   * @param {number} keyframeId
+   * @returns {Object}
+   */
+  function composeKeyframe (kapi, keyframeId) {
+    var keyframeList
+        ,keyframes
+        ,composedKeyframe
+        ,i;
+
+    keyframeList = kapi._keyframeList;
+    keyframes = kapi._keyframes;
+    composedKeyframe = {
+      'position': {}
+      ,'easing': {}
+    };
+    
+    for (i = keyframeId; i >= 0; i--) {
+      _.defaults(composedKeyframe.position, keyframes[keyframeList[i]].position)
+      _.defaults(composedKeyframe.easing, keyframes[keyframeList[i]].easing)
+    }
+
+    return composedKeyframe;
+  }
+
+
   /**
    * @param {Object} opt_config
    * @returns {Actor.Kapi}
@@ -608,13 +637,13 @@
         opt_easing[positionName] = originalEasingString;
       });
     }
-    
+
     // If `opt_easing` was passed as an Object, this will fill in any missing
     // opt_easing properties with the default equation.
     _.each(position, function (positionVal, positionName) {
       opt_easing[positionName] = opt_easing[positionName] || DEFAULT_EASING;
     });
-    
+
     this._keyframes[when] = {
       'position': position
       ,'easing': opt_easing
@@ -759,7 +788,9 @@
         ,endMs
         ,timeRangeIndexStart
         ,rangeFloor
-        ,rangeCeil;
+        ,rangeCeil
+        ,composedFrom
+        ,composedTo;
         
     keyframeList = this._keyframeList;
     startMs = _.first(keyframeList);
@@ -769,18 +800,24 @@
     if (startMs <= millisecond && millisecond <= endMs) {
       this.show();
       keyframes = this._keyframes;
-      timeRangeIndexStart = getKeyframeForMillisecond(this, 
+      timeRangeIndexStart = getKeyframeForMillisecond(this,
           millisecond);
       rangeFloor = keyframeList[timeRangeIndexStart];
       rangeCeil = keyframeList[timeRangeIndexStart + 1];
       delta = rangeCeil - rangeFloor;
       interpolatedPosition = (millisecond - rangeFloor) / delta;
-      
+      composedFrom = composeKeyframe(this,
+          timeRangeIndexStart);
+      composedTo = _.extend({},
+          keyframes[keyframeList[timeRangeIndexStart + 1]]);
+      _.defaults(composedTo.position, composedFrom.position);
+      _.defaults(composedTo.easing, composedFrom.easing);
+
       this
-        .set(keyframes[keyframeList[timeRangeIndexStart]].position)
-        .interpolate(keyframes[keyframeList[timeRangeIndexStart + 1]].position,
+        .set(composedFrom.position)
+        .interpolate(composedTo.position,
             interpolatedPosition,
-            keyframes[keyframeList[timeRangeIndexStart + 1]].easing);
+            composedTo.easing);
     }
 
     return this;

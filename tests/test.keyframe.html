@@ -108,7 +108,8 @@
     });
 
 
-    test('Tweens are only valid if there is a start point',
+
+    test('Keyframes inherit missing properties from the previous keyframe',
     function () {
       var testKapi
           ,testActor;
@@ -123,11 +124,11 @@
       });
 
       testActor.calculatePosition(500);
-      equals(testActor.get().x, undefined, 
+      equals(testActor.get().x, 100,
           'Value only has a start point, therefore a calculated midpoint is undefined.');
     });
-    
-    
+
+
     test('Tweens are only valid if there is an end point',
     function () {
       var testKapi

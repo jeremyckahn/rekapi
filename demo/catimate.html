@@ -5,6 +5,10 @@
   <script src="../dist/underscore.js"></script>
   <script src="../dist/shifty.js"></script>
   <script src="../dist/rekapi.min.js"></script>
+  <!--<script src="../src/rekapi.core.js"></script>-->
+  <!--<script src="../src/rekapi.actor.js"></script>-->
+  <!--<script src="../src/rekapi.canvas.js"></script>-->
+  <!--<script src="../src/rekapi.interpolate.js"></script>-->
 </head>
 <body>
   <canvas></canvas>
@@ -41,7 +45,8 @@
 
     var canvas = document.getElementsByTagName('canvas')[0]
         ,kapi = new Kapi(canvas, {
-          'height': 500
+          'fps': 60
+          ,'height': 500
           ,'width': 600
         })
         ,cats = [];
@@ -57,14 +62,13 @@
       .keyframe(0, {
         'x': -240
         ,'y': -160
-      }).keyframe(2000, {
+      }).keyframe(1750, {
         'x': 300
         ,'y': 250
       }, 'bouncePast')
       .liveCopy(3000)
       .keyframe(4000, {
         'x': 50
-        ,'y': 250
         ,'rotate': 0
       }, 'easeInOutBack')
       .liveCopy(5000)
@@ -73,11 +77,8 @@
         ,'y': 440
         ,'rotate': -90
       }, 'easeFromTo')
-      .liveCopy(6600)
-      .keyframe(7500, {
+      .keyframe(7350, {
         'x': -800
-        ,'y': 440
-        ,'rotate': -90
       }, 'easeFrom')
       .liveCopy(9000);
 

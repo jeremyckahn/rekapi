@@ -346,6 +346,19 @@ actor.keyframe(1000, {
 
 `x` will transition with an easing of `easeInSine`, and `y` will transition with an easing of `easeOutSine`.  Any missing properties will transition with `linear`.  If the `opt_easing` property is omitted, all properties will default to `linear`.
 
+Keyframes always inherit missing properties from the keyframes that came before them.  For example:
+
+````javascript
+actor.keyframe(0, {
+  'x': 100
+}).keyframe(1000{
+  // Inheriting the `x` from above!
+  'y': 50
+});
+````
+
+Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was inherited from keyframe `0`.
+
 
 ### liveCopy
 
@@ -361,7 +374,6 @@ Kapi.Actor.prototype.liveCopy (when, opt_source)
 Copy an existing keyframe into another keyframe.  If the original keyframe is modified by `modifyKeyframe()`, then the copy is modified as well.  If the original keyframe is deleted, the copy remains.  If the original keyframe is overwritten with `keyframe()`, then the link between the keyframes is lost (although the copy remains as an independent keyframe).
 
 `when` specifies where in the animation to place the liveCopy.  `opt_source` specifies which keyframe to use as the source to copy from (as defined by its millisecond position in the animation).  If `opt_source` is omitted, then the last keyframe set on this actor is copied.  This is useful for creating a "waiting" behavior.
-
 
 ### modifyKeyframe
 
