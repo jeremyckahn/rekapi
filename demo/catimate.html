@@ -48,7 +48,7 @@
     _.each(cats, function (cat) {
       kapi.addActor(cat);
     });
-    
+
     cats[0]
       .keyframe(0, {
         'x': -240
@@ -59,8 +59,10 @@
       }, 'bouncePast')
       .liveCopy(3000)
       .keyframe(4000, {
-        'x': 100
+        'x': 50
+        ,'y': 250
       }, 'easeInBack')
+      .liveCopy(5000)
 
     catImg.onload = function () {
       kapi.play();
