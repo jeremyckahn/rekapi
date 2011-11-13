@@ -302,9 +302,9 @@ Create a `Kapi.Actor` instance.
 
 Valid properties of `opt_config`:
 
-* __setup__: A function that gets called when the Actor is added to a `Kapi` instance (with `addActor`).
-* __draw__: A function that gets called every frame.  It receives two parameters, the first is a reference to a `<canvas>` context, and the second is an Object containing the current state properties.  _This method should draw the state properties to the screen with the canvas context.  There's no reason that this property should be omitted._
-* __teardown__: A function that gets called when the Actor is removed from the animation (with `removeActor`).
+* __setup__: A function that gets called when the Actor is added to a `Kapi` instance (with `addActor()`).
+* __draw__: A function that gets called every frame that the actor is showing in.  It receives two parameters, the first is a reference to a `<canvas>` context, and the second is an Object containing the current state properties.  _This method should draw the state properties to the screen with the `<canvas>` context._
+* __teardown__: A function that gets called when the Actor is removed from the animation (with `removeActor()`).
 
 
 ### keyframe
@@ -358,9 +358,11 @@ actor.keyframe(1000, {
 Kapi.Actor.prototype.liveCopy (when, source)
 ````
 
-Copy an existing keyframe into another keyframe.  If the original keyframe is modified by `Kapi.Actor.prototype.modifyKeyframe`, then the copy is modified as well.  If the original keyframe is deleted, the copy remains.  If the original keyframe is overwritten with `Kapi.Actor.prototype.keyframe`, then the link between the keyframes is lost (although the copy remains as an independent keyframe).
+Copy an existing keyframe into another keyframe.  If the original keyframe is modified by `modifyKeyframe()`, then the copy is modified as well.  If the original keyframe is deleted, the copy remains.  If the original keyframe is overwritten with `keyframe()`, then the link between the keyframes is lost (although the copy remains as an independent keyframe).
 
 `when` specifies where in the animation to place the liveCopy.  `source`  specifies which keyframe to use as the source to copy from (as defined by its millisecond position in the animation).
+
+`liveCopy()` is useful for animating an Actor back to it's starting position, for example.
 
 
 ### modifyKeyframe
@@ -375,7 +377,7 @@ Copy an existing keyframe into another keyframe.  If the original keyframe is mo
 Kapi.Actor.prototype.modifyKeyframe (when, stateModification, opt_easingModification)
 ````
 
-Augments the properties of a pre-existing keyframe.  `when` specifies the millisecond target keyframe to modify.  For `stateModification`, each property  will overwrite the target keyframe's corresponding property.  If the the  property in `stateModification` is `null` or `undefined`, then the property on the target will be deleted.
+Augments the properties of a pre-existing keyframe.  `when` specifies the millisecond target keyframe to modify.  For `stateModification`, each property  will overwrite the target keyframe's corresponding property.  If a property in `stateModification` is `null`, then the property on the target will be deleted.
 
 If `opt_easingModification` is specified, it works identically to `stateModification`, but with the easing properties instead of the state properties.
 
@@ -402,7 +404,7 @@ Remove a keyframe set on the Actor.  `when` is the millisecond of the keyframe t
 Kapi.Actor.prototype.removeAllKeyframes ()
 ````
 
-Removes all keyframes set on the Actor.
+Remove all keyframes set on the Actor.
 
 
 ### moveToLayer
@@ -415,7 +417,7 @@ Removes all keyframes set on the Actor.
 Kapi.Actor.prototype.moveToLayer (layer)
 ````
 
-Move this actor to a different layer in the `Kapi` instance that controls it.  This returns `undefined` if the operation was successful
+Move this Actor to a different layer in the `Kapi` instance that it belongs to.  This returns `undefined` if the operation was unsuccessful
 
 
 ### show
@@ -428,7 +430,7 @@ Move this actor to a different layer in the `Kapi` instance that controls it.  T
 Kapi.Actor.prototype.show (alsoPersist)
 ````
 
-Tell the Actor to draw itself for the next rendered frame.  If `alsoPersist` is true, it continues to draw for every frame until `Kapi.Actor.prototype.hide(true)` is called.
+Tell the Actor to draw itself for the next rendered frame.  If `alsoPersist` is true, it continues to draw for every frame until `hide(true)` is called.
 
 
 ### hide
@@ -441,7 +443,7 @@ Tell the Actor to draw itself for the next rendered frame.  If `alsoPersist` is 
 Kapi.Actor.prototype.hide (alsoUnpersist)
 ````
 
-Tell the Actor not to draw itself for the next frame.  If `alsoUnpersist` is true, this undoes the persistence effect of `Kapi.Actor.prototype.show(true)`.
+Tell the Actor not to draw itself for the next frame.  If `alsoUnpersist` is true, this undoes the persistence effect of `show(true)`.
 
 
 ### isShowing
@@ -453,7 +455,7 @@ Tell the Actor not to draw itself for the next frame.  If `alsoUnpersist` is tru
 Kapi.Actor.prototype.isShowing ()
 ````
 
-Returns whether or not the Actor is showing for this frame or persisting across frames.
+Return whether or not the Actor is showing for this frame or persisting across frames.
 
 
 ### calculatePosition
@@ -466,19 +468,19 @@ Returns whether or not the Actor is showing for this frame or persisting across 
 Kapi.Actor.prototype.calculatePosition (millisecond)
 ````
 
-Calculates and sets the Actor's position at `millisecond` in the animation.
+Calculate and sets the Actor's position at `millisecond` in the animation.
 
 
 ### keyframeList
 
 ````javascript
 /**
- * @returns {Kapi.Actor}
+ * @returns {Array}
  */
 Kapi.Actor.prototype.keyframeList ()
 ````
 
-Exposes the Actor's ordered list of keyframe times (as `number`s).
+Expose the Actor's ordered list of keyframe "when" times (as `number`s).
 
 
 ### data
@@ -491,4 +493,4 @@ Exposes the Actor's ordered list of keyframe times (as `number`s).
 Kapi.Actor.prototype.data (opt_newData)
 ````
 
-Retrieve and optionally bind arbitrary data to the Actor.  If `opt_newData` is specified, it will overwrite the previous data that was bound with this method.
+Retrieve and optionally bind arbitrary data to the Actor.  If `opt_newData` is specified, it will overwrite the previous `opt_newData` Object that was bound with this method.
