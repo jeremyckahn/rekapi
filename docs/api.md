@@ -91,7 +91,7 @@ Play the animation on a loop, either a set amount of times or infinitely.  If `o
 Kapi.prototype.pause ()
 ````
 
-Pauses the animation.  A "paused" animation can be resumed from where it left off with `play()`.
+Pause the animation.  A "paused" animation can be resumed from where it left off with `play()`.
 
 
 ### stop
@@ -104,7 +104,7 @@ Pauses the animation.  A "paused" animation can be resumed from where it left of
 Kapi.prototype.stop (alsoClear)
 ````
 
-Stops the animation.  A "stopped" animation will start from the beginning if `play()` is called upon it again.  If `alsoClear` is `true`, the contents of the canvas will be cleared.  It is `false` by default.
+Stop the animation.  A "stopped" animation will start from the beginning if `play()` is called upon it again.  If `alsoClear` is `true`, the contents of the canvas will be cleared.  It is `false` by default.
 
 
 ### isPlaying
@@ -116,7 +116,7 @@ Stops the animation.  A "stopped" animation will start from the beginning if `pl
 Kapi.prototype.isPlaying ()
 ````
 
-Returns whether or not the animation is playing (meaning not paused or stopped).
+Return whether or not the animation is playing (meaning not paused or stopped).
 
 
 ### animationLength
@@ -273,7 +273,7 @@ These methods get and optionally set their respective dimensions on the canvas.
 Kapi.prototype.canvas_style (styleName, opt_styleValue)
 ````
 
-Get and optionally set a style on the canvas.
+Get and optionally set a CSS style on the canvas.
 
 
 ### canvas_clear

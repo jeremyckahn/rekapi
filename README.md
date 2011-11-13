@@ -1,6 +1,15 @@
 # Rekapi - Rewritten Kapi.
 
-[Kapi](https://github.com/jeremyckahn/kapi) is a **k**eyframing **API** for JavaScript.  Rekapi is also a keyframing API for JavaScript, but it's another attempt.  I didn't like how Kapi was written, so I rewrote it, improved the API, and removed a few things that were unneccessary.
+[Kapi](https://github.com/jeremyckahn/kapi) is a **k**eyframing **API** for JavaScript.  Rekapi is also a keyframing API for JavaScript, but it's another attempt.  I didn't like how Kapi was written, so I rewrote it, improved the API, and removed a few things that were unnecessary.
+
+What Rekapi is:
+
+* A tool to organize how animations are structured
+* A tool that lets you easily and expressively define the steps of an animation
+
+What Rekapi is _not_:
+
+* A `<canvas>` drawing tool (so that you can define whatever drawing methods you need)
 
 Rekapi has two dependencies: [Underscore](https://github.com/documentcloud/underscore) and [Shifty](https://github.com/jeremyckahn/shifty).  You need to load these first before loading Rekapi.
 
