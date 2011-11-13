@@ -137,14 +137,18 @@
 
   /**
    * @param {number} when
-   * @param {number} source
+   * @param {number} opt_source
    * @returns {Kapi.Actor}
    */
-  gk.Actor.prototype.liveCopy = function (when, source) {
+  gk.Actor.prototype.liveCopy = function (when, opt_source) {
     var sourceKeyframeData;
 
-    if (this._keyframes.hasOwnProperty(source)) {
-      sourceKeyframeData = this._keyframes[source];
+    if (typeof opt_source === 'undefined') {
+      opt_source = _.last(this._keyframeList);
+    }
+
+    if (this._keyframes.hasOwnProperty(opt_source)) {
+      sourceKeyframeData = this._keyframes[opt_source];
       this.keyframe(when, sourceKeyframeData.position,
           sourceKeyframeData.easing);
     }

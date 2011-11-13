@@ -352,17 +352,15 @@ actor.keyframe(1000, {
 ````javascript
 /**
  * @param {number} when
- * @param {number} source
+ * @param {number} opt_source
  * @returns {Kapi.Actor}
  */
-Kapi.Actor.prototype.liveCopy (when, source)
+Kapi.Actor.prototype.liveCopy (when, opt_source)
 ````
 
 Copy an existing keyframe into another keyframe.  If the original keyframe is modified by `modifyKeyframe()`, then the copy is modified as well.  If the original keyframe is deleted, the copy remains.  If the original keyframe is overwritten with `keyframe()`, then the link between the keyframes is lost (although the copy remains as an independent keyframe).
 
-`when` specifies where in the animation to place the liveCopy.  `source`  specifies which keyframe to use as the source to copy from (as defined by its millisecond position in the animation).
-
-`liveCopy()` is useful for animating an Actor back to it's starting position, for example.
+`when` specifies where in the animation to place the liveCopy.  `opt_source` specifies which keyframe to use as the source to copy from (as defined by its millisecond position in the animation).  If `opt_source` is omitted, then the last keyframe set on this actor is copied.  This is useful for creating a "waiting" behavior.
 
 
 ### modifyKeyframe
