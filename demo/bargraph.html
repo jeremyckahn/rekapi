@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="../dist/underscore.js"></script>
+  <script src="../dist/shifty.js"></script>
+  <script src="../dist/rekapi.min.js"></script>
+  <!--<script src="../src/rekapi.core.js"></script>-->
+  <!--<script src="../src/rekapi.actor.js"></script>-->
+  <!--<script src="../src/rekapi.canvas.js"></script>-->
+  <!--<script src="../src/rekapi.interpolate.js"></script>-->
+</head>
+<body>
+  <canvas></canvas>
+  <script>
+  (function (global) {
+
+    function makeBarActor (val) {
+      return new Kapi.Actor({
+        'setup': function () {
+          this.data({
+            'val': val
+          });
+        }
+        ,'draw': function (context, state) {
+          context.beginPath();
+          context.lineWidth = 20;
+          context.moveTo(state.x, state.y);
+          context.lineTo(state.x, state.y - state.height);
+          context.strokeStyle = state.color || '#00f';
+          context.fill();
+          context.stroke();
+          context.closePath();
+        }
+      });
+    }
+
+    function getXOffset () {
+      var count = 0;
+
+      getXOffset = function () {
+        return 50 + (count++ * 30);
+      };
+
+      return getXOffset();
+    }
+
+    var canvas = document.getElementsByTagName('canvas')[0]
+        ,kapi = new Kapi(canvas, {
+          'fps': 60
+          ,'height': 400
+          ,'width': 250
+        })
+        ,BASELINE = 350
+        ,GROW_EASE = 'easeOutQuad'
+        ,bars = [];
+
+    kapi.canvas_style('background', '#eee');
+    bars[0] = makeBarActor(150);
+    bars[1] = makeBarActor(300);
+    bars[2] = makeBarActor(270);
+    bars[3] = makeBarActor(230);
+    bars[4] = makeBarActor(165);
+    bars[5] = makeBarActor(265);
+
+    _.each(bars, function (bar) {
+      kapi.addActor(bar);
+
+      bar.keyframe(0, {
+        'x': getXOffset()
+        ,'y': BASELINE
+        ,'height': 0
+      }).keyframe(800, {
+        'height': bar.data().val
+      }, GROW_EASE).liveCopy(1500)
+    });
+
+
+    kapi.play();
+  
+  } (this));
+  </script>
+</body>
+</html>

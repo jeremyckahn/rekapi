@@ -66,21 +66,20 @@
         'x': 300
         ,'y': 250
       }, 'bouncePast')
-      .liveCopy(3000)
-      .keyframe(4000, {
+      .liveCopy(2000)
+      .keyframe(3000, {
         'x': 50
         ,'rotate': 0
       }, 'easeInOutBack')
-      .liveCopy(5000)
-      .keyframe(6500, {
+      .keyframe(4500, {
         'x': -240
         ,'y': 440
         ,'rotate': -90
       }, 'easeFromTo')
-      .keyframe(7350, {
+      .keyframe(5350, {
         'x': -800
       }, 'easeFrom')
-      .liveCopy(9000);
+      .liveCopy(6500);
 
     catImg.onload = function () {
       kapi.play();
