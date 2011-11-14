@@ -13,7 +13,7 @@
 <body>
   <canvas></canvas>
   <!-- This is the laziest image preload known to man. -->
-  <img src="img/meow.jpeg" style="position: absolute; left: -10000em;" />
+  <img src="img/octocat.png" style="position: absolute; left: -10000em;" />
   <script>
   (function (global) {
 
@@ -35,8 +35,8 @@
             catImg, 
             state.x, 
             state.y, 
-            240, 
-            160);
+            256, 
+            256);
           context.rotate(-degToRad(state.rotate || 0));
         }
       });
@@ -49,37 +49,36 @@
           ,'height': 500
           ,'width': 600
         })
-        ,cats = [];
+        ,cat
+        ,time = 0;
 
     kapi.canvas_style('background', '#eee');
-    cats[0] = makeCatActor();
-    
-    _.each(cats, function (cat) {
-      kapi.addActor(cat);
-    });
+    cat = makeCatActor();
+    kapi.addActor(cat);
 
-    cats[0]
-      .keyframe(0, {
+    cat
+      .keyframe(time, {
         'x': -240
         ,'y': -160
-      }).keyframe(1750, {
+      }).keyframe(time += 1200, {
         'x': 300
         ,'y': 250
       }, 'bouncePast')
-      .liveCopy(2000)
-      .keyframe(3000, {
+      .liveCopy(time += 400)
+      .keyframe(time += 700, {
         'x': 50
         ,'rotate': 0
       }, 'easeInOutBack')
-      .keyframe(4500, {
-        'x': -240
-        ,'y': 440
+      .liveCopy(time += 150)
+      .keyframe(time += 850, {
+        'x': -256
+        ,'y': 344
         ,'rotate': -90
       }, 'easeFromTo')
-      .keyframe(5350, {
+      .keyframe(time += 700, {
         'x': -800
       }, 'easeFrom')
-      .liveCopy(6500);
+      .liveCopy(time += 500);
 
     catImg.onload = function () {
       kapi.play();
