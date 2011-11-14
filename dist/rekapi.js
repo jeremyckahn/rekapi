@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.1.13
+ * Rekapi - Rewritten Kapi. v0.1.14
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -441,6 +441,7 @@
     _.each(this._drawOrder, function (i) {
       allKeyframeLists = allKeyframeLists.concat(allKeyframeLists,
           this._actors[i].keyframeList());
+      allKeyframeLists = _.uniq(allKeyframeLists);
     }, this);
     
     this._animationLength = Math.max.apply(Math, allKeyframeLists);

@@ -432,6 +432,7 @@
     _.each(this._drawOrder, function (i) {
       allKeyframeLists = allKeyframeLists.concat(allKeyframeLists,
           this._actors[i].keyframeList());
+      allKeyframeLists = _.uniq(allKeyframeLists);
     }, this);
     
     this._animationLength = Math.max.apply(Math, allKeyframeLists);
