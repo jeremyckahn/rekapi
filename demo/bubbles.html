@@ -42,7 +42,7 @@
     }
 
     function getSize () {
-      return 5 + (Math.random() * 30);
+      return 5 + (Math.random() * 20);
     }
     
     function getColor () {
@@ -72,11 +72,12 @@
       bubbles[i].keyframe(time, {
         'x': kapi.canvas_width() / 2
         ,'y': kapi.canvas_height() + 50
-        ,'radius': getSize()
+        ,'radius': 0
         ,'color': getColor()
       }, 'swingFrom').keyframe(time += 750, {
         'x': getBubbleX()
         ,'y': getBubbleY()
+        ,'radius': getSize()
       }, 'swingTo')
       .liveCopy(time += 500)
       .liveCopy(time += 750, 0)
