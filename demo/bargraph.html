@@ -27,7 +27,7 @@
           context.lineWidth = 20;
           context.moveTo(state.x, state.y);
           context.lineTo(state.x, state.y - state.height);
-          context.strokeStyle = state.color || '#00f';
+          context.strokeStyle = state.color;
           context.fill();
           context.stroke();
           context.closePath();
@@ -43,6 +43,16 @@
       };
 
       return getXOffset();
+    }
+    
+    function getColor () {
+      var blue = 240;
+
+      getColor = function () {
+        return 'rgb(0,0,' + (blue -= 20) + ')';
+      };
+
+      return getColor();
     }
 
     var canvas = document.getElementsByTagName('canvas')[0]
@@ -64,15 +74,22 @@
     bars[5] = makeBarActor(265);
 
     _.each(bars, function (bar) {
+      var time = 0;
+
       kapi.addActor(bar);
 
-      bar.keyframe(0, {
+      bar.keyframe(time, {
         'x': getXOffset()
         ,'y': BASELINE
+        ,'color': getColor()
         ,'height': 0
-      }).keyframe(800, {
+      }).keyframe(time += 750, {
         'height': bar.data().val
-      }, GROW_EASE).liveCopy(1500)
+      }, 'swingTo').liveCopy(time += 500)
+      .keyframe(time += 500, {
+        'x': -50
+      }, 'swingFrom')
+      .liveCopy(time += 750);
     });
 
 
