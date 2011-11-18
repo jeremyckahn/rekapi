@@ -279,8 +279,30 @@
 
     return this;
   };
-  
-  
+
+
+  /**
+   * @param {number} millisecond
+   * @param {number} opt_howManyTimes
+   * @returns {Kapi}
+   */
+  gk.prototype.playFrom = function (millisecond, opt_howManyTimes) {
+    this.play(opt_howManyTimes);
+    this._loopTimestamp = now() - millisecond;
+
+    return this;
+  };
+
+
+  /**
+   * @param {number} opt_howManyTimes
+   * @returns {Kapi}
+   */
+  gk.prototype.playFromCurrent = function (opt_howManyTimes) {
+    return this.playFrom(this._lastRenderedMillisecond, opt_howManyTimes);
+  };
+
+
   /**
    * @returns {Kapi}
    */
@@ -369,8 +391,8 @@
     
     return this;
   };
-  
-  
+
+
   /**
    * @returns {Kapi}
    */

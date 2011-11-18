@@ -169,6 +169,55 @@
       equals(testKapi._loopTimestamp, 1500, 
           '.stop() resets the timestamp of the animation');
     });
+
+
+    test('Can start an animation from an arbitrary point on the timeline',
+      function () {
+      var testKapi
+          ,testActor
+          ,calculatedMillisecond;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      
+      testActor
+        .keyframe(0, {})
+        .keyframe(1000, {});
+
+      internalDebugNow = function () {
+        return 3000;
+      };
+      
+      testKapi.playFrom(500);
+      
+      equals(testKapi._loopTimestamp, 2500, 
+          '.playFrom resets the timestamp');
+    });
+
+
+    test('Can render any point on the timeline and playFromCurrent()',
+      function () {
+      var testKapi
+          ,testActor
+          ,calculatedMillisecond;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      
+      testActor
+        .keyframe(0, {})
+        .keyframe(1000, {});
+
+      internalDebugNow = function () {
+        return 3000;
+      };
+      
+      testKapi.render(500);
+      testKapi.playFromCurrent();
+      
+      equals(testKapi._loopTimestamp, 2500, 
+          '.playFromCurrent resets the timestamp from last rendered frame');
+    });
     
   }
   </script>

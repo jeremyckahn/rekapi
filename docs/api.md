@@ -82,6 +82,33 @@ Kapi.prototype.play (opt_howManyTimes)
 Play the animation on a loop, either a set amount of times or infinitely.  If `opt_howManyTimes` is omitted, the animation will loop infinitely.
 
 
+### playFrom
+
+````javascript
+/**
+ * @param {number} millisecond
+ * @param {number} opt_howManyTimes
+ * @returns {Kapi}
+ */
+Kapi.prototype.playFrom (millisecond, opt_howManyTimes)
+````
+
+Move to a specific millisecond on the timeline and play from there.  `opt_howManyTimes` works as it does in `play()`.
+
+
+### playFromCurrent
+
+````javascript
+/**
+ * @param {number} opt_howManyTimes
+ * @returns {Kapi}
+ */
+Kapi.prototype.playFrom (opt_howManyTimes)
+````
+
+Play from the last frame that was drawn with `render()`. `opt_howManyTimes` works as it does in `play()`.
+
+
 ### pause
 
 ````javascript
