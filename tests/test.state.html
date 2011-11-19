@@ -312,6 +312,33 @@
       equals(testActor._data.test, 'hello', 'Data was set.');
     });
 
+    module('context');
+
+    test('Can set Canvas context', function () {
+      var testKapi = new Kapi(document.createElement('canvas'));
+
+      ok(testKapi.canvas_getContext() instanceof CanvasRenderingContext2D,
+          'Context is a canvas');
+    });
+    
+    
+    test('Can set DOM element context', function () {
+      var testKapi = new Kapi(document.createElement('div'));
+
+      ok(testKapi.canvas_getContext() instanceof HTMLElement,
+          'Context is a DOM element');
+    });
+
+
+    test('Can set Object context', function () {
+      var testKapi = new Kapi({});
+
+      // I'm pretty sure this is the most convoluted way to see if an Object
+      // is an empty, pure Object
+      equals(testKapi.canvas_getContext().__proto__.__proto__, null,
+          'Context is an Object');
+    });
+
   }
   </script>
 </head>

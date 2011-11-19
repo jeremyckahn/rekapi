@@ -258,13 +258,26 @@ Kapi.prototype.moveActorToLayer (actor, layer)
 Move an Actor around in the layer list.  Each layer has one Actor, and Actors are drawn in order of their layer.  Lower layers (starting with 0) are drawn earlier.  If `layer` is higher than the number of layers (which can be found with `actorCount()`) or lower than 0, this method will return `undefined`.
 
 
-### canvas_context
+### canvas_setContext
 
 ````javascript
 /**
- * @returns {CanvasRenderingContext2D}
+ * @param {HTMLCanvas|HTMLElement|Object} canvas
+ * @returns {CanvasRenderingContext2D|HTMLElement|Object}
  */
-Kapi.prototype.canvas_context ()
+Kapi.prototype.canvas_setContext (canvas)
+````
+
+Define the context that Kapi is rendering in.  This can be either an HTML 5 <canvas>, other DOM element, or Object.  Note that if `canvas` is not an HTML 5 <canvas>, `canvas_clear` doesn't do anything.
+
+
+### canvas_getContext
+
+````javascript
+/**
+ * @returns {CanvasRenderingContext2D|HTMLElement|Object}
+ */
+Kapi.prototype.canvas_getContext ()
 ````
 
 Return the 2d context of the `<canvas>`.  This is needed for any and all drawing operations - it is also provided to an Actor's `draw` method.  See the [MDN](https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas) for more info on the `<canvas>` context.
@@ -312,7 +325,7 @@ Get and optionally set a CSS style on the canvas.
 Kapi.prototype.canvas_clear ()
 ````
 
-Erase the canvas.
+Erase the canvas.  This only does somehthing if Kapi is bound to an HTML 5 <canvas>.
 
 
 ## Kapi.Actor constructor and methods

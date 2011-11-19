@@ -167,8 +167,8 @@
    */
   gk = global.Kapi || function Kapi (canvas, opt_config) {
     this.canvas = canvas;
-    this._context = canvas.getContext('2d');
-    
+    this._contextType = null;
+    this.canvas_setContext(canvas);
     this.config = {};
     this._actors = {};
     this._drawOrder = [];
@@ -430,7 +430,7 @@
     
     this.canvas_clear();
     len = this._drawOrder.length;
-    canvas_context = this.canvas_context();
+    canvas_context = this.canvas_getContext();
     
     for (i = 0; i < len; i++) {
       currentActor = this._actors[this._drawOrder[i]];
@@ -478,8 +478,8 @@
 
     return undefined;
   };
-  
-  
+
+
   gk.util = {};
   
   _.extend(gk.util, {
