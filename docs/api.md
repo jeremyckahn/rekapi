@@ -262,18 +262,32 @@ Move an Actor around in the layer list.  Each layer has one Actor, and Actors ar
 
 ````javascript
 /**
-* @param {string} eventName
-* @param {Function} handler
-* @returns {Kapi}
-*/
+ * @param {string} eventName
+ * @param {Function} handler
+ * @returns {Kapi}
+ */
 Kapi.prototype.bind (eventName, handler)
 ````
 
-Bind an function to a Kapi event.  Possible events include:
+Bind an handler function to a Kapi event.  Possible events include:
 
 * __onFrameRender__: Fires when a frame is rendered.
 * __onStart__: Fires when the animation starts (with `play()`).
 * __onAnimationComplete__: Fires when all loops have finished.
+
+
+### unbind
+
+````javascript
+/**
+ * @param {string} eventName
+ * @param {Function} opt_handler
+ * @returns {Kapi}
+ */
+Kapi.prototype.unbind (eventName, opt_handler)
+````
+
+Unbind `opt_handler` from a Kapi event.  If `opt_handler` is omitted, all handler functions bound to `eventName` are unbound.  Valid events correspond to the list under `bind()`.
 
 
 ### canvas_setContext
