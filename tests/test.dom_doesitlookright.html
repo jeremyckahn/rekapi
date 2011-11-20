@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+  <script src="../lib/require.js"></script><script>
+  
+  require([
+      '../lib/underscore/underscore.js'
+      ,'../lib/shifty/shifty.js'
+      ,'../lib/jquery.js'], 
+      function () {
+        
+      require(['../src/rekapi.core.js'], function () {
+        require(['../src/rekapi.actor.js'], function () {
+          require(['../src/rekapi.canvas.js'
+                  ,'../src/rekapi.interpolate.js'
+                  ,'../src/rekapi.dom.js'], function () {
+            setTimeout(setupTests, 1);
+          });
+        });
+      });
+    
+  });
+  
+  
+  
+  function setupTestKapi () {
+    var sandbox
+        ,kapi
+        ,actor;
+
+    sandbox = document.getElementById('sandbox');
+    kapi = new Kapi(sandbox, {
+      'fps': 60
+      ,'height': 300
+      ,'width': 300
+    });
+
+    return kapi;
+  }
+  
+  function  setupTestActor (forKapi) {
+    var actor
+        ,element;
+
+    element = document.getElementById('actor');
+    element.style.height = '50px';
+    element.style.width = '50px';
+    element.style.background = '#f00';
+    actor = new Kapi.DOMActor(element);
+    forKapi.addActor(actor);
+    return actor;
+  }
+  
+  function setupTests () {
+    
+    var kapi;
+    
+    function killTest () {
+      kapi && kapi.stop(true);
+      kapi = undefined;
+    }
+    
+    $('#kill-test').click(killTest);
+    
+    $('#play').click(function () {
+      kapi && kapi.play();
+    });
+    
+    $('#pause').click(function () {
+      kapi && kapi.pause();
+    });
+    
+    $('#stop').click(function () {
+      kapi && kapi.stop(true);
+    });
+    
+    $('#basic-linear-tween').click(function () {
+      var actor;
+
+      killTest();
+      kapi = setupTestKapi();
+      actor = setupTestActor(kapi);
+      
+      actor
+        .keyframe(0, {
+          'left': '0px'
+          ,'top': '0px'
+        })
+        .keyframe(1500, {
+          'left': '200px'
+          ,'top': '200px'
+        });
+
+      kapi.play();
+      console.log(kapi);
+    });
+    
+
+    $('#basic-eased-tween').click(function () {
+      var actor;
+
+      killTest();
+      kapi = setupTestKapi();
+      actor = setupTestActor(kapi);
+      
+      actor
+        .keyframe(0, {
+          'left': '0px'
+          ,'top': '0px'
+        })
+        .keyframe(1500, {
+          'left': '200px'
+          ,'top': '200px'
+        }, 'easeOutExpo');
+
+      kapi.play();
+      console.log(kapi);
+    });
+
+
+    $('#multi-eased-tween').click(function () {
+      var actor;
+
+      killTest();
+      kapi = setupTestKapi();
+      actor = setupTestActor(kapi);
+      
+      actor
+        .keyframe(0, {
+          'left': '0px'
+          ,'top': '0px'
+        })
+        .keyframe(1500, {
+          'left': '200px'
+          ,'top': '200px'
+        }, {
+          'left': 'easeOutExpo'
+          ,'top': 'easeInSine'
+        });
+
+      kapi.play();
+      console.log(kapi);
+    });
+
+
+    $('#fancy-parameters-tween').click(function () {
+      var actor;
+
+      killTest();
+      kapi = setupTestKapi();
+      actor = setupTestActor(kapi);
+      
+      actor
+        .keyframe(0, {
+          'left': '0px'
+          ,'top': '0px'
+          ,'background': '#f00'
+          ,'height': '50px'
+          ,'width': '50px'
+          ,'rotate': 0
+        })
+        .keyframe(1500, {
+          'left': '200px'
+          ,'top': '200px'
+          ,'background': '#00f'
+          ,'height': '100px'
+          ,'width': '100px'
+          ,'rotate': 180
+        }, 'easeOutExpo');
+
+      kapi.play();
+      console.log(kapi);
+    });
+
+
+    $('#delayed-start').click(function () {
+      var actor;
+
+      killTest();
+      kapi = setupTestKapi();
+      actor = setupTestActor(kapi);
+      
+      actor
+        .keyframe(500, {
+          'left': '0px'
+          ,'top': '0px'
+        })
+        .keyframe(1500, {
+          'left': '200px'
+          ,'top': '200px'
+        });
+
+      kapi.play();
+      console.log(kapi);
+    });
+  };
+  
+  </script>
+</head>
+<body>
+  <div id="sandbox" style="height: 300px; width: 300px; background: #ff8; float: left;">
+    <div id="actor"></div>
+  </div>
+  <ul style="float: left;">
+    <li>
+      <button id="kill-test">Kill test</button>
+      <button id="play">Play</button>
+      <button id="pause">Pause</button>
+      <button id="stop">Stop</button>
+    </li>
+    <li><button id="basic-linear-tween">Basic linear tween loop</button></li>
+    <li><button id="delayed-start">Delayed start</button></li>
+    <li><button id="basic-eased-tween">Basic eased tween loop</button></li>
+    <li><button id="multi-eased-tween">Tween loop with multiple easings</button></li>
+    <li><button id="fancy-parameters-tween">Tween loop with fancy parameters</button></li>
+  </ul>
+</body>
+</html>

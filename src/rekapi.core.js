@@ -307,6 +307,10 @@
    * @returns {Kapi}
    */
   gk.prototype.pause = function () {
+    if (this._playState === playState.PAUSED) {
+      return this;
+    }
+
     this._playState = playState.PAUSED;
     clearTimeout(this._loopId);
     this._pausedAtTime = now();
@@ -337,6 +341,10 @@
     // also kill any shifty tweens that are running.
     _.each(this._actors, function (actor) {
       actor.stop();
+
+      if (alsoClear === true) {
+        actor.hide();
+      }
     });
     
     return this;
