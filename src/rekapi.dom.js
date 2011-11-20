@@ -31,6 +31,10 @@
     setStyle(element, 'display', 'block');
   }
 
+  /**
+   * @param {HTMLElement} element
+   * @returns {Kapi.DOMActor}
+   */
   gk.DOMActor = function (element) {
     var actor;
 

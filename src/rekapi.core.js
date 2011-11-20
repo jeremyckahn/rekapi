@@ -505,17 +505,27 @@
   };
 
 
+  /**
+   * @param {string} eventName
+   * @param {Function} handler
+   * @returns {Kapi}
+   */
   gk.prototype.bind = function (eventName, handler) {
     if (!this._events[eventName]) {
       return;
     }
 
     this._events[eventName].push(handler);
-    
+
     return this;
   };
 
 
+  /**
+   * @param {string} eventName
+   * @param {Function} opt_handler
+   * @returns {Kapi}
+   */
   gk.prototype.unbind = function (eventName, opt_handler) {
     if (!this._events[eventName]) {
       return;
@@ -524,7 +534,8 @@
     if (!opt_handler) {
       this._events[eventName] = [];
     } else {
-      this._events[eventName] = _.without(this._events[eventName], opt_handler);
+      this._events[eventName] = _.without(this._events[eventName],
+        opt_handler);
     }
 
     return this;

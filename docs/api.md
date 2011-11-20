@@ -258,6 +258,24 @@ Kapi.prototype.moveActorToLayer (actor, layer)
 Move an Actor around in the layer list.  Each layer has one Actor, and Actors are drawn in order of their layer.  Lower layers (starting with 0) are drawn earlier.  If `layer` is higher than the number of layers (which can be found with `actorCount()`) or lower than 0, this method will return `undefined`.
 
 
+### bind
+
+````javascript
+/**
+* @param {string} eventName
+* @param {Function} handler
+* @returns {Kapi}
+*/
+Kapi.prototype.bind (eventName, handler)
+````
+
+Bind an function to a Kapi event.  Possible events include:
+
+* __onFrameRender__: Fires when a frame is rendered.
+* __onStart__: Fires when the animation starts (with `play()`).
+* __onAnimationComplete__: Fires when all loops have finished.
+
+
 ### canvas_setContext
 
 ````javascript
