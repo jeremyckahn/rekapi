@@ -13,7 +13,7 @@
 </head>
 <body>
   <div id="canvas">
-    <img src="img/octocat.png">
+    <img src="img/octocat.png" style="display: none;">
   </div>
   <script>
   (function (global) {
@@ -31,6 +31,9 @@
     kapi.canvas_style('overflow', 'hidden');
     cat = new Kapi.DOMActor(document.getElementsByTagName('img')[0]);
     kapi.addActor(cat);
+    kapi.bind('onFrameRender', function () {
+      cat.show();
+    });
 
     cat
       .keyframe(time, {

@@ -59,18 +59,60 @@
       return keys[parseInt(Math.random() * keys.length, 10)];
     }
 
-    function generateRandomFrame (actor) {
-      return actor.keyframe(time += 2250, {
-        'x': getBubbleX()
-        ,'y': getBubbleY()
-        ,'radius': getSize()
-        ,'color': getColor()
-      }, {
-        'x': getRandomEasing()
-        ,'y': getRandomEasing()
-        ,'radius': getRandomEasing()
-        ,'color': getRandomEasing()
-      }).liveCopy(time += 750);
+    function generateKeyframes (bubbles) {
+      var i, j
+          ,time = 0;
+
+      function generateRandomFrame (actor) {
+        return actor.keyframe(time += 2250, {
+          'x': getBubbleX()
+          ,'y': getBubbleY()
+          ,'radius': getSize()
+          ,'color': getColor()
+        }, {
+          'x': getRandomEasing()
+          ,'y': getRandomEasing()
+          ,'radius': getRandomEasing()
+          ,'color': getRandomEasing()
+        }).liveCopy(time += 750);
+      }
+
+      for (i = 0; i < 30; i++) {
+        time = 0;
+        bubbles[i] = makeBubble();
+        kapi.addActor(bubbles[i]);
+
+        bubbles[i].keyframe(time, {
+          'x': kapi.canvas_width() / 2
+          ,'y': kapi.canvas_height() + 50
+          ,'radius': 0
+          ,'color': getColor()
+        }, {
+          'x': getRandomEasing()
+          ,'y': getRandomEasing()
+          ,'radius': getRandomEasing()
+          ,'color': getRandomEasing()
+        });
+
+        for (j = 0; j < 5; j++) {
+          generateRandomFrame(bubbles[i]);
+        }
+
+        bubbles[i]
+          .liveCopy(time += 1500, 0)
+          .liveCopy(time += 750);
+      }
+    }
+
+    function generateSequence() {
+      _.each(bubbles, function (bubble) {
+        bubble.removeAllKeyframes();
+        kapi.removeActor(bubble)
+      });
+
+      bubbles = [];
+      generateKeyframes(bubbles);
+      kapi.play(1);
     }
 
     var canvas = document.getElementsByTagName('canvas')[0]
@@ -79,39 +121,11 @@
           ,'height': 500
           ,'width': 500
         })
-        ,bubbles = []
-        ,i ,j
-        ,time;
+        ,bubbles = [];
 
     kapi.canvas_style('background', '#eee');
-
-    for (i = 0; i < 30; i++) {
-      time = 0;
-      bubbles[i] = makeBubble();
-      kapi.addActor(bubbles[i]);
-
-      bubbles[i].keyframe(time, {
-        'x': kapi.canvas_width() / 2
-        ,'y': kapi.canvas_height() + 50
-        ,'radius': 0
-        ,'color': getColor()
-      }, {
-        'x': getRandomEasing()
-        ,'y': getRandomEasing()
-        ,'radius': getRandomEasing()
-        ,'color': getRandomEasing()
-      });
-
-    for (j = 0; j < 5; j++) {
-      generateRandomFrame(bubbles[i]);
-    }
-
-    bubbles[i]
-      .liveCopy(time += 1500, 0)
-      .liveCopy(time += 750);
-    }
-
-    kapi.play();
+    kapi.bind('onAnimationComplete', generateSequence)
+    generateSequence();
   
   } (this));
   </script>

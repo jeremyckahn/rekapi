@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.2.0
+ * Rekapi - Rewritten Kapi. v0.2.1
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -80,6 +80,7 @@
   function updatePlayState (kapi, currentLoopIteration) {
     if (isAnimationComplete(kapi, currentLoopIteration)) {
       kapi.stop();
+      fireEvent(kapi, 'onAnimationComplete');
     }
   }
   
@@ -145,6 +146,13 @@
       renderCurrentMillisecond(kapi);
     }, 1000 / kapi.config.fps);
   }
+
+
+  function fireEvent (kapi, eventName) {
+    _.each(kapi._events[eventName], function (event) {
+      event(kapi);
+    });
+  }
   
   
   /**
@@ -182,6 +190,12 @@
     this._actors = {};
     this._drawOrder = [];
     this._playState = playState.STOPPED;
+
+    this._events = {
+      'onFrameRender': []
+      ,'onStart': []
+      ,'onAnimationComplete': []
+    };
 
     // How many times to loop the animation before stopping.
     this._timesToIterate = -1;
@@ -285,6 +299,8 @@
         actor.resume();
       }
     });
+
+    fireEvent(this, 'onPlay');
 
     return this;
   };
@@ -405,6 +421,7 @@
     this.calculateActorPositions(millisecond);
     this.draw();
     this._lastRenderedMillisecond = millisecond;
+    fireEvent(this, 'onFrameRender');
     
     return this;
   };
@@ -494,6 +511,32 @@
     }
 
     return undefined;
+  };
+
+
+  gk.prototype.bind = function (eventName, handler) {
+    if (!this._events[eventName]) {
+      return;
+    }
+
+    this._events[eventName].push(handler);
+    
+    return this;
+  };
+
+
+  gk.prototype.unbind = function (eventName, opt_handler) {
+    if (!this._events[eventName]) {
+      return;
+    }
+
+    if (!opt_handler) {
+      this._events[eventName] = [];
+    } else {
+      this._events[eventName] = _.without(this._events[eventName], opt_handler);
+    }
+
+    return this;
   };
 
 
