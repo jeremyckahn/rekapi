@@ -59,6 +59,20 @@
       return keys[parseInt(Math.random() * keys.length, 10)];
     }
 
+    function generateRandomFrame (actor) {
+      return actor.keyframe(time += 2500, {
+        'x': getBubbleX()
+        ,'y': getBubbleY()
+        ,'radius': getSize()
+        ,'color': getColor()
+      }, {
+        'x': getRandomEasing()
+        ,'y': getRandomEasing()
+        ,'radius': getRandomEasing()
+        ,'color': getRandomEasing()
+      }).liveCopy(time += 1000);
+    }
+
     var canvas = document.getElementsByTagName('canvas')[0]
         ,kapi = new Kapi(canvas, {
           'fps': 30
@@ -66,12 +80,12 @@
           ,'width': 500
         })
         ,bubbles = []
-        ,i
+        ,i ,j
         ,time;
 
     kapi.canvas_style('background', '#eee');
 
-    for (i = 0; i < 40; i++) {
+    for (i = 0; i < 30; i++) {
       time = 0;
       bubbles[i] = makeBubble();
       kapi.addActor(bubbles[i]);
@@ -86,18 +100,14 @@
         ,'y': getRandomEasing()
         ,'radius': getRandomEasing()
         ,'color': getRandomEasing()
-      }).keyframe(time += 2250, {
-        'x': getBubbleX()
-        ,'y': getBubbleY()
-        ,'radius': getSize()
-      }, {
-        'x': getRandomEasing()
-        ,'y': getRandomEasing()
-        ,'radius': getRandomEasing()
-        ,'color': getRandomEasing()
-      })
-      .liveCopy(time += 500)
-      .liveCopy(time += 750, 0)
+      });
+
+    for (j = 0; j < 5; j++) {
+      generateRandomFrame(bubbles[i]);
+    }
+
+    bubbles[i]
+      .liveCopy(time += 1000, 0)
       .liveCopy(time += 750);
     }
 
