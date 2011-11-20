@@ -7,6 +7,7 @@
   <script src="../dist/rekapi.min.js"></script>
   <!--<script src="../src/rekapi.core.js"></script>-->
   <!--<script src="../src/rekapi.actor.js"></script>-->
+  <!--<script src="../src/rekapi.dom.js"></script>-->
   <!--<script src="../src/rekapi.canvas.js"></script>-->
   <!--<script src="../src/rekapi.interpolate.js"></script>-->
 </head>
@@ -22,7 +23,7 @@
           canvas_context.arc(
             state.x || 0,
             state.y || 0,
-            state.radius || 50,
+            Math.abs(state.radius || 50),
             0,
             Math.PI*2, 
             true);
@@ -52,6 +53,12 @@
         + parseInt(Math.random() * 255, 10) + ')';
     }
 
+    function getRandomEasing () {
+      var keys = _.keys(Tweenable.prototype.formula);
+
+      return keys[parseInt(Math.random() * keys.length, 10)];
+    }
+
     var canvas = document.getElementsByTagName('canvas')[0]
         ,kapi = new Kapi(canvas, {
           'fps': 30
@@ -64,7 +71,7 @@
 
     kapi.canvas_style('background', '#eee');
 
-    for (i = 0; i < 30; i++) {
+    for (i = 0; i < 40; i++) {
       time = 0;
       bubbles[i] = makeBubble();
       kapi.addActor(bubbles[i]);
@@ -74,11 +81,21 @@
         ,'y': kapi.canvas_height() + 50
         ,'radius': 0
         ,'color': getColor()
-      }, 'swingFrom').keyframe(time += 750, {
+      }, {
+        'x': getRandomEasing()
+        ,'y': getRandomEasing()
+        ,'radius': getRandomEasing()
+        ,'color': getRandomEasing()
+      }).keyframe(time += 2250, {
         'x': getBubbleX()
         ,'y': getBubbleY()
         ,'radius': getSize()
-      }, 'swingTo')
+      }, {
+        'x': getRandomEasing()
+        ,'y': getRandomEasing()
+        ,'radius': getRandomEasing()
+        ,'color': getRandomEasing()
+      })
       .liveCopy(time += 500)
       .liveCopy(time += 750, 0)
       .liveCopy(time += 750);
