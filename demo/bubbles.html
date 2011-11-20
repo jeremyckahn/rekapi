@@ -54,13 +54,13 @@
     }
 
     function getRandomEasing () {
-      var keys = _.keys(Tweenable.prototype.formula);
+      var keys = ['bouncePast', 'easeInOutBack', 'swingFromTo']
 
       return keys[parseInt(Math.random() * keys.length, 10)];
     }
 
     function generateRandomFrame (actor) {
-      return actor.keyframe(time += 2500, {
+      return actor.keyframe(time += 2250, {
         'x': getBubbleX()
         ,'y': getBubbleY()
         ,'radius': getSize()
@@ -70,7 +70,7 @@
         ,'y': getRandomEasing()
         ,'radius': getRandomEasing()
         ,'color': getRandomEasing()
-      }).liveCopy(time += 1000);
+      }).liveCopy(time += 750);
     }
 
     var canvas = document.getElementsByTagName('canvas')[0]
@@ -107,7 +107,7 @@
     }
 
     bubbles[i]
-      .liveCopy(time += 1000, 0)
+      .liveCopy(time += 1500, 0)
       .liveCopy(time += 750);
     }
 
