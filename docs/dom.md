@@ -2,7 +2,7 @@
 
 Rekapi was built around animating Actors in an HTML 5 `<canvas>`, but it also works with DOM elements.  The API is identical either way, there are just a few caveats you should know about if you use Rekapi on the DOM.
 
-##Canvas and Actors
+##Canvas and Actor nodes
 
 Since you aren't using a literal `<canvas>`, the canvas is an arbitrary container DOM element.  The Actors are simply DOM elements inside of that container "canvas."
 
@@ -11,7 +11,7 @@ Since you aren't using a literal `<canvas>`, the canvas is an arbitrary containe
 var kapi = new Kapi(document.getElementById('canvas'));
 ````
 
-All DOM actors inherently act the same way, so you can just use the `Kapi.DOMActor` Object to control them.  There's generally no need to roll your own Actor if you are using Rekapi for DOM animation.
+All DOM actors inherently work the same way, so you can just use the `Kapi.DOMActor` Object to control them.  There's generally no need to roll your own Actor if you are using Rekapi for DOM animation.
 
 ````javascript
 /**
