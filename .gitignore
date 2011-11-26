@@ -1,4 +1,2 @@
 *.swp
 .DS_Store
-dist/underscore.js
-dist/shifty.js
