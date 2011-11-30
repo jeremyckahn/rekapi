@@ -274,6 +274,7 @@ Bind an handler function to a Kapi event.  Possible events include:
 * __onFrameRender__: Fires when a frame is rendered.
 * __onStart__: Fires when the animation starts (with `play()`).
 * __onAnimationComplete__: Fires when all loops have finished.
+* __onPlayStateChange__: Fires when the animation is played, paused, or stopped.
 
 
 ### unbind

@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.3.0
+ * Rekapi - Rewritten Kapi. v0.3.1
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -149,8 +149,8 @@
 
 
   function fireEvent (kapi, eventName) {
-    _.each(kapi._events[eventName], function (event) {
-      event(kapi);
+    _.each(kapi._events[eventName], function (handler) {
+      handler(kapi);
     });
   }
   
@@ -195,6 +195,7 @@
       'onFrameRender': []
       ,'onStart': []
       ,'onAnimationComplete': []
+      ,'onPlayStateChange': []
     };
 
     // How many times to loop the animation before stopping.
@@ -301,6 +302,7 @@
     });
 
     fireEvent(this, 'onPlay');
+    fireEvent(this, 'onPlayStateChange');
 
     return this;
   };
@@ -347,6 +349,8 @@
       }
     });
 
+    fireEvent(this, 'onPlayStateChange');
+
     return this;
   };
   
@@ -371,7 +375,9 @@
         actor.hide();
       }
     });
-    
+
+    fireEvent(this, 'onPlayStateChange');
+
     return this;
   };
   

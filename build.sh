@@ -36,3 +36,5 @@ cp lib/shifty/builds/shifty.min.js dist/shifty.js
 
 echo 'Yay!  Rekapi was built.  The file size, minified and gzipped, is:'
 echo `cat dist/rekapi.min.js | gzip -9f | wc -c` "bytes"
+
+echo ${1} > version.txt

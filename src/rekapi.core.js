@@ -140,8 +140,8 @@
 
 
   function fireEvent (kapi, eventName) {
-    _.each(kapi._events[eventName], function (event) {
-      event(kapi);
+    _.each(kapi._events[eventName], function (handler) {
+      handler(kapi);
     });
   }
   
@@ -186,6 +186,7 @@
       'onFrameRender': []
       ,'onStart': []
       ,'onAnimationComplete': []
+      ,'onPlayStateChange': []
     };
 
     // How many times to loop the animation before stopping.
@@ -292,6 +293,7 @@
     });
 
     fireEvent(this, 'onPlay');
+    fireEvent(this, 'onPlayStateChange');
 
     return this;
   };
@@ -338,6 +340,8 @@
       }
     });
 
+    fireEvent(this, 'onPlayStateChange');
+
     return this;
   };
   
@@ -362,7 +366,9 @@
         actor.hide();
       }
     });
-    
+
+    fireEvent(this, 'onPlayStateChange');
+
     return this;
   };
   

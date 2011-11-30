@@ -2,30 +2,23 @@
 <html>
 <head>
   <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
-  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
-  <script src="../lib/require.js"></script><script>
-  
+  <script>
   var KAPI_DEBUG = true
-      ,internalDebugNow
+      ,internalDebugNow = function () {
+        return +(new Date());
+      }
       ,SHIFTY_DEBUG_NOW = function () {
         return internalDebugNow();
       };
-  
-  require([
-      '../lib/underscore/underscore.js'
-      ,'../lib/shifty/shifty.js'], 
-      function () {
-        
-        require(['../src/rekapi.core.js'], function () {
-          require(['../src/rekapi.actor.js'], function () {
-            require(['../src/rekapi.canvas.js'], function () {
-              setTimeout(runTests, 1);
-            });
-          });
-        });
-    
-  });
-  
+  </script>
+  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+  <script src="../lib/underscore/underscore.js"></script>
+  <script src="../lib/shifty/shifty.js"></script>
+  <script src="../src/rekapi.core.js"></script>
+  <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.canvas.js"></script>
+  <script src="../src/rekapi.dom.js"></script>
+  <script>
   function setupTestKapi () {
     var sandbox
         ,kapi
@@ -66,7 +59,7 @@
     return actor;
   }
   
-  function runTests () {
+  (function () {
     
     module("Play state");
     
@@ -217,8 +210,7 @@
       equals(testKapi._loopTimestamp, 2500, 
           '.playFromCurrent resets the timestamp from last rendered frame');
     });
-    
-  }
+  } ());
   </script>
 </head>
 <body>
