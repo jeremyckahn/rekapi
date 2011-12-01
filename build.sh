@@ -1,5 +1,7 @@
+#!/bin/bash
+
 # Call this script like this:
-# $: sh build.sh versionNumber
+# $: sh build.sh version_number [local_path_to_compiler]
 
 echo \
 "/**
@@ -22,13 +24,19 @@ cat /tmp/rekapi.header.js \
 in=dist/rekapi.js
 out=/tmp/rekapi.compiled.js
 
-curl -s \
-  -d compilation_level=SIMPLE_OPTIMIZATIONS \
-  -d output_format=text \
-  -d output_info=compiled_code \
-  --data-urlencode "js_code@${in}" \
-  http://closure-compiler.appspot.com/compile \
-   > $out
+# If a local path to the Closure compiler was specified, use that.
+if [ $2 ]; then
+  java -jar ${2} --js=$in --js_output_file=$out
+else
+  # Otherwise curl out to Google's.
+  curl -s \
+    -d compilation_level=SIMPLE_OPTIMIZATIONS \
+    -d output_format=text \
+    -d output_info=compiled_code \
+    --data-urlencode "js_code@${in}" \
+    http://closure-compiler.appspot.com/compile \
+     > $out
+fi
 
 cat /tmp/rekapi.header.js /tmp/rekapi.compiled.js > dist/rekapi.min.js
 cp lib/underscore/underscore-min.js dist/underscore.js

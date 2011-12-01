@@ -227,7 +227,9 @@ The `--recursive` flag tells Git to download the submodules in addition to the R
 If you make a change to the Rekapi source and would like to build the project, just run this from the Rekapi root directory on the command line:
 
 ````
-sh build.sh <version>
+sh build.sh <version> [<local_compiler_path>]
 ````
 
-`<version>` is whatever version you want to call the build.  Rekapi uses the [SemVer](http://semver.org/) versioning scheme.  This will generate any files you need and place them into the `dist/` directory.  The build script requires Curl.  It will just work if you are on a Mac.  On Linux, you may need run `sudo apt-get install curl`.  It's also important to make sure you didn't break any tests in `tests/`.  You can take a quick look by opening `tests/test.all_unit_tests.html` in your browser.
+`version` is whatever version you want to call the build.  Rekapi uses the [SemVer](http://semver.org/) versioning scheme.  This will generate any files you need and place them into the `dist/` directory.  You can specify a local copy of the Google Closure compiler with `local_compiler_path`, if you have it.  If you omit the `local_compiler_path` variable, then the script will `curl` out to the Closure compiler on the web.  This will just work if you are on a Mac.  On Linux, you may need run `sudo apt-get install curl`.
+
+It's also important to make sure you didn't break any tests in `tests/`.  You can take a quick look by opening `tests/test.all_unit_tests.html` in your browser.
