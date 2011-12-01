@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.3.1
+ * Rekapi - Rewritten Kapi. v0.3.2
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -559,9 +559,12 @@
 
   gk.util = {};
   
+  //TODO:  There are some duplicates in gk.util and gk._private, clean up the
+  // references in the tests.
   _.extend(gk.util, {
     'noop': noop
     ,'sortNumerically': sortNumerically
+    ,'calculateLoopPosition': calculateLoopPosition
   });
   
   // Some hooks for testing.
