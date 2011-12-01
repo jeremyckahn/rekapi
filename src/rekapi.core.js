@@ -184,9 +184,11 @@
 
     this._events = {
       'onFrameRender': []
-      ,'onStart': []
       ,'onAnimationComplete': []
       ,'onPlayStateChange': []
+      ,'onPlay': []
+      ,'onPause': []
+      ,'onStop': []
     };
 
     // How many times to loop the animation before stopping.
@@ -292,8 +294,8 @@
       }
     });
 
-    fireEvent(this, 'onPlay');
     fireEvent(this, 'onPlayStateChange');
+    fireEvent(this, 'onPlay');
 
     return this;
   };
@@ -341,6 +343,7 @@
     });
 
     fireEvent(this, 'onPlayStateChange');
+    fireEvent(this, 'onPause');
 
     return this;
   };
@@ -368,6 +371,7 @@
     });
 
     fireEvent(this, 'onPlayStateChange');
+    fireEvent(this, 'onStop');
 
     return this;
   };
