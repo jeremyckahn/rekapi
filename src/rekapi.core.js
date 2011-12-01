@@ -556,6 +556,7 @@
     'noop': noop
     ,'sortNumerically': sortNumerically
     ,'calculateLoopPosition': calculateLoopPosition
+    ,'calculateTimeSinceStart': calculateTimeSinceStart
   });
   
   // Some hooks for testing.

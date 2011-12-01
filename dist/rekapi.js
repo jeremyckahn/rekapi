@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.3.2
+ * Rekapi - Rewritten Kapi. v0.3.3
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -565,6 +565,7 @@
     'noop': noop
     ,'sortNumerically': sortNumerically
     ,'calculateLoopPosition': calculateLoopPosition
+    ,'calculateTimeSinceStart': calculateTimeSinceStart
   });
   
   // Some hooks for testing.
