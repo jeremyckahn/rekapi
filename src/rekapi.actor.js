@@ -61,11 +61,11 @@
   /**
    * Compute a keyframe's positions and easing from all of the keyframes that
    * came before it.
-   * @param {Kapi} kapi
+   * @param {Actor} actor
    * @param {number} keyframeId
    * @returns {Object}
    */
-  function composeKeyframe (kapi, keyframeId) {
+  function composeKeyframe (actor, keyframeId) {
     // TODO: This function is insanely slow and is a performance bottleneck.
     // Make this suck less, somehow.
     var keyframeList
@@ -73,8 +73,8 @@
         ,composedKeyframe
         ,i;
 
-    keyframeList = kapi._keyframeList;
-    keyframes = kapi._keyframes;
+    keyframeList = actor._keyframeList;
+    keyframes = actor._keyframes;
     composedKeyframe = {
       'position': {}
       ,'easing': {}
