@@ -4,16 +4,16 @@
       ,gk
       ,actorCount
       ,ActorMethods;
-  
+
   gk = global.Kapi;
   actorCount = 0;
-  
-  
+
+
   function getUniqueActorId () {
     return actorCount++;
   }
-  
-  
+
+
   /**
    * Finds the index of the keyframe that occurs for `millisecond`.
    * @param {Kapi.Actor} actor The actor to find the keyframe during which
@@ -26,16 +26,16 @@
   function getKeyframeForMillisecond (actor, millisecond) {
     var i, len
         ,list;
-    
+
     list = actor._keyframeList;
     len = list.length;
-    
+
     for (i = 1; i < len; i++) {
       if (list[i] >= millisecond) {
         return (i - 1);
       }
     }
-    
+
     return -1;
   }
 
@@ -57,7 +57,7 @@
     });
   }
 
-  
+
   /**
    * Compute a keyframe's positions and easing from all of the keyframes that
    * came before it.
@@ -77,7 +77,7 @@
       'position': {}
       ,'easing': {}
     };
-    
+
     for (i = keyframeId; i >= 0; i--) {
       _.defaults(composedKeyframe.position, keyframes[keyframeList[i]].position)
       _.defaults(composedKeyframe.easing, keyframes[keyframeList[i]].easing)
@@ -92,12 +92,12 @@
    * @returns {Actor.Kapi}
    */
   gk.Actor = function Actor (opt_config) {
-    
+
     opt_config = opt_config || {};
-    
+
     // Steal the `Tweenable` constructor.
     this.constructor.call(this);
-    
+
     _.extend(this, {
       '_keyframes': {}
       ,'_keyframeList': []
@@ -109,7 +109,7 @@
       ,'draw': opt_config.draw || gk.util.noop
       ,'teardown': opt_config.teardown || gk.util.noop
     });
-    
+
     return this;
   };
 
@@ -132,12 +132,12 @@
    */
   gk.Actor.prototype.keyframe = function keyframe (when, position, opt_easing) {
     var originalEasingString;
-    
+
     // This code will be used.  Other work needs to be done beforehand, though.
     if (!opt_easing) {
       opt_easing = DEFAULT_EASING;
     }
-    
+
     if (typeof opt_easing === 'string') {
       originalEasingString = opt_easing;
       opt_easing = {};
@@ -159,7 +159,7 @@
     this._keyframeList.push(when);
     gk.util.sortNumerically(this._keyframeList);
     this.kapi.updateInternalState();
-    
+
     return this;
   };
 
@@ -236,8 +236,8 @@
 
     return this;
   };
-  
-  
+
+
   /**
    * @param {number} layer
    * @returns {Kapi.Actor|undefined}
@@ -254,11 +254,11 @@
   gk.Actor.prototype.show = function (alsoPersist) {
     this._isShowing = true;
     this._isPersisting = !!alsoPersist;
-    
+
     return this;
   };
-  
-  
+
+
   /**
    * @param {boolean} alsoUnpersist
    * @returns {Kapi.Actor}
@@ -269,11 +269,11 @@
     if (alsoUnpersist === true) {
       this._isPersisting = false;
     }
-    
+
     return this;
   };
-  
-  
+
+
   /**
    * @returns {boolean}
    */
@@ -299,7 +299,7 @@
         ,rangeCeil
         ,composedFrom
         ,composedTo;
-        
+
     keyframeList = this._keyframeList;
     startMs = _.first(keyframeList);
     endMs = _.last(keyframeList);

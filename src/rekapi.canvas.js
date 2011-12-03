@@ -8,8 +8,8 @@
       };
 
   gk = global.Kapi;
-  
-  
+
+
   /**
    * Gets (and optionally sets) a style on a canvas.
    * @param {HTMLCanvas|HTMLElement} canvas
@@ -62,36 +62,36 @@
 
     return this.canvas_getContext();
   };
-  
-  
+
+
   /**
    * @returns {CanvasRenderingContext2D|HTMLElement|Object}
    */
   gk.prototype.canvas_getContext = function () {
     return this._context;
   };
-  
+
 
   /**
    * @param {number} opt_height
    * @returns {number}
    */
   gk.prototype.canvas_height = function (opt_height) {
-    return canvas_dimension(this.canvas, this._contextType, 'height', 
+    return canvas_dimension(this.canvas, this._contextType, 'height',
         opt_height);
   };
-  
-  
+
+
   /**
    * @param {number} opt_width
    * @returns {number}
    */
   gk.prototype.canvas_width = function (opt_width) {
-    return canvas_dimension(this.canvas, this._contextType, 'width', 
+    return canvas_dimension(this.canvas, this._contextType, 'width',
         opt_width);
   };
-  
-  
+
+
   /**
    * @param {string} styleName
    * @param {number|string} opt_styleValue
@@ -102,11 +102,11 @@
         && this.canvas.style) {
        this.canvas.style[styleName] = opt_styleValue;
     }
-    
+
     return this.canvas.style[styleName];
   }
-  
-  
+
+
   /**
    * @returns {Kapi}
    */
