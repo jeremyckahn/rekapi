@@ -66,6 +66,8 @@
    * @returns {Object}
    */
   function composeKeyframe (kapi, keyframeId) {
+    // TODO: This function is insanely slow and is a performance bottleneck.
+    // Make this suck less, somehow.
     var keyframeList
         ,keyframes
         ,composedKeyframe
@@ -79,8 +81,9 @@
     };
 
     for (i = keyframeId; i >= 0; i--) {
-      _.defaults(composedKeyframe.position, keyframes[keyframeList[i]].position)
-      _.defaults(composedKeyframe.easing, keyframes[keyframeList[i]].easing)
+      _.defaults(composedKeyframe.position,
+          keyframes[keyframeList[i]].position);
+      _.defaults(composedKeyframe.easing, keyframes[keyframeList[i]].easing);
     }
 
     return composedKeyframe;
