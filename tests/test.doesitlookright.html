@@ -329,6 +329,42 @@
     });
 
 
+    $('#multi-actor-same-keyframeid').click(function () {
+      var actor
+          ,actor2;
+
+      killTest();
+      kapi = setupTestKapi();
+      actor1 = setupTestActor(kapi);
+      actor2 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0, {
+          'x': 50
+          ,'y': 50
+        })
+        .keyframe(750, {
+          'x': 100
+          ,'y': 100
+        }, 'easeOutExpo');
+
+
+      actor2
+        .keyframe(0, {
+          'color': '#00f'
+          ,'x': 250
+          ,'y': 250
+        })
+        .keyframe(750, {
+          'x': 200
+          ,'y': 200
+        }, 'easeOutExpo');
+
+      kapi.play();
+      console.log(kapi);
+    });
+
+
     $('#tween').click(function () {
       var actor;
 
@@ -377,6 +413,7 @@
       kapi.play();
       console.log(kapi);
     });
+
   });
 
   </script>
@@ -400,6 +437,7 @@
     <li><button id="removed-step-tween">Tween loop with a step removed</button></li>
     <li><button id="multi-eased-tween">Tween loop with multiple easings</button></li>
     <li><button id="fancy-parameters-tween">Tween loop with fancy parameters</button></li>
+    <li><button id="multi-actor-same-keyframeid">Two actors with keyframe at the same ID, different positions</button></li>
     <li><button id="tween">Shifty-inherited call to <code>tween</code></button></li>
     <li><button id="to">Shifty-inherited call to <code>to</code></button></li>
   </ul>
