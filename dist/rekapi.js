@@ -561,6 +561,9 @@
   };
 
 
+  /**
+   * @returns {Object}
+   */
   gk.prototype.exportKeyframeData = function () {
     var exportedKeyframeData;
 
@@ -967,6 +970,9 @@
   };
 
 
+  /**
+   * @returns {Object}
+   */
   gk.Actor.prototype.exportKeyframeData = function () {
     var exportedKeyframeData;
 

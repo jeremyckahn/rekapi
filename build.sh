@@ -41,6 +41,7 @@ fi
 cat /tmp/rekapi.header.js /tmp/rekapi.compiled.js > dist/rekapi.min.js
 cp lib/underscore/underscore-min.js dist/underscore.js
 cp lib/shifty/builds/shifty.min.js dist/shifty.js
+cat /tmp/rekapi.header.js dist/underscore.js dist/shifty.js dist/rekapi.min.js > dist/rekapi.bundle.min.js
 
 echo 'Yay!  Rekapi was built.  The file size, minified and gzipped, is:'
 echo `cat dist/rekapi.min.js | gzip -9f | wc -c` "bytes"
