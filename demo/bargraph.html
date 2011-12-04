@@ -2,13 +2,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="../dist/underscore.js"></script>
+  <!--<script src="../dist/underscore.js"></script>
   <script src="../dist/shifty.js"></script>
-  <script src="../dist/rekapi.min.js"></script>
+  <script src="../dist/rekapi.js"></script>-->
+  <script src="../dist/rekapi.bundle.min.js"></script>
   <!--<script src="../src/rekapi.core.js"></script>-->
-  <!--<script src="../src/rekapi.actor.js"></script>-->
-  <!--<script src="../src/rekapi.canvas.js"></script>-->
-  <!--<script src="../src/rekapi.interpolate.js"></script>-->
+  <!--<script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.canvas.js"></script>
+  <script src="../src/rekapi.dom.js"></script>-->
 </head>
 <body>
   <canvas></canvas>
@@ -44,7 +45,7 @@
 
       return getXOffset();
     }
-    
+
     function getColor () {
       var blue = 240;
 
@@ -93,7 +94,7 @@
 
 
     kapi.play();
-  
+
   } (this));
   </script>
 </body>
