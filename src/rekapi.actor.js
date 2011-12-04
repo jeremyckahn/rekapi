@@ -357,6 +357,22 @@
 
 
   /**
+   * @returns {Object}
+   */
+  gk.Actor.prototype.exportKeyframeData = function () {
+    var exportedKeyframeData;
+
+    exportedKeyframeData = {
+      'keyframeList': this._keyframeList.slice(0)
+      ,'keyframes': _.extend({}, this._keyframes)
+    };
+
+    return exportedKeyframeData;
+  };
+
+
+
+  /**
    * Start Shifty interoperability methods...
    ******/
 
@@ -370,5 +386,9 @@
   /******
    * ...End Shifty interoperability methods.
    */
+
+   _.extend(gk.util, {
+    'composeKeyframe': composeKeyframe
+   });
 
 } (this));

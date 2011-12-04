@@ -192,7 +192,7 @@ Get and optionally set the framerate of the animation.  There's generally no poi
  */
 Kapi.prototype.render (millisecond)
 ````
- 
+
 Calculate the positions for all Actors at `millisecond`, and then draw them.  You can define any millisecond in the animation to render, so long as it is less than the length of the animation (see `animationLength`).
 
 ### redraw
@@ -360,7 +360,19 @@ Get and optionally set a CSS style on the canvas.
 Kapi.prototype.canvas_clear ()
 ````
 
-Erase the canvas.  This only does somehthing if Kapi is bound to an HTML 5 <canvas>.
+Erase the canvas.  This only does something if Kapi is bound to an HTML 5 <canvas>.
+
+
+### exportKeyframeData
+
+````javascript
+/**
+ * @returns {Object}
+ */
+Kapi.prototype.exportKeyframeData ()
+````
+
+Generates a dump of all the keyframe data for all of the Actors.
 
 
 ## Kapi.Actor constructor and methods
@@ -394,7 +406,7 @@ Valid properties of `opt_config`:
 Kapi.Actor.prototype.keyframe (when, position, opt_easing)
 ````
 
-Create a keyframe for the Actor.  `when` defines where in the animation to place the keyframe, in milliseconds (assumes that `0` is when the animation began).  The animation length will automatically "grow" to accommodate any keyframe position.  
+Create a keyframe for the Actor.  `when` defines where in the animation to place the keyframe, in milliseconds (assumes that `0` is when the animation began).  The animation length will automatically "grow" to accommodate any keyframe position.
 
 `position` should contain all of the properties that define the keyframe's state.  These properties can be any value that can be tweened by [Shifty](https://github.com/jeremyckahn/shifty) (numbers, color strings, CSS properties).
 
@@ -579,3 +591,15 @@ Kapi.Actor.prototype.data (opt_newData)
 ````
 
 Retrieve and optionally bind arbitrary data to the Actor.  If `opt_newData` is specified, it will overwrite the previous `opt_newData` Object that was bound with this method.
+
+
+### exportKeyframeData
+
+````javascript
+/**
+ * @returns {Object}
+ */
+Kapi.Actor.prototype.exportKeyframeData ()
+````
+
+Generate a dump of the keyframe data for the Actor.

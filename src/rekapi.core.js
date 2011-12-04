@@ -552,6 +552,29 @@
   };
 
 
+  /**
+   * @returns {Object}
+   */
+  gk.prototype.exportKeyframeData = function () {
+    var exportedKeyframeData;
+
+    exportedKeyframeData = {};
+
+    _.each(this._actors, function (actor, actorId) {
+      var exportedActorKeyframeData;
+
+      exportedActorKeyframeData = actor.exportKeyframeData();
+      exportedKeyframeData[actorId] = {
+        'actor': actor
+        ,'keyframeList': exportedActorKeyframeData.keyframeList
+        ,'keyframes': exportedActorKeyframeData.keyframes
+      };
+    });
+
+    return exportedKeyframeData;
+  };
+
+
   gk.util = {};
 
   //TODO:  There are some duplicates in gk.util and gk._private, clean up the

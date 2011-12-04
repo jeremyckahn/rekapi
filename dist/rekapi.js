@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.3.4
+ * Rekapi - Rewritten Kapi. v0.3.5
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -8,21 +8,21 @@
  * MIT Lincense.  This code free to use, modify, distribute and enjoy.
  */
 ;(function rekapiCore (global) {
-  
+
   if (!_) {
     throw 'underscore.js is required for Kapi.';
   }
-  
+
   if (!Tweenable) {
     throw 'shifty.js is required for Kapi.';
   }
-  
+
   var gk
       ,defaultConfig
       ,now
       ,playState;
-  
-  
+
+
   /**
    * Sorts an array numerically, from smallest to largest.
    * @param {Array} array The Array to sort.
@@ -33,8 +33,8 @@
       return a - b;
     });
   }
-  
-  
+
+
   /**
    * Determines which iteration of the loop the animation is currently in.
    * @param {Kapi} kapi
@@ -42,12 +42,12 @@
    */
   function determineCurrentLoopIteration (kapi, timeSinceStart) {
     var currentIteration;
-    
+
     currentIteration = Math.floor((timeSinceStart) / kapi._animationLength);
     return currentIteration;
   }
-  
-  
+
+
   /**
    * Calculate how many milliseconds since the animation began.
    * @param {Kapi} kapi
@@ -59,8 +59,8 @@
     timeSinceStart = now() - kapi._loopTimestamp;
     return timeSinceStart;
   }
-  
-  
+
+
   /**
    * Determines is the animation is complete or not.
    * @param {Kapi} kapi
@@ -70,8 +70,8 @@
     return currentLoopIteration >= kapi._timesToIterate
         && kapi._timesToIterate !== -1;
   }
-  
-  
+
+
   /**
    * Stops the animation if the animation is complete.
    * @param {Kapi} kapi
@@ -83,30 +83,30 @@
       fireEvent(kapi, 'onAnimationComplete');
     }
   }
-  
-  
+
+
   /**
-   * Calculate how far in the animation loop `kapi` is, in milliseconds, based 
+   * Calculate how far in the animation loop `kapi` is, in milliseconds, based
    * on the current time.  Also overflows into a new loop if necessary.
    * @param {Kapi} kapi
    * @returns {number}
    */
   function calculateLoopPosition (kapi, forMillisecond, currentLoopIteration) {
     var currentLoopPosition;
-    
+
     if (isAnimationComplete(kapi, currentLoopIteration)) {
       currentLoopPosition = kapi._animationLength;
     } else {
       currentLoopPosition = forMillisecond % kapi._animationLength;
     }
-    
+
     return currentLoopPosition;
   }
-  
-  
+
+
   /**
    * Calculate the position and state for a given millisecond and render it.
-   * Also updates the state internally and accounts for how many loop 
+   * Also updates the state internally and accounts for how many loop
    * iterations the animation runs for.
    * @param {Kapi} kapi
    * @param {number} forMillisecond The millisecond to render
@@ -114,15 +114,15 @@
   function renderMillisecond (kapi, forMillisecond) {
     var currentIteration
         ,loopPosition;
-    
+
     currentIteration = determineCurrentLoopIteration(kapi, forMillisecond);
     loopPosition = calculateLoopPosition(kapi, forMillisecond,
         currentIteration);
     updatePlayState(kapi, currentIteration);
     kapi.render(loopPosition);
   }
-  
-  
+
+
   /**
    * Calculate how far in the animation loop `kapi` is, in milliseconds, and
    * render based on that time.
@@ -131,8 +131,8 @@
   function renderCurrentMillisecond (kapi) {
     renderMillisecond(kapi, calculateTimeSinceStart(kapi));
   }
-  
-  
+
+
   /**
    * This is the heartbeat of an animation.  Renders a frame and then calls
    * itself based on the framerate of the supplied Kapi.
@@ -153,30 +153,30 @@
       handler(kapi);
     });
   }
-  
-  
+
+
   /**
    * Does nothing.  Absolutely nothing at all.
    */
   function noop () {
     // NOOP!
   }
-  
-  
+
+
   defaultConfig = {
     'fps': 30
     ,'height': 150
     ,'width': 300
   };
-  
+
   playState = {
     'STOPPED': 'stopped'
     ,'PAUSED': 'paused'
     ,'PLAYING': 'playing'
   };
-  
+
   now = Tweenable.util.now;
-  
+
   /**
    * @param {HTMLCanvas} canvas
    * @param {Object} opt_config
@@ -202,26 +202,26 @@
 
     // How many times to loop the animation before stopping.
     this._timesToIterate = -1;
-    
+
     // Millisecond duration of the animation
     this._animationLength = 0;
 
     // The setTimeout ID of `tick`
     this._loopId = null;
-    
+
     // The UNIX time at which the animation loop started
     this._loopTimestamp = null;
-    
-    
-    // Used for maintaining position when the animation is paused. 
+
+
+    // Used for maintaining position when the animation is paused.
     this._pausedAtTime = null;
-    
+
     // The last millisecond position that was drawn
     this._lastRenderedMillisecond = 0;
-    
+
     _.extend(this.config, opt_config);
     _.defaults(this.config, defaultConfig);
-    
+
     // Apply the height and width if they were passed in the`config` Object.
     // Also delete them from the internal config - we won't need them anymore.
     _.each(['height', 'width'], function (dimension) {
@@ -230,11 +230,11 @@
         delete this.config[dimension];
       }
     }, this);
-    
+
     return this;
   };
-  
-  
+
+
   /**
    * @param {Kapi.Actor} actor
    * @param {Object} opt_initialState
@@ -250,11 +250,11 @@
       this._drawOrder.push(actor.id);
       actor.setup();
     }
-    
+
     return this;
   };
-  
-  
+
+
   /**
    * @param {number} actorId
    * @returns {Kapi.Actor}
@@ -262,8 +262,8 @@
   gk.prototype.getActor = function (actorId) {
     return this._actors[actorId];
   };
-  
-  
+
+
   /**
    * @param {Kapi.Actor} actor
    * @returns {Kapi}
@@ -274,28 +274,28 @@
     this._drawOrder = _.without(this._drawOrder, actor.id);
     actor.teardown();
     this.updateInternalState();
-    
+
     return this;
   };
-  
-  
+
+
   /**
    * @param {number} opt_howManyTimes
    * @returns {Kapi}
    */
   gk.prototype.play = function (opt_howManyTimes) {
     clearTimeout(this._loopId);
-    
+
     if (this._playState === playState.PAUSED) {
       this._loopTimestamp += now() - this._pausedAtTime;
     } else {
       this._loopTimestamp = now();
     }
-    
+
     this._timesToIterate = opt_howManyTimes || -1;
     this._playState = playState.PLAYING;
     tick(this);
-    
+
     // also resume any shifty tweens that are paused.
     _.each(this._actors, function (actor) {
       if (actor._state.isPaused ) {
@@ -343,7 +343,7 @@
     this._playState = playState.PAUSED;
     clearTimeout(this._loopId);
     this._pausedAtTime = now();
-    
+
     // also pause any shifty tweens that are running.
     _.each(this._actors, function (actor) {
       if (actor._state.isTweening) {
@@ -356,8 +356,8 @@
 
     return this;
   };
-  
-  
+
+
   /**
    * @param {boolean} alsoClear
    * @returns {Kapi}
@@ -365,7 +365,7 @@
   gk.prototype.stop = function (alsoClear) {
     this._playState = playState.STOPPED;
     clearTimeout(this._loopId);
-    
+
     if (alsoClear === true) {
       this.canvas_clear();
     }
@@ -384,16 +384,16 @@
 
     return this;
   };
-  
-  
+
+
   /**
    * @returns {boolean}
    */
   gk.prototype.isPlaying = function () {
     return this._playState === playState.PLAYING;
   };
-  
-  
+
+
   /**
    * @returns {number}
    */
@@ -421,8 +421,8 @@
 
     return this.config.fps;
   };
-  
-  
+
+
   /**
    * @param {number} millisecond
    * @returns {Kapi}
@@ -432,7 +432,7 @@
     this.draw();
     this._lastRenderedMillisecond = millisecond;
     fireEvent(this, 'onFrameRender');
-    
+
     return this;
   };
 
@@ -442,28 +442,28 @@
    */
   gk.prototype.redraw = function () {
     this.render(this._lastRenderedMillisecond);
-    
+
     return this;
   };
-  
-  
+
+
   /**
    * @param {number} millisecond
    * @returns {Kapi}
    */
   gk.prototype.calculateActorPositions = function (millisecond) {
     var i, len;
-        
+
     len = this._drawOrder.length;
-    
+
     for (i = 0; i < len; i++) {
       this._actors[this._drawOrder[i]].calculatePosition(millisecond);
     }
-    
+
     return this;
   };
-  
-  
+
+
   /**
    * @returns {Kapi}
    */
@@ -471,38 +471,38 @@
     var i, len
         ,currentActor
         ,canvas_context;
-    
+
     this.canvas_clear();
     len = this._drawOrder.length;
     canvas_context = this.canvas_getContext();
-    
+
     for (i = 0; i < len; i++) {
       currentActor = this._actors[this._drawOrder[i]];
       if (currentActor.isShowing()) {
         currentActor.draw(canvas_context, currentActor.get());
       }
     }
-    
+
     return this;
   };
-  
-  
+
+
   /**
    * @returns {Kapi}
    */
   gk.prototype.updateInternalState = function () {
     var allKeyframeLists;
-        
+
     allKeyframeLists = [0];
-        
+
     _.each(this._drawOrder, function (i) {
       allKeyframeLists = allKeyframeLists.concat(allKeyframeLists,
           this._actors[i].keyframeList());
       allKeyframeLists = _.uniq(allKeyframeLists);
     }, this);
-    
+
     this._animationLength = Math.max.apply(Math, allKeyframeLists);
-    
+
     return this;
   };
 
@@ -561,8 +561,28 @@
   };
 
 
+  gk.prototype.exportKeyframeData = function () {
+    var exportedKeyframeData;
+
+    exportedKeyframeData = {};
+
+    _.each(this._actors, function (actor, actorId) {
+      var exportedActorKeyframeData;
+
+      exportedActorKeyframeData = actor.exportKeyframeData();
+      exportedKeyframeData[actorId] = {
+        'actor': actor
+        ,'keyframeList': exportedActorKeyframeData.keyframeList
+        ,'keyframes': exportedActorKeyframeData.keyframes
+      };
+    });
+
+    return exportedKeyframeData;
+  };
+
+
   gk.util = {};
-  
+
   //TODO:  There are some duplicates in gk.util and gk._private, clean up the
   // references in the tests.
   _.extend(gk.util, {
@@ -571,7 +591,7 @@
     ,'calculateLoopPosition': calculateLoopPosition
     ,'calculateTimeSinceStart': calculateTimeSinceStart
   });
-  
+
   // Some hooks for testing.
   if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
     gk._private = {
@@ -585,9 +605,9 @@
       ,'updatePlayState': updatePlayState
     }
   }
-  
+
   global.Kapi = gk;
-  
+
 } (this));
 ;(function rekapiActor (global) {
 
@@ -595,16 +615,16 @@
       ,gk
       ,actorCount
       ,ActorMethods;
-  
+
   gk = global.Kapi;
   actorCount = 0;
-  
-  
+
+
   function getUniqueActorId () {
     return actorCount++;
   }
-  
-  
+
+
   /**
    * Finds the index of the keyframe that occurs for `millisecond`.
    * @param {Kapi.Actor} actor The actor to find the keyframe during which
@@ -617,16 +637,16 @@
   function getKeyframeForMillisecond (actor, millisecond) {
     var i, len
         ,list;
-    
+
     list = actor._keyframeList;
     len = list.length;
-    
+
     for (i = 1; i < len; i++) {
       if (list[i] >= millisecond) {
         return (i - 1);
       }
     }
-    
+
     return -1;
   }
 
@@ -648,30 +668,33 @@
     });
   }
 
-  
+
   /**
    * Compute a keyframe's positions and easing from all of the keyframes that
    * came before it.
-   * @param {Kapi} kapi
+   * @param {Actor} actor
    * @param {number} keyframeId
    * @returns {Object}
    */
-  function composeKeyframe (kapi, keyframeId) {
+  function composeKeyframe (actor, keyframeId) {
+    // TODO: This function is insanely slow and is a performance bottleneck.
+    // Make this suck less, somehow.
     var keyframeList
         ,keyframes
         ,composedKeyframe
         ,i;
 
-    keyframeList = kapi._keyframeList;
-    keyframes = kapi._keyframes;
+    keyframeList = actor._keyframeList;
+    keyframes = actor._keyframes;
     composedKeyframe = {
       'position': {}
       ,'easing': {}
     };
-    
+
     for (i = keyframeId; i >= 0; i--) {
-      _.defaults(composedKeyframe.position, keyframes[keyframeList[i]].position)
-      _.defaults(composedKeyframe.easing, keyframes[keyframeList[i]].easing)
+      _.defaults(composedKeyframe.position,
+          keyframes[keyframeList[i]].position);
+      _.defaults(composedKeyframe.easing, keyframes[keyframeList[i]].easing);
     }
 
     return composedKeyframe;
@@ -683,12 +706,12 @@
    * @returns {Actor.Kapi}
    */
   gk.Actor = function Actor (opt_config) {
-    
+
     opt_config = opt_config || {};
-    
+
     // Steal the `Tweenable` constructor.
     this.constructor.call(this);
-    
+
     _.extend(this, {
       '_keyframes': {}
       ,'_keyframeList': []
@@ -700,7 +723,7 @@
       ,'draw': opt_config.draw || gk.util.noop
       ,'teardown': opt_config.teardown || gk.util.noop
     });
-    
+
     return this;
   };
 
@@ -723,12 +746,12 @@
    */
   gk.Actor.prototype.keyframe = function keyframe (when, position, opt_easing) {
     var originalEasingString;
-    
+
     // This code will be used.  Other work needs to be done beforehand, though.
     if (!opt_easing) {
       opt_easing = DEFAULT_EASING;
     }
-    
+
     if (typeof opt_easing === 'string') {
       originalEasingString = opt_easing;
       opt_easing = {};
@@ -750,7 +773,7 @@
     this._keyframeList.push(when);
     gk.util.sortNumerically(this._keyframeList);
     this.kapi.updateInternalState();
-    
+
     return this;
   };
 
@@ -827,8 +850,8 @@
 
     return this;
   };
-  
-  
+
+
   /**
    * @param {number} layer
    * @returns {Kapi.Actor|undefined}
@@ -845,11 +868,11 @@
   gk.Actor.prototype.show = function (alsoPersist) {
     this._isShowing = true;
     this._isPersisting = !!alsoPersist;
-    
+
     return this;
   };
-  
-  
+
+
   /**
    * @param {boolean} alsoUnpersist
    * @returns {Kapi.Actor}
@@ -860,11 +883,11 @@
     if (alsoUnpersist === true) {
       this._isPersisting = false;
     }
-    
+
     return this;
   };
-  
-  
+
+
   /**
    * @returns {boolean}
    */
@@ -890,7 +913,7 @@
         ,rangeCeil
         ,composedFrom
         ,composedTo;
-        
+
     keyframeList = this._keyframeList;
     startMs = _.first(keyframeList);
     endMs = _.last(keyframeList);
@@ -944,6 +967,19 @@
   };
 
 
+  gk.Actor.prototype.exportKeyframeData = function () {
+    var exportedKeyframeData;
+
+    exportedKeyframeData = {
+      'keyframeList': this._keyframeList.slice(0)
+      ,'keyframes': _.extend({}, this._keyframes)
+    };
+
+    return exportedKeyframeData;
+  };
+
+
+
   /**
    * Start Shifty interoperability methods...
    ******/
@@ -958,6 +994,10 @@
   /******
    * ...End Shifty interoperability methods.
    */
+
+   _.extend(gk.util, {
+    'composeKeyframe': composeKeyframe
+   });
 
 } (this));
 ;(function rekapiDOM (global) {
@@ -1056,8 +1096,8 @@
       };
 
   gk = global.Kapi;
-  
-  
+
+
   /**
    * Gets (and optionally sets) a style on a canvas.
    * @param {HTMLCanvas|HTMLElement} canvas
@@ -1110,36 +1150,36 @@
 
     return this.canvas_getContext();
   };
-  
-  
+
+
   /**
    * @returns {CanvasRenderingContext2D|HTMLElement|Object}
    */
   gk.prototype.canvas_getContext = function () {
     return this._context;
   };
-  
+
 
   /**
    * @param {number} opt_height
    * @returns {number}
    */
   gk.prototype.canvas_height = function (opt_height) {
-    return canvas_dimension(this.canvas, this._contextType, 'height', 
+    return canvas_dimension(this.canvas, this._contextType, 'height',
         opt_height);
   };
-  
-  
+
+
   /**
    * @param {number} opt_width
    * @returns {number}
    */
   gk.prototype.canvas_width = function (opt_width) {
-    return canvas_dimension(this.canvas, this._contextType, 'width', 
+    return canvas_dimension(this.canvas, this._contextType, 'width',
         opt_width);
   };
-  
-  
+
+
   /**
    * @param {string} styleName
    * @param {number|string} opt_styleValue
@@ -1150,11 +1190,11 @@
         && this.canvas.style) {
        this.canvas.style[styleName] = opt_styleValue;
     }
-    
+
     return this.canvas.style[styleName];
   }
-  
-  
+
+
   /**
    * @returns {Kapi}
    */

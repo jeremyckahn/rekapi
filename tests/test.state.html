@@ -21,13 +21,13 @@
     kapi.canvas_style('background', '#ddd');
     kapi.canvas_height(300);
     kapi.canvas_width(500);
-    
+
     return kapi;
   }
-  
+
   function  setupTestActor (forKapi) {
     var actor;
-    
+
     actor = new Kapi.Actor({
       'draw': function (canvas_context, state) {
         canvas_context.beginPath();
@@ -36,7 +36,7 @@
             this.y || 0,
             this.radius || 0,
             0,
-            Math.PI*2, 
+            Math.PI*2,
             true);
           canvas_context.fillStyle = this.color || '#f0f';
           canvas_context.fill();
@@ -45,15 +45,15 @@
           return this;
       }
     });
-    
+
     forKapi.addActor(actor);
     return actor;
   }
-  
+
   (function () {
-    
+
     module('Actor management');
-    
+
     test('Actors are added successfully', function () {
       var testKapi
           ,testActor1;
@@ -61,10 +61,10 @@
       testKapi = setupTestKapi();
       // setupTestActor calls addActor
       testActor1 = setupTestActor(testKapi);
-      
-      equals(testKapi._actors[testActor1.id], testActor1, 
+
+      equals(testKapi._actors[testActor1.id], testActor1,
           'Actor is in the internal _actors Object');
-          
+
       equals(testKapi._drawOrder[0], testActor1.id,
           'Actor is the first element in the internal _drawOrder array');
     });
@@ -76,22 +76,22 @@
 
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
-      
+
       testKapi.addActor(testActor1);
 
       equals(testKapi.actorCount(), 1,
           'The actor was not added twice');
     });
-    
-    
+
+
     test('Actors can be retrieved from the Kapi', function () {
       var testKapi
           ,testActor1;
 
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
-      
-      equals(testKapi.getActor(testActor1.id), testActor1, 
+
+      equals(testKapi.getActor(testActor1.id), testActor1,
           'Can reference the Actor inside the Kapi via the actor ID.');
     });
 
@@ -136,8 +136,8 @@
       equals(testKapi.actorCount(), 2,
           'Draw list size did not change.');
     });
-    
-    
+
+
     test('Actors can move themselves.', function () {
       var testKapi
           ,testActor1
@@ -165,12 +165,12 @@
 
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
-      
-      equals(testKapi.getActor(testActor1.id), testActor1, 
+
+      equals(testKapi.getActor(testActor1.id), testActor1,
           'Can reference the Actor inside the Kapi via the actor ID.');
     });
-    
-    
+
+
     test('Actors are removed successfully', function () {
       var testKapi
           ,testActor1;
@@ -178,34 +178,34 @@
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
       testKapi.removeActor(testActor1)
-      
-      equals(testKapi._actors[testActor1.id], undefined, 
+
+      equals(testKapi._actors[testActor1.id], undefined,
           'Actor is no longer in the internal _actors Object');
-          
+
       equals(testKapi._drawOrder.indexOf(testActor1.id), -1,
           'Actor is not in the internal _drawOrder array');
     });
-    
-    
-    module("Animation timeline");
-    
+
+
+    module('Animation timeline');
+
     test('Calculate animation length with one Actor', function () {
       var testKapi
           ,testActor1;
 
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
-      
+
       testActor1
         .keyframe(0, {})
         .keyframe(1000, {})
         .keyframe(2000, {});
-    
-      equals(testKapi.animationLength(), 2000, 
+
+      equals(testKapi.animationLength(), 2000,
           'Length of the animation was calculated');
     });
-    
-    
+
+
     test('Calculate animation length with multiple Actors', function () {
       var testKapi
           ,testActor1
@@ -214,21 +214,21 @@
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
       testActor2 = setupTestActor(testKapi);
-      
+
       testActor1
         .keyframe(0, {})
         .keyframe(1000, {})
         .keyframe(2000, {});
-        
+
       testActor2
         .keyframe(0, {})
         .keyframe(5000, {});
-      
-      equals(testKapi.animationLength(), 5000, 
+
+      equals(testKapi.animationLength(), 5000,
           'Length of the animation was calculated');
     });
-    
-    
+
+
     test('An Actor does not show before it has reached its first keyframe'
       ,function () {
       var testKapi
@@ -236,19 +236,19 @@
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
+
       testActor
         .keyframe(1000, {})
         .keyframe(2000, {});
 
       testKapi.calculateActorPositions(500);
-      
+
       equals(testActor.isShowing(), false,
           'Actor has not yet gotten state');
-      
-      
+
+
       testKapi.calculateActorPositions(1500);
-      
+
       equals(testActor.isShowing(), true,
           'Actor has gotten state');
     });
@@ -263,23 +263,23 @@
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
       testActor2 = setupTestActor(testKapi);
-      
+
       testActor1
         .keyframe(0, {})
         .keyframe(2000, {});
-      
+
       testActor2
         .keyframe(500, {})
         .keyframe(1500, {});
-      
+
       testKapi.calculateActorPositions(1000);
-      
+
       equals(testActor2.isShowing(), true,
           'Actor has state');
 
 
       testKapi.calculateActorPositions(1750);
-      
+
       equals(testActor2.isShowing(), false,
           'Actor no longer has state');
     });
@@ -309,8 +309,8 @@
       ok(testKapi.canvas_getContext() instanceof CanvasRenderingContext2D,
           'Context is a canvas');
     });
-    
-    
+
+
     test('Can set DOM element context', function () {
       var testKapi = new Kapi(document.createElement('div'));
 
@@ -326,6 +326,138 @@
       // is an empty, pure Object
       equals(testKapi.canvas_getContext().__proto__.__proto__, null,
           'Context is an Object');
+    });
+
+
+    module('Keyframe data exporting');
+
+    test('Can export actor keyframes correctly'
+    ,function () {
+      var testKapi
+          ,testActor
+          ,exportedKeyframeData;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, {
+        'a': 1
+        ,'b': 2
+      }).keyframe(1000, {
+        'a': 3
+        ,'b': 4
+      }).keyframe(2000, {
+        'a': 5
+        ,'b': 6
+      });
+
+      exportedKeyframeData = testActor.exportKeyframeData();
+
+      deepEqual(exportedKeyframeData.keyframeList, [0, 1000, 2000],
+          'Exported keyframe list matches the created keyframes');
+
+      deepEqual(exportedKeyframeData.keyframes, {
+          '0': {
+            'position': {
+              'a': 1,
+              'b': 2
+            },
+            'easing': {
+              'a': 'linear',
+              'b': 'linear'
+            }
+          },
+          '1000': {
+            'position': {
+              'a': 3,
+              'b': 4
+            },
+            'easing': {
+              'a': 'linear',
+              'b': 'linear'
+            }
+          },
+          '2000': {
+            'position': {
+              'a': 5,
+              'b': 6
+            },
+            'easing': {
+              'a': 'linear',
+              'b': 'linear'
+            }
+          }
+        }, 'Exported keyframes match the created keyframes');
+    });
+
+
+    test('Can export kapi keyframes correctly'
+    ,function () {
+      var testKapi
+          ,testActor
+          ,exportedKeyframeData;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, {
+        'a': 1
+        ,'b': 2
+      }).keyframe(1000, {
+        'a': 3
+        ,'b': 4
+      }).keyframe(2000, {
+        'a': 5
+        ,'b': 6
+      });
+
+      // Override the actor ID for this test.
+      testActor.id = 0;
+
+      exportedKeyframeData = testKapi.exportKeyframeData();
+
+      deepEqual(exportedKeyframeData, {
+        '0': {
+            'actor': testActor,
+            'keyframeList': [
+              0,
+              1000,
+              2000
+            ],
+            'keyframes': {
+              '0': {
+                'position': {
+                  'a': 1,
+                  'b': 2
+                },
+                'easing': {
+                  'a': 'linear',
+                  'b': 'linear'
+                }
+              },
+              '1000': {
+                'position': {
+                  'a': 3,
+                  'b': 4
+                },
+                'easing': {
+                  'a': 'linear',
+                  'b': 'linear'
+                }
+              },
+              '2000': {
+                'position': {
+                  'a': 5,
+                  'b': 6
+                },
+                'easing': {
+                  'a': 'linear',
+                  'b': 'linear'
+                }
+              }
+            }
+          }
+        }, 'Exported keyframe data match the created animation');
     });
 
   } ());
