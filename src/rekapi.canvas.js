@@ -16,7 +16,7 @@
    * @param {string} dimension The dimension (either "height" or "width") to
    *    get or set.
    * @param {number} opt_new_size The new value to set for `dimension`.
-   * @returns {number}
+   * @return {number}
    */
   function canvas_dimension (canvas, contextType, dimension, opt_new_size) {
     if (typeof opt_new_size !== 'undefined') {
@@ -39,7 +39,7 @@
 
   /**
    * @param {HTMLCanvas|HTMLElement|Object} canvas
-   * @returns {CanvasRenderingContext2D|HTMLElement|Object}
+   * @return {CanvasRenderingContext2D|HTMLElement|Object}
    */
   gk.prototype.canvas_setContext = function (canvas) {
     var nodeName;
@@ -65,7 +65,7 @@
 
 
   /**
-   * @returns {CanvasRenderingContext2D|HTMLElement|Object}
+   * @return {CanvasRenderingContext2D|HTMLElement|Object}
    */
   gk.prototype.canvas_getContext = function () {
     return this._context;
@@ -74,7 +74,7 @@
 
   /**
    * @param {number} opt_height
-   * @returns {number}
+   * @return {number}
    */
   gk.prototype.canvas_height = function (opt_height) {
     return canvas_dimension(this.canvas, this._contextType, 'height',
@@ -84,7 +84,7 @@
 
   /**
    * @param {number} opt_width
-   * @returns {number}
+   * @return {number}
    */
   gk.prototype.canvas_width = function (opt_width) {
     return canvas_dimension(this.canvas, this._contextType, 'width',
@@ -108,7 +108,7 @@
 
 
   /**
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.canvas_clear = function () {
     // Clearing only mades sense if Kapi is bound to a canvas

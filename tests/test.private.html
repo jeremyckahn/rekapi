@@ -16,6 +16,7 @@
   <script src="../lib/shifty/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.keyframeprops.js"></script>
   <script src="../src/rekapi.canvas.js"></script>
   <script src="../src/rekapi.dom.js"></script>
   <script>
@@ -30,13 +31,13 @@
     kapi.canvas_style('background', '#ddd');
     kapi.canvas_height(300);
     kapi.canvas_width(500);
-    
+
     return kapi;
   }
-  
+
   function  setupTestActor (forKapi) {
     var actor;
-    
+
     actor = new Kapi.Actor({
       'draw': function (canvas_context, state) {
         canvas_context.beginPath();
@@ -45,7 +46,7 @@
             this.y || 0,
             this.radius || 0,
             0,
-            Math.PI*2, 
+            Math.PI*2,
             true);
           canvas_context.fillStyle = this.color || '#f0f';
           canvas_context.fill();
@@ -54,112 +55,112 @@
           return this;
       }
     });
-    
+
     forKapi.addActor(actor);
     return actor;
   }
-  
+
   (function () {
-    
+
     module("calculateLoopPosition");
-    
+
     test('Calculate accurate position in the tween', function () {
       var testKapi
           ,testActor1
           ,calculatedMillisecond;
-    
+
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
-      
+
       testActor1
-        .keyframe(0, {})
-        .keyframe(2000, {});
-        
+        .keyframe(0, { x: 1 })
+        .keyframe(2000, { x: 2 });
+
       calculatedMillisecond =  Kapi._private
         .calculateLoopPosition(testKapi, 1000, 0);
-    
-      equals(calculatedMillisecond, 1000, 
+
+      equals(calculatedMillisecond, 1000,
           'Calculated a midpoint of the animation');
     });
-    
-    
+
+
     test('Calculate accurate overflow position in the tween', function () {
       var testKapi
           ,testActor1
           ,calculatedMillisecond;
-    
+
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
-      
+
       testActor1
-        .keyframe(0, {})
-        .keyframe(2000, {});
-        
-      calculatedMillisecond = 
+        .keyframe(0, { x: 1 })
+        .keyframe(2000, { x: 2 });
+
+      calculatedMillisecond =
           Kapi._private.calculateLoopPosition(testKapi, 2500, 1);
-    
-      equals(calculatedMillisecond, 500, 
+
+      equals(calculatedMillisecond, 500,
           'Calculated an overflow position of the animation');
     });
-   
+
 
     module("determineCurrentLoopIteration");
-    
+
     test('Calculate a given iteration of a loop', function () {
       var testKapi
           ,testActor1
           ,calculatedIteration;
-    
+
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
-      
+
       testActor1
-        .keyframe(0, {})
-        .keyframe(2000, {});
-      
-      calculatedIteration = 
+        .keyframe(0, { x: 1 })
+        .keyframe(2000, { x: 2 });
+
+      calculatedIteration =
           Kapi._private.determineCurrentLoopIteration(testKapi, 0);
-    
-      equals(calculatedIteration, 0, 
+
+      equals(calculatedIteration, 0,
           'Calculated the beginning of the first iteration');
 
 
-      calculatedIteration = 
+      calculatedIteration =
           Kapi._private.determineCurrentLoopIteration(testKapi, 1000);
-    
-      equals(calculatedIteration, 0, 
+
+      equals(calculatedIteration, 0,
           'Calculated the middle of the first iteration');
 
 
-      calculatedIteration = 
+      calculatedIteration =
           Kapi._private.determineCurrentLoopIteration(testKapi, 1999);
-    
-      equals(calculatedIteration, 0, 
+
+      equals(calculatedIteration, 0,
           'Calculated the end of the first iteration');
 
 
-      calculatedIteration = 
+      calculatedIteration =
           Kapi._private.determineCurrentLoopIteration(testKapi, 4000);
-    
-      equals(calculatedIteration, 2, 
+
+      equals(calculatedIteration, 2,
           'Calculated the beginning of an iteration greater than 1');
 
 
-      calculatedIteration = 
+      calculatedIteration =
           Kapi._private.determineCurrentLoopIteration(testKapi, 5000);
-    
-      equals(calculatedIteration, 2, 
+
+      equals(calculatedIteration, 2,
           'Calculated the middle of an iteration greater than 1');
 
 
-      calculatedIteration = 
+      calculatedIteration =
           Kapi._private.determineCurrentLoopIteration(testKapi, 5999);
-    
-      equals(calculatedIteration, 2, 
+
+      equals(calculatedIteration, 2,
           'Calculated the end of an iteration greater than 1');
     });
-    
-    
+
+
     module('calculateTimeSinceStart');
 
     test('Calculate the delta of the current time and when the animation began'
@@ -167,10 +168,10 @@
       var testKapi
           ,testActor1
           ,calculatedTime;
-    
+
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
-      
+
       testActor1
         .keyframe(0, {})
         .keyframe(2000, {});
@@ -184,11 +185,11 @@
       internalDebugNow = function () {
         return 500;
       };
-      
+
       calculatedTime = Kapi._private.calculateTimeSinceStart(testKapi);
-      equals(calculatedTime, 500, 
+      equals(calculatedTime, 500,
           'The expected amount of time since beginning the animation was calculated');
-    
+
     });
 
 
@@ -199,10 +200,10 @@
       var testKapi
           ,testActor1
           ,animationIsComplete;
-    
+
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
-      
+
       testActor1
         .keyframe(0, {})
         .keyframe(2000, {});
@@ -221,16 +222,16 @@
       equals(animationIsComplete, true,
           'An iteration after the specified amount of iterations is considered to be complete');
     });
-    
+
     test('Determine if the animation has completed in an infinite loop'
       ,function () {
       var testKapi
           ,testActor1
           ,animationIsComplete;
-    
+
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
-      
+
       testActor1
         .keyframe(0, {})
         .keyframe(2000, {});
@@ -257,10 +258,10 @@
       ,function () {
       var testKapi
           ,testActor1;
-    
+
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
-      
+
       testActor1
         .keyframe(0, {})
         .keyframe(2000, {});

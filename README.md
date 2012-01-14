@@ -90,7 +90,7 @@ var actor = new Kapi.Actor({
       state.y || 50,
       state.radius || 50,
       0,
-      Math.PI*2, 
+      Math.PI*2,
       true);
     canvas_context.fillStyle = state.color || '#f0f';
     canvas_context.fill();
@@ -161,9 +161,7 @@ Copy/paste/save this onto your machine to see a simple Rekapi animation:
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://raw.github.com/documentcloud/underscore/master/underscore-min.js"></script>
-  <script src="https://raw.github.com/jeremyckahn/shifty/master/builds/shifty.min.js"></script>
-  <script src="https://raw.github.com/jeremyckahn/rekapi/master/dist/rekapi.min.js"></script>
+  <script src="https://raw.github.com/jeremyckahn/rekapi/master/dist/rekapi.bundle.min.js"></script>
 </head>
 <body>
   <canvas></canvas>
@@ -180,16 +178,16 @@ Copy/paste/save this onto your machine to see a simple Rekapi animation:
         state.y || 50,
         state.radius || 50,
         0,
-        Math.PI*2, 
+        Math.PI*2,
         true);
       canvas_context.fillStyle = state.color || '#f0f';
       canvas_context.fill();
       canvas_context.closePath();
     }
   });
-  
+
   kapi.addActor(actor);
-  
+
   actor
     .keyframe(0, {
       x: 50,
@@ -199,9 +197,9 @@ Copy/paste/save this onto your machine to see a simple Rekapi animation:
       x: 200,
       y: 100
     }, 'easeOutExpo');
-    
+
   kapi.play();
-  
+
   </script>
 </body>
 </html>

@@ -44,12 +44,12 @@
         'left': '300px'
         ,'top': '250px'
       }, 'bouncePast')
-      .liveCopy(time += 400)
+      .wait(time += 400)
       .keyframe(time += 700, {
         'left': '50px'
         ,'rotate': 0
       }, 'easeInOutBack')
-      .liveCopy(time += 150)
+      .wait(time += 150)
       .keyframe(time += 850, {
         'left': '344px'
         ,'top': '0px'
@@ -62,7 +62,7 @@
       .keyframe(time += 700, {
         'top': '800px'
       }, 'easeFrom')
-      .liveCopy(time += 500);
+      .wait(time += 500);
 
     kapi.play();
 

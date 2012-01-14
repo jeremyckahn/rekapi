@@ -85,11 +85,11 @@
         ,'height': 0
       }).keyframe(time += 750, {
         'height': bar.data().val
-      }, 'swingTo').liveCopy(time += 500)
+      }, 'swingTo').wait(time += 500)
       .keyframe(time += 500, {
         'x': -50
       }, 'swingFrom')
-      .liveCopy(time += 750);
+      .wait(time += 750);
     });
 
 

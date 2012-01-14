@@ -17,6 +17,7 @@
   <script src="../lib/shifty/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.keyframeprops.js"></script>
   <script src="../src/rekapi.canvas.js"></script>
   <script src="../src/rekapi.dom.js"></script>
   <script>
@@ -223,7 +224,7 @@
     });
 
 
-    $('#live-copy-tween').click(function () {
+    $('#copy-props-tween').click(function () {
       var actor;
 
       killTest();
@@ -239,7 +240,7 @@
           'x': 200
           ,'y': 200
         }, 'easeOutExpo')
-        .liveCopy(1500, 0);
+        .copyProperties(0, 1500);
 
       kapi.play();
       console.log(kapi);
@@ -433,7 +434,7 @@
     <li><button id="delayed-start">Delayed start</button></li>
     <li><button id="basic-eased-tween">Basic eased tween loop</button></li>
     <li><button id="two-step-tween">Two-step tween loop</button></li>
-    <li><button id="live-copy-tween">Live copied tween loop</button></li>
+    <li><button id="copy-props-tween">Tween loop with copied properties</button></li>
     <li><button id="removed-step-tween">Tween loop with a step removed</button></li>
     <li><button id="multi-eased-tween">Tween loop with multiple easings</button></li>
     <li><button id="fancy-parameters-tween">Tween loop with fancy parameters</button></li>

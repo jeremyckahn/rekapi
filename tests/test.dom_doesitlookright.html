@@ -17,6 +17,7 @@
   <script src="../lib/shifty/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.keyframeprops.js"></script>
   <script src="../src/rekapi.canvas.js"></script>
   <script src="../src/rekapi.dom.js"></script>
   <script>
@@ -34,7 +35,7 @@
 
     return kapi;
   }
-  
+
   function  setupTestActor (forKapi) {
     var actor
         ,element;
@@ -47,37 +48,37 @@
     forKapi.addActor(actor);
     return actor;
   }
-  
+
   $(function () {
-    
+
     var kapi;
-    
+
     function killTest () {
       kapi && kapi.stop(true);
       kapi = undefined;
     }
-    
+
     $('#kill-test').click(killTest);
-    
+
     $('#play').click(function () {
       kapi && kapi.play();
     });
-    
+
     $('#pause').click(function () {
       kapi && kapi.pause();
     });
-    
+
     $('#stop').click(function () {
       kapi && kapi.stop(true);
     });
-    
+
     $('#basic-linear-tween').click(function () {
       var actor;
 
       killTest();
       kapi = setupTestKapi();
       actor = setupTestActor(kapi);
-      
+
       actor
         .keyframe(0, {
           'left': '0px'
@@ -91,7 +92,7 @@
       kapi.play();
       console.log(kapi);
     });
-    
+
 
     $('#basic-eased-tween').click(function () {
       var actor;
@@ -99,7 +100,7 @@
       killTest();
       kapi = setupTestKapi();
       actor = setupTestActor(kapi);
-      
+
       actor
         .keyframe(0, {
           'left': '0px'
@@ -121,7 +122,7 @@
       killTest();
       kapi = setupTestKapi();
       actor = setupTestActor(kapi);
-      
+
       actor
         .keyframe(0, {
           'left': '0px'
@@ -146,7 +147,7 @@
       killTest();
       kapi = setupTestKapi();
       actor = setupTestActor(kapi);
-      
+
       actor
         .keyframe(0, {
           'left': '0px'
@@ -176,7 +177,7 @@
       killTest();
       kapi = setupTestKapi();
       actor = setupTestActor(kapi);
-      
+
       actor
         .keyframe(500, {
           'left': '0px'
@@ -191,7 +192,7 @@
       console.log(kapi);
     });
   });
-  
+
   </script>
 </head>
 <body>

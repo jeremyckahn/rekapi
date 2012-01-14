@@ -16,6 +16,7 @@
   <script src="../lib/shifty/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.keyframeprops.js"></script>
   <script src="../src/rekapi.canvas.js"></script>
   <script src="../src/rekapi.dom.js"></script>
   <script>
@@ -30,13 +31,13 @@
     kapi.canvas_style('background', '#ddd');
     kapi.canvas_height(300);
     kapi.canvas_width(500);
-    
+
     return kapi;
   }
-  
+
   function  setupTestActor (forKapi) {
     var actor;
-    
+
     actor = new Kapi.Actor({
       'draw': function (canvas_context, state) {
         canvas_context.beginPath();
@@ -45,7 +46,7 @@
             this.y || 0,
             this.radius || 0,
             0,
-            Math.PI*2, 
+            Math.PI*2,
             true);
           canvas_context.fillStyle = this.color || '#f0f';
           canvas_context.fill();
@@ -54,24 +55,24 @@
           return this;
       }
     });
-    
+
     forKapi.addActor(actor);
     return actor;
   }
-  
+
   (function runTests () {
-    
+
     module('Single keyframe');
-    
-    test('Correctly interpolate Actor positions at various positions mid-frame', 
+
+    test('Correctly interpolate Actor positions at various positions mid-frame',
     function () {
       var testKapi
           ,testActor;
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
-      
+
+
       testActor.keyframe(0, {
         'x': 0
         ,'y': 0
@@ -79,29 +80,29 @@
         'x': 100
         ,'y':100
       });
-      
-      
+
+
       testActor.calculatePosition(0);
-      
-      equals(testActor.get().x, 0, 
+
+      equals(testActor.get().x, 0,
         'Value "x" was properly interpolated at position 0.0');
-      equals(testActor.get().y, 0, 
+      equals(testActor.get().y, 0,
         'Value "y" was properly interpolated at position 0.0');
-      
-      
+
+
       testActor.calculatePosition(500);
-      
-      equals(testActor.get().x, 50, 
+
+      equals(testActor.get().x, 50,
         'Value "x" was properly interpolated at position 0.5');
-      equals(testActor.get().y, 50, 
+      equals(testActor.get().y, 50,
         'Value "y" was properly interpolated at position 0.5');
 
 
       testActor.calculatePosition(1000);
 
-      equals(testActor.get().x, 100, 
+      equals(testActor.get().x, 100,
         'Value "x" was properly interpolated at position 1.0');
-      equals(testActor.get().y, 100, 
+      equals(testActor.get().y, 100,
         'Value "y" was properly interpolated at position 1.0');
     });
 
@@ -142,14 +143,14 @@
       });
 
       testActor.calculatePosition(500);
-      equals(testActor.get().x, undefined, 
+      equals(testActor.get().x, undefined,
           'Value only has an end point, therefore a calculated midpoint is undefined.');
     });
 
 
 
     module('Multiple keyframes');
-    
+
     test('Interpolate Actor positions at various positions mid-frame',
     function () {
       var testKapi
@@ -157,8 +158,8 @@
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
-      
+
+
       testActor.keyframe(1000, {
           'x': 0
           ,'y':0
@@ -166,34 +167,34 @@
         'x': 100
         ,'y':100
       });
-      
+
       testActor.calculatePosition(1000);
-      
-      equals(testActor.get().x, 0, 
+
+      equals(testActor.get().x, 0,
         'Value "x" was properly interpolated at position 0.0');
-      equals(testActor.get().y, 0, 
+      equals(testActor.get().y, 0,
         'Value "y" was properly interpolated at position 0.0');
-      
-      
+
+
       testActor.calculatePosition(1500);
-      
-      equals(testActor.get().x, 50, 
+
+      equals(testActor.get().x, 50,
         'Value "x" was properly interpolated at position 0.5');
-      equals(testActor.get().y, 50, 
+      equals(testActor.get().y, 50,
         'Value "y" was properly interpolated at position 0.5');
-      
-      
+
+
       testActor.calculatePosition(2000);
-      
-      equals(testActor.get().x, 100, 
+
+      equals(testActor.get().x, 100,
         'Value "x" was properly interpolated at position 1.0');
-      equals(testActor.get().y, 100, 
+      equals(testActor.get().y, 100,
         'Value "y" was properly interpolated at position 1.0');
     });
-    
-    
-    
-    test('Applied easing is taken from the destination frame', 
+
+
+
+    test('Applied easing is taken from the destination frame',
     function () {
       var testKapi
           ,testActor
@@ -201,7 +202,7 @@
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
+
       testActor.keyframe(0, {
         'x': 0
       }, 'linear').keyframe(1000, {
@@ -209,18 +210,18 @@
       }, 'easeInSine').keyframe(2000, {
         'x': 200
       }, 'easeOutCirc');
-      
+
       tweenableComparator = Tweenable.util.interpolate({
         'x': 0
       }, {
         'x': 100
       }, .5, 'easeInSine');
-      
-      testActor.calculatePosition(500);     
-      equals(testActor.get().x, tweenableComparator.x, 
+
+      testActor.calculatePosition(500);
+      equals(testActor.get().x, tweenableComparator.x,
         'Value "x" was properly interpolated at position 0.5 with "easeInSine"');
-        
-      
+
+
       tweenableComparator = Tweenable.util.interpolate({
         'x': 100
       }, {
@@ -228,15 +229,15 @@
       }, .5, 'easeOutCirc');
 
       testActor.calculatePosition(1500);
-      equals(testActor.get().x, tweenableComparator.x, 
+      equals(testActor.get().x, tweenableComparator.x,
         'Value "x" was properly interpolated at position 0.5 with "easeOutCirc"');
-      
+
     });
 
 
     module('Keyframe removal');
 
-    test('Keyframes can be removed from the middle of the animation', 
+    test('Keyframes can be removed from the middle of the animation',
         function () {
 
       var testKapi
@@ -244,22 +245,84 @@
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
+
       testActor
-        .keyframe(0, {})
-        .keyframe(1000, {})
-        .keyframe(2000, {});
-      
+        .keyframe(0, { x: 1 })
+        .keyframe(1000, { x: 2 })
+        .keyframe(2000, { x: 3 });
+
       testActor.removeKeyframe(1000);
-      
-      equals(testActor._keyframeList[1000], undefined,
-        'Keyframe 1000 no longer exists in _keyframeList');
 
-      equals(testActor._keyframeList.indexOf(1000), -1,
-          'Keyframe 1000 is no longer in _keyframeList');
+      equals(testActor._propertyTracks.x.length, 2,
+          'A keyframe property was removed from testActor._propertyTracks.x');
+
+      equals(_.keys(testActor._keyframeProperties).length, 2,
+          'A keyframe property was deleted from the internal hash');
     });
-    
-    test('Keyframes can be removed from the end of the animation', 
+
+
+    test('Single keyframe properties can be removed from an actor at a time',
+        function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, {
+          'x': 0
+        }).keyframe(1000, {
+          'x': 50
+        }).keyframe(2000, {
+          'x': 100
+        });
+
+     testActor.removeKeyframe(1000);
+
+     equal(testActor._propertyTracks.x.length, 2
+          ,'x track was shortened properly');
+     equal(testActor._propertyTracks.x[0].value, 0
+          ,'First x property was unchanged');
+     equal(testActor._propertyTracks.x[1].value, 100
+          ,'Last x property was unchanged');
+    });
+
+    test('Multiple keyframe properties can be removed from an actor at a time',
+        function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, {
+          'x': 0
+          ,'y': 1
+        }).keyframe(1000, {
+          'x': 50
+          ,'y': 51
+        }).keyframe(2000, {
+          'x': 100
+          ,'y': 101
+        });
+
+     testActor.removeKeyframe(1000);
+
+     equal(testActor._propertyTracks.x.length, 2
+          ,'x track was shortened properly');
+     equal(testActor._propertyTracks.y.length, 2
+          ,'y track was shortened properly');
+     equal(testActor._propertyTracks.x[0].value, 0
+          ,'First x property was unchanged');
+     equal(testActor._propertyTracks.x[1].value, 100
+          ,'Last x property was unchanged');
+     equal(testActor._propertyTracks.y[0].value, 1
+          ,'First y property was unchanged');
+     equal(testActor._propertyTracks.y[1].value, 101
+          ,'Last y property was unchanged');
+    });
+
+    test('Keyframes can be removed from the end of the animation',
         function () {
 
       var testKapi
@@ -267,14 +330,20 @@
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
+
       testActor
-        .keyframe(0, {})
-        .keyframe(1000, {})
-        .keyframe(2000, {});
-      
+        .keyframe(0, {
+          'x': 1
+        })
+        .keyframe(1000, {
+          'x': 2
+        })
+        .keyframe(2000, {
+          'x': 3
+        });
+
       testActor.removeKeyframe(2000);
-      
+
       equals(testKapi._animationLength, 1000,
           'The animation length is shortened when the final keyframe is removed');
     });
@@ -285,18 +354,24 @@
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
+
       testActor
-        .keyframe(0, {})
-        .keyframe(1000, {})
-        .keyframe(2000, {});
-      
-      testActor.removeAllKeyframes();
-      
+        .keyframe(0, {
+          'x': 0
+        })
+        .keyframe(1000, {
+          'x': 1
+        })
+        .keyframe(2000, {
+          'x': 2
+        });
+
+      testActor.removeAllKeyframeProperties();
+
       equals(testKapi._animationLength, 0, 'Animation length is 0');
-      equals(testActor._keyframeList.length, 0, 
-          'There are no keyframes in the keyframe list');
-    
+      equals(testActor._propertyTracks.x.length, 0,
+          'x property track exists, but is empty');
+
     });
 
 
@@ -308,14 +383,14 @@
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
+
       testActor
         .keyframe(0, {
           'x': 100
         }).keyframe(1000, {
           'x': 200
         });
-      
+
       testActor.modifyKeyframe(0, {
         'x': 0
       });
@@ -332,7 +407,7 @@
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
+
       testActor
         .keyframe(0, {
           'x': 0
@@ -343,7 +418,7 @@
         }, {
           'x': 'elastic'
         });
-      
+
       testActor.modifyKeyframe(1000, {}, {
         'x': 'linear'
       });
@@ -354,87 +429,76 @@
     });
 
 
-    module('Live copies');
+    module('Waits');
 
-    test('Live copy state and easing Objects point to the source keyframe\'s Objects'
-    ,function () {
+    test('Can copy keyframes (one initial keyframe)', function () {
       var testKapi
           ,testActor;
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
-      testActor
-        .keyframe(0, {
-          'x': 100
-        }).keyframe(1000, {
-          'x': 200
-        }).liveCopy(2000, 0);
 
-      ok(testActor._keyframes[0].position === testActor._keyframes[2000].position,
-          'Live copy position Object is a reference to the source postition Object');
+      testActor.keyframe(0, {
+        'x': 50
+      }).wait(1000);
 
-      ok(testActor._keyframes[0].easing === testActor._keyframes[2000].easing,
-          'Live copy easing Object is a reference to the source easing Object');
+
+      equals(testActor._propertyTracks.x[1].value, 50,
+          'The first keyframe was extended.');
     });
 
 
-    test('Modifiying the target keyframe modifies the live copy'
-    ,function () {
+    test('Can copy keyframes (multiple initial keyframe)', function () {
       var testKapi
           ,testActor;
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
-      testActor
-        .keyframe(0, {
-          'x': 100
-        }, {
-          'x': 'easeOutCirc'
-        }).keyframe(1000, {
-          'x': 200
-        }).liveCopy(2000, 0);
 
-      testActor.modifyKeyframe(0, {
+      testActor.keyframe(0, {
         'x': 50
-      }, {
-        'x': 'easeOutSine'
+      }).keyframe(1000, {
+        'x': 100
+      }).wait(2000);
+
+
+      equals(testActor._propertyTracks.x[2].value, 100,
+          'The last keyframe was extended.');
+    });
+
+
+    test('wait() extends all lagging KeyframeProperties', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, {
+        'x': 51
+        ,'y': 50
+      }).keyframe(1000, {
+        'x': 101
+        ,'y': 100
       });
 
-      equals(testActor._keyframes[0].position.x
-          ,testActor._keyframes[2000].position.x
-          ,'The live copy "x" property was modified when the original property was modified.');
+      // Move the y property back a bit
+      testActor.modifyKeyframeProperty('y', 1, {
+        'millisecond': 500
+      });
 
-      equals(testActor._keyframes[0].easing.x
-          ,testActor._keyframes[2000].easing.x
-          ,'the live copy "x" easing was modified when the original easing was modified.');
+      testActor.wait(2000);
+
+      equal(testActor._propertyTracks.x[2].value, 101
+          ,'x value is extended correctly');
+      equal(testActor._propertyTracks.x[2].millisecond, 2000
+          ,'x value is placed at 2000');
+      equal(testActor._propertyTracks.y[2].value, 100
+          ,'y value is extended correctly');
+      equal(testActor._propertyTracks.y[2].millisecond, 2000
+          ,'y value is placed at 2000');
     });
 
-
-    test('Omitting the liveCopy() opt_source parameter copies the last keyframe'
-    ,function () {
-      var testKapi
-          ,testActor;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-      
-      testActor
-        .keyframe(0, {
-          'x': 0
-        }, {
-          'x': 'easeOutCirc'
-        }).keyframe(1000, {
-          'x': 100
-        }).keyframe(2000, {
-          'x': 200
-        }).liveCopy(3000);
-
-      equals(testActor._keyframes[3000].position.x
-          ,200
-          ,'The live copy took the property from the last-added keyframe');
-    });
   } ());
   </script>
 </head>

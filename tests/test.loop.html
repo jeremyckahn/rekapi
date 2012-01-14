@@ -16,6 +16,7 @@
   <script src="../lib/shifty/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.keyframeprops.js"></script>
   <script src="../src/rekapi.canvas.js"></script>
   <script src="../src/rekapi.dom.js"></script>
   <script>
@@ -30,13 +31,13 @@
     kapi.canvas_style('background', '#ddd');
     kapi.canvas_height(300);
     kapi.canvas_width(500);
-    
+
     return kapi;
   }
-  
+
   function  setupTestActor (forKapi) {
     var actor;
-    
+
     actor = new Kapi.Actor({
       'draw': function (canvas_context, state) {
         canvas_context.beginPath();
@@ -45,7 +46,7 @@
             this.y || 0,
             this.radius || 0,
             0,
-            Math.PI*2, 
+            Math.PI*2,
             true);
           canvas_context.fillStyle = this.color || '#f0f';
           canvas_context.fill();
@@ -54,15 +55,15 @@
           return this;
       }
     });
-    
+
     forKapi.addActor(actor);
     return actor;
   }
-  
+
   (function () {
-    
+
     module("Finite loop interval calculation");
-    
+
     test('Actor.tween correctly calculates position based on time'
       ,function () {
       var testKapi
@@ -83,21 +84,21 @@
         .keyframe(1000, {
           'x': 100
         });
-      
+
       internalDebugNow = function () {
         return 0;
       };
-      
+
       testKapi.play(2);
-      
+
       internalDebugNow = function () {
         return 500;
       };
-      
+
       Kapi._private.renderCurrentMillisecond(testKapi);
       equals(testActor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
-        
+
       internalDebugNow = function () {
         return 1500;
       };
@@ -105,7 +106,7 @@
       Kapi._private.renderCurrentMillisecond(testKapi);
       equals(testActor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
-          
+
       internalDebugNow = function () {
         return 2500;
       };
@@ -114,10 +115,10 @@
       equals(testActor.get().x, 100,
           'Loop sequence has completed, actor is locked at final position');
     });
-    
-    
+
+
     module("Infinite loop interval calculation");
-    
+
     test('Actor.tween correctly calculates position based on time'
       ,function () {
       var testKapi
@@ -138,21 +139,21 @@
         .keyframe(1000, {
           'x': 100
         });
-      
+
       internalDebugNow = function () {
         return 0;
       };
-      
+
       testKapi.play();
-      
+
       internalDebugNow = function () {
         return 500;
       };
-      
+
       Kapi._private.renderCurrentMillisecond(testKapi);
       equals(testActor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
-        
+
       internalDebugNow = function () {
         return 1500;
       };
@@ -160,7 +161,7 @@
       Kapi._private.renderCurrentMillisecond(testKapi);
       equals(testActor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
-          
+
       internalDebugNow = function () {
         return 10000000500;
       };

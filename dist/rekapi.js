@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.3.5
+ * Rekapi - Rewritten Kapi. v0.4.0
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -17,16 +17,11 @@
     throw 'shifty.js is required for Kapi.';
   }
 
-  var gk
-      ,defaultConfig
-      ,now
-      ,playState;
-
 
   /**
    * Sorts an array numerically, from smallest to largest.
    * @param {Array} array The Array to sort.
-   * @returns {Array} The sorted Array.
+   * @return {Array} The sorted Array.
    */
   function sortNumerically (array) {
     return array.sort(function (a, b) {
@@ -51,7 +46,7 @@
   /**
    * Calculate how many milliseconds since the animation began.
    * @param {Kapi} kapi
-   * @returns {number}
+   * @return {number}
    */
   function calculateTimeSinceStart (kapi) {
     var timeSinceStart;
@@ -89,7 +84,7 @@
    * Calculate how far in the animation loop `kapi` is, in milliseconds, based
    * on the current time.  Also overflows into a new loop if necessary.
    * @param {Kapi} kapi
-   * @returns {number}
+   * @return {number}
    */
   function calculateLoopPosition (kapi, forMillisecond, currentLoopIteration) {
     var currentLoopPosition;
@@ -140,7 +135,7 @@
    */
   function tick (kapi) {
     kapi._loopId = setTimeout(function () {
-      // First, scedule the next update.  renderCurrentMillisecond can cancel
+      // First, schedule the next update.  renderCurrentMillisecond can cancel
       // the update if necessary.
       tick(kapi);
       renderCurrentMillisecond(kapi);
@@ -148,6 +143,11 @@
   }
 
 
+  /**
+   * Fire an event bound to a Kapi.
+   * @param {Kapi} kapi
+   * @param {string} eventName
+   */
   function fireEvent (kapi, eventName) {
     _.each(kapi._events[eventName], function (handler) {
       handler(kapi);
@@ -163,26 +163,26 @@
   }
 
 
-  defaultConfig = {
+  var defaultConfig = {
     'fps': 30
     ,'height': 150
     ,'width': 300
   };
 
-  playState = {
+  var playState = {
     'STOPPED': 'stopped'
     ,'PAUSED': 'paused'
     ,'PLAYING': 'playing'
   };
 
-  now = Tweenable.util.now;
+  var now = Tweenable.util.now;
 
   /**
    * @param {HTMLCanvas} canvas
    * @param {Object} opt_config
-   * @returns {Kapi}
+   * @constructor
    */
-  gk = global.Kapi || function Kapi (canvas, opt_config) {
+  var gk = global.Kapi || function Kapi (canvas, opt_config) {
     this.canvas = canvas;
     this._contextType = null;
     this.canvas_setContext(canvas);
@@ -237,15 +237,13 @@
 
   /**
    * @param {Kapi.Actor} actor
-   * @param {Object} opt_initialState
-   * @returns {Kapi}
+   * @return {Kapi}
    */
-  gk.prototype.addActor = function (actor, opt_initialState) {
+  gk.prototype.addActor = function (actor) {
     // You can't add an actor more than once.
     if (!_.contains(this._actors, actor)) {
       actor.kapi = this;
       actor.fps = this.framerate();
-      actor.set(opt_initialState || {});
       this._actors[actor.id] = actor;
       this._drawOrder.push(actor.id);
       actor.setup();
@@ -257,7 +255,7 @@
 
   /**
    * @param {number} actorId
-   * @returns {Kapi.Actor}
+   * @return {Kapi.Actor}
    */
   gk.prototype.getActor = function (actorId) {
     return this._actors[actorId];
@@ -266,7 +264,7 @@
 
   /**
    * @param {Kapi.Actor} actor
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.removeActor = function (actor) {
     delete this._actors[actor.id];
@@ -281,7 +279,7 @@
 
   /**
    * @param {number} opt_howManyTimes
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.play = function (opt_howManyTimes) {
     clearTimeout(this._loopId);
@@ -313,7 +311,7 @@
   /**
    * @param {number} millisecond
    * @param {number} opt_howManyTimes
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.playFrom = function (millisecond, opt_howManyTimes) {
     this.play(opt_howManyTimes);
@@ -325,7 +323,7 @@
 
   /**
    * @param {number} opt_howManyTimes
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.playFromCurrent = function (opt_howManyTimes) {
     return this.playFrom(this._lastRenderedMillisecond, opt_howManyTimes);
@@ -333,7 +331,7 @@
 
 
   /**
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.pause = function () {
     if (this._playState === playState.PAUSED) {
@@ -360,7 +358,7 @@
 
   /**
    * @param {boolean} alsoClear
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.stop = function (alsoClear) {
     this._playState = playState.STOPPED;
@@ -387,7 +385,7 @@
 
 
   /**
-   * @returns {boolean}
+   * @return {boolean}
    */
   gk.prototype.isPlaying = function () {
     return this._playState === playState.PLAYING;
@@ -395,7 +393,7 @@
 
 
   /**
-   * @returns {number}
+   * @return {number}
    */
   gk.prototype.animationLength = function () {
     return this._animationLength;
@@ -403,7 +401,7 @@
 
 
   /**
-   * @returns {number}
+   * @return {number}
    */
   gk.prototype.actorCount = function () {
     return this._drawOrder.length;
@@ -412,7 +410,7 @@
 
   /**
    * @param {number} opt_newFramerate
-   * @returns {number}
+   * @return {number}
    */
   gk.prototype.framerate = function (opt_newFramerate) {
     if (opt_newFramerate) {
@@ -425,7 +423,7 @@
 
   /**
    * @param {number} millisecond
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.render = function (millisecond) {
     this.calculateActorPositions(millisecond);
@@ -438,7 +436,7 @@
 
 
   /**
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.redraw = function () {
     this.render(this._lastRenderedMillisecond);
@@ -449,7 +447,7 @@
 
   /**
    * @param {number} millisecond
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.calculateActorPositions = function (millisecond) {
     var i, len;
@@ -465,7 +463,7 @@
 
 
   /**
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.draw = function () {
     var i, len
@@ -488,20 +486,16 @@
 
 
   /**
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.updateInternalState = function () {
-    var allKeyframeLists;
+    var actorLengths = [];
 
-    allKeyframeLists = [0];
+    _.each(this._actors, function (actor) {
+      actorLengths.push(actor.getEnd());
+    });
 
-    _.each(this._drawOrder, function (i) {
-      allKeyframeLists = allKeyframeLists.concat(allKeyframeLists,
-          this._actors[i].keyframeList());
-      allKeyframeLists = _.uniq(allKeyframeLists);
-    }, this);
-
-    this._animationLength = Math.max.apply(Math, allKeyframeLists);
+    this._animationLength = Math.max.apply(Math, actorLengths);
 
     return this;
   };
@@ -510,7 +504,7 @@
   /**
    * @param {Kapi.Actor} actor
    * @param {number} layer
-   * @returns {Kapi.Actor|undefined}
+   * @return {Kapi.Actor|undefined}
    */
   gk.prototype.moveActorToLayer = function (actor, layer) {
     if (layer < this._drawOrder.length) {
@@ -527,7 +521,7 @@
   /**
    * @param {string} eventName
    * @param {Function} handler
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.bind = function (eventName, handler) {
     if (!this._events[eventName]) {
@@ -543,7 +537,7 @@
   /**
    * @param {string} eventName
    * @param {Function} opt_handler
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.unbind = function (eventName, opt_handler) {
     if (!this._events[eventName]) {
@@ -558,29 +552,6 @@
     }
 
     return this;
-  };
-
-
-  /**
-   * @returns {Object}
-   */
-  gk.prototype.exportKeyframeData = function () {
-    var exportedKeyframeData;
-
-    exportedKeyframeData = {};
-
-    _.each(this._actors, function (actor, actorId) {
-      var exportedActorKeyframeData;
-
-      exportedActorKeyframeData = actor.exportKeyframeData();
-      exportedKeyframeData[actorId] = {
-        'actor': actor
-        ,'keyframeList': exportedActorKeyframeData.keyframeList
-        ,'keyframes': exportedActorKeyframeData.keyframes
-      };
-    });
-
-    return exportedKeyframeData;
   };
 
 
@@ -629,19 +600,16 @@
 
 
   /**
-   * Finds the index of the keyframe that occurs for `millisecond`.
-   * @param {Kapi.Actor} actor The actor to find the keyframe during which
-   *    `millisecond` occurs.
+   * @param {Kapi.Actor} actor
    * @param {number} millisecond
-   * @returns {number} The keyframe index for `millisecond`, or -1 if it was
-   *    not found.
+   * @return {number}
    */
   //TODO:  Oh noes, this is a linear search!  Maybe optimize it?
-  function getKeyframeForMillisecond (actor, millisecond) {
+  function getPropertyCacheIdForMillisecond (actor, millisecond) {
     var i, len
         ,list;
 
-    list = actor._keyframeList;
+    list = actor._timelinePropertyCacheIndex;
     len = list.length;
 
     for (i = 1; i < len; i++) {
@@ -655,58 +623,121 @@
 
 
   /**
-   * Apply new values to an Object.  If the new value for a given property is
-   * `null` or `undefined`, the property is deleted from the original Object.
-   * @param {Object} targetObject The Object to modify.
-   * @param {Object} augmentation The Object containing properties to modify
-   *    `targetObject` with.
+   * Order all of an Actor's property tracks so they can be cached.
+   * @param {Kapi.Actor} actor
    */
-  function augmentObject (targetObject, augmentation) {
-    _.each(augmentation, function (newVal, name) {
-      if (newVal === undefined || newVal === null) {
-        delete targetObject[name];
-      } else {
-        targetObject[name] = newVal;
-      }
+  function sortPropertyTracks (actor) {
+    _.each(actor._propertyTracks, function (track, name) {
+      actor._propertyTracks[name] = _.sortBy(actor._propertyTracks[name],
+        function (keyframeProperty) {
+        return keyframeProperty.millisecond;
+      });
     });
   }
 
 
   /**
-   * Compute a keyframe's positions and easing from all of the keyframes that
-   * came before it.
-   * @param {Actor} actor
-   * @param {number} keyframeId
-   * @returns {Object}
+   * Compute and fill all timeline caches.
+   * @param {Kapi.Actor} actor
    */
-  function composeKeyframe (actor, keyframeId) {
-    // TODO: This function is insanely slow and is a performance bottleneck.
-    // Make this suck less, somehow.
-    var keyframeList
-        ,keyframes
-        ,composedKeyframe
-        ,i;
+  function cachePropertiesToSegments (actor) {
+    _.each(actor._timelinePropertyCaches, function (propertyCache, cacheId) {
+      var latestProperties = {};
 
-    keyframeList = actor._keyframeList;
-    keyframes = actor._keyframes;
-    composedKeyframe = {
-      'position': {}
-      ,'easing': {}
-    };
+      _.each(actor._propertyTracks, function (propertyTrack, propertyName) {
+        var previousKeyframeProperty = null;
 
-    for (i = keyframeId; i >= 0; i--) {
-      _.defaults(composedKeyframe.position,
-          keyframes[keyframeList[i]].position);
-      _.defaults(composedKeyframe.easing, keyframes[keyframeList[i]].easing);
-    }
+        _.find(propertyTrack, function (keyframeProperty) {
+          if (keyframeProperty.millisecond > cacheId) {
+            latestProperties[propertyName] = previousKeyframeProperty;
+          }
 
-    return composedKeyframe;
+          previousKeyframeProperty = keyframeProperty;
+          return !!latestProperties[propertyName];
+        });
+      });
+
+      _.defaults(propertyCache, latestProperties);
+    });
+  }
+
+
+  /**
+   * Links each KeyframeProperty to the next one in it's respective track.
+   *
+   * They're linked lists!
+   * @param {Kapi.Actor} actor
+   */
+  function linkTrackedProperties (actor) {
+    _.each(actor._propertyTracks, function (propertyTrack, trackName) {
+      _.each(propertyTrack, function (trackProperty, i) {
+        trackProperty.linkToNext(propertyTrack[i + 1]);
+      });
+    });
+  }
+
+
+  /**
+   * Returns a requested KeyframeProperty at a millisecond on a specified
+   * track.
+   * @param {Kapi.Actor} actor
+   * @param {string} trackName
+   * @param {number} millisecond
+   * @return {Kapi.KeyframeProperty}
+   */
+  function findPropertyAtMillisecondInTrack (actor, trackName, millisecond) {
+    return _.find(actor._propertyTracks[trackName],
+        function (keyframeProperty) {
+      return keyframeProperty.millisecond === millisecond;
+    });
+  }
+
+
+  /**
+   * For a given millisecond, determine all of the latest keyframe properties
+   * for each property track and decorate `providedPositions` and
+   * `providedEasings` with their value and easing.
+   *
+   * @param {Kapi.Actor} actor
+   * @param {Object} providedPositions
+   * @param {Object} providedEasings
+   * @param {number} forMillisecond
+   */
+  function fillInMissingProperties (actor, providedPositions, providedEasings,
+      forMillisecond) {
+    var trackedPropertyNames = _.keys(actor._propertyTracks);
+    var providedPropertyNames = _.keys(providedPositions);
+    var missingProperties = _.difference(trackedPropertyNames,
+        providedPropertyNames);
+    var latestPropertiesForMillisecond = {};
+
+    _.each(missingProperties, function (propertyName) {
+      var reversedProperties;
+
+      reversedProperties = actor._propertyTracks[propertyName]
+          .slice(0).reverse();
+
+      _.each(reversedProperties, function (keyframeProperty) {
+        if (keyframeProperty.millisecond < forMillisecond
+            && !latestPropertiesForMillisecond[propertyName]) {
+          latestPropertiesForMillisecond[propertyName] = {
+            'value': keyframeProperty.value
+            ,'easing': keyframeProperty.easing
+          };
+        }
+      });
+    });
+
+    _.each(latestPropertiesForMillisecond, function (property, propertyName) {
+      providedPositions[propertyName] = property.value;
+      providedEasings[propertyName] = property.easing;
+    });
   }
 
 
   /**
    * @param {Object} opt_config
-   * @returns {Actor.Kapi}
+   * @constructor
    */
   gk.Actor = function Actor (opt_config) {
 
@@ -716,9 +747,11 @@
     this.constructor.call(this);
 
     _.extend(this, {
-      '_keyframes': {}
-      ,'_keyframeList': []
-      ,'_data': {}
+      '_data': {}
+      ,'_propertyTracks': {}
+      ,'_timelinePropertyCaches': {}
+      ,'_timelinePropertyCacheIndex': []
+      ,'_keyframeProperties': {}
       ,'_isShowing': false
       ,'_isPersisting': false
       ,'id': getUniqueActorId()
@@ -745,9 +778,10 @@
    * @param {number} when
    * @param {Object} position
    * @param {string|Object} easing
-   * @returns {Kapi.Actor}
+   * @return {Kapi.Actor}
    */
-  gk.Actor.prototype.keyframe = function keyframe (when, position, opt_easing) {
+  gk.Actor.prototype.keyframe = function keyframe (when, position,
+      opt_easing) {
     var originalEasingString;
 
     // This code will be used.  Other work needs to be done beforehand, though.
@@ -769,37 +803,132 @@
       opt_easing[positionName] = opt_easing[positionName] || DEFAULT_EASING;
     });
 
-    this._keyframes[when] = {
-      'position': position
-      ,'easing': opt_easing
-    };
-    this._keyframeList.push(when);
-    gk.util.sortNumerically(this._keyframeList);
+    fillInMissingProperties(this, position, opt_easing, when);
+
+    _.each(position, function (value, name) {
+      var newKeyframeProperty;
+
+      newKeyframeProperty = new gk.KeyframeProperty(this, when, name, value,
+          opt_easing[name]);
+      this._keyframeProperties[newKeyframeProperty.id] = newKeyframeProperty;
+
+      if (!this._propertyTracks[name]) {
+        this._propertyTracks[name] = [];
+      }
+
+      this._propertyTracks[name].push(newKeyframeProperty);
+      sortPropertyTracks(this);
+    }, this);
+
     this.kapi.updateInternalState();
+    this.invalidatePropertyCache();
 
     return this;
   };
 
 
   /**
-   * @param {number} when
-   * @param {number} opt_source
-   * @returns {Kapi.Actor}
+   * @param {string} property
+   * @param {number} index
+   * @param {Object} newProperties
+   * @return {Kapi.Actor}
    */
-  gk.Actor.prototype.liveCopy = function (when, opt_source) {
-    var sourceKeyframeData;
-
-    if (typeof opt_source === 'undefined') {
-      opt_source = _.last(this._keyframeList);
+  gk.Actor.prototype.modifyKeyframeProperty = function (property, index,
+      newProperties) {
+    if (this._propertyTracks[property]
+        && this._propertyTracks[property][index]) {
+      this._propertyTracks[property][index].modifyWith(newProperties);
     }
 
-    if (this._keyframes.hasOwnProperty(opt_source)) {
-      sourceKeyframeData = this._keyframes[opt_source];
-      this.keyframe(when, sourceKeyframeData.position,
-          sourceKeyframeData.easing);
+    sortPropertyTracks(this);
+    this.invalidatePropertyCache();
+    return this;
+  };
+
+
+  /**
+   * @param {number} copyTo
+   * @param {number} copyFrom
+   * @return {Kapi.Actor}
+   */
+  gk.Actor.prototype.copyProperties = function (copyTo, copyFrom) {
+    var sourcePositions
+        ,sourceEasings;
+
+    sourcePositions = {};
+    sourceEasings = {};
+
+    _.each(this._propertyTracks, function (propertyTrack, trackName) {
+      var foundProperty;
+
+      foundProperty = findPropertyAtMillisecondInTrack(this, trackName,
+          copyFrom);
+
+      if (foundProperty) {
+        sourcePositions[trackName] = foundProperty.value;
+        sourceEasings[trackName] = foundProperty.easing;
+      }
+    }, this);
+
+    this.keyframe(copyTo, sourcePositions, sourceEasings);
+    return this;
+  };
+
+
+  /**
+   * @param {number} until
+   * @return {Kapi.Actor}
+   */
+  gk.Actor.prototype.wait = function (until) {
+    var length = this.getEnd();
+
+    if (until <= length) {
+      return;
     }
+
+    this.copyProperties(until, length);
 
     return this;
+  };
+
+
+  /**
+   * @return {number}
+   */
+  gk.Actor.prototype.getStart = function () {
+    var starts = [];
+
+    _.each(this._propertyTracks, function (propertyTrack) {
+      if (propertyTrack.length) {
+        starts.push(propertyTrack[0].millisecond);
+      }
+    });
+
+    if (starts.length === 0) {
+      starts = [0];
+    }
+
+    return Math.min.apply(Math, starts);
+  };
+
+
+  /**
+   * @return {number}
+   */
+  gk.Actor.prototype.getEnd = function () {
+    var latest = 0;
+
+    _.each(this._propertyTracks, function (propertyTrack) {
+      if (propertyTrack.length) {
+        var trackLength = _.last(propertyTrack).millisecond;
+
+        if (trackLength > latest) {
+          latest = trackLength;
+        }
+      }
+    }, this);
+
+    return latest;
   };
 
 
@@ -807,18 +936,24 @@
    * @param {number} when
    * @param {Object} stateModification
    * @param {Object} opt_easingModification
+   * @return {Kapi.Actor}
    */
   gk.Actor.prototype.modifyKeyframe = function (when, stateModification,
       opt_easingModification) {
 
-    var targetKeyframe;
+    opt_easingModification = opt_easingModification || {};
 
-    targetKeyframe = this._keyframes[when];
-    augmentObject(targetKeyframe.position, stateModification);
+    _.each(this._propertyTracks, function (propertyTrack, trackName) {
+      var property = findPropertyAtMillisecondInTrack(this, trackName, when);
 
-    if (opt_easingModification) {
-      augmentObject(targetKeyframe.easing, opt_easingModification);
-    }
+      if (property) {
+        property.modifyWith({
+          'value': stateModification[trackName]
+          ,'easing': opt_easingModification[trackName]
+        });
+      }
+    }, this);
+
 
     return this;
   };
@@ -826,38 +961,47 @@
 
   /**
    * @param {when} when
-   * @returns {Kapi.Actor}
+   * @return {Kapi.Actor}
    */
   gk.Actor.prototype.removeKeyframe = function (when) {
-    if (this._keyframeList.indexOf(when) !== -1) {
-      this._keyframeList = _.without(this._keyframeList, when);
-      delete this._keyframes[when];
-      this.kapi.updateInternalState();
-    }
+    _.each(this._propertyTracks, function (propertyTrack, propertyName) {
+      var i = -1;
+
+      _.find(propertyTrack, function (keyframeProperty) {
+        i++;
+        return when === keyframeProperty.millisecond;
+      });
+
+      var removedProperty = propertyTrack.splice(i, 1)[0];
+
+      if (removedProperty) {
+        delete this._keyframeProperties[removedProperty.id];
+      }
+
+    }, this);
+    this.kapi.updateInternalState();
+    this.invalidatePropertyCache();
 
     return this;
   };
 
 
   /**
-   * @returns {Kapi.Actor}
+   * @return {Kapi.Actor}
    */
-  gk.Actor.prototype.removeAllKeyframes = function () {
-    var keyframeListCopy;
-
-    keyframeListCopy = this._keyframeList.slice(0);
-
-    _.each(keyframeListCopy, function (when) {
-      this.removeKeyframe(when);
+  gk.Actor.prototype.removeAllKeyframeProperties = function () {
+    _.each(this._propertyTracks, function (propertyTrack, propertyName) {
+      propertyTrack.length = 0;
     }, this);
 
-    return this;
+    this._keyframeProperties = {};
+    return this.removeKeyframe(0);
   };
 
 
   /**
    * @param {number} layer
-   * @returns {Kapi.Actor|undefined}
+   * @return {Kapi.Actor|undefined}
    */
   gk.Actor.prototype.moveToLayer = function (layer) {
     return this.kapi.moveActorToLayer(this, layer);
@@ -866,7 +1010,7 @@
 
   /**
    * @param {boolean} alsoPersist
-   * @returns {Kapi.Actor}
+   * @return {Kapi.Actor}
    */
   gk.Actor.prototype.show = function (alsoPersist) {
     this._isShowing = true;
@@ -878,7 +1022,7 @@
 
   /**
    * @param {boolean} alsoUnpersist
-   * @returns {Kapi.Actor}
+   * @return {Kapi.Actor}
    */
   gk.Actor.prototype.hide = function (alsoUnpersist) {
     this._isShowing = false;
@@ -892,7 +1036,7 @@
 
 
   /**
-   * @returns {boolean}
+   * @return {boolean}
    */
   gk.Actor.prototype.isShowing = function () {
     return this._isShowing || this._isPersisting;
@@ -901,48 +1045,35 @@
 
   /**
    * @param {number} millisecond
-   * @returns {Kapi.Actor}
+   * @return {Kapi.Actor}
    */
   gk.Actor.prototype.calculatePosition = function (millisecond) {
     //TODO: This function is too long!  It needs to be broken out somehow.
-    var keyframeList
-        ,keyframes
-        ,delta
-        ,interpolatedPosition
+    var delta
         ,startMs
         ,endMs
-        ,timeRangeIndexStart
-        ,rangeFloor
-        ,rangeCeil
-        ,composedFrom
-        ,composedTo;
+        ,latestCacheId
+        ,propertiesToInterpolate
+        ,interpolatedObject;
 
-    keyframeList = this._keyframeList;
-    startMs = _.first(keyframeList);
-    endMs = _.last(keyframeList);
+    startMs = this.getStart();
+    endMs = this.getEnd();
     this.hide();
 
     if (startMs <= millisecond && millisecond <= endMs) {
       this.show();
-      keyframes = this._keyframes;
-      timeRangeIndexStart = getKeyframeForMillisecond(this,
-          millisecond);
-      rangeFloor = keyframeList[timeRangeIndexStart];
-      rangeCeil = keyframeList[timeRangeIndexStart + 1];
-      delta = rangeCeil - rangeFloor;
-      interpolatedPosition = (millisecond - rangeFloor) / delta;
-      composedFrom = composeKeyframe(this,
-          timeRangeIndexStart);
-      composedTo = _.extend({},
-          keyframes[keyframeList[timeRangeIndexStart + 1]]);
-      _.defaults(composedTo.position, composedFrom.position);
-      _.defaults(composedTo.easing, composedFrom.easing);
+      latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
+      propertiesToInterpolate =
+          this._timelinePropertyCaches[this._timelinePropertyCacheIndex[
+          latestCacheId]];
+      interpolatedObject = {};
 
-      this
-        .set(composedFrom.position)
-        .interpolate(composedTo.position,
-            interpolatedPosition,
-            composedTo.easing);
+      _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
+        interpolatedObject[propName] =
+            keyframeProperty.getValueAt(millisecond);
+      });
+
+      this.set(interpolatedObject);
     }
 
     return this;
@@ -950,16 +1081,8 @@
 
 
   /**
-   * @returns {Array}
-   */
-  gk.Actor.prototype.keyframeList = function () {
-    return this._keyframeList;
-  };
-
-
-  /**
    * @param {Object} opt_newData
-   * @returns {Object}
+   * @return {Object}
    */
   gk.Actor.prototype.data = function (opt_newData) {
     if (opt_newData) {
@@ -971,19 +1094,30 @@
 
 
   /**
-   * @returns {Object}
+   * Empty out and re-cache internal KeyframeProperty data.
    */
-  gk.Actor.prototype.exportKeyframeData = function () {
-    var exportedKeyframeData;
+  gk.Actor.prototype.invalidatePropertyCache = function () {
+    this._timelinePropertyCaches = {};
 
-    exportedKeyframeData = {
-      'keyframeList': this._keyframeList.slice(0)
-      ,'keyframes': _.extend({}, this._keyframes)
-    };
+    _.each(this._keyframeProperties, function (keyframeProperty) {
+      if (!this._timelinePropertyCaches[keyframeProperty.millisecond]) {
+        this._timelinePropertyCaches[keyframeProperty.millisecond] = {};
+      }
 
-    return exportedKeyframeData;
+      this._timelinePropertyCaches[keyframeProperty.millisecond][
+          keyframeProperty.name] = keyframeProperty;
+    }, this);
+
+    this._timelinePropertyCacheIndex = _.keys(this._timelinePropertyCaches);
+
+    _.each(this._timelinePropertyCacheIndex, function (listId, i) {
+      this._timelinePropertyCacheIndex[i] = +listId;
+    }, this);
+
+    gk.util.sortNumerically(this._timelinePropertyCacheIndex);
+    cachePropertiesToSegments(this);
+    linkTrackedProperties(this);
   };
-
 
 
   /**
@@ -1000,10 +1134,6 @@
   /******
    * ...End Shifty interoperability methods.
    */
-
-   _.extend(gk.util, {
-    'composeKeyframe': composeKeyframe
-   });
 
 } (this));
 ;(function rekapiDOM (global) {
@@ -1041,7 +1171,7 @@
 
   /**
    * @param {HTMLElement} element
-   * @returns {Kapi.DOMActor}
+   * @return {Kapi.DOMActor}
    */
   gk.DOMActor = function (element) {
     var actor;
@@ -1110,7 +1240,7 @@
    * @param {string} dimension The dimension (either "height" or "width") to
    *    get or set.
    * @param {number} opt_new_size The new value to set for `dimension`.
-   * @returns {number}
+   * @return {number}
    */
   function canvas_dimension (canvas, contextType, dimension, opt_new_size) {
     if (typeof opt_new_size !== 'undefined') {
@@ -1133,7 +1263,7 @@
 
   /**
    * @param {HTMLCanvas|HTMLElement|Object} canvas
-   * @returns {CanvasRenderingContext2D|HTMLElement|Object}
+   * @return {CanvasRenderingContext2D|HTMLElement|Object}
    */
   gk.prototype.canvas_setContext = function (canvas) {
     var nodeName;
@@ -1159,7 +1289,7 @@
 
 
   /**
-   * @returns {CanvasRenderingContext2D|HTMLElement|Object}
+   * @return {CanvasRenderingContext2D|HTMLElement|Object}
    */
   gk.prototype.canvas_getContext = function () {
     return this._context;
@@ -1168,7 +1298,7 @@
 
   /**
    * @param {number} opt_height
-   * @returns {number}
+   * @return {number}
    */
   gk.prototype.canvas_height = function (opt_height) {
     return canvas_dimension(this.canvas, this._contextType, 'height',
@@ -1178,7 +1308,7 @@
 
   /**
    * @param {number} opt_width
-   * @returns {number}
+   * @return {number}
    */
   gk.prototype.canvas_width = function (opt_width) {
     return canvas_dimension(this.canvas, this._contextType, 'width',
@@ -1202,7 +1332,7 @@
 
 
   /**
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.canvas_clear = function () {
     // Clearing only mades sense if Kapi is bound to a canvas
@@ -1213,5 +1343,86 @@
 
     return this;
   };
+
+} (this));
+;(function rekapiKeyframeProperty (global) {
+  var gk
+      ,DEFAULT_EASING = 'linear'
+      ,KeyframePropertyMethods;
+
+  gk = global.Kapi;
+
+  /**
+   * @param {Kapi.Actor} ownerActor
+   * @param {number} millisecond
+   * @param {string} name
+   * @param {number} value
+   * @param {string} opt_easing
+   * @constructor
+   */
+  gk.KeyframeProperty = function (ownerActor, millisecond, name, value,
+      opt_easing) {
+    this.id = _.uniqueId('keyframeProperty_');
+    this.ownerActor = ownerActor;
+    this.millisecond = millisecond;
+    this.name = name;
+    this.value = value;
+    this.easing = opt_easing || DEFAULT_EASING;
+    this.nextProperty = null;
+
+    return this;
+  };
+
+
+  /**
+   * @param {Object} newProperties
+   */
+  gk.KeyframeProperty.prototype.modifyWith = function (newProperties) {
+    var modifiedProperties = {};
+
+    _.each(['millisecond', 'easing', 'value'], function (str) {
+      modifiedProperties[str] = typeof(newProperties[str]) === 'undefined' ?
+          this[str] : newProperties[str];
+    }, this);
+
+    _.extend(this, modifiedProperties);
+  };
+
+
+  /**
+   * @param {KeyframeProperty} nextProperty
+   */
+  gk.KeyframeProperty.prototype.linkToNext = function (nextProperty) {
+    this.nextProperty = nextProperty || null;
+  }
+
+
+  /**
+   * @param {number} millisecond
+   * @return {number}
+   */
+  gk.KeyframeProperty.prototype.getValueAt = function (millisecond) {
+    var fromObj
+        ,toObj
+        ,delta
+        ,interpolatedPosition
+        ,value;
+
+    fromObj = {};
+    toObj = {};
+
+    if (this.nextProperty) {
+      fromObj[this.name] = this.value;
+      toObj[this.name] = this.nextProperty.value;
+      delta = this.nextProperty.millisecond - this.millisecond;
+      interpolatedPosition = (millisecond - this.millisecond) / delta;
+      value = Tweenable.util.interpolate(fromObj, toObj, interpolatedPosition,
+          this.nextProperty.easing)[this.name];
+    } else {
+      value =  null;
+    }
+
+    return value;
+  }
 
 } (this));

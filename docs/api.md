@@ -4,25 +4,26 @@ This document is separated into 2 sections:
 
 1.  `Kapi` constructor and methods
 2.  `Kapi.Actor` constructor and methods
+3.  `Kapi.KeyframeProperty` constructor and methods
 
 __Note__: Parameters with a prefix of `opt_` are optional and may be omitted.
 
 ## Kapi constructor and methods
 
-### Kapi
+### Kapi ###
 
 ````javascript
 /**
  * @param {HTMLCanvas} canvas
  * @param {Object} opt_config
- * @returns {Kapi}
+ * @constructor
  */
 Kapi (canvas, opt_config)
 ````
 
 Create a `Kapi` instance.  `canvas` is an HTML 5 `<canvas>` from the DOM.  This `<canvas>` is where the animation is drawn.
 
-Valid properties of `opt_config`:
+Functional properties of `opt_config`:
 
 * __fps__: The frames per second at which the animation updates.
 * __height__: The height to set upon `canvas`.
@@ -34,13 +35,12 @@ Valid properties of `opt_config`:
 ````javascript
 /**
  * @param {Kapi.Actor} actor
- * @param {Object} opt_initialState
  * @returns {Kapi}
  */
-Kapi.prototype.addActor (actor, opt_initialState)
+Kapi.prototype.addActor (actor)
 ````
 
-Add a `Kapi.Actor` to a `Kapi` instance.  Optionally define the state at which the Actor will start from.
+Add a `Kapi.Actor` to a `Kapi` instance.
 
 
 ### getActor
@@ -195,6 +195,19 @@ Kapi.prototype.render (millisecond)
 
 Calculate the positions for all Actors at `millisecond`, and then draw them.  You can define any millisecond in the animation to render, so long as it is less than the length of the animation (see `animationLength`).
 
+
+### draw
+
+````javascript
+/**
+ * @returns {Kapi}
+ */
+Kapi.prototype.draw ()
+````
+
+Draw all the Actors at whatever position they are currently in.
+
+
 ### redraw
 
 ````javascript
@@ -218,18 +231,6 @@ Kapi.prototype.calculateActorPositions (millisecond)
 ````
 
 Update the position of all the Actors at `millisecond`, but do not draw them.
-
-
-### draw
-
-````javascript
-/**
- * @returns {Kapi}
- */
-Kapi.prototype.draw ()
-````
-
-Draw all the Actors at whatever position they are currently in.
 
 
 ### updateInternalState
@@ -363,24 +364,13 @@ Kapi.prototype.canvas_clear ()
 Erase the canvas.  This only does something if Kapi is bound to an HTML 5 <canvas>.
 
 
-### exportKeyframeData
-
-````javascript
-/**
- * @returns {Object}
- */
-Kapi.prototype.exportKeyframeData ()
-````
-
-Generates a dump of all the keyframe data for all of the Actors.
-
-
-## Kapi.Actor constructor and methods
+### Kapi.Actor constructor and methods ###
 
 ````javascript
 /**
  * @param {Object} opt_config
  * @returns {Kapi.Actor}
+ * @constructor
  */
 Kapi.Actor (opt_config)
 ````
@@ -411,6 +401,8 @@ Create a keyframe for the Actor.  `when` defines where in the animation to place
 `position` should contain all of the properties that define the keyframe's state.  These properties can be any value that can be tweened by [Shifty](https://github.com/jeremyckahn/shifty) (numbers, color strings, CSS properties).
 
 `opt_easing`, if specified, can be a string or an Object.  If it's a string, all properties in `position` will have the same easing formula applied to them.  Like this:
+
+__Note:__ Internally, this creates a one or more `Kapi.KeyframeProperty`s and places them on a "track."  Any previously added/tracked properties that were not defined in `position` are inferred from previous, corresponding `KeyframeProperty`s.  This information will likely not be important to you unless you are making very complex animations, so don't worry if it doesn't make any sense.
 
 ````javascript
 actor.keyframe(1000, {
@@ -447,20 +439,58 @@ actor.keyframe(0, {
 Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was inherited from keyframe `0`.
 
 
-### liveCopy
+### copyProperties
+
+````javascript
+/**
+ * @param {number} copyTo The millisecond to copy KeyframeProperties to
+ * @param {number} copyFrom The millisecond to copy KeyframeProperties from
+ * @return {Kapi.Actor}
+ */
+Kapi.Actor.prototype.copyProperties (when, opt_source)
+````
+
+Copy all of the properties that at one point in the timeline to another point. This effectively copies the state of an Actor from point to another.
+
+
+### wait
+
+````javascript
+/**
+ * @param {number} until At what point in the animation the Actor should wait
+ *     until (relative to the start of the animation)
+ * @return {Kapi.Actor}
+ */
+Kapi.Actor.prototype.copyProperties (when, opt_source)
+````
+
+Extend the last state on this Actor's timeline to create a animation wait.  The state does not change during this time.
+
+
+### removeKeyframe
 
 ````javascript
 /**
  * @param {number} when
- * @param {number} opt_source
  * @returns {Kapi.Actor}
  */
-Kapi.Actor.prototype.liveCopy (when, opt_source)
+Kapi.Actor.prototype.removeKeyframe (when)
 ````
 
-Copy an existing keyframe into another keyframe.  If the original keyframe is modified by `modifyKeyframe()`, then the copy is modified as well.  If the original keyframe is deleted, the copy remains.  If the original keyframe is overwritten with `keyframe()`, then the link between the keyframes is lost (although the copy remains as an independent keyframe).
+Remove all `KeyframeProperty`s at a given millisecond of the animation.  `when` is the millisecond of the keyframe to remove.
 
-`when` specifies where in the animation to place the liveCopy.  `opt_source` specifies which keyframe to use as the source to copy from (as defined by its millisecond position in the animation).  If `opt_source` is omitted, then the last keyframe set on this actor is copied.  This is useful for creating a "waiting" behavior.
+
+### removeAllKeyframeProperties
+
+````javascript
+/**
+ * @returns {Kapi.Actor}
+ */
+Kapi.Actor.prototype.removeAllKeyframeProperties ()
+````
+
+Remove all `KeyframeProperty`s set on the Actor.
+
 
 ### modifyKeyframe
 
@@ -474,34 +504,69 @@ Copy an existing keyframe into another keyframe.  If the original keyframe is mo
 Kapi.Actor.prototype.modifyKeyframe (when, stateModification, opt_easingModification)
 ````
 
-Augments the properties of a pre-existing keyframe.  `when` specifies the millisecond target keyframe to modify.  For `stateModification`, each property  will overwrite the target keyframe's corresponding property.  If a property in `stateModification` is `null`, then the property on the target will be deleted.
+Augment the `value` or `easing` of any or all `KeyframeProperty`s at a given millisecond for an Actor.  Any `KeyframeProperty`s not specified in `stateModification` or `opt_easing` are not modified.  Here's how you might use it:
 
-If `opt_easingModification` is specified, it works identically to `stateModification`, but with the easing properties instead of the state properties.
+````javascript
+actor.keyframe(0, {
+  'x': 10,
+  'y': 20
+}).keyframe(1000, {
+  'x': 20,
+  'y': 40
+}).keyframe(2000, {
+  'x': 30,
+  'y': 60
+})
+
+// Changes the state of the keyframe at millisecond 1000.
+// Modifies the value of 'y' and the easing of 'x.'
+actor.modifyKeyframe(1000, {
+  'y': 150
+}, {
+  'x': 'easeFrom'
+});
+````
 
 
-### removeKeyframe
+### modifyKeyframeProperty
 
 ````javascript
 /**
- * @param {number} when
- * @returns {Kapi.Actor}
+ * @param {string} property The name of the property to modify
+ * @param {number} index The property track index of the KeyframeProperty to modify
+ * @param {Object} newProperties The properties to augment the KeyframeProperty with
+ * @return {Kapi.Actor}
  */
-Kapi.Actor.prototype.removeKeyframe (when)
+Kapi.Actor.prototype.modifyKeyframeProperty (property, index, newProperties)
 ````
 
-Remove a keyframe set on the Actor.  `when` is the millisecond of the keyframe to remove.
+Modify a specified `KeyframeProperty` stored on an Actor.  Essentially, this calls `modifyWith` on the targeted `KeyframeProperty` (passing along `newProperties`) and then performs some cleanup.
 
 
-### removeAllKeyframes
+### getStart
 
 ````javascript
 /**
- * @returns {Kapi.Actor}
+ * @return {number}
  */
-Kapi.Actor.prototype.removeAllKeyframes ()
+Kapi.Actor.prototype.getStart ()
+
 ````
 
-Remove all keyframes set on the Actor.
+Get the millisecond of the first state of an Actor (when it first starts animating).
+
+
+### getEnd
+
+````javascript
+/**
+ * @return {number}
+ */
+Kapi.Actor.prototype.getEnd ()
+
+````
+
+Get the millisecond of the last state of an Actor (when it is done animating).
 
 
 ### moveToLayer
@@ -565,19 +630,7 @@ Return whether or not the Actor is showing for this frame or persisting across f
 Kapi.Actor.prototype.calculatePosition (millisecond)
 ````
 
-Calculate and sets the Actor's position at `millisecond` in the animation.
-
-
-### keyframeList
-
-````javascript
-/**
- * @returns {Array}
- */
-Kapi.Actor.prototype.keyframeList ()
-````
-
-Expose the Actor's ordered list of keyframe "when" times (as `number`s).
+Calculate and set the Actor's position at `millisecond` in the animation.
 
 
 ### data
@@ -593,13 +646,58 @@ Kapi.Actor.prototype.data (opt_newData)
 Retrieve and optionally bind arbitrary data to the Actor.  If `opt_newData` is specified, it will overwrite the previous `opt_newData` Object that was bound with this method.
 
 
-### exportKeyframeData
+### Kapi.KeyframeProperty constructor and methods ###
 
 ````javascript
 /**
- * @returns {Object}
+ * @param {Kapi.Actor} ownerActor The Actor to which this KeyframeProperty is associated.
+ * @param {number} millisecond Where in the animation this KeyframeProperty lives.
+ * @param {string} name The property's name, such as "x" or "opacity."
+ * @param {number} value The value of `name`.  This is the value to animate to.
+ * @param {string} opt_easing The easing to arrive to `value` at.  Defaults to linear.
+ * @constructor
  */
-Kapi.Actor.prototype.exportKeyframeData ()
+Kapi.KeyframeProperty (ownerActor, millisecond, name, value, opt_easing)
+````
+Represents an individual component of an Actor's keyframe state.  In most cases you won't need to deal with this directly, `Kapi.Actor` abstracts a lot of what this Object does away for you.
+
+
+### modifyWith
+
+````javascript
+/**
+ * @param {Object} newProperties Contains the new `millisecond`, `easing`, or
+ * `value` values to update this KeyframeProperty with.  These correspond to
+ * the formal parameters of the KeyframeProperty constructor.
+ */
+Kapi.KeyframeProperty.prototype.modifyWith (newProperties)
 ````
 
-Generate a dump of the keyframe data for the Actor.
+Augment a `KeyframeProperty`'s properties.
+
+
+### linkToNext
+
+````javascript
+/**
+ * @param {KeyframeProperty} nextProperty The KeyframeProperty that immediately
+ * follows this one in an animation.
+ */
+Kapi.KeyframeProperty.prototype.linkToNext (nextProperty)
+````
+
+Create the reference to the next KeyframeProperty in an `Actor`'s `KeyframeProperty` track.
+
+
+### getValueAt
+
+````javascript
+/**
+ * @param {number} millisecond The point in the animation to compute the
+ * midpoint of the two KeyframeProperties.
+ * @return {number}
+ */
+Kapi.KeyframeProperty.prototype.getValueAt (millisecond)
+````
+
+Calculate the midpoint between this `KeyframeProperty` and the next `KeyframeProperty` in an `Actor`'s `KeyframeProperty` track.

@@ -7,6 +7,7 @@
   <script src="../lib/shifty/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.keyframeprops.js"></script>
   <script src="../src/rekapi.canvas.js"></script>
   <script src="../src/rekapi.dom.js"></script>
   <script>
@@ -197,9 +198,9 @@
       testActor1 = setupTestActor(testKapi);
 
       testActor1
-        .keyframe(0, {})
-        .keyframe(1000, {})
-        .keyframe(2000, {});
+        .keyframe(0, { x: 1 })
+        .keyframe(1000, { x: 2 })
+        .keyframe(2000, { x: 3 });
 
       equals(testKapi.animationLength(), 2000,
           'Length of the animation was calculated');
@@ -216,13 +217,13 @@
       testActor2 = setupTestActor(testKapi);
 
       testActor1
-        .keyframe(0, {})
-        .keyframe(1000, {})
-        .keyframe(2000, {});
+        .keyframe(0, { x: 1})
+        .keyframe(1000, { x: 2})
+        .keyframe(2000, { x: 3});
 
       testActor2
-        .keyframe(0, {})
-        .keyframe(5000, {});
+        .keyframe(0, { x: 1 })
+        .keyframe(5000, { x: 2 });
 
       equals(testKapi.animationLength(), 5000,
           'Length of the animation was calculated');
@@ -238,14 +239,13 @@
       testActor = setupTestActor(testKapi);
 
       testActor
-        .keyframe(1000, {})
-        .keyframe(2000, {});
+        .keyframe(1000, { x: 1 })
+        .keyframe(2000, { x: 2 });
 
       testKapi.calculateActorPositions(500);
 
       equals(testActor.isShowing(), false,
           'Actor has not yet gotten state');
-
 
       testKapi.calculateActorPositions(1500);
 
@@ -265,12 +265,12 @@
       testActor2 = setupTestActor(testKapi);
 
       testActor1
-        .keyframe(0, {})
-        .keyframe(2000, {});
+        .keyframe(0, { x: 1 })
+        .keyframe(2000, { x: 2 });
 
       testActor2
-        .keyframe(500, {})
-        .keyframe(1500, {});
+        .keyframe(500, { x: 1 })
+        .keyframe(1500, { x: 2 });
 
       testKapi.calculateActorPositions(1000);
 
@@ -326,138 +326,6 @@
       // is an empty, pure Object
       equals(testKapi.canvas_getContext().__proto__.__proto__, null,
           'Context is an Object');
-    });
-
-
-    module('Keyframe data exporting');
-
-    test('Can export actor keyframes correctly'
-    ,function () {
-      var testKapi
-          ,testActor
-          ,exportedKeyframeData;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-
-      testActor.keyframe(0, {
-        'a': 1
-        ,'b': 2
-      }).keyframe(1000, {
-        'a': 3
-        ,'b': 4
-      }).keyframe(2000, {
-        'a': 5
-        ,'b': 6
-      });
-
-      exportedKeyframeData = testActor.exportKeyframeData();
-
-      deepEqual(exportedKeyframeData.keyframeList, [0, 1000, 2000],
-          'Exported keyframe list matches the created keyframes');
-
-      deepEqual(exportedKeyframeData.keyframes, {
-          '0': {
-            'position': {
-              'a': 1,
-              'b': 2
-            },
-            'easing': {
-              'a': 'linear',
-              'b': 'linear'
-            }
-          },
-          '1000': {
-            'position': {
-              'a': 3,
-              'b': 4
-            },
-            'easing': {
-              'a': 'linear',
-              'b': 'linear'
-            }
-          },
-          '2000': {
-            'position': {
-              'a': 5,
-              'b': 6
-            },
-            'easing': {
-              'a': 'linear',
-              'b': 'linear'
-            }
-          }
-        }, 'Exported keyframes match the created keyframes');
-    });
-
-
-    test('Can export kapi keyframes correctly'
-    ,function () {
-      var testKapi
-          ,testActor
-          ,exportedKeyframeData;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-
-      testActor.keyframe(0, {
-        'a': 1
-        ,'b': 2
-      }).keyframe(1000, {
-        'a': 3
-        ,'b': 4
-      }).keyframe(2000, {
-        'a': 5
-        ,'b': 6
-      });
-
-      // Override the actor ID for this test.
-      testActor.id = 0;
-
-      exportedKeyframeData = testKapi.exportKeyframeData();
-
-      deepEqual(exportedKeyframeData, {
-        '0': {
-            'actor': testActor,
-            'keyframeList': [
-              0,
-              1000,
-              2000
-            ],
-            'keyframes': {
-              '0': {
-                'position': {
-                  'a': 1,
-                  'b': 2
-                },
-                'easing': {
-                  'a': 'linear',
-                  'b': 'linear'
-                }
-              },
-              '1000': {
-                'position': {
-                  'a': 3,
-                  'b': 4
-                },
-                'easing': {
-                  'a': 'linear',
-                  'b': 'linear'
-                }
-              },
-              '2000': {
-                'position': {
-                  'a': 5,
-                  'b': 6
-                },
-                'easing': {
-                  'a': 'linear',
-                  'b': 'linear'
-                }
-              }
-            }
-          }
-        }, 'Exported keyframe data match the created animation');
     });
 
   } ());

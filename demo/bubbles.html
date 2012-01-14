@@ -74,7 +74,7 @@
           ,'y': getRandomEasing()
           ,'radius': getRandomEasing()
           ,'color': getRandomEasing()
-        }).liveCopy(time += 750);
+        }).wait(time += 750);
       }
 
       for (i = 0; i < 30; i++) {
@@ -99,14 +99,14 @@
         }
 
         bubbles[i]
-          .liveCopy(time += 1500, 0)
-          .liveCopy(time += 750);
+          .copyProperties(time += 1500, 0)
+          .wait(time += 750);
       }
     }
 
     function generateSequence() {
       _.each(bubbles, function (bubble) {
-        bubble.removeAllKeyframes();
+        bubble.removeAllKeyframeProperties();
         kapi.removeActor(bubble)
       });
 

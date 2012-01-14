@@ -16,6 +16,7 @@
   <script src="../lib/shifty/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.keyframeprops.js"></script>
   <script src="../src/rekapi.canvas.js"></script>
   <script src="../src/rekapi.dom.js"></script>
   <script>
@@ -30,13 +31,13 @@
     kapi.canvas_style('background', '#ddd');
     kapi.canvas_height(300);
     kapi.canvas_width(500);
-    
+
     return kapi;
   }
-  
+
   function  setupTestActor (forKapi) {
     var actor;
-    
+
     actor = new Kapi.Actor({
       'draw': function (canvas_context, state) {
         canvas_context.beginPath();
@@ -45,7 +46,7 @@
             this.y || 0,
             this.radius || 0,
             0,
-            Math.PI*2, 
+            Math.PI*2,
             true);
           canvas_context.fillStyle = this.color || '#f0f';
           canvas_context.fill();
@@ -54,40 +55,40 @@
           return this;
       }
     });
-    
+
     forKapi.addActor(actor);
     return actor;
   }
-  
+
   (function () {
-    
+
     module("Play state");
-    
+
     test('Check the state of a playing animation', function () {
       var testKapi
           ,calculatedMillisecond;
-          
+
       internalDebugNow = function () {
         return new Date();
       };
 
       testKapi = setupTestKapi();
       testKapi.play();
-      equals(testKapi.isPlaying(), true, 
+      equals(testKapi.isPlaying(), true,
           '.play() causes .isPlaying() to be true');
-          
+
       testKapi.pause();
-      equals(testKapi.isPlaying(), false, 
+      equals(testKapi.isPlaying(), false,
           '.pause() causes .isPlaying() to be false');
-          
+
       testKapi.stop();
-      equals(testKapi.isPlaying(), false, 
+      equals(testKapi.isPlaying(), false,
           '.stop() causes .isPlaying() to be false');
     });
-    
-    
+
+
     module("Play/pause/stop timeline control");
-    
+
     test('Resuming a paused animation starts where it left off', function () {
       var testKapi
           ,testActor
@@ -95,36 +96,36 @@
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
+
       testActor
         .keyframe(0, {})
         .keyframe(1000, {})
         .keyframe(2000, {});
 
-        
+
       internalDebugNow = function () {
         return 0;
       };
-      
+
       testKapi.play();
-      
+
       internalDebugNow = function () {
         return 500;
       };
-      
+
       testKapi.pause();
-      
+
       internalDebugNow = function () {
         return 1500;
       };
-      
+
       testKapi.play();
-      
+
       equals(testKapi._loopTimestamp, 1000,
           '.pause() modifies the internal timestamp of the animation');
     });
-    
-    
+
+
     test('Re-starting a stopped animation starts where from the beginning',
       function () {
       var testKapi
@@ -133,32 +134,32 @@
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
+
       testActor
         .keyframe(0, {})
         .keyframe(1000, {})
         .keyframe(2000, {});
 
-        
+
       internalDebugNow = function () {
         return 0;
       };
-      
+
       testKapi.play();
-      
+
       internalDebugNow = function () {
         return 500;
       };
-      
+
       testKapi.stop();
-      
+
       internalDebugNow = function () {
         return 1500;
       };
-      
+
       testKapi.play();
-      
-      equals(testKapi._loopTimestamp, 1500, 
+
+      equals(testKapi._loopTimestamp, 1500,
           '.stop() resets the timestamp of the animation');
     });
 
@@ -171,7 +172,7 @@
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
+
       testActor
         .keyframe(0, {})
         .keyframe(1000, {});
@@ -179,10 +180,10 @@
       internalDebugNow = function () {
         return 3000;
       };
-      
+
       testKapi.playFrom(500);
-      
-      equals(testKapi._loopTimestamp, 2500, 
+
+      equals(testKapi._loopTimestamp, 2500,
           '.playFrom resets the timestamp');
     });
 
@@ -195,7 +196,7 @@
 
       testKapi = setupTestKapi();
       testActor = setupTestActor(testKapi);
-      
+
       testActor
         .keyframe(0, {})
         .keyframe(1000, {});
@@ -203,11 +204,11 @@
       internalDebugNow = function () {
         return 3000;
       };
-      
+
       testKapi.render(500);
       testKapi.playFromCurrent();
-      
-      equals(testKapi._loopTimestamp, 2500, 
+
+      equals(testKapi._loopTimestamp, 2500,
           '.playFromCurrent resets the timestamp from last rendered frame');
     });
   } ());

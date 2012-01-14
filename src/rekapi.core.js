@@ -8,16 +8,11 @@
     throw 'shifty.js is required for Kapi.';
   }
 
-  var gk
-      ,defaultConfig
-      ,now
-      ,playState;
-
 
   /**
    * Sorts an array numerically, from smallest to largest.
    * @param {Array} array The Array to sort.
-   * @returns {Array} The sorted Array.
+   * @return {Array} The sorted Array.
    */
   function sortNumerically (array) {
     return array.sort(function (a, b) {
@@ -42,7 +37,7 @@
   /**
    * Calculate how many milliseconds since the animation began.
    * @param {Kapi} kapi
-   * @returns {number}
+   * @return {number}
    */
   function calculateTimeSinceStart (kapi) {
     var timeSinceStart;
@@ -80,7 +75,7 @@
    * Calculate how far in the animation loop `kapi` is, in milliseconds, based
    * on the current time.  Also overflows into a new loop if necessary.
    * @param {Kapi} kapi
-   * @returns {number}
+   * @return {number}
    */
   function calculateLoopPosition (kapi, forMillisecond, currentLoopIteration) {
     var currentLoopPosition;
@@ -131,7 +126,7 @@
    */
   function tick (kapi) {
     kapi._loopId = setTimeout(function () {
-      // First, scedule the next update.  renderCurrentMillisecond can cancel
+      // First, schedule the next update.  renderCurrentMillisecond can cancel
       // the update if necessary.
       tick(kapi);
       renderCurrentMillisecond(kapi);
@@ -139,6 +134,11 @@
   }
 
 
+  /**
+   * Fire an event bound to a Kapi.
+   * @param {Kapi} kapi
+   * @param {string} eventName
+   */
   function fireEvent (kapi, eventName) {
     _.each(kapi._events[eventName], function (handler) {
       handler(kapi);
@@ -154,26 +154,26 @@
   }
 
 
-  defaultConfig = {
+  var defaultConfig = {
     'fps': 30
     ,'height': 150
     ,'width': 300
   };
 
-  playState = {
+  var playState = {
     'STOPPED': 'stopped'
     ,'PAUSED': 'paused'
     ,'PLAYING': 'playing'
   };
 
-  now = Tweenable.util.now;
+  var now = Tweenable.util.now;
 
   /**
    * @param {HTMLCanvas} canvas
    * @param {Object} opt_config
-   * @returns {Kapi}
+   * @constructor
    */
-  gk = global.Kapi || function Kapi (canvas, opt_config) {
+  var gk = global.Kapi || function Kapi (canvas, opt_config) {
     this.canvas = canvas;
     this._contextType = null;
     this.canvas_setContext(canvas);
@@ -228,15 +228,13 @@
 
   /**
    * @param {Kapi.Actor} actor
-   * @param {Object} opt_initialState
-   * @returns {Kapi}
+   * @return {Kapi}
    */
-  gk.prototype.addActor = function (actor, opt_initialState) {
+  gk.prototype.addActor = function (actor) {
     // You can't add an actor more than once.
     if (!_.contains(this._actors, actor)) {
       actor.kapi = this;
       actor.fps = this.framerate();
-      actor.set(opt_initialState || {});
       this._actors[actor.id] = actor;
       this._drawOrder.push(actor.id);
       actor.setup();
@@ -248,7 +246,7 @@
 
   /**
    * @param {number} actorId
-   * @returns {Kapi.Actor}
+   * @return {Kapi.Actor}
    */
   gk.prototype.getActor = function (actorId) {
     return this._actors[actorId];
@@ -257,7 +255,7 @@
 
   /**
    * @param {Kapi.Actor} actor
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.removeActor = function (actor) {
     delete this._actors[actor.id];
@@ -272,7 +270,7 @@
 
   /**
    * @param {number} opt_howManyTimes
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.play = function (opt_howManyTimes) {
     clearTimeout(this._loopId);
@@ -304,7 +302,7 @@
   /**
    * @param {number} millisecond
    * @param {number} opt_howManyTimes
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.playFrom = function (millisecond, opt_howManyTimes) {
     this.play(opt_howManyTimes);
@@ -316,7 +314,7 @@
 
   /**
    * @param {number} opt_howManyTimes
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.playFromCurrent = function (opt_howManyTimes) {
     return this.playFrom(this._lastRenderedMillisecond, opt_howManyTimes);
@@ -324,7 +322,7 @@
 
 
   /**
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.pause = function () {
     if (this._playState === playState.PAUSED) {
@@ -351,7 +349,7 @@
 
   /**
    * @param {boolean} alsoClear
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.stop = function (alsoClear) {
     this._playState = playState.STOPPED;
@@ -378,7 +376,7 @@
 
 
   /**
-   * @returns {boolean}
+   * @return {boolean}
    */
   gk.prototype.isPlaying = function () {
     return this._playState === playState.PLAYING;
@@ -386,7 +384,7 @@
 
 
   /**
-   * @returns {number}
+   * @return {number}
    */
   gk.prototype.animationLength = function () {
     return this._animationLength;
@@ -394,7 +392,7 @@
 
 
   /**
-   * @returns {number}
+   * @return {number}
    */
   gk.prototype.actorCount = function () {
     return this._drawOrder.length;
@@ -403,7 +401,7 @@
 
   /**
    * @param {number} opt_newFramerate
-   * @returns {number}
+   * @return {number}
    */
   gk.prototype.framerate = function (opt_newFramerate) {
     if (opt_newFramerate) {
@@ -416,7 +414,7 @@
 
   /**
    * @param {number} millisecond
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.render = function (millisecond) {
     this.calculateActorPositions(millisecond);
@@ -429,7 +427,7 @@
 
 
   /**
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.redraw = function () {
     this.render(this._lastRenderedMillisecond);
@@ -440,7 +438,7 @@
 
   /**
    * @param {number} millisecond
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.calculateActorPositions = function (millisecond) {
     var i, len;
@@ -456,7 +454,7 @@
 
 
   /**
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.draw = function () {
     var i, len
@@ -479,20 +477,16 @@
 
 
   /**
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.updateInternalState = function () {
-    var allKeyframeLists;
+    var actorLengths = [];
 
-    allKeyframeLists = [0];
+    _.each(this._actors, function (actor) {
+      actorLengths.push(actor.getEnd());
+    });
 
-    _.each(this._drawOrder, function (i) {
-      allKeyframeLists = allKeyframeLists.concat(allKeyframeLists,
-          this._actors[i].keyframeList());
-      allKeyframeLists = _.uniq(allKeyframeLists);
-    }, this);
-
-    this._animationLength = Math.max.apply(Math, allKeyframeLists);
+    this._animationLength = Math.max.apply(Math, actorLengths);
 
     return this;
   };
@@ -501,7 +495,7 @@
   /**
    * @param {Kapi.Actor} actor
    * @param {number} layer
-   * @returns {Kapi.Actor|undefined}
+   * @return {Kapi.Actor|undefined}
    */
   gk.prototype.moveActorToLayer = function (actor, layer) {
     if (layer < this._drawOrder.length) {
@@ -518,7 +512,7 @@
   /**
    * @param {string} eventName
    * @param {Function} handler
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.bind = function (eventName, handler) {
     if (!this._events[eventName]) {
@@ -534,7 +528,7 @@
   /**
    * @param {string} eventName
    * @param {Function} opt_handler
-   * @returns {Kapi}
+   * @return {Kapi}
    */
   gk.prototype.unbind = function (eventName, opt_handler) {
     if (!this._events[eventName]) {
@@ -549,29 +543,6 @@
     }
 
     return this;
-  };
-
-
-  /**
-   * @returns {Object}
-   */
-  gk.prototype.exportKeyframeData = function () {
-    var exportedKeyframeData;
-
-    exportedKeyframeData = {};
-
-    _.each(this._actors, function (actor, actorId) {
-      var exportedActorKeyframeData;
-
-      exportedActorKeyframeData = actor.exportKeyframeData();
-      exportedKeyframeData[actorId] = {
-        'actor': actor
-        ,'keyframeList': exportedActorKeyframeData.keyframeList
-        ,'keyframes': exportedActorKeyframeData.keyframes
-      };
-    });
-
-    return exportedKeyframeData;
   };
 
 

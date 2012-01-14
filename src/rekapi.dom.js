@@ -33,7 +33,7 @@
 
   /**
    * @param {HTMLElement} element
-   * @returns {Kapi.DOMActor}
+   * @return {Kapi.DOMActor}
    */
   gk.DOMActor = function (element) {
     var actor;
