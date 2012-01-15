@@ -262,6 +262,18 @@
 
 
   /**
+   * @param {string} trackName
+   */
+  gk.Actor.prototype.getTrackLength = function (trackName) {
+    if (!this._propertyTracks[trackName]) {
+      return;
+    }
+
+    return this._propertyTracks[trackName].length;
+  };
+
+
+  /**
    * @param {number} copyTo
    * @param {number} copyFrom
    * @return {Kapi.Actor}

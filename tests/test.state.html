@@ -188,6 +188,42 @@
     });
 
 
+    module('Actor introspection');
+
+    test('Actor track with KeyframeProperties can be measured', function () {
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+
+      testActor1
+        .keyframe(0, { x: 1 })
+        .keyframe(1000, { x: 2 })
+        .keyframe(2000, { x: 3 });
+
+      equals(testActor1.getTrackLength('x'), 3,
+          'Track with Actors has a length');
+    });
+
+
+    test('Actor track with no KeyframeProperties cannot be measured', function () {
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+
+      testActor1
+        .keyframe(0, {})
+        .keyframe(1000, {})
+        .keyframe(2000, {});
+
+      equals(testActor1.getTrackLength('x'), undefined,
+          'Track with Actors does not have a length');
+    });
+
+
     module('Animation timeline');
 
     test('Calculate animation length with one Actor', function () {
