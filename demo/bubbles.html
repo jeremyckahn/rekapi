@@ -74,7 +74,7 @@
           ,'y': getRandomEasing()
           ,'radius': getRandomEasing()
           ,'color': getRandomEasing()
-        }).wait(time += 750);
+        }).wait(time += 1000);
       }
 
       for (i = 0; i < 30; i++) {
@@ -94,7 +94,7 @@
           ,'color': getRandomEasing()
         });
 
-        for (j = 0; j < 5; j++) {
+        for (j = 0; j < 3; j++) {
           generateRandomFrame(bubbles[i]);
         }
 
@@ -102,6 +102,31 @@
           .copyProperties(time += 1500, 0)
           .wait(time += 750);
       }
+    }
+
+    function mungeKeyframes (bubbles) {
+      _.each(bubbles, function (bubble) {
+        var trackNames = bubble.getTrackNames();
+
+        _.each(trackNames, function (trackName) {
+          var i
+              ,keyProp
+              ,newMillisecond
+              ,randomNumber
+              ,trackLength = bubble.getTrackLength(trackName);
+
+          for (i = 1; i < trackLength - 1; i++) {
+            keyProp = bubble.getKeyframeProperty(trackName, i);
+            randomNumber = (Math.random() * 1000) - 50;
+            newMillisecond = keyProp.millisecond + randomNumber;
+            bubble.modifyKeyframeProperty(trackName, i, {
+              'millisecond': newMillisecond
+            });
+          }
+        });
+
+        bubble.invalidatePropertyCache();
+      });
     }
 
     function generateSequence() {
@@ -112,6 +137,7 @@
 
       bubbles = [];
       generateKeyframes(bubbles);
+      mungeKeyframes(bubbles);
       kapi.play(1);
     }
 
