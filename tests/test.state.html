@@ -224,6 +224,31 @@
     });
 
 
+    test('Actor track names can be retrieved', function () {
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+
+      testActor1
+        .keyframe(0, {
+          a: 1
+          ,b: 2
+          ,c: 3
+          ,d: 4
+        });
+
+      var trackNames = testActor1.getTrackNames();
+
+      ok(_.contains(trackNames, 'a'), 'Track "a" exists');
+      ok(_.contains(trackNames, 'b'), 'Track "b" exists');
+      ok(_.contains(trackNames, 'c'), 'Track "c" exists');
+      ok(_.contains(trackNames, 'd'), 'Track "d" exists');
+      equals(trackNames.length, 4, 'There are only 4 track names');
+    });
+
+
     module('Animation timeline');
 
     test('Calculate animation length with one Actor', function () {

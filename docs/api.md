@@ -543,16 +543,29 @@ Kapi.Actor.prototype.modifyKeyframeProperty (property, index, newProperties)
 Modify a specified `KeyframeProperty` stored on an `Actor`.  Essentially, this calls `modifyWith` on the targeted `KeyframeProperty` (passing along `newProperties`) and then performs some cleanup.
 
 
+### getTrackNames
+
+````javascript
+/**
+ * @return {Array}
+ */
+Kapi.Actor.prototype.getTrackNames ()
+````
+
+Get a list of all the track names for an `Actor`.  Each element in this Array is a string.
+
+
 ### getTrackLength
 
 ````javascript
 /**
  * @param {string} trackName
+ * @return {number}
  */
 Kapi.Actor.prototype.getTrackLength (trackName)
 ````
 
-Get the property track length for an Actor.
+Get the property track length for an `Actor`.
 
 
 ### getStart

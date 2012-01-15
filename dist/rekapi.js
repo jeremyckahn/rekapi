@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.4.2
+ * Rekapi - Rewritten Kapi. v0.4.3
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -847,7 +847,16 @@
 
 
   /**
+   * @return {Array}
+   */
+  gk.Actor.prototype.getTrackNames = function () {
+    return _.keys(this._propertyTracks);
+  };
+
+
+  /**
    * @param {string} trackName
+   * @return {number|length}
    */
   gk.Actor.prototype.getTrackLength = function (trackName) {
     if (!this._propertyTracks[trackName]) {

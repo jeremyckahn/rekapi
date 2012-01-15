@@ -262,7 +262,16 @@
 
 
   /**
+   * @return {Array}
+   */
+  gk.Actor.prototype.getTrackNames = function () {
+    return _.keys(this._propertyTracks);
+  };
+
+
+  /**
    * @param {string} trackName
+   * @return {number|length}
    */
   gk.Actor.prototype.getTrackLength = function (trackName) {
     if (!this._propertyTracks[trackName]) {
