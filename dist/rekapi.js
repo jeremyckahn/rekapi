@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.4.3
+ * Rekapi - Rewritten Kapi. v0.4.4
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -824,6 +824,19 @@
     this.invalidatePropertyCache();
 
     return this;
+  };
+
+
+  /**
+   * @param {string} property
+   * @param {number} index
+   * @return {Kapi.KeyframeProperty}
+   */
+  gk.Actor.prototype.getKeyframeProperty = function (property, index) {
+    if (this._propertyTracks[property]
+        && this._propertyTracks[property][index]) {
+      return this._propertyTracks[property][index];
+    }
   };
 
 

@@ -245,6 +245,19 @@
   /**
    * @param {string} property
    * @param {number} index
+   * @return {Kapi.KeyframeProperty}
+   */
+  gk.Actor.prototype.getKeyframeProperty = function (property, index) {
+    if (this._propertyTracks[property]
+        && this._propertyTracks[property][index]) {
+      return this._propertyTracks[property][index];
+    }
+  };
+
+
+  /**
+   * @param {string} property
+   * @param {number} index
    * @param {Object} newProperties
    * @return {Kapi.Actor}
    */

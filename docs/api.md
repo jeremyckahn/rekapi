@@ -528,6 +528,21 @@ actor.modifyKeyframe(1000, {
 ````
 
 
+### getKeyframeProperty
+
+````javascript
+/**
+ * @param {string} property The name of the property.
+ * @param {number} index The index of the KeyframeProperty in the Actor's
+ *     KeyframeProperty track.
+ * @return {Kapi.KeyframeProperty}
+ */
+Kapi.Actor.prototype.getKeyframeProperty (property, index)
+````
+
+Gets the `KeyframeProperty` from an `Actor`'s `KeyframeProperty` track.
+
+
 ### modifyKeyframeProperty
 
 ````javascript

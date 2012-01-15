@@ -249,6 +249,23 @@
     });
 
 
+    test('KeyframeProperties can be retrieved from an Actor', function () {
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+
+      testActor1
+        .keyframe(0, {
+          a: 1
+        });
+
+      ok(testActor1.getKeyframeProperty('a', 0) instanceof Kapi.KeyframeProperty,
+          'getKeyframeProperty returned a KeyframeProperty');
+    });
+
+
     module('Animation timeline');
 
     test('Calculate animation length with one Actor', function () {
