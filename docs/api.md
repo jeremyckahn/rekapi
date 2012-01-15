@@ -361,7 +361,7 @@ Get and optionally set a CSS style on the canvas.
 Kapi.prototype.canvas_clear ()
 ````
 
-Erase the canvas.  This only does something if Kapi is bound to an HTML 5 <canvas>.
+Erase the canvas.  This only does something if Kapi is bound to an HTML 5 `<canvas>`.
 
 
 ### Kapi.Actor constructor and methods ###
