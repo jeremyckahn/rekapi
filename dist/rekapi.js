@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.4.4
+ * Rekapi - Rewritten Kapi. v0.4.5
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *

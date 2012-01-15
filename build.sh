@@ -42,7 +42,14 @@ fi
 cat /tmp/rekapi.header.js /tmp/rekapi.compiled.js > dist/rekapi.min.js
 cp lib/underscore/underscore-min.js dist/underscore.js
 cp lib/shifty/dist/shifty.min.js dist/shifty.js
-cat /tmp/rekapi.header.js dist/underscore.js dist/shifty.js dist/rekapi.min.js > dist/rekapi.bundle.min.js
+
+cat /tmp/rekapi.header.js > dist/rekapi.bundle.min.js
+cat dist/underscore.js >> dist/rekapi.bundle.min.js
+# Semicolon insertions fix bizarre Closure bugs.  They separate the libraries.
+echo ";" >> dist/rekapi.bundle.min.js
+cat dist/shifty.js >> dist/rekapi.bundle.min.js
+echo ";" >> dist/rekapi.bundle.min.js
+cat dist/rekapi.min.js >> dist/rekapi.bundle.min.js
 
 echo 'Yay!  Rekapi was built.  The file size, minified and gzipped, is:'
 echo `cat dist/rekapi.min.js | gzip -9f | wc -c` "bytes"
