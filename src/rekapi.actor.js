@@ -542,6 +542,11 @@
   };
 
 
+  gk.Actor.prototype.exportTimeline = function () {
+
+  };
+
+
   /**
    * Empty out and re-cache internal KeyframeProperty data.
    */

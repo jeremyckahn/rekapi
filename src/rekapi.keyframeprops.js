@@ -47,7 +47,7 @@
    */
   gk.KeyframeProperty.prototype.linkToNext = function (nextProperty) {
     this.nextProperty = nextProperty || null;
-  }
+  };
 
 
   /**
@@ -76,6 +76,21 @@
     }
 
     return value;
-  }
+  };
+
+
+  /**
+   * Exports a reference-less dump of this KeyframeProperty's state data.
+   * @return {Object}
+   */
+  gk.KeyframeProperty.prototype.exportPropertyData = function () {
+    return {
+     'id': this.id
+     ,'millisecond': this.millisecond
+     ,'name': this.name
+     ,'value': this.value
+     ,'easing': this.easing
+    };
+  };
 
 } (this));
