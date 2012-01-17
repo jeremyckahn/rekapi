@@ -542,13 +542,12 @@
   };
 
 
+  /**
+   * Export a reference-less dump of this Actor's timeline property tracks and
+   * KeyframeProperties.
+   * @return {Object}
+   */
   gk.Actor.prototype.exportTimeline = function () {
-    // Things to export:
-    //   Property tracks
-    //   Track names
-    //   End ms
-    //   Start ms
-
     var exportData = {
       'start': this.getStart()
       ,'end': this.getEnd()

@@ -413,7 +413,33 @@
           'Data for all "y" KeyframeProperties was exported')
       equals(typeof exportedTimeline.propertyTracks.x[0].id, 'string',
           'First exported x KeyframeProperty has an id');
-      console.log(exportedTimeline)
+      equals(typeof exportedTimeline.propertyTracks.y[0].id, 'string',
+          'First exported y KeyframeProperty has an id');
+    });
+
+
+    module('Kapi export');
+
+    test('Exported Kapi data has key data points', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      testActor.keyframe(0, {
+        'x': 1
+      }).keyframe(1000, {
+        'x': 2
+      });
+
+      var exportedTimeline = testKapi.exportTimeline();
+      equals(exportedTimeline.duration, 1000,
+          'Duration was exported');
+      equals(typeof exportedTimeline.actorOrder[0], 'number',
+          'Draw order was exported');
+      deepEqual(exportedTimeline.actors[testActor.id],
+          testActor.exportTimeline(),
+          'Actor was exported');
     });
 
     module('context');

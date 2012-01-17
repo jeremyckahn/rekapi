@@ -546,6 +546,26 @@
   };
 
 
+  /**
+   * Export a referenct-less dump of this Kapi's animation properties and
+   * Actors.
+   * @return {Object}
+   */
+  gk.prototype.exportTimeline = function () {
+    var exportData = {
+      'duration': this._animationLength
+      ,'actorOrder': this._drawOrder.slice(0)
+      ,'actors': {}
+    };
+
+    _.each(this._drawOrder, function (actorId) {
+      exportData.actors[actorId] = this._actors[actorId].exportTimeline();
+    }, this);
+
+    return exportData;
+  };
+
+
   gk.util = {};
 
   //TODO:  There are some duplicates in gk.util and gk._private, clean up the

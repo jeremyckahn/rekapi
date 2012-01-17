@@ -80,7 +80,7 @@
 
 
   /**
-   * Exports a reference-less dump of this KeyframeProperty's state data.
+   * Export a reference-less dump of this KeyframeProperty's state data.
    * @return {Object}
    */
   gk.KeyframeProperty.prototype.exportPropertyData = function () {
