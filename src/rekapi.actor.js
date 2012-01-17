@@ -552,8 +552,8 @@
     var exportData = {
       'start': this.getStart()
       ,'end': this.getEnd()
-      ,'trackName': this.getTrackNames()
-      ,'propertyTracks': this._propertyTracks.slice(0)
+      ,'trackNames': this.getTrackNames()
+      ,'propertyTracks': {}
     };
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
@@ -562,6 +562,8 @@
         trackAlias.push(keyframeProperty.exportPropertyData());
       });
     });
+
+    return exportData;
   };
 
 

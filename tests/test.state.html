@@ -379,6 +379,43 @@
       equals(testActor._data.test, 'hello', 'Data was set.');
     });
 
+
+    module('Actor export');
+
+    test('Exported Actor data has key data points', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      testActor.keyframe(0, {
+        'x': 1
+        ,'y': 10
+      }).keyframe(1000, {
+        'x': 2
+        ,'y': 20
+      });
+
+      var exportedTimeline = testActor.exportTimeline();
+      equals(exportedTimeline.start, 0,
+          'Actor start time is properly exported');
+      equals(exportedTimeline.end, 1000,
+          'Actor end time is properly exported');
+      ok(_.contains(exportedTimeline.trackNames, 'x'),
+          '"x"" track is in the trackName list');
+      ok(_.contains(exportedTimeline.trackNames, 'y'),
+          '"y"" track is in the trackName list');
+      equals(exportedTimeline.trackNames.length, 2,
+          'Only two track names were exported');
+      equals(exportedTimeline.propertyTracks.x.length, 2,
+          'Data for all "x" KeyframeProperties was exported')
+      equals(exportedTimeline.propertyTracks.y.length, 2,
+          'Data for all "y" KeyframeProperties was exported')
+      equals(typeof exportedTimeline.propertyTracks.x[0].id, 'string',
+          'First exported x KeyframeProperty has an id');
+      console.log(exportedTimeline)
+    });
+
     module('context');
 
     test('Can set Canvas context', function () {
