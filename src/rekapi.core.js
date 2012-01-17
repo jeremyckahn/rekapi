@@ -547,8 +547,6 @@
 
 
   /**
-   * Export a referenct-less dump of this Kapi's animation properties and
-   * Actors.
    * @return {Object}
    */
   gk.prototype.exportTimeline = function () {

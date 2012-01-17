@@ -543,8 +543,6 @@
 
 
   /**
-   * Export a reference-less dump of this Actor's timeline property tracks and
-   * KeyframeProperties.
    * @return {Object}
    */
   gk.Actor.prototype.exportTimeline = function () {

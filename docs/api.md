@@ -245,6 +245,17 @@ Kapi.prototype.updateInternalState ()
 Invalidate and re-compute the internal state of the `Kapi`.
 
 
+### exportTimeline
+
+````javascript
+/**
+ * @return {Object}
+ */
+Kapi.prototype.exportTimeline ()
+````
+Export a reference-less dump of this Kapi's animation properties and Actors.
+
+
 ### moveActorToLayer
 
 ````javascript
@@ -686,6 +697,18 @@ Kapi.Actor.prototype.data (opt_newData)
 Retrieve and optionally bind arbitrary data to the `Actor`.  If `opt_newData` is specified, it will overwrite the previous `opt_newData` Object that was bound with this method.
 
 
+### exportTimeline
+
+````javascript
+/**
+ * @return {Object}
+ */
+Kapi.Actor.prototype.exportTimeline ()
+````
+
+Export a reference-less dump of this Actor's timeline property tracks and KeyframeProperties.
+
+
 ### Kapi.KeyframeProperty constructor and methods ###
 
 ````javascript
@@ -741,3 +764,15 @@ Kapi.KeyframeProperty.prototype.getValueAt (millisecond)
 ````
 
 Calculate the midpoint between this `KeyframeProperty` and the next `KeyframeProperty` in an `Actor`'s `KeyframeProperty` track.
+
+
+### exportTimeline
+
+````javascript
+/**
+ * @return {Object}
+ */
+Kapi.KeyframeProperty.prototype.exportTimeline ()
+````
+
+Export a reference-less dump of this KeyframeProperty's state data.
