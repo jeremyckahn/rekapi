@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.4.5
+ * Rekapi - Rewritten Kapi. v0.4.6
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -555,6 +555,24 @@
   };
 
 
+  /**
+   * @return {Object}
+   */
+  gk.prototype.exportTimeline = function () {
+    var exportData = {
+      'duration': this._animationLength
+      ,'actorOrder': this._drawOrder.slice(0)
+      ,'actors': {}
+    };
+
+    _.each(this._drawOrder, function (actorId) {
+      exportData.actors[actorId] = this._actors[actorId].exportTimeline();
+    }, this);
+
+    return exportData;
+  };
+
+
   gk.util = {};
 
   //TODO:  There are some duplicates in gk.util and gk._private, clean up the
@@ -869,7 +887,7 @@
 
   /**
    * @param {string} trackName
-   * @return {number|length}
+   * @return {number}
    */
   gk.Actor.prototype.getTrackLength = function (trackName) {
     if (!this._propertyTracks[trackName]) {
@@ -1124,6 +1142,28 @@
     }
 
     return this._data;
+  };
+
+
+  /**
+   * @return {Object}
+   */
+  gk.Actor.prototype.exportTimeline = function () {
+    var exportData = {
+      'start': this.getStart()
+      ,'end': this.getEnd()
+      ,'trackNames': this.getTrackNames()
+      ,'propertyTracks': {}
+    };
+
+    _.each(this._propertyTracks, function (propertyTrack, trackName) {
+      var trackAlias = exportData.propertyTracks[trackName] = [];
+      _.each(propertyTrack, function (keyframeProperty) {
+        trackAlias.push(keyframeProperty.exportPropertyData());
+      });
+    });
+
+    return exportData;
   };
 
 
@@ -1428,7 +1468,7 @@
    */
   gk.KeyframeProperty.prototype.linkToNext = function (nextProperty) {
     this.nextProperty = nextProperty || null;
-  }
+  };
 
 
   /**
@@ -1457,6 +1497,20 @@
     }
 
     return value;
-  }
+  };
+
+
+  /**
+   * @return {Object}
+   */
+  gk.KeyframeProperty.prototype.exportPropertyData = function () {
+    return {
+     'id': this.id
+     ,'millisecond': this.millisecond
+     ,'name': this.name
+     ,'value': this.value
+     ,'easing': this.easing
+    };
+  };
 
 } (this));
