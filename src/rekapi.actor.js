@@ -284,7 +284,7 @@
 
   /**
    * @param {string} trackName
-   * @return {number|length}
+   * @return {number}
    */
   gk.Actor.prototype.getTrackLength = function (trackName) {
     if (!this._propertyTracks[trackName]) {
@@ -543,7 +543,25 @@
 
 
   gk.Actor.prototype.exportTimeline = function () {
+    // Things to export:
+    //   Property tracks
+    //   Track names
+    //   End ms
+    //   Start ms
 
+    var exportData = {
+      'start': this.getStart()
+      ,'end': this.getEnd()
+      ,'trackName': this.getTrackNames()
+      ,'propertyTracks': this._propertyTracks.slice(0)
+    };
+
+    _.each(this._propertyTracks, function (propertyTrack, trackName) {
+      var trackAlias = exportData.propertyTracks[trackName] = [];
+      _.each(propertyTrack, function (keyframeProperty) {
+        trackAlias.push(keyframeProperty.exportPropertyData());
+      });
+    });
   };
 
 

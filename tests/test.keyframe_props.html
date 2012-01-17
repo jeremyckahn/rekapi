@@ -211,6 +211,30 @@
     });
 
 
+    module('KeyframeProperty export');
+
+    test('Exported data has key data points', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      testActor.keyframe(0, {
+        'x': 1
+      });
+
+      var exportedProp = testActor._propertyTracks.x[0].exportPropertyData();
+      equals(typeof exportedProp.id, 'string',
+          'id is a string');
+      equals(typeof exportedProp.millisecond, 'number',
+          'millisecond is a number');
+      equals(typeof exportedProp.name, 'string',
+          'name is a string');
+      equals(typeof exportedProp.value, 'number',
+          'value is a number');
+      equals(typeof exportedProp.easing, 'string',
+          'easing is a string');
+    });
 
   } ());
   </script>
