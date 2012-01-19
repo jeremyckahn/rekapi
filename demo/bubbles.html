@@ -27,9 +27,27 @@
             0,
             Math.PI*2,
             true);
-          canvas_context.fillStyle = state.color;
-          canvas_context.fill();
           canvas_context.closePath();
+
+          var rad = Math.abs(state.radius);
+          var startX = state.x - (rad * .2);
+          var startY = state.y - (rad * .2);
+          var startRad = rad * .3;
+          var endX = state.x;
+          var endY = state.y;
+          var endRad = rad * 2;
+
+          var grad = canvas_context.createRadialGradient(startX, startY,
+              startRad, endX, endY, endRad);
+
+          var innerColor = Tweenable.util.interpolate({color: state.color},
+              {color: 'rgb(0,0,0)'}, 0.3, 'linear').color;
+
+          grad.addColorStop(0, innerColor);
+          grad.addColorStop(1, state.color);
+          canvas_context.fillStyle = grad;
+          canvas_context.fill();
+
         }
       });
     }
@@ -73,7 +91,7 @@
           'x': getRandomEasing()
           ,'y': getRandomEasing()
           ,'radius': getRandomEasing()
-          ,'color': getRandomEasing()
+          ,'color': 'linear'
         }).wait(time += 1000);
       }
 
