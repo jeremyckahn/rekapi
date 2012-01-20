@@ -29,22 +29,21 @@
             true);
           canvas_context.closePath();
 
-          var rad = Math.abs(state.radius);
-          var startX = state.x - (rad * .2);
-          var startY = state.y - (rad * .2);
-          var startRad = rad * .3;
-          var endX = state.x;
-          var endY = state.y;
-          var endRad = rad * 2;
-
-          var grad = canvas_context.createRadialGradient(startX, startY,
+          var rad = Math.abs(state.radius)
+          ,startX = state.x - (rad * .2)
+          ,startY = state.y - (rad * .2)
+          ,startRad = rad * .3
+          ,endX = state.x
+          ,endY = state.y
+          ,endRad = rad * 2
+          ,grad = canvas_context.createRadialGradient(startX, startY,
               startRad, endX, endY, endRad);
 
-          var innerColor = Tweenable.util.interpolate({color: state.color},
+          var bgColor = Tweenable.util.interpolate({color: state.color},
               {color: 'rgb(0,0,0)'}, 0.3, 'linear').color;
 
-          grad.addColorStop(0, innerColor);
-          grad.addColorStop(1, state.color);
+          grad.addColorStop(0, state.color);
+          grad.addColorStop(1, bgColor);
           canvas_context.fillStyle = grad;
           canvas_context.fill();
 
@@ -61,7 +60,7 @@
     }
 
     function getSize () {
-      return 5 + (Math.random() * 20);
+      return 7 + (Math.random() * 18);
     }
 
     function getColor () {
@@ -86,12 +85,10 @@
           'x': getBubbleX()
           ,'y': getBubbleY()
           ,'radius': getSize()
-          ,'color': getColor()
         }, {
           'x': getRandomEasing()
           ,'y': getRandomEasing()
           ,'radius': getRandomEasing()
-          ,'color': 'linear'
         }).wait(time += 1000);
       }
 
@@ -109,7 +106,7 @@
           'x': getRandomEasing()
           ,'y': getRandomEasing()
           ,'radius': getRandomEasing()
-          ,'color': getRandomEasing()
+          //,'color': 'linear'
         });
 
         for (j = 0; j < 3; j++) {
