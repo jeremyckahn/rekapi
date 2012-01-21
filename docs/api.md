@@ -305,6 +305,37 @@ Kapi.prototype.unbind (eventName, opt_handler)
 Unbind `opt_handler` from a Kapi event.  If `opt_handler` is omitted, all handler functions bound to `eventName` are unbound.  Valid events correspond to the list under `bind()`.
 
 
+### setOrderFunction
+
+````javascript
+/**
+ * @param {function(Kapi.Actor, number)} sortFunction
+ * @return {Kapi}
+ */
+Kapi.prototype.setOrderFunction (sortFunction)
+````
+
+Set a function that defines the draw order of the `Actor`s.  This is called each frame before the `Actor`s are drawn.  The following example assumes that all `Actor`s are circles that have a `radius` property.  The circles will be drawn in order of the value of their `radius`, from smallest to largest.  This has the effect of layering larger circles on top of smaller circles, giving a sense of perspective.
+
+````javascript
+kapi.setOrderFunction(function (actor) {
+  return actor.get().radius;
+});
+````
+
+
+### unsetOrderFunction
+
+````javascript
+/**
+ * @return {Kapi}
+ */
+Kapi.prototype.unsetOrderFunction (sortFunction)
+````
+
+Remove the sort order function set by `setOrderFunction`.  Draw order defaults back to the order in which `Actors` were added.
+
+
 ### canvas_setContext
 
 ````javascript

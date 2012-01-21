@@ -557,13 +557,22 @@
   };
 
 
+  /**
+   * @param {function(Kapi.Actor, number)} sortFunction
+   * @return {Kapi}
+   */
   gk.prototype.setOrderFunction = function (sortFunction) {
     this._drawOrderSorter = sortFunction;
+    return this;
   };
 
 
+  /**
+   * @return {Kapi}
+   */
   gk.prototype.unsetOrderFunction = function () {
     this._drawOrderSorter = null;
+    return this;
   };
 
 

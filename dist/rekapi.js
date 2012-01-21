@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.4.7
+ * Rekapi - Rewritten Kapi. v0.4.8
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -566,13 +566,22 @@
   };
 
 
+  /**
+   * @param {function(Kapi.Actor, number)} sortFunction
+   * @return {Kapi}
+   */
   gk.prototype.setOrderFunction = function (sortFunction) {
     this._drawOrderSorter = sortFunction;
+    return this;
   };
 
 
+  /**
+   * @return {Kapi}
+   */
   gk.prototype.unsetOrderFunction = function () {
     this._drawOrderSorter = null;
+    return this;
   };
 
 
