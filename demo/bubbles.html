@@ -60,7 +60,7 @@
     }
 
     function getSize () {
-      return 7 + (Math.random() * 18);
+      return 7 + (Math.random() * 25);
     }
 
     function getColor () {
@@ -166,6 +166,11 @@
 
     kapi.canvas_style('background', '#eee');
     kapi.bind('onAnimationComplete', generateSequence)
+
+    kapi.setOrderFunction(function (actor) {
+      return actor.get().radius;
+    });
+
     generateSequence();
 
   } (this));

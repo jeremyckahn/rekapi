@@ -181,6 +181,7 @@
     this._actors = {};
     this._drawOrder = [];
     this._playState = playState.STOPPED;
+    this._drawOrderSorter = null;
 
     this._events = {
       'onFrameRender': []
@@ -459,14 +460,24 @@
   gk.prototype.draw = function () {
     var i, len
         ,currentActor
-        ,canvas_context;
+        ,canvas_context
+        ,orderedActors
+        ,drawOrder;
 
     this.canvas_clear();
     len = this._drawOrder.length;
     canvas_context = this.canvas_getContext();
 
+    if (this._drawOrderSorter) {
+      orderedActors = drawOrder =
+          _.sortBy(this._actors, this._drawOrderSorter);
+      drawOrder = _.pluck(orderedActors, 'id');
+    } else {
+      drawOrder = this._drawOrder;
+    }
+
     for (i = 0; i < len; i++) {
-      currentActor = this._actors[this._drawOrder[i]];
+      currentActor = this._actors[drawOrder[i]];
       if (currentActor.isShowing()) {
         currentActor.draw(canvas_context, currentActor.get());
       }
@@ -543,6 +554,16 @@
     }
 
     return this;
+  };
+
+
+  gk.prototype.setOrderFunction = function (sortFunction) {
+    this._drawOrderSorter = sortFunction;
+  };
+
+
+  gk.prototype.unsetOrderFunction = function () {
+    this._drawOrderSorter = null;
   };
 
 
