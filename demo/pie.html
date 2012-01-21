@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--<script src="../dist/underscore.js"></script>
+  <script src="../dist/shifty.js"></script>
+  <script src="../dist/rekapi.js"></script>-->
+  <script src="../dist/rekapi.bundle.min.js"></script>
+  <!--<script src="../src/rekapi.core.js"></script>-->
+  <!--<script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.canvas.js"></script>
+  <script src="../src/rekapi.dom.js"></script>
+  <script src="../src/rekapi.keyframeprops.js"></script>-->
+</head>
+<body>
+  <canvas></canvas>
+  <script>
+  (function (global) {
+
+
+    var canvas = document.getElementsByTagName('canvas')[0]
+        ,kapi = new Kapi(canvas, {
+          'fps': 30
+          ,'height': 300
+          ,'width': 300
+        });
+        kapi.canvas_style('background', '#eee');
+
+    var CANVAS_HEIGHT = 300
+        ,CANVAS_WIDTH = 300
+        ,PERCENTAGES = {
+          '#CFC7A4': 15
+          ,'#5A9E94': 30
+          ,'#005275': 15
+          ,'#002344': 25
+          ,'#A38650': 15
+        }
+        ,actors = {}
+
+
+    function percentToRad (percent) {
+      return degToRad(3.6 * percent);
+    }
+
+
+    function degToRad (degree) {
+      return degree * (Math.PI / 180);
+    }
+
+
+    function getStartRad (actor) {
+      var radSum = 0,
+          current = actor;
+
+      while (current && current.data().previousPiece) {
+        radSum += current.data().previousPiece.data().percent;
+        current = current.data().previousPiece;
+      }
+
+      return radSum;
+    }
+
+
+    function getActor (basePercentage, color, previousPiece) {
+      var actor = new Kapi.Actor({
+        'draw': function (canvas_context, state) {
+          var percent = basePercentage
+              ,previousSum = getStartRad(this)
+              ,x ,y
+              ,spread
+              ,adjustedSpread
+              ,radius
+              ,adjustedRadius
+              ,startAngle
+              ,endAngle
+              ,midAngle;
+
+          adjustedRadius = radius = state.radius;
+          adjustedSpread = spread = state.spread;
+          x = state.x;
+          y = state.y;
+
+          if (spread < 0) {
+            adjustedRadius = radius + spread;
+            adjustedSpread = 0;
+            x = (CANVAS_WIDTH / 2);
+            y = (CANVAS_HEIGHT / 2);
+          }
+
+          startAngle = percentToRad(75 + previousSum);
+          midAngle = percentToRad(75 + previousSum +
+              (percent * state.scale * .5));
+          endAngle = percentToRad(75 + previousSum + (percent * state.scale));
+          canvas_context.translate(Math.cos(midAngle) * adjustedSpread,
+              Math.sin(midAngle) * adjustedSpread);
+          canvas_context.beginPath();
+          canvas_context.moveTo(state.x, state.y);
+          canvas_context.arc(
+              x, y, adjustedRadius, startAngle, endAngle, false);
+          canvas_context.moveTo(state.x, state.y);
+          canvas_context.closePath();
+          canvas_context.translate(Math.cos(midAngle) * -adjustedSpread,
+              Math.sin(midAngle) * -adjustedSpread);
+          canvas_context.fillStyle = color || '#f0f';
+          canvas_context.fill();
+
+          actor.data({
+            'previousPiece': previousPiece
+            ,'percent': percent * state.scale
+          });
+        }
+      });
+
+
+      return actor;
+    }
+
+    var previousSum = 0
+        ,previousActor;
+
+    _.each(PERCENTAGES, function (percent, color) {
+      actors[color] = getActor(percent, color, previousActor);
+      kapi.addActor(actors[color]);
+      previousSum += percent;
+      previousActor = actors[color];
+    });
+
+
+    var delay = 0;
+
+    _.each(actors, function (actor, color) {
+      actor.keyframe(0, {
+       'x': CANVAS_WIDTH / 2
+        ,'y': CANVAS_HEIGHT / 2
+        ,'color': color
+        ,'scale': 1
+        ,'spread': CANVAS_WIDTH
+        ,'radius': 100
+      })
+      .wait(delay += 75)
+      .keyframe(1800, {
+        'spread': 0
+      }, {
+        'spread': 'bouncePast'
+      })
+      .wait(2500 + delay)
+      .keyframe(3000 + delay * 2, {
+        'spread': 40
+      }, {
+        'spread': 'easeFromTo'
+      })
+      .keyframe(3900 + delay * 2, {
+        'spread': 0
+      }, {
+        'spread': 'easeFromTo'
+      })
+      .wait(5000)
+      .keyframe(6000, {
+        'scale': 0
+      }, {
+        'scale': 'swingFrom'
+      });
+    });
+
+    kapi.play();
+
+  } (this));
+  </script>
+</body>
+</html>
