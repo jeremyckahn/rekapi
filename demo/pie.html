@@ -78,6 +78,7 @@
           adjustedSpread = spread = state.spread;
           x = state.x;
           y = state.y;
+          canvas_context.globalAlpha = state.opacity;
 
           if (spread < 0) {
             adjustedRadius = radius + spread;
@@ -102,6 +103,7 @@
               Math.sin(midAngle) * -adjustedSpread);
           canvas_context.fillStyle = color || '#f0f';
           canvas_context.fill();
+          canvas_context.globalAlpha = 1;
 
           actor.data({
             'previousPiece': previousPiece
@@ -133,18 +135,21 @@
         ,'y': CANVAS_HEIGHT / 2
         ,'color': color
         ,'scale': 1
-        ,'spread': CANVAS_WIDTH
+        ,'spread': 80
         ,'radius': 100
+        ,'opacity': 0
       })
       .wait(delay += 75)
       .keyframe(1800, {
         'spread': 0
+        ,'opacity': 1
       }, {
         'spread': 'bouncePast'
+        ,'opacity': 'easeOutCubic'
       })
       .wait(2500 + delay)
       .keyframe(3000 + delay * 2, {
-        'spread': 40
+        'spread': 16
       }, {
         'spread': 'easeFromTo'
       })
