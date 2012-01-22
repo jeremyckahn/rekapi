@@ -29,10 +29,10 @@
         ,CANVAS_WIDTH = 300
         ,PERCENTAGES = {
           '#CFC7A4': 15
-          ,'#5A9E94': 30
-          ,'#005275': 15
-          ,'#002344': 25
-          ,'#A38650': 15
+          ,'#5A9E94': 35
+          ,'#005275': 10
+          ,'#002344': 35
+          ,'#A38650': 5
         }
         ,actors = {}
 
@@ -159,10 +159,15 @@
         'spread': 'easeFromTo'
       })
       .wait(5000)
-      .keyframe(6000, {
+      .keyframe(6200, {
         'scale': 0
       }, {
         'scale': 'swingFrom'
+      })
+      .wait(6850);
+
+      actor.modifyKeyframeProperty('opacity', 3, {
+        'millisecond': 1400
       });
     });
 
