@@ -26,6 +26,9 @@
       <button id="play">Play</button>
       <button id="pause">Pause</button>
     </div>
+    <p class="center">
+      You can also type <code>Ctrl+`</code> to while focused on the editor to update the animation.
+    </p>
     <div id="editor-wrapper">
       <div id="editor" style="height: 500px; width: 800px">actor
   .keyframe(0, {
@@ -103,6 +106,18 @@
           setTimeout(function () {
             kapi.canvas_style('background', '#eee');
           }, 1200);
+        }
+      });
+
+      editor.commands.addCommand({
+        name: 'execute',
+        bindKey: {
+          win: 'ctrl-`',
+          mac: 'ctrl-`',
+          sender: 'editor'
+        },
+        exec: function(env, args, request) {
+          update.click();
         }
       });
 
