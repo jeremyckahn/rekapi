@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Rekapi - A keyframe animation tool for JavaScript</title>
+  <link href='http://fonts.googleapis.com/css?family=Candal' rel='stylesheet' type='text/css'>
+  <link href='http://fonts.googleapis.com/css?family=Petrona' rel='stylesheet' type='text/css'>
+  <style>
+    #fork-me-link {
+      left: 0px;
+      position: absolute;
+      top: 0px;
+    }
+
+    #main-container {
+      font-family: 'Petrona', serif;
+      line-height: 1.7em;
+      margin: 50px auto;
+      width: 800px;
+    }
+
+    header {
+      padding-bottom: 20px;
+    }
+
+    h1, h2 {
+      font-family: 'Candal', sans-serif;
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 4.2em;
+    }
+
+    h1 a:active,
+    h1 a:link,
+    h1 a:hover,
+    h1 a:visited {
+      color: #000;
+    }
+
+    p {
+      font-size: 1.2em;
+    }
+
+    a, a:active, a:hover, a:link, a:visited {
+      color: #a00;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    a:hover {
+      color: #f00;
+    }
+
+    footer {
+      margin: 40px 0px 0px;
+      text-align: center;
+    }
+
+    .buttons {
+      text-align: center;
+    }
+
+    button {
+      display: inline;
+      font-size: 18px;
+      margin: 0 auto;
+      -webkit-border-radius: 8px;
+      -moz-border-radius: 8px;
+      border-radius: 8px;
+      background: #1e5799; /* Old browsers */
+      background: -moz-linear-gradient(top, #1e5799 0%, #eaeaea 0%, #d8d8d8 100%); /* FF3.6+ */
+      background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1e5799), color-stop(0%,#eaeaea), color-stop(100%,#d8d8d8)); /* Chrome,Safari4+ */
+      background: -webkit-linear-gradient(top, #1e5799 0%,#eaeaea 0%,#d8d8d8 100%); /* Chrome10+,Safari5.1+ */
+      background: -o-linear-gradient(top, #1e5799 0%,#eaeaea 0%,#d8d8d8 100%); /* Opera 11.10+ */
+      background: -ms-linear-gradient(top, #1e5799 0%,#eaeaea 0%,#d8d8d8 100%); /* IE10+ */
+      background: linear-gradient(top, #1e5799 0%,#eaeaea 0%,#d8d8d8 100%); /* W3C */
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#1e5799', endColorstr='#d8d8d8',GradientType=0  ); /* IE6-9 */
+    }
+
+    button.#update {
+      width: 200px;
+    }
+
+    button#play,
+    button#pause {
+    }
+
+    canvas {
+      display: block;
+      margin: 20px auto;
+    }
+
+    #editor-wrapper {
+      height: 500px;
+      overflow: auto;
+    }
+
+    #editor {
+      margin: 20px 0;
+    }
+  </style>
+  <script src="dist/rekapi.bundle.min.js"></script>
+  <script src="lib/ace/ace.js"></script>
+  <script src="lib/jquery.js"></script>
+  <script src="lib/ace/theme-textmate.js"></script>
+  <script src="lib/ace/mode-javascript.js"></script>
+</head>
+<body>
+  <div id="main-container">
+    <header>
+      <h1><a href="./">Rekapi</a></h1>
+      <h2>A keyframe animation tool for JavaScript</h2>
+    </header>
+    <canvas></canvas>
+    <div class="buttons">
+      <button id="update">Update with the keyframes below</button>
+      <button id="play">Play</button>
+      <button id="pause">Pause</button>
+    </div>
+    <div id="editor-wrapper">
+      <div id="editor" style="height: 500px; width: 800px">actor
+  .keyframe(0, {
+    x: 100,
+    y: 100,
+    radius: 50,
+    color: '#ddd'
+  }, 'easeOutExpo')
+  .keyframe(1500, {
+    x: 400,
+    y: 300,
+    radius: 100,
+    color: '#666'
+  }, {
+    x: 'easeOutSine',
+    y: 'easeOutExpo',
+    radius: 'easeOutExpo',
+    color: 'easeOutExpo'
+  });</div>
+    </div>
+  <a id="fork-me-link" href="https://github.com/jeremyckahn/rekapi/"><img src="demo/img/forkme.png" alt="Fork me!" /></a>
+
+  <footer>Rekapi is free and open source software, obsessively made by <a href="http://www.jeremyckahn.com" target="_blank">Jeremy Kahn</a>.</footer>
+  <script type="text/javascript">
+    window.onload = function() {
+    };
+$(function () {
+    var editor = ace.edit("editor");
+    editor.setTheme("ace/theme/textmate");
+    var JavaScriptMode = require("ace/mode/javascript").Mode;
+    editor.getSession().setMode(new JavaScriptMode());
+
+    var canvas = $('canvas')[0]
+    ,kapi = new Kapi(canvas, {
+        'fps': 60
+        ,'height': 400
+        ,'width': 500
+      })
+    ,actor = new Kapi.Actor({
+      'draw': function (canvas_context, state) {
+        canvas_context.beginPath();
+          canvas_context.arc(
+            state.x || 0,
+            state.y || 0,
+            state.radius || 50,
+            0,
+            Math.PI*2,
+            true);
+          canvas_context.fillStyle = state.color || '#444';
+          canvas_context.fill();
+          canvas_context.closePath();
+
+          return this;
+      }
+    });
+
+    kapi.canvas_style('background', '#eee');
+    kapi.addActor(actor);
+    var update = $('#update');
+
+    update.on('click', function (evt) {
+      var newCode = editor.getSession().getValue();
+      kapi.stop();
+      actor.removeAllKeyframeProperties();
+      eval(newCode);
+      kapi.play();
+    });
+
+    var play = $('#play');
+
+    play.on('click', function () {
+      kapi.play();
+    });
+
+    var pause = $('#pause');
+
+    pause.on('click', function () {
+      kapi.pause();
+    });
+
+    update.click();
+
+});
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-10592695-6']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</body>
+</html>
