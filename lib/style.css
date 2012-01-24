@@ -56,6 +56,7 @@ footer {
 }
 
 .buttons {
+  padding-bottom: 10px;
   text-align: center;
 }
 
@@ -91,8 +92,17 @@ canvas {
   margin: 20px auto;
 }
 
+#sandbox {
+  float: left;
+}
+
 #editor-wrapper {
-  height: 500px;
+  float: left;
+  height: 480px;
+  overflow: auto;
+}
+
+.float-wrap {
   overflow: auto;
 }
 

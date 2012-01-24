@@ -20,25 +20,23 @@
     <p class="center">
       <a href="https://github.com/jeremyckahn/rekapi/blob/master/docs/api.md" target="_blank">Learn about the API here</a>.
     </p>
-    <canvas></canvas>
     <div class="buttons">
       <button id="update">Update with the keyframes below</button>
       <button id="play">Play</button>
       <button id="pause">Pause</button>
     </div>
-    <p class="center">
-      You can also type <code>Ctrl+`</code> to while focused on the editor to update the animation.
-    </p>
-    <div id="editor-wrapper">
-      <div id="editor" style="height: 500px; width: 800px">actor
+    <div class="float-wrap">
+      <canvas id="sandbox"></canvas>
+      <div id="editor-wrapper">
+        <div id="editor" style="height: 480px; width: 400px">actor
   .keyframe(0, {
     x: 100,
     y: 100,
     radius: 50,
     color: '#ddd'
   }).keyframe(1500, {
-    x: 400,
-    y: 300,
+    x: 300,
+    y: 380,
     radius: 100,
     color: '#666'
   }, {
@@ -46,11 +44,15 @@
     y: 'easeOutExpo',
     radius: 'easeOutExpo',
     color: 'easeOutExpo'
-  });</div>
+  }).wait(2000);</div>
+      </div>
     </div>
-  <a id="fork-me-link" href="https://github.com/jeremyckahn/rekapi/"><img src="demo/img/forkme.png" alt="Fork me!" /></a>
-
-  <footer>Rekapi is free and open source software, obsessively made by <a href="http://www.jeremyckahn.com" target="_blank">Jeremy Kahn</a>.</footer>
+    <p class="center">
+      You can also type <code>Ctrl+`</code> to while focused on the editor to update the animation.
+    </p>
+    <a id="fork-me-link" href="https://github.com/jeremyckahn/rekapi/"><img src="demo/img/forkme.png" alt="Fork me!" /></a>
+    <footer>Rekapi is free and open source software, obsessively made by <a href="http://www.jeremyckahn.com" target="_blank">Jeremy Kahn</a>.</footer>
+  </div>
   <script type="text/javascript">
     $(function () {
       var editor = ace.edit("editor");
@@ -61,8 +63,8 @@
       var canvas = $('canvas')[0]
       ,kapi = new Kapi(canvas, {
           'fps': 60
-          ,'height': 400
-          ,'width': 500
+          ,'height': 480
+          ,'width': 400
         })
       ,actor = new Kapi.Actor({
         'draw': function (canvas_context, state) {
