@@ -619,6 +619,6 @@
     }
   }
 
-  global.Kapi = gk;
+  global.Rekapi = global.Kapi = gk;
 
 } (this));
