@@ -255,6 +255,22 @@
 
 
   /**
+   * @returns {Array}
+   */
+  gk.prototype.getActorIds = function () {
+    return _.pluck(this._actors, 'id');
+  };
+
+
+  /**
+   * @returns {Array}
+   */
+  gk.prototype.getAllActors = function () {
+    return _.clone(this._actors);
+  };
+
+
+  /**
    * @param {Kapi.Actor} actor
    * @return {Kapi}
    */

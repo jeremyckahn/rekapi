@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.4.9
+ * Rekapi - Rewritten Kapi. v0.4.10
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -260,6 +260,22 @@
    */
   gk.prototype.getActor = function (actorId) {
     return this._actors[actorId];
+  };
+
+
+  /**
+   * @returns {Array}
+   */
+  gk.prototype.getActorIds = function () {
+    return _.pluck(this._actors, 'id');
+  };
+
+
+  /**
+   * @returns {Array}
+   */
+  gk.prototype.getAllActors = function () {
+    return _.clone(this._actors);
   };
 
 

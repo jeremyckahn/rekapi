@@ -53,7 +53,31 @@ Add a `Kapi.Actor` to a `Kapi` instance.
 Kapi.prototype.getActor (actorId)
 ````
 
-Retrieve an `Actor` from the `Kapi` instance by its ID.  All `Kapi.Actor`'s have an `id` property.
+Retrieve an `Actor` from the `Kapi` instance by its ID.  All `Actor`'s have an `id` property.
+
+
+### getAllActors
+
+````javascript
+/**
+ * @returns {Kapi.Actor}
+ */
+Kapi.prototype.getAllActors ()
+````
+
+Retrieve all `Actor`s in a `Kapi` instance as an Object.
+
+
+### getActorIds
+
+````javascript
+/**
+ * @returns {Array}
+ */
+Kapi.prototype.getActorIds ()
+````
+
+Retrieve the IDs of all `Actor`s in a `Kapi` instance as an Array.
 
 
 ### removeActor
