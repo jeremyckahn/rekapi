@@ -158,7 +158,7 @@
     'fps': 30
     ,'height': 150
     ,'width': 300
-    ,'doRoundNumbers': true
+    ,'doRoundNumbers': false
   };
 
   var playState = {
