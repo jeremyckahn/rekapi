@@ -158,6 +158,7 @@
     'fps': 30
     ,'height': 150
     ,'width': 300
+    ,'doRoundNumbers': true
   };
 
   var playState = {
@@ -203,7 +204,6 @@
 
     // The UNIX time at which the animation loop started
     this._loopTimestamp = null;
-
 
     // Used for maintaining position when the animation is paused.
     this._pausedAtTime = null;
@@ -458,12 +458,26 @@
    * @return {Kapi}
    */
   gk.prototype.calculateActorPositions = function (millisecond) {
-    var i, len;
+    var i, len, initialRoundSetting;
+
+    initialRoundSetting = Tweenable.util.isRoundingEnabled();
+
+    if (this.config.doRoundNumbers) {
+      Tweenable.util.enableRounding();
+    } else {
+      Tweenable.util.disableRounding();
+    }
 
     len = this._drawOrder.length;
 
     for (i = 0; i < len; i++) {
       this._actors[this._drawOrder[i]].calculatePosition(millisecond);
+    }
+
+    if (initialRoundSetting === true) {
+      Tweenable.util.enableRounding();
+    } else {
+      Tweenable.util.disableRounding();
     }
 
     return this;
