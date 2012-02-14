@@ -6,7 +6,7 @@
  * @param {number} millisecond Where in the animation this KeyframeProperty lives.
  * @param {string} name The property's name, such as "x" or "opacity."
  * @param {number} value The value of `name`.  This is the value to animate to.
- * @param {string} opt_easing The easing to arrive to `value` at.  Defaults to linear.
+ * @param {string=} opt_easing The easing to arrive to `value` at.  Defaults to linear.
  * @constructor
  */
 Kapi.KeyframeProperty (ownerActor, millisecond, name, value, opt_easing)

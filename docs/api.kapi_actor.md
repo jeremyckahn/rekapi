@@ -2,7 +2,7 @@
 
 ````javascript
 /**
- * @param {Object} opt_config
+ * @param {Object=} opt_config
  *   @param {function=} setup
  *   @param {function(CanvasRenderingContext2D, Object)=} draw
  *   @param {function=} teardown
@@ -56,7 +56,7 @@ var actor = new Kapi.Actor({
 /**
  * @param {number} when
  * @param {Object} position
- * @param {string|Object} opt_easing
+ * @param {string|Object=} opt_easing
  * @returns {Kapi.Actor}
  */
 Kapi.Actor.prototype.keyframe (when, position, opt_easing)
@@ -164,7 +164,7 @@ Remove all `KeyframeProperty`s set on the `Actor`.
 /**
  * @param {number} when
  * @param {Object} stateModification
- * @param {Object} opt_easingModification
+ * @param {Object=} opt_easingModification
  * @returns {Kapi.Actor}
  */
 Kapi.Actor.prototype.modifyKeyframe (when, stateModification, opt_easingModification)
@@ -343,7 +343,7 @@ Calculate and set the `Actor`'s position at `millisecond` in the animation.
 
 ````javascript
 /**
- * @param {Object} opt_newData
+ * @param {Object=} opt_newData
  * @returns {Kapi.Actor}
  */
 Kapi.Actor.prototype.data (opt_newData)

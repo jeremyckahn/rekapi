@@ -5,7 +5,7 @@
 ````javascript
 /**
  * @param {HTMLCanvas|HTMLElement|Object} canvas
- * @param {Object} opt_config
+ * @param {Object=} opt_config
  * @constructor
  */
 Kapi (canvas, opt_config)
@@ -87,7 +87,7 @@ Remove `actor` from the animation.  This does not destroy `actor`, it only remov
 
 ````javascript
 /**
- * @param {number} opt_howManyTimes
+ * @param {number=} opt_howManyTimes
  * @returns {Kapi}
  */
 Kapi.prototype.play (opt_howManyTimes)
@@ -101,7 +101,7 @@ Play the animation on a loop, either a set amount of times or infinitely.  If `o
 ````javascript
 /**
  * @param {number} millisecond
- * @param {number} opt_howManyTimes
+ * @param {number=} opt_howManyTimes
  * @returns {Kapi}
  */
 Kapi.prototype.playFrom (millisecond, opt_howManyTimes)
@@ -114,7 +114,7 @@ Move to a specific millisecond on the timeline and play from there.  `opt_howMan
 
 ````javascript
 /**
- * @param {number} opt_howManyTimes
+ * @param {number=} opt_howManyTimes
  * @returns {Kapi}
  */
 Kapi.prototype.playFrom (opt_howManyTimes)
@@ -188,7 +188,7 @@ Return the number of `Actor`s in the animation.
 
 ````javascript
 /**
- * @param {number} opt_newFramerate
+ * @param {number=} opt_newFramerate
  * @returns {number}
  */
 Kapi.prototype.framerate (opt_newFramerate)
@@ -289,7 +289,7 @@ Move an `Actor` around in the layer list.  Each layer has one `Actor`, and `Acto
 ````javascript
 /**
  * @param {string} eventName
- * @param {Function} handler
+ * @param {function} handler
  * @returns {Kapi}
  */
 Kapi.prototype.bind (eventName, handler)
@@ -310,7 +310,7 @@ Bind an handler function to a Kapi event.  Possible events include:
 ````javascript
 /**
  * @param {string} eventName
- * @param {Function} opt_handler
+ * @param {function=} opt_handler
  * @returns {Kapi}
  */
 Kapi.prototype.unbind (eventName, opt_handler)
@@ -379,13 +379,13 @@ Return the 2d context of the `<canvas>`.  This is needed for any and all drawing
 
 ````javascript
 /**
- * @param {number} opt_height
+ * @param {number=} opt_height
  * @returns {number}
  */
 Kapi.prototype.canvas_height (opt_height)
 
 /**
- * @param {number} opt_width
+ * @param {number=} opt_width
  * @returns {number}
  */
 Kapi.prototype.canvas_width (opt_width)
@@ -399,7 +399,7 @@ These methods get and optionally set their respective dimensions on the canvas.
 ````javascript
 /**
  * @param {string} styleName
- * @param {number|string} opt_styleValue
+ * @param {number|string=} opt_styleValue
  * @returns {number|string}
  */
 Kapi.prototype.canvas_style (styleName, opt_styleValue)
