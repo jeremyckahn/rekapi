@@ -24,7 +24,7 @@ var actor = new Kapi.Actor({
 
   'setup': function () {
     console.log('Alive!');
-  }
+  },
 
   'draw': function (canvas_context, state) {
     canvas_context.beginPath();
@@ -40,7 +40,7 @@ var actor = new Kapi.Actor({
       canvas_context.closePath();
 
       return this;
-  }
+  },
 
   'teardown': function () {
     console.log('Bye bye...');
