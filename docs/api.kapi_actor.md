@@ -3,7 +3,9 @@
 ````javascript
 /**
  * @param {Object} opt_config
- * @returns {Kapi.Actor}
+ *   @param {function=} setup
+ *   @param {function(CanvasRenderingContext2D, Object)=} draw
+ *   @param {function=} teardown
  * @constructor
  */
 Kapi.Actor (opt_config)
@@ -14,8 +16,38 @@ Create a `Kapi.Actor` instance.
 Valid properties of `opt_config`:
 
 * __setup__: A function that gets called when the `Actor` is added to a `Kapi` instance (with `addActor()`).
-* __draw__: A function that gets called every frame that the actor is showing in.  It receives two parameters, the first is a reference to a `<canvas>` context, and the second is an Object containing the current state properties.  _This method should draw the state properties to the screen with the `<canvas>` context._
+* __draw__: A function that gets called every frame that the actor is rendered in.  It receives two parameters:  A reference to a `<canvas>` context, and an Object containing the current state properties.  _This method should render the state properties to the screen with the `<canvas>` context._
 * __teardown__: A function that gets called when the `Actor` is removed from the animation (with `removeActor()`).
+
+````javascript
+var actor = new Kapi.Actor({
+
+  'setup': function () {
+    console.log('Alive!');
+  }
+
+  'draw': function (canvas_context, state) {
+    canvas_context.beginPath();
+      canvas_context.arc(
+        state.x || 0,
+        state.y || 0,
+        state.radius || 50,
+        0,
+        Math.PI*2,
+        true);
+      canvas_context.fillStyle = state.color || '#f0f';
+      canvas_context.fill();
+      canvas_context.closePath();
+
+      return this;
+  }
+
+  'teardown': function () {
+    console.log('Bye bye...');
+  }
+
+});
+````
 
 
 ### keyframe
