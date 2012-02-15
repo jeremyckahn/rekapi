@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.4.11b
+ * Rekapi - Rewritten Kapi. v0.4.12
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -168,6 +168,7 @@
     ,'height': 150
     ,'width': 300
     ,'doRoundNumbers': false
+    ,'clearOnUpdate': true
   };
 
   var playState = {
@@ -503,7 +504,10 @@
         ,orderedActors
         ,drawOrder;
 
-    this.canvas_clear();
+    if (this.config.clearOnUpdate) {
+      this.canvas_clear();
+    }
+
     len = this._drawOrder.length;
     canvas_context = this.canvas_getContext();
 

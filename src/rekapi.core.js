@@ -159,6 +159,7 @@
     ,'height': 150
     ,'width': 300
     ,'doRoundNumbers': false
+    ,'clearOnUpdate': true
   };
 
   var playState = {
@@ -494,7 +495,10 @@
         ,orderedActors
         ,drawOrder;
 
-    this.canvas_clear();
+    if (this.config.clearOnUpdate) {
+      this.canvas_clear();
+    }
+
     len = this._drawOrder.length;
     canvas_context = this.canvas_getContext();
 

@@ -11,13 +11,15 @@
 Kapi (canvas, opt_config)
 ````
 
-Create a `Kapi` instance.  `canvas` is (typically) an HTML 5 `<canvas>` from the DOM.  This `<canvas>` is where the animation is drawn.  `canvas` can also be an `HTMLElement`, please see [dom.md](https://github.com/jeremyckahn/rekapi/blob/master/docs/dom.md) for documentation of DOM animations.
+Create a `Kapi` instance.  `canvas` is (typically) an HTML 5 `<canvas>` from the DOM.  This `<canvas>` is where the animation is drawn.  `canvas` can also be an `HTMLElement`, please see [dom.md](dom.md) for documentation of DOM animations.
 
 Functional properties of `opt_config`:
 
-* __fps__: The frames per second at which the animation updates.
+* __fps__: The frames per second at which the animation updates.  The default value is 30.
 * __height__: The height to set upon `canvas`.
 * __width__: The width to set upon `canvas`.
+* __doRoundNumbers__: Force all calculated state values to be rounded to the nearest integer.  This is an optimization that generally equates to faster screen updates, but the quality of the animation may suffer.  `false` by default.
+* __clearOnUpdate__: Whether or not clear out the canvas before each new frame is drawn.  `true` by default.
 
 
 ### addActor
