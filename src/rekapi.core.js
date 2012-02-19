@@ -1,14 +1,5 @@
 ;(function rekapiCore (global) {
 
-  if (!_) {
-    throw 'underscore.js is required for Kapi.';
-  }
-
-  if (!Tweenable) {
-    throw 'shifty.js is required for Kapi.';
-  }
-
-
   /**
    * Sorts an array numerically, from smallest to largest.
    * @param {Array} array The Array to sort.
