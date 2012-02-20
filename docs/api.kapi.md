@@ -174,6 +174,18 @@ Kapi.prototype.animationLength ()
 Return the length of the animation, in milliseconds.
 
 
+### lastPositionRendered
+
+````javascript
+/**
+ * @returns {number}
+ */
+Kapi.prototype.lastPositionRendered ()
+````
+
+Return the normalized (between 0 and 1) timeline position that was last rendered.
+
+
 ### actorCount
 
 ````javascript
