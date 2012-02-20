@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.4.12
+ * Rekapi - Rewritten Kapi. v0.4.13
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -8,15 +8,6 @@
  * MIT Lincense.  This code free to use, modify, distribute and enjoy.
  */
 ;(function rekapiCore (global) {
-
-  if (!_) {
-    throw 'underscore.js is required for Kapi.';
-  }
-
-  if (!Tweenable) {
-    throw 'shifty.js is required for Kapi.';
-  }
-
 
   /**
    * Sorts an array numerically, from smallest to largest.
@@ -415,6 +406,14 @@
    */
   gk.prototype.animationLength = function () {
     return this._animationLength;
+  };
+
+
+  /**
+   * @return {number}
+   */
+  gk.prototype.lastPositionRendered = function () {
+    return (this._lastRenderedMillisecond / this._animationLength);
   };
 
 
