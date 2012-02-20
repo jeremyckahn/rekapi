@@ -403,6 +403,14 @@
   /**
    * @return {number}
    */
+  gk.prototype.lastPositionRendered = function () {
+    return (this._lastRenderedMillisecond / this._animationLength);
+  };
+
+
+  /**
+   * @return {number}
+   */
   gk.prototype.actorCount = function () {
     return this._drawOrder.length;
   };
