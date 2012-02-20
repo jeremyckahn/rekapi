@@ -192,6 +192,15 @@ canvas {
       width: auto;
     }
 
+    #tween-controls input.full-width {
+      display: block;
+      width: 270px;
+    }
+
+    #tween-controls input.error {
+      background: #f55;
+    }
+
 #tweenbox {
 
 }
