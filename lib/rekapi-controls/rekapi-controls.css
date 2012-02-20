@@ -1,0 +1,73 @@
+.rekapi-scrubber-wrapper {
+  /* overflow: auto here makes the scrubber partially disappear.*/
+  padding-bottom: 18px;
+}
+
+  .rekapi-scrubber {
+    float: left;
+  }
+
+    .rekapi-scrubber-button {
+      background: #ccc;
+      display: block;
+      float: left;
+    }
+
+    .rekapi-scrubber-play,
+    .rekapi-scrubber-pause {
+      margin-right: 6px;
+    }
+
+    .rekapi-scrubber-stop {
+      margin-left: 6px;
+    }
+
+    .rekapi-scrubber-timeline {
+      float: left;
+      margin: 0px 12px;
+    }
+
+    .rekapi-scrubber-timeline .ui-slider-handle {
+      outline: none;
+    }
+
+.rt-wrapper {
+  background: #eee;
+  border-top: solid 1px #222;
+  bottom: 0;
+  font-family: 'Lucida Sans Unicode','Lucida Grande',sans-serif;
+  left: 0;
+  position: fixed;
+  width: 100%;
+}
+
+  .rt-control-bar {
+    background: #ddd;
+    border-bottom: solid 1px #222;
+    height: 40px;
+  }
+
+  .rt-actor-headers,
+  .rt-actor-timeline {
+    float: left;
+    font-weight: bold;
+    padding: 0px;
+    margin: 0px;
+  }
+
+  .rt-actor-headers {
+    border-right: solid 1px #222;
+    min-height: 100px;
+    width: 140px;
+  }
+
+    .rt-actor-headers li {
+      border-bottom: 1px solid #bbb;
+      font-size: 14px;
+      padding: 10px;
+    }
+
+
+  .rt-actor-timeline {
+
+  }

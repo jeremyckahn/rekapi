@@ -1,4 +1,3 @@
-
 #fork-me-link {
   left: 0px;
   position: absolute;
@@ -94,6 +93,97 @@ canvas {
 
 #sandbox {
   float: left;
+}
+
+#crosshairs {
+  height: 432px;
+  float: left;
+  margin: 0 auto;
+  position: relative;
+  width: 500px;
+}
+
+  #crosshairs canvas {
+    float: left;
+    margin: 0 0 12px;
+  }
+
+  #crosshairs .crosshair {
+    cursor: move;
+    height: 40px;
+    position: absolute;
+    top: 180px;
+    width: 40px;
+  }
+
+  .crosshair.from {
+    left: 25px;
+  }
+
+  .crosshair.to {
+    left: 435px;
+  }
+
+    .crosshair .dashmark {
+      height: 2px;
+      left: 0;
+      position: absolute;
+      top: 0;
+      width: 2px;
+    }
+
+      .from .dashmark {
+        background: #0c0;
+      }
+
+      .to .dashmark {
+        background: #f00;
+      }
+
+    .crosshair .dashmark.horiz {
+      top: 19px;
+      width: 100%;
+    }
+
+    .crosshair .dashmark.vert {
+      height: 100%;
+      left: 19px;
+    }
+
+  #tween-controls {
+    float: left;
+    list-style-type: none;
+    margin: 0;
+    padding: 12px;
+  }
+
+    #tween-controls li {
+      display: block;
+      font-size: 1.4em;
+      padding-bottom: 6px;
+    }
+
+    #tween-controls label {
+      padding-right: 6px;
+    }
+
+    #tween-controls select {
+      background: transparent;
+      font-size: 0.8em;
+    }
+
+    #tween-controls hr {
+      margin: 14px 0 20px;
+      width: 274px;
+    }
+
+    #tween-controls .buttons {
+      padding: 6px 0;
+      text-align: left;
+    }
+
+#tweenbox {
+
 }
 
 #editor-wrapper {
