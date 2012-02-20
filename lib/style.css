@@ -183,6 +183,15 @@ canvas {
       text-align: left;
     }
 
+    #tween-controls input {
+      font-size: 0.8em;
+      width: 165px;
+    }
+
+    #tween-controls input[type="checkbox"] {
+      width: auto;
+    }
+
 #tweenbox {
 
 }
