@@ -96,9 +96,10 @@ canvas {
 }
 
 #crosshairs {
-  height: 432px;
+  height: 400px;
   float: left;
   margin: 0 auto;
+  padding-bottom: 32px;
   position: relative;
   width: 500px;
 }
