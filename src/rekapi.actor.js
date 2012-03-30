@@ -332,7 +332,7 @@
     var length = this.getEnd();
 
     if (until <= length) {
-      return;
+      return this;
     }
 
     this.copyProperties(until, length);
