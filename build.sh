@@ -17,9 +17,9 @@ echo \
 cat /tmp/rekapi.header.js \
   src/rekapi.core.js \
   src/rekapi.actor.js \
-  src/rekapi.dom.js \
   src/rekapi.canvas.js \
   src/rekapi.keyframeprops.js \
+  ext/dom/rekapi.dom.js \
   ext/to-css/rekapi.to-css.js \
   > dist/rekapi.js
 
