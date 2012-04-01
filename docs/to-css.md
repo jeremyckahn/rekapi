@@ -39,7 +39,7 @@ style.innerHTML = css;
 document.head.appendChild(style);
 ````
 
-For a working example of this method, take a look at the source for `ext/to-css/sandbox.html`.
+For a working example of this method, take a look at the source for `ext/to-css/sandbox.html`. [Live demo](http://rekapi.com/ext/to-css/sandbox.html).
 
 ### .toCSS() options
 
