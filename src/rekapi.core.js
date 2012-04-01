@@ -95,8 +95,8 @@
     currentIteration = determineCurrentLoopIteration(kapi, forMillisecond);
     loopPosition = calculateLoopPosition(kapi, forMillisecond,
         currentIteration);
-    updatePlayState(kapi, currentIteration);
     kapi.render(loopPosition);
+    updatePlayState(kapi, currentIteration);
   }
 
 

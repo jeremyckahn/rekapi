@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.4.14
+ * Rekapi - Rewritten Kapi. v0.4.15
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -104,8 +104,8 @@
     currentIteration = determineCurrentLoopIteration(kapi, forMillisecond);
     loopPosition = calculateLoopPosition(kapi, forMillisecond,
         currentIteration);
-    updatePlayState(kapi, currentIteration);
     kapi.render(loopPosition);
+    updatePlayState(kapi, currentIteration);
   }
 
 
