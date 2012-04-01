@@ -54,6 +54,7 @@
     var kapi;
 
     function killTest () {
+      $('#actor').removeAttr('class');
       kapi && kapi.stop(true);
       kapi = undefined;
     }

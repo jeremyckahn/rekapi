@@ -68,6 +68,8 @@
       }
     });
 
+    element.classList.add(actor.getCSSName());
+
     actor.show = function (alsoPersist) {
       gk.Actor.prototype.show.call(this, alsoPersist);
       showElement(element);
