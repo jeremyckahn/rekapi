@@ -1,10 +1,6 @@
 ;(function rekapiDOM (global) {
-  var gk
-      ,getStyle
-      ,transforms;
-
-  gk = global.Kapi;
-  transforms = [
+  var gk = global.Kapi;
+  var transforms = [
     'transform'
     ,'webkitTransform'
     ,'MozTransform'
@@ -47,6 +43,8 @@
         if (getStyle(element, 'position') === 'static') {
           setStyle(element, 'position', 'absolute');
         }
+
+        this.hide();
       }
 
       ,'draw': function (canvas_context, state) {
@@ -66,7 +64,7 @@
           }
         });
 
-        isShowing ? showElement(element) : hideElement(element);
+        isShowing ? this.show() : this.hide();
       }
     });
 
