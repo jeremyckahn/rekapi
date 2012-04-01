@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.5.0
+ * Rekapi - Rewritten Kapi. v0.5.1
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -1500,12 +1500,8 @@
 
 } (this));
 ;(function rekapiDOM (global) {
-  var gk
-      ,getStyle
-      ,transforms;
-
-  gk = global.Kapi;
-  transforms = [
+  var gk = global.Kapi;
+  var transforms = [
     'transform'
     ,'webkitTransform'
     ,'MozTransform'
@@ -1534,7 +1530,7 @@
 
   /**
    * @param {HTMLElement} element
-   * @return {Kapi.DOMActor}
+   * @return {Kapi.Actor}
    */
   gk.DOMActor = function (element) {
     var actor;
@@ -1548,6 +1544,8 @@
         if (getStyle(element, 'position') === 'static') {
           setStyle(element, 'position', 'absolute');
         }
+
+        this.hide();
       }
 
       ,'draw': function (canvas_context, state) {
@@ -1567,9 +1565,11 @@
           }
         });
 
-        isShowing ? showElement(element) : hideElement(element);
+        isShowing ? this.show() : this.hide();
       }
     });
+
+    element.classList.add(actor.getCSSName());
 
     actor.show = function (alsoPersist) {
       gk.Actor.prototype.show.call(this, alsoPersist);
@@ -1582,6 +1582,14 @@
     };
 
     return actor;
+  };
+
+
+  /**
+   * @return {string}
+   */
+  global.Kapi.Actor.prototype.getCSSName = function () {
+    return 'actor-' + this.id;
   };
 
 }(this));
@@ -1658,14 +1666,6 @@
     actorCSS.push(boilerplatedKeyframes);
 
     return actorCSS.join('\n');
-  };
-
-
-  /**
-   * @return {string}
-   */
-  global.Kapi.Actor.prototype.getCSSName = function () {
-    return 'actor-' + this.id;
   };
 
 
