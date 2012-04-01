@@ -1,10 +1,12 @@
 # Using Rekapi on the DOM
 
-Rekapi was built around animating Actors in an HTML 5 `<canvas>`, but it also works with DOM elements.  The API is identical either way, there are just a few caveats you should know about if you use Rekapi on the DOM.
+You can use Rekapi to animate DOM elements.  This is thanks to a standard extension, which lives at `ext/dom/rekapi.dom.js`.  This extension is part of the standard build, but you can safely omit it from custom builds if you don't need it.
+
+There are just a few caveats you should know about if you use Rekapi on the DOM.
 
 ##Canvas and Actor nodes
 
-Since you aren't using a literal `<canvas>`, the canvas is an arbitrary container DOM element.  The Actors are simply DOM elements inside of that container "canvas."
+Since you aren't using a literal `<canvas>`, the canvas is an arbitrary container DOM element.  The Actors are simply child elements of that container element.
 
 ````javascript
 // Assumes there is a DOM element with an ID of "canvas"
@@ -62,3 +64,16 @@ actor
     ,'rotate': 90
   }, 'easeOutExpo');
 ````
+
+## getCSSName
+
+The extension also provides a small utility function for generating a class for each actor DOM element.
+
+````javascript
+/**
+ * @return {string}
+ */
+actor.getCSSName();
+````
+
+This can be useful when used with the to-css extension.  You might not ever need to use this directly, as the class is attached to an element when you create a DOMActor from said element.
