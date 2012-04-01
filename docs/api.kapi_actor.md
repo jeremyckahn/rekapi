@@ -275,6 +275,19 @@ Kapi.Actor.prototype.getEnd ()
 Get the millisecond of the last state of an `Actor` (when it is done animating).
 
 
+### getLength
+
+````javascript
+/**
+ * @return {number}
+ */
+Kapi.Actor.prototype.getLength ()
+
+````
+
+Get the length of time in milliseconds that an `Actor` animates for (`getEnd()` - `getStart()`).
+
+
 ### moveToLayer
 
 ````javascript

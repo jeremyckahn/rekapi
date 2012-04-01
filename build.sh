@@ -20,6 +20,7 @@ cat /tmp/rekapi.header.js \
   src/rekapi.dom.js \
   src/rekapi.canvas.js \
   src/rekapi.keyframeprops.js \
+  ext/to-css/rekapi.to-css.js \
   > dist/rekapi.js
 
 in=dist/rekapi.js

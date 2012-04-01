@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>rekapi.toCSS();</title>
+    <script src="../../dist/rekapi.bundle.min.js"></script>
+    <script src="rekapi.to-css.js"></script>
+    <style type="text/css">
+      .container {
+        position: relative;
+      }
+      #actor-1 {
+        background: #f00;
+        height: 100px;
+        width: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="animation-container" class="container">
+      <div id="actor-1"></div>
+    </div>
+    <script>
+
+      var animation = new Rekapi(document.getElementById('animation-container'), {
+        'fps': 60
+      });
+      var actorDiv = document.getElementById('actor-1');
+      var actor = new Rekapi.DOMActor(actorDiv);
+      animation.addActor(actor);
+
+      actor
+        .keyframe(500, {
+          'top': '0px'
+          ,'left': '0px'
+          ,'background': '#f00'
+        }).keyframe(3000, {
+          'top': '400px'
+          ,'left': '400px'
+          ,'background': '#00f'
+        }, {
+          'left': 'easeInOutQuart'
+          ,'top': 'swingTo'
+        });
+
+     console.log(animation);
+     var css = animation.toCSS({
+       'vendors': ['webkit', 'mozilla']
+       ,'granularity': 150
+     });
+
+     var style = document.createElement('style');
+     style.innerHTML = css;
+     document.head.appendChild(style);
+     actorDiv.classList.add(actor.getCSSName());
+
+    </script>
+  </body>
+</html>
