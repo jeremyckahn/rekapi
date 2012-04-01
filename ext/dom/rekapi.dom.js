@@ -29,7 +29,7 @@
 
   /**
    * @param {HTMLElement} element
-   * @return {Kapi.DOMActor}
+   * @return {Kapi.Actor}
    */
   gk.DOMActor = function (element) {
     var actor;
@@ -79,6 +79,14 @@
     };
 
     return actor;
+  };
+
+
+  /**
+   * @return {string}
+   */
+  global.Kapi.Actor.prototype.getCSSName = function () {
+    return 'actor-' + this.id;
   };
 
 }(this));

@@ -74,14 +74,6 @@
   };
 
 
-  /**
-   * @return {string}
-   */
-  global.Kapi.Actor.prototype.getCSSName = function () {
-    return 'actor-' + this.id;
-  };
-
-
   // UTILITY FUNCTIONS
   //
   /**
