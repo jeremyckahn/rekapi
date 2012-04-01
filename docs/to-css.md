@@ -31,7 +31,7 @@ var animation = new Kapi(container);
 var css = animation.toCSS();
 ````
 
-All `toCSS()` does is render a string.  The most common thing to do with this string is to stick it into a <style> element somewhere on your page.
+All `toCSS()` does is render a string.  The most common thing to do with this string is to stick it into a 'style' element somewhere on your page.
 
 ````javascript
 var style = document.createElement('style');
