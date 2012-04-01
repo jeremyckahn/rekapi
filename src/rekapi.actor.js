@@ -382,6 +382,14 @@
 
 
   /**
+   * @return {number}
+   */
+  gk.Actor.prototype.getLength = function () {
+    return this.getEnd() - this.getStart();
+  }
+
+
+  /**
    * @param {number} when
    * @param {Object} stateModification
    * @param {Object} opt_easingModification
