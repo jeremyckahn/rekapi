@@ -68,21 +68,25 @@
       return keys[parseInt(Math.random() * keys.length, 10)];
     }
 
+    function generateRandomFrame (actor, time) {
+      actor.keyframe(time += 2250, {
+        'x': getBubbleX()
+        ,'y': getBubbleY()
+        ,'radius': getSize()
+      }, {
+        'x': getRandomEasing()
+        ,'y': getRandomEasing()
+        ,'radius': getRandomEasing()
+      }).wait(time += 1000);
+
+      // TODO:  The fact that this returns an integer makes no
+      // sense, clean this up.
+      return time;
+    }
+
     function generateKeyframes (bubbles) {
       var i, j
           ,time = 0;
-
-      function generateRandomFrame (actor) {
-        return actor.keyframe(time += 2250, {
-          'x': getBubbleX()
-          ,'y': getBubbleY()
-          ,'radius': getSize()
-        }, {
-          'x': getRandomEasing()
-          ,'y': getRandomEasing()
-          ,'radius': getRandomEasing()
-        }).wait(time += 1000);
-      }
 
       for (i = 0; i < 30; i++) {
         time = 0;
@@ -101,7 +105,7 @@
         });
 
         for (j = 0; j < 3; j++) {
-          generateRandomFrame(bubbles[i]);
+          time = generateRandomFrame(bubbles[i], time);
         }
 
         bubbles[i]
