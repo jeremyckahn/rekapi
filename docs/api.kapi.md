@@ -36,6 +36,8 @@ Kapi.prototype.addActor (actor)
 
 Add a `Kapi.Actor` to a `Kapi` instance.
 
+__[Example](examples/add_actor.html)__
+
 
 ### getActor
 
