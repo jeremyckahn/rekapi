@@ -58,12 +58,14 @@ __[Example](examples/get_actor.html)__
 
 ````javascript
 /**
- * @returns {Kapi.Actor}
+ * @returns {Object}
  */
 Kapi.prototype.getAllActors ()
 ````
 
-Retrieve all `Actor`s in a `Kapi` instance as an Object.
+Retrieve all `Actor`s in a `Kapi` instance as an Object.  Actor IDs correspond to the property names of the returned Object.
+
+__[Example](examples/get_all_actors.html)__
 
 
 ### getActorIds
