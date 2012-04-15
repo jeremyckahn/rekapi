@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Rekapi example</title>
+    <script src="../../dist/underscore.js"></script>
+    <script src="../../dist/shifty.js"></script>
+    <script src="../../dist/rekapi.js"></script>
+  </head>
+  <body>
+    <canvas style="border: solid 1px #000;"></canvas>
+    <script>
+      var canvas = document.getElementsByTagName('canvas')[0];
+
+      var kapi = new Kapi(canvas, {
+        'height': 300,
+        'width': 400
+      });
+    </script>
+  </body>
+</html>

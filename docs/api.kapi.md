@@ -15,11 +15,13 @@ Create a `Kapi` instance.  `canvas` is (typically) an HTML 5 `<canvas>` from the
 
 Functional properties of `opt_config`:
 
-* __fps__: The frames per second at which the animation updates.  The default value is 30.
-* __height__: The height to set upon `canvas`.
-* __width__: The width to set upon `canvas`.
-* __doRoundNumbers__: Force all calculated state values to be rounded to the nearest integer.  This is an optimization that generally equates to faster screen updates, but the quality of the animation may suffer.  `false` by default.
-* __clearOnUpdate__: Whether or not clear out the canvas before each new frame is drawn.  `true` by default.
+* __fps__: Number.  The frames per second at which the animation updates.  The default value is 30.
+* __height__: Number.  The height to set upon `canvas`.
+* __width__: Number.  The width to set upon `canvas`.
+* __doRoundNumbers__: Boolean.  Force all calculated state values to be rounded to the nearest integer.  This is an optimization that generally equates to faster screen updates, but the quality of the animation may suffer.  `false` by default.
+* __clearOnUpdate__: Boolean.  Whether or not clear out the canvas before each new frame is drawn.  `true` by default.
+
+__[Example](examples/kapi.html)__
 
 
 ### addActor
