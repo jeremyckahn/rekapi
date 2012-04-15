@@ -51,6 +51,8 @@ Kapi.prototype.getActor (actorId)
 
 Retrieve an `Actor` from the `Kapi` instance by its ID.  All `Actor`'s have an `id` property.
 
+__[Example](examples/get_actor.html)__
+
 
 ### getAllActors
 
