@@ -127,7 +127,7 @@ Move to a specific millisecond on the timeline and play from there.  `opt_howMan
  * @param {number=} opt_howManyTimes
  * @returns {Kapi}
  */
-Kapi.prototype.playFrom (opt_howManyTimes)
+Kapi.prototype.playFromCurrent (opt_howManyTimes)
 ````
 
 Play from the last frame that was drawn with `render()`. `opt_howManyTimes` works as it does in `play()`.

@@ -99,7 +99,7 @@ Copy all of the properties that at one point in the timeline to another point. T
  *     until (relative to the start of the animation)
  * @return {Kapi.Actor}
  */
-Kapi.Actor.prototype.copyProperties (when, opt_source)
+Kapi.Actor.prototype.wait (when, opt_source)
 ````
 
 Extend the last state on this `Actor`'s timeline to create a animation wait.  The state does not change during this time.
