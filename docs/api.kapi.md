@@ -140,6 +140,8 @@ Kapi.prototype.playFromCurrent (opt_howManyTimes)
 
 Play from the last frame that was drawn with `render()`. `opt_howManyTimes` works as it does in `play()`.
 
+__[Example](examples/play_from_current.html)__
+
 
 ### pause
 
