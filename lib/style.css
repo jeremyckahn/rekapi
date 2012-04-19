@@ -21,7 +21,9 @@ header {
 
 header img {
   display: block;
+  height: 179px;
   margin: 0 auto;
+  padding-bottom: 8px;
 }
 
 h1, h2 {
