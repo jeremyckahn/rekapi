@@ -1,4 +1,4 @@
-;(function rekapiDOM (global) {
+var rekapiDOM = function (global) {
   var gk = global.Kapi;
   var transforms = [
     'transform'
@@ -91,4 +91,4 @@
     return 'actor-' + this.id;
   };
 
-}(this));
+};

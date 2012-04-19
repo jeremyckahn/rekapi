@@ -1,4 +1,4 @@
-;(function (Rekapi, global) {
+var rekapiToCSS = function (Rekapi, global) {
 
   // CONSTANTS
   //
@@ -231,4 +231,4 @@
     return val.toFixed(precision) + unit;
   }
 
-} (this.Rekapi, this));
+};

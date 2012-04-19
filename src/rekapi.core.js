@@ -1,4 +1,4 @@
-;(function rekapiCore (global) {
+var rekapiCore = function (global, deps) {
 
   /**
    * Sorts an array numerically, from smallest to largest.
@@ -143,6 +143,9 @@
   function noop () {
     // NOOP!
   }
+  
+  var _ = (deps && deps.underscore) ? deps.underscore : global._
+      ,Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : global.Tweenable;
 
 
   var defaultConfig = {
@@ -654,4 +657,4 @@
 
   global.Rekapi = global.Kapi = gk;
 
-} (this));
+};

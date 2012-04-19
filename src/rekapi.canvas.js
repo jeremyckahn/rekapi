@@ -1,4 +1,4 @@
-;(function rekapiCanvas (global) {
+var rekapiCanvas = function (global) {
 
   var gk,
       contextTypes = {
@@ -120,4 +120,4 @@
     return this;
   };
 
-} (this));
+};

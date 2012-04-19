@@ -208,6 +208,31 @@ Copy/paste/save this onto your machine to see a simple Rekapi animation:
 
 To learn about the API methods not covered in this README, please view the [API documentation](https://github.com/jeremyckahn/rekapi/blob/master/docs/api.md).
 
+## AMD
+
+Alternatively, you can load Rekapi as an [AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) module by using a loader such as [RequireJS](http://requirejs.org). This has the added benefit of not creating any `Kapi`, `Tweenable` (from Shifty) or `_` global variables, unlike in the previous code sample.
+
+Caution: You can only require `rekapi.js` or `rekapi.min.js` as AMD modules. It will not work with `rekapi.bundle.min.js`.
+
+Here is an example of how you can use it with RequireJS:
+
+````javascript
+// This example assumes that there is a `lib` directory in your project
+require.config({
+  paths: {
+    shifty: "lib/shifty",
+    underscore: "lib/underscore.min",
+    rekapi: "lib/rekapi"
+  }
+});
+
+// Dependencies (Underscore and Shifty) are automatically loaded.
+require(['rekapi'], function(Kapi) {
+  var canvas = document.getElementById('canvas'),
+      kapi = new Kapi(canvas);
+});
+````
+
 ## Support
 
 If you find any bugs, have suggestions or questions, please post them them to the [Rekapi Github issue tracker](https://github.com/jeremyckahn/rekapi/issues).
