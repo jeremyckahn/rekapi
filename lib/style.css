@@ -19,8 +19,14 @@ header {
   padding-bottom: 20px;
 }
 
+header img {
+  display: block;
+  height: 179px;
+  margin: 0 auto;
+  padding-bottom: 8px;
+}
+
 h1, h2 {
-  font-family: 'Candal', sans-serif;
   text-align: center;
 }
 

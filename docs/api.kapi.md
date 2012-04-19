@@ -79,6 +79,8 @@ Kapi.prototype.getActorIds ()
 
 Retrieve the IDs of all `Actor`s in a `Kapi` instance as an Array.
 
+__[Example](examples/get_actor_ids.html)__
+
 
 ### removeActor
 
@@ -92,6 +94,8 @@ Kapi.prototype.removeActor (actor)
 
 Remove `actor` from the animation.  This does not destroy `actor`, it only removes the link between `actor` and the `Kapi` instance.
 
+__[Example](examples/remove_actor.html)__
+
 
 ### play
 
@@ -104,6 +108,8 @@ Kapi.prototype.play (opt_howManyTimes)
 ````
 
 Play the animation on a loop, either a set amount of times or infinitely.  If `opt_howManyTimes` is omitted, the animation will loop infinitely.
+
+__[Example](examples/play.html)__
 
 
 ### playFrom
@@ -119,6 +125,8 @@ Kapi.prototype.playFrom (millisecond, opt_howManyTimes)
 
 Move to a specific millisecond on the timeline and play from there.  `opt_howManyTimes` works as it does in `play()`.
 
+__[Example](examples/play_from.html)__
+
 
 ### playFromCurrent
 
@@ -131,6 +139,8 @@ Kapi.prototype.playFromCurrent (opt_howManyTimes)
 ````
 
 Play from the last frame that was drawn with `render()`. `opt_howManyTimes` works as it does in `play()`.
+
+__[Example](examples/play_from_current.html)__
 
 
 ### pause
