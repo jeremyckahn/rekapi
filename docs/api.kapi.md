@@ -79,6 +79,8 @@ Kapi.prototype.getActorIds ()
 
 Retrieve the IDs of all `Actor`s in a `Kapi` instance as an Array.
 
+__[Example](examples/get_actor_ids.html)__
+
 
 ### removeActor
 
@@ -91,6 +93,8 @@ Kapi.prototype.removeActor (actor)
 ````
 
 Remove `actor` from the animation.  This does not destroy `actor`, it only removes the link between `actor` and the `Kapi` instance.
+
+__[Example](examples/remove_actor.html)__
 
 
 ### play
