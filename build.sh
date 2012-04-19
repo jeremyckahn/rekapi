@@ -14,13 +14,23 @@ echo \
  * MIT Lincense.  This code free to use, modify, distribute and enjoy.
  */" | cat > /tmp/rekapi.header.js
 
+echo \
+"(function(global) {
+" | cat > /tmp/rekapi.iife-open.js
+
+echo \
+"} (this));" | cat > /tmp/rekapi.iife-close.js
+
 cat /tmp/rekapi.header.js \
+  /tmp/rekapi.iife-open.js \
   src/rekapi.core.js \
   src/rekapi.actor.js \
   src/rekapi.canvas.js \
   src/rekapi.keyframeprops.js \
   ext/dom/rekapi.dom.js \
   ext/to-css/rekapi.to-css.js \
+  src/rekapi.init.js \
+  /tmp/rekapi.iife-close.js \
   > dist/rekapi.js
 
 in=dist/rekapi.js

@@ -1,9 +1,11 @@
-;(function rekapiActor (global) {
+var rekapiActor = function (global, deps) {
 
   var DEFAULT_EASING = 'linear'
       ,gk
       ,actorCount
-      ,ActorMethods;
+      ,ActorMethods
+      ,_ = (deps && deps.underscore) ? deps.underscore : global._
+      ,Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : global.Tweenable;
 
   gk = global.Kapi;
   actorCount = 0;
@@ -614,4 +616,4 @@
    * ...End Shifty interoperability methods.
    */
 
-} (this));
+};

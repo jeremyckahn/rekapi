@@ -1,7 +1,9 @@
-;(function rekapiKeyframeProperty (global) {
+var rekapiKeyframeProperty = function (global, deps) {
   var gk
       ,DEFAULT_EASING = 'linear'
-      ,KeyframePropertyMethods;
+      ,KeyframePropertyMethods
+      ,_ = (deps && deps.underscore) ? deps.underscore : global._
+      ,Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : global.Tweenable;
 
   gk = global.Kapi;
 
@@ -92,4 +94,4 @@
     };
   };
 
-} (this));
+};

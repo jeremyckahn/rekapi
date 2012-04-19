@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.5.1
+ * Rekapi - Rewritten Kapi. v0.5.2
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -7,7 +7,9 @@
  * Dependencies: Underscore.js (https://github.com/documentcloud/underscore), Shifty.js (https://github.com/jeremyckahn/shifty)
  * MIT Lincense.  This code free to use, modify, distribute and enjoy.
  */
-;(function rekapiCore (global) {
+(function(global) {
+
+var rekapiCore = function (global, deps) {
 
   /**
    * Sorts an array numerically, from smallest to largest.
@@ -152,6 +154,9 @@
   function noop () {
     // NOOP!
   }
+  
+  var _ = (deps && deps.underscore) ? deps.underscore : global._
+      ,Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : global.Tweenable;
 
 
   var defaultConfig = {
@@ -663,13 +668,15 @@
 
   global.Rekapi = global.Kapi = gk;
 
-} (this));
-;(function rekapiActor (global) {
+};
+var rekapiActor = function (global, deps) {
 
   var DEFAULT_EASING = 'linear'
       ,gk
       ,actorCount
-      ,ActorMethods;
+      ,ActorMethods
+      ,_ = (deps && deps.underscore) ? deps.underscore : global._
+      ,Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : global.Tweenable;
 
   gk = global.Kapi;
   actorCount = 0;
@@ -1280,8 +1287,8 @@
    * ...End Shifty interoperability methods.
    */
 
-} (this));
-;(function rekapiCanvas (global) {
+};
+var rekapiCanvas = function (global) {
 
   var gk,
       contextTypes = {
@@ -1403,11 +1410,13 @@
     return this;
   };
 
-} (this));
-;(function rekapiKeyframeProperty (global) {
+};
+var rekapiKeyframeProperty = function (global, deps) {
   var gk
       ,DEFAULT_EASING = 'linear'
-      ,KeyframePropertyMethods;
+      ,KeyframePropertyMethods
+      ,_ = (deps && deps.underscore) ? deps.underscore : global._
+      ,Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : global.Tweenable;
 
   gk = global.Kapi;
 
@@ -1498,8 +1507,8 @@
     };
   };
 
-} (this));
-;(function rekapiDOM (global) {
+};
+var rekapiDOM = function (global) {
   var gk = global.Kapi;
   var transforms = [
     'transform'
@@ -1592,8 +1601,8 @@
     return 'actor-' + this.id;
   };
 
-}(this));
-;(function (Rekapi, global) {
+};
+var rekapiToCSS = function (Rekapi, global) {
 
   // CONSTANTS
   //
@@ -1826,4 +1835,64 @@
     return val.toFixed(precision) + unit;
   }
 
-} (this.Rekapi, this));
+};
+var rekapi = function (global, deps) {
+  // If `deps` is defined, it means that Rekapi is loaded via AMD.
+  // Don't use global context in this case so that the global scope
+  // is not polluted by the Kapi object.
+  var context = deps ? {} : global;
+  
+  rekapiCore(context, deps);
+  rekapiActor(context, deps);
+  rekapiCanvas(context, deps);
+  rekapiKeyframeProperty(context, deps);
+  
+  // Extensions
+  if (typeof rekapiDOM === "function") {
+    rekapiDOM(context, deps);
+  }
+  if (typeof rekapiToCSS === "function") {
+    rekapiToCSS(context.Kapi, context, deps);
+  }
+  
+  return context.Kapi;
+};
+
+
+if (typeof define === "function" && define.amd) {
+  var underscoreAlreadyInUse = (typeof _ !== 'undefined');
+  
+  // Expose Rekapi as an AMD module if it's loaded with RequireJS or similar.
+  // Shifty and Underscore are set as dependencies of this module.
+  //
+  // The rekapi module is anonymous so that it can be required with any name.
+  // Example: define(['lib/rekapi.min'], function(Kapi) { ... });
+  define(['shifty', 'underscore'], function (Tweenable, Underscore) {
+    var underscoreSupportsAMD = (Underscore !== null)
+        ,deps = {  Tweenable: Tweenable,
+                  // Some versions of Underscore.js support AMD, others don't.
+                  // If not, use the `_` global.
+                  underscore: underscoreSupportsAMD ? Underscore : _ }
+        ,Kapi = rekapi(global, deps);
+        
+    if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
+        Kapi.underscore_version = deps.underscore.VERSION;
+    }
+    
+    if (!underscoreAlreadyInUse) {
+      // Prevent Underscore from polluting the global scope.
+      // This global can be safely removed since Rekapi keeps its own reference
+      // to Underscore via the `deps` object passed earlier as an argument.
+      delete global._;
+    }
+    
+    return Kapi;
+  });
+} else {
+  // Load Rekapi normally (creating a Kapi global) if not using an AMD loader.
+  
+  // Note: `global` is not defined when running unit tests. Pass `this` instead.
+  rekapi(typeof global !== 'undefined' ? global : this);
+}
+
+} (this));
