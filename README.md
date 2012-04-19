@@ -210,8 +210,7 @@ To learn about the API methods not covered in this README, please view the [API 
 
 ## AMD
 
-You can load Rekapi with an AMD loader such as [RequireJS](http://requirejs.org).
-This has the added benefit of not creating any `Kapi`, `Tweenable` (from Shifty) or `_` global variables, unlike in the previous code sample.
+Alternatively, you can load Rekapi as an [AMD](https://github.com/amdjs/amdjs-api/wiki/AMD) module by using a loader such as [RequireJS](http://requirejs.org). This has the added benefit of not creating any `Kapi`, `Tweenable` (from Shifty) or `_` global variables, unlike in the previous code sample.
 
 Caution: You can only require `rekapi.js` or `rekapi.min.js` as AMD modules. It will not work with `rekapi.bundle.min.js`.
 
