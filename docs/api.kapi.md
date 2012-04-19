@@ -109,6 +109,8 @@ Kapi.prototype.play (opt_howManyTimes)
 
 Play the animation on a loop, either a set amount of times or infinitely.  If `opt_howManyTimes` is omitted, the animation will loop infinitely.
 
+__[Example](examples/play.html)__
+
 
 ### playFrom
 
@@ -122,6 +124,8 @@ Kapi.prototype.playFrom (millisecond, opt_howManyTimes)
 ````
 
 Move to a specific millisecond on the timeline and play from there.  `opt_howManyTimes` works as it does in `play()`.
+
+__[Example](examples/play_from.html)__
 
 
 ### playFromCurrent
