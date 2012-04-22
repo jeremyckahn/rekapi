@@ -15,7 +15,7 @@ echo \
  */" | cat > /tmp/rekapi.header.js
 
 echo \
-"(function(global) {
+";(function(global) {
 " | cat > /tmp/rekapi.iife-open.js
 
 echo \

@@ -16,7 +16,7 @@
   <!--
   This RequireJS script is patched to add an undef() method. This allows this test suite to clean up loaded modules after each test.
   Otherwise, it's not possible to successively load modules with the same name but different paths via multiple require.config() calls.
-  
+
   Some code borrowed from: https://github.com/jrburke/requirejs/commit/c8a6636f08ca552cbff3843f27eab8825e33fab9
   -->
   <script src="../lib/test-amd/require-1.0.7+undef.js"></script>
@@ -60,21 +60,21 @@
     forKapi.addActor(actor);
     return actor;
   }
-  
+
   function requireConfig(path_opts) {
     var paths = $.extend({
       shifty: "../dist/shifty",
       underscore: "../dist/underscore",
       rekapi: '../dist/rekapi'
     }, path_opts || {});
-    
+
     require.config({
       paths: paths
     });
   }
-  
+
   $(document).ready(function() {
-    
+
     module('Loading with RequireJS', {
       teardown: function() {
         $('head').find('script[data-requiremodule]').remove();
@@ -83,12 +83,12 @@
         require.undef('rekapi');
       }
     });
-    
+
     asyncTest("Can load the minified version of Rekapi", function() {
       requireConfig({
         rekapi: '../dist/rekapi.min'
       });
-    
+
       require(['rekapi'], function(Kapi) {
         var testKapi
             ,testActor;
@@ -101,10 +101,10 @@
         start();
       });
     });
-    
-    asyncTest("Can instanciate Kapi and Actor objects", function() {
+
+    asyncTest("Can instantiate Kapi and Actor objects", function() {
       requireConfig();
-    
+
       require(['rekapi'], function(Kapi) {
         var testKapi
             ,testActor;
@@ -117,46 +117,46 @@
         start();
       });
     });
-    
+
     asyncTest("Global scope is not polluted by Kapi and its dependencies", function() {
       requireConfig();
-    
+
       require(['rekapi'], function(Kapi) {
         var k = new Kapi({});
-        
+
         ok(window.Kapi === undefined);
         ok(window.Tweenable === undefined);
         ok(window._ === undefined);
         start();
       });
     });
-  
+
     asyncTest("Can use Underscore version with AMD support", function() {
       requireConfig({
         // This version returns an AMD module
         underscore: "../lib/test-amd/underscore-1.2.2"
       });
-    
+
       require(['rekapi'], function(Kapi) {
         ok(Kapi !== undefined);
         ok(Kapi.underscore_version === '1.2.2');
-        
+
         var k = new Kapi({});
         ok(k !== undefined);
         start();
       });
     });
-  
+
     asyncTest("Can use Underscore version without AMD support", function() {
       requireConfig({
         // Underscore has removed support for AMD from versions 1.3.0 and higher
         underscore: "../lib/test-amd/underscore-1.3.3"
       });
-      
+
       require(['rekapi'], function(Kapi) {
         ok(Kapi !== undefined);
         ok(Kapi.underscore_version === '1.3.3');
-        
+
         var k = new Kapi({});
         ok(k !== undefined);
         // Make sure that Rekapi has cleaned up the Underscore global.
@@ -164,40 +164,40 @@
         start();
       });
     });
-    
+
     // In some applications, Underscore will need to be loaded earlier than Rekapi.
     asyncTest("Can work well with a previously loaded Underscore", function() {
       requireConfig({
         // Use a version which creates a global
         underscore: "../lib/test-amd/underscore-1.3.3"
       });
-      
+
       require(['underscore'], function() {
         // By now, the `_` global should exist
         ok(typeof _ !== 'undefined');
         ok(_.VERSION === '1.3.3');
-        
+
         // Add a mixin to Underscore
         _.mixin({
           foo: function() {
             return 'bar';
           }
         });
-        
+
         require(['rekapi'], function(Kapi) {
           ok(Kapi !== undefined);
 
           var k = new Kapi({});
           ok(k !== undefined);
-          
+
           // Make sure that `_` still has its mixin
           ok(_.foo !== undefined);
-          
+
           start();
         });
       });
     });
-  
+
   });
 </script>
 </head>

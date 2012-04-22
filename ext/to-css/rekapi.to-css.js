@@ -1,4 +1,4 @@
-var rekapiToCSS = function (Rekapi, global) {
+var rekapiToCSS = function (Rekapi, global, deps) {
 
   // CONSTANTS
   //
@@ -10,6 +10,7 @@ var rekapiToCSS = function (Rekapi, global) {
     ,'w3': ''
     ,'webkit': '-webkit-'
   };
+  var _ = (deps && deps.underscore) ? deps.underscore : global._;
 
 
   // TEMPLATES

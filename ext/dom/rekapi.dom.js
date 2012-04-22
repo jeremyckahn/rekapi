@@ -1,5 +1,6 @@
-var rekapiDOM = function (global) {
+var rekapiDOM = function (global, deps) {
   var gk = global.Kapi;
+  var _ = (deps && deps.underscore) ? deps.underscore : global._;
   var transforms = [
     'transform'
     ,'webkitTransform'

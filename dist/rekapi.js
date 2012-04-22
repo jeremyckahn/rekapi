@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.5.2
+ * Rekapi - Rewritten Kapi. v0.6.0
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -7,7 +7,7 @@
  * Dependencies: Underscore.js (https://github.com/documentcloud/underscore), Shifty.js (https://github.com/jeremyckahn/shifty)
  * MIT Lincense.  This code free to use, modify, distribute and enjoy.
  */
-(function(global) {
+;(function(global) {
 
 var rekapiCore = function (global, deps) {
 
@@ -1508,8 +1508,9 @@ var rekapiKeyframeProperty = function (global, deps) {
   };
 
 };
-var rekapiDOM = function (global) {
+var rekapiDOM = function (global, deps) {
   var gk = global.Kapi;
+  var _ = (deps && deps.underscore) ? deps.underscore : global._;
   var transforms = [
     'transform'
     ,'webkitTransform'
@@ -1602,7 +1603,7 @@ var rekapiDOM = function (global) {
   };
 
 };
-var rekapiToCSS = function (Rekapi, global) {
+var rekapiToCSS = function (Rekapi, global, deps) {
 
   // CONSTANTS
   //
@@ -1614,6 +1615,7 @@ var rekapiToCSS = function (Rekapi, global) {
     ,'w3': ''
     ,'webkit': '-webkit-'
   };
+  var _ = (deps && deps.underscore) ? deps.underscore : global._;
 
 
   // TEMPLATES
