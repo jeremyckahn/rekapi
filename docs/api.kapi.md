@@ -154,6 +154,8 @@ Kapi.prototype.pause ()
 
 Pause the animation.  A "paused" animation can be resumed from where it left off with `play()`.
 
+__[Example](examples/pause.html)__
+
 
 ### stop
 
@@ -167,6 +169,8 @@ Kapi.prototype.stop (alsoClear)
 
 Stop the animation.  A "stopped" animation will start from the beginning if `play()` is called upon it again.  If `alsoClear` is `true`, the contents of the canvas will be cleared.  It is `false` by default.
 
+__[Example](examples/stop.html)__
+
 
 ### isPlaying
 
@@ -179,6 +183,8 @@ Kapi.prototype.isPlaying ()
 
 Return whether or not the animation is playing (meaning not paused or stopped).
 
+__[Example](examples/is_playing.html)__
+
 
 ### animationLength
 
@@ -190,6 +196,8 @@ Kapi.prototype.animationLength ()
 ````
 
 Return the length of the animation, in milliseconds.
+
+__[Example](examples/animation_length.html)__
 
 
 ### lastPositionRendered
