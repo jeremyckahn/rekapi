@@ -10,6 +10,7 @@
     <script src="../../../src/rekapi.canvas.js"></script>
     <script src="../../../ext/dom/rekapi.dom.js"></script>
     <script src="../rekapi.to-css.js"></script>
+    <script src="../../../src/rekapi.init.js"></script>
     <style type="text/css">
       .container {
         padding: 0;
@@ -41,7 +42,7 @@
       function init () {
         var container = document.getElementById('animation-container');
 
-        var animation = new Rekapi(container, {
+        var animation = new Kapi(container, {
           'fps': 60
           ,'height': 300
           ,'width': 600

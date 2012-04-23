@@ -143,7 +143,7 @@ var rekapiCore = function (global, deps) {
   function noop () {
     // NOOP!
   }
-  
+
   var _ = (deps && deps.underscore) ? deps.underscore : global._
       ,Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : global.Tweenable;
 
@@ -655,6 +655,6 @@ var rekapiCore = function (global, deps) {
     }
   }
 
-  global.Rekapi = global.Kapi = gk;
+  global.Kapi = gk;
 
 };

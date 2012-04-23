@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.6.0
+ * Rekapi - Rewritten Kapi. v0.6.1
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -154,7 +154,7 @@ var rekapiCore = function (global, deps) {
   function noop () {
     // NOOP!
   }
-  
+
   var _ = (deps && deps.underscore) ? deps.underscore : global._
       ,Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : global.Tweenable;
 
@@ -666,7 +666,7 @@ var rekapiCore = function (global, deps) {
     }
   }
 
-  global.Rekapi = global.Kapi = gk;
+  global.Kapi = gk;
 
 };
 var rekapiActor = function (global, deps) {

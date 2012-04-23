@@ -10,6 +10,7 @@
     <script src="../../src/rekapi.canvas.js"></script>
     <script src="../../ext/dom/rekapi.dom.js"></script>
     <script src="rekapi.to-css.js"></script>
+    <script src="../../src/rekapi.init.js"></script>
     <style type="text/css">
       .container {
         position: relative;
@@ -27,11 +28,11 @@
     </div>
     <script>
 
-      var animation = new Rekapi(document.getElementById('animation-container'), {
+      var animation = new Kapi(document.getElementById('animation-container'), {
         'fps': 60
       });
       var actorDiv = document.getElementById('actor-1');
-      var actor = new Rekapi.DOMActor(actorDiv);
+      var actor = new Kapi.DOMActor(actorDiv);
       animation.addActor(actor);
 
       actor
