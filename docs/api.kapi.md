@@ -211,6 +211,8 @@ Kapi.prototype.lastPositionRendered ()
 
 Return the normalized (between 0 and 1) timeline position that was last rendered.
 
+__[Example](examples/last_position_rendered.html)__
+
 
 ### actorCount
 
@@ -222,6 +224,8 @@ Kapi.prototype.actorCount ()
 ````
 
 Return the number of `Actor`s in the animation.
+
+__[Example](examples/actor_count.html)__
 
 
 ### framerate
@@ -235,6 +239,8 @@ Kapi.prototype.framerate (opt_newFramerate)
 ````
 
 Get and optionally set the framerate of the animation.  There's generally no point in going above 60.
+
+__[Example](examples/framerate.html)__
 
 
 ### render
