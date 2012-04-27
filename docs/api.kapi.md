@@ -255,6 +255,8 @@ Kapi.prototype.render (millisecond)
 
 Calculate the positions for all `Actor`s at `millisecond`, and then draw them.  You can define any millisecond in the animation to render, so long as it is less than the length of the animation (see `animationLength`).
 
+__[Example](examples/render.html)__
+
 
 ### draw
 
@@ -266,6 +268,8 @@ Kapi.prototype.draw ()
 ````
 
 Draw all the `Actor`s at whatever position they are currently in.
+
+__[Example](examples/draw.html)__
 
 
 ### redraw
@@ -279,6 +283,8 @@ Kapi.prototype.redraw ()
 
 Re-`render()` the last frame that was `render()`ed.
 
+__[Example](examples/redraw.html)__
+
 
 ### calculateActorPositions
 
@@ -291,6 +297,8 @@ Kapi.prototype.calculateActorPositions (millisecond)
 ````
 
 Update the position of all the `Actor`s at `millisecond`, but do not draw them.
+
+__[Example](examples/calculate_actor_positions.html)__
 
 
 ### updateInternalState
