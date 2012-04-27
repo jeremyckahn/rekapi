@@ -39,8 +39,7 @@
         .keyframe(0,    { x: 50,  y: 50 })
         .keyframe(1000, { x: 200, y: 150 });
 
-      kapi.calculateActorPositions(500);
-      kapi.draw();
+      kapi.render(500);
       kapi.canvas_clear();
 
       setTimeout(function () {
