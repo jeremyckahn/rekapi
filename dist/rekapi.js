@@ -1518,12 +1518,12 @@ var rekapiDOM = function (global, deps) {
     ,'oTransform'
     ,'msTransform'];
 
-  if (!global.getComputedStyle) {
+  if (!window.getComputedStyle) {
     return;
   }
 
   function getStyle (forElement, styleName) {
-    return global.getComputedStyle(forElement).getPropertyValue(styleName);
+    return window.getComputedStyle(forElement).getPropertyValue(styleName);
   }
 
   function setStyle (forElement, styleName, styleValue) {
