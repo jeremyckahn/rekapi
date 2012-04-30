@@ -197,6 +197,23 @@
         });
       });
     });
+    
+    asyncTest("Can instantiate a DOMActor", function() {
+      requireConfig();
+
+      require(['rekapi'], function(Kapi) {
+        var actor, el;
+        
+        ok(Kapi.DOMActor !== undefined);
+        
+        if (Kapi.DOMActor) {
+          el = document.createElement("div");
+          actor = new Kapi.DOMActor(el);
+          ok(actor !== undefined);
+        }
+        start();
+      });
+    });
 
   });
 </script>
