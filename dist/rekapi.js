@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.6.1
+ * Rekapi - Rewritten Kapi. v0.6.2
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -1554,8 +1554,6 @@ var rekapiDOM = function (global, deps) {
         if (getStyle(element, 'position') === 'static') {
           setStyle(element, 'position', 'absolute');
         }
-
-        this.hide();
       }
 
       ,'draw': function (canvas_context, state) {

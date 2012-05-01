@@ -44,8 +44,6 @@ var rekapiDOM = function (global, deps) {
         if (getStyle(element, 'position') === 'static') {
           setStyle(element, 'position', 'absolute');
         }
-
-        this.hide();
       }
 
       ,'draw': function (canvas_context, state) {
