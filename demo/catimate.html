@@ -1,65 +1,68 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="../dist/rekapi.bundle.min.js"></script>
+  <script src="../lib/shifty/tests/utils/require.js"></script>
 </head>
 <body>
   <div id="canvas">
     <img src="img/octocat.png" style="display: none;">
   </div>
   <script>
-  (function (global) {
-
-    var canvas = document.getElementById('canvas')
-        ,kapi = new Kapi(canvas, {
-          'fps': 60
-          ,'height': 500
-          ,'width': 600
-        })
-        ,cat
-        ,time = 0;
-
-    kapi.canvas_style('background', '#eee');
-    kapi.canvas_style('overflow', 'hidden');
-    cat = new Kapi.DOMActor(document.getElementsByTagName('img')[0]);
-    kapi.addActor(cat);
-    kapi.bind('onFrameRender', function () {
-      cat.show();
+    require.config({
+      paths: {
+        shifty: "../dist/shifty",
+        underscore: "../dist/underscore",
+        rekapi: "../dist/rekapi"
+      }
     });
 
-    cat
-      .keyframe(time, {
-        'left': '-240px'
-        ,'top': '-160px'
-        ,'rotate': 0
-      }).keyframe(time += 1200, {
-        'left': '300px'
-        ,'top': '250px'
-      }, 'bouncePast')
-      .wait(time += 400)
-      .keyframe(time += 700, {
-        'left': '50px'
-        ,'rotate': 0
-      }, 'easeInOutBack')
-      .wait(time += 150)
-      .keyframe(time += 850, {
-        'left': '344px'
-        ,'top': '0px'
-        ,'rotate': -90
-      }, {
-        'left': 'easeFromTo'
-        ,'top': 'easeInOutCubic'
-        ,'rotate': 'bouncePast'
-      })
-      .keyframe(time += 700, {
-        'top': '800px'
-      }, 'easeFrom')
-      .wait(time += 500);
+    // Dependencies (Underscore and Shifty) are automatically loaded.
+    require(['rekapi'], function(Kapi) {
+      var canvas = document.getElementById('canvas')
+          ,kapi = new Kapi(canvas, {
+            'fps': 60
+            ,'height': 500
+            ,'width': 600
+          })
+          ,cat
+          ,time = 0;
 
-    kapi.play();
+      kapi.canvas_style('background', '#eee');
+      kapi.canvas_style('overflow', 'hidden');
+      cat = new Kapi.DOMActor(document.getElementsByTagName('img')[0]);
+      kapi.addActor(cat);
 
-  } (this));
+      cat
+        .keyframe(time, {
+          'left': '-240px'
+          ,'top': '-160px'
+          ,'rotate': 0
+        }).keyframe(time += 1200, {
+          'left': '300px'
+          ,'top': '250px'
+        }, 'bouncePast')
+        .wait(time += 400)
+        .keyframe(time += 700, {
+          'left': '50px'
+          ,'rotate': 0
+        }, 'easeInOutBack')
+        .wait(time += 150)
+        .keyframe(time += 850, {
+          'left': '344px'
+          ,'top': '0px'
+          ,'rotate': -90
+        }, {
+          'left': 'easeFromTo'
+          ,'top': 'easeInOutCubic'
+          ,'rotate': 'bouncePast'
+        })
+        .keyframe(time += 700, {
+          'top': '800px'
+        }, 'easeFrom')
+        .wait(time += 500);
+
+      kapi.play();
+    });
   </script>
 </body>
 </html>
