@@ -223,6 +223,24 @@ var rekapiCore = function (global, deps) {
 
 
   /**
+   * @private
+   *
+   * @return {Kapi}
+   */
+  gk.prototype._recalculateAnimationLength = function () {
+    var actorLengths = [];
+
+    _.each(this._actors, function (actor) {
+      actorLengths.push(actor.getEnd());
+    });
+
+    this._animationLength = Math.max.apply(Math, actorLengths);
+
+    return this;
+  };
+
+
+  /**
    * @param {Kapi.Actor} actor
    * @return {Kapi}
    */
@@ -274,7 +292,7 @@ var rekapiCore = function (global, deps) {
     delete actor.kapi;
     this._drawOrder = _.without(this._drawOrder, actor.id);
     actor.teardown();
-    this.updateInternalState();
+    this._recalculateAnimationLength();
 
     return this;
   };
@@ -518,22 +536,6 @@ var rekapiCore = function (global, deps) {
         currentActor.draw(canvas_context, currentActor.get());
       }
     }
-
-    return this;
-  };
-
-
-  /**
-   * @return {Kapi}
-   */
-  gk.prototype.updateInternalState = function () {
-    var actorLengths = [];
-
-    _.each(this._actors, function (actor) {
-      actorLengths.push(actor.getEnd());
-    });
-
-    this._animationLength = Math.max.apply(Math, actorLengths);
 
     return this;
   };

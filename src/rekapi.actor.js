@@ -237,7 +237,7 @@ var rekapiActor = function (global, deps) {
       sortPropertyTracks(this);
     }, this);
 
-    this.kapi.updateInternalState();
+    this.kapi._recalculateAnimationLength();
     this.invalidatePropertyCache();
 
     return this;
@@ -438,7 +438,7 @@ var rekapiActor = function (global, deps) {
       }
 
     }, this);
-    this.kapi.updateInternalState();
+    this.kapi._recalculateAnimationLength();
     this.invalidatePropertyCache();
 
     return this;

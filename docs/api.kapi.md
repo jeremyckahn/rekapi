@@ -301,18 +301,6 @@ Update the position of all the `Actor`s at `millisecond`, but do not draw them.
 __[Example](examples/calculate_actor_positions.html)__
 
 
-### updateInternalState
-
-````javascript
-/**
- * @returns {Kapi}
- */
-Kapi.prototype.updateInternalState ()
-````
-
-Invalidate and re-compute the internal state of the `Kapi`.
-
-
 ### exportTimeline
 
 ````javascript
