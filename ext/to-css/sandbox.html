@@ -37,16 +37,13 @@
 
       actor
         .keyframe(500, {
-          'top': '0px'
-          ,'left': '0px'
+          '-webkit-transform': 'translateX(0px) translateY(0px)'
           ,'background': '#f00'
         }).keyframe(3000, {
-          'top': '400px'
-          ,'left': '400px'
+          '-webkit-transform': 'translateX(400px) translateY(400px)'
           ,'background': '#00f'
         }, {
-          'left': 'easeInOutQuart'
-          ,'top': 'swingTo'
+          '-webkit-transform': 'easeInOutQuart swingTo'
         });
 
      console.log(animation);
