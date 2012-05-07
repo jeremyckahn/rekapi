@@ -92,11 +92,7 @@ var rekapiToCSS = function (Rekapi, global, deps) {
     var serializedProps = ['{'];
     var printVal;
     _.each(actor.get(), function (val, key) {
-      if (isColorString(val)) {
-        printVal = val;
-      } else {
-        printVal = limitCSSPrecision(val, 2);
-      }
+      printVal = val;
       serializedProps.push(key + ':' + printVal + ';');
     });
 
@@ -220,16 +216,5 @@ var rekapiToCSS = function (Rekapi, global, deps) {
 
     return composedStr;
   };
-
-
-  /**
-   * @param {string} cssVal
-   * @param {number} precision
-   */
-  function limitCSSPrecision (cssVal, precision) {
-    var unit = cssVal.match(/\D*$/);
-    var val = parseFloat(cssVal);
-    return val.toFixed(precision) + unit;
-  }
 
 };

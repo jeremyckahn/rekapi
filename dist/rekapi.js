@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.6.3
+ * Rekapi - Rewritten Kapi. v0.6.4
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -228,6 +228,24 @@ var rekapiCore = function (global, deps) {
         delete this.config[dimension];
       }
     }, this);
+
+    return this;
+  };
+
+
+  /**
+   * @private
+   *
+   * @return {Kapi}
+   */
+  gk.prototype._recalculateAnimationLength = function () {
+    var actorLengths = [];
+
+    _.each(this._actors, function (actor) {
+      actorLengths.push(actor.getEnd());
+    });
+
+    this._animationLength = Math.max.apply(Math, actorLengths);
 
     return this;
   };
@@ -529,22 +547,6 @@ var rekapiCore = function (global, deps) {
         currentActor.draw(canvas_context, currentActor.get());
       }
     }
-
-    return this;
-  };
-
-
-  /**
-   * @return {Kapi}
-   */
-  gk.prototype._recalculateAnimationLength = function () {
-    var actorLengths = [];
-
-    _.each(this._actors, function (actor) {
-      actorLengths.push(actor.getEnd());
-    });
-
-    this._animationLength = Math.max.apply(Math, actorLengths);
 
     return this;
   };
@@ -1695,11 +1697,7 @@ var rekapiToCSS = function (Rekapi, global, deps) {
     var serializedProps = ['{'];
     var printVal;
     _.each(actor.get(), function (val, key) {
-      if (isColorString(val)) {
-        printVal = val;
-      } else {
-        printVal = limitCSSPrecision(val, 2);
-      }
+      printVal = val;
       serializedProps.push(key + ':' + printVal + ';');
     });
 
@@ -1823,17 +1821,6 @@ var rekapiToCSS = function (Rekapi, global, deps) {
 
     return composedStr;
   };
-
-
-  /**
-   * @param {string} cssVal
-   * @param {number} precision
-   */
-  function limitCSSPrecision (cssVal, precision) {
-    var unit = cssVal.match(/\D*$/);
-    var val = parseFloat(cssVal);
-    return val.toFixed(precision) + unit;
-  }
 
 };
 var rekapi = function (global, deps) {
