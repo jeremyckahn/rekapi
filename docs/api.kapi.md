@@ -327,6 +327,8 @@ Kapi.prototype.moveActorToLayer (actor, layer)
 
 Move an `Actor` around in the layer list.  Each layer has one `Actor`, and `Actor`s are drawn in order of their layer.  Lower layers (starting with 0) are drawn earlier.  If `layer` is higher than the number of layers (which can be found with `actorCount()`) or lower than 0, this method will return `undefined`.
 
+__[Example](examples/move_actor_to_layer.html)__
+
 
 ### bind
 
