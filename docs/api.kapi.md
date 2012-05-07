@@ -311,6 +311,8 @@ Kapi.prototype.exportTimeline ()
 ````
 Export a reference-less dump of this Kapi's animation properties and Actors.
 
+__[Example](examples/export_timeline.html)__
+
 
 ### moveActorToLayer
 
