@@ -110,7 +110,7 @@ var rekapiToCSS = function (Rekapi, global, deps) {
     var animLength = actor.getLength();
     var i, delay = actor.getStart();
     var serializedFrames = [];
-    var percent, stepPrefix;
+    var percent, adjustedPercent, stepPrefix;
     var increment = animLength / granularity;
     var animPercent = animLength / 100;
 
@@ -118,12 +118,13 @@ var rekapiToCSS = function (Rekapi, global, deps) {
     for (i = delay; i <= animLength + delay; i += increment) {
       actor.calculatePosition(i);
       percent = (i - delay) / animPercent;
-      if (percent === 0) {
+      adjustedPercent = +percent.toFixed(2)
+      if (adjustedPercent === 0) {
         stepPrefix = 'from ';
-      } else if (percent === 100) {
+      } else if (adjustedPercent === 100) {
         stepPrefix = 'to ';
       } else {
-        stepPrefix = percent.toFixed(2) + '% ';
+        stepPrefix = adjustedPercent + '% ';
       }
       serializedFrames.push('  ' + stepPrefix + serializeActorStep(actor));
     }
