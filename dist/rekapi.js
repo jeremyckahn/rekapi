@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.6.4
+ * Rekapi - Rewritten Kapi. v0.6.5
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -1713,25 +1713,28 @@ var rekapiToCSS = function (Rekapi, global, deps) {
    */
   function generateActorKeyframes (actor, granularity) {
     var animLength = actor.getLength();
-    var i, delay = actor.getStart();
+    var delay = actor.getStart();
     var serializedFrames = [];
-    var percent, stepPrefix;
+    var percent, adjustedPercent, stepPrefix;
     var increment = animLength / granularity;
+    var adjustedIncrement = Math.floor(increment);
     var animPercent = animLength / 100;
+    var loopStart = delay + increment;
+    var loopEnd = animLength + delay - increment;
 
+    actor.calculatePosition(delay);
+    serializedFrames.push('  from ' + serializeActorStep(actor));
 
-    for (i = delay; i <= animLength + delay; i += increment) {
+    for (var i = loopStart; i <= loopEnd; i += increment) {
       actor.calculatePosition(i);
       percent = (i - delay) / animPercent;
-      if (percent === 0) {
-        stepPrefix = 'from ';
-      } else if (percent === 100) {
-        stepPrefix = 'to ';
-      } else {
-        stepPrefix = percent.toFixed(2) + '% ';
-      }
+      adjustedPercent = +percent.toFixed(2)
+      stepPrefix = adjustedPercent + '% ';
       serializedFrames.push('  ' + stepPrefix + serializeActorStep(actor));
     }
+
+    actor.calculatePosition(animLength + delay);
+    serializedFrames.push('  to ' + serializeActorStep(actor));
 
     return serializedFrames.join('\n');
   }
