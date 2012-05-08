@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.6.3
+ * Rekapi - Rewritten Kapi. v0.6.5
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -228,6 +228,24 @@ var rekapiCore = function (global, deps) {
         delete this.config[dimension];
       }
     }, this);
+
+    return this;
+  };
+
+
+  /**
+   * @private
+   *
+   * @return {Kapi}
+   */
+  gk.prototype._recalculateAnimationLength = function () {
+    var actorLengths = [];
+
+    _.each(this._actors, function (actor) {
+      actorLengths.push(actor.getEnd());
+    });
+
+    this._animationLength = Math.max.apply(Math, actorLengths);
 
     return this;
   };
@@ -529,22 +547,6 @@ var rekapiCore = function (global, deps) {
         currentActor.draw(canvas_context, currentActor.get());
       }
     }
-
-    return this;
-  };
-
-
-  /**
-   * @return {Kapi}
-   */
-  gk.prototype._recalculateAnimationLength = function () {
-    var actorLengths = [];
-
-    _.each(this._actors, function (actor) {
-      actorLengths.push(actor.getEnd());
-    });
-
-    this._animationLength = Math.max.apply(Math, actorLengths);
 
     return this;
   };
@@ -1695,11 +1697,7 @@ var rekapiToCSS = function (Rekapi, global, deps) {
     var serializedProps = ['{'];
     var printVal;
     _.each(actor.get(), function (val, key) {
-      if (isColorString(val)) {
-        printVal = val;
-      } else {
-        printVal = limitCSSPrecision(val, 2);
-      }
+      printVal = val;
       serializedProps.push(key + ':' + printVal + ';');
     });
 
@@ -1715,25 +1713,28 @@ var rekapiToCSS = function (Rekapi, global, deps) {
    */
   function generateActorKeyframes (actor, granularity) {
     var animLength = actor.getLength();
-    var i, delay = actor.getStart();
+    var delay = actor.getStart();
     var serializedFrames = [];
-    var percent, stepPrefix;
+    var percent, adjustedPercent, stepPrefix;
     var increment = animLength / granularity;
+    var adjustedIncrement = Math.floor(increment);
     var animPercent = animLength / 100;
+    var loopStart = delay + increment;
+    var loopEnd = animLength + delay - increment;
 
+    actor.calculatePosition(delay);
+    serializedFrames.push('  from ' + serializeActorStep(actor));
 
-    for (i = delay; i <= animLength + delay; i += increment) {
+    for (var i = loopStart; i <= loopEnd; i += increment) {
       actor.calculatePosition(i);
       percent = (i - delay) / animPercent;
-      if (percent === 0) {
-        stepPrefix = 'from ';
-      } else if (percent === 100) {
-        stepPrefix = 'to ';
-      } else {
-        stepPrefix = percent.toFixed(2) + '% ';
-      }
+      adjustedPercent = +percent.toFixed(2)
+      stepPrefix = adjustedPercent + '% ';
       serializedFrames.push('  ' + stepPrefix + serializeActorStep(actor));
     }
+
+    actor.calculatePosition(animLength + delay);
+    serializedFrames.push('  to ' + serializeActorStep(actor));
 
     return serializedFrames.join('\n');
   }
@@ -1823,17 +1824,6 @@ var rekapiToCSS = function (Rekapi, global, deps) {
 
     return composedStr;
   };
-
-
-  /**
-   * @param {string} cssVal
-   * @param {number} precision
-   */
-  function limitCSSPrecision (cssVal, precision) {
-    var unit = cssVal.match(/\D*$/);
-    var val = parseFloat(cssVal);
-    return val.toFixed(precision) + unit;
-  }
 
 };
 var rekapi = function (global, deps) {
