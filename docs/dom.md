@@ -1,19 +1,27 @@
 # Using Rekapi on the DOM
 
-You can use Rekapi to animate DOM elements.  This is thanks to a standard extension, which lives at `ext/dom/rekapi.dom.js`.  This extension is part of the standard build, but you can safely omit it from custom builds if you don't need it.
+You can use Rekapi to animate DOM elements.  This is thanks to a standard
+extension, which lives at `ext/dom/rekapi.dom.js`.  This extension is part of
+the standard build, but you can safely omit it from custom builds if you don't
+need it.
 
-There are just a few caveats you should know about if you use Rekapi on the DOM.
+There are just a few caveats you should know about if you use Rekapi on the
+DOM.
 
 ##Canvas and Actor nodes
 
-Since you aren't using a literal `<canvas>`, the canvas is an arbitrary container DOM element.  The Actors are simply child elements of that container element.
+Since you aren't using a literal `<canvas>`, the canvas is an arbitrary
+container DOM element.  The Actors are simply child elements of that container
+element.
 
 ````javascript
 // Assumes there is a DOM element with an ID of "canvas"
 var kapi = new Kapi(document.getElementById('canvas'));
 ````
 
-All DOM actors inherently work the same way, so you can just use the `Kapi.DOMActor` Object to control them.  There's generally no need to roll your own Actor if you are using Rekapi for DOM animation.
+All DOM actors inherently work the same way, so you can just use the
+`Kapi.DOMActor` Object to control them.  There's generally no need to roll your
+own Actor if you are using Rekapi for DOM animation.
 
 ````javascript
 /**
@@ -23,7 +31,8 @@ All DOM actors inherently work the same way, so you can just use the `Kapi.DOMAc
 Kapi.DOMActor = function (element)
 ````
 
-So, let's suppose you have a DOM node inside of `#canvas` with an ID of "actor."
+So, let's suppose you have a DOM node inside of `#canvas` with an ID of
+"actor."
 
 ````javascript
 var actor = new Kapi.DOMActor(document.getElementById('actor'));
@@ -31,7 +40,9 @@ var actor = new Kapi.DOMActor(document.getElementById('actor'));
 kapi.addActor(actor);
 ````
 
-Now you can keyframe `actor` like you would any Actor.  The only difference is that you are animating CSS properties, not arbitrarily defined properties for a `<canvas>` animation.
+Now you can keyframe `actor` like you would any Actor.  The only difference is
+that you are animating CSS properties, not arbitrarily defined properties for a
+`<canvas>` animation.
 
 ````javascript
 actor
@@ -49,7 +60,11 @@ kapi.play();
 
 ## Transforms
 
-`DOMActor` supports CSS3 `transform`s.  Typically, when writing a `transform` rule, it is necessary to write the same rule multiple times, in order to support the vendor prefixes for all of the browser rendering engines.  The DOM extension takes care of the cross browser inconsistencies; all you need to use is the `transform` property:
+`DOMActor` supports CSS3 `transform`s.  Typically, when writing a `transform`
+rule, it is necessary to write the same rule multiple times, in order to
+support the vendor prefixes for all of the browser rendering engines.  The DOM
+extension takes care of the cross browser inconsistencies; all you need to use
+is the `transform` property:
 
 ````javascript
 actor
@@ -63,7 +78,8 @@ actor
 
 ## getCSSName
 
-The DOM extension also provides a small utility function for generating a class for each actor DOM element.
+The DOM extension also provides a small utility function for generating a class
+for each actor DOM element.
 
 ````javascript
 /**
@@ -72,4 +88,6 @@ The DOM extension also provides a small utility function for generating a class 
 actor.getCSSName();
 ````
 
-This can be useful when used with the `to-css` extension.  You might not ever need to use this directly, as the class is attached to an element when you create a DOMActor from said element.
+This can be useful when used with the `to-css` extension.  You might not ever
+need to use this directly, as the class is attached to an element when you
+create a DOMActor from said element.
