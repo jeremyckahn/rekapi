@@ -34,30 +34,22 @@
 
       cat
         .keyframe(time, {
-          'left': '-240px'
-          ,'top': '-160px'
-          ,'rotate': 0
+          'transform': 'translateX(-240px) translateY(-160px) rotate(0deg)'
         }).keyframe(time += 1200, {
-          'left': '300px'
-          ,'top': '250px'
+          'transform': 'translateX(300px) translateY(250px) rotate(0deg)'
         }, 'bouncePast')
         .wait(time += 400)
         .keyframe(time += 700, {
-          'left': '50px'
-          ,'rotate': 0
+          'transform': 'translateX(50px) translateY(250px) rotate(0deg)'
         }, 'easeInOutBack')
         .wait(time += 150)
         .keyframe(time += 850, {
-          'left': '344px'
-          ,'top': '0px'
-          ,'rotate': -90
+          'transform': 'translateX(344px) translateY(0px) rotate(-90deg)'
         }, {
-          'left': 'easeFromTo'
-          ,'top': 'easeInOutCubic'
-          ,'rotate': 'bouncePast'
+          'transform': 'easeFromTo easeInOutCubic bouncePast'
         })
         .keyframe(time += 700, {
-          'top': '800px'
+          'transform': 'translateX(344px) translateY(800px) rotate(-90deg)'
         }, 'easeFrom')
         .wait(time += 500);
 

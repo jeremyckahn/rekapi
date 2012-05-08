@@ -54,9 +54,9 @@ var rekapiDOM = function (global, deps) {
         _.each(state, function (styleValue, styleName) {
           isShowing = true;
 
-          if (styleName === 'rotate') {
+          if (styleName === 'transform') {
             _.each(transforms, function (transform) {
-              setStyle(element, transform, 'rotate(' + styleValue + 'deg)')
+              setStyle(element, transform, styleValue);
             });
           } else {
             setStyle(element, styleName, styleValue);

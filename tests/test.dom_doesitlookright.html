@@ -83,12 +83,10 @@
 
       actor
         .keyframe(0, {
-          'left': '0px'
-          ,'top': '0px'
+          'transform': 'translateX(0px) translateY(0px)'
         })
         .keyframe(1500, {
-          'left': '200px'
-          ,'top': '200px'
+          'transform': 'translateX(200px) translateY(200px)'
         });
 
       kapi.play();
@@ -105,12 +103,10 @@
 
       actor
         .keyframe(0, {
-          'left': '0px'
-          ,'top': '0px'
+          'transform': 'translateX(0px) translateY(0px)'
         })
         .keyframe(1500, {
-          'left': '200px'
-          ,'top': '200px'
+          'transform': 'translateX(200px) translateY(200px)'
         }, 'easeOutExpo');
 
       kapi.play();
@@ -127,15 +123,12 @@
 
       actor
         .keyframe(0, {
-          'left': '0px'
-          ,'top': '0px'
+          'transform': 'translateX(0px) translateY(0px)'
         })
         .keyframe(1500, {
-          'left': '200px'
-          ,'top': '200px'
+          'transform': 'translateX(200px) translateY(200px)'
         }, {
-          'left': 'easeOutExpo'
-          ,'top': 'easeInSine'
+          'transform': 'easeOutExpo easeInSine'
         });
 
       kapi.play();
@@ -152,20 +145,16 @@
 
       actor
         .keyframe(0, {
-          'left': '0px'
-          ,'top': '0px'
+          'transform': 'translateX(0px) translateY(0px) rotate(0deg)'
           ,'background': '#f00'
           ,'height': '50px'
           ,'width': '50px'
-          ,'rotate': 0
         })
         .keyframe(1500, {
-          'left': '200px'
-          ,'top': '200px'
+          'transform': 'translateX(200px) translateY(200px) rotate(180deg)'
           ,'background': '#00f'
           ,'height': '100px'
           ,'width': '100px'
-          ,'rotate': 180
         }, 'easeOutExpo');
 
       kapi.play();
@@ -182,12 +171,10 @@
 
       actor
         .keyframe(500, {
-          'left': '0px'
-          ,'top': '0px'
+          'transform': 'translateX(0px) translateY(0px)'
         })
         .keyframe(1500, {
-          'left': '200px'
-          ,'top': '200px'
+          'transform': 'translateX(200px) translateY(200px)'
         });
 
       kapi.play();
