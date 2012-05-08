@@ -47,27 +47,23 @@ actor
 kapi.play();
 ````
 
-## Rotation
+## Transforms
 
-`DOMActor` supports CSS3 rotations.  This is accomplished with the non-standard `rotate` property, and a degree integer.  Modifying the above snippet:
+`DOMActor` supports CSS3 `transform`s.  Typically, when writing a `transform` rule, it is necessary to write the same rule multiple times, in order to support the vendor prefixes for all of the browser rendering engines.  The DOM extension takes care of the cross browser inconsistencies; all you need to use is the `transform` property:
 
 ````javascript
 actor
   .keyframe(0, {
-    'left': '0px'
-    ,'top': '0px'
-    ,'rotate': 0
+    'transform': 'translateX(0px) translateY(0px) rotate(0deg)'
   })
   .keyframe(1500, {
-    'left': '200px'
-    ,'top': '200px'
-    ,'rotate': 90
+    'transform': 'translateX(200px) translateY(200px) rotate(90deg)'
   }, 'easeOutExpo');
 ````
 
 ## getCSSName
 
-The extension also provides a small utility function for generating a class for each actor DOM element.
+The DOM extension also provides a small utility function for generating a class for each actor DOM element.
 
 ````javascript
 /**
@@ -76,4 +72,4 @@ The extension also provides a small utility function for generating a class for 
 actor.getCSSName();
 ````
 
-This can be useful when used with the to-css extension.  You might not ever need to use this directly, as the class is attached to an element when you create a DOMActor from said element.
+This can be useful when used with the `to-css` extension.  You might not ever need to use this directly, as the class is attached to an element when you create a DOMActor from said element.
