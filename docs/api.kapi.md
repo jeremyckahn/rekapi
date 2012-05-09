@@ -350,6 +350,8 @@ Bind an handler function to a Kapi event.  Possible events include:
 * __onPause__: Fires when the animation is `pause()`d.
 * __onStop__: Fires when the animation is `stop()`ped.
 
+__[Example](examples/bind.html)__
+
 
 ### unbind
 
@@ -363,6 +365,8 @@ Kapi.prototype.unbind (eventName, opt_handler)
 ````
 
 Unbind `opt_handler` from a Kapi event.  If `opt_handler` is omitted, all handler functions bound to `eventName` are unbound.  Valid events correspond to the list under `bind()`.
+
+__[Example](examples/unbind.html)__
 
 
 ### setOrderFunction
