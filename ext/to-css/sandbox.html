@@ -37,18 +37,18 @@
 
       actor
         .keyframe(500, {
-          '-webkit-transform': 'translateX(0px) translateY(0px)'
+          'transform': 'translateX(0px) translateY(0px)'
           ,'background': '#f00'
         }).keyframe(3000, {
-          '-webkit-transform': 'translateX(400px) translateY(400px)'
+          'transform': 'translateX(400px) translateY(400px)'
           ,'background': '#00f'
         }, {
-          '-webkit-transform': 'easeInOutQuart swingTo'
+          'transform': 'easeInOutQuart swingTo'
         });
 
      console.log(animation);
      var css = animation.toCSS({
-       'vendors': ['webkit']
+       'vendors': ['webkit', 'mozilla']
        ,'granularity': 150
      });
 
