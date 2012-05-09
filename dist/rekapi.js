@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.6.6
+ * Rekapi - Rewritten Kapi. v0.6.7
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -1608,6 +1608,7 @@ var rekapiToCSS = function (Rekapi, global, deps) {
   // CONSTANTS
   //
   var DEFAULT_GRANULARITY = 100;
+  var TRANSFORM_TOKEN = 'TRANSFORM';
   var VENDOR_PREFIXES = Rekapi.util.VENDOR_PREFIXES = {
     'microsoft': '-ms-'
     ,'mozilla': '-moz-'
@@ -1698,7 +1699,13 @@ var rekapiToCSS = function (Rekapi, global, deps) {
     var printVal;
     _.each(actor.get(), function (val, key) {
       printVal = val;
-      serializedProps.push(key + ':' + printVal + ';');
+      var printKey = key;
+
+      if (key === 'transform') {
+        printKey = TRANSFORM_TOKEN;
+      }
+
+      serializedProps.push(printKey + ':' + printVal + ';');
     });
 
     serializedProps.push('}');
@@ -1754,11 +1761,27 @@ var rekapiToCSS = function (Rekapi, global, deps) {
     _.each(opt_vendors, function (vendor) {
       var renderedChunk = printf(KEYFRAME_TEMPLATE,
           [VENDOR_PREFIXES[vendor], animName, toKeyframes]);
-
-      renderedKeyframes.push(renderedChunk);
+      var prefixedKeyframes =
+        applyVendorPropertyPrefixes(renderedChunk, vendor);
+      renderedKeyframes.push(prefixedKeyframes);
     });
 
     return renderedKeyframes.join('\n');
+  }
+
+
+  /**
+   * @param {string} keyframes
+   * @param {vendor} vendor
+   * @return {string}
+   */
+  function applyVendorPropertyPrefixes (keyframes, vendor) {
+    var transformRegExp = new RegExp(TRANSFORM_TOKEN, 'g');
+    var prefixedTransformKey = VENDOR_PREFIXES[vendor] + 'transform';
+    var prefixedKeyframes =
+      keyframes.replace(transformRegExp, prefixedTransformKey);
+
+    return prefixedKeyframes;
   }
 
 
