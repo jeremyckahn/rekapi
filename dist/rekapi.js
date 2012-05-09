@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.6.7
+ * Rekapi - Rewritten Kapi. v0.7.2
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -127,7 +127,7 @@ var rekapiCore = function (global, deps) {
    * @param {Kapi} kapi
    */
   function tick (kapi) {
-    kapi._loopId = setTimeout(function () {
+    kapi._loopId = kapi._scheduleUpdate.call(window, function () {
       // First, schedule the next update.  renderCurrentMillisecond can cancel
       // the update if necessary.
       tick(kapi);
@@ -149,6 +149,45 @@ var rekapiCore = function (global, deps) {
 
 
   /**
+   * @param {number}
+   * @return {Function}
+   */
+  function getUpdateMethod (framerate) {
+    if (framerate !== 60) {
+      return window.setTimeout;
+    } else {
+      // requestAnimationFrame() shim by Paul Irish (modified for Rekapi)
+      // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+      return  window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.oRequestAnimationFrame      ||
+        window.msRequestAnimationFrame     ||
+        (window.mozCancelRequestAnimationFrame
+          && window.mozRequestAnimationFrame) ||
+        window.setTimeout;
+    }
+  }
+
+
+  /**
+   * @param {number}
+   * @return {Function}
+   */
+  function getCancelMethod (framerate) {
+    if (framerate !== 60) {
+      return window.clearTimeout;
+    } else {
+      return  window.cancelAnimationFrame ||
+        window.webkitCancelAnimationFrame ||
+        window.oCancelAnimationFrame      ||
+        window.msCancelAnimationFrame     ||
+        window.mozCancelRequestAnimationFrame ||
+        window.clearTimeout;
+    }
+  }
+
+
+  /**
    * Does nothing.  Absolutely nothing at all.
    */
   function noop () {
@@ -160,7 +199,7 @@ var rekapiCore = function (global, deps) {
 
 
   var defaultConfig = {
-    'fps': 30
+    'fps': 60
     ,'height': 150
     ,'width': 300
     ,'doRoundNumbers': false
@@ -219,6 +258,9 @@ var rekapiCore = function (global, deps) {
 
     _.extend(this.config, opt_config);
     _.defaults(this.config, defaultConfig);
+
+    this._scheduleUpdate = getUpdateMethod(this.config.fps);
+    this._cancelUpdate = getCancelMethod(this.config.fps);
 
     // Apply the height and width if they were passed in the`config` Object.
     // Also delete them from the internal config - we won't need them anymore.
@@ -314,7 +356,7 @@ var rekapiCore = function (global, deps) {
    * @return {Kapi}
    */
   gk.prototype.play = function (opt_howManyTimes) {
-    clearTimeout(this._loopId);
+    this._cancelUpdate.call(window, this._loopId);
 
     if (this._playState === playState.PAUSED) {
       this._loopTimestamp += now() - this._pausedAtTime;
@@ -371,7 +413,7 @@ var rekapiCore = function (global, deps) {
     }
 
     this._playState = playState.PAUSED;
-    clearTimeout(this._loopId);
+    this._cancelUpdate.call(window, this._loopId);
     this._pausedAtTime = now();
 
     // also pause any shifty tweens that are running.
@@ -394,7 +436,7 @@ var rekapiCore = function (global, deps) {
    */
   gk.prototype.stop = function (alsoClear) {
     this._playState = playState.STOPPED;
-    clearTimeout(this._loopId);
+    this._cancelUpdate.call(window, this._loopId);
 
     if (alsoClear === true) {
       this.canvas_clear();
@@ -455,6 +497,8 @@ var rekapiCore = function (global, deps) {
   gk.prototype.framerate = function (opt_newFramerate) {
     if (opt_newFramerate) {
       this.config.fps = opt_newFramerate;
+      this._scheduleUpdate = getUpdateMethod(this.config.fps);
+      this._cancelUpdate = getCancelMethod(this.config.fps);
     }
 
     return this.config.fps;
