@@ -396,10 +396,12 @@ __[Example](examples/set_order_function.html)__
 /**
  * @return {Kapi}
  */
-Kapi.prototype.unsetOrderFunction (sortFunction)
+Kapi.prototype.unsetOrderFunction ()
 ````
 
 Remove the sort order function set by `setOrderFunction`.  Draw order defaults back to the order in which `Actors` were added.
+
+__[Example](examples/unset_order_function.html)__
 
 
 ### canvas_setContext
