@@ -1,23 +1,19 @@
-# Rekapi - Rewritten Kapi.
+# Rekapi - Keyframes for JavaScript
 
-[Kapi](https://github.com/jeremyckahn/kapi) is a **k**eyframing **API** for JavaScript.  Rekapi is also a keyframing API for JavaScript, but it's another attempt.  I didn't like how Kapi was written, so I rewrote it, improved the API, and removed a few things that were unnecessary.
+Rekapi is a keyframe animation library for JavaScript.  It gives you:
 
-What Rekapi is:
+* A keyframe-based Model by which to structure an animation
+* Controller APIs to control the playback of an animation
 
-* A tool to organize how animations are structured
-* A tool that lets you easily and expressively define the steps of an animation
+Rekapi does not define drawing methods.  That part is completely generic, and the library exposes a common interface for defining Views.
 
-What Rekapi is _not_:
+Rekapi has two dependencies: [Underscore](https://github.com/documentcloud/underscore) and [Shifty](https://github.com/jeremyckahn/shifty).
 
-* A `<canvas>` drawing tool (so that you can define whatever drawing methods you need)
+Please note:  Rekapi is a rewrite of [Kapi](https://github.com/jeremyckahn/kapi). Rekapi is very similar to Kapi, but they are not identical.  Rekapi is not a drop-in replacement for Kapi.  Rekapi is way awesomer, so you should use it instead.
 
-Rekapi has two dependencies: [Underscore](https://github.com/documentcloud/underscore) and [Shifty](https://github.com/jeremyckahn/shifty).  You need to load these first before loading Rekapi.
+## What is keyframing?
 
-Please note:  While Rekapi's API is very similar to Kapi's, they are not identical.  Rekapi is not a drop-in replacement for Kapi.  But Rekapi is way awesomer, so you should use it instead of Kapi.
-
-## What's keyframing?
-
-Keyframing is an animation technique for defining states at specific points in time. Animations are always rendered as frames to the screen, and keyframing allows you to define the key points at which the motion in the animation changes - all of the frames that exist between those points are interpolated for you.
+Keyframing is an animation technique for defining states at specific points in time. Animations are always rendered as frames to the screen, and keyframing allows you to define the key points at which the motion in the animation changes - all of the frames that exist between those points are interpolated for you.  It is a powerful way to construct a complex animation.
 
 ## How do I use Rekapi?
 
