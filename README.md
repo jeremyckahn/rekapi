@@ -17,6 +17,9 @@ Please note:  Rekapi is a rewrite of
 but they are not identical.  Rekapi is not a drop-in replacement for Kapi.
 Rekapi is way awesomer, so you should use it instead.
 
+The API may change somewhat before reaching 1.0.  __[See how to upgrade from
+older versions.](docs/upgrading.md)__.
+
 __[Please see the getting started guide](docs/getting_started.md)__.
 
 ## What is keyframing?
