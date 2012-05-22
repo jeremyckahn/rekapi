@@ -28,7 +28,7 @@
       <button id="pause">Pause</button>
     </div>
     <div class="float-wrap">
-      <canvas id="sandbox"></canvas>
+      <canvas id="sandbox" style="background: #eee;"></canvas>
       <div id="editor-wrapper">
         <div id="editor" style="height: 480px; width: 400px">actor
   .keyframe(0, {
@@ -62,13 +62,13 @@
       var JavaScriptMode = require("ace/mode/javascript").Mode;
       editor.getSession().setMode(new JavaScriptMode());
 
-      var canvas = $('canvas')[0]
-      ,kapi = new Kapi(canvas, {
-          'fps': 60
+      var canvas = $('canvas')
+      ,kapi = new Kapi({
+          'context': canvas[0]
           ,'height': 480
           ,'width': 400
         })
-      ,actor = new Kapi.Actor({
+      ,actor = new Kapi.CanvasActor({
         'draw': function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
@@ -85,7 +85,7 @@
         }
       });
 
-      kapi.canvas_style('background', '#eee');
+      canvas.css('background', '#eee');
       kapi.addActor(actor);
       var update = $('#update')
           ,oldCode = editor.getSession().getValue();
@@ -105,10 +105,10 @@
           actor.removeAllKeyframeProperties();
           eval(oldCode);
           kapi.play();
-          kapi.canvas_style('background', '#ff45b1');
+          canvas.css('background', '#ff45b1');
 
           setTimeout(function () {
-            kapi.canvas_style('background', '#eee');
+            canvas.css('background', '#eee');
           }, 1200);
         }
       });
