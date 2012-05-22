@@ -1,3 +1,9 @@
+# Upgrading to Rekapi 0.8.1
+
+The `draw` method that gets passed into the `Kapi.Actor` constructor (and its
+subclasses) is now called `render`.  __Using `draw` instead of `render` will
+break.__
+
 # Upgrading to Rekapi 0.8.0
 
 The API changed a bit for 0.8.0, as a result of issue #9.  Upgrading shouldn't

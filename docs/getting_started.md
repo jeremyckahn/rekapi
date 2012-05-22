@@ -28,7 +28,7 @@ var actor = new Kapi.CanvasActor({
 
   // Called every frame.  Receives a reference to the canvas context, and the
   // Actor's state.
-  'draw': function (context, state) {
+  'render': function (context, state) {
 
   },
 
@@ -40,7 +40,7 @@ var actor = new Kapi.CanvasActor({
 ````
 
 All of the methods described above are optional, but you should at least have a
-`draw` method.  Continuing from before, here's a simple implementation for a
+`render` method.  Continuing from before, here's a simple implementation for a
 canvas actor that we can use as an example:
 
 ````javascript
@@ -51,7 +51,7 @@ var canvas = document.getElementsByTagName('canvas')[0],
 
 var actor = new Kapi.CanvasActor({
   // Draws a circle.
-  'draw': function (context, state) {
+  'render': function (context, state) {
     context.beginPath();
     context.arc(
       state.x || 50,
@@ -67,9 +67,9 @@ var actor = new Kapi.CanvasActor({
 });
 ````
 
-The Actor's `draw` method can do whatever you want it to, really.  The idea is
+The Actor's `render` method can do whatever you want it to, really.  The idea is
 that the `context` and `state` parameters are computed by the `Kapi` Model, and
-then expressed visually on the `<canvas>` by the Actor's `draw` method.
+then expressed visually on the `<canvas>` by the Actor's `render` method.
 `setup` and `teardown` are methods that get called when the Actor is added and
 removed from the Kapi instance.
 
@@ -167,7 +167,7 @@ Copy/paste/save this onto your machine to see a simple Rekapi animation:
 
   var actor = new Kapi.CanvasActor({
     // Draws a circle.
-    'draw': function (context, state) {
+    'render': function (context, state) {
       context.beginPath();
       context.arc(
         state.x || 50,

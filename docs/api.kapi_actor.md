@@ -5,7 +5,7 @@
  * @param {Object=} opt_config
  *   @param {Object=} context
  *   @param {function=} setup
- *   @param {function(Object, Object)=} draw
+ *   @param {function(Object, Object)=} render
  *   @param {function=} teardown
  * @constructor
  */
@@ -18,7 +18,7 @@ Valid properties of `opt_config` (you can omit the ones you don't need):
 
 * __context__: The context that this Actor gets rendered to.  If omitted, this Actor gets the `Kapi` instance's rendering context when it is added to an animation.
 * __setup__: A function that gets called when the `Actor` is added to a `Kapi` instance (with `addActor()`).
-* __draw__: A function that gets called every frame that the actor is rendered in.  It receives two parameters:  A reference to a `<canvas>` context, and an Object containing the current state properties.  _This method should render the state properties to the screen with the `<canvas>` context._
+* __render__: A function that gets called every frame that the actor is rendered in.  It receives two parameters:  A reference to a `<canvas>` context, and an Object containing the current state properties.  _This method should render the state properties to the screen with the `<canvas>` context._
 * __teardown__: A function that gets called when the `Actor` is removed from the animation (with `removeActor()`).
 
 `Kapi.Actor` does _not_ render to any context.  It is a base class.  Use the [`Kapi.CanvasActor`](../ext/canvas) [`Kapi.DOMActor`](../ext/dom) subclasses to render to the screen.
@@ -300,7 +300,7 @@ Move this `Actor` to a different layer in the `Kapi` instance that it belongs to
 Kapi.Actor.prototype.show (alsoPersist)
 ````
 
-Tell the `Actor` to draw itself for the next rendered frame.  If `alsoPersist` is true, it continues to draw for every frame until `hide(true)` is called.
+Tell the `Actor` to render itself for the next rendered frame.  If `alsoPersist` is true, it continues to render for every frame until `hide(true)` is called.
 
 
 ### hide
@@ -313,7 +313,7 @@ Tell the `Actor` to draw itself for the next rendered frame.  If `alsoPersist` i
 Kapi.Actor.prototype.hide (alsoUnpersist)
 ````
 
-Tell the `Actor` not to draw itself for the next frame.  If `alsoUnpersist` is true, this undoes the persistence effect of `show(true)`.
+Tell the `Actor` not to render itself for the next frame.  If `alsoUnpersist` is true, this undoes the persistence effect of `show(true)`.
 
 
 ### isShowing

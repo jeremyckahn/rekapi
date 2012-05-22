@@ -7,7 +7,7 @@ You can use Rekapi to render to `<canvas>`.
  * @param {Object=} opt_config
  *   @param {Object=} context
  *   @param {function=} setup
- *   @param {function(CanvasRenderingContext2D, Object)=} draw
+ *   @param {function(CanvasRenderingContext2D, Object)=} render
  *   @param {function=} teardown
  * @constructor
  * @extends Kapi.Actor
@@ -27,7 +27,7 @@ Kapi.prototype.canvasContext ()
 ````
 
 Return the 2d context of the `<canvas>`.  This is needed for any and all cavnas
-drawing operations - it is also provided to an `Actor`'s `draw` method.  See
+rendering operations - it is also provided to an `Actor`'s `render` method.  See
 the [MDN](https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas) for
 more info on the `<canvas>` context.
 

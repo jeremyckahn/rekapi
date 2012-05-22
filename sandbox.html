@@ -69,7 +69,7 @@
           ,'width': 400
         })
       ,actor = new Kapi.CanvasActor({
-        'draw': function (canvas_context, state) {
+        'render': function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
               state.x || 0,

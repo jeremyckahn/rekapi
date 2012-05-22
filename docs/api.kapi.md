@@ -178,7 +178,7 @@ __[Example](examples/framerate.html)__
 Kapi.prototype.render (millisecond)
 ````
 
-Calculate the positions for all `Actor`s at `millisecond`, and then draw them.  You can define any millisecond in the animation to render, so long as it is less than the length of the animation (see `animationLength`).
+Calculate the positions for all `Actor`s at `millisecond`, and then render them.  You can define any millisecond in the animation to render, so long as it is less than the length of the animation (see `animationLength`).
 
 __[Example](examples/render.html)__
 

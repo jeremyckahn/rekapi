@@ -174,7 +174,7 @@ var rekapiActor = function (global, deps) {
       ,'_isPersisting': false
       ,'id': getUniqueActorId()
       ,'setup': opt_config.setup || gk.util.noop
-      ,'draw': opt_config.draw || gk.util.noop
+      ,'render': opt_config.render || gk.util.noop
       ,'teardown': opt_config.teardown || gk.util.noop
     });
 

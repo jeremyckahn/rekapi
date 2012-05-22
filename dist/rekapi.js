@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.8.0
+ * Rekapi - Rewritten Kapi. v0.8.1
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -576,7 +576,7 @@ var rekapiCore = function (global, deps) {
       currentActor = this._actors[drawOrder[i]];
       if (currentActor.isShowing()) {
         canvas_context = currentActor.context();
-        currentActor.draw(canvas_context, currentActor.get());
+        currentActor.render(canvas_context, currentActor.get());
       }
     }
 
@@ -879,7 +879,7 @@ var rekapiActor = function (global, deps) {
       ,'_isPersisting': false
       ,'id': getUniqueActorId()
       ,'setup': opt_config.setup || gk.util.noop
-      ,'draw': opt_config.draw || gk.util.noop
+      ,'render': opt_config.render || gk.util.noop
       ,'teardown': opt_config.teardown || gk.util.noop
     });
 
@@ -1589,9 +1589,9 @@ var rekapiDOM = function (global, deps) {
     this._context = element;
     this._context.classList.add(this.getCSSName());
 
-    // Remove the instance's draw method to allow the
-    // ActorMethods.prototype.draw method to be accessible.
-    delete this.draw;
+    // Remove the instance's render method to allow the
+    // ActorMethods.prototype.render method to be accessible.
+    delete this.render;
 
     this.show = function (alsoPersist) {
       gk.Actor.prototype.show.call(this, alsoPersist);
@@ -1616,7 +1616,7 @@ var rekapiDOM = function (global, deps) {
    * @param {HTMLElement} context
    * @param {Object} state
    */
-  DOMActorMethods.prototype.draw = function (context, state) {
+  DOMActorMethods.prototype.render = function (context, state) {
     var isShowing;
 
     isShowing = false;

@@ -565,7 +565,7 @@ var rekapiCore = function (global, deps) {
       currentActor = this._actors[drawOrder[i]];
       if (currentActor.isShowing()) {
         canvas_context = currentActor.context();
-        currentActor.draw(canvas_context, currentActor.get());
+        currentActor.render(canvas_context, currentActor.get());
       }
     }
 

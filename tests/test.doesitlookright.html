@@ -9,7 +9,6 @@
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
   <script src="../src/rekapi.keyframeprops.js"></script>
-  <script src="../ext/dom/rekapi.dom.js"></script>
   <script src="../ext/canvas/rekapi.canvas.context.js"></script>
   <script src="../ext/canvas/rekapi.canvas.actor.js"></script>
   <script src="../src/rekapi.init.js"></script>
@@ -26,7 +25,7 @@
     var actor;
 
     actor = new Kapi.CanvasActor({
-      'draw': function (canvas_context, state) {
+      'render': function (canvas_context, state) {
         canvas_context.beginPath();
           canvas_context.arc(
             state.x || 0,

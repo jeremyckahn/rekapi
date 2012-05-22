@@ -33,9 +33,9 @@ var rekapiDOM = function (global, deps) {
     this._context = element;
     this._context.classList.add(this.getCSSName());
 
-    // Remove the instance's draw method to allow the
-    // ActorMethods.prototype.draw method to be accessible.
-    delete this.draw;
+    // Remove the instance's render method to allow the
+    // ActorMethods.prototype.render method to be accessible.
+    delete this.render;
 
     this.show = function (alsoPersist) {
       gk.Actor.prototype.show.call(this, alsoPersist);
@@ -60,7 +60,7 @@ var rekapiDOM = function (global, deps) {
    * @param {HTMLElement} context
    * @param {Object} state
    */
-  DOMActorMethods.prototype.draw = function (context, state) {
+  DOMActorMethods.prototype.render = function (context, state) {
     var isShowing;
 
     isShowing = false;
