@@ -4,7 +4,7 @@
   <script src="../lib/shifty/tests/utils/require.js"></script>
 </head>
 <body>
-  <div id="canvas">
+  <div id="canvas" style="background: #eee; overflow: hidden; height: 500px; width: 600px;">
     <img src="img/octocat.png" style="display: none;">
   </div>
   <script>
@@ -19,16 +19,10 @@
     // Dependencies (Underscore and Shifty) are automatically loaded.
     require(['rekapi'], function(Kapi) {
       var canvas = document.getElementById('canvas')
-          ,kapi = new Kapi(canvas, {
-            'fps': 60
-            ,'height': 500
-            ,'width': 600
-          })
+          ,kapi = new Kapi()
           ,cat
           ,time = 0;
 
-      kapi.canvas_style('background', '#eee');
-      kapi.canvas_style('overflow', 'hidden');
       cat = new Kapi.DOMActor(document.getElementsByTagName('img')[0]);
       kapi.addActor(cat);
 

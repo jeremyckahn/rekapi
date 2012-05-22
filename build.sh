@@ -25,9 +25,10 @@ cat /tmp/rekapi.header.js \
   /tmp/rekapi.iife-open.js \
   src/rekapi.core.js \
   src/rekapi.actor.js \
-  src/rekapi.canvas.js \
   src/rekapi.keyframeprops.js \
-  ext/dom/rekapi.dom.js \
+  ext/canvas/rekapi.canvas.context.js \
+  ext/canvas/rekapi.canvas.actor.js \
+  ext/dom/rekapi.dom.actor.js \
   ext/to-css/rekapi.to-css.js \
   src/rekapi.init.js \
   /tmp/rekapi.iife-close.js \
@@ -56,6 +57,7 @@ cp lib/shifty/dist/shifty.min.js dist/shifty.js
 
 cat /tmp/rekapi.header.js > dist/rekapi.bundle.min.js
 cat dist/underscore.js >> dist/rekapi.bundle.min.js
+
 # Semicolon insertions fix bizarre Closure bugs.  They separate the libraries.
 echo ";" >> dist/rekapi.bundle.min.js
 cat dist/shifty.js >> dist/rekapi.bundle.min.js

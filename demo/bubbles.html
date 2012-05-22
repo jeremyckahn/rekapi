@@ -1,15 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="../dist/rekapi.bundle.min.js"></script>
+  <script src="../lib/shifty/tests/utils/require.js"></script>
 </head>
 <body>
-  <canvas></canvas>
+  <canvas style="background: #eee;"></canvas>
   <script>
-  (function (global) {
+  require.config({
+    paths: {
+      shifty: "../dist/shifty",
+      underscore: "../dist/underscore",
+      rekapi: "../dist/rekapi"
+    }
+  });
+  require(['rekapi', 'shifty', 'underscore'], function(Kapi, Tweenable, _) {
 
     function makeBubble () {
-      return new Kapi.Actor({
+      return new Kapi.CanvasActor({
         'draw': function (canvas_context, state) {
           canvas_context.beginPath();
           canvas_context.arc(
@@ -44,11 +51,11 @@
     }
 
     function getBubbleX () {
-      return Math.random() * kapi.canvas_width();
+      return Math.random() * kapi.canvasWidth();
     }
 
     function getBubbleY () {
-      return Math.random() * kapi.canvas_height();
+      return Math.random() * kapi.canvasHeight();
     }
 
     function getSize () {
@@ -94,8 +101,8 @@
         kapi.addActor(bubbles[i]);
 
         bubbles[i].keyframe(time, {
-          'x': kapi.canvas_width() / 2
-          ,'y': kapi.canvas_height() + 50
+          'x': kapi.canvasWidth() / 2
+          ,'y': kapi.canvasHeight() + 50
           ,'radius': 0
           ,'color': getColor()
         }, {
@@ -152,15 +159,14 @@
     }
 
     var canvas = document.getElementsByTagName('canvas')[0]
-        ,kapi = new Kapi(canvas, {
-          'fps': 30
-          ,'height': 500
-          ,'width': 500
-          ,'doRoundNumbers': false
+        ,kapi = new Kapi({
+          'context': canvas
+          ,'fps': 30
         })
         ,bubbles = [];
 
-    kapi.canvas_style('background', '#eee');
+    kapi.canvasHeight(500);
+    kapi.canvasWidth(500);
     kapi.bind('onAnimationComplete', generateSequence)
 
     kapi.setOrderFunction(function (actor) {
@@ -169,7 +175,7 @@
 
     generateSequence();
 
-  } (this));
+    });
   </script>
 </body>
 </html>

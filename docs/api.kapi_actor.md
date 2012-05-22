@@ -3,8 +3,9 @@
 ````javascript
 /**
  * @param {Object=} opt_config
+ *   @param {Object=} context
  *   @param {function=} setup
- *   @param {function(CanvasRenderingContext2D, Object)=} draw
+ *   @param {function(Object, Object)=} draw
  *   @param {function=} teardown
  * @constructor
  */
@@ -13,13 +14,29 @@ Kapi.Actor (opt_config)
 
 Create a `Kapi.Actor` instance.
 
-Valid properties of `opt_config`:
+Valid properties of `opt_config` (you can omit the ones you don't need):
 
+* __context__: The context that this Actor gets rendered to.  If omitted, this Actor gets the `Kapi` instance's rendering context when it is added to an animation.
 * __setup__: A function that gets called when the `Actor` is added to a `Kapi` instance (with `addActor()`).
 * __draw__: A function that gets called every frame that the actor is rendered in.  It receives two parameters:  A reference to a `<canvas>` context, and an Object containing the current state properties.  _This method should render the state properties to the screen with the `<canvas>` context._
 * __teardown__: A function that gets called when the `Actor` is removed from the animation (with `removeActor()`).
 
+`Kapi.Actor` does _not_ render to any context.  It is a base class.  Use the [`Kapi.CanvasActor`](../ext/canvas) [`Kapi.DOMActor`](../ext/dom) subclasses to render to the screen.
+
 __[Example](examples/actor.html)__
+
+
+### context
+
+````javascript
+/**
+ * @param {Object} opt_context
+ * @return {Object}
+ */
+Kapi.Actor.prototype.context (opt_context)
+````
+
+Get and optionally set the `Actor`'s rendering context.
 
 
 ### keyframe

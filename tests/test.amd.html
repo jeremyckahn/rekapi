@@ -22,41 +22,11 @@
   <script src="../lib/test-amd/require-1.0.7+undef.js"></script>
   <script>
   function setupTestKapi (Kapi) {
-    var sandbox
-        ,kapi
-        ,actor;
-
-    sandbox = document.getElementById('sandbox');
-    kapi = new Kapi(sandbox);
-
-    kapi.canvas_style('background', '#ddd');
-    kapi.canvas_height(300);
-    kapi.canvas_width(500);
-
-    return kapi;
+    return new Kapi();
   }
 
   function  setupTestActor (Kapi, forKapi) {
-    var actor;
-
-    actor = new Kapi.Actor({
-      'draw': function (canvas_context, state) {
-        canvas_context.beginPath();
-          canvas_context.arc(
-            this.x || 0,
-            this.y || 0,
-            this.radius || 0,
-            0,
-            Math.PI*2,
-            true);
-          canvas_context.fillStyle = this.color || '#f0f';
-          canvas_context.fill();
-          canvas_context.closePath();
-
-          return this;
-      }
-    });
-
+    var actor = new Kapi.Actor();
     forKapi.addActor(actor);
     return actor;
   }
@@ -197,15 +167,15 @@
         });
       });
     });
-    
+
     asyncTest("Can instantiate a DOMActor", function() {
       requireConfig();
 
       require(['rekapi'], function(Kapi) {
         var actor, el;
-        
+
         ok(Kapi.DOMActor !== undefined);
-        
+
         if (Kapi.DOMActor) {
           el = document.createElement("div");
           actor = new Kapi.DOMActor(el);

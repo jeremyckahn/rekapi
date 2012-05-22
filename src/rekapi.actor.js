@@ -5,7 +5,8 @@ var rekapiActor = function (global, deps) {
       ,actorCount
       ,ActorMethods
       ,_ = (deps && deps.underscore) ? deps.underscore : global._
-      ,Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : global.Tweenable;
+      ,Tweenable = (deps && deps.Tweenable) ?
+          deps.Tweenable : global.Tweenable;
 
   gk = global.Kapi;
   actorCount = 0;
@@ -177,6 +178,10 @@ var rekapiActor = function (global, deps) {
       ,'teardown': opt_config.teardown || gk.util.noop
     });
 
+    if (opt_config.context) {
+      this.context(opt_context);
+    }
+
     return this;
   };
 
@@ -192,6 +197,19 @@ var rekapiActor = function (global, deps) {
 
 
   /**
+   * @param {Object} opt_context
+   * @return {Object}
+   */
+  gk.Actor.prototype.context = function (opt_context) {
+    if (opt_context) {
+      this._context = opt_context;
+    }
+
+    return this._context;
+  };
+
+
+  /**
    * @param {number} when
    * @param {Object} position
    * @param {string|Object} easing
@@ -201,10 +219,10 @@ var rekapiActor = function (global, deps) {
       opt_easing) {
     var originalEasingString;
 
-    // This code will be used.  Other work needs to be done beforehand, though.
-    if (!opt_easing) {
-      opt_easing = DEFAULT_EASING;
-    }
+    // TODO:  The opt_easing logic seems way overcomplicated, it's probably out
+    // of date.  Multiple eases landed first in Rekapi, then were pushed
+    // upstream into Shifty.  There's likely some redundant logic here.
+    opt_easing = opt_easing || DEFAULT_EASING;
 
     if (typeof opt_easing === 'string') {
       originalEasingString = opt_easing;
@@ -507,7 +525,6 @@ var rekapiActor = function (global, deps) {
    * @return {Kapi.Actor}
    */
   gk.Actor.prototype.calculatePosition = function (millisecond) {
-    //TODO: This function is too long!  It needs to be broken out somehow.
     var delta
         ,startMs
         ,endMs
@@ -602,7 +619,7 @@ var rekapiActor = function (global, deps) {
 
 
   /**
-   * Start Shifty interoperability methods...
+   * Start Shifty interoperability logic...
    ******/
 
   _.each(['tween', 'to'], function (shiftyMethodName) {
@@ -613,7 +630,7 @@ var rekapiActor = function (global, deps) {
   }, this);
 
   /******
-   * ...End Shifty interoperability methods.
+   * ...End Shifty interoperability logic.
    */
 
 };

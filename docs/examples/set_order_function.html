@@ -11,12 +11,13 @@
     <script>
       var canvas = document.getElementsByTagName('canvas')[0];
 
-      var kapi = new Kapi(canvas, {
+      var kapi = new Kapi({
+        'context': canvas,
         'height': 300,
         'width': 400
       });
 
-      var actor1 = new Kapi.Actor({
+      var actor1 = new Kapi.CanvasActor({
         'draw': function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
@@ -34,7 +35,7 @@
         }
       });
 
-      var actor2 = new Kapi.Actor({
+      var actor2 = new Kapi.CanvasActor({
         'draw': function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(

@@ -11,7 +11,8 @@
     <script>
       var canvas = document.getElementsByTagName('canvas')[0];
 
-      var kapi = new Kapi(canvas, {
+      var kapi = new Kapi({
+        'context': canvas,
         'height': 300,
         'width': 400
       });

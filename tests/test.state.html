@@ -8,46 +8,14 @@
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
   <script src="../src/rekapi.keyframeprops.js"></script>
-  <script src="../src/rekapi.canvas.js"></script>
-  <script src="../ext/dom/rekapi.dom.js"></script>
   <script src="../src/rekapi.init.js"></script>
   <script>
   function setupTestKapi () {
-    var sandbox
-        ,kapi
-        ,actor;
-
-    sandbox = document.getElementById('sandbox');
-    kapi = new Kapi(sandbox);
-
-    kapi.canvas_style('background', '#ddd');
-    kapi.canvas_height(300);
-    kapi.canvas_width(500);
-
-    return kapi;
+    return new Kapi();
   }
 
   function  setupTestActor (forKapi) {
-    var actor;
-
-    actor = new Kapi.Actor({
-      'draw': function (canvas_context, state) {
-        canvas_context.beginPath();
-          canvas_context.arc(
-            this.x || 0,
-            this.y || 0,
-            this.radius || 0,
-            0,
-            Math.PI*2,
-            true);
-          canvas_context.fillStyle = this.color || '#f0f';
-          canvas_context.fill();
-          canvas_context.closePath();
-
-          return this;
-      }
-    });
-
+    var actor = new Kapi.Actor();
     forKapi.addActor(actor);
     return actor;
   }
@@ -61,7 +29,6 @@
           ,testActor1;
 
       testKapi = setupTestKapi();
-      // setupTestActor calls addActor
       testActor1 = setupTestActor(testKapi);
 
       equals(testKapi._actors[testActor1.id], testActor1,
@@ -483,33 +450,6 @@
           'Actor was exported');
     });
 
-    module('context');
-
-    test('Can set Canvas context', function () {
-      var testKapi = new Kapi(document.createElement('canvas'));
-
-      ok(testKapi.canvas_getContext() instanceof CanvasRenderingContext2D,
-          'Context is a canvas');
-    });
-
-
-    test('Can set DOM element context', function () {
-      var testKapi = new Kapi(document.createElement('div'));
-
-      ok(testKapi.canvas_getContext() instanceof HTMLElement,
-          'Context is a DOM element');
-    });
-
-
-    test('Can set Object context', function () {
-      var testKapi = new Kapi({});
-
-      // I'm pretty sure this is the most convoluted way to see if an Object
-      // is an empty, pure Object
-      equals(testKapi.canvas_getContext().__proto__.__proto__, null,
-          'Context is an Object');
-    });
-
   } ());
   </script>
 </head>
@@ -520,6 +460,5 @@
    <h2 id="qunit-userAgent"></h2>
    <ol id="qunit-tests"></ol>
    <div id="qunit-fixture"></div>
-  <canvas id="sandbox"></canvas>
 </body>
 </html>

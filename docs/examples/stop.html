@@ -11,12 +11,13 @@
     <script>
       var canvas = document.getElementsByTagName('canvas')[0];
 
-      var kapi = new Kapi(canvas, {
+      var kapi = new Kapi({
+        'context': canvas,
         'height': 300,
         'width': 400
       });
 
-      var actor = new Kapi.Actor({
+      var actor = new Kapi.CanvasActor({
         'draw': function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
@@ -42,7 +43,7 @@
       kapi.play();
 
       setTimeout(function () {
-        kapi.stop(true);
+        kapi.stop();
       }, 750);
     </script>
   </body>

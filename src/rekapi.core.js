@@ -117,8 +117,6 @@ var rekapiCore = function (global, deps) {
    */
   function tick (kapi) {
     kapi._loopId = kapi._scheduleUpdate.call(window, function () {
-      // First, schedule the next update.  renderCurrentMillisecond can cancel
-      // the update if necessary.
       tick(kapi);
       renderCurrentMillisecond(kapi);
     }, 1000 / kapi.config.fps);
@@ -183,14 +181,12 @@ var rekapiCore = function (global, deps) {
     // NOOP!
   }
 
-  var _ = (deps && deps.underscore) ? deps.underscore : global._
-      ,Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : global.Tweenable;
-
+  var _ = (deps && deps.underscore) ? deps.underscore : global._;
+  var Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : global.Tweenable;
+  var now = Tweenable.util.now;
 
   var defaultConfig = {
     'fps': 60
-    ,'height': 150
-    ,'width': 300
     ,'doRoundNumbers': false
     ,'clearOnUpdate': true
   };
@@ -201,18 +197,15 @@ var rekapiCore = function (global, deps) {
     ,'PLAYING': 'playing'
   };
 
-  var now = Tweenable.util.now;
 
   /**
-   * @param {HTMLCanvas} canvas
+   * @param {Object} context
    * @param {Object} opt_config
    * @constructor
    */
-  var gk = global.Kapi || function Kapi (canvas, opt_config) {
-    this.canvas = canvas;
-    this._contextType = null;
-    this.canvas_setContext(canvas);
-    this.config = {};
+  var gk = global.Kapi || function Kapi (opt_config) {
+    this.config = opt_config || {};
+    this.context = this.config.context;
     this._actors = {};
     this._drawOrder = [];
     this._playState = playState.STOPPED;
@@ -225,6 +218,7 @@ var rekapiCore = function (global, deps) {
       ,'onPlay': []
       ,'onPause': []
       ,'onStop': []
+      ,'onBeforeDraw': []
     };
 
     // How many times to loop the animation before stopping.
@@ -251,17 +245,19 @@ var rekapiCore = function (global, deps) {
     this._scheduleUpdate = getUpdateMethod(this.config.fps);
     this._cancelUpdate = getCancelMethod(this.config.fps);
 
-    // Apply the height and width if they were passed in the`config` Object.
-    // Also delete them from the internal config - we won't need them anymore.
-    _.each(['height', 'width'], function (dimension) {
-      if (this.config[dimension]) {
-        this['canvas_' + dimension](this.config[dimension]);
-        delete this.config[dimension];
-      }
-    }, this);
+    _.each(this._contextInitHook, function (fn) {
+      fn.call(this);
+    }, this)
 
     return this;
   };
+
+
+  /**
+   * @type {{function}} Contains the context init function to be called in the
+   * Kapi contstructor.
+   */
+  gk.prototype._contextInitHook = {};
 
 
   /**
@@ -289,6 +285,10 @@ var rekapiCore = function (global, deps) {
   gk.prototype.addActor = function (actor) {
     // You can't add an actor more than once.
     if (!_.contains(this._actors, actor)) {
+      if (!actor.context()) {
+        actor.context(this.context);
+      }
+
       actor.kapi = this;
       actor.fps = this.framerate();
       this._actors[actor.id] = actor;
@@ -357,7 +357,7 @@ var rekapiCore = function (global, deps) {
     this._playState = playState.PLAYING;
     tick(this);
 
-    // also resume any shifty tweens that are paused.
+    // also resume any Shifty tweens that are paused.
     _.each(this._actors, function (actor) {
       if (actor._state.isPaused ) {
         actor.resume();
@@ -420,24 +420,15 @@ var rekapiCore = function (global, deps) {
 
 
   /**
-   * @param {boolean} alsoClear
    * @return {Kapi}
    */
-  gk.prototype.stop = function (alsoClear) {
+  gk.prototype.stop = function () {
     this._playState = playState.STOPPED;
     this._cancelUpdate.call(window, this._loopId);
 
-    if (alsoClear === true) {
-      this.canvas_clear();
-    }
-
-    // also kill any shifty tweens that are running.
+    // Also kill any shifty tweens that are running.
     _.each(this._actors, function (actor) {
       actor.stop();
-
-      if (alsoClear === true) {
-        actor.hide();
-      }
     });
 
     fireEvent(this, 'onPlayStateChange');
@@ -559,12 +550,8 @@ var rekapiCore = function (global, deps) {
         ,orderedActors
         ,drawOrder;
 
-    if (this.config.clearOnUpdate) {
-      this.canvas_clear();
-    }
-
+    fireEvent(this, 'onBeforeDraw');
     len = this._drawOrder.length;
-    canvas_context = this.canvas_getContext();
 
     if (this._drawOrderSorter) {
       orderedActors = drawOrder =
@@ -577,6 +564,7 @@ var rekapiCore = function (global, deps) {
     for (i = 0; i < len; i++) {
       currentActor = this._actors[drawOrder[i]];
       if (currentActor.isShowing()) {
+        canvas_context = currentActor.context();
         currentActor.draw(canvas_context, currentActor.get());
       }
     }
@@ -598,7 +586,7 @@ var rekapiCore = function (global, deps) {
       return actor;
     }
 
-    return undefined;
+    return;
   };
 
 

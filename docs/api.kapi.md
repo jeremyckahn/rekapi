@@ -97,81 +97,6 @@ Remove `actor` from the animation.  This does not destroy `actor`, it only remov
 __[Example](examples/remove_actor.html)__
 
 
-### play
-
-````javascript
-/**
- * @param {number=} opt_howManyTimes
- * @returns {Kapi}
- */
-Kapi.prototype.play (opt_howManyTimes)
-````
-
-Play the animation on a loop, either a set amount of times or infinitely.  If `opt_howManyTimes` is omitted, the animation will loop infinitely.
-
-__[Example](examples/play.html)__
-
-
-### playFrom
-
-````javascript
-/**
- * @param {number} millisecond
- * @param {number=} opt_howManyTimes
- * @returns {Kapi}
- */
-Kapi.prototype.playFrom (millisecond, opt_howManyTimes)
-````
-
-Move to a specific millisecond on the timeline and play from there.  `opt_howManyTimes` works as it does in `play()`.
-
-__[Example](examples/play_from.html)__
-
-
-### playFromCurrent
-
-````javascript
-/**
- * @param {number=} opt_howManyTimes
- * @returns {Kapi}
- */
-Kapi.prototype.playFromCurrent (opt_howManyTimes)
-````
-
-Play from the last frame that was drawn with `render()`. `opt_howManyTimes` works as it does in `play()`.
-
-__[Example](examples/play_from_current.html)__
-
-
-### pause
-
-````javascript
-/**
- * @returns {Kapi}
- */
-Kapi.prototype.pause ()
-````
-
-Pause the animation.  A "paused" animation can be resumed from where it left off with `play()`.
-
-__[Example](examples/pause.html)__
-
-
-### stop
-
-````javascript
-/**
- * @param {boolean} alsoClear
- * @returns {Kapi}
- */
-Kapi.prototype.stop (alsoClear)
-````
-
-Stop the animation.  A "stopped" animation will start from the beginning if `play()` is called upon it again.  If `alsoClear` is `true`, the contents of the canvas will be cleared.  It is `false` by default.
-
-__[Example](examples/stop.html)__
-
-
 ### isPlaying
 
 ````javascript
@@ -343,6 +268,7 @@ Kapi.prototype.bind (eventName, handler)
 
 Bind an handler function to a Kapi event.  Possible events include:
 
+* __onBeforeDraw__: Fires each frame before Actors are rendered.
 * __onFrameRender__: Fires when a frame is rendered.
 * __onAnimationComplete__: Fires when all loops have finished.
 * __onPlayStateChange__: Fires when the animation is played, paused, or stopped.
@@ -402,73 +328,3 @@ Kapi.prototype.unsetOrderFunction ()
 Remove the sort order function set by `setOrderFunction`.  Draw order defaults back to the order in which `Actors` were added.
 
 __[Example](examples/unset_order_function.html)__
-
-
-### canvas_setContext
-
-````javascript
-/**
- * @param {HTMLCanvas|HTMLElement|Object} canvas
- * @returns {CanvasRenderingContext2D|HTMLElement|Object}
- */
-Kapi.prototype.canvas_setContext (canvas)
-````
-
-Define the context that Kapi is rendering in.  This can be either an HTML 5 <canvas>, other DOM element, or Object.  Note that if `canvas` is not an HTML 5 <canvas>, `canvas_clear` doesn't do anything.
-
-
-### canvas_getContext
-
-````javascript
-/**
- * @returns {CanvasRenderingContext2D|HTMLElement|Object}
- */
-Kapi.prototype.canvas_getContext ()
-````
-
-Return the 2d context of the `<canvas>`.  This is needed for any and all drawing operations - it is also provided to an `Actor`'s `draw` method.  See the [MDN](https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas) for more info on the `<canvas>` context.
-
-
-### canvas_height, canvas_width
-
-````javascript
-/**
- * @param {number=} opt_height
- * @returns {number}
- */
-Kapi.prototype.canvas_height (opt_height)
-
-/**
- * @param {number=} opt_width
- * @returns {number}
- */
-Kapi.prototype.canvas_width (opt_width)
-````
-
-These methods get and optionally set their respective dimensions on the canvas.
-
-
-### canvas_style
-
-````javascript
-/**
- * @param {string} styleName
- * @param {number|string=} opt_styleValue
- * @returns {number|string}
- */
-Kapi.prototype.canvas_style (styleName, opt_styleValue)
-````
-
-Get and optionally set a CSS style on the canvas.
-
-
-### canvas_clear
-
-````javascript
-/**
- * @returns {Kapi}
- */
-Kapi.prototype.canvas_clear ()
-````
-
-Erase the canvas.  This only does something if Kapi is bound to an HTML 5 `<canvas>`.

@@ -1,16 +1,22 @@
-
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="../dist/rekapi.bundle.min.js"></script>
+  <script src="../lib/shifty/tests/utils/require.js"></script>
 </head>
 <body>
-  <canvas></canvas>
+  <canvas style="background: #eee;"></canvas>
   <script>
-  (function (global) {
+  require.config({
+    paths: {
+      shifty: "../dist/shifty",
+      underscore: "../dist/underscore",
+      rekapi: "../dist/rekapi"
+    }
+  });
+  require(['rekapi', 'underscore'], function(Kapi, _) {
 
     function makeBarActor (val) {
-      return new Kapi.Actor({
+      return new Kapi.CanvasActor({
         'setup': function () {
           this.data({
             'val': val
@@ -50,15 +56,14 @@
     }
 
     var canvas = document.getElementsByTagName('canvas')[0]
-        ,kapi = new Kapi(canvas, {
-          'fps': 60
-          ,'height': 400
-          ,'width': 250
+        ,kapi = new Kapi({
+          'context': canvas
         })
         ,BASELINE = 350
         ,bars = [];
 
-    kapi.canvas_style('background', '#eee');
+    kapi.canvasHeight(400);
+    kapi.canvasWidth(250);
     bars[0] = makeBarActor(150);
     bars[1] = makeBarActor(300);
     bars[2] = makeBarActor(270);
@@ -88,7 +93,7 @@
 
     kapi.play();
 
-  } (this));
+  });
   </script>
 </body>
 </html>

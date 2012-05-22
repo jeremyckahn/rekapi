@@ -11,13 +11,14 @@
     <script>
       var canvas = document.getElementsByTagName('canvas')[0];
 
-      var kapi = new Kapi(canvas, {
+      var kapi = new Kapi({
+        'context': canvas,
         'height': 300,
         'width': 400
       });
 
       function getActorInstance () {
-        return new Kapi.Actor({
+        return new Kapi.CanvasActor({
           'draw': function (canvas_context, state) {
             canvas_context.beginPath();
               canvas_context.arc(
