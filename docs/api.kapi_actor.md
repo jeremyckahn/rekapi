@@ -38,6 +38,8 @@ Kapi.Actor.prototype.context (opt_context)
 
 Get and optionally set the `Actor`'s rendering context.
 
+__[Example](examples/actor_context.html)__
+
 
 ### keyframe
 
