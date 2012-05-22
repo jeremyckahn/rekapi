@@ -18,10 +18,11 @@ but they are not identical.  Rekapi is not a drop-in replacement for Kapi.
 Rekapi is way awesomer, so you should use it instead.
 
 The API may change somewhat before reaching 1.0.  __[See how to upgrade from
-older versions.](blob/master/docs/upgrading.md)__.
+older versions.
+](https://github.com/jeremyckahn/rekapi/blob/master/docs/upgrading.md)__.
 
-__[Please see the getting started 
-guide](blob/master/docs/getting_started.md)__.
+__[Please see the getting started guide
+](https://github.com/jeremyckahn/rekapi/blob/master/docs/getting_started.md)__.
 
 ## What is keyframing?
 
