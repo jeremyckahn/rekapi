@@ -182,20 +182,6 @@ Calculate the positions for all `Actor`s at `millisecond`, and then render them.
 __[Example](examples/render.html)__
 
 
-### draw
-
-````javascript
-/**
- * @returns {Kapi}
- */
-Kapi.prototype.draw ()
-````
-
-Draw all the `Actor`s at whatever position they are currently in.
-
-__[Example](examples/draw.html)__
-
-
 ### redraw
 
 ````javascript

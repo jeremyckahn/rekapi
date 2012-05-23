@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.8.2
+ * Rekapi - Rewritten Kapi. v0.8.3
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -183,6 +183,41 @@ var rekapiCore = function (global, deps) {
         window.clearTimeout;
     }
   }
+
+
+  /**
+   * Draw all the `Actor`s at whatever position they are currently in.
+   * @param {Kapi}
+   * @return {Kapi}
+   */
+  function draw (kapi) {
+    var i, len
+        ,currentActor
+        ,canvas_context
+        ,orderedActors
+        ,drawOrder;
+
+    fireEvent(kapi, 'onBeforeDraw');
+    len = kapi._drawOrder.length;
+
+    if (kapi._drawOrderSorter) {
+      orderedActors = drawOrder =
+          _.sortBy(kapi._actors, kapi._drawOrderSorter);
+      drawOrder = _.pluck(orderedActors, 'id');
+    } else {
+      drawOrder = kapi._drawOrder;
+    }
+
+    for (i = 0; i < len; i++) {
+      currentActor = kapi._actors[drawOrder[i]];
+      if (currentActor.isShowing()) {
+        canvas_context = currentActor.context();
+        currentActor.render(canvas_context, currentActor.get());
+      }
+    }
+
+    return kapi;
+  };
 
 
   /**
@@ -501,7 +536,7 @@ var rekapiCore = function (global, deps) {
    */
   gk.prototype.render = function (millisecond) {
     this.calculateActorPositions(millisecond);
-    this.draw();
+    draw(this);
     this._lastRenderedMillisecond = millisecond;
     fireEvent(this, 'onFrameRender');
 
@@ -528,39 +563,6 @@ var rekapiCore = function (global, deps) {
 
     for (var i = 0; i < len; i++) {
       this._actors[this._drawOrder[i]].calculatePosition(millisecond);
-    }
-
-    return this;
-  };
-
-
-  /**
-   * @return {Kapi}
-   */
-  gk.prototype.draw = function () {
-    var i, len
-        ,currentActor
-        ,canvas_context
-        ,orderedActors
-        ,drawOrder;
-
-    fireEvent(this, 'onBeforeDraw');
-    len = this._drawOrder.length;
-
-    if (this._drawOrderSorter) {
-      orderedActors = drawOrder =
-          _.sortBy(this._actors, this._drawOrderSorter);
-      drawOrder = _.pluck(orderedActors, 'id');
-    } else {
-      drawOrder = this._drawOrder;
-    }
-
-    for (i = 0; i < len; i++) {
-      currentActor = this._actors[drawOrder[i]];
-      if (currentActor.isShowing()) {
-        canvas_context = currentActor.context();
-        currentActor.render(canvas_context, currentActor.get());
-      }
     }
 
     return this;
