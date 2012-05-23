@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.8.1
+ * Rekapi - Rewritten Kapi. v0.8.2
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -198,7 +198,6 @@ var rekapiCore = function (global, deps) {
 
   var defaultConfig = {
     'fps': 60
-    ,'doRoundNumbers': false
     ,'clearOnUpdate': true
   };
 
@@ -525,26 +524,10 @@ var rekapiCore = function (global, deps) {
    * @return {Kapi}
    */
   gk.prototype.calculateActorPositions = function (millisecond) {
-    var i, len, initialRoundSetting;
+    var len = this._drawOrder.length;
 
-    initialRoundSetting = Tweenable.util.isRoundingEnabled();
-
-    if (this.config.doRoundNumbers) {
-      Tweenable.util.enableRounding();
-    } else {
-      Tweenable.util.disableRounding();
-    }
-
-    len = this._drawOrder.length;
-
-    for (i = 0; i < len; i++) {
+    for (var i = 0; i < len; i++) {
       this._actors[this._drawOrder[i]].calculatePosition(millisecond);
-    }
-
-    if (initialRoundSetting === true) {
-      Tweenable.util.enableRounding();
-    } else {
-      Tweenable.util.disableRounding();
     }
 
     return this;

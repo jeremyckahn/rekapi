@@ -1,3 +1,8 @@
+# Upgrading to Rekapi 0.8.2
+
+Rounding functionality was removed.  Passing `doRoundNumbers` to the `Kapi`
+constructor will do nothing.
+
 # Upgrading to Rekapi 0.8.1
 
 The `draw` method that gets passed into the `Kapi.Actor` constructor (and its
