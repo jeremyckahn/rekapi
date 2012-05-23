@@ -7,8 +7,7 @@
     <script src="../../src/rekapi.core.js"></script>
     <script src="../../src/rekapi.actor.js"></script>
     <script src="../../src/rekapi.keyframeprops.js"></script>
-    <script src="../../src/rekapi.canvas.js"></script>
-    <script src="../../ext/dom/rekapi.dom.js"></script>
+    <script src="../../ext/dom/rekapi.dom.actor.js"></script>
     <script src="rekapi.to-css.js"></script>
     <script src="../../src/rekapi.init.js"></script>
     <style type="text/css">
@@ -28,9 +27,7 @@
     </div>
     <script>
 
-      var animation = new Kapi(document.getElementById('animation-container'), {
-        'fps': 60
-      });
+      var animation = new Kapi();
       var actorDiv = document.getElementById('actor-1');
       var actor = new Kapi.DOMActor(actorDiv);
       animation.addActor(actor);
