@@ -104,10 +104,10 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
  * @param {number} copyFrom The millisecond to copy KeyframeProperties from
  * @return {Kapi.Actor}
  */
-Kapi.Actor.prototype.copyProperties (when, opt_source)
+Kapi.Actor.prototype.copyProperties (copyTo, copyFrom)
 ````
 
-Copy all of the properties that at one point in the timeline to another point. This effectively copies the state of an `Actor` from point to another.
+Copy all of the properties that at one point in the timeline to another point.
 
 
 ### wait
