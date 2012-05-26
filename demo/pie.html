@@ -139,7 +139,8 @@
       })
       .wait(delay += 75)
       .keyframe(1800, {
-        'spread': 0
+        'scale': 1
+        ,'spread': 0
         ,'opacity': 1
       }, {
         'spread': 'bouncePast'
@@ -147,12 +148,14 @@
       })
       .wait(2500 + delay)
       .keyframe(3000 + delay * 2, {
-        'spread': 16
+        'scale': 1
+        ,'spread': 16
       }, {
         'spread': 'easeFromTo'
       })
       .keyframe(3900 + delay * 2, {
-        'spread': 0
+        'scale': 1
+        ,'spread': 0
       }, {
         'spread': 'easeFromTo'
       })

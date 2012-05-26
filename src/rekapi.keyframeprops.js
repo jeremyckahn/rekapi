@@ -74,7 +74,7 @@ var rekapiKeyframeProperty = function (global, deps) {
       value = Tweenable.util.interpolate(fromObj, toObj, interpolatedPosition,
           this.nextProperty.easing)[this.name];
     } else {
-      value =  null;
+      value =  this.value;
     }
 
     return value;

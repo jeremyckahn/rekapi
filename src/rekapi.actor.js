@@ -24,13 +24,10 @@ var rekapiActor = function (global, deps) {
    */
   //TODO:  Oh noes, this is a linear search!  Maybe optimize it?
   function getPropertyCacheIdForMillisecond (actor, millisecond) {
-    var i, len
-        ,list;
+    var list = actor._timelinePropertyCacheIndex;
+    var len = list.length;
 
-    list = actor._timelinePropertyCacheIndex;
-    len = list.length;
-
-    for (i = 1; i < len; i++) {
+    for (var i = 1; i < len; i++) {
       if (list[i] >= millisecond) {
         return (i - 1);
       }
@@ -60,23 +57,45 @@ var rekapiActor = function (global, deps) {
    */
   function cachePropertiesToSegments (actor) {
     _.each(actor._timelinePropertyCaches, function (propertyCache, cacheId) {
-      var latestProperties = {};
-
-      _.each(actor._propertyTracks, function (propertyTrack, propertyName) {
-        var previousKeyframeProperty = null;
-
-        _.find(propertyTrack, function (keyframeProperty) {
-          if (keyframeProperty.millisecond > cacheId) {
-            latestProperties[propertyName] = previousKeyframeProperty;
-          }
-
-          previousKeyframeProperty = keyframeProperty;
-          return !!latestProperties[propertyName];
-        });
-      });
-
+      var latestProperties = getLatestPropeties(actor, +cacheId);
       _.defaults(propertyCache, latestProperties);
     });
+  }
+
+
+  /**
+   * Gets all of the current and most recent Kapi.KeyframeProperty's for a
+   * given millisecond.
+   * @param {Kapi.Actor} actor
+   * @param {number} forMillisecond
+   */
+  function getLatestPropeties (actor, forMillisecond) {
+    var latestProperties = {};
+
+    _.each(actor._propertyTracks, function (propertyTrack, propertyName) {
+      var previousKeyframeProperty = null;
+
+      _.find(propertyTrack, function (keyframeProperty) {
+        if (keyframeProperty.millisecond > forMillisecond) {
+          latestProperties[propertyName] = previousKeyframeProperty;
+        } else if (keyframeProperty.millisecond === forMillisecond) {
+          latestProperties[propertyName] = keyframeProperty;
+        }
+
+        previousKeyframeProperty = keyframeProperty;
+        return !!latestProperties[propertyName];
+      });
+
+      if (!latestProperties[propertyName]) {
+        var lastProp = _.last(propertyTrack);
+
+        if (lastProp && lastProp.millisecond <= forMillisecond) {
+          latestProperties[propertyName] = lastProp;
+        }
+      }
+    });
+
+    return latestProperties;
   }
 
 
@@ -107,48 +126,6 @@ var rekapiActor = function (global, deps) {
     return _.find(actor._propertyTracks[trackName],
         function (keyframeProperty) {
       return keyframeProperty.millisecond === millisecond;
-    });
-  }
-
-
-  /**
-   * For a given millisecond, determine all of the latest keyframe properties
-   * for each property track and decorate `providedPositions` and
-   * `providedEasings` with their value and easing.
-   *
-   * @param {Kapi.Actor} actor
-   * @param {Object} providedPositions
-   * @param {Object} providedEasings
-   * @param {number} forMillisecond
-   */
-  function fillInMissingProperties (actor, providedPositions, providedEasings,
-      forMillisecond) {
-    var trackedPropertyNames = _.keys(actor._propertyTracks);
-    var providedPropertyNames = _.keys(providedPositions);
-    var missingProperties = _.difference(trackedPropertyNames,
-        providedPropertyNames);
-    var latestPropertiesForMillisecond = {};
-
-    _.each(missingProperties, function (propertyName) {
-      var reversedProperties;
-
-      reversedProperties = actor._propertyTracks[propertyName]
-          .slice(0).reverse();
-
-      _.each(reversedProperties, function (keyframeProperty) {
-        if (keyframeProperty.millisecond < forMillisecond
-            && !latestPropertiesForMillisecond[propertyName]) {
-          latestPropertiesForMillisecond[propertyName] = {
-            'value': keyframeProperty.value
-            ,'easing': keyframeProperty.easing
-          };
-        }
-      });
-    });
-
-    _.each(latestPropertiesForMillisecond, function (property, propertyName) {
-      providedPositions[propertyName] = property.value;
-      providedEasings[propertyName] = property.easing;
     });
   }
 
@@ -237,8 +214,6 @@ var rekapiActor = function (global, deps) {
     _.each(position, function (positionVal, positionName) {
       opt_easing[positionName] = opt_easing[positionName] || DEFAULT_EASING;
     });
-
-    fillInMissingProperties(this, position, opt_easing, when);
 
     _.each(position, function (value, name) {
       var newKeyframeProperty;
@@ -355,7 +330,19 @@ var rekapiActor = function (global, deps) {
       return this;
     }
 
-    this.copyProperties(until, length);
+    var end = this.getEnd();
+    var latestProps = getLatestPropeties(this, this.getEnd());
+    var serializedProps = {};
+    var serializedEasings = {};
+
+    _.each(latestProps, function (latestProp, propName) {
+      serializedProps[propName] = latestProp.value;
+      serializedEasings[propName] = latestProp.easing;
+    });
+
+    this.removeKeyframe(end);
+    this.keyframe(end, serializedProps, serializedEasings);
+    this.keyframe(until, serializedProps, serializedEasings);
 
     return this;
   };
@@ -443,18 +430,21 @@ var rekapiActor = function (global, deps) {
   gk.Actor.prototype.removeKeyframe = function (when) {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       var i = -1;
+      var foundProperty = false;
 
       _.find(propertyTrack, function (keyframeProperty) {
         i++;
-        return when === keyframeProperty.millisecond;
+        foundProperty = (when === keyframeProperty.millisecond);
+        return foundProperty;
       });
 
-      var removedProperty = propertyTrack.splice(i, 1)[0];
+      if (foundProperty) {
+        var removedProperty = propertyTrack.splice(i, 1)[0];
 
-      if (removedProperty) {
-        delete this._keyframeProperties[removedProperty.id];
+        if (removedProperty) {
+          delete this._keyframeProperties[removedProperty.id];
+        }
       }
-
     }, this);
     this.kapi._recalculateAnimationLength();
     this.invalidatePropertyCache();
@@ -525,28 +515,23 @@ var rekapiActor = function (global, deps) {
    * @return {Kapi.Actor}
    */
   gk.Actor.prototype.calculatePosition = function (millisecond) {
-    var delta
-        ,startMs
-        ,endMs
-        ,latestCacheId
-        ,propertiesToInterpolate
-        ,interpolatedObject;
-
-    startMs = this.getStart();
-    endMs = this.getEnd();
+    var startMs = this.getStart();
+    var endMs = this.getEnd();
     this.hide();
 
     if (startMs <= millisecond && millisecond <= endMs) {
       this.show();
-      latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
-      propertiesToInterpolate =
+      var latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
+      var propertiesToInterpolate =
           this._timelinePropertyCaches[this._timelinePropertyCacheIndex[
           latestCacheId]];
-      interpolatedObject = {};
+      var interpolatedObject = {};
 
       _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
-        interpolatedObject[propName] =
-            keyframeProperty.getValueAt(millisecond);
+        if (keyframeProperty) {
+          interpolatedObject[propName] =
+              keyframeProperty.getValueAt(millisecond);
+        }
       });
 
       this.set(interpolatedObject);

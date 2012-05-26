@@ -178,8 +178,9 @@
           'There is a "y" KeyframeProperty at 1000');
       equals(testActor._timelinePropertyCaches[1500].x.millisecond, 1500,
           'There is an "x" KeyframeProperty at 1500');
-      equals(testActor._timelinePropertyCaches[1500].y, undefined,
-          'There is no "y" KeyframeProperty at 1500');
+      equals(testActor._timelinePropertyCaches[1500].y,
+          testActor._propertyTracks.y[1],
+          'The second tracked "y" property is cached at the 1500 millisecond cache');
       equals(testActor._propertyTracks.x[0].nextProperty,
           testActor._propertyTracks.x[1],
           'The first tracked "x" KeyframeProperty instance\'s nextProperty did not change');

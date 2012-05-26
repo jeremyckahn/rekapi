@@ -92,7 +92,7 @@
       });
 
       testActor.calculatePosition(500);
-      equals(testActor.get().x, 100,
+      equals(testActor.get().x, undefined,
           'Value only has a start point, therefore a calculated midpoint is undefined.');
     });
 
@@ -462,10 +462,97 @@
           ,'x value is extended correctly');
       equal(testActor._propertyTracks.x[2].millisecond, 2000
           ,'x value is placed at 2000');
-      equal(testActor._propertyTracks.y[2].value, 100
-          ,'y value is extended correctly');
-      equal(testActor._propertyTracks.y[2].millisecond, 2000
-          ,'y value is placed at 2000');
+      equal(testActor._propertyTracks.x.length, 3
+          ,'The x property track was extended');
+      equal(testActor._propertyTracks.y.length, 4
+          ,'The missing y property at millisecond 1000 was implicitly filled in and copied');
+    });
+
+
+    test('wait() copies all of the most recent KeyframeProperties',
+        function () {
+
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, {
+        'x': 0
+        ,'y': 0
+      }).keyframe(1000, {
+        'x': 100
+      }).wait(2000).keyframe(3000, {
+        x: 200
+        ,y: 200
+      });
+
+      equal(testActor._propertyTracks.y[1].millisecond, 1000
+          ,'The missing Y property at the wait-start millisecond was explicitly filled in');
+      equal(testActor._propertyTracks.y[0].value
+          ,testActor._propertyTracks.y[1].value
+          ,'The copied Y property has the same value as the initial Y property');
+    });
+
+
+    module('Missing keyframe properties');
+
+
+    test('If there are no current or future properties, use the latest property'
+      , function () {
+
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, {
+        'x': 50
+        ,'y': 50
+      }).keyframe(1000, {
+        'y': 100
+      }).keyframe(2000, {
+        'y': 150
+      });
+
+      testActor.calculatePosition(500);
+
+      equal(testActor.get().x, 50
+        ,'Got the x value from one keyframe back');
+      equal(testActor.get().y, 75
+        ,'Got the corrext y midpoint');
+
+      testActor.calculatePosition(1500);
+
+      equal(testActor.get().x, 50
+        ,'Got the x value from two keyframes back');
+    });
+
+
+    test('If a given millisecond doesn\'t have a previous keyframe, return null'
+      , function () {
+
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, {
+        'x': 50
+      }).keyframe(1000, {
+        'x': 100
+        ,'y': 100
+      });
+
+      testActor.calculatePosition(500);
+
+      equal(testActor.get().x, 75
+        ,'Got the most recent x value');
+      equal(testActor.get().y, null
+        ,'Got the corrext y midpoint');
     });
 
   } ());
