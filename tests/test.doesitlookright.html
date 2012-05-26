@@ -26,6 +26,10 @@
 
     actor = new Kapi.CanvasActor({
       'render': function (canvas_context, state) {
+        if (isNaN(state.x)) {
+          return;
+        }
+
         canvas_context.beginPath();
           canvas_context.arc(
             state.x || 0,
@@ -37,8 +41,6 @@
           canvas_context.fillStyle = state.color || '#f0f';
           canvas_context.fill();
           canvas_context.closePath();
-
-          return this;
       }
     });
 

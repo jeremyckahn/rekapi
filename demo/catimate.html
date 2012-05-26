@@ -23,7 +23,8 @@
           ,cat
           ,time = 0;
 
-      cat = new Kapi.DOMActor(document.getElementsByTagName('img')[0]);
+      var catImg = document.getElementsByTagName('img')[0];
+      cat = new Kapi.DOMActor(catImg);
       kapi.addActor(cat);
 
       cat
@@ -47,6 +48,7 @@
         }, 'easeFrom')
         .wait(time += 500);
 
+      catImg.style.display = 'block';
       kapi.play();
     });
   </script>

@@ -292,44 +292,6 @@ Kapi.Actor.prototype.moveToLayer (layer)
 Move this `Actor` to a different layer in the `Kapi` instance that it belongs to.  This returns `undefined` if the operation was unsuccessful
 
 
-### show
-
-````javascript
-/**
- * @param {boolean} alsoPersist
- * @returns {Kapi.Actor}
- */
-Kapi.Actor.prototype.show (alsoPersist)
-````
-
-Tell the `Actor` to render itself for the next rendered frame.  If `alsoPersist` is true, it continues to render for every frame until `hide(true)` is called.
-
-
-### hide
-
-````javascript
-/**
- * @param {boolean} alsoUnpersist
- * @returns {Kapi.Actor}
- */
-Kapi.Actor.prototype.hide (alsoUnpersist)
-````
-
-Tell the `Actor` not to render itself for the next frame.  If `alsoUnpersist` is true, this undoes the persistence effect of `show(true)`.
-
-
-### isShowing
-
-````javascript
-/**
- * @returns {boolean}
- */
-Kapi.Actor.prototype.isShowing ()
-````
-
-Return whether or not the `Actor` is showing for this frame or persisting across frames.
-
-
 ### calculatePosition
 
 ````javascript

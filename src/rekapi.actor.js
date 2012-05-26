@@ -147,7 +147,6 @@ var rekapiActor = function (global, deps) {
       ,'_timelinePropertyCaches': {}
       ,'_timelinePropertyCacheIndex': []
       ,'_keyframeProperties': {}
-      ,'_isShowing': false
       ,'_isPersisting': false
       ,'id': getUniqueActorId()
       ,'setup': opt_config.setup || gk.util.noop
@@ -476,51 +475,14 @@ var rekapiActor = function (global, deps) {
 
 
   /**
-   * @param {boolean} alsoPersist
-   * @return {Kapi.Actor}
-   */
-  gk.Actor.prototype.show = function (alsoPersist) {
-    this._isShowing = true;
-    this._isPersisting = !!alsoPersist;
-
-    return this;
-  };
-
-
-  /**
-   * @param {boolean} alsoUnpersist
-   * @return {Kapi.Actor}
-   */
-  gk.Actor.prototype.hide = function (alsoUnpersist) {
-    this._isShowing = false;
-
-    if (alsoUnpersist === true) {
-      this._isPersisting = false;
-    }
-
-    return this;
-  };
-
-
-  /**
-   * @return {boolean}
-   */
-  gk.Actor.prototype.isShowing = function () {
-    return this._isShowing || this._isPersisting;
-  };
-
-
-  /**
    * @param {number} millisecond
    * @return {Kapi.Actor}
    */
   gk.Actor.prototype.calculatePosition = function (millisecond) {
     var startMs = this.getStart();
     var endMs = this.getEnd();
-    this.hide();
 
     if (startMs <= millisecond && millisecond <= endMs) {
-      this.show();
       var latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
       var propertiesToInterpolate =
           this._timelinePropertyCaches[this._timelinePropertyCacheIndex[
@@ -601,21 +563,5 @@ var rekapiActor = function (global, deps) {
     cachePropertiesToSegments(this);
     linkTrackedProperties(this);
   };
-
-
-  /**
-   * Start Shifty interoperability logic...
-   ******/
-
-  _.each(['tween', 'to'], function (shiftyMethodName) {
-    gk.Actor.prototype[shiftyMethodName] = function () {
-      this.show(true);
-      Tweenable.prototype[shiftyMethodName].apply(this, arguments);
-    }
-  }, this);
-
-  /******
-   * ...End Shifty interoperability logic.
-   */
 
 };

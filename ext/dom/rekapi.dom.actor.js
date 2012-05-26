@@ -14,16 +14,6 @@ var rekapiDOM = function (global, deps) {
   }
 
 
-  function hideElement (element) {
-    setStyle(element, 'display', 'none');
-  }
-
-
-  function showElement (element) {
-    setStyle(element, 'display', 'block');
-  }
-
-
   /**
    * @param {HTMLElement} element
    * @constructor
@@ -36,16 +26,6 @@ var rekapiDOM = function (global, deps) {
     // Remove the instance's render method to allow the
     // ActorMethods.prototype.render method to be accessible.
     delete this.render;
-
-    this.show = function (alsoPersist) {
-      gk.Actor.prototype.show.call(this, alsoPersist);
-      showElement(this._context);
-    };
-
-    this.hide = function (alsoUnpersist) {
-      gk.Actor.prototype.hide.call(this, alsoUnpersist);
-      hideElement(this._context);
-    };
 
     return this;
   };
@@ -61,13 +41,8 @@ var rekapiDOM = function (global, deps) {
    * @param {Object} state
    */
   DOMActorMethods.prototype.render = function (context, state) {
-    var isShowing;
-
-    isShowing = false;
 
     _.each(state, function (styleValue, styleName) {
-      isShowing = true;
-
       if (styleName === 'transform') {
         _.each(transforms, function (transform) {
           setStyle(context, transform, styleValue);
@@ -76,8 +51,6 @@ var rekapiDOM = function (global, deps) {
         setStyle(context, styleName, styleValue);
       }
     }, this);
-
-    isShowing ? this.show() : this.hide();
   };
 
 

@@ -1,3 +1,7 @@
+# Upgrading to Rekapi 0.8.5
+
+All hide/show functionality has been __removed__.
+
 # Upgrading to Rekapi 0.8.4
 
 The keyframe model has __changed__.  It works much more like the `@keyframe`

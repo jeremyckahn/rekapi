@@ -199,10 +199,8 @@ var rekapiCore = function (global, deps) {
 
     for (i = 0; i < len; i++) {
       currentActor = kapi._actors[drawOrder[i]];
-      if (currentActor.isShowing()) {
-        canvas_context = currentActor.context();
-        currentActor.render(canvas_context, currentActor.get());
-      }
+      canvas_context = currentActor.context();
+      currentActor.render(canvas_context, currentActor.get());
     }
 
     return kapi;

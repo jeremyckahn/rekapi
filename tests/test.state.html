@@ -316,61 +316,6 @@
     });
 
 
-    test('An Actor does not show before it has reached its first keyframe'
-      ,function () {
-      var testKapi
-          ,testActor;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-
-      testActor
-        .keyframe(1000, { x: 1 })
-        .keyframe(2000, { x: 2 });
-
-      testKapi.calculateActorPositions(500);
-
-      equals(testActor.isShowing(), false,
-          'Actor has not yet gotten state');
-
-      testKapi.calculateActorPositions(1500);
-
-      equals(testActor.isShowing(), true,
-          'Actor has gotten state');
-    });
-
-
-    test('An Actor does not show after it passes its last keyframe'
-      ,function () {
-      var testKapi
-          ,testActor1
-          ,testActor2;
-
-      testKapi = setupTestKapi();
-      testActor1 = setupTestActor(testKapi);
-      testActor2 = setupTestActor(testKapi);
-
-      testActor1
-        .keyframe(0, { x: 1 })
-        .keyframe(2000, { x: 2 });
-
-      testActor2
-        .keyframe(500, { x: 1 })
-        .keyframe(1500, { x: 2 });
-
-      testKapi.calculateActorPositions(1000);
-
-      equals(testActor2.isShowing(), true,
-          'Actor has state');
-
-
-      testKapi.calculateActorPositions(1750);
-
-      equals(testActor2.isShowing(), false,
-          'Actor no longer has state');
-    });
-
-
     module('Actor data');
 
     test('Can set arbitrary data on the Actor'

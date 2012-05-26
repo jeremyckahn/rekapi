@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.8.4
+ * Rekapi - Rewritten Kapi. v0.8.5
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -210,10 +210,8 @@ var rekapiCore = function (global, deps) {
 
     for (i = 0; i < len; i++) {
       currentActor = kapi._actors[drawOrder[i]];
-      if (currentActor.isShowing()) {
-        canvas_context = currentActor.context();
-        currentActor.render(canvas_context, currentActor.get());
-      }
+      canvas_context = currentActor.context();
+      currentActor.render(canvas_context, currentActor.get());
     }
 
     return kapi;
@@ -837,7 +835,6 @@ var rekapiActor = function (global, deps) {
       ,'_timelinePropertyCaches': {}
       ,'_timelinePropertyCacheIndex': []
       ,'_keyframeProperties': {}
-      ,'_isShowing': false
       ,'_isPersisting': false
       ,'id': getUniqueActorId()
       ,'setup': opt_config.setup || gk.util.noop
@@ -1166,51 +1163,14 @@ var rekapiActor = function (global, deps) {
 
 
   /**
-   * @param {boolean} alsoPersist
-   * @return {Kapi.Actor}
-   */
-  gk.Actor.prototype.show = function (alsoPersist) {
-    this._isShowing = true;
-    this._isPersisting = !!alsoPersist;
-
-    return this;
-  };
-
-
-  /**
-   * @param {boolean} alsoUnpersist
-   * @return {Kapi.Actor}
-   */
-  gk.Actor.prototype.hide = function (alsoUnpersist) {
-    this._isShowing = false;
-
-    if (alsoUnpersist === true) {
-      this._isPersisting = false;
-    }
-
-    return this;
-  };
-
-
-  /**
-   * @return {boolean}
-   */
-  gk.Actor.prototype.isShowing = function () {
-    return this._isShowing || this._isPersisting;
-  };
-
-
-  /**
    * @param {number} millisecond
    * @return {Kapi.Actor}
    */
   gk.Actor.prototype.calculatePosition = function (millisecond) {
     var startMs = this.getStart();
     var endMs = this.getEnd();
-    this.hide();
 
     if (startMs <= millisecond && millisecond <= endMs) {
-      this.show();
       var latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
       var propertiesToInterpolate =
           this._timelinePropertyCaches[this._timelinePropertyCacheIndex[
@@ -1291,22 +1251,6 @@ var rekapiActor = function (global, deps) {
     cachePropertiesToSegments(this);
     linkTrackedProperties(this);
   };
-
-
-  /**
-   * Start Shifty interoperability logic...
-   ******/
-
-  _.each(['tween', 'to'], function (shiftyMethodName) {
-    gk.Actor.prototype[shiftyMethodName] = function () {
-      this.show(true);
-      Tweenable.prototype[shiftyMethodName].apply(this, arguments);
-    }
-  }, this);
-
-  /******
-   * ...End Shifty interoperability logic.
-   */
 
 };
 var rekapiKeyframeProperty = function (global, deps) {
@@ -1540,16 +1484,6 @@ var rekapiDOM = function (global, deps) {
   }
 
 
-  function hideElement (element) {
-    setStyle(element, 'display', 'none');
-  }
-
-
-  function showElement (element) {
-    setStyle(element, 'display', 'block');
-  }
-
-
   /**
    * @param {HTMLElement} element
    * @constructor
@@ -1562,16 +1496,6 @@ var rekapiDOM = function (global, deps) {
     // Remove the instance's render method to allow the
     // ActorMethods.prototype.render method to be accessible.
     delete this.render;
-
-    this.show = function (alsoPersist) {
-      gk.Actor.prototype.show.call(this, alsoPersist);
-      showElement(this._context);
-    };
-
-    this.hide = function (alsoUnpersist) {
-      gk.Actor.prototype.hide.call(this, alsoUnpersist);
-      hideElement(this._context);
-    };
 
     return this;
   };
@@ -1587,13 +1511,8 @@ var rekapiDOM = function (global, deps) {
    * @param {Object} state
    */
   DOMActorMethods.prototype.render = function (context, state) {
-    var isShowing;
-
-    isShowing = false;
 
     _.each(state, function (styleValue, styleName) {
-      isShowing = true;
-
       if (styleName === 'transform') {
         _.each(transforms, function (transform) {
           setStyle(context, transform, styleValue);
@@ -1602,8 +1521,6 @@ var rekapiDOM = function (global, deps) {
         setStyle(context, styleName, styleValue);
       }
     }, this);
-
-    isShowing ? this.show() : this.hide();
   };
 
 
