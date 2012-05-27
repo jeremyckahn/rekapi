@@ -20,19 +20,6 @@
     return actor;
   }
 
-  // Silly hack to make IE work properly for the test.
-  // http://soledadpenades.com/2007/05/17/arrayindexof-in-internet-explorer/
-  if(!Array.indexOf){
-    Array.prototype.indexOf = function(obj){
-      for(var i=0; i<this.length; i++){
-        if(this[i]==obj){
-            return i;
-        }
-      }
-      return -1;
-    }
-  }
-
   (function () {
 
     module('Actor management');
@@ -152,7 +139,7 @@
       equals(testKapi._actors[testActor1.id], undefined,
           'Actor is no longer in the internal _actors Object');
 
-      equals(testKapi._drawOrder.indexOf(testActor1.id), -1,
+      equals(_.indexOf(testKapi._drawOrder, testActor1.id), -1,
           'Actor is not in the internal _drawOrder array');
     });
 
