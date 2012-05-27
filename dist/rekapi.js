@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.8.5
+ * Rekapi - Rewritten Kapi. v0.8.6
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -127,10 +127,19 @@ var rekapiCore = function (global, deps) {
    * @param {Kapi} kapi
    */
   function tick (kapi) {
-    kapi._loopId = kapi._scheduleUpdate.call(window, function () {
+    var updateFn = function () {
       tick(kapi);
       renderCurrentMillisecond(kapi);
-    }, 1000 / kapi.config.fps);
+    };
+
+    // Need to check for .call presence to get around an IE limitation.
+    // See annotation for cancelLoop for more info.
+    if (kapi._scheduleUpdate.call) {
+      kapi._loopId = kapi._scheduleUpdate.call(window,
+          updateFn, 1000 / kapi.config.fps);
+    } else {
+      kapi._loopId = setTimeout(updateFn, 1000 / kapi.config.fps);
+    }
   }
 
 
@@ -216,6 +225,22 @@ var rekapiCore = function (global, deps) {
 
     return kapi;
   };
+
+
+  /**
+   * Cancels an update loop.  This abstraction is needed to get around the fact
+   * that in IE, clearTimeout is not technically a function
+   * (https://twitter.com/kitcambridge/status/206655060342603777) and thus
+   * Function.prototype.call cannot be used upon it.
+   * @param {Kapi} kapi
+   */
+  function cancelLoop (kapi) {
+    if (kapi._cancelUpdate.call) {
+      kapi._cancelUpdate.call(window, kapi._loopId);
+    } else {
+      clearTimeout(kapi._loopId);
+    }
+  }
 
 
   /**
@@ -388,7 +413,7 @@ var rekapiCore = function (global, deps) {
    * @return {Kapi}
    */
   gk.prototype.play = function (opt_howManyTimes) {
-    this._cancelUpdate.call(window, this._loopId);
+    cancelLoop(this);
 
     if (this._playState === playState.PAUSED) {
       this._loopTimestamp += now() - this._pausedAtTime;
@@ -445,7 +470,7 @@ var rekapiCore = function (global, deps) {
     }
 
     this._playState = playState.PAUSED;
-    this._cancelUpdate.call(window, this._loopId);
+    cancelLoop(this);
     this._pausedAtTime = now();
 
     // also pause any shifty tweens that are running.
@@ -467,7 +492,7 @@ var rekapiCore = function (global, deps) {
    */
   gk.prototype.stop = function () {
     this._playState = playState.STOPPED;
-    this._cancelUpdate.call(window, this._loopId);
+    cancelLoop(this);
 
     // Also kill any shifty tweens that are running.
     _.each(this._actors, function (actor) {
@@ -1491,7 +1516,13 @@ var rekapiDOM = function (global, deps) {
   gk.DOMActor = function (element) {
     gk.Actor.call(this);
     this._context = element;
-    this._context.classList.add(this.getCSSName());
+    var className = this.getCSSName();
+
+    // Add the class if it's not already there.
+    // Using className instead of classList to make IE happy.
+    if (!this._context.className.match(className)) {
+      this._context.className += className;
+    }
 
     // Remove the instance's render method to allow the
     // ActorMethods.prototype.render method to be accessible.
@@ -1823,14 +1854,14 @@ if (typeof define === 'function' && define.amd) {
         ,Kapi = rekapi(global, deps);
 
     if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
-        Kapi.underscore_version = deps.underscore.VERSION;
+      Kapi.underscore_version = deps.underscore.VERSION;
     }
 
     if (!underscoreAlreadyInUse) {
       // Prevent Underscore from polluting the global scope.
       // This global can be safely removed since Rekapi keeps its own reference
       // to Underscore via the `deps` object passed earlier as an argument.
-      delete global._;
+      global._ = undefined;
     }
 
     return Kapi;

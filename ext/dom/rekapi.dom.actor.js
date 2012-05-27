@@ -21,7 +21,13 @@ var rekapiDOM = function (global, deps) {
   gk.DOMActor = function (element) {
     gk.Actor.call(this);
     this._context = element;
-    this._context.classList.add(this.getCSSName());
+    var className = this.getCSSName();
+
+    // Add the class if it's not already there.
+    // Using className instead of classList to make IE happy.
+    if (!this._context.className.match(className)) {
+      this._context.className += className;
+    }
 
     // Remove the instance's render method to allow the
     // ActorMethods.prototype.render method to be accessible.

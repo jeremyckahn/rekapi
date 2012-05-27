@@ -41,6 +41,8 @@
         ,element;
 
     element = document.getElementById('actor');
+    element.removeAttribute('style');
+    element.style.position = 'absolute';
     element.style.height = '50px';
     element.style.width = '50px';
     element.style.background = '#f00';
@@ -86,6 +88,28 @@
         })
         .keyframe(1500, {
           'transform': 'translateX(200px) translateY(200px)'
+        });
+
+      kapi.play();
+      console.log(kapi);
+    });
+
+
+    $('#basic-linear-tween-ie').click(function () {
+      var actor;
+
+      killTest();
+      kapi = setupTestKapi();
+      actor = setupTestActor(kapi);
+
+      actor
+        .keyframe(0, {
+          'left': '0px'
+          ,'top': '0px'
+        })
+        .keyframe(1500, {
+          'left': '200px'
+          ,'top': '200px'
         });
 
       kapi.play();
@@ -195,6 +219,7 @@
       <button id="stop">Stop</button>
     </li>
     <li><button id="basic-linear-tween">Basic linear tween loop</button></li>
+    <li><button id="basic-linear-tween-ie">Basic linear tween loop (IE-friendly)</button></li>
     <li><button id="delayed-start">Delayed start</button></li>
     <li><button id="basic-eased-tween">Basic eased tween loop</button></li>
     <li><button id="multi-eased-tween">Tween loop with multiple easings</button></li>

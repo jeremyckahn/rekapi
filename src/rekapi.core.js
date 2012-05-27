@@ -116,10 +116,19 @@ var rekapiCore = function (global, deps) {
    * @param {Kapi} kapi
    */
   function tick (kapi) {
-    kapi._loopId = kapi._scheduleUpdate.call(window, function () {
+    var updateFn = function () {
       tick(kapi);
       renderCurrentMillisecond(kapi);
-    }, 1000 / kapi.config.fps);
+    };
+
+    // Need to check for .call presence to get around an IE limitation.
+    // See annotation for cancelLoop for more info.
+    if (kapi._scheduleUpdate.call) {
+      kapi._loopId = kapi._scheduleUpdate.call(window,
+          updateFn, 1000 / kapi.config.fps);
+    } else {
+      kapi._loopId = setTimeout(updateFn, 1000 / kapi.config.fps);
+    }
   }
 
 
@@ -205,6 +214,22 @@ var rekapiCore = function (global, deps) {
 
     return kapi;
   };
+
+
+  /**
+   * Cancels an update loop.  This abstraction is needed to get around the fact
+   * that in IE, clearTimeout is not technically a function
+   * (https://twitter.com/kitcambridge/status/206655060342603777) and thus
+   * Function.prototype.call cannot be used upon it.
+   * @param {Kapi} kapi
+   */
+  function cancelLoop (kapi) {
+    if (kapi._cancelUpdate.call) {
+      kapi._cancelUpdate.call(window, kapi._loopId);
+    } else {
+      clearTimeout(kapi._loopId);
+    }
+  }
 
 
   /**
@@ -377,7 +402,7 @@ var rekapiCore = function (global, deps) {
    * @return {Kapi}
    */
   gk.prototype.play = function (opt_howManyTimes) {
-    this._cancelUpdate.call(window, this._loopId);
+    cancelLoop(this);
 
     if (this._playState === playState.PAUSED) {
       this._loopTimestamp += now() - this._pausedAtTime;
@@ -434,7 +459,7 @@ var rekapiCore = function (global, deps) {
     }
 
     this._playState = playState.PAUSED;
-    this._cancelUpdate.call(window, this._loopId);
+    cancelLoop(this);
     this._pausedAtTime = now();
 
     // also pause any shifty tweens that are running.
@@ -456,7 +481,7 @@ var rekapiCore = function (global, deps) {
    */
   gk.prototype.stop = function () {
     this._playState = playState.STOPPED;
-    this._cancelUpdate.call(window, this._loopId);
+    cancelLoop(this);
 
     // Also kill any shifty tweens that are running.
     _.each(this._actors, function (actor) {

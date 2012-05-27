@@ -43,14 +43,14 @@ if (typeof define === 'function' && define.amd) {
         ,Kapi = rekapi(global, deps);
 
     if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
-        Kapi.underscore_version = deps.underscore.VERSION;
+      Kapi.underscore_version = deps.underscore.VERSION;
     }
 
     if (!underscoreAlreadyInUse) {
       // Prevent Underscore from polluting the global scope.
       // This global can be safely removed since Rekapi keeps its own reference
       // to Underscore via the `deps` object passed earlier as an argument.
-      delete global._;
+      global._ = undefined;
     }
 
     return Kapi;
