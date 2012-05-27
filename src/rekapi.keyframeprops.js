@@ -1,11 +1,11 @@
-var rekapiKeyframeProperty = function (global, deps) {
+var rekapiKeyframeProperty = function (context, deps) {
   var gk
       ,DEFAULT_EASING = 'linear'
       ,KeyframePropertyMethods
-      ,_ = (deps && deps.underscore) ? deps.underscore : global._
-      ,Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : global.Tweenable;
+      ,_ = (deps && deps.underscore) ? deps.underscore : context._
+      ,Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : context.Tweenable;
 
-  gk = global.Kapi;
+  gk = context.Kapi;
 
   /**
    * @param {Kapi.Actor} ownerActor

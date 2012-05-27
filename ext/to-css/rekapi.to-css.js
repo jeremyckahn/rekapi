@@ -1,4 +1,4 @@
-var rekapiToCSS = function (Rekapi, global, deps) {
+var rekapiToCSS = function (Rekapi, context, deps) {
 
   // CONSTANTS
   //
@@ -11,7 +11,7 @@ var rekapiToCSS = function (Rekapi, global, deps) {
     ,'w3': ''
     ,'webkit': '-webkit-'
   };
-  var _ = (deps && deps.underscore) ? deps.underscore : global._;
+  var _ = (deps && deps.underscore) ? deps.underscore : context._;
 
 
   // TEMPLATES
@@ -45,7 +45,7 @@ var rekapiToCSS = function (Rekapi, global, deps) {
   /**
    * @param {Object} opts
    */
-  global.Kapi.prototype.toCSS = function (opts) {
+  context.Kapi.prototype.toCSS = function (opts) {
     opts = opts || {};
     var animationCSS = [];
     var actorIds = this.getActorIds();
@@ -61,7 +61,7 @@ var rekapiToCSS = function (Rekapi, global, deps) {
   /**
    * @param {Object} opts
    */
-  global.Kapi.Actor.prototype.toCSS = function (opts) {
+  context.Kapi.Actor.prototype.toCSS = function (opts) {
     opts = opts || {};
     var actorCSS = [];
     var granularity = opts.granularity || DEFAULT_GRANULARITY;

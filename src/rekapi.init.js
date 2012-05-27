@@ -4,7 +4,7 @@ var rekapi = function (global, deps) {
   // is not polluted by the Kapi object.
   var context = deps ? {} : global;
 
-  rekapiCore(context, deps);
+  rekapiCore(context, deps, global);
   rekapiActor(context, deps);
   rekapiKeyframeProperty(context, deps);
 

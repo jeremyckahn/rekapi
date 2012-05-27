@@ -1,14 +1,14 @@
-var rekapiActor = function (global, deps) {
+var rekapiActor = function (context, deps) {
 
   var DEFAULT_EASING = 'linear'
       ,gk
       ,actorCount
       ,ActorMethods
-      ,_ = (deps && deps.underscore) ? deps.underscore : global._
+      ,_ = (deps && deps.underscore) ? deps.underscore : context._
       ,Tweenable = (deps && deps.Tweenable) ?
-          deps.Tweenable : global.Tweenable;
+          deps.Tweenable : context.Tweenable;
 
-  gk = global.Kapi;
+  gk = context.Kapi;
   actorCount = 0;
 
 

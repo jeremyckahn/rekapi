@@ -1,5 +1,5 @@
-var rekapiCanvasActor = function (global) {
-  var gk = global.Kapi;
+var rekapiCanvasActor = function (context) {
+  var gk = context.Kapi;
 
   function CanvasActorMethods () {};
   CanvasActorMethods.prototype = gk.Actor.prototype;

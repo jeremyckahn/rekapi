@@ -1,4 +1,4 @@
-var rekapiCore = function (global, deps) {
+var rekapiCore = function (context, deps, global) {
 
   /**
    * Sorts an array numerically, from smallest to largest.
@@ -124,7 +124,7 @@ var rekapiCore = function (global, deps) {
     // Need to check for .call presence to get around an IE limitation.
     // See annotation for cancelLoop for more info.
     if (kapi._scheduleUpdate.call) {
-      kapi._loopId = kapi._scheduleUpdate.call(window,
+      kapi._loopId = kapi._scheduleUpdate.call(global,
           updateFn, 1000 / kapi.config.fps);
     } else {
       kapi._loopId = setTimeout(updateFn, 1000 / kapi.config.fps);
@@ -150,17 +150,17 @@ var rekapiCore = function (global, deps) {
    */
   function getUpdateMethod (framerate) {
     if (framerate !== 60) {
-      return window.setTimeout;
+      return global.setTimeout;
     } else {
       // requestAnimationFrame() shim by Paul Irish (modified for Rekapi)
       // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-      return  window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.oRequestAnimationFrame      ||
-        window.msRequestAnimationFrame     ||
-        (window.mozCancelRequestAnimationFrame
-          && window.mozRequestAnimationFrame) ||
-        window.setTimeout;
+      return  global.requestAnimationFrame ||
+        global.webkitRequestAnimationFrame ||
+        global.oRequestAnimationFrame      ||
+        global.msRequestAnimationFrame     ||
+        (global.mozCancelRequestAnimationFrame
+          && global.mozRequestAnimationFrame) ||
+        global.setTimeout;
     }
   }
 
@@ -171,14 +171,14 @@ var rekapiCore = function (global, deps) {
    */
   function getCancelMethod (framerate) {
     if (framerate !== 60) {
-      return window.clearTimeout;
+      return global.clearTimeout;
     } else {
-      return  window.cancelAnimationFrame ||
-        window.webkitCancelAnimationFrame ||
-        window.oCancelAnimationFrame      ||
-        window.msCancelAnimationFrame     ||
-        window.mozCancelRequestAnimationFrame ||
-        window.clearTimeout;
+      return  global.cancelAnimationFrame ||
+        global.webkitCancelAnimationFrame ||
+        global.oCancelAnimationFrame      ||
+        global.msCancelAnimationFrame     ||
+        global.mozCancelRequestAnimationFrame ||
+        global.clearTimeout;
     }
   }
 
@@ -225,7 +225,7 @@ var rekapiCore = function (global, deps) {
    */
   function cancelLoop (kapi) {
     if (kapi._cancelUpdate.call) {
-      kapi._cancelUpdate.call(window, kapi._loopId);
+      kapi._cancelUpdate.call(global, kapi._loopId);
     } else {
       clearTimeout(kapi._loopId);
     }
@@ -239,8 +239,8 @@ var rekapiCore = function (global, deps) {
     // NOOP!
   }
 
-  var _ = (deps && deps.underscore) ? deps.underscore : global._;
-  var Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : global.Tweenable;
+  var _ = (deps && deps.underscore) ? deps.underscore : context._;
+  var Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : context.Tweenable;
   var now = Tweenable.util.now;
 
   var defaultConfig = {
@@ -260,7 +260,7 @@ var rekapiCore = function (global, deps) {
    * @param {Object} opt_config
    * @constructor
    */
-  var gk = global.Kapi || function Kapi (opt_config) {
+  var gk = context.Kapi || function Kapi (opt_config) {
     this.config = opt_config || {};
     this.context = this.config.context;
     this._actors = {};
@@ -697,6 +697,6 @@ var rekapiCore = function (global, deps) {
     }
   }
 
-  global.Kapi = gk;
+  context.Kapi = gk;
 
 };

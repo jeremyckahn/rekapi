@@ -1,7 +1,7 @@
-var rekapiCanvasContext = function (global, deps) {
+var rekapiCanvasContext = function (context, deps) {
 
-  var gk = global.Kapi;
-  var _ = (deps && deps.underscore) ? deps.underscore : global._;
+  var gk = context.Kapi;
+  var _ = (deps && deps.underscore) ? deps.underscore : context._;
 
 
   /**
