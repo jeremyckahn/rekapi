@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.8.9
+ * Rekapi - Rewritten Kapi. v0.8.10
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -1556,7 +1556,7 @@ var rekapiDOM = function (context, deps) {
   };
 
 };
-var KapiToCSS = function (context, deps) {
+var rekapiToCSS = function (context, deps) {
 
   var Kapi = context.Kapi;
   var _ = (deps && deps.underscore) ? deps.underscore : context._;
