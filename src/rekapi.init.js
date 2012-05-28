@@ -13,7 +13,7 @@ var rekapi = function (global, deps) {
     rekapiDOM(context, deps);
   }
   if (typeof rekapiToCSS === 'function') {
-    rekapiToCSS(context.Kapi, context, deps);
+    rekapiToCSS(context, deps);
   }
   if (typeof rekapiCanvasContext === 'function') {
     rekapiCanvasContext(context, deps);

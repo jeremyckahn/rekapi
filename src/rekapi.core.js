@@ -1,18 +1,6 @@
 var rekapiCore = function (context, deps, global) {
 
   /**
-   * Sorts an array numerically, from smallest to largest.
-   * @param {Array} array The Array to sort.
-   * @return {Array} The sorted Array.
-   */
-  function sortNumerically (array) {
-    return array.sort(function (a, b) {
-      return a - b;
-    });
-  }
-
-
-  /**
    * Determines which iteration of the loop the animation is currently in.
    * @param {Kapi} kapi
    * @param {number} timeSinceStart
@@ -678,7 +666,6 @@ var rekapiCore = function (context, deps, global) {
   // the references in the tests.
   _.extend(Kapi.util, {
     'noop': noop
-    ,'sortNumerically': sortNumerically
     ,'calculateLoopPosition': calculateLoopPosition
     ,'calculateTimeSinceStart': calculateTimeSinceStart
   });
@@ -686,8 +673,7 @@ var rekapiCore = function (context, deps, global) {
   // Some hooks for testing.
   if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
     Kapi._private = {
-      'sortNumerically': sortNumerically
-      ,'calculateLoopPosition': calculateLoopPosition
+      'calculateLoopPosition': calculateLoopPosition
       ,'renderCurrentMillisecond': renderCurrentMillisecond
       ,'tick': tick
       ,'determineCurrentLoopIteration': determineCurrentLoopIteration

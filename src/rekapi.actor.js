@@ -15,6 +15,18 @@ var rekapiActor = function (context, deps) {
 
 
   /**
+   * Sorts an array numerically, from smallest to largest.
+   * @param {Array} array The Array to sort.
+   * @return {Array} The sorted Array.
+   */
+  function sortNumerically (array) {
+    return array.sort(function (a, b) {
+      return a - b;
+    });
+  }
+
+
+  /**
    * @param {Kapi.Actor} actor
    * @param {number} millisecond
    * @return {number}
@@ -555,7 +567,7 @@ var rekapiActor = function (context, deps) {
       this._timelinePropertyCacheIndex[i] = +listId;
     }, this);
 
-    Kapi.util.sortNumerically(this._timelinePropertyCacheIndex);
+    sortNumerically(this._timelinePropertyCacheIndex);
     cachePropertiesToSegments(this);
     linkTrackedProperties(this);
   };
