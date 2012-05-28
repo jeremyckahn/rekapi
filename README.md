@@ -12,6 +12,12 @@ Rekapi has two dependencies:
 [Underscore](https://github.com/documentcloud/underscore) and
 [Shifty](https://github.com/jeremyckahn/shifty).
 
+Rekapi has been tested in and supports:
+
+  * Modern HTML5 browsers
+  * IE 7/8 (9 probably works; has not been tested)
+  * Node.js
+
 Please note:  Rekapi is a rewrite of
 [Kapi](https://github.com/jeremyckahn/kapi). Rekapi is very similar to Kapi,
 but they are not identical.  Rekapi is not a drop-in replacement for Kapi.
@@ -102,6 +108,28 @@ require.config({
 
 // Dependencies (Underscore and Shifty) are automatically loaded.
 require(['rekapi'], function(Kapi) {
+  var kapi = new Kapi();
+});
+````
+
+## Node
+
+Rekapi can be used in Node.js.  This can be useful for generating keyframe
+data.  Usage is the same as in the browser.  Loading the code requires the
+[r.js](https://github.com/jrburke/r.js/blob/master/dist/r.js) script and looks
+a lot ike the AMD approach above:
+
+````javascript
+var r = require('lib/r.js');
+r.config({
+  paths: {
+    shifty: "dist/shifty",
+    underscore: "dist/underscore",
+    rekapi: "dist/rekapi"
+  }
+});
+
+r(['rekapi'], function(Kapi) {
   var kapi = new Kapi();
 });
 ````
