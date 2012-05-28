@@ -35,12 +35,12 @@ if (typeof define === 'function' && define.amd) {
   // The rekapi module is anonymous so that it can be required with any name.
   // Example: define(['lib/rekapi.min'], function(Kapi) { ... });
   define(['shifty', 'underscore'], function (Tweenable, Underscore) {
-    var underscoreSupportsAMD = (Underscore !== null)
-        ,deps = {  Tweenable: Tweenable,
+    var underscoreSupportsAMD = (Underscore !== null);
+    var deps = {  Tweenable: Tweenable,
                   // Some versions of Underscore.js support AMD, others don't.
                   // If not, use the `_` global.
                   underscore: underscoreSupportsAMD ? Underscore : _ }
-        ,Kapi = rekapi(global, deps);
+    var Kapi = rekapi(global, deps);
 
     if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
       Kapi.underscore_version = deps.underscore.VERSION;
@@ -61,4 +61,3 @@ if (typeof define === 'function' && define.amd) {
   // Note: `global` is not defined when running unit tests. Pass `this` instead.
   rekapi(typeof global !== 'undefined' ? global : this);
 }
-

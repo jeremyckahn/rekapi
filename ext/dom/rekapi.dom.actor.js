@@ -1,5 +1,5 @@
 var rekapiDOM = function (context, deps) {
-  var gk = context.Kapi;
+  var Kapi = context.Kapi;
   var _ = (deps && deps.underscore) ? deps.underscore : context._;
   var transforms = [
     'transform'
@@ -18,8 +18,8 @@ var rekapiDOM = function (context, deps) {
    * @param {HTMLElement} element
    * @constructor
    */
-  gk.DOMActor = function (element) {
-    gk.Actor.call(this);
+  Kapi.DOMActor = function (element) {
+    Kapi.Actor.call(this);
     this._context = element;
     var className = this.getCSSName();
 
@@ -38,8 +38,8 @@ var rekapiDOM = function (context, deps) {
 
 
   function DOMActorMethods () {}
-  DOMActorMethods.prototype = gk.Actor.prototype;
-  gk.DOMActor.prototype = new DOMActorMethods();
+  DOMActorMethods.prototype = Kapi.Actor.prototype;
+  Kapi.DOMActor.prototype = new DOMActorMethods();
 
 
   /**

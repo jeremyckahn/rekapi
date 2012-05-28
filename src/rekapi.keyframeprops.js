@@ -1,11 +1,10 @@
 var rekapiKeyframeProperty = function (context, deps) {
-  var gk
-      ,DEFAULT_EASING = 'linear'
-      ,KeyframePropertyMethods
-      ,_ = (deps && deps.underscore) ? deps.underscore : context._
-      ,Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : context.Tweenable;
+  var DEFAULT_EASING = 'linear';
+  var _ = (deps && deps.underscore) ? deps.underscore : context._;
+  var Tweenable = (deps && deps.Tweenable)
+      ? deps.Tweenable : context.Tweenable;
 
-  gk = context.Kapi;
+  var Kapi = context.Kapi;
 
   /**
    * @param {Kapi.Actor} ownerActor
@@ -15,8 +14,8 @@ var rekapiKeyframeProperty = function (context, deps) {
    * @param {string} opt_easing
    * @constructor
    */
-  gk.KeyframeProperty = function (ownerActor, millisecond, name, value,
-      opt_easing) {
+  var KeyframeProperty = Kapi.KeyframeProperty = function (ownerActor,
+      millisecond, name, value, opt_easing) {
     this.id = _.uniqueId('keyframeProperty_');
     this.ownerActor = ownerActor;
     this.millisecond = millisecond;
@@ -32,7 +31,7 @@ var rekapiKeyframeProperty = function (context, deps) {
   /**
    * @param {Object} newProperties
    */
-  gk.KeyframeProperty.prototype.modifyWith = function (newProperties) {
+  KeyframeProperty.prototype.modifyWith = function (newProperties) {
     var modifiedProperties = {};
 
     _.each(['millisecond', 'easing', 'value'], function (str) {
@@ -47,7 +46,7 @@ var rekapiKeyframeProperty = function (context, deps) {
   /**
    * @param {KeyframeProperty} nextProperty
    */
-  gk.KeyframeProperty.prototype.linkToNext = function (nextProperty) {
+  KeyframeProperty.prototype.linkToNext = function (nextProperty) {
     this.nextProperty = nextProperty || null;
   };
 
@@ -56,7 +55,7 @@ var rekapiKeyframeProperty = function (context, deps) {
    * @param {number} millisecond
    * @return {number}
    */
-  gk.KeyframeProperty.prototype.getValueAt = function (millisecond) {
+  KeyframeProperty.prototype.getValueAt = function (millisecond) {
     var fromObj
         ,toObj
         ,delta
@@ -84,7 +83,7 @@ var rekapiKeyframeProperty = function (context, deps) {
   /**
    * @return {Object}
    */
-  gk.KeyframeProperty.prototype.exportPropertyData = function () {
+  KeyframeProperty.prototype.exportPropertyData = function () {
     return {
      'id': this.id
      ,'millisecond': this.millisecond

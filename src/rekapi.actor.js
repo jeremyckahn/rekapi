@@ -1,15 +1,12 @@
 var rekapiActor = function (context, deps) {
 
-  var DEFAULT_EASING = 'linear'
-      ,gk
-      ,actorCount
-      ,ActorMethods
-      ,_ = (deps && deps.underscore) ? deps.underscore : context._
-      ,Tweenable = (deps && deps.Tweenable) ?
-          deps.Tweenable : context.Tweenable;
+  var DEFAULT_EASING = 'linear';
+  var actorCount = 0;
+  var _ = (deps && deps.underscore) ? deps.underscore : context._;
+  var Tweenable = (deps && deps.Tweenable) ?
+      deps.Tweenable : context.Tweenable;
 
-  gk = context.Kapi;
-  actorCount = 0;
+  var Kapi = context.Kapi;
 
 
   function getUniqueActorId () {
@@ -64,7 +61,7 @@ var rekapiActor = function (context, deps) {
 
 
   /**
-   * Gets all of the current and most recent Kapi.KeyframeProperty's for a
+   * Gets all of the current and most recent Kapi.KeyframeProperties for a
    * given millisecond.
    * @param {Kapi.Actor} actor
    * @param {number} forMillisecond
@@ -134,7 +131,7 @@ var rekapiActor = function (context, deps) {
    * @param {Object} opt_config
    * @constructor
    */
-  gk.Actor = function Actor (opt_config) {
+  var Actor = Kapi.Actor = function (opt_config) {
 
     opt_config = opt_config || {};
 
@@ -149,9 +146,9 @@ var rekapiActor = function (context, deps) {
       ,'_keyframeProperties': {}
       ,'_isPersisting': false
       ,'id': getUniqueActorId()
-      ,'setup': opt_config.setup || gk.util.noop
-      ,'render': opt_config.render || gk.util.noop
-      ,'teardown': opt_config.teardown || gk.util.noop
+      ,'setup': opt_config.setup || Kapi.util.noop
+      ,'render': opt_config.render || Kapi.util.noop
+      ,'teardown': opt_config.teardown || Kapi.util.noop
     });
 
     if (opt_config.context) {
@@ -167,7 +164,7 @@ var rekapiActor = function (context, deps) {
   // `Actor` specific methods.
   ActorMethods = function () {};
   ActorMethods.prototype = Tweenable.prototype;
-  gk.Actor.prototype = new ActorMethods();
+  Actor.prototype = new ActorMethods();
   // But the magic doesn't stop here!  `Actor`'s constructor steals the
   // `Tweenable` constructor.
 
@@ -176,7 +173,7 @@ var rekapiActor = function (context, deps) {
    * @param {Object} opt_context
    * @return {Object}
    */
-  gk.Actor.prototype.context = function (opt_context) {
+  Actor.prototype.context = function (opt_context) {
     if (opt_context) {
       this._context = opt_context;
     }
@@ -191,8 +188,7 @@ var rekapiActor = function (context, deps) {
    * @param {string|Object} easing
    * @return {Kapi.Actor}
    */
-  gk.Actor.prototype.keyframe = function keyframe (when, position,
-      opt_easing) {
+  Actor.prototype.keyframe = function keyframe (when, position, opt_easing) {
     var originalEasingString;
 
     // TODO:  The opt_easing logic seems way overcomplicated, it's probably out
@@ -217,7 +213,7 @@ var rekapiActor = function (context, deps) {
     _.each(position, function (value, name) {
       var newKeyframeProperty;
 
-      newKeyframeProperty = new gk.KeyframeProperty(this, when, name, value,
+      newKeyframeProperty = new Kapi.KeyframeProperty(this, when, name, value,
           opt_easing[name]);
       this._keyframeProperties[newKeyframeProperty.id] = newKeyframeProperty;
 
@@ -241,7 +237,7 @@ var rekapiActor = function (context, deps) {
    * @param {number} index
    * @return {Kapi.KeyframeProperty}
    */
-  gk.Actor.prototype.getKeyframeProperty = function (property, index) {
+  Actor.prototype.getKeyframeProperty = function (property, index) {
     if (this._propertyTracks[property]
         && this._propertyTracks[property][index]) {
       return this._propertyTracks[property][index];
@@ -255,7 +251,7 @@ var rekapiActor = function (context, deps) {
    * @param {Object} newProperties
    * @return {Kapi.Actor}
    */
-  gk.Actor.prototype.modifyKeyframeProperty = function (property, index,
+  Actor.prototype.modifyKeyframeProperty = function (property, index,
       newProperties) {
     if (this._propertyTracks[property]
         && this._propertyTracks[property][index]) {
@@ -271,7 +267,7 @@ var rekapiActor = function (context, deps) {
   /**
    * @return {Array}
    */
-  gk.Actor.prototype.getTrackNames = function () {
+  Actor.prototype.getTrackNames = function () {
     return _.keys(this._propertyTracks);
   };
 
@@ -280,7 +276,7 @@ var rekapiActor = function (context, deps) {
    * @param {string} trackName
    * @return {number}
    */
-  gk.Actor.prototype.getTrackLength = function (trackName) {
+  Actor.prototype.getTrackLength = function (trackName) {
     if (!this._propertyTracks[trackName]) {
       return;
     }
@@ -294,7 +290,7 @@ var rekapiActor = function (context, deps) {
    * @param {number} copyFrom
    * @return {Kapi.Actor}
    */
-  gk.Actor.prototype.copyProperties = function (copyTo, copyFrom) {
+  Actor.prototype.copyProperties = function (copyTo, copyFrom) {
     var sourcePositions
         ,sourceEasings;
 
@@ -322,7 +318,7 @@ var rekapiActor = function (context, deps) {
    * @param {number} until
    * @return {Kapi.Actor}
    */
-  gk.Actor.prototype.wait = function (until) {
+  Actor.prototype.wait = function (until) {
     var length = this.getEnd();
 
     if (until <= length) {
@@ -350,7 +346,7 @@ var rekapiActor = function (context, deps) {
   /**
    * @return {number}
    */
-  gk.Actor.prototype.getStart = function () {
+  Actor.prototype.getStart = function () {
     var starts = [];
 
     _.each(this._propertyTracks, function (propertyTrack) {
@@ -370,7 +366,7 @@ var rekapiActor = function (context, deps) {
   /**
    * @return {number}
    */
-  gk.Actor.prototype.getEnd = function () {
+  Actor.prototype.getEnd = function () {
     var latest = 0;
 
     _.each(this._propertyTracks, function (propertyTrack) {
@@ -390,7 +386,7 @@ var rekapiActor = function (context, deps) {
   /**
    * @return {number}
    */
-  gk.Actor.prototype.getLength = function () {
+  Actor.prototype.getLength = function () {
     return this.getEnd() - this.getStart();
   }
 
@@ -401,7 +397,7 @@ var rekapiActor = function (context, deps) {
    * @param {Object} opt_easingModification
    * @return {Kapi.Actor}
    */
-  gk.Actor.prototype.modifyKeyframe = function (when, stateModification,
+  Actor.prototype.modifyKeyframe = function (when, stateModification,
       opt_easingModification) {
 
     opt_easingModification = opt_easingModification || {};
@@ -426,7 +422,7 @@ var rekapiActor = function (context, deps) {
    * @param {when} when
    * @return {Kapi.Actor}
    */
-  gk.Actor.prototype.removeKeyframe = function (when) {
+  Actor.prototype.removeKeyframe = function (when) {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       var i = -1;
       var foundProperty = false;
@@ -455,7 +451,7 @@ var rekapiActor = function (context, deps) {
   /**
    * @return {Kapi.Actor}
    */
-  gk.Actor.prototype.removeAllKeyframeProperties = function () {
+  Actor.prototype.removeAllKeyframeProperties = function () {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       propertyTrack.length = 0;
     }, this);
@@ -469,7 +465,7 @@ var rekapiActor = function (context, deps) {
    * @param {number} layer
    * @return {Kapi.Actor|undefined}
    */
-  gk.Actor.prototype.moveToLayer = function (layer) {
+  Actor.prototype.moveToLayer = function (layer) {
     return this.kapi.moveActorToLayer(this, layer);
   };
 
@@ -478,7 +474,7 @@ var rekapiActor = function (context, deps) {
    * @param {number} millisecond
    * @return {Kapi.Actor}
    */
-  gk.Actor.prototype.calculatePosition = function (millisecond) {
+  Actor.prototype.calculatePosition = function (millisecond) {
     var startMs = this.getStart();
     var endMs = this.getEnd();
 
@@ -507,7 +503,7 @@ var rekapiActor = function (context, deps) {
    * @param {Object} opt_newData
    * @return {Object}
    */
-  gk.Actor.prototype.data = function (opt_newData) {
+  Actor.prototype.data = function (opt_newData) {
     if (opt_newData) {
       this._data = opt_newData;
     }
@@ -519,7 +515,7 @@ var rekapiActor = function (context, deps) {
   /**
    * @return {Object}
    */
-  gk.Actor.prototype.exportTimeline = function () {
+  Actor.prototype.exportTimeline = function () {
     var exportData = {
       'start': this.getStart()
       ,'end': this.getEnd()
@@ -541,7 +537,7 @@ var rekapiActor = function (context, deps) {
   /**
    * Empty out and re-cache internal KeyframeProperty data.
    */
-  gk.Actor.prototype.invalidatePropertyCache = function () {
+  Actor.prototype.invalidatePropertyCache = function () {
     this._timelinePropertyCaches = {};
 
     _.each(this._keyframeProperties, function (keyframeProperty) {
@@ -559,7 +555,7 @@ var rekapiActor = function (context, deps) {
       this._timelinePropertyCacheIndex[i] = +listId;
     }, this);
 
-    gk.util.sortNumerically(this._timelinePropertyCacheIndex);
+    Kapi.util.sortNumerically(this._timelinePropertyCacheIndex);
     cachePropertiesToSegments(this);
     linkTrackedProperties(this);
   };
