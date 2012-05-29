@@ -1,7 +1,7 @@
 var rekapiCanvasActor = function (context) {
   var Kapi = context.Kapi;
 
-  function CanvasActorMethods () {};
+  function CanvasActorMethods () {}
   CanvasActorMethods.prototype = Kapi.Actor.prototype;
 
   /**

@@ -137,12 +137,14 @@ var rekapiCore = function (context, deps, global) {
    * @return {Function}
    */
   function getUpdateMethod (framerate) {
+    var updateMethod;
+
     if (framerate !== 60) {
-      return global.setTimeout;
+      updateMethod = global.setTimeout;
     } else {
       // requestAnimationFrame() shim by Paul Irish (modified for Rekapi)
       // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-      return  global.requestAnimationFrame ||
+      updateMethod = global.requestAnimationFrame ||
         global.webkitRequestAnimationFrame ||
         global.oRequestAnimationFrame      ||
         global.msRequestAnimationFrame     ||
@@ -150,6 +152,8 @@ var rekapiCore = function (context, deps, global) {
           && global.mozRequestAnimationFrame) ||
         global.setTimeout;
     }
+
+    return updateMethod;
   }
 
 
@@ -158,16 +162,20 @@ var rekapiCore = function (context, deps, global) {
    * @return {Function}
    */
   function getCancelMethod (framerate) {
+    var cancelMethod;
+
     if (framerate !== 60) {
-      return global.clearTimeout;
+      cancelMethod = global.clearTimeout;
     } else {
-      return  global.cancelAnimationFrame ||
+      cancelMethod = global.cancelAnimationFrame ||
         global.webkitCancelAnimationFrame ||
         global.oCancelAnimationFrame      ||
         global.msCancelAnimationFrame     ||
         global.mozCancelRequestAnimationFrame ||
         global.clearTimeout;
     }
+
+    return cancelMethod;    
   }
 
 
@@ -190,14 +198,15 @@ var rekapiCore = function (context, deps, global) {
 
     var currentActor, canvas_context;
 
-    for (var i = 0; i < len; i++) {
+    var i;
+    for (i = 0; i < len; i++) {
       currentActor = kapi._actors[drawOrder[i]];
       canvas_context = currentActor.context();
       currentActor.render(canvas_context, currentActor.get());
     }
 
     return kapi;
-  };
+  }
 
 
   /**
@@ -280,7 +289,7 @@ var rekapiCore = function (context, deps, global) {
 
     _.each(this._contextInitHook, function (fn) {
       fn.call(this);
-    }, this)
+    }, this);
 
     return this;
   };
@@ -549,7 +558,8 @@ var rekapiCore = function (context, deps, global) {
   Kapi.prototype.calculateActorPositions = function (millisecond) {
     var len = this._drawOrder.length;
 
-    for (var i = 0; i < len; i++) {
+    var i;
+    for (i = 0; i < len; i++) {
       this._actors[this._drawOrder[i]].calculatePosition(millisecond);
     }
 
@@ -668,7 +678,7 @@ var rekapiCore = function (context, deps, global) {
       ,'calculateTimeSinceStart': calculateTimeSinceStart
       ,'isAnimationComplete': isAnimationComplete
       ,'updatePlayState': updatePlayState
-    }
+    };
   }
 
   context.Kapi = Kapi;

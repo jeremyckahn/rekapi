@@ -1,5 +1,6 @@
+/*jslint browser: true, nomen: true, plusplus: true, undef: true, sloppy: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.8.14
+ * Rekapi - Rewritten Kapi. v0.8.15
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -148,12 +149,14 @@ var rekapiCore = function (context, deps, global) {
    * @return {Function}
    */
   function getUpdateMethod (framerate) {
+    var updateMethod;
+
     if (framerate !== 60) {
-      return global.setTimeout;
+      updateMethod = global.setTimeout;
     } else {
       // requestAnimationFrame() shim by Paul Irish (modified for Rekapi)
       // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-      return  global.requestAnimationFrame ||
+      updateMethod = global.requestAnimationFrame ||
         global.webkitRequestAnimationFrame ||
         global.oRequestAnimationFrame      ||
         global.msRequestAnimationFrame     ||
@@ -161,6 +164,8 @@ var rekapiCore = function (context, deps, global) {
           && global.mozRequestAnimationFrame) ||
         global.setTimeout;
     }
+
+    return updateMethod;
   }
 
 
@@ -169,16 +174,20 @@ var rekapiCore = function (context, deps, global) {
    * @return {Function}
    */
   function getCancelMethod (framerate) {
+    var cancelMethod;
+
     if (framerate !== 60) {
-      return global.clearTimeout;
+      cancelMethod = global.clearTimeout;
     } else {
-      return  global.cancelAnimationFrame ||
+      cancelMethod = global.cancelAnimationFrame ||
         global.webkitCancelAnimationFrame ||
         global.oCancelAnimationFrame      ||
         global.msCancelAnimationFrame     ||
         global.mozCancelRequestAnimationFrame ||
         global.clearTimeout;
     }
+
+    return cancelMethod;    
   }
 
 
@@ -201,14 +210,15 @@ var rekapiCore = function (context, deps, global) {
 
     var currentActor, canvas_context;
 
-    for (var i = 0; i < len; i++) {
+    var i;
+    for (i = 0; i < len; i++) {
       currentActor = kapi._actors[drawOrder[i]];
       canvas_context = currentActor.context();
       currentActor.render(canvas_context, currentActor.get());
     }
 
     return kapi;
-  };
+  }
 
 
   /**
@@ -291,7 +301,7 @@ var rekapiCore = function (context, deps, global) {
 
     _.each(this._contextInitHook, function (fn) {
       fn.call(this);
-    }, this)
+    }, this);
 
     return this;
   };
@@ -560,7 +570,8 @@ var rekapiCore = function (context, deps, global) {
   Kapi.prototype.calculateActorPositions = function (millisecond) {
     var len = this._drawOrder.length;
 
-    for (var i = 0; i < len; i++) {
+    var i;
+    for (i = 0; i < len; i++) {
       this._actors[this._drawOrder[i]].calculatePosition(millisecond);
     }
 
@@ -679,7 +690,7 @@ var rekapiCore = function (context, deps, global) {
       ,'calculateTimeSinceStart': calculateTimeSinceStart
       ,'isAnimationComplete': isAnimationComplete
       ,'updatePlayState': updatePlayState
-    }
+    };
   }
 
   context.Kapi = Kapi;
@@ -723,7 +734,8 @@ var rekapiActor = function (context, deps) {
     var list = actor._timelinePropertyCacheIndex;
     var len = list.length;
 
-    for (var i = 1; i < len; i++) {
+    var i;
+    for (i = 1; i < len; i++) {
       if (list[i] >= millisecond) {
         return (i - 1);
       }
@@ -852,7 +864,7 @@ var rekapiActor = function (context, deps) {
     sortNumerically(actor._timelinePropertyCacheIndex);
     cachePropertiesToSegments(actor);
     linkTrackedProperties(actor);
-  };
+  }
 
 
   /**
@@ -1108,7 +1120,7 @@ var rekapiActor = function (context, deps) {
    */
   Actor.prototype.getLength = function () {
     return this.getEnd() - this.getStart();
-  }
+  };
 
 
   /**
@@ -1439,7 +1451,7 @@ var rekapiCanvasContext = function (context, deps) {
 var rekapiCanvasActor = function (context) {
   var Kapi = context.Kapi;
 
-  function CanvasActorMethods () {};
+  function CanvasActorMethods () {}
   CanvasActorMethods.prototype = Kapi.Actor.prototype;
 
   /**
@@ -1629,7 +1641,7 @@ var rekapiToCSS = function (context, deps) {
    * @param {string} str
    */
   function isColorString (str) {
-    return /rgb/.test(str);
+    return (/rgb/).test(str);
   }
 
 
@@ -1652,7 +1664,7 @@ var rekapiToCSS = function (context, deps) {
 
     serializedProps.push('}');
     return serializedProps.join('');
-  };
+  }
 
 
   /**
@@ -1674,10 +1686,11 @@ var rekapiToCSS = function (context, deps) {
     actor.calculatePosition(delay);
     serializedFrames.push('  from ' + serializeActorStep(actor));
 
-    for (var i = loopStart; i <= loopEnd; i += increment) {
+    var i;
+    for (i = loopStart; i <= loopEnd; i += increment) {
       actor.calculatePosition(i);
       percent = (i - delay) / animPercent;
-      adjustedPercent = +percent.toFixed(2)
+      adjustedPercent = +percent.toFixed(2);
       stepPrefix = adjustedPercent + '% ';
       serializedFrames.push('  ' + stepPrefix + serializeActorStep(actor));
     }
@@ -1758,7 +1771,7 @@ var rekapiToCSS = function (context, deps) {
     var start = actor.getStart();
     var duration = actor.getEnd() - start;
 
-    var duration = printf('  %sanimation-duration: %sms;'
+    duration = printf('  %sanimation-duration: %sms;'
         ,[prefix, duration]);
     generatedAttributes.push(duration);
 
@@ -1832,7 +1845,7 @@ if (typeof define === 'function' && define.amd) {
     var deps = {  Tweenable: Tweenable,
                   // Some versions of Underscore.js support AMD, others don't.
                   // If not, use the `_` global.
-                  underscore: underscoreSupportsAMD ? Underscore : _ }
+                  underscore: underscoreSupportsAMD ? Underscore : _ };
     var Kapi = rekapi(global, deps);
 
     if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {

@@ -39,7 +39,7 @@ if (typeof define === 'function' && define.amd) {
     var deps = {  Tweenable: Tweenable,
                   // Some versions of Underscore.js support AMD, others don't.
                   // If not, use the `_` global.
-                  underscore: underscoreSupportsAMD ? Underscore : _ }
+                  underscore: underscoreSupportsAMD ? Underscore : _ };
     var Kapi = rekapi(global, deps);
 
     if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {

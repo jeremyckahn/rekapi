@@ -36,7 +36,8 @@ var rekapiActor = function (context, deps) {
     var list = actor._timelinePropertyCacheIndex;
     var len = list.length;
 
-    for (var i = 1; i < len; i++) {
+    var i;
+    for (i = 1; i < len; i++) {
       if (list[i] >= millisecond) {
         return (i - 1);
       }
@@ -165,7 +166,7 @@ var rekapiActor = function (context, deps) {
     sortNumerically(actor._timelinePropertyCacheIndex);
     cachePropertiesToSegments(actor);
     linkTrackedProperties(actor);
-  };
+  }
 
 
   /**
@@ -421,7 +422,7 @@ var rekapiActor = function (context, deps) {
    */
   Actor.prototype.getLength = function () {
     return this.getEnd() - this.getStart();
-  }
+  };
 
 
   /**

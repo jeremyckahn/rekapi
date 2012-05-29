@@ -4,7 +4,8 @@
 # $: sh build.sh version_number [local_path_to_compiler]
 
 echo \
-"/**
+"/*jslint browser: true, nomen: true, plusplus: true, undef: true, sloppy: true, vars: true, white: true */
+/**
  * Rekapi - Rewritten Kapi. v${1}
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi

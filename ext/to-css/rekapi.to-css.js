@@ -84,7 +84,7 @@ var rekapiToCSS = function (context, deps) {
    * @param {string} str
    */
   function isColorString (str) {
-    return /rgb/.test(str);
+    return (/rgb/).test(str);
   }
 
 
@@ -107,7 +107,7 @@ var rekapiToCSS = function (context, deps) {
 
     serializedProps.push('}');
     return serializedProps.join('');
-  };
+  }
 
 
   /**
@@ -129,10 +129,11 @@ var rekapiToCSS = function (context, deps) {
     actor.calculatePosition(delay);
     serializedFrames.push('  from ' + serializeActorStep(actor));
 
-    for (var i = loopStart; i <= loopEnd; i += increment) {
+    var i;
+    for (i = loopStart; i <= loopEnd; i += increment) {
       actor.calculatePosition(i);
       percent = (i - delay) / animPercent;
-      adjustedPercent = +percent.toFixed(2)
+      adjustedPercent = +percent.toFixed(2);
       stepPrefix = adjustedPercent + '% ';
       serializedFrames.push('  ' + stepPrefix + serializeActorStep(actor));
     }
@@ -213,7 +214,7 @@ var rekapiToCSS = function (context, deps) {
     var start = actor.getStart();
     var duration = actor.getEnd() - start;
 
-    var duration = printf('  %sanimation-duration: %sms;'
+    duration = printf('  %sanimation-duration: %sms;'
         ,[prefix, duration]);
     generatedAttributes.push(duration);
 
