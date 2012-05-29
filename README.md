@@ -176,4 +176,5 @@ It's also important to make sure you didn't break any tests in `tests/`.  You
 can take a quick look by opening `tests/test.all_unit_tests.html` in your
 browser.
 
-Please make sure to follow the [style guide](./blob/master/docs/styleguide.md).
+Please make sure to follow the [style guide]
+(https://github.com/jeremyckahn/rekapi/blob/master/docs/styleguide.md).
