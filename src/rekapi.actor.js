@@ -77,6 +77,7 @@ var rekapiActor = function (context, deps) {
    * given millisecond.
    * @param {Kapi.Actor} actor
    * @param {number} forMillisecond
+   * @return {Object} An Object containing Kapi.KeyframeProperties
    */
   function getLatestPropeties (actor, forMillisecond) {
     var latestProperties = {};
@@ -156,7 +157,6 @@ var rekapiActor = function (context, deps) {
       ,'_timelinePropertyCaches': {}
       ,'_timelinePropertyCacheIndex': []
       ,'_keyframeProperties': {}
-      ,'_isPersisting': false
       ,'id': getUniqueActorId()
       ,'setup': opt_config.setup || Kapi.util.noop
       ,'render': opt_config.render || Kapi.util.noop
@@ -223,9 +223,7 @@ var rekapiActor = function (context, deps) {
     });
 
     _.each(position, function (value, name) {
-      var newKeyframeProperty;
-
-      newKeyframeProperty = new Kapi.KeyframeProperty(this, when, name, value,
+      var newKeyframeProperty = new Kapi.KeyframeProperty(this, when, name, value,
           opt_easing[name]);
       this._keyframeProperties[newKeyframeProperty.id] = newKeyframeProperty;
 
@@ -303,16 +301,11 @@ var rekapiActor = function (context, deps) {
    * @return {Kapi.Actor}
    */
   Actor.prototype.copyProperties = function (copyTo, copyFrom) {
-    var sourcePositions
-        ,sourceEasings;
-
-    sourcePositions = {};
-    sourceEasings = {};
+    var sourcePositions = {};
+    var sourceEasings = {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var foundProperty;
-
-      foundProperty = findPropertyAtMillisecondInTrack(this, trackName,
+      var foundProperty = findPropertyAtMillisecondInTrack(this, trackName,
           copyFrom);
 
       if (foundProperty) {

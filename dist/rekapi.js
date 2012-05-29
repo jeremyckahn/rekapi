@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.8.12
+ * Rekapi - Rewritten Kapi. v0.8.13
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -12,14 +12,20 @@
 var rekapiCore = function (context, deps, global) {
 
   /**
+   * Does nothing.  Absolutely nothing at all.
+   */
+  function noop () {
+    // NOOP!
+  }
+
+
+  /**
    * Determines which iteration of the loop the animation is currently in.
    * @param {Kapi} kapi
    * @param {number} timeSinceStart
    */
   function determineCurrentLoopIteration (kapi, timeSinceStart) {
-    var currentIteration;
-
-    currentIteration = Math.floor((timeSinceStart) / kapi._animationLength);
+    var currentIteration = Math.floor((timeSinceStart) / kapi._animationLength);
     return currentIteration;
   }
 
@@ -30,10 +36,7 @@ var rekapiCore = function (context, deps, global) {
    * @return {number}
    */
   function calculateTimeSinceStart (kapi) {
-    var timeSinceStart;
-
-    timeSinceStart = now() - kapi._loopTimestamp;
-    return timeSinceStart;
+    return now() - kapi._loopTimestamp;
   }
 
 
@@ -88,11 +91,8 @@ var rekapiCore = function (context, deps, global) {
    * @param {number} forMillisecond The millisecond to render
    */
   function renderMillisecond (kapi, forMillisecond) {
-    var currentIteration
-        ,loopPosition;
-
-    currentIteration = determineCurrentLoopIteration(kapi, forMillisecond);
-    loopPosition = calculateLoopPosition(kapi, forMillisecond,
+    var currentIteration = determineCurrentLoopIteration(kapi, forMillisecond);
+    var loopPosition = calculateLoopPosition(kapi, forMillisecond,
         currentIteration);
     kapi.render(loopPosition);
     updatePlayState(kapi, currentIteration);
@@ -188,24 +188,20 @@ var rekapiCore = function (context, deps, global) {
    * @return {Kapi}
    */
   function draw (kapi) {
-    var i, len
-        ,currentActor
-        ,canvas_context
-        ,orderedActors
-        ,drawOrder;
-
     fireEvent(kapi, 'onBeforeDraw');
-    len = kapi._drawOrder.length;
+    var len = kapi._drawOrder.length;
+    var drawOrder;
 
     if (kapi._drawOrderSorter) {
-      orderedActors = drawOrder =
-          _.sortBy(kapi._actors, kapi._drawOrderSorter);
+      var orderedActors = _.sortBy(kapi._actors, kapi._drawOrderSorter);
       drawOrder = _.pluck(orderedActors, 'id');
     } else {
       drawOrder = kapi._drawOrder;
     }
 
-    for (i = 0; i < len; i++) {
+    var currentActor, canvas_context;
+
+    for (var i = 0; i < len; i++) {
       currentActor = kapi._actors[drawOrder[i]];
       canvas_context = currentActor.context();
       currentActor.render(canvas_context, currentActor.get());
@@ -230,16 +226,9 @@ var rekapiCore = function (context, deps, global) {
     }
   }
 
-
-  /**
-   * Does nothing.  Absolutely nothing at all.
-   */
-  function noop () {
-    // NOOP!
-  }
-
   var _ = (deps && deps.underscore) ? deps.underscore : context._;
-  var Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : context.Tweenable;
+  var Tweenable = (deps && deps.Tweenable) ?
+      deps.Tweenable : context.Tweenable;
   var now = Tweenable.util.now;
 
   var defaultConfig = {
@@ -412,7 +401,7 @@ var rekapiCore = function (context, deps, global) {
     this._playState = playState.PLAYING;
     tick(this);
 
-    // also resume any Shifty tweens that are paused.
+    // Also resume any Shifty tweens that are paused.
     _.each(this._actors, function (actor) {
       if (actor._state.isPaused ) {
         actor.resume();
@@ -460,7 +449,7 @@ var rekapiCore = function (context, deps, global) {
     cancelLoop(this);
     this._pausedAtTime = now();
 
-    // also pause any shifty tweens that are running.
+    // Also pause any Shifty tweens that are running
     _.each(this._actors, function (actor) {
       if (actor._state.isTweening) {
         actor.pause();
@@ -775,6 +764,7 @@ var rekapiActor = function (context, deps) {
    * given millisecond.
    * @param {Kapi.Actor} actor
    * @param {number} forMillisecond
+   * @return {Object} An Object containing Kapi.KeyframeProperties
    */
   function getLatestPropeties (actor, forMillisecond) {
     var latestProperties = {};
@@ -854,7 +844,6 @@ var rekapiActor = function (context, deps) {
       ,'_timelinePropertyCaches': {}
       ,'_timelinePropertyCacheIndex': []
       ,'_keyframeProperties': {}
-      ,'_isPersisting': false
       ,'id': getUniqueActorId()
       ,'setup': opt_config.setup || Kapi.util.noop
       ,'render': opt_config.render || Kapi.util.noop
@@ -921,9 +910,7 @@ var rekapiActor = function (context, deps) {
     });
 
     _.each(position, function (value, name) {
-      var newKeyframeProperty;
-
-      newKeyframeProperty = new Kapi.KeyframeProperty(this, when, name, value,
+      var newKeyframeProperty = new Kapi.KeyframeProperty(this, when, name, value,
           opt_easing[name]);
       this._keyframeProperties[newKeyframeProperty.id] = newKeyframeProperty;
 
@@ -1001,16 +988,11 @@ var rekapiActor = function (context, deps) {
    * @return {Kapi.Actor}
    */
   Actor.prototype.copyProperties = function (copyTo, copyFrom) {
-    var sourcePositions
-        ,sourceEasings;
-
-    sourcePositions = {};
-    sourceEasings = {};
+    var sourcePositions = {};
+    var sourceEasings = {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var foundProperty;
-
-      foundProperty = findPropertyAtMillisecondInTrack(this, trackName,
+      var foundProperty = findPropertyAtMillisecondInTrack(this, trackName,
           copyFrom);
 
       if (foundProperty) {
@@ -1329,20 +1311,15 @@ var rekapiKeyframeProperty = function (context, deps) {
    * @return {number}
    */
   KeyframeProperty.prototype.getValueAt = function (millisecond) {
-    var fromObj
-        ,toObj
-        ,delta
-        ,interpolatedPosition
-        ,value;
-
-    fromObj = {};
-    toObj = {};
+    var fromObj = {};
+    var toObj = {};
+    var value;
 
     if (this.nextProperty) {
       fromObj[this.name] = this.value;
       toObj[this.name] = this.nextProperty.value;
-      delta = this.nextProperty.millisecond - this.millisecond;
-      interpolatedPosition = (millisecond - this.millisecond) / delta;
+      var delta = this.nextProperty.millisecond - this.millisecond;
+      var interpolatedPosition = (millisecond - this.millisecond) / delta;
       value = Tweenable.util.interpolate(fromObj, toObj, interpolatedPosition,
           this.nextProperty.easing)[this.name];
     } else {

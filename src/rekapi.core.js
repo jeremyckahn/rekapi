@@ -1,14 +1,20 @@
 var rekapiCore = function (context, deps, global) {
 
   /**
+   * Does nothing.  Absolutely nothing at all.
+   */
+  function noop () {
+    // NOOP!
+  }
+
+
+  /**
    * Determines which iteration of the loop the animation is currently in.
    * @param {Kapi} kapi
    * @param {number} timeSinceStart
    */
   function determineCurrentLoopIteration (kapi, timeSinceStart) {
-    var currentIteration;
-
-    currentIteration = Math.floor((timeSinceStart) / kapi._animationLength);
+    var currentIteration = Math.floor((timeSinceStart) / kapi._animationLength);
     return currentIteration;
   }
 
@@ -19,10 +25,7 @@ var rekapiCore = function (context, deps, global) {
    * @return {number}
    */
   function calculateTimeSinceStart (kapi) {
-    var timeSinceStart;
-
-    timeSinceStart = now() - kapi._loopTimestamp;
-    return timeSinceStart;
+    return now() - kapi._loopTimestamp;
   }
 
 
@@ -77,11 +80,8 @@ var rekapiCore = function (context, deps, global) {
    * @param {number} forMillisecond The millisecond to render
    */
   function renderMillisecond (kapi, forMillisecond) {
-    var currentIteration
-        ,loopPosition;
-
-    currentIteration = determineCurrentLoopIteration(kapi, forMillisecond);
-    loopPosition = calculateLoopPosition(kapi, forMillisecond,
+    var currentIteration = determineCurrentLoopIteration(kapi, forMillisecond);
+    var loopPosition = calculateLoopPosition(kapi, forMillisecond,
         currentIteration);
     kapi.render(loopPosition);
     updatePlayState(kapi, currentIteration);
@@ -177,24 +177,20 @@ var rekapiCore = function (context, deps, global) {
    * @return {Kapi}
    */
   function draw (kapi) {
-    var i, len
-        ,currentActor
-        ,canvas_context
-        ,orderedActors
-        ,drawOrder;
-
     fireEvent(kapi, 'onBeforeDraw');
-    len = kapi._drawOrder.length;
+    var len = kapi._drawOrder.length;
+    var drawOrder;
 
     if (kapi._drawOrderSorter) {
-      orderedActors = drawOrder =
-          _.sortBy(kapi._actors, kapi._drawOrderSorter);
+      var orderedActors = _.sortBy(kapi._actors, kapi._drawOrderSorter);
       drawOrder = _.pluck(orderedActors, 'id');
     } else {
       drawOrder = kapi._drawOrder;
     }
 
-    for (i = 0; i < len; i++) {
+    var currentActor, canvas_context;
+
+    for (var i = 0; i < len; i++) {
       currentActor = kapi._actors[drawOrder[i]];
       canvas_context = currentActor.context();
       currentActor.render(canvas_context, currentActor.get());
@@ -219,16 +215,9 @@ var rekapiCore = function (context, deps, global) {
     }
   }
 
-
-  /**
-   * Does nothing.  Absolutely nothing at all.
-   */
-  function noop () {
-    // NOOP!
-  }
-
   var _ = (deps && deps.underscore) ? deps.underscore : context._;
-  var Tweenable = (deps && deps.Tweenable) ? deps.Tweenable : context.Tweenable;
+  var Tweenable = (deps && deps.Tweenable) ?
+      deps.Tweenable : context.Tweenable;
   var now = Tweenable.util.now;
 
   var defaultConfig = {
@@ -401,7 +390,7 @@ var rekapiCore = function (context, deps, global) {
     this._playState = playState.PLAYING;
     tick(this);
 
-    // also resume any Shifty tweens that are paused.
+    // Also resume any Shifty tweens that are paused.
     _.each(this._actors, function (actor) {
       if (actor._state.isPaused ) {
         actor.resume();
@@ -449,7 +438,7 @@ var rekapiCore = function (context, deps, global) {
     cancelLoop(this);
     this._pausedAtTime = now();
 
-    // also pause any shifty tweens that are running.
+    // Also pause any Shifty tweens that are running
     _.each(this._actors, function (actor) {
       if (actor._state.isTweening) {
         actor.pause();
