@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.8.11
+ * Rekapi - Rewritten Kapi. v0.8.12
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -244,7 +244,6 @@ var rekapiCore = function (context, deps, global) {
 
   var defaultConfig = {
     'fps': 60
-    ,'clearOnUpdate': true
   };
 
   var playState = {
@@ -1407,6 +1406,8 @@ var rekapiCanvasContext = function (context, deps) {
     if (!(this.config.context && this.config.context.nodeName === 'CANVAS')) {
       return;
     }
+
+    this.config.clearOnUpdate = true;
 
     _.each(['Height', 'Width'], function (dimension) {
       var dimensionLower = dimension.toLowerCase();

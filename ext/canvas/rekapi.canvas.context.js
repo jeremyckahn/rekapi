@@ -38,6 +38,8 @@ var rekapiCanvasContext = function (context, deps) {
       return;
     }
 
+    this.config.clearOnUpdate = true;
+
     _.each(['Height', 'Width'], function (dimension) {
       var dimensionLower = dimension.toLowerCase();
       if (this.config[dimensionLower]) {

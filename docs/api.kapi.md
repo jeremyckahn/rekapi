@@ -18,7 +18,6 @@ Functional properties of `opt_config`:
 * __fps__: Number.  The frames per second at which the animation updates.  The default value is 30.
 * __height__: Number.  The height to set upon `canvas`.
 * __width__: Number.  The width to set upon `canvas`.
-* __clearOnUpdate__: Boolean.  Whether or not clear out the canvas before each new frame is drawn.  `true` by default.
 
 __[Example](examples/kapi.html)__
 

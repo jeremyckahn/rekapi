@@ -233,7 +233,6 @@ var rekapiCore = function (context, deps, global) {
 
   var defaultConfig = {
     'fps': 60
-    ,'clearOnUpdate': true
   };
 
   var playState = {
