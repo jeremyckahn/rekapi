@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.8.13
+ * Rekapi - Rewritten Kapi. v0.8.14
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -828,6 +828,34 @@ var rekapiActor = function (context, deps) {
 
 
   /**
+   * Empty out and re-cache internal KeyframeProperty data.
+   * @param {Kapi.Actor}
+   */
+  function invalidatePropertyCache  (actor) {
+    actor._timelinePropertyCaches = {};
+
+    _.each(actor._keyframeProperties, function (keyframeProperty) {
+      if (!actor._timelinePropertyCaches[keyframeProperty.millisecond]) {
+        actor._timelinePropertyCaches[keyframeProperty.millisecond] = {};
+      }
+
+      actor._timelinePropertyCaches[keyframeProperty.millisecond][
+          keyframeProperty.name] = keyframeProperty;
+    }, actor);
+
+    actor._timelinePropertyCacheIndex = _.keys(actor._timelinePropertyCaches);
+
+    _.each(actor._timelinePropertyCacheIndex, function (listId, i) {
+      actor._timelinePropertyCacheIndex[i] = +listId;
+    }, actor);
+
+    sortNumerically(actor._timelinePropertyCacheIndex);
+    cachePropertiesToSegments(actor);
+    linkTrackedProperties(actor);
+  };
+
+
+  /**
    * @param {Object} opt_config
    * @constructor
    */
@@ -923,7 +951,7 @@ var rekapiActor = function (context, deps) {
     }, this);
 
     this.kapi._recalculateAnimationLength();
-    this.invalidatePropertyCache();
+    invalidatePropertyCache(this);
 
     return this;
   };
@@ -956,7 +984,7 @@ var rekapiActor = function (context, deps) {
     }
 
     sortPropertyTracks(this);
-    this.invalidatePropertyCache();
+    invalidatePropertyCache(this);
     return this;
   };
 
@@ -1134,7 +1162,7 @@ var rekapiActor = function (context, deps) {
       }
     }, this);
     this.kapi._recalculateAnimationLength();
-    this.invalidatePropertyCache();
+    invalidatePropertyCache(this);
 
     return this;
   };
@@ -1223,33 +1251,6 @@ var rekapiActor = function (context, deps) {
     });
 
     return exportData;
-  };
-
-
-  /**
-   * Empty out and re-cache internal KeyframeProperty data.
-   */
-  Actor.prototype.invalidatePropertyCache = function () {
-    this._timelinePropertyCaches = {};
-
-    _.each(this._keyframeProperties, function (keyframeProperty) {
-      if (!this._timelinePropertyCaches[keyframeProperty.millisecond]) {
-        this._timelinePropertyCaches[keyframeProperty.millisecond] = {};
-      }
-
-      this._timelinePropertyCaches[keyframeProperty.millisecond][
-          keyframeProperty.name] = keyframeProperty;
-    }, this);
-
-    this._timelinePropertyCacheIndex = _.keys(this._timelinePropertyCaches);
-
-    _.each(this._timelinePropertyCacheIndex, function (listId, i) {
-      this._timelinePropertyCacheIndex[i] = +listId;
-    }, this);
-
-    sortNumerically(this._timelinePropertyCacheIndex);
-    cachePropertiesToSegments(this);
-    linkTrackedProperties(this);
   };
 
 };
