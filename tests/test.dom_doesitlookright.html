@@ -43,9 +43,6 @@
     element = document.getElementById('actor');
     element.removeAttribute('style');
     element.style.position = 'absolute';
-    element.style.height = '50px';
-    element.style.width = '50px';
-    element.style.background = '#f00';
     actor = new Kapi.DOMActor(element);
     forKapi.addActor(actor);
     return actor;
@@ -56,9 +53,13 @@
     var kapi;
 
     function killTest () {
-      $('#actor').removeAttr('class');
-      kapi && kapi.stop(true);
-      kapi = undefined;
+      if (kapi) {
+        var ids = kapi.getActorIds();
+        var actor = kapi.getActor(ids[0]);
+        kapi.removeActor(actor);
+        kapi.stop(true);
+        kapi = undefined;
+      }
     }
 
     $('#kill-test').click(killTest);
@@ -206,10 +207,17 @@
   });
 
   </script>
+  <style>
+    .actor {
+      height: 50px;
+      width: 50px;
+      background: #f00;
+    }
+  </style>
 </head>
 <body>
   <div id="sandbox" style="height: 300px; width: 300px; background: #ff8; float: left;">
-    <div id="actor"></div>
+    <div id="actor" class="actor"></div>
   </div>
   <ul style="float: left;">
     <li>

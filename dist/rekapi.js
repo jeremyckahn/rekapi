@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.8.10
+ * Rekapi - Rewritten Kapi. v0.8.11
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -1514,12 +1514,13 @@ var rekapiDOM = function (context, deps) {
     // Add the class if it's not already there.
     // Using className instead of classList to make IE happy.
     if (!this._context.className.match(className)) {
-      this._context.className += className;
+      this._context.className += ' ' + className;
     }
 
     // Remove the instance's render method to allow the
     // ActorMethods.prototype.render method to be accessible.
     delete this.render;
+    delete this.teardown;
 
     return this;
   };
@@ -1545,6 +1546,13 @@ var rekapiDOM = function (context, deps) {
         setStyle(context, styleName, styleValue);
       }
     }, this);
+  };
+
+
+  DOMActorMethods.prototype.teardown = function (context, state) {
+    var classList = this._context.className.match(/\S+/g);
+    var sanitizedClassList = _.without(classList, this.getCSSName());
+    this._context.className = sanitizedClassList;
   };
 
 
