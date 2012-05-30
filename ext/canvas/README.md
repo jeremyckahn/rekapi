@@ -12,8 +12,11 @@ You can use Rekapi to render to `<canvas>`.
  * @constructor
  * @extends Kapi.Actor
  */
-Kapi.DOMActor = function (element)
+Kapi.CanvasActor = function (element)
 ````
+
+Note: `context` is inherited from the `Kapi` instance that a `Kapi.CanvasActor`
+is added to if it is not provided to this constructor.
 
 This extension also adds the following methods to the `Kapi` prototype:
 

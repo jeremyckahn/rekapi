@@ -175,7 +175,7 @@ var rekapiCore = function (context, deps, global) {
         global.clearTimeout;
     }
 
-    return cancelMethod;    
+    return cancelMethod;
   }
 
 
@@ -241,7 +241,6 @@ var rekapiCore = function (context, deps, global) {
 
 
   /**
-   * @param {Object} context
    * @param {Object} opt_config
    * @constructor
    */
