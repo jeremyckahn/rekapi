@@ -48,7 +48,7 @@ var rekapiCore = function (context, deps, global) {
   function updatePlayState (kapi, currentLoopIteration) {
     if (isAnimationComplete(kapi, currentLoopIteration)) {
       kapi.stop();
-      fireEvent(kapi, 'onAnimationComplete');
+      fireEvent(kapi, 'animationComplete');
     }
   }
 
@@ -185,7 +185,7 @@ var rekapiCore = function (context, deps, global) {
    * @return {Kapi}
    */
   function draw (kapi) {
-    fireEvent(kapi, 'onBeforeDraw');
+    fireEvent(kapi, 'beforeDraw');
     var len = kapi._drawOrder.length;
     var drawOrder;
 
@@ -253,13 +253,13 @@ var rekapiCore = function (context, deps, global) {
     this._drawOrderSorter = null;
 
     this._events = {
-      'onFrameRender': []
-      ,'onAnimationComplete': []
-      ,'onPlayStateChange': []
-      ,'onPlay': []
-      ,'onPause': []
-      ,'onStop': []
-      ,'onBeforeDraw': []
+      'frameRender': []
+      ,'animationComplete': []
+      ,'playStateChange': []
+      ,'play': []
+      ,'pause': []
+      ,'stop': []
+      ,'beforeDraw': []
     };
 
     // How many times to loop the animation before stopping.
@@ -405,8 +405,8 @@ var rekapiCore = function (context, deps, global) {
       }
     });
 
-    fireEvent(this, 'onPlayStateChange');
-    fireEvent(this, 'onPlay');
+    fireEvent(this, 'playStateChange');
+    fireEvent(this, 'play');
 
     return this;
   };
@@ -453,8 +453,8 @@ var rekapiCore = function (context, deps, global) {
       }
     });
 
-    fireEvent(this, 'onPlayStateChange');
-    fireEvent(this, 'onPause');
+    fireEvent(this, 'playStateChange');
+    fireEvent(this, 'pause');
 
     return this;
   };
@@ -472,8 +472,8 @@ var rekapiCore = function (context, deps, global) {
       actor.stop();
     });
 
-    fireEvent(this, 'onPlayStateChange');
-    fireEvent(this, 'onStop');
+    fireEvent(this, 'playStateChange');
+    fireEvent(this, 'stop');
 
     return this;
   };
@@ -534,7 +534,7 @@ var rekapiCore = function (context, deps, global) {
     this.calculateActorPositions(millisecond);
     draw(this);
     this._lastRenderedMillisecond = millisecond;
-    fireEvent(this, 'onFrameRender');
+    fireEvent(this, 'frameRender');
 
     return this;
   };

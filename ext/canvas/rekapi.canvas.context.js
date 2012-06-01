@@ -26,7 +26,7 @@ var rekapiCanvasContext = function (context, deps) {
    * Takes care of some pre-render tasks for canvas animations.  To be called
    * in the context of the Kapi instance.
    */
-  function onBeforeDraw () {
+  function beforeDraw () {
     if (this.config.clearOnUpdate) {
       this.canvasClear();
     }
@@ -48,7 +48,7 @@ var rekapiCanvasContext = function (context, deps) {
       }
     }, this);
 
-    this.bind('onBeforeDraw', _.bind(onBeforeDraw, this));
+    this.bind('beforeDraw', _.bind(beforeDraw, this));
   };
 
 

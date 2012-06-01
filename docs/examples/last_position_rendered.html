@@ -41,7 +41,7 @@
         .keyframe(1000, { x: 200, y: 150 });
 
       // For every frame, print where in the animation we are in the console.
-      kapi.bind('onFrameRender', function () {
+      kapi.bind('frameRender', function () {
         console.log(kapi.lastPositionRendered());
       });
 

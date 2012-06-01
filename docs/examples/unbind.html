@@ -40,14 +40,14 @@
         .keyframe(0,    { x: 50,  y: 50 })
         .keyframe(1000, { x: 200, y: 150 });
 
-      function onPlay (kapi) {
+      function play (kapi) {
         console.log(kapi, 'is now playing');
       }
 
-      kapi.bind('onPlay', onPlay);
-      kapi.unbind('onPlay', onPlay);
+      kapi.bind('play', play);
+      kapi.unbind('play', play);
 
-      // The onPlay handler was unbound, it will not run.
+      // The play handler was unbound, it will not run.
       kapi.play(1);
     </script>
   </body>

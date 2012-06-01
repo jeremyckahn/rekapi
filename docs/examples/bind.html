@@ -40,13 +40,13 @@
         .keyframe(0,    { x: 50,  y: 50 })
         .keyframe(1000, { x: 200, y: 150 });
 
-      kapi.bind('onPlay', function (kapi) {
+      kapi.bind('play', function (kapi) {
         console.log(kapi, 'is now playing');
       });
-      kapi.bind('onFrameRender', function (kapi) {
+      kapi.bind('frameRender', function (kapi) {
         console.log(kapi, 'just rendered a frame');
       });
-      kapi.bind('onStop', function (kapi) {
+      kapi.bind('stop', function (kapi) {
         console.log(kapi, 'has stopped');
       });
 

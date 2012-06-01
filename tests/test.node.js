@@ -16,15 +16,15 @@ r(['rekapi'], function(Kapi) {
     .keyframe(0, { x: 0 })
     .keyframe(250, { x: 100 });
 
-  kapi.bind('onPlay', function () {
+  kapi.bind('play', function () {
     console.log('The animation has begun!');
   });
 
-  kapi.bind('onFrameRender', function () {
+  kapi.bind('frameRender', function () {
     console.log('Actor state:', actor.get());
   });
 
-  kapi.bind('onStop', function () {
+  kapi.bind('stop', function () {
     console.log('The animation has completed!');
   });
 
