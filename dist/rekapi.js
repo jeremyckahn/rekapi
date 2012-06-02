@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, sloppy: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.8.17
+ * Rekapi - Rewritten Kapi. v0.8.18
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -900,7 +900,7 @@ var rekapiActor = function (context, deps) {
   // Kind of a fun way to set up an inheritance chain.  `ActorMethods` prevents
   // methods on `Actor.prototype` from polluting `Tweenable`'s prototype with
   // `Actor` specific methods.
-  ActorMethods = function () {};
+  var ActorMethods = function () {};
   ActorMethods.prototype = Tweenable.prototype;
   Actor.prototype = new ActorMethods();
   // But the magic doesn't stop here!  `Actor`'s constructor steals the

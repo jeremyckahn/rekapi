@@ -203,7 +203,7 @@ var rekapiActor = function (context, deps) {
   // Kind of a fun way to set up an inheritance chain.  `ActorMethods` prevents
   // methods on `Actor.prototype` from polluting `Tweenable`'s prototype with
   // `Actor` specific methods.
-  ActorMethods = function () {};
+  var ActorMethods = function () {};
   ActorMethods.prototype = Tweenable.prototype;
   Actor.prototype = new ActorMethods();
   // But the magic doesn't stop here!  `Actor`'s constructor steals the
