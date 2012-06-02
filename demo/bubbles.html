@@ -165,7 +165,7 @@
 
     kapi.canvasHeight(500);
     kapi.canvasWidth(500);
-    kapi.bind('animationComplete', generateSequence)
+    kapi.on('animationComplete', generateSequence)
 
     kapi.setOrderFunction(function (actor) {
       return actor.get().radius;

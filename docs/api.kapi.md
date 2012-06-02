@@ -245,7 +245,7 @@ __[Example](examples/move_actor_to_layer.html)__
  * @param {function} handler
  * @returns {Kapi}
  */
-Kapi.prototype.bind (eventName, handler)
+Kapi.prototype.on (eventName, handler)
 ````
 
 Bind an handler function to a Kapi event.  Possible events include:
@@ -269,7 +269,7 @@ __[Example](examples/bind.html)__
  * @param {function=} opt_handler
  * @returns {Kapi}
  */
-Kapi.prototype.unbind (eventName, opt_handler)
+Kapi.prototype.off (eventName, opt_handler)
 ````
 
 Unbind `opt_handler` from a Kapi event.  If `opt_handler` is omitted, all handler functions bound to `eventName` are unbound.  Valid events correspond to the list under `bind()`.

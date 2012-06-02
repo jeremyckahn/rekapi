@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, sloppy: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.8.16
+ * Rekapi - Rewritten Kapi. v0.8.17
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -600,7 +600,7 @@ var rekapiCore = function (context, deps, global) {
    * @param {Function} handler
    * @return {Kapi}
    */
-  Kapi.prototype.bind = function (eventName, handler) {
+  Kapi.prototype.on = function (eventName, handler) {
     if (!this._events[eventName]) {
       return;
     }
@@ -616,7 +616,7 @@ var rekapiCore = function (context, deps, global) {
    * @param {Function} opt_handler
    * @return {Kapi}
    */
-  Kapi.prototype.unbind = function (eventName, opt_handler) {
+  Kapi.prototype.off = function (eventName, opt_handler) {
     if (!this._events[eventName]) {
       return;
     }
@@ -1406,7 +1406,7 @@ var rekapiCanvasContext = function (context, deps) {
       }
     }, this);
 
-    this.bind('beforeDraw', _.bind(beforeDraw, this));
+    this.on('beforeDraw', _.bind(beforeDraw, this));
   };
 
 

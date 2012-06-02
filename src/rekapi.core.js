@@ -588,7 +588,7 @@ var rekapiCore = function (context, deps, global) {
    * @param {Function} handler
    * @return {Kapi}
    */
-  Kapi.prototype.bind = function (eventName, handler) {
+  Kapi.prototype.on = function (eventName, handler) {
     if (!this._events[eventName]) {
       return;
     }
@@ -604,7 +604,7 @@ var rekapiCore = function (context, deps, global) {
    * @param {Function} opt_handler
    * @return {Kapi}
    */
-  Kapi.prototype.unbind = function (eventName, opt_handler) {
+  Kapi.prototype.off = function (eventName, opt_handler) {
     if (!this._events[eventName]) {
       return;
     }

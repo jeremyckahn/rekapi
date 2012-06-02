@@ -48,7 +48,7 @@ var rekapiCanvasContext = function (context, deps) {
       }
     }, this);
 
-    this.bind('beforeDraw', _.bind(beforeDraw, this));
+    this.on('beforeDraw', _.bind(beforeDraw, this));
   };
 
 
