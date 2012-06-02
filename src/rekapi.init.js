@@ -1,4 +1,7 @@
 var rekapi = function (global, deps) {
+
+  'use strict';
+
   // If `deps` is defined, it means that Rekapi is loaded via AMD.
   // Don't use global context in this case so that the global scope
   // is not polluted by the Kapi object.

@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, sloppy: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.8.18
+ * Rekapi - Rewritten Kapi. v0.8.19
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -11,6 +11,8 @@
 ;(function(global) {
 
 var rekapiCore = function (context, deps, global) {
+
+  'use strict';
 
   /**
    * Does nothing.  Absolutely nothing at all.
@@ -697,6 +699,8 @@ var rekapiCore = function (context, deps, global) {
 };
 var rekapiActor = function (context, deps) {
 
+  'use strict';
+
   var DEFAULT_EASING = 'linear';
   var actorCount = 0;
   var _ = (deps && deps.underscore) ? deps.underscore : context._;
@@ -1266,6 +1270,9 @@ var rekapiActor = function (context, deps) {
 
 };
 var rekapiKeyframeProperty = function (context, deps) {
+
+  'use strict';
+
   var DEFAULT_EASING = 'linear';
   var _ = (deps && deps.underscore) ? deps.underscore : context._;
   var Tweenable = (deps && deps.Tweenable)
@@ -1804,6 +1811,9 @@ var rekapiToCSS = function (context, deps) {
 
 };
 var rekapi = function (global, deps) {
+
+  'use strict';
+
   // If `deps` is defined, it means that Rekapi is loaded via AMD.
   // Don't use global context in this case so that the global scope
   // is not polluted by the Kapi object.

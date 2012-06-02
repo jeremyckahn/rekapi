@@ -1,5 +1,7 @@
 var rekapiActor = function (context, deps) {
 
+  'use strict';
+
   var DEFAULT_EASING = 'linear';
   var actorCount = 0;
   var _ = (deps && deps.underscore) ? deps.underscore : context._;

@@ -1,5 +1,7 @@
 var rekapiCore = function (context, deps, global) {
 
+  'use strict';
+
   /**
    * Does nothing.  Absolutely nothing at all.
    */

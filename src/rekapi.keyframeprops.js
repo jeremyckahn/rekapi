@@ -1,4 +1,7 @@
 var rekapiKeyframeProperty = function (context, deps) {
+
+  'use strict';
+
   var DEFAULT_EASING = 'linear';
   var _ = (deps && deps.underscore) ? deps.underscore : context._;
   var Tweenable = (deps && deps.Tweenable)
