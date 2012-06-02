@@ -1,6 +1,10 @@
-var rekapiCore = function (context, deps, global) {
+var rekapiCore = function (context, _, Tweenable) {
 
   'use strict';
+
+  // GLOBAL is read from for various environment properties
+  // http://stackoverflow.com/questions/3277182/how-to-get-the-global-object-in-javascript
+  var Fn = Function, GLOBAL = Fn('return this')();
 
   /**
    * Does nothing.  Absolutely nothing at all.
@@ -114,7 +118,7 @@ var rekapiCore = function (context, deps, global) {
     // Need to check for .call presence to get around an IE limitation.
     // See annotation for cancelLoop for more info.
     if (kapi._scheduleUpdate.call) {
-      kapi._loopId = kapi._scheduleUpdate.call(global,
+      kapi._loopId = kapi._scheduleUpdate.call(GLOBAL,
           updateFn, 1000 / kapi.config.fps);
     } else {
       kapi._loopId = setTimeout(updateFn, 1000 / kapi.config.fps);
@@ -142,17 +146,17 @@ var rekapiCore = function (context, deps, global) {
     var updateMethod;
 
     if (framerate !== 60) {
-      updateMethod = global.setTimeout;
+      updateMethod = GLOBAL.setTimeout;
     } else {
       // requestAnimationFrame() shim by Paul Irish (modified for Rekapi)
       // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-      updateMethod = global.requestAnimationFrame ||
-        global.webkitRequestAnimationFrame ||
-        global.oRequestAnimationFrame      ||
-        global.msRequestAnimationFrame     ||
-        (global.mozCancelRequestAnimationFrame
-          && global.mozRequestAnimationFrame) ||
-        global.setTimeout;
+      updateMethod = GLOBAL.requestAnimationFrame ||
+        GLOBAL.webkitRequestAnimationFrame ||
+        GLOBAL.oRequestAnimationFrame      ||
+        GLOBAL.msRequestAnimationFrame     ||
+        (GLOBAL.mozCancelRequestAnimationFrame
+          && GLOBAL.mozRequestAnimationFrame) ||
+        GLOBAL.setTimeout;
     }
 
     return updateMethod;
@@ -167,14 +171,14 @@ var rekapiCore = function (context, deps, global) {
     var cancelMethod;
 
     if (framerate !== 60) {
-      cancelMethod = global.clearTimeout;
+      cancelMethod = GLOBAL.clearTimeout;
     } else {
-      cancelMethod = global.cancelAnimationFrame ||
-        global.webkitCancelAnimationFrame ||
-        global.oCancelAnimationFrame      ||
-        global.msCancelAnimationFrame     ||
-        global.mozCancelRequestAnimationFrame ||
-        global.clearTimeout;
+      cancelMethod = GLOBAL.cancelAnimationFrame ||
+        GLOBAL.webkitCancelAnimationFrame ||
+        GLOBAL.oCancelAnimationFrame      ||
+        GLOBAL.msCancelAnimationFrame     ||
+        GLOBAL.mozCancelRequestAnimationFrame ||
+        GLOBAL.clearTimeout;
     }
 
     return cancelMethod;
@@ -220,15 +224,12 @@ var rekapiCore = function (context, deps, global) {
    */
   function cancelLoop (kapi) {
     if (kapi._cancelUpdate.call) {
-      kapi._cancelUpdate.call(global, kapi._loopId);
+      kapi._cancelUpdate.call(GLOBAL, kapi._loopId);
     } else {
       clearTimeout(kapi._loopId);
     }
   }
 
-  var _ = (deps && deps.underscore) ? deps.underscore : context._;
-  var Tweenable = (deps && deps.Tweenable) ?
-      deps.Tweenable : context.Tweenable;
   var now = Tweenable.util.now;
 
   var defaultConfig = {

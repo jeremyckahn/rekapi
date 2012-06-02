@@ -1,9 +1,8 @@
-var rekapiToCSS = function (context, deps) {
+var rekapiToCSS = function (context, _) {
 
   'use strict';
 
   var Kapi = context.Kapi;
-  var _ = (deps && deps.underscore) ? deps.underscore : context._;
 
   // CONSTANTS
   //

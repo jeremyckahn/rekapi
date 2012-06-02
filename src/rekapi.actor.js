@@ -1,13 +1,9 @@
-var rekapiActor = function (context, deps) {
+var rekapiActor = function (context, _, Tweenable) {
 
   'use strict';
 
   var DEFAULT_EASING = 'linear';
   var actorCount = 0;
-  var _ = (deps && deps.underscore) ? deps.underscore : context._;
-  var Tweenable = (deps && deps.Tweenable) ?
-      deps.Tweenable : context.Tweenable;
-
   var Kapi = context.Kapi;
 
 

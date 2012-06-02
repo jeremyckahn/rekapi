@@ -1,13 +1,10 @@
-var rekapiKeyframeProperty = function (context, deps) {
+var rekapiKeyframeProperty = function (context, _, Tweenable) {
 
   'use strict';
 
   var DEFAULT_EASING = 'linear';
-  var _ = (deps && deps.underscore) ? deps.underscore : context._;
-  var Tweenable = (deps && deps.Tweenable)
-      ? deps.Tweenable : context.Tweenable;
-
   var Kapi = context.Kapi;
+
 
   /**
    * @param {Kapi.Actor} ownerActor
