@@ -1,3 +1,12 @@
+# Upgrading to Rekapi 0.8.17
+
+Renamed `bind` to `on` and `unbind` to `off`.
+
+# Upgrading to Rekapi 0.8.16
+
+All event names removed the "on" prefix with proper camelCasing.  So,
+"onAnimationComplete" is now "animationComplete," for example.
+
 # Upgrading to Rekapi 0.8.5
 
 All hide/show functionality has been __removed__.
