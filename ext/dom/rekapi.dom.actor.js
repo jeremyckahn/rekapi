@@ -1,4 +1,7 @@
 var rekapiDOM = function (context, deps) {
+
+  'use strict';
+
   var Kapi = context.Kapi;
   var _ = (deps && deps.underscore) ? deps.underscore : context._;
   var transforms = [

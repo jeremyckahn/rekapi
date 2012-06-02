@@ -1,5 +1,7 @@
 var rekapiCanvasContext = function (context, deps) {
 
+  'use strict';
+
   var gk = context.Kapi;
   var _ = (deps && deps.underscore) ? deps.underscore : context._;
 

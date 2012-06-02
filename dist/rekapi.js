@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, sloppy: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.8.19
+ * Rekapi - Rewritten Kapi. v0.8.20
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -1365,6 +1365,8 @@ var rekapiKeyframeProperty = function (context, deps) {
 };
 var rekapiCanvasContext = function (context, deps) {
 
+  'use strict';
+
   var gk = context.Kapi;
   var _ = (deps && deps.underscore) ? deps.underscore : context._;
 
@@ -1455,6 +1457,9 @@ var rekapiCanvasContext = function (context, deps) {
 
 };
 var rekapiCanvasActor = function (context) {
+
+  'use strict';
+
   var Kapi = context.Kapi;
 
   function CanvasActorMethods () {}
@@ -1484,6 +1489,9 @@ var rekapiCanvasActor = function (context) {
   };
 };
 var rekapiDOM = function (context, deps) {
+
+  'use strict';
+
   var Kapi = context.Kapi;
   var _ = (deps && deps.underscore) ? deps.underscore : context._;
   var transforms = [
@@ -1562,6 +1570,8 @@ var rekapiDOM = function (context, deps) {
 
 };
 var rekapiToCSS = function (context, deps) {
+
+  'use strict';
 
   var Kapi = context.Kapi;
   var _ = (deps && deps.underscore) ? deps.underscore : context._;

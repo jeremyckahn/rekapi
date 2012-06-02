@@ -1,4 +1,7 @@
 var rekapiCanvasActor = function (context) {
+
+  'use strict';
+
   var Kapi = context.Kapi;
 
   function CanvasActorMethods () {}
