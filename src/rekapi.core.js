@@ -6,6 +6,7 @@ var rekapiCore = function (context, _, Tweenable) {
   // http://stackoverflow.com/questions/3277182/how-to-get-the-global-object-in-javascript
   var Fn = Function, GLOBAL = Fn('return this')();
 
+
   /**
    * Does nothing.  Absolutely nothing at all.
    */
@@ -20,7 +21,8 @@ var rekapiCore = function (context, _, Tweenable) {
    * @param {number} timeSinceStart
    */
   function determineCurrentLoopIteration (kapi, timeSinceStart) {
-    var currentIteration = Math.floor((timeSinceStart) / kapi._animationLength);
+    var currentIteration = Math.floor(
+        (timeSinceStart) / kapi._animationLength);
     return currentIteration;
   }
 
