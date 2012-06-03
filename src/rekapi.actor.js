@@ -185,9 +185,9 @@ var rekapiActor = function (context, _, Tweenable) {
       ,'_timelinePropertyCacheIndex': []
       ,'_keyframeProperties': {}
       ,'id': getUniqueActorId()
-      ,'setup': opt_config.setup || Kapi.util.noop
-      ,'render': opt_config.render || Kapi.util.noop
-      ,'teardown': opt_config.teardown || Kapi.util.noop
+      ,'setup': opt_config.setup || noop
+      ,'render': opt_config.render || noop
+      ,'teardown': opt_config.teardown || noop
     });
 
     if (opt_config.context) {

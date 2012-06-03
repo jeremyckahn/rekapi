@@ -1,3 +1,27 @@
+// REKAPI-GLOBAL METHODS
+// These are global in development, but get wrapped in a closure at build-time.
+
+/**
+ * Fire an event bound to a Kapi.
+ * @param {Kapi} kapi
+ * @param {string} eventName
+ * @param {Underscore} _ A reference to the scoped Underscore dependency
+ */
+function fireEvent (kapi, eventName, _) {
+  _.each(kapi._events[eventName], function (handler) {
+    handler(kapi);
+  });
+}
+
+
+/**
+ * Does nothing.  Absolutely nothing at all.
+ */
+function noop () {
+  // NOOP!
+}
+
+
 var rekapiCore = function (context, _, Tweenable) {
 
   'use strict';
@@ -5,14 +29,6 @@ var rekapiCore = function (context, _, Tweenable) {
   // GLOBAL is read from for various environment properties
   // http://stackoverflow.com/questions/3277182/how-to-get-the-global-object-in-javascript
   var Fn = Function, GLOBAL = Fn('return this')();
-
-
-  /**
-   * Does nothing.  Absolutely nothing at all.
-   */
-  function noop () {
-    // NOOP!
-  }
 
 
   /**
@@ -56,7 +72,7 @@ var rekapiCore = function (context, _, Tweenable) {
   function updatePlayState (kapi, currentLoopIteration) {
     if (isAnimationComplete(kapi, currentLoopIteration)) {
       kapi.stop();
-      fireEvent(kapi, 'animationComplete');
+      fireEvent(kapi, 'animationComplete', _);
     }
   }
 
@@ -129,18 +145,6 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
-   * Fire an event bound to a Kapi.
-   * @param {Kapi} kapi
-   * @param {string} eventName
-   */
-  function fireEvent (kapi, eventName) {
-    _.each(kapi._events[eventName], function (handler) {
-      handler(kapi);
-    });
-  }
-
-
-  /**
    * @param {number}
    * @return {Function}
    */
@@ -193,7 +197,7 @@ var rekapiCore = function (context, _, Tweenable) {
    * @return {Kapi}
    */
   function draw (kapi) {
-    fireEvent(kapi, 'beforeDraw');
+    fireEvent(kapi, 'beforeDraw', _);
     var len = kapi._drawOrder.length;
     var drawOrder;
 
@@ -410,8 +414,8 @@ var rekapiCore = function (context, _, Tweenable) {
       }
     });
 
-    fireEvent(this, 'playStateChange');
-    fireEvent(this, 'play');
+    fireEvent(this, 'playStateChange', _);
+    fireEvent(this, 'play', _);
 
     return this;
   };
@@ -458,8 +462,8 @@ var rekapiCore = function (context, _, Tweenable) {
       }
     });
 
-    fireEvent(this, 'playStateChange');
-    fireEvent(this, 'pause');
+    fireEvent(this, 'playStateChange', _);
+    fireEvent(this, 'pause', _);
 
     return this;
   };
@@ -477,8 +481,8 @@ var rekapiCore = function (context, _, Tweenable) {
       actor.stop();
     });
 
-    fireEvent(this, 'playStateChange');
-    fireEvent(this, 'stop');
+    fireEvent(this, 'playStateChange', _);
+    fireEvent(this, 'stop', _);
 
     return this;
   };
@@ -539,7 +543,7 @@ var rekapiCore = function (context, _, Tweenable) {
     this.calculateActorPositions(millisecond);
     draw(this);
     this._lastRenderedMillisecond = millisecond;
-    fireEvent(this, 'frameRender');
+    fireEvent(this, 'frameRender', _);
 
     return this;
   };
@@ -667,8 +671,7 @@ var rekapiCore = function (context, _, Tweenable) {
   // TODO:  There are some duplicates in Kapi.util and Kapi._private, clean up
   // the references in the tests.
   _.extend(Kapi.util, {
-    'noop': noop
-    ,'calculateLoopPosition': calculateLoopPosition
+    'calculateLoopPosition': calculateLoopPosition
     ,'calculateTimeSinceStart': calculateTimeSinceStart
   });
 
