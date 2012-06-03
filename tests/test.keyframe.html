@@ -555,6 +555,32 @@
         ,'Got the corrext y midpoint');
     });
 
+
+    module('Unattached actors');
+
+    test('Can create keyframes on unattached actors', function () {
+      var actor = new Kapi.Actor();
+
+      actor.keyframe(0, { x: 0 });
+      ok(actor._propertyTracks.x, 'A property track was created');
+    });
+
+
+    test('Animation length is updated when an actor with prior keyframes is added.',
+        function () {
+      var actor = new Kapi.Actor();
+
+      actor
+      .keyframe(0, { x: 0 })
+      .keyframe(1000, { x: 10 });
+
+      var kapi = new Kapi();
+      kapi.addActor(actor);
+
+      equal(kapi.animationLength(), 1000,
+        'Animation length reflects actor keyframes added before the Actor was added');
+    });
+
   } ());
   </script>
 </head>

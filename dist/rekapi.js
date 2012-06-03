@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, sloppy: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.8.22
+ * Rekapi - Rewritten Kapi. v0.8.23
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -355,6 +355,7 @@ var rekapiCore = function (context, _, Tweenable) {
       actor.fps = this.framerate();
       this._actors[actor.id] = actor;
       this._drawOrder.push(actor.id);
+      this._recalculateAnimationLength();
       actor.setup();
     }
 
@@ -967,7 +968,10 @@ var rekapiActor = function (context, _, Tweenable) {
       sortPropertyTracks(this);
     }, this);
 
-    this.kapi._recalculateAnimationLength();
+    if (this.kapi) {
+      this.kapi._recalculateAnimationLength();
+    }
+
     invalidatePropertyCache(this);
 
     return this;
@@ -1178,7 +1182,11 @@ var rekapiActor = function (context, _, Tweenable) {
         }
       }
     }, this);
-    this.kapi._recalculateAnimationLength();
+
+    if (this.kapi) {
+      this.kapi._recalculateAnimationLength();
+    }
+
     invalidatePropertyCache(this);
 
     return this;

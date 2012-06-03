@@ -262,7 +262,10 @@ var rekapiActor = function (context, _, Tweenable) {
       sortPropertyTracks(this);
     }, this);
 
-    this.kapi._recalculateAnimationLength();
+    if (this.kapi) {
+      this.kapi._recalculateAnimationLength();
+    }
+
     invalidatePropertyCache(this);
 
     return this;
@@ -473,7 +476,11 @@ var rekapiActor = function (context, _, Tweenable) {
         }
       }
     }, this);
-    this.kapi._recalculateAnimationLength();
+
+    if (this.kapi) {
+      this.kapi._recalculateAnimationLength();
+    }
+
     invalidatePropertyCache(this);
 
     return this;

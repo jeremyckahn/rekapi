@@ -343,6 +343,7 @@ var rekapiCore = function (context, _, Tweenable) {
       actor.fps = this.framerate();
       this._actors[actor.id] = actor;
       this._drawOrder.push(actor.id);
+      this._recalculateAnimationLength();
       actor.setup();
     }
 
