@@ -1,0 +1,26 @@
+.dragon-slider {
+  background: #ddd;
+  border: solid 1px #666;
+  border-radius: 10px;
+  position: relative;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -o-border-radius: 10px;
+  -ms-border-radius: 10px;
+}
+
+  .dragon-slider,
+  .dragon-slider-handle {
+    height: 20px;
+  }
+
+  .dragon-slider-handle {
+    border: none;
+    background: #666;
+    width: 20px;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    -ms-border-radius: 50%;
+    border-radius: 50%;
+  }

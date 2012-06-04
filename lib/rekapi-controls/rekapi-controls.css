@@ -11,6 +11,7 @@
       background: #ccc;
       display: block;
       float: left;
+      margin-top: 4px;
     }
 
     .rekapi-scrubber-play,
@@ -31,15 +32,34 @@
       outline: none;
     }
 
+/* The .ui* styles were taken from jQueryUI. */
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl { -moz-border-radius-topleft: 4px/*{cornerRadius}*/; -webkit-border-top-left-radius: 4px/*{cornerRadius}*/; -khtml-border-top-left-radius: 4px/*{cornerRadius}*/; border-top-left-radius: 4px/*{cornerRadius}*/; }
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr { -moz-border-radius-topright: 4px/*{cornerRadius}*/; -webkit-border-top-right-radius: 4px/*{cornerRadius}*/; -khtml-border-top-right-radius: 4px/*{cornerRadius}*/; border-top-right-radius: 4px/*{cornerRadius}*/; }
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl { -moz-border-radius-bottomleft: 4px/*{cornerRadius}*/; -webkit-border-bottom-left-radius: 4px/*{cornerRadius}*/; -khtml-border-bottom-left-radius: 4px/*{cornerRadius}*/; border-bottom-left-radius: 4px/*{cornerRadius}*/; }
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br { -moz-border-radius-bottomright: 4px/*{cornerRadius}*/; -webkit-border-bottom-right-radius: 4px/*{cornerRadius}*/; -khtml-border-bottom-right-radius: 4px/*{cornerRadius}*/; border-bottom-right-radius: 4px/*{cornerRadius}*/; }
+
+.ui-icon { display: block; text-indent: -99999px; overflow: hidden; background-repeat: no-repeat; }
+.ui-icon { width: 16px; height: 16px; background-image: url(images/ui-icons_222222_256x240.png)/*{iconsContent}*/; }
+.ui-icon-play { background-position: 0 -160px; }
+.ui-icon-pause { background-position: -16px -160px; }
+.ui-icon-stop { background-position: -96px -160px; }
+
 .rt-wrapper {
   background: #eee;
   border-top: solid 1px #222;
-  bottom: 0;
   font-family: 'Lucida Sans Unicode','Lucida Grande',sans-serif;
+  height: 140px; /* Initial style, gets overridden with JavaScript. */
   left: 0;
   position: fixed;
   width: 100%;
+  bottom: 0px;
 }
+
+  .rt-wrapper ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
 
   .rt-control-bar {
     background: #ddd;
@@ -47,27 +67,66 @@
     height: 40px;
   }
 
-  .rt-actor-headers,
+  .rt-actor {
+    border-bottom: 1px solid #222;
+    overflow: hidden;
+  }
+
+  .rt-actor-header,
   .rt-actor-timeline {
-    float: left;
     font-weight: bold;
+    float: left;
+    height: 100%;
+    overflow: hidden;
     padding: 0px;
     margin: 0px;
   }
 
-  .rt-actor-headers {
-    border-right: solid 1px #222;
-    min-height: 100px;
+  .rt-actor-header {
     width: 140px;
   }
 
-    .rt-actor-headers li {
-      border-bottom: 1px solid #bbb;
+    .rt-actor-header .rt-actor-id {
       font-size: 14px;
+      margin: 0;
       padding: 10px;
     }
 
+.rt-actors {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  width: 100%;
+}
 
-  .rt-actor-timeline {
+.rt-wrapper .splitter {
+  border-left: solid 1px #222;
+  left: 140px;
+}
 
+.rt-tickmarks {
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  /* There's gotta be a better way to position this than hardcoding a static
+   * top. */
+  top: 22px;
+}
+
+  .rt-tickmarks ul {
+    width: 999em;
+  }
+
+  .rt-tickmarks .rt-tickmark {
+    float: left;
+    font-size: .5em;
+    overflow: visible;
+    width: 0;
+  }
+
+  .rt-summary-block {
+    background: #555;
+    cursor: move;
+    height: 60px;
   }
