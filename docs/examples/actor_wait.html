@@ -38,11 +38,9 @@
       kapi.addActor(actor);
       actor
         .keyframe(0,    { x: 50,  y: 50 })
-        .keyframe(1000, { x: 200, y: 150 });
-
-      // Makes a new keyframe at the end of the animation that has the same
-      // properties as the first keyframe.
-      actor.copyProperties(2000, 0);
+        .keyframe(500, { x: 125, y: 100 })
+        .wait(1500)
+        .keyframe(2000, { x: 200, y: 150 });
 
       kapi.play(1);
     </script>

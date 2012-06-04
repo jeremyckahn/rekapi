@@ -108,6 +108,10 @@ Kapi.Actor.prototype.copyProperties (copyTo, copyFrom)
 ````
 
 Copy all of the properties that at one point in the timeline to another point.
+This is useful for many things, particularly for bringing a `Kapi.Actor` back
+to its original position.
+
+__[Example](examples/actor_copy_properties.html)__
 
 
 ### wait
@@ -118,10 +122,13 @@ Copy all of the properties that at one point in the timeline to another point.
  *     until (relative to the start of the animation)
  * @return {Kapi.Actor}
  */
-Kapi.Actor.prototype.wait (when, opt_source)
+Kapi.Actor.prototype.wait (until)
 ````
 
-Extend the last state on this `Actor`'s timeline to create a animation wait.  The state does not change during this time.
+Extend the last state on this `Actor`'s timeline to create a animation wait.
+The state does not change during this time.
+
+__[Example](examples/actor_wait.html)__
 
 
 ### removeKeyframe
