@@ -143,6 +143,8 @@ Kapi.Actor.prototype.removeKeyframe (when)
 
 Remove all `KeyframeProperty`s at a given millisecond of the animation.  `when` is the millisecond of the keyframe to remove.
 
+__[Example](examples/actor_remove_keyframe.html)__
+
 
 ### removeAllKeyframeProperties
 
