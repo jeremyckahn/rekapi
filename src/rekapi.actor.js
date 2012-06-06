@@ -186,7 +186,7 @@ var rekapiActor = function (context, _, Tweenable) {
       ,'_keyframeProperties': {}
       ,'id': getUniqueActorId()
       ,'setup': opt_config.setup || noop
-      ,'render': opt_config.render || noop
+      ,'update': opt_config.update || noop
       ,'teardown': opt_config.teardown || noop
     });
 
@@ -524,19 +524,10 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
-   * @param {number} layer
-   * @return {Kapi.Actor|undefined}
-   */
-  Actor.prototype.moveToLayer = function (layer) {
-    return this.kapi.moveActorToLayer(this, layer);
-  };
-
-
-  /**
    * @param {number} millisecond
    * @return {Kapi.Actor}
    */
-  Actor.prototype.calculatePosition = function (millisecond) {
+  Actor.prototype.updateState = function (millisecond) {
     var startMs = this.getStart();
     var endMs = this.getEnd();
 

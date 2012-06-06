@@ -31,9 +31,9 @@ var rekapiDOM = function (context, _) {
       this._context.className += ' ' + className;
     }
 
-    // Remove the instance's render method to allow the
-    // ActorMethods.prototype.render method to be accessible.
-    delete this.render;
+    // Remove the instance's update method to allow the
+    // ActorMethods.prototype.update method to be accessible.
+    delete this.update;
     delete this.teardown;
 
     return this;
@@ -49,7 +49,7 @@ var rekapiDOM = function (context, _) {
    * @param {HTMLElement} context
    * @param {Object} state
    */
-  DOMActorMethods.prototype.render = function (context, state) {
+  DOMActorMethods.prototype.update = function (context, state) {
 
     _.each(state, function (styleValue, styleName) {
       if (styleName === 'transform') {
