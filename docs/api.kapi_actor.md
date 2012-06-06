@@ -16,12 +16,21 @@ Create a `Kapi.Actor` instance.
 
 Valid properties of `opt_config` (you can omit the ones you don't need):
 
-* __context__: The context that this Actor gets rendered to.  If omitted, this Actor gets the `Kapi` instance's rendering context when it is added to an animation.
-* __setup__: A function that gets called when the `Actor` is added to a `Kapi` instance (with `addActor()`).
-* __render__: A function that gets called every frame that the actor is rendered in.  It receives two parameters:  A reference to a `<canvas>` context, and an Object containing the current state properties.  _This method should render the state properties to the screen with the `<canvas>` context._
-* __teardown__: A function that gets called when the `Actor` is removed from the animation (with `removeActor()`).
+* __context__: The context that this Actor gets rendered to.  If omitted, this
+Actor gets the `Kapi` instance's rendering context when it is added to an
+animation.
+* __setup__: A function that gets called when the `Actor` is added to a `Kapi`
+instance (with `addActor()`).
+* __render__: A function that gets called every frame that the actor is
+rendered in.  It receives two parameters:  A reference to a `<canvas>` context,
+and an Object containing the current state properties.  _This method should
+render the state properties to the screen with the `<canvas>` context._
+* __teardown__: A function that gets called when the `Actor` is removed from
+the animation (with `removeActor()`).
 
-`Kapi.Actor` does _not_ render to any context.  It is a base class.  Use the [`Kapi.CanvasActor`](../ext/canvas) [`Kapi.DOMActor`](../ext/dom) subclasses to render to the screen.
+`Kapi.Actor` does _not_ render to any context.  It is a base class.  Use the
+[`Kapi.CanvasActor`](../ext/canvas) [`Kapi.DOMActor`](../ext/dom) subclasses to
+render to the screen.
 
 __[Example](examples/actor.html)__
 
@@ -53,13 +62,22 @@ __[Example](examples/actor_context.html)__
 Kapi.Actor.prototype.keyframe (when, position, opt_easing)
 ````
 
-Create a keyframe for the `Actor`.  `when` defines where in the animation to place the keyframe, in milliseconds (assumes that `0` is when the animation began).  The animation length will automatically "grow" to accommodate any keyframe position.
+Create a keyframe for the `Actor`.  `when` defines where in the animation to
+place the keyframe, in milliseconds (assumes that `0` is when the animation
+began).  The animation length will automatically "grow" to accommodate any
+keyframe position.
 
-`position` should contain all of the properties that define the keyframe's state.  These properties can be any value that can be tweened by [Shifty](https://github.com/jeremyckahn/shifty) (numbers, color strings, CSS properties).
+`position` should contain all of the properties that define the keyframe's
+state.  These properties can be any value that can be tweened by
+[Shifty](https://github.com/jeremyckahn/shifty) (numbers, color strings, CSS
+properties).
 
-`opt_easing`, if specified, can be a string or an Object.  If it's a string, all properties in `position` will have the same easing formula applied to them.  Like this:
+__Note:__ Internally, this creates a one or more `Kapi.KeyframeProperty`s and
+places them on a "track."
 
-__Note:__ Internally, this creates a one or more `Kapi.KeyframeProperty`s and places them on a "track."  Any previously added/tracked properties that were not defined in `position` are inferred from previous, corresponding `KeyframeProperty`s.  This information will likely not be important to you unless you are making very complex animations, so don't worry if it doesn't make any sense.
+`opt_easing`, if specified, can be a string or an Object.  If it's a string,
+all properties in `position` will have the same easing formula applied to them.
+Like this:
 
 ````javascript
 actor.keyframe(1000, {
@@ -68,7 +86,8 @@ actor.keyframe(1000, {
   }, 'easeOutSine');
 ````
 
-Both `x` and `y` will have `easeOutSine` applied to them.  You can also specify multiple easing formulas with an Object:
+Both `x` and `y` will have `easeOutSine` applied to them.  You can also specify
+multiple easing formulas with an Object:
 
 ````javascript
 actor.keyframe(1000, {
@@ -80,9 +99,13 @@ actor.keyframe(1000, {
   });
 ````
 
-`x` will transition with an easing of `easeInSine`, and `y` will transition with an easing of `easeOutSine`.  Any missing properties will transition with `linear`.  If the `opt_easing` property is omitted, all properties will default to `linear`.
+`x` will transition with an easing of `easeInSine`, and `y` will transition
+with an easing of `easeOutSine`.  Any missing properties will transition with
+`linear`.  If the `opt_easing` property is omitted, all properties will default
+to `linear`.
 
-Keyframes always inherit missing properties from the keyframes that came before them.  For example:
+Keyframes always inherit missing properties from the keyframes that came before
+them.  For example:
 
 ````javascript
 actor.keyframe(0, {
@@ -93,7 +116,8 @@ actor.keyframe(0, {
 });
 ````
 
-Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was inherited from keyframe `0`.
+Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was
+inherited from keyframe `0`.
 
 
 ### copyProperties
@@ -141,7 +165,8 @@ __[Example](examples/actor_wait.html)__
 Kapi.Actor.prototype.removeKeyframe (when)
 ````
 
-Remove all `KeyframeProperty`s at a given millisecond of the animation.  `when` is the millisecond of the keyframe to remove.
+Remove all `KeyframeProperty`s at a given millisecond of the animation.  `when`
+is the millisecond of the keyframe to remove.
 
 __[Example](examples/actor_remove_keyframe.html)__
 
@@ -172,7 +197,10 @@ __[Example](examples/actor_remove_all_keyframe_properties.html)__
 Kapi.Actor.prototype.modifyKeyframe (when, stateModification, opt_easingModification)
 ````
 
-Augment the `value` or `easing` of any or all `KeyframeProperty`s at a given millisecond for an `Actor`.  Any `KeyframeProperty`s not specified in `stateModification` or `opt_easing` are not modified.  Here's how you might use it:
+Augment the `value` or `easing` of any or all `KeyframeProperty`s at a given
+millisecond for an `Actor`.  Any `KeyframeProperty`s not specified in
+`stateModification` or `opt_easing` are not modified.  Here's how you might use
+it:
 
 ````javascript
 actor.keyframe(0, {
@@ -223,7 +251,9 @@ Gets the `KeyframeProperty` from an `Actor`'s `KeyframeProperty` track.
 Kapi.Actor.prototype.modifyKeyframeProperty (property, index, newProperties)
 ````
 
-Modify a specified `KeyframeProperty` stored on an `Actor`.  Essentially, this calls `modifyWith` on the targeted `KeyframeProperty` (passing along `newProperties`) and then performs some cleanup.
+Modify a specified `KeyframeProperty` stored on an `Actor`.  Essentially, this
+calls `modifyWith` on the targeted `KeyframeProperty` (passing along
+`newProperties`) and then performs some cleanup.
 
 
 ### getTrackNames
@@ -235,7 +265,8 @@ Modify a specified `KeyframeProperty` stored on an `Actor`.  Essentially, this c
 Kapi.Actor.prototype.getTrackNames ()
 ````
 
-Get a list of all the track names for an `Actor`.  Each element in this Array is a string.
+Get a list of all the track names for an `Actor`.  Each element in this Array
+is a string.
 
 
 ### getTrackLength
@@ -261,7 +292,8 @@ Kapi.Actor.prototype.getStart ()
 
 ````
 
-Get the millisecond of the first state of an `Actor` (when it first starts animating).
+Get the millisecond of the first state of an `Actor` (when it first starts
+animating).
 
 
 ### getEnd
@@ -274,7 +306,8 @@ Kapi.Actor.prototype.getEnd ()
 
 ````
 
-Get the millisecond of the last state of an `Actor` (when it is done animating).
+Get the millisecond of the last state of an `Actor` (when it is done
+animating).
 
 
 ### getLength
@@ -287,7 +320,8 @@ Kapi.Actor.prototype.getLength ()
 
 ````
 
-Get the length of time in milliseconds that an `Actor` animates for (`getEnd()` - `getStart()`).
+Get the length of time in milliseconds that an `Actor` animates for (`getEnd()`
+- `getStart()`).
 
 
 ### moveToLayer
@@ -300,7 +334,8 @@ Get the length of time in milliseconds that an `Actor` animates for (`getEnd()` 
 Kapi.Actor.prototype.moveToLayer (layer)
 ````
 
-Move this `Actor` to a different layer in the `Kapi` instance that it belongs to.  This returns `undefined` if the operation was unsuccessful
+Move this `Actor` to a different layer in the `Kapi` instance that it belongs
+to.  This returns `undefined` if the operation was unsuccessful
 
 
 ### calculatePosition
@@ -326,7 +361,9 @@ Calculate and set the `Actor`'s position at `millisecond` in the animation.
 Kapi.Actor.prototype.data (opt_newData)
 ````
 
-Retrieve and optionally bind arbitrary data to the `Actor`.  If `opt_newData` is specified, it will overwrite the previous `opt_newData` Object that was bound with this method.
+Retrieve and optionally bind arbitrary data to the `Actor`.  If `opt_newData`
+is specified, it will overwrite the previous `opt_newData` Object that was
+bound with this method.
 
 
 ### exportTimeline
@@ -338,4 +375,5 @@ Retrieve and optionally bind arbitrary data to the `Actor`.  If `opt_newData` is
 Kapi.Actor.prototype.exportTimeline ()
 ````
 
-Export a reference-less dump of this Actor's timeline property tracks and KeyframeProperties.
+Export a reference-less dump of this Actor's timeline property tracks and
+KeyframeProperties.
