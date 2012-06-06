@@ -18,7 +18,7 @@
       });
 
       var actor = new Kapi.CanvasActor({
-        'render': function (canvas_context, state) {
+        'draw': function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
               state.x || 0,
@@ -43,7 +43,7 @@
       kapi.on('play', function (kapi) {
         console.log(kapi, 'is now playing');
       });
-      kapi.on('frameRender', function (kapi) {
+      kapi.on('afterDraw', function (kapi) {
         console.log(kapi, 'just rendered a frame');
       });
       kapi.on('stop', function (kapi) {

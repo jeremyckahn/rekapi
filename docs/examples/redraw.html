@@ -18,7 +18,7 @@
       });
 
       var actor = new Kapi.CanvasActor({
-        'render': function (canvas_context, state) {
+        'draw': function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
               state.x || 0,
@@ -40,7 +40,7 @@
         .keyframe(0,    { x: 50,  y: 50 })
         .keyframe(1000, { x: 200, y: 150 });
 
-      kapi.render(500);
+      kapi.update(500);
       kapi.canvasClear();
 
       setTimeout(function () {
