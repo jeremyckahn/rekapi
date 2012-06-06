@@ -28,7 +28,7 @@ var actor = new Kapi.CanvasActor({
 
   // Called every frame.  Receives a reference to the canvas context, and the
   // Actor's state.
-  'render': function (context, state) {
+  'draw': function (context, state) {
 
   },
 
@@ -51,7 +51,7 @@ var canvas = document.getElementsByTagName('canvas')[0],
 
 var actor = new Kapi.CanvasActor({
   // Draws a circle.
-  'render': function (context, state) {
+  'draw': function (context, state) {
     context.beginPath();
     context.arc(
       state.x || 50,
@@ -167,7 +167,7 @@ Copy/paste/save this onto your machine to see a simple Rekapi animation:
 
   var actor = new Kapi.CanvasActor({
     // Draws a circle.
-    'render': function (context, state) {
+    'draw': function (context, state) {
       context.beginPath();
       context.arc(
         state.x || 50,
