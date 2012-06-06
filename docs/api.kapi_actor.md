@@ -157,6 +157,8 @@ Kapi.Actor.prototype.removeAllKeyframeProperties ()
 
 Remove all `KeyframeProperty`s set on the `Actor`.
 
+__[Example](examples/actor_remove_all_keyframe_properties.html)__
+
 
 ### modifyKeyframe
 
