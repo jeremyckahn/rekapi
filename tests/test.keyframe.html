@@ -51,7 +51,7 @@
       });
 
 
-      testActor.calculatePosition(0);
+      testActor.updateState(0);
 
       equals(testActor.get().x, 0,
         'Value "x" was properly interpolated at position 0.0');
@@ -59,7 +59,7 @@
         'Value "y" was properly interpolated at position 0.0');
 
 
-      testActor.calculatePosition(500);
+      testActor.updateState(500);
 
       equals(testActor.get().x, 50,
         'Value "x" was properly interpolated at position 0.5');
@@ -67,7 +67,7 @@
         'Value "y" was properly interpolated at position 0.5');
 
 
-      testActor.calculatePosition(1000);
+      testActor.updateState(1000);
 
       equals(testActor.get().x, 100,
         'Value "x" was properly interpolated at position 1.0');
@@ -91,7 +91,7 @@
         // Nothing!
       });
 
-      testActor.calculatePosition(500);
+      testActor.updateState(500);
       equals(testActor.get().x, undefined,
           'Value only has a start point, therefore a calculated midpoint is undefined.');
     });
@@ -111,7 +111,7 @@
         'x': 100
       });
 
-      testActor.calculatePosition(500);
+      testActor.updateState(500);
       equals(testActor.get().x, undefined,
           'Value only has an end point, therefore a calculated midpoint is undefined.');
     });
@@ -137,7 +137,7 @@
         ,'y':100
       });
 
-      testActor.calculatePosition(1000);
+      testActor.updateState(1000);
 
       equals(testActor.get().x, 0,
         'Value "x" was properly interpolated at position 0.0');
@@ -145,7 +145,7 @@
         'Value "y" was properly interpolated at position 0.0');
 
 
-      testActor.calculatePosition(1500);
+      testActor.updateState(1500);
 
       equals(testActor.get().x, 50,
         'Value "x" was properly interpolated at position 0.5');
@@ -153,7 +153,7 @@
         'Value "y" was properly interpolated at position 0.5');
 
 
-      testActor.calculatePosition(2000);
+      testActor.updateState(2000);
 
       equals(testActor.get().x, 100,
         'Value "x" was properly interpolated at position 1.0');
@@ -186,7 +186,7 @@
         'x': 100
       }, .5, 'easeInSine');
 
-      testActor.calculatePosition(500);
+      testActor.updateState(500);
       equals(testActor.get().x, tweenableComparator.x,
         'Value "x" was properly interpolated at position 0.5 with "easeInSine"');
 
@@ -197,7 +197,7 @@
         'x': 200
       }, .5, 'easeOutCirc');
 
-      testActor.calculatePosition(1500);
+      testActor.updateState(1500);
       equals(testActor.get().x, tweenableComparator.x,
         'Value "x" was properly interpolated at position 0.5 with "easeOutCirc"');
 
@@ -364,7 +364,7 @@
         'x': 0
       });
 
-      testActor.calculatePosition(500);
+      testActor.updateState(500);
       equals(testActor.get().x, 100,
           'First keyframe was modified and factored into the position calculation');
     });
@@ -392,7 +392,7 @@
         'x': 'linear'
       });
 
-      testActor.calculatePosition(500);
+      testActor.updateState(500);
       equals(testActor.get().x, 50,
           'Second keyframe\'s easing  was modified and factored into the position calculation');
     });
@@ -517,14 +517,14 @@
         'y': 150
       });
 
-      testActor.calculatePosition(500);
+      testActor.updateState(500);
 
       equal(testActor.get().x, 50
         ,'Got the x value from one keyframe back');
       equal(testActor.get().y, 75
         ,'Got the corrext y midpoint');
 
-      testActor.calculatePosition(1500);
+      testActor.updateState(1500);
 
       equal(testActor.get().x, 50
         ,'Got the x value from two keyframes back');
@@ -547,7 +547,7 @@
         ,'y': 100
       });
 
-      testActor.calculatePosition(500);
+      testActor.updateState(500);
 
       equal(testActor.get().x, 75
         ,'Got the most recent x value');
