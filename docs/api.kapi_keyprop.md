@@ -2,16 +2,21 @@
 
 ````javascript
 /**
- * @param {Kapi.Actor} ownerActor The Actor to which this KeyframeProperty is associated.
- * @param {number} millisecond Where in the animation this KeyframeProperty lives.
+ * @param {Kapi.Actor} ownerActor The Actor to which this KeyframeProperty is
+ *     associated.
+ * @param {number} millisecond Where in the animation this KeyframeProperty
+ *     lives.
  * @param {string} name The property's name, such as "x" or "opacity."
  * @param {number} value The value of `name`.  This is the value to animate to.
- * @param {string=} opt_easing The easing to arrive to `value` at.  Defaults to linear.
+ * @param {string=} opt_easing The easing to arrive to `value` at.  Defaults to
+ *     linear.
  * @constructor
  */
 Kapi.KeyframeProperty (ownerActor, millisecond, name, value, opt_easing)
 ````
-Represents an individual component of an `Actor`'s keyframe state.  In most cases you won't need to deal with this directly, `Actor` abstracts a lot of what this Object does away for you.
+Represents an individual component of an `Actor`'s keyframe state.  In most
+cases you won't need to deal with this directly, `Actor` abstracts a lot of
+what this Object does away for you.
 
 
 ### modifyWith
@@ -38,7 +43,8 @@ Augment a `KeyframeProperty`'s properties.
 Kapi.KeyframeProperty.prototype.linkToNext (nextProperty)
 ````
 
-Create the reference to the next KeyframeProperty in an `Actor`'s `KeyframeProperty` track.
+Create the reference to the next KeyframeProperty in an `Actor`'s
+`KeyframeProperty` track.
 
 
 ### getValueAt
@@ -52,7 +58,8 @@ Create the reference to the next KeyframeProperty in an `Actor`'s `KeyframePrope
 Kapi.KeyframeProperty.prototype.getValueAt (millisecond)
 ````
 
-Calculate the midpoint between this `KeyframeProperty` and the next `KeyframeProperty` in an `Actor`'s `KeyframeProperty` track.
+Calculate the midpoint between this `KeyframeProperty` and the next
+`KeyframeProperty` in an `Actor`'s `KeyframeProperty` track.
 
 
 ### exportTimeline
