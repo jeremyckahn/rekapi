@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+  <script src="../lib/underscore/underscore.js"></script>
+  <script src="../lib/shifty/dist/shifty.js"></script>
+  <script src="../src/rekapi.core.js"></script>
+  <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.keyframeprops.js"></script>
+  <script src="../ext/canvas/rekapi.canvas.actor.js"></script>
+  <script src="../ext/canvas/rekapi.canvas.context.js"></script>
+  <script src="../src/rekapi.init.js"></script>
+  <script>
+  function setupTestKapi () {
+    var canvas = document.createElement('canvas')
+        ,kapi = new Kapi({
+          'context': canvas
+          ,'fps': 60
+        });
+    
+    return kapi;
+  }
+
+  function  setupTestActor (forKapi) {
+    var actor = new Kapi.CanvasActor();
+    forKapi.addActor(actor);
+    return actor;
+  }
+
+  (function () {
+
+    module('Canvas extension');
+
+    test('Actors are added to the drawOrder array', function () {
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+
+      equals(testKapi._drawOrder[0], testActor1.id,
+          'Actor is the first element in the internal _drawOrder array');
+    });
+
+
+    test('Actors can be moved to the beginning of the draw list', function () {
+      var testKapi
+          ,testActor1
+          ,testActor2;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      testActor2 = setupTestActor(testKapi);
+      testKapi.moveActorToLayer(testActor2, 0);
+
+      equals(testKapi._drawOrder[0], testActor2.id,
+          'Second actor was moved to the first position.');
+
+      equals(testKapi._drawOrder[1], testActor1.id,
+          'First actor was moved to the second position.');
+
+      equals(testKapi.actorCount(), 2,
+          'Draw list size did not change.');
+    });
+
+
+    test('Actors can be moved to the end of the draw list', function () {
+      var testKapi
+          ,testActor1
+          ,testActor2;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      testActor2 = setupTestActor(testKapi);
+      testKapi.moveActorToLayer(testActor1, 1);
+
+      equals(testKapi._drawOrder[0], testActor2.id,
+          'Second actor was moved to the first position.');
+
+      equals(testKapi._drawOrder[1], testActor1.id,
+          'First actor was moved to the second position.');
+
+      equals(testKapi.actorCount(), 2,
+          'Draw list size did not change.');
+    });
+
+
+    test('Actors can move themselves.', function () {
+      var testKapi
+          ,testActor1
+          ,testActor2;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      testActor2 = setupTestActor(testKapi);
+      testActor1.moveToLayer(1);
+
+      equals(testKapi._drawOrder[0], testActor2.id,
+          'Second actor was moved to the first position.');
+
+      equals(testKapi._drawOrder[1], testActor1.id,
+          'First actor was moved to the second position.');
+
+      equals(testKapi.actorCount(), 2,
+          'Draw list size did not change.');
+    });
+
+
+    test('Exported Kapi data has actor order', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      testActor.keyframe(0, {
+        'x': 1
+      }).keyframe(1000, {
+        'x': 2
+      });
+
+      var exportedTimeline = testKapi.exportTimeline();
+      equals(typeof exportedTimeline.actorOrder[0], 'number',
+          'Draw order was exported');
+    });
+
+  } ());
+  </script>
+</head>
+<body>
+  <h1 id="qunit-header"><a href="https://github.com/jeremyckahn/rekapi">Rekapi</a></h1>
+   <h2 id="qunit-banner"></h2>
+   <div id="qunit-testrunner-toolbar"></div>
+   <h2 id="qunit-userAgent"></h2>
+   <ol id="qunit-tests"></ol>
+   <div id="qunit-fixture"></div>
+</body>
+</html>

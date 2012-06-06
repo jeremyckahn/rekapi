@@ -49,15 +49,15 @@
       }, 'linear');
 
 
-      testActor.calculatePosition(0);
+      testActor.updateState(0);
       equal(testActor.get().color, 'rgb(0,255,0)', 'Interpolated 0.0');
 
 
-      testActor.calculatePosition(500);
+      testActor.updateState(500);
       equal(testActor.get().color, 'rgb(127,127,127)', 'Interpolated 0.5');
 
 
-      testActor.calculatePosition(1000);
+      testActor.updateState(1000);
       equal(testActor.get().color, 'rgb(255,0,255)', 'Interpolated 1.0');
 
     });
@@ -79,15 +79,15 @@
       }, 'linear');
 
 
-      testActor.calculatePosition(0);
+      testActor.updateState(0);
       equal(testActor.get().color, 'rgb(0,255,0)', 'Interpolated 0.0');
 
 
-      testActor.calculatePosition(500);
+      testActor.updateState(500);
       equal(testActor.get().color, 'rgb(127,127,127)', 'Interpolated 0.5');
 
 
-      testActor.calculatePosition(1000);
+      testActor.updateState(1000);
       equal(testActor.get().color, 'rgb(255,0,255)', 'Interpolated 1.0');
 
     });
@@ -109,15 +109,15 @@
       }, 'linear');
 
 
-      testActor.calculatePosition(0);
+      testActor.updateState(0);
       equal(testActor.get().color, 'rgb(0,255,0)', 'Interpolated 0.0');
 
 
-      testActor.calculatePosition(500);
+      testActor.updateState(500);
       equal(testActor.get().color, 'rgb(127,127,127)', 'Interpolated 0.5');
 
 
-      testActor.calculatePosition(1000);
+      testActor.updateState(1000);
       equal(testActor.get().color, 'rgb(255,0,255)', 'Interpolated 1.0');
 
     });
