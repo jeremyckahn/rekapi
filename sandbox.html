@@ -62,14 +62,14 @@
       var JavaScriptMode = require("ace/mode/javascript").Mode;
       editor.getSession().setMode(new JavaScriptMode());
 
-      var canvas = $('canvas')
+      canvas = $('canvas')
       ,kapi = new Kapi({
           'context': canvas[0]
           ,'height': 480
           ,'width': 400
         })
       ,actor = new Kapi.CanvasActor({
-        'render': function (canvas_context, state) {
+        'draw': function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
               state.x || 0,

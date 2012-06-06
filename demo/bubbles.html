@@ -17,7 +17,7 @@
 
     function makeBubble () {
       return new Kapi.CanvasActor({
-        'render': function (canvas_context, state) {
+        'draw': function (canvas_context, state) {
           canvas_context.beginPath();
           canvas_context.arc(
             state.x || 0,
