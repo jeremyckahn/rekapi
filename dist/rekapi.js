@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, sloppy: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.8.25
+ * Rekapi - Rewritten Kapi. v0.9.0
  *   By Jeremy Kahn - jeremyckahn@gmail.com
  *   https://github.com/jeremyckahn/rekapi
  *
@@ -18,10 +18,11 @@
  * @param {Kapi} kapi
  * @param {string} eventName
  * @param {Underscore} _ A reference to the scoped Underscore dependency
+ * @param {object} opt_data Optional event-specific data
  */
-function fireEvent (kapi, eventName, _) {
+function fireEvent (kapi, eventName, _, opt_data) {
   _.each(kapi._events[eventName], function (handler) {
-    handler(kapi);
+    handler(kapi, opt_data);
   });
 }
 
@@ -119,7 +120,7 @@ var rekapiCore = function (context, _, Tweenable) {
     var currentIteration = determineCurrentLoopIteration(kapi, forMillisecond);
     var loopPosition = calculateLoopPosition(kapi, forMillisecond,
         currentIteration);
-    kapi.render(loopPosition);
+    kapi.update(loopPosition);
     updatePlayState(kapi, currentIteration);
   }
 
@@ -204,36 +205,6 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
-   * Draw all the `Actor`s at whatever position they are currently in.
-   * @param {Kapi}
-   * @return {Kapi}
-   */
-  function draw (kapi) {
-    fireEvent(kapi, 'beforeDraw', _);
-    var len = kapi._drawOrder.length;
-    var drawOrder;
-
-    if (kapi._drawOrderSorter) {
-      var orderedActors = _.sortBy(kapi._actors, kapi._drawOrderSorter);
-      drawOrder = _.pluck(orderedActors, 'id');
-    } else {
-      drawOrder = kapi._drawOrder;
-    }
-
-    var currentActor, canvas_context;
-
-    var i;
-    for (i = 0; i < len; i++) {
-      currentActor = kapi._actors[drawOrder[i]];
-      canvas_context = currentActor.context();
-      currentActor.render(canvas_context, currentActor.get());
-    }
-
-    return kapi;
-  }
-
-
-  /**
    * Cancels an update loop.  This abstraction is needed to get around the fact
    * that in IE, clearTimeout is not technically a function
    * (https://twitter.com/kitcambridge/status/206655060342603777) and thus
@@ -269,18 +240,18 @@ var rekapiCore = function (context, _, Tweenable) {
     this.config = opt_config || {};
     this.context = this.config.context;
     this._actors = {};
-    this._drawOrder = [];
     this._playState = playState.STOPPED;
-    this._drawOrderSorter = null;
 
     this._events = {
-      'frameRender': []
-      ,'animationComplete': []
+      'animationComplete': []
       ,'playStateChange': []
       ,'play': []
       ,'pause': []
       ,'stop': []
-      ,'beforeDraw': []
+      ,'beforeUpdate': []
+      ,'afterUpdate': []
+      ,'addActor': []
+      ,'removeActor': []
     };
 
     // How many times to loop the animation before stopping.
@@ -298,8 +269,8 @@ var rekapiCore = function (context, _, Tweenable) {
     // Used for maintaining position when the animation is paused.
     this._pausedAtTime = null;
 
-    // The last millisecond position that was drawn
-    this._lastRenderedMillisecond = 0;
+    // The last millisecond position that was updated
+    this._lastUpdatedMillisecond = 0;
 
     _.extend(this.config, opt_config);
     _.defaults(this.config, defaultConfig);
@@ -354,9 +325,10 @@ var rekapiCore = function (context, _, Tweenable) {
       actor.kapi = this;
       actor.fps = this.framerate();
       this._actors[actor.id] = actor;
-      this._drawOrder.push(actor.id);
       this._recalculateAnimationLength();
       actor.setup();
+      
+      fireEvent(this, 'addActor', _, actor);
     }
 
     return this;
@@ -452,7 +424,7 @@ var rekapiCore = function (context, _, Tweenable) {
    * @return {Kapi}
    */
   Kapi.prototype.playFromCurrent = function (opt_howManyTimes) {
-    return this.playFrom(this._lastRenderedMillisecond, opt_howManyTimes);
+    return this.playFrom(this._lastUpdatedMillisecond, opt_howManyTimes);
   };
 
 
@@ -520,8 +492,8 @@ var rekapiCore = function (context, _, Tweenable) {
   /**
    * @return {number}
    */
-  Kapi.prototype.lastPositionRendered = function () {
-    return (this._lastRenderedMillisecond / this._animationLength);
+  Kapi.prototype.lastPositionUpdated = function () {
+    return (this._lastUpdatedMillisecond / this._animationLength);
   };
 
 
@@ -529,7 +501,7 @@ var rekapiCore = function (context, _, Tweenable) {
    * @return {number}
    */
   Kapi.prototype.actorCount = function () {
-    return this._drawOrder.length;
+    return _.size(this._actors);
   };
 
 
@@ -552,56 +524,18 @@ var rekapiCore = function (context, _, Tweenable) {
    * @param {number} millisecond
    * @return {Kapi}
    */
-  Kapi.prototype.render = function (millisecond) {
-    this.calculateActorPositions(millisecond);
-    draw(this);
-    this._lastRenderedMillisecond = millisecond;
-    fireEvent(this, 'frameRender', _);
+  Kapi.prototype.update = function (millisecond) {
+    fireEvent(this, 'beforeUpdate', _);
+    _.each(this._actors, function (actor) {
+      actor.updateState(millisecond);
+      if (actor.update && typeof actor.update === 'function') {
+        actor.update(actor.context(), actor.get());
+      }
+    });
+    this._lastUpdatedMillisecond = millisecond;
+    fireEvent(this, 'afterUpdate', _);
 
     return this;
-  };
-
-
-  /**
-   * @return {Kapi}
-   */
-  Kapi.prototype.redraw = function () {
-    this.render(this._lastRenderedMillisecond);
-
-    return this;
-  };
-
-
-  /**
-   * @param {number} millisecond
-   * @return {Kapi}
-   */
-  Kapi.prototype.calculateActorPositions = function (millisecond) {
-    var len = this._drawOrder.length;
-
-    var i;
-    for (i = 0; i < len; i++) {
-      this._actors[this._drawOrder[i]].calculatePosition(millisecond);
-    }
-
-    return this;
-  };
-
-
-  /**
-   * @param {Kapi.Actor} actor
-   * @param {number} layer
-   * @return {Kapi.Actor|undefined}
-   */
-  Kapi.prototype.moveActorToLayer = function (actor, layer) {
-    if (layer < this._drawOrder.length) {
-      this._drawOrder = _.without(this._drawOrder, actor.id);
-      this._drawOrder.splice(layer, 0, actor.id);
-
-      return actor;
-    }
-
-    return;
   };
 
 
@@ -643,36 +577,16 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
-   * @param {function(Kapi.Actor, number)} sortFunction
-   * @return {Kapi}
-   */
-  Kapi.prototype.setOrderFunction = function (sortFunction) {
-    this._drawOrderSorter = sortFunction;
-    return this;
-  };
-
-
-  /**
-   * @return {Kapi}
-   */
-  Kapi.prototype.unsetOrderFunction = function () {
-    this._drawOrderSorter = null;
-    return this;
-  };
-
-
-  /**
    * @return {Object}
    */
   Kapi.prototype.exportTimeline = function () {
     var exportData = {
       'duration': this._animationLength
-      ,'actorOrder': this._drawOrder.slice(0)
       ,'actors': {}
     };
 
-    _.each(this._drawOrder, function (actorId) {
-      exportData.actors[actorId] = this._actors[actorId].exportTimeline();
+    _.each(this._actors, function (actor) {
+      exportData.actors[actor.id] = actor.exportTimeline();
     }, this);
 
     return exportData;
@@ -892,7 +806,7 @@ var rekapiActor = function (context, _, Tweenable) {
       ,'_keyframeProperties': {}
       ,'id': getUniqueActorId()
       ,'setup': opt_config.setup || noop
-      ,'render': opt_config.render || noop
+      ,'update': opt_config.update || noop
       ,'teardown': opt_config.teardown || noop
     });
 
@@ -1207,19 +1121,10 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
-   * @param {number} layer
-   * @return {Kapi.Actor|undefined}
-   */
-  Actor.prototype.moveToLayer = function (layer) {
-    return this.kapi.moveActorToLayer(this, layer);
-  };
-
-
-  /**
    * @param {number} millisecond
    * @return {Kapi.Actor}
    */
-  Actor.prototype.calculatePosition = function (millisecond) {
+  Actor.prototype.updateState = function (millisecond) {
     var startMs = this.getStart();
     var endMs = this.getEnd();
 
@@ -1376,7 +1281,6 @@ var rekapiCanvasContext = function (context, _) {
 
   var gk = context.Kapi;
 
-
   /**
    * Gets (and optionally sets) height or width on a canvas.
    * @param {HTMLCanvas} context
@@ -1406,12 +1310,55 @@ var rekapiCanvasContext = function (context, _) {
   }
 
 
+  /**
+   * Draw all the `Actor`s at whatever position they are currently in.
+   * @param {Kapi}
+   * @return {Kapi}
+   */
+  function draw () {
+    fireEvent(this, 'beforeDraw', _);
+    var len = this._drawOrder.length;
+    var drawOrder;
+
+    if (this._drawOrderSorter) {
+      var orderedActors = _.sortBy(this._actors, this._drawOrderSorter);
+      drawOrder = _.pluck(orderedActors, 'id');
+    } else {
+      drawOrder = this._drawOrder;
+    }
+
+    var currentActor, canvas_context;
+
+    var i;
+    for (i = 0; i < len; i++) {
+      currentActor = this._actors[drawOrder[i]];
+      canvas_context = currentActor.context();
+      currentActor.draw(canvas_context, currentActor.get());
+    }
+    fireEvent(this, 'afterDraw', _);
+
+    return this;
+  }
+
+
+  function addActor (kapi, actor) {
+    kapi._drawOrder.push(actor.id);
+  }
+
+
   gk.prototype._contextInitHook.canvas = function () {
     if (!(this.config.context && this.config.context.nodeName === 'CANVAS')) {
       return;
     }
 
+    this._drawOrder = [];
+    this._drawOrderSorter = null;
     this.config.clearOnUpdate = true;
+
+    _.extend(this._events, {
+      'beforeDraw': []
+      ,'afterDraw': []
+    });
 
     _.each(['Height', 'Width'], function (dimension) {
       var dimensionLower = dimension.toLowerCase();
@@ -1421,6 +1368,8 @@ var rekapiCanvasContext = function (context, _) {
       }
     }, this);
 
+    this.on('afterUpdate', _.bind(draw, this));
+    this.on('addActor', _.bind(addActor, this));
     this.on('beforeDraw', _.bind(beforeDraw, this));
   };
 
@@ -1461,8 +1410,72 @@ var rekapiCanvasContext = function (context, _) {
     return this.context.getContext('2d');
   };
 
+
+  /**
+   * @return {Kapi}
+   */
+  gk.prototype.redraw = function () {
+    draw(this._lastUpdatedMillisecond);
+
+    return this;
+  };
+
+
+  /**
+   * @param {Kapi.Actor} actor
+   * @param {number} layer
+   * @return {Kapi.Actor|undefined}
+   */
+  gk.prototype.moveActorToLayer = function (actor, layer) {
+    if (layer < this._drawOrder.length) {
+      this._drawOrder = _.without(this._drawOrder, actor.id);
+      this._drawOrder.splice(layer, 0, actor.id);
+
+      return actor;
+    }
+
+    return;
+  };
+
+
+  /**
+   * @param {function(Kapi.Actor, number)} sortFunction
+   * @return {Kapi}
+   */
+  gk.prototype.setOrderFunction = function (sortFunction) {
+    this._drawOrderSorter = sortFunction;
+    return this;
+  };
+
+
+  /**
+   * @return {Kapi}
+   */
+  gk.prototype.unsetOrderFunction = function () {
+    this._drawOrderSorter = null;
+    return this;
+  };
+
+
+  /**
+   * @return {Object}
+   */
+  gk.prototype.exportTimeline = function () {
+    var exportData = {
+      'duration': this._animationLength
+      ,'actorOrder': this._drawOrder.slice(0) // TODO Move this to the canvas ext
+      ,'actors': {}
+    };
+
+    _.each(this._drawOrder, function (actorId) {
+      exportData.actors[actorId] = this._actors[actorId].exportTimeline();
+    }, this);
+
+    return exportData;
+  };
+
 };
-var rekapiCanvasActor = function (context) {
+var rekapiCanvasActor = function (context, _) {
 
   'use strict';
 
@@ -1477,6 +1490,13 @@ var rekapiCanvasActor = function (context) {
    */
   var CanvasActor = Kapi.CanvasActor = function (opt_config) {
     Kapi.Actor.call(this, opt_config);
+  
+    opt_config = opt_config || {};
+
+    _.extend(this, {
+      'draw': opt_config.draw || noop
+    });
+    
     return this;
   };
 
@@ -1492,6 +1512,14 @@ var rekapiCanvasActor = function (context) {
     }
 
     return this._context && this._context.getContext('2d');
+  };
+
+  /**
+   * @param {number} layer
+   * @return {Kapi.Actor|undefined}
+   */
+  CanvasActor.prototype.moveToLayer = function (layer) {
+    return this.kapi.moveActorToLayer(this, layer);
   };
 };
 var rekapiDOM = function (context, _) {
@@ -1527,9 +1555,9 @@ var rekapiDOM = function (context, _) {
       this._context.className += ' ' + className;
     }
 
-    // Remove the instance's render method to allow the
-    // ActorMethods.prototype.render method to be accessible.
-    delete this.render;
+    // Remove the instance's update method to allow the
+    // ActorMethods.prototype.update method to be accessible.
+    delete this.update;
     delete this.teardown;
 
     return this;
@@ -1545,7 +1573,7 @@ var rekapiDOM = function (context, _) {
    * @param {HTMLElement} context
    * @param {Object} state
    */
-  DOMActorMethods.prototype.render = function (context, state) {
+  DOMActorMethods.prototype.update = function (context, state) {
 
     _.each(state, function (styleValue, styleName) {
       if (styleName === 'transform') {
