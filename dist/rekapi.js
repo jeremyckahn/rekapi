@@ -1415,7 +1415,7 @@ var rekapiCanvasContext = function (context, _) {
    * @return {Kapi}
    */
   gk.prototype.redraw = function () {
-    draw(this._lastUpdatedMillisecond);
+    _.bind(draw, this)(this._lastUpdatedMillisecond);
 
     return this;
   };
