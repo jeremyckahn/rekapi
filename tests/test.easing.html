@@ -59,7 +59,7 @@
           ,'m': 100
         }, 0, name);
 
-        testActor.calculatePosition(0);
+        testActor.updateState(0);
         equal(testActor.get().n, tweenableComparator.n, 'Interpolated 0.0');
 
 
@@ -71,7 +71,7 @@
           ,'m': 100
         }, 0.5, name);
 
-        testActor.calculatePosition(500);
+        testActor.updateState(500);
         equal(testActor.get().n, tweenableComparator.n, 'Interpolated 0.5');
 
 
@@ -83,7 +83,7 @@
           ,'m': 100
         }, 1, name);
 
-        testActor.calculatePosition(1000);
+        testActor.updateState(1000);
         equal(testActor.get().n, tweenableComparator.n, 'Interpolated 1.0');
 
       });
@@ -124,7 +124,7 @@
           ,'m': 100
         }, 0, name);
 
-        testActor.calculatePosition(0);
+        testActor.updateState(0);
         equal(testActor.get().n, tweenableComparator.n, 'Interpolated 0.0');
         equal(testActor.get().m, tweenableComparator.m, 'Interpolated 0.0');
 
@@ -137,7 +137,7 @@
           ,'m': 100
         }, 0.5, name);
 
-        testActor.calculatePosition(500);
+        testActor.updateState(500);
         equal(testActor.get().n, tweenableComparator.n, 'Interpolated 0.5');
         equal(testActor.get().m, tweenableComparator.m, 'Interpolated 0.5');
 
@@ -150,7 +150,7 @@
           ,'m': 100
         }, 1, name);
 
-        testActor.calculatePosition(1000);
+        testActor.updateState(1000);
         equal(testActor.get().n, tweenableComparator.n, 'Interpolated 1.0');
         equal(testActor.get().m, tweenableComparator.m, 'Interpolated 1.0');
 
@@ -193,7 +193,7 @@
           ,'m': 100
         }, 0, name);
 
-        testActor.calculatePosition(0);
+        testActor.updateState(0);
         equal(testActor.get().n, tweenableComparator.n, 'Interpolated 0.0');
         equal(testActor.get().m, 0, 'Interpolated 0.0 linearly.');
 
@@ -206,7 +206,7 @@
           ,'m': 100
         }, 0.5, name);
 
-        testActor.calculatePosition(500);
+        testActor.updateState(500);
         equal(testActor.get().n, tweenableComparator.n, 'Interpolated 0.5');
         equal(testActor.get().m, 50, 'Interpolated 0.5 linearly.');
 
@@ -217,7 +217,7 @@
           'n': 100
         }, 1, name);
 
-        testActor.calculatePosition(1000);
+        testActor.updateState(1000);
         equal(testActor.get().n, tweenableComparator.n, 'Interpolated 1.0');
         equal(testActor.get().m, 100, 'Interpolated 1.0 linearly.');
 
@@ -259,7 +259,7 @@
           ,'m': 100
         }, 0, name);
 
-        testActor.calculatePosition(0);
+        testActor.updateState(0);
         equal(testActor.get().n, tweenableComparator.n, 'Interpolated 0.0');
         equal(testActor.get().m, 0, 'Interpolated 0.0 linearly');
 
@@ -272,7 +272,7 @@
           ,'m': 100
         }, 0.5, name);
 
-        testActor.calculatePosition(500);
+        testActor.updateState(500);
         equal(testActor.get().n, tweenableComparator.n, 'Interpolated 0.5');
         equal(testActor.get().m, 50, 'Interpolated 0.5 linearly');
 
@@ -283,7 +283,7 @@
           'n': 100
         }, 1, name);
 
-        testActor.calculatePosition(1000);
+        testActor.updateState(1000);
         equal(testActor.get().n, tweenableComparator.n, 'Interpolated 1.0');
         equal(testActor.get().m, 100, 'Interpolated 1.0 linearly');
 
