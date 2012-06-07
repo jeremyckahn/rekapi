@@ -69,6 +69,11 @@ var rekapiCanvasContext = function (context, _) {
   }
 
 
+  function removeActor (kapi, actor) {
+    kapi._drawOrder = _.without(kapi._drawOrder, actor.id);
+  }
+
+
   gk.prototype._contextInitHook.canvas = function () {
     if (!(this.config.context && this.config.context.nodeName === 'CANVAS')) {
       return;
@@ -93,6 +98,7 @@ var rekapiCanvasContext = function (context, _) {
 
     this.on('afterUpdate', _.bind(draw, this));
     this.on('addActor', _.bind(addActor, this));
+    this.on('removeActor', _.bind(removeActor, this));
     this.on('beforeDraw', _.bind(beforeDraw, this));
   };
 

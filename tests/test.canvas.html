@@ -44,6 +44,20 @@
     });
 
 
+    test('Actors are removed from the drawOrder array', function () {
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      
+      testKapi.removeActor(testActor1);
+
+      equals(testKapi._drawOrder.length, 0,
+          'Actor is no longer present in the internal _drawOrder array');
+    });
+
+
     test('Actors can be moved to the beginning of the draw list', function () {
       var testKapi
           ,testActor1

@@ -355,9 +355,10 @@ var rekapiCore = function (context, _, Tweenable) {
   Kapi.prototype.removeActor = function (actor) {
     delete this._actors[actor.id];
     delete actor.kapi;
-    this._drawOrder = _.without(this._drawOrder, actor.id);
     actor.teardown();
     this._recalculateAnimationLength();
+    
+    fireEvent(this, 'removeActor', _, actor);
 
     return this;
   };
