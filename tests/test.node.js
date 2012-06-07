@@ -20,7 +20,7 @@ r(['rekapi'], function(Kapi) {
     console.log('The animation has begun!');
   });
 
-  kapi.on('frameRender', function () {
+  kapi.on('afterUpdate', function () {
     console.log('Actor state:', actor.get());
   });
 
