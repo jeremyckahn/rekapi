@@ -426,6 +426,30 @@ var rekapiActor = function (context, _, Tweenable) {
   };
 
 
+  /*
+   * Determines if an actor has a keyframe set at a given millisecond.
+   * Can optionally look for an existing keyframe on a single property track.
+   *
+   * @param {number} when Millisecond
+   * @param {string} opt_trackName Optional name of a property track
+   * @return {boolean}
+   */
+  Actor.prototype.hasKeyframeAt = function(when, opt_trackName) {
+    var tracks = this._propertyTracks;
+
+    if (opt_trackName) {
+      if (!_.has(tracks, opt_trackName)) {
+        return false;
+      }
+      tracks = _.pick(tracks, opt_trackName);
+    }
+
+    return _.find(tracks, function (propertyTrack, trackName) {
+      return findPropertyAtMillisecondInTrack(this, trackName, when) !== undefined;
+    }, this) !== undefined;
+  };
+
+
   /**
    * @param {number} when
    * @param {Object} stateModification
@@ -447,7 +471,6 @@ var rekapiActor = function (context, _, Tweenable) {
         });
       }
     }, this);
-
 
     return this;
   };
