@@ -431,7 +431,7 @@ var rekapiActor = function (context, _, Tweenable) {
    * Can optionally look for an existing keyframe on a single property track.
    *
    * @param {number} when Millisecond
-   * @param {number} opt_trackName Optional name of a property track
+   * @param {string} opt_trackName Optional name of a property track
    * @return {Kapi.Actor}
    */
   Actor.prototype.hasKeyframeAt = function(when, opt_trackName) {
