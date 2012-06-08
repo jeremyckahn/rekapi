@@ -398,6 +398,63 @@
     });
 
 
+    module('Keyframe presence');
+
+    test('Actor can determine if it has a keyframe at a given millisecond' , function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, {
+          'x': 0
+        }, {
+          'x': 'elastic'
+        }).keyframe(1000, {
+          'x': 100
+        }, {
+          'x': 'elastic'
+        });
+
+      equals(testActor.hasKeyframeAt(500), false,
+          'Keyframe does not exist at 500ms');
+      equals(testActor.hasKeyframeAt(2000), false,
+          'Keyframe does not exist at 2000ms');
+      equals(testActor.hasKeyframeAt(1000), true,
+          'Keyframe exists at 1000ms');
+    });
+    
+    test('Actor can determine if it has a keyframe on a given property track' , function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, {
+          'x': 0
+        }, {
+          'x': 'elastic'
+        }).keyframe(1000, {
+          'x': 100
+        }, {
+          'x': 'elastic'
+        });
+
+      //debugger;
+      equals(testActor.hasKeyframeAt(0, 'y'), false,
+          'Keyframe does not exist at 0ms on an unknown track');
+      equals(testActor.hasKeyframeAt(1200, 'x'), false,
+          'Keyframe does not exist at 1200ms on the x track');
+      //debugger;
+      equals(testActor.hasKeyframeAt(1000, 'x'), true,
+          'Keyframe exists at 1000ms on the x track');
+    });
+
+
     module('Waits');
 
     test('Can copy keyframes (one initial keyframe)', function () {
