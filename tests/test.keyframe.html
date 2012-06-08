@@ -444,12 +444,10 @@
           'x': 'elastic'
         });
 
-      //debugger;
       equals(testActor.hasKeyframeAt(0, 'y'), false,
           'Keyframe does not exist at 0ms on an unknown track');
       equals(testActor.hasKeyframeAt(1200, 'x'), false,
           'Keyframe does not exist at 1200ms on the x track');
-      //debugger;
       equals(testActor.hasKeyframeAt(1000, 'x'), true,
           'Keyframe exists at 1000ms on the x track');
     });
