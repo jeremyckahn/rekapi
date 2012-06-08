@@ -432,7 +432,7 @@ var rekapiActor = function (context, _, Tweenable) {
    *
    * @param {number} when Millisecond
    * @param {string} opt_trackName Optional name of a property track
-   * @return {Kapi.Actor}
+   * @return {boolean}
    */
   Actor.prototype.hasKeyframeAt = function(when, opt_trackName) {
     var tracks = this._propertyTracks;
