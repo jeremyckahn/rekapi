@@ -139,7 +139,7 @@
     });
 
 
-    asyncTest('Kapi can redraw last frame', function () {
+    test('Kapi can redraw last frame', function () {
       var testKapi
           ,testActor;
 
@@ -154,7 +154,6 @@
       testActor.draw = function(context, state) {
         equals(testKapi._lastUpdatedMillisecond, 500,
           'Last frame was redrawn');
-        start();
       };
       testKapi.redraw();
     });

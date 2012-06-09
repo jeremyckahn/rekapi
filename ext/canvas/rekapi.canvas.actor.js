@@ -13,13 +13,10 @@ var rekapiCanvasActor = function (context, _) {
    */
   var CanvasActor = Kapi.CanvasActor = function (opt_config) {
     Kapi.Actor.call(this, opt_config);
-  
-    opt_config = opt_config || {};
 
-    _.extend(this, {
-      'draw': opt_config.draw || noop
-    });
-    
+    opt_config = opt_config || {};
+    this.draw = opt_config.draw || noop;
+
     return this;
   };
 

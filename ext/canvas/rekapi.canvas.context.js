@@ -23,12 +23,12 @@ var rekapiCanvasContext = function (context, _) {
 
 
   /**
-   * Takes care of some pre-render tasks for canvas animations.  To be called
-   * in the context of the Kapi instance.
+   * Takes care of some pre-drawing tasks for canvas animations.
+  * @param {Kapi}
    */
-  function beforeDraw () {
-    if (this.config.clearOnUpdate) {
-      this.canvasClear();
+  function beforeDraw (kapi) {
+    if (kapi.config.clearOnUpdate) {
+      kapi.canvasClear();
     }
   }
 
@@ -38,29 +38,29 @@ var rekapiCanvasContext = function (context, _) {
    * @param {Kapi}
    * @return {Kapi}
    */
-  function draw () {
-    fireEvent(this, 'beforeDraw', _);
-    var len = this._drawOrder.length;
+  function draw (kapi) {
+    fireEvent(kapi, 'beforeDraw', _);
+    var len = kapi._drawOrder.length;
     var drawOrder;
 
-    if (this._drawOrderSorter) {
-      var orderedActors = _.sortBy(this._actors, this._drawOrderSorter);
+    if (kapi._drawOrderSorter) {
+      var orderedActors = _.sortBy(kapi._actors, kapi._drawOrderSorter);
       drawOrder = _.pluck(orderedActors, 'id');
     } else {
-      drawOrder = this._drawOrder;
+      drawOrder = kapi._drawOrder;
     }
 
     var currentActor, canvas_context;
 
     var i;
     for (i = 0; i < len; i++) {
-      currentActor = this._actors[drawOrder[i]];
+      currentActor = kapi._actors[drawOrder[i]];
       canvas_context = currentActor.context();
       currentActor.draw(canvas_context, currentActor.get());
     }
-    fireEvent(this, 'afterDraw', _);
+    fireEvent(kapi, 'afterDraw', _);
 
-    return this;
+    return kapi;
   }
 
 
@@ -96,10 +96,10 @@ var rekapiCanvasContext = function (context, _) {
       }
     }, this);
 
-    this.on('afterUpdate', _.bind(draw, this));
-    this.on('addActor', _.bind(addActor, this));
-    this.on('removeActor', _.bind(removeActor, this));
-    this.on('beforeDraw', _.bind(beforeDraw, this));
+    this.on('afterUpdate', draw);
+    this.on('addActor', addActor);
+    this.on('removeActor', removeActor);
+    this.on('beforeDraw', beforeDraw);
   };
 
 
@@ -144,7 +144,7 @@ var rekapiCanvasContext = function (context, _) {
    * @return {Kapi}
    */
   gk.prototype.redraw = function () {
-    _.bind(draw, this)(this._lastUpdatedMillisecond);
+    draw(this);
 
     return this;
   };
@@ -192,7 +192,7 @@ var rekapiCanvasContext = function (context, _) {
   gk.prototype.exportTimeline = function () {
     var exportData = {
       'duration': this._animationLength
-      ,'actorOrder': this._drawOrder.slice(0) // TODO Move this to the canvas ext
+      ,'actorOrder': this._drawOrder.slice(0)
       ,'actors': {}
     };
 
