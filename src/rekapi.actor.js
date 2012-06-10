@@ -191,7 +191,7 @@ var rekapiActor = function (context, _, Tweenable) {
     });
 
     if (opt_config.context) {
-      this.context(opt_context);
+      this.context(opt_config.context);
     }
 
     return this;
