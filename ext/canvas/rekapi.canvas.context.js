@@ -44,7 +44,7 @@ var rekapiCanvasContext = function (context, _) {
     var drawOrder;
 
     if (kapi._drawOrderSorter) {
-      var orderedActors = _.sortBy(kapi._actors, kapi._drawOrderSorter);
+      var orderedActors = _.sortBy(kapi._canvasActors, kapi._drawOrderSorter);
       drawOrder = _.pluck(orderedActors, 'id');
     } else {
       drawOrder = kapi._drawOrder;
@@ -54,7 +54,7 @@ var rekapiCanvasContext = function (context, _) {
 
     var i;
     for (i = 0; i < len; i++) {
-      currentActor = kapi._actors[drawOrder[i]];
+      currentActor = kapi._canvasActors[drawOrder[i]];
       canvas_context = currentActor.context();
       currentActor.draw(canvas_context, currentActor.get());
     }
@@ -65,12 +65,18 @@ var rekapiCanvasContext = function (context, _) {
 
 
   function addActor (kapi, actor) {
-    kapi._drawOrder.push(actor.id);
+    if (actor instanceof Kapi.CanvasActor) {
+      kapi._drawOrder.push(actor.id);
+      kapi._canvasActors[actor.id] = actor;
+    }
   }
 
 
   function removeActor (kapi, actor) {
-    kapi._drawOrder = _.without(kapi._drawOrder, actor.id);
+    if (actor instanceof Kapi.CanvasActor) {
+      kapi._drawOrder = _.without(kapi._drawOrder, actor.id);
+      delete kapi._canvasActors[actor.id];
+    }
   }
 
 
@@ -81,6 +87,7 @@ var rekapiCanvasContext = function (context, _) {
 
     this._drawOrder = [];
     this._drawOrderSorter = null;
+    this._canvasActors = {};
     this.config.clearOnUpdate = true;
 
     _.extend(this._events, {

@@ -58,6 +58,41 @@
     });
 
 
+    test('Only CanvasActors are added to the drawOrder array', function () {
+      var testKapi
+          ,testCanvasActor1
+          ,testCanvasActor2
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testCanvasActor1 = setupTestActor(testKapi);
+      testCanvasActor2 = setupTestActor(testKapi);
+      testActor = new Kapi.Actor();
+      testKapi.addActor(testActor);
+
+      equals(testKapi._drawOrder.length, 2,
+          'There are only two canvas actors in the drawOrder array');
+      equals(testKapi._drawOrder.indexOf(testActor.id), -1,
+          'testActor is not present inside the drawOrder array');
+
+      testCanvasActor1.keyframe(0, { 'x': 1 }).keyframe(1000, { 'x': 2 });
+      testCanvasActor2.keyframe(0, { 'x': 1 }).keyframe(1000, { 'x': 2 });
+      testActor.keyframe(0, { 'x': 1 }).keyframe(1000, { 'x': 2 });
+
+      testCanvasActor1.draw = function(context, state) {
+        ok(state != undefined);
+      };
+      testCanvasActor2.draw = function(context, state) {
+        ok(state != undefined);
+      };
+      // This is only for testing. Regular actors don't have a `draw` method.
+      testActor.draw = function() {
+        throw new Error('draw() should not be called on non-canvas actors');
+      };
+
+      testKapi.update(500);
+    });
+
     test('Actors can be moved to the beginning of the draw list', function () {
       var testKapi
           ,testActor1
