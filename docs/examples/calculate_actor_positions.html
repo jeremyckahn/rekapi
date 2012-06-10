@@ -41,8 +41,8 @@
         .keyframe(1000, { x: 200, y: 150 });
 
       // This operation doesn't actually render anything.  It just calls
-      // calculatePosition on all of the actors.
-      kapi.calculateActorPositions(500);
+      // `updateState` on all of the actors.
+      kapi.updateState(500);
     </script>
   </body>
 </html>
