@@ -114,9 +114,9 @@ var rekapiCore = function (context, _, Tweenable) {
    * Also updates the state internally and accounts for how many loop
    * iterations the animation runs for.
    * @param {Kapi} kapi
-   * @param {number} forMillisecond The millisecond to render
+   * @param {number} forMillisecond The millisecond to update
    */
-  function renderMillisecond (kapi, forMillisecond) {
+  function updateToMillisecond (kapi, forMillisecond) {
     var currentIteration = determineCurrentLoopIteration(kapi, forMillisecond);
     var loopPosition = calculateLoopPosition(kapi, forMillisecond,
         currentIteration);
@@ -130,8 +130,8 @@ var rekapiCore = function (context, _, Tweenable) {
    * update based on that time.
    * @param {Kapi} kapi
    */
-  function renderCurrentMillisecond (kapi) {
-    renderMillisecond(kapi, calculateTimeSinceStart(kapi));
+  function updateToCurrentMillisecond (kapi) {
+    updateToMillisecond(kapi, calculateTimeSinceStart(kapi));
   }
 
 
@@ -143,7 +143,7 @@ var rekapiCore = function (context, _, Tweenable) {
   function tick (kapi) {
     var updateFn = function () {
       tick(kapi);
-      renderCurrentMillisecond(kapi);
+      updateToCurrentMillisecond(kapi);
     };
 
     // Need to check for .call presence to get around an IE limitation.
@@ -607,7 +607,7 @@ var rekapiCore = function (context, _, Tweenable) {
   if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
     Kapi._private = {
       'calculateLoopPosition': calculateLoopPosition
-      ,'renderCurrentMillisecond': renderCurrentMillisecond
+      ,'updateToCurrentMillisecond': updateToCurrentMillisecond
       ,'tick': tick
       ,'determineCurrentLoopIteration': determineCurrentLoopIteration
       ,'calculateTimeSinceStart': calculateTimeSinceStart
@@ -812,7 +812,7 @@ var rekapiActor = function (context, _, Tweenable) {
     });
 
     if (opt_config.context) {
-      this.context(opt_context);
+      this.context(opt_config.context);
     }
 
     return this;
