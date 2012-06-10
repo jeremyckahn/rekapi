@@ -127,19 +127,19 @@ var rekapiToCSS = function (context, _) {
     var loopStart = delay + increment;
     var loopEnd = animLength + delay - increment;
 
-    actor.calculatePosition(delay);
+    actor.updateState(delay);
     serializedFrames.push('  from ' + serializeActorStep(actor));
 
     var i;
     for (i = loopStart; i <= loopEnd; i += increment) {
-      actor.calculatePosition(i);
+      actor.updateState(i);
       percent = (i - delay) / animPercent;
       adjustedPercent = +percent.toFixed(2);
       stepPrefix = adjustedPercent + '% ';
       serializedFrames.push('  ' + stepPrefix + serializeActorStep(actor));
     }
 
-    actor.calculatePosition(animLength + delay);
+    actor.updateState(animLength + delay);
     serializedFrames.push('  to ' + serializeActorStep(actor));
 
     return serializedFrames.join('\n');
