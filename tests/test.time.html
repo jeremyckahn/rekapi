@@ -157,7 +157,7 @@
     });
 
 
-    test('Can render any point on the timeline and playFromCurrent()',
+    test('Can calculate any point on the timeline and playFromCurrent()',
       function () {
       var testKapi
           ,testActor
@@ -174,11 +174,11 @@
         return 3000;
       };
 
-      testKapi.render(500);
+      testKapi.update(500);
       testKapi.playFromCurrent();
 
       equals(testKapi._loopTimestamp, 2500,
-          '.playFromCurrent resets the timestamp from last rendered frame');
+          '.playFromCurrent resets the timestamp from last updated position');
     });
   } ());
   </script>

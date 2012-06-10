@@ -1,4 +1,4 @@
-var rekapiCanvasActor = function (context) {
+var rekapiCanvasActor = function (context, _) {
 
   'use strict';
 
@@ -13,6 +13,10 @@ var rekapiCanvasActor = function (context) {
    */
   var CanvasActor = Kapi.CanvasActor = function (opt_config) {
     Kapi.Actor.call(this, opt_config);
+
+    opt_config = opt_config || {};
+    this.draw = opt_config.draw || noop;
+
     return this;
   };
 
@@ -28,5 +32,13 @@ var rekapiCanvasActor = function (context) {
     }
 
     return this._context && this._context.getContext('2d');
+  };
+
+  /**
+   * @param {number} layer
+   * @return {Kapi.Actor|undefined}
+   */
+  CanvasActor.prototype.moveToLayer = function (layer) {
+    return this.kapi.moveActorToLayer(this, layer);
   };
 };

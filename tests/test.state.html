@@ -33,9 +33,6 @@
 
       equals(testKapi._actors[testActor1.id], testActor1,
           'Actor is in the internal _actors Object');
-
-      equals(testKapi._drawOrder[0], testActor1.id,
-          'Actor is the first element in the internal _drawOrder array');
     });
 
 
@@ -50,69 +47,6 @@
 
       equals(testKapi.actorCount(), 1,
           'The actor was not added twice');
-    });
-
-
-    test('Actors can be moved to the beginning of the draw list', function () {
-      var testKapi
-          ,testActor1
-          ,testActor2;
-
-      testKapi = setupTestKapi();
-      testActor1 = setupTestActor(testKapi);
-      testActor2 = setupTestActor(testKapi);
-      testKapi.moveActorToLayer(testActor2, 0);
-
-      equals(testKapi._drawOrder[0], testActor2.id,
-          'Second actor was moved to the first position.');
-
-      equals(testKapi._drawOrder[1], testActor1.id,
-          'First actor was moved to the second position.');
-
-      equals(testKapi.actorCount(), 2,
-          'Draw list size did not change.');
-    });
-
-
-    test('Actors can be moved to the end of the draw list', function () {
-      var testKapi
-          ,testActor1
-          ,testActor2;
-
-      testKapi = setupTestKapi();
-      testActor1 = setupTestActor(testKapi);
-      testActor2 = setupTestActor(testKapi);
-      testKapi.moveActorToLayer(testActor1, 1);
-
-      equals(testKapi._drawOrder[0], testActor2.id,
-          'Second actor was moved to the first position.');
-
-      equals(testKapi._drawOrder[1], testActor1.id,
-          'First actor was moved to the second position.');
-
-      equals(testKapi.actorCount(), 2,
-          'Draw list size did not change.');
-    });
-
-
-    test('Actors can move themselves.', function () {
-      var testKapi
-          ,testActor1
-          ,testActor2;
-
-      testKapi = setupTestKapi();
-      testActor1 = setupTestActor(testKapi);
-      testActor2 = setupTestActor(testKapi);
-      testActor1.moveToLayer(1);
-
-      equals(testKapi._drawOrder[0], testActor2.id,
-          'Second actor was moved to the first position.');
-
-      equals(testKapi._drawOrder[1], testActor1.id,
-          'First actor was moved to the second position.');
-
-      equals(testKapi.actorCount(), 2,
-          'Draw list size did not change.');
     });
 
 
@@ -388,8 +322,6 @@
       var exportedTimeline = testKapi.exportTimeline();
       equals(exportedTimeline.duration, 1000,
           'Duration was exported');
-      equals(typeof exportedTimeline.actorOrder[0], 'number',
-          'Draw order was exported');
       deepEqual(exportedTimeline.actors[testActor.id],
           testActor.exportTimeline(),
           'Actor was exported');

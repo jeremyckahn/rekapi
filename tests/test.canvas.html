@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+  <script src="../lib/underscore/underscore.js"></script>
+  <script src="../lib/shifty/dist/shifty.js"></script>
+  <script src="../src/rekapi.core.js"></script>
+  <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.keyframeprops.js"></script>
+  <script src="../ext/canvas/rekapi.canvas.actor.js"></script>
+  <script src="../ext/canvas/rekapi.canvas.context.js"></script>
+  <script src="../src/rekapi.init.js"></script>
+  <script>
+  function setupTestKapi () {
+    var canvas = document.createElement('canvas')
+        ,kapi = new Kapi({
+          'context': canvas
+          ,'fps': 60
+        });
+    
+    return kapi;
+  }
+
+  function  setupTestActor (forKapi) {
+    var actor = new Kapi.CanvasActor();
+    forKapi.addActor(actor);
+    return actor;
+  }
+
+  (function () {
+
+    module('Canvas extension');
+
+    test('Actors are added to the drawOrder array', function () {
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+
+      equals(testKapi._drawOrder[0], testActor1.id,
+          'Actor is the first element in the internal _drawOrder array');
+    });
+
+
+    test('Actors are removed from the drawOrder array', function () {
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      
+      testKapi.removeActor(testActor1);
+
+      equals(testKapi._drawOrder.length, 0,
+          'Actor is no longer present in the internal _drawOrder array');
+    });
+
+
+    test('Only CanvasActors are added to the drawOrder array', function () {
+      var testKapi
+          ,testCanvasActor1
+          ,testCanvasActor2
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testCanvasActor1 = setupTestActor(testKapi);
+      testCanvasActor2 = setupTestActor(testKapi);
+      testActor = new Kapi.Actor();
+      testKapi.addActor(testActor);
+
+      equals(testKapi._drawOrder.length, 2,
+          'There are only two canvas actors in the drawOrder array');
+      equals(testKapi._drawOrder.indexOf(testActor.id), -1,
+          'testActor is not present inside the drawOrder array');
+
+      testCanvasActor1.keyframe(0, { 'x': 1 }).keyframe(1000, { 'x': 2 });
+      testCanvasActor2.keyframe(0, { 'x': 1 }).keyframe(1000, { 'x': 2 });
+      testActor.keyframe(0, { 'x': 1 }).keyframe(1000, { 'x': 2 });
+
+      testCanvasActor1.draw = function(context, state) {
+        ok(state != undefined);
+      };
+      testCanvasActor2.draw = function(context, state) {
+        ok(state != undefined);
+      };
+      // This is only for testing. Regular actors don't have a `draw` method.
+      testActor.draw = function() {
+        throw new Error('draw() should not be called on non-canvas actors');
+      };
+
+      testKapi.update(500);
+    });
+
+    test('Actors can be moved to the beginning of the draw list', function () {
+      var testKapi
+          ,testActor1
+          ,testActor2;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      testActor2 = setupTestActor(testKapi);
+      testKapi.moveActorToLayer(testActor2, 0);
+
+      equals(testKapi._drawOrder[0], testActor2.id,
+          'Second actor was moved to the first position.');
+
+      equals(testKapi._drawOrder[1], testActor1.id,
+          'First actor was moved to the second position.');
+
+      equals(testKapi.actorCount(), 2,
+          'Draw list size did not change.');
+    });
+
+
+    test('Actors can be moved to the end of the draw list', function () {
+      var testKapi
+          ,testActor1
+          ,testActor2;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      testActor2 = setupTestActor(testKapi);
+      testKapi.moveActorToLayer(testActor1, 1);
+
+      equals(testKapi._drawOrder[0], testActor2.id,
+          'Second actor was moved to the first position.');
+
+      equals(testKapi._drawOrder[1], testActor1.id,
+          'First actor was moved to the second position.');
+
+      equals(testKapi.actorCount(), 2,
+          'Draw list size did not change.');
+    });
+
+
+    test('Actors can move themselves.', function () {
+      var testKapi
+          ,testActor1
+          ,testActor2;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+      testActor2 = setupTestActor(testKapi);
+      testActor1.moveToLayer(1);
+
+      equals(testKapi._drawOrder[0], testActor2.id,
+          'Second actor was moved to the first position.');
+
+      equals(testKapi._drawOrder[1], testActor1.id,
+          'First actor was moved to the second position.');
+
+      equals(testKapi.actorCount(), 2,
+          'Draw list size did not change.');
+    });
+
+
+    test('Exported Kapi data has actor order', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      testActor.keyframe(0, {
+        'x': 1
+      }).keyframe(1000, {
+        'x': 2
+      });
+
+      var exportedTimeline = testKapi.exportTimeline();
+      equals(typeof exportedTimeline.actorOrder[0], 'number',
+          'Draw order was exported');
+    });
+
+
+    test('Kapi can redraw last frame', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      testActor.keyframe(0,    { x: 50,  y: 50 })
+               .keyframe(1000, { x: 200, y: 150 });
+
+      testKapi.update(500);
+      testKapi.canvasClear();
+      
+      testActor.draw = function(context, state) {
+        equals(testKapi._lastUpdatedMillisecond, 500,
+          'Last frame was redrawn');
+      };
+      testKapi.redraw();
+    });
+
+  } ());
+  </script>
+</head>
+<body>
+  <h1 id="qunit-header"><a href="https://github.com/jeremyckahn/rekapi">Rekapi</a></h1>
+   <h2 id="qunit-banner"></h2>
+   <div id="qunit-testrunner-toolbar"></div>
+   <h2 id="qunit-userAgent"></h2>
+   <ol id="qunit-tests"></ol>
+   <div id="qunit-fixture"></div>
+</body>
+</html>

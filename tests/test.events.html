@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+  <script src="../lib/underscore/underscore.js"></script>
+  <script src="../lib/shifty/dist/shifty.js"></script>
+  <script src="../src/rekapi.core.js"></script>
+  <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.keyframeprops.js"></script>
+  <script src="../ext/canvas/rekapi.canvas.actor.js"></script>
+  <script src="../ext/canvas/rekapi.canvas.context.js"></script>
+  <script src="../src/rekapi.init.js"></script>
+  <script>
+  function setupTestKapi () {
+    return new Kapi();
+  }
+
+  function  setupTestActor (forKapi) {
+    return new Kapi.Actor();
+  }
+
+  (function () {
+
+    module('Core events');
+
+    test('Event is fired when an actor is added', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testKapi.on('addActor', function(kapi, actor) {
+        ok(actor !== undefined);
+        equals(actor, testActor, 'Event data is equal to added actor');
+      });
+      testKapi.addActor(testActor);
+    });
+
+    test('Event is fired when an actor is removed', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testKapi.on('removeActor', function(kapi, actor) {
+        ok(actor !== undefined);
+        equals(actor, testActor, 'Event data is equal to removed actor');
+      });
+      testKapi.removeActor(testActor);
+    });
+
+  } ());
+  </script>
+</head>
+<body>
+  <h1 id="qunit-header"><a href="https://github.com/jeremyckahn/rekapi">Rekapi</a></h1>
+   <h2 id="qunit-banner"></h2>
+   <div id="qunit-testrunner-toolbar"></div>
+   <h2 id="qunit-userAgent"></h2>
+   <ol id="qunit-tests"></ol>
+   <div id="qunit-fixture"></div>
+</body>
+</html>

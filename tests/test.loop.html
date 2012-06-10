@@ -64,7 +64,7 @@
         return 500;
       };
 
-      Kapi._private.renderCurrentMillisecond(testKapi);
+      Kapi._private.updateToCurrentMillisecond(testKapi);
       equals(testActor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
 
@@ -72,7 +72,7 @@
         return 1500;
       };
 
-      Kapi._private.renderCurrentMillisecond(testKapi);
+      Kapi._private.updateToCurrentMillisecond(testKapi);
       equals(testActor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
 
@@ -80,7 +80,7 @@
         return 2500;
       };
 
-      Kapi._private.renderCurrentMillisecond(testKapi);
+      Kapi._private.updateToCurrentMillisecond(testKapi);
       equals(testActor.get().x, 100,
           'Loop sequence has completed, actor is locked at final position');
     });
@@ -119,7 +119,7 @@
         return 500;
       };
 
-      Kapi._private.renderCurrentMillisecond(testKapi);
+      Kapi._private.updateToCurrentMillisecond(testKapi);
       equals(testActor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
 
@@ -127,7 +127,7 @@
         return 1500;
       };
 
-      Kapi._private.renderCurrentMillisecond(testKapi);
+      Kapi._private.updateToCurrentMillisecond(testKapi);
       equals(testActor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
 
@@ -135,7 +135,7 @@
         return 10000000500;
       };
 
-      Kapi._private.renderCurrentMillisecond(testKapi);
+      Kapi._private.updateToCurrentMillisecond(testKapi);
       equals(testActor.get().x, 50,
           'Loop sequence is still running at some distant point in the future');
     });

@@ -18,7 +18,7 @@
       });
 
       var actor = new Kapi.CanvasActor({
-        'render': function (canvas_context, state) {
+        'draw': function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
               state.x || 0,
@@ -40,9 +40,9 @@
         .keyframe(0,    { x: 50,  y: 50 })
         .keyframe(1000, { x: 200, y: 150 });
 
-      // This operation doesn't actually render anything.  It just calls
-      // calculatePosition on all of the actors.
-      kapi.calculateActorPositions(500);
+      // This updates all actors at the 500 millisecond in the animation.
+      // The canvas extension then calls the 'draw' method of each CanvasActor.
+      kapi.update(500);
     </script>
   </body>
 </html>

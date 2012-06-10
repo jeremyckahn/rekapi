@@ -4,7 +4,6 @@ var rekapiCanvasContext = function (context, _) {
 
   var gk = context.Kapi;
 
-
   /**
    * Gets (and optionally sets) height or width on a canvas.
    * @param {HTMLCanvas} context
@@ -24,12 +23,59 @@ var rekapiCanvasContext = function (context, _) {
 
 
   /**
-   * Takes care of some pre-render tasks for canvas animations.  To be called
-   * in the context of the Kapi instance.
+   * Takes care of some pre-drawing tasks for canvas animations.
+  * @param {Kapi}
    */
-  function beforeDraw () {
-    if (this.config.clearOnUpdate) {
-      this.canvasClear();
+  function beforeDraw (kapi) {
+    if (kapi.config.clearOnUpdate) {
+      kapi.canvasClear();
+    }
+  }
+
+
+  /**
+   * Draw all the `Actor`s at whatever position they are currently in.
+   * @param {Kapi}
+   * @return {Kapi}
+   */
+  function draw (kapi) {
+    fireEvent(kapi, 'beforeDraw', _);
+    var len = kapi._drawOrder.length;
+    var drawOrder;
+
+    if (kapi._drawOrderSorter) {
+      var orderedActors = _.sortBy(kapi._canvasActors, kapi._drawOrderSorter);
+      drawOrder = _.pluck(orderedActors, 'id');
+    } else {
+      drawOrder = kapi._drawOrder;
+    }
+
+    var currentActor, canvas_context;
+
+    var i;
+    for (i = 0; i < len; i++) {
+      currentActor = kapi._canvasActors[drawOrder[i]];
+      canvas_context = currentActor.context();
+      currentActor.draw(canvas_context, currentActor.get());
+    }
+    fireEvent(kapi, 'afterDraw', _);
+
+    return kapi;
+  }
+
+
+  function addActor (kapi, actor) {
+    if (actor instanceof gk.CanvasActor) {
+      kapi._drawOrder.push(actor.id);
+      kapi._canvasActors[actor.id] = actor;
+    }
+  }
+
+
+  function removeActor (kapi, actor) {
+    if (actor instanceof gk.CanvasActor) {
+      kapi._drawOrder = _.without(kapi._drawOrder, actor.id);
+      delete kapi._canvasActors[actor.id];
     }
   }
 
@@ -39,7 +85,15 @@ var rekapiCanvasContext = function (context, _) {
       return;
     }
 
+    this._drawOrder = [];
+    this._drawOrderSorter = null;
+    this._canvasActors = {};
     this.config.clearOnUpdate = true;
+
+    _.extend(this._events, {
+      'beforeDraw': []
+      ,'afterDraw': []
+    });
 
     _.each(['Height', 'Width'], function (dimension) {
       var dimensionLower = dimension.toLowerCase();
@@ -49,7 +103,10 @@ var rekapiCanvasContext = function (context, _) {
       }
     }, this);
 
-    this.on('beforeDraw', _.bind(beforeDraw, this));
+    this.on('afterUpdate', draw);
+    this.on('addActor', addActor);
+    this.on('removeActor', removeActor);
+    this.on('beforeDraw', beforeDraw);
   };
 
 
@@ -87,6 +144,70 @@ var rekapiCanvasContext = function (context, _) {
    */
   gk.prototype.canvasContext = function () {
     return this.context.getContext('2d');
+  };
+
+
+  /**
+   * @return {Kapi}
+   */
+  gk.prototype.redraw = function () {
+    draw(this);
+
+    return this;
+  };
+
+
+  /**
+   * @param {Kapi.Actor} actor
+   * @param {number} layer
+   * @return {Kapi.Actor|undefined}
+   */
+  gk.prototype.moveActorToLayer = function (actor, layer) {
+    if (layer < this._drawOrder.length) {
+      this._drawOrder = _.without(this._drawOrder, actor.id);
+      this._drawOrder.splice(layer, 0, actor.id);
+
+      return actor;
+    }
+
+    return;
+  };
+
+
+  /**
+   * @param {function(Kapi.Actor, number)} sortFunction
+   * @return {Kapi}
+   */
+  gk.prototype.setOrderFunction = function (sortFunction) {
+    this._drawOrderSorter = sortFunction;
+    return this;
+  };
+
+
+  /**
+   * @return {Kapi}
+   */
+  gk.prototype.unsetOrderFunction = function () {
+    this._drawOrderSorter = null;
+    return this;
+  };
+
+
+  /**
+   * @return {Object}
+   */
+  gk.prototype.exportTimeline = function () {
+    var exportData = {
+      'duration': this._animationLength
+      ,'actorOrder': this._drawOrder.slice(0)
+      ,'actors': {}
+    };
+
+    _.each(this._drawOrder, function (actorId) {
+      exportData.actors[actorId] = this._actors[actorId].exportTimeline();
+    }, this);
+
+    return exportData;
   };
 
 };

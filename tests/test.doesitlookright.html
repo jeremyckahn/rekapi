@@ -25,7 +25,7 @@
     var actor;
 
     actor = new Kapi.CanvasActor({
-      'render': function (canvas_context, state) {
+      'draw': function (canvas_context, state) {
         if (isNaN(state.x)) {
           return;
         }

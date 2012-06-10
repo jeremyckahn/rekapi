@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Rekapi example</title>
+    <script src="../../dist/underscore.js"></script>
+    <script src="../../dist/shifty.js"></script>
+    <script src="../../dist/rekapi.js"></script>
+  </head>
+  <body>
+    <script>
+      var kapi = new Kapi();
+      
+      var position = {
+        x: 0,
+        y: 0
+      };
+
+      var actor = new Kapi.Actor({
+        'context': position,
+        'update': function(context, state) {
+          context.x = state.x,
+          context.y = state.y
+        }
+      });
+
+      kapi.addActor(actor);
+      actor
+        .keyframe(0,    { x: 50,  y: 50 })
+        .keyframe(1000, { x: 200, y: 150 });
+
+      console.log("position: " + position.x + ", " + position.y);
+
+      // This updates the state of `position` at 500 millisecond in the animation.
+      // This method is also used for the canvas extension (see docs/examples/draw.html)
+      kapi.update(500);
+      
+      console.log("position: " + position.x + ", " + position.y);
+    </script>
+  </body>
+</html>

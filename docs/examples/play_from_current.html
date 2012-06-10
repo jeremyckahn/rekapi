@@ -18,7 +18,7 @@
       });
 
       var actor = new Kapi.CanvasActor({
-        'render': function (canvas_context, state) {
+        'draw': function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
               state.x || 0,
@@ -41,7 +41,7 @@
         .keyframe(1000, { x: 200, y: 150 });
 
       // Show the animation at 500 milliseconds...
-      kapi.render(500);
+      kapi.update(500);
 
       setTimeout(function () {
         // ... and then play twice from there.
