@@ -65,7 +65,7 @@ var rekapiCanvasContext = function (context, _) {
 
 
   function addActor (kapi, actor) {
-    if (actor instanceof Kapi.CanvasActor) {
+    if (actor instanceof gk.CanvasActor) {
       kapi._drawOrder.push(actor.id);
       kapi._canvasActors[actor.id] = actor;
     }
@@ -73,7 +73,7 @@ var rekapiCanvasContext = function (context, _) {
 
 
   function removeActor (kapi, actor) {
-    if (actor instanceof Kapi.CanvasActor) {
+    if (actor instanceof gk.CanvasActor) {
       kapi._drawOrder = _.without(kapi._drawOrder, actor.id);
       delete kapi._canvasActors[actor.id];
     }
