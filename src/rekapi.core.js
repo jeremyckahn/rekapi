@@ -98,7 +98,7 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
-   * Calculate the position and state for a given millisecond and render it.
+   * Calculate the position and state for a given millisecond.
    * Also updates the state internally and accounts for how many loop
    * iterations the animation runs for.
    * @param {Kapi} kapi
@@ -115,7 +115,7 @@ var rekapiCore = function (context, _, Tweenable) {
 
   /**
    * Calculate how far in the animation loop `kapi` is, in milliseconds, and
-   * render based on that time.
+   * update based on that time.
    * @param {Kapi} kapi
    */
   function renderCurrentMillisecond (kapi) {
@@ -124,7 +124,7 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
-   * This is the heartbeat of an animation.  Renders a frame and then calls
+   * This is the heartbeat of an animation.  Updates the state and then calls
    * itself based on the framerate of the supplied Kapi.
    * @param {Kapi} kapi
    */
