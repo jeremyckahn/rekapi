@@ -14,8 +14,14 @@ Kapi (opt_config)
 
 Create a `Kapi` instance.  Valid  properties of `opt_config`:
 
-* __fps__: The frames per second at which the animation updates.  The default value is 30.
-* __context__: The context that the animation will run in.  Can be any type of `Object`; gets used by the renderer and inherited by the `Kapi.Actor`s as they are added to the animation.  This isn't always needed, it usually just applies to `<canvas>` animations.  See the documenation on the [`<canvas>` extension](https://github.com/jeremyckahn/rekapi/tree/master/ext/canvas) for more info.
+  * __fps__: The frames per second at which the animation updates.  The default
+  value is 30.
+  * __context__: The context that the animation will run in.  Can be any type
+  of `Object`; gets used by the renderer and inherited by the `Kapi.Actor`s as
+  they are added to the animation.  This isn't always needed, it usually just
+  applies to `<canvas>` animations.  See the documenation on the
+  [`<canvas>` extension](https://github.com/jeremyckahn/rekapi/tree/master/ext/canvas)
+  for more info.
 
 __[Example](examples/kapi.html)__
 
@@ -45,7 +51,8 @@ __[Example](examples/add_actor.html)__
 Kapi.prototype.getActor (actorId)
 ````
 
-Retrieve an `Actor` from the `Kapi` instance by its ID.  All `Actor`'s have an `id` property.
+Retrieve an `Actor` from the `Kapi` instance by its ID.  All `Actor`'s have an
+`id` property.
 
 __[Example](examples/get_actor.html)__
 
@@ -59,7 +66,8 @@ __[Example](examples/get_actor.html)__
 Kapi.prototype.getAllActors ()
 ````
 
-Retrieve all `Actor`s in a `Kapi` instance as an Object.  Actor IDs correspond to the property names of the returned Object.
+Retrieve all `Actor`s in a `Kapi` instance as an Object.  Actor IDs correspond
+to the property names of the returned Object.
 
 __[Example](examples/get_all_actors.html)__
 
@@ -88,7 +96,8 @@ __[Example](examples/get_actor_ids.html)__
 Kapi.prototype.removeActor (actor)
 ````
 
-Remove `actor` from the animation.  This does not destroy `actor`, it only removes the link between `actor` and the `Kapi` instance.
+Remove `actor` from the animation.  This does not destroy `actor`, it only
+removes the link between `actor` and the `Kapi` instance.
 
 __[Example](examples/remove_actor.html)__
 
@@ -127,10 +136,11 @@ __[Example](examples/animation_length.html)__
 /**
  * @returns {number}
  */
-Kapi.prototype.lastPositionRendered ()
+Kapi.prototype.lastPositionUpdated ()
 ````
 
-Return the normalized (between 0 and 1) timeline position that was last rendered.
+Return the normalized (between 0 and 1) timeline position that was last
+calculated.
 
 __[Example](examples/last_position_rendered.html)__
 
@@ -159,7 +169,8 @@ __[Example](examples/actor_count.html)__
 Kapi.prototype.framerate (opt_newFramerate)
 ````
 
-Get and optionally set the framerate of the animation.  There's generally no point in going above 60.
+Get and optionally set the framerate of the animation.  There's generally no
+point in going above 60.
 
 __[Example](examples/framerate.html)__
 
@@ -171,26 +182,14 @@ __[Example](examples/framerate.html)__
  * @param {number} millisecond
  * @returns {Kapi}
  */
-Kapi.prototype.render (millisecond)
+Kapi.prototype.update (millisecond)
 ````
 
-Calculate the positions for all `Actor`s at `millisecond`, and then render them.  You can define any millisecond in the animation to render, so long as it is less than the length of the animation (see `animationLength`).
+Calculate the positions for all `Actor`s at `millisecond`.  You can define any
+millisecond in the animation to update to, so long as it is less than the
+length of the animation (see `animationLength`).
 
 __[Example](examples/render.html)__
-
-
-### redraw
-
-````javascript
-/**
- * @returns {Kapi}
- */
-Kapi.prototype.redraw ()
-````
-
-Re-`render()` the last frame that was `render()`ed.
-
-__[Example](examples/redraw.html)__
 
 
 ### calculateActorPositions
@@ -219,22 +218,6 @@ Kapi.prototype.exportTimeline ()
 Export a reference-less dump of this Kapi's animation properties and Actors.
 
 __[Example](examples/export_timeline.html)__
-
-
-### moveActorToLayer
-
-````javascript
-/**
- * @param {Kapi.Actor} actor
- * @param {number} layer
- * @returns {Kapi|undefined}
- */
-Kapi.prototype.moveActorToLayer (actor, layer)
-````
-
-Move an `Actor` around in the layer list.  Each layer has one `Actor`, and `Actor`s are drawn in order of their layer.  Lower layers (starting with 0) are drawn earlier.  If `layer` is higher than the number of layers (which can be found with `actorCount()`) or lower than 0, this method will return `undefined`.
-
-__[Example](examples/move_actor_to_layer.html)__
 
 
 ### bind
@@ -272,41 +255,8 @@ __[Example](examples/bind.html)__
 Kapi.prototype.off (eventName, opt_handler)
 ````
 
-Unbind `opt_handler` from a Kapi event.  If `opt_handler` is omitted, all handler functions bound to `eventName` are unbound.  Valid events correspond to the list under `bind()`.
+Unbind `opt_handler` from a Kapi event.  If `opt_handler` is omitted, all
+handler functions bound to `eventName` are unbound.  Valid events correspond to
+the list under `bind()`.
 
 __[Example](examples/unbind.html)__
-
-
-### setOrderFunction
-
-````javascript
-/**
- * @param {function(Kapi.Actor, number)} sortFunction
- * @return {Kapi}
- */
-Kapi.prototype.setOrderFunction (sortFunction)
-````
-
-Set a function that defines the draw order of the `Actor`s.  This is called each frame before the `Actor`s are drawn.  The following example assumes that all `Actor`s are circles that have a `radius` property.  The circles will be drawn in order of the value of their `radius`, from smallest to largest.  This has the effect of layering larger circles on top of smaller circles, giving a sense of perspective.
-
-````javascript
-kapi.setOrderFunction(function (actor) {
-  return actor.get().radius;
-});
-````
-
-__[Example](examples/set_order_function.html)__
-
-
-### unsetOrderFunction
-
-````javascript
-/**
- * @return {Kapi}
- */
-Kapi.prototype.unsetOrderFunction ()
-````
-
-Remove the sort order function set by `setOrderFunction`.  Draw order defaults back to the order in which `Actors` were added.
-
-__[Example](examples/unset_order_function.html)__

@@ -315,7 +315,7 @@ var rekapiCore = function (context, _, Tweenable) {
       this._actors[actor.id] = actor;
       this._recalculateAnimationLength();
       actor.setup();
-      
+
       fireEvent(this, 'addActor', _, actor);
     }
 
@@ -357,7 +357,7 @@ var rekapiCore = function (context, _, Tweenable) {
     delete actor.kapi;
     actor.teardown();
     this._recalculateAnimationLength();
-    
+
     fireEvent(this, 'removeActor', _, actor);
 
     return this;

@@ -30,9 +30,9 @@ Kapi.prototype.canvasContext ()
 ````
 
 Return the 2d context of the `<canvas>`.  This is needed for any and all cavnas
-rendering operations - it is also provided to an `Actor`'s `render` method.  See
-the [MDN](https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas) for
-more info on the `<canvas>` context.
+rendering operations - it is also provided to an `Actor`'s `render` method.
+See the [MDN](https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas)
+for more info on the `<canvas>` context.
 
 
 ### canvasHeight, canvasWidth
@@ -64,3 +64,78 @@ Kapi.prototype.canvasClear ()
 ````
 
 Erase the canvas.
+
+
+### redraw
+
+````javascript
+/**
+ * @returns {Kapi}
+ */
+Kapi.prototype.redraw ()
+````
+
+Re-`render()` the last frame that was `render()`ed.
+
+__[Example](examples/redraw.html)__
+
+
+### moveActorToLayer
+
+````javascript
+/**
+ * @param {Kapi.Actor} actor
+ * @param {number} layer
+ * @returns {Kapi|undefined}
+ */
+Kapi.prototype.moveActorToLayer (actor, layer)
+````
+
+Move an `Actor` around in the layer list.  Each layer has one `Actor`, and
+`Actor`s are drawn in order of their layer.  Lower layers (starting with 0) are
+drawn earlier.  If `layer` is higher than the number of layers (which can be
+found with `actorCount()`) or lower than 0, this method will return
+`undefined`.
+
+__[Example](examples/move_actor_to_layer.html)__
+
+
+### setOrderFunction
+
+````javascript
+/**
+ * @param {function(Kapi.Actor, number)} sortFunction
+ * @return {Kapi}
+ */
+Kapi.prototype.setOrderFunction (sortFunction)
+````
+
+Set a function that defines the draw order of the `Actor`s.  This is called
+each frame before the `Actor`s are drawn.  The following example assumes that
+all `Actor`s are circles that have a `radius` property.  The circles will be
+drawn in order of the value of their `radius`, from smallest to largest.  This
+has the effect of layering larger circles on top of smaller circles, giving a
+sense of perspective.
+
+````javascript
+kapi.setOrderFunction(function (actor) {
+  return actor.get().radius;
+});
+````
+
+__[Example](examples/set_order_function.html)__
+
+
+### unsetOrderFunction
+
+````javascript
+/**
+ * @return {Kapi}
+ */
+Kapi.prototype.unsetOrderFunction ()
+````
+
+Remove the sort order function set by `setOrderFunction`.  Draw order defaults
+back to the order in which `Actors` were added.
+
+__[Example](examples/unset_order_function.html)__
