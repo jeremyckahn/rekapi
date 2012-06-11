@@ -233,13 +233,16 @@ Kapi.prototype.on (eventName, handler)
 
 Bind an handler function to a Kapi event.  Possible events include:
 
-* __beforeDraw__: Fires each frame before Actors are rendered.
-* __frameRender__: Fires when a frame is rendered.
-* __animationComplete__: Fires when all loops have finished.
-* __playStateChange__: Fires when the animation is played, paused, or stopped.
-* __play__: Fires when the animation is `play()`ed.
-* __pause__: Fires when the animation is `pause()`d.
-* __stop__: Fires when the animation is `stop()`ped.
+  * __animationComplete__: Fires when all animations loops have completed.
+  * __playStateChange__: Fires when the animation is played, paused, or
+  stopped.
+  * __play__: Fires when the animation is `play()`ed.
+  * __pause__: Fires when the animation is `pause()`d.
+  * __stop__: Fires when the animation is `stop()`ped.
+  * __beforeUpdate__: Fires each frame before all Actors are updated.
+  * __afterUpdate__: Fires each frame after all Actors are updated.
+  * __addActor__: Fires when an Actor is added.
+  * __removeActor__: Fires when an Actor is removed.
 
 __[Example](examples/bind.html)__
 
