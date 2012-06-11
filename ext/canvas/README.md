@@ -1,3 +1,5 @@
+You can use Rekapi to render to `<canvas>`.
+
 # Kapi method additions
 
 
@@ -39,7 +41,7 @@ Kapi.prototype.unsetOrderFunction ()
 Remove the sort order function set by `setOrderFunction`.  Draw order defaults
 back to the order in which `Actors` were added.
 
-__[Example](examples/unset_order_function.html)__
+__[Example](../../docs/examples/unset_order_function.html)__
 
 
 ### canvasContext
@@ -99,7 +101,7 @@ Kapi.prototype.redraw ()
 
 Re-`render()` the last frame that was `render()`ed.
 
-__[Example](examples/redraw.html)__
+__[Example](../../docs/examples/redraw.html)__
 
 
 ### moveActorToLayer
@@ -119,15 +121,13 @@ drawn earlier.  If `layer` is higher than the number of layers (which can be
 found with `actorCount()`) or lower than 0, this method will return
 `undefined`.
 
-__[Example](examples/move_actor_to_layer.html)__
+__[Example](../../docs/examples/move_actor_to_layer.html)__
 
 
 ===
 
 
 # Kapi.CanvasActor
-
-You can use Rekapi to render to `<canvas>`.
 
 ````javascript
 /**
