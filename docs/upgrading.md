@@ -1,3 +1,22 @@
+# Upgrading to Rekapi 0.9.0
+
+Version 0.8.x had lots of API changes, but 0.9.x should be much more stable.
+However, there are some differences from older versions.
+
+  * `Kapi.Actor` receives the `update` constructor parameter to specify the
+  function that processes the per-frame state data; the analagous parameter for
+  `Kapi.CanvasActor` is now `draw`.  `Kapi.DOMActor` doesn't need any such
+  parameter.
+  * Methods moved from core to the Canvas extension:
+    * actor.moveToLayer
+    * kapi.redraw
+    * kapi.moveActorToLayer
+    * kapi.setOrderFunction
+    * kapi.unsetOrderFunction
+  * Method name changes
+    * kapi.render -> kapi.update
+    * kapi.lastPositionUpdated -> kapi.lastPositionUpdated
+
 # Upgrading to Rekapi 0.8.17
 
 Renamed `bind` to `on` and `unbind` to `off`.
