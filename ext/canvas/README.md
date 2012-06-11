@@ -24,7 +24,7 @@ kapi.setOrderFunction(function (actor) {
 });
 ````
 
-__[Example](examples/set_order_function.html)__
+__[Example](../../docs/examples/set_order_function.html)__
 
 
 ### unsetOrderFunction
