@@ -139,3 +139,20 @@ Remove the sort order function set by `setOrderFunction`.  Draw order defaults
 back to the order in which `Actors` were added.
 
 __[Example](examples/unset_order_function.html)__
+
+
+## Actor methods
+
+
+### moveToLayer
+
+````javascript
+/**
+ * @param {number} layer
+ * @returns {Kapi.Actor|undefined}
+ */
+Kapi.Actor.prototype.moveToLayer (layer)
+````
+
+Move this `Actor` to a different layer in the `Kapi` instance that it belongs
+to.  This returns `undefined` if the operation was unsuccessful

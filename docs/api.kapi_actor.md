@@ -16,17 +16,16 @@ Create a `Kapi.Actor` instance.
 
 Valid properties of `opt_config` (you can omit the ones you don't need):
 
-* __context__: The context that this Actor gets rendered to.  If omitted, this
-Actor gets the `Kapi` instance's rendering context when it is added to an
-animation.
-* __setup__: A function that gets called when the `Actor` is added to a `Kapi`
-instance (with `addActor()`).
-* __render__: A function that gets called every frame that the actor is
-rendered in.  It receives two parameters:  A reference to a `<canvas>` context,
-and an Object containing the current state properties.  _This method should
-render the state properties to the screen with the `<canvas>` context._
-* __teardown__: A function that gets called when the `Actor` is removed from
-the animation (with `removeActor()`).
+  * __context__: The context that this Actor gets rendered to.  If omitted,
+  this Actor gets the `Kapi` instance's rendering context when it is added to
+  an animation.
+  * __setup__: A function that gets called when the `Actor` is added to a
+  `Kapi` instance (with `addActor()`).
+  * __update__: A function that gets called every frame that the actor is
+  rendered in.  It receives two parameters:  A reference to a `<canvas>`
+  context, and an Object containing the current state properties.
+  * __teardown__: A function that gets called when the `Actor` is removed from
+  the animation (with `removeActor()`).
 
 `Kapi.Actor` does _not_ render to any context.  It is a base class.  Use the
 [`Kapi.CanvasActor`](../ext/canvas) [`Kapi.DOMActor`](../ext/dom) subclasses to
@@ -320,22 +319,7 @@ Kapi.Actor.prototype.getLength ()
 
 ````
 
-Get the length of time in milliseconds that an `Actor` animates for (`getEnd()`
-- `getStart()`).
-
-
-### moveToLayer
-
-````javascript
-/**
- * @param {number} layer
- * @returns {Kapi.Actor|undefined}
- */
-Kapi.Actor.prototype.moveToLayer (layer)
-````
-
-Move this `Actor` to a different layer in the `Kapi` instance that it belongs
-to.  This returns `undefined` if the operation was unsuccessful
+Get the length of time in milliseconds that an `Actor` animates for.
 
 
 ### calculatePosition
