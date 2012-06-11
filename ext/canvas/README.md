@@ -3,6 +3,14 @@ You can use Rekapi to render to `<canvas>`.
 # Kapi method additions
 
 
+### Events
+
+This extension adds some new events you can bind to with `Kapi.on`.
+
+  * __beforeDraw__: Fires just before an actor is drawn to the screen.
+  * __afterDraw__: Fires just after an actor is drawn to the screen.
+
+
 ### setOrderFunction
 
 ````javascript
