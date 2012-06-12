@@ -15,7 +15,7 @@ However, there are some differences from older versions.
     * kapi.unsetOrderFunction
   * Method name changes
     * kapi.render -> kapi.update
-    * kapi.lastPositionUpdated -> kapi.lastPositionUpdated
+    * kapi.lastPositionRendered -> kapi.lastPositionUpdated
 
 # Upgrading to Rekapi 0.8.17
 

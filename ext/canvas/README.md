@@ -15,18 +15,18 @@ This extension adds some new events you can bind to with `Kapi.on`.
 
 ````javascript
 /**
- * @param {function(Kapi.Actor, number)} sortFunction
+ * @param {function(Kapi.CanvasActor, number)} sortFunction
  * @return {Kapi}
  */
 Kapi.prototype.setOrderFunction (sortFunction)
 ````
 
-Set a function that defines the draw order of the `Actor`s.  This is called
-each frame before the `Actor`s are drawn.  The following example assumes that
-all `Actor`s are circles that have a `radius` property.  The circles will be
-drawn in order of the value of their `radius`, from smallest to largest.  This
-has the effect of layering larger circles on top of smaller circles, giving a
-sense of perspective.
+Set a function that defines the draw order of the `CanvasActor`s.  This is
+called each frame before the `CanvasActor`s are drawn.  The following example
+assumes that all `CanvasActor`s are circles that have a `radius` property.  The
+circles will be drawn in order of the value of their `radius`, from smallest to
+largest.  This has the effect of layering larger circles on top of smaller
+circles, giving a sense of perspective.
 
 ````javascript
 kapi.setOrderFunction(function (actor) {
@@ -47,7 +47,7 @@ Kapi.prototype.unsetOrderFunction ()
 ````
 
 Remove the sort order function set by `setOrderFunction`.  Draw order defaults
-back to the order in which `Actors` were added.
+back to the order in which `CanvasActors` were added.
 
 __[Example](../../docs/examples/unset_order_function.html)__
 
@@ -61,10 +61,11 @@ __[Example](../../docs/examples/unset_order_function.html)__
 Kapi.prototype.canvasContext ()
 ````
 
-Return the 2d context of the `<canvas>`.  This is needed for any and all cavnas
-rendering operations - it is also provided to an `Actor`'s `render` method.
-See the [MDN](https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas)
-for more info on the `<canvas>` context.
+Return the 2d context of the `<canvas>`.  This is needed for any and all canvas
+rendering operations - it is also provided to a `CanvasActor`'s `render`
+method.  See the
+[MDN](https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas) for more
+info on the `<canvas>` context.
 
 
 ### canvasHeight, canvasWidth
@@ -123,11 +124,11 @@ __[Example](../../docs/examples/redraw.html)__
 Kapi.prototype.moveActorToLayer (actor, layer)
 ````
 
-Move an `Actor` around in the layer list.  Each layer has one `Actor`, and
-`Actor`s are drawn in order of their layer.  Lower layers (starting with 0) are
-drawn earlier.  If `layer` is higher than the number of layers (which can be
-found with `actorCount()`) or lower than 0, this method will return
-`undefined`.
+Move a `CanvasActor` around in the layer list.  Each layer has one
+`CanvasActor`, and `CanvasActor`s are drawn in order of their layer.  Lower
+layers (starting with 0) are drawn earlier.  If `layer` is higher than the
+number of layers (which can be found with `actorCount()`) or lower than 0, this
+method will return `undefined`.
 
 __[Example](../../docs/examples/move_actor_to_layer.html)__
 
@@ -166,5 +167,5 @@ This extension also adds the following methods to the `Kapi` prototype:
 Kapi.CanvasActor.prototype.moveToLayer (layer)
 ````
 
-Move this `Actor` to a different layer in the `Kapi` instance that it belongs
+Move this `CanvasActor` to a different layer in the `Kapi` instance that it belongs
 to.  This returns `undefined` if the operation was unsuccessful
