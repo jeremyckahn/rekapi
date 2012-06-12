@@ -1,11 +1,14 @@
-/*jslint browser: true, nomen: true, plusplus: true, undef: true, sloppy: true, vars: true, white: true */
+/*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
  * Rekapi - Rewritten Kapi. v0.9.0
- *   By Jeremy Kahn - jeremyckahn@gmail.com
- *   https://github.com/jeremyckahn/rekapi
+ * https://github.com/jeremyckahn/rekapi
+ *
+ * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
+ *   Franck Lecollinet
  *
  * Make fun keyframe animations with JavaScript.
- * Dependencies: Underscore.js (https://github.com/documentcloud/underscore), Shifty.js (https://github.com/jeremyckahn/shifty)
+ * Dependencies: Underscore.js (https://github.com/documentcloud/underscore),
+ *   Shifty.js (https://github.com/jeremyckahn/shifty).
  * MIT Lincense.  This code free to use, modify, distribute and enjoy.
  */
 ;(function(global) {
@@ -327,7 +330,7 @@ var rekapiCore = function (context, _, Tweenable) {
       this._actors[actor.id] = actor;
       this._recalculateAnimationLength();
       actor.setup();
-      
+
       fireEvent(this, 'addActor', _, actor);
     }
 
@@ -369,7 +372,7 @@ var rekapiCore = function (context, _, Tweenable) {
     delete actor.kapi;
     actor.teardown();
     this._recalculateAnimationLength();
-    
+
     fireEvent(this, 'removeActor', _, actor);
 
     return this;
@@ -1047,6 +1050,30 @@ var rekapiActor = function (context, _, Tweenable) {
   };
 
 
+  /*
+   * Determines if an actor has a keyframe set at a given millisecond.
+   * Can optionally look for an existing keyframe on a single property track.
+   *
+   * @param {number} when Millisecond
+   * @param {string} opt_trackName Optional name of a property track
+   * @return {boolean}
+   */
+  Actor.prototype.hasKeyframeAt = function(when, opt_trackName) {
+    var tracks = this._propertyTracks;
+
+    if (opt_trackName) {
+      if (!_.has(tracks, opt_trackName)) {
+        return false;
+      }
+      tracks = _.pick(tracks, opt_trackName);
+    }
+
+    return _.find(tracks, function (propertyTrack, trackName) {
+      return findPropertyAtMillisecondInTrack(this, trackName, when) !== undefined;
+    }, this) !== undefined;
+  };
+
+
   /**
    * @param {number} when
    * @param {Object} stateModification
@@ -1068,7 +1095,6 @@ var rekapiActor = function (context, _, Tweenable) {
         });
       }
     }, this);
-
 
     return this;
   };
@@ -1918,7 +1944,7 @@ if (typeof define === 'function' && define.amd) {
       Kapi.underscore_version = deps.underscore.VERSION;
     }
 
-    if (!underscoreAlreadyInUse) {
+    if (!underscoreAlreadyInUse && underscoreSupportsAMD) {
       // Prevent Underscore from polluting the global scope.
       // This global can be safely removed since Rekapi keeps its own reference
       // to Underscore via the `deps` object passed earlier as an argument.

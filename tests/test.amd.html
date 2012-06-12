@@ -96,7 +96,10 @@
 
         ok(window.Kapi === undefined);
         ok(window.Tweenable === undefined);
-        ok(window._ === undefined);
+
+        // The loaded version of Underscore does not support AMD, so it will
+        // be global.
+        ok(window._ !== undefined);
         start();
       });
     });
@@ -129,8 +132,8 @@
 
         var k = new Kapi({});
         ok(k !== undefined);
-        // Make sure that Rekapi has cleaned up the Underscore global.
-        ok(window._ === undefined);
+        // Make sure that Rekapi did not touch the global _ property.
+        ok(window._ !== undefined);
         start();
       });
     });
