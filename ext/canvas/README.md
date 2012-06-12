@@ -62,7 +62,7 @@ Kapi.prototype.canvasContext ()
 ````
 
 Return the 2d context of the `<canvas>`.  This is needed for any and all canvas
-rendering operations - it is also provided to a `CanvasActor`'s `render`
+rendering operations - it is also provided to a `CanvasActor`'s `draw`
 method.  See the
 [MDN](https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas) for more
 info on the `<canvas>` context.
