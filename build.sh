@@ -4,14 +4,17 @@
 # $: sh build.sh version_number [local_path_to_compiler]
 
 echo \
-"/*jslint browser: true, nomen: true, plusplus: true, undef: true, sloppy: true, vars: true, white: true */
+"/*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
  * Rekapi - Rewritten Kapi. v${1}
- *   By Jeremy Kahn - jeremyckahn@gmail.com
- *   https://github.com/jeremyckahn/rekapi
+ * https://github.com/jeremyckahn/rekapi
+ *
+ * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
+ *   Franck Lecollinet
  *
  * Make fun keyframe animations with JavaScript.
- * Dependencies: Underscore.js (https://github.com/documentcloud/underscore), Shifty.js (https://github.com/jeremyckahn/shifty)
+ * Dependencies: Underscore.js (https://github.com/documentcloud/underscore),
+ *   Shifty.js (https://github.com/jeremyckahn/shifty).
  * MIT Lincense.  This code free to use, modify, distribute and enjoy.
  */" | cat > /tmp/rekapi.header.js
 
