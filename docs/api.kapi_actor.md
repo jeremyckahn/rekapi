@@ -16,14 +16,14 @@ Create a `Kapi.Actor` instance.
 
 Valid properties of `opt_config` (you can omit the ones you don't need):
 
-  * __context__: The context that this Actor gets rendered to.  If omitted,
-  this Actor gets the `Kapi` instance's rendering context when it is added to
-  an animation.
+  * __context__: The context that this Actor is associated with. If omitted,
+  this Actor gets the `Kapi` instance's context when it is added to an
+  animation.
   * __setup__: A function that gets called when the `Actor` is added to a
   `Kapi` instance (with `addActor()`).
-  * __update__: A function that gets called every frame that the actor is
-  rendered in.  It receives two parameters:  A reference to a `<canvas>`
-  context, and an Object containing the current state properties.
+  * __update__: A function that gets called every time that the `Actor`'s state
+  is updated. It receives two parameters: A reference to the `Actor`'s context
+  and an Object containing the current state properties.
   * __teardown__: A function that gets called when the `Actor` is removed from
   the animation (with `removeActor()`).
 
