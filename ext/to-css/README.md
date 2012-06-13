@@ -43,20 +43,24 @@ For a working example of this method, take a look at the source for `ext/to-css/
 
 ### .toCSS() options
 
-You can specify some parameters for your CSS animation.  Just supply them in the configuration parameter when calling `.toCSS()`:
+You can specify some parameters for your CSS animation.  They are all optional.  Just supply them in the configuration parameter when calling `.toCSS()`:
 
 ````javascript
 /**
  * @param {Object} options
+ *   @param {Array} vendors
+ *   @param {number} granularity
+ *   @param {string} name
  * @return {string}
  */
 animation.toCSS(options);
 ````
 
-  * vendors: __Array of strings__.  Defaults to `['w3']`.  The browser vendors you want this CSS to support. Valid values are:
+  * vendors: Defaults to `['w3']`.  The browser vendors you want this CSS to support. Valid values are:
     * `'microsoft'`
     * `'mozilla'`
     * `'opera'`
     * `'w3'`
     * `'webkit'`
-  * granularity: __Number__.  Defaults to `100`.  Defines the "resolution" of an exported animation.  CSS `@keyframes` are comprised of a series of explicitly defined steps, and more steps will result in a smoother animation.  More steps will also result in overhead in regards to the size of the CSS string generated, and also processing time to generate the string.
+  * granularity: Defaults to `100`.  Defines the "resolution" of an exported animation.  CSS `@keyframes` are comprised of a series of explicitly defined steps, and more steps will result in a smoother animation.  More steps will also result in overhead in regards to the size of the CSS string generated, and also processing time to generate the string.
+  * name: Define a custom name for your animation.  This becomes the class name targeted in the generated CSS selector, and also the name of the `@keyframes` rule that is generated.  Note that this does not match the CSS class that is automatically added to the `Kapi.DOMActor` DOM element, so you will have to add that yourself.

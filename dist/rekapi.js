@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.9.0
+ * Rekapi - Rewritten Kapi. v0.9.1
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -1708,12 +1708,13 @@ var rekapiToCSS = function (context, _) {
   context.Kapi.Actor.prototype.toCSS = function (opts) {
     opts = opts || {};
     var actorCSS = [];
+    var animName = opts.name || this.getCSSName();
     var granularity = opts.granularity || DEFAULT_GRANULARITY;
-    var actorClass = generateCSSClass(this, opts.vendors);
+    var actorClass = generateCSSClass(this, opts.vendors, animName);
     actorCSS.push(actorClass);
     var keyframes = generateActorKeyframes(this, granularity);
     var boilerplatedKeyframes = applyVendorBoilerplates(
-        keyframes, this.getCSSName(), opts.vendors);
+        keyframes, animName, opts.vendors);
     actorCSS.push(boilerplatedKeyframes);
 
     return actorCSS.join('\n');
@@ -1828,19 +1829,20 @@ var rekapiToCSS = function (context, _) {
   /**
    * @param {Kapi.Actor} actor
    * @param {[string]} opt_vendors
+   * @param {string} animName
    */
-  function generateCSSClass (actor, opt_vendors) {
+  function generateCSSClass (actor, opt_vendors, animName) {
     opt_vendors = opt_vendors || ['w3'];
     var classAttrs = [];
     var vendorAttrs;
 
     _.each(opt_vendors, function (vendor) {
-      vendorAttrs = generateCSSVendorAttributes(actor, vendor);
+      vendorAttrs = generateCSSVendorAttributes(actor, vendor, animName);
       classAttrs.push(vendorAttrs);
     });
 
     var boilerplatedClass = printf(CLASS_BOILERPLATE
-        ,[actor.getCSSName(), classAttrs.join('\n')]);
+        ,[animName, classAttrs.join('\n')]);
 
     return boilerplatedClass;
   }
@@ -1849,8 +1851,9 @@ var rekapiToCSS = function (context, _) {
   /**
    * @param {Kapi.Actor} actor
    * @param {string} vendor
+   * @param {string} animName
    */
-  function generateCSSVendorAttributes (actor, vendor) {
+  function generateCSSVendorAttributes (actor, vendor, animName) {
     var generatedAttributes = [];
     var prefix = VENDOR_PREFIXES[vendor];
     var start = actor.getStart();
@@ -1861,7 +1864,7 @@ var rekapiToCSS = function (context, _) {
     generatedAttributes.push(duration);
 
     var animationName = printf('  %sanimation-name: %s;'
-        ,[prefix, actor.getCSSName() + '-keyframes']);
+        ,[prefix, animName + '-keyframes']);
     generatedAttributes.push(animationName);
 
     var delay = printf('  %sanimation-delay: %sms;', [prefix, start]);
