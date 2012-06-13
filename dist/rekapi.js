@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.9.3
+ * Rekapi - Rewritten Kapi. v0.9.4
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -794,7 +794,7 @@ var rekapiActor = function (context, _, Tweenable) {
     opt_config = opt_config || {};
 
     // Steal the `Tweenable` constructor.
-    this.constructor.call(this);
+    Tweenable.call(this);
 
     _.extend(this, {
       '_data': {}

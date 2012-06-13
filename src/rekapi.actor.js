@@ -170,7 +170,7 @@ var rekapiActor = function (context, _, Tweenable) {
     opt_config = opt_config || {};
 
     // Steal the `Tweenable` constructor.
-    this.constructor.call(this);
+    Tweenable.call(this);
 
     _.extend(this, {
       '_data': {}
