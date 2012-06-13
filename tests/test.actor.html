@@ -679,7 +679,21 @@
       testActor.keyframe(0, { x: 10 });
 
       equals(testActor.getKeyframeProperty('x', 0).value, 10,
-        'Retrieved the value of the keyframe property that was set');
+        'Retrieved the value of the KeyframeProperty that was set');
+    });
+
+
+    test('KeyframePropererties created with .keyframe can be modified with .modifyKeyframeProperty',
+        function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, { x: 10 });
+      testActor.modifyKeyframeProperty('x', 0, { value: 20 });
+
+      equals(testActor.getKeyframeProperty('x', 0).value, 20,
+        'The KeyframeProperty was modified');
     });
 
   } ());
