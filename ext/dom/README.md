@@ -69,4 +69,4 @@ Kapi.DOMActor.prototype.getCSSName();
 
 This can be useful when used with the `to-css` extension.  You might not ever
 need to use this directly, as the class is attached to an element when you
-create a DOMActor from said element.
+create a `DOMActor` from said element.
