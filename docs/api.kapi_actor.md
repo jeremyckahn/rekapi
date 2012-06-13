@@ -222,6 +222,8 @@ actor.modifyKeyframe(1000, {
 });
 ````
 
+__[Example](examples/actor_modify_keyframe.html)__
+
 
 ### getKeyframeProperty
 
