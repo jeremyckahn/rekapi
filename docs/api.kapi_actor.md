@@ -44,7 +44,7 @@ __[Example](examples/actor.html)__
 Kapi.Actor.prototype.context (opt_context)
 ````
 
-Get and optionally set the `Actor`'s rendering context.
+Get and optionally set the `Actor`'s context.
 
 __[Example](examples/actor_context.html)__
 
