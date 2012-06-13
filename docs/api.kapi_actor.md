@@ -322,14 +322,14 @@ Kapi.Actor.prototype.getLength ()
 Get the length of time in milliseconds that an `Actor` animates for.
 
 
-### calculatePosition
+### updateState
 
 ````javascript
 /**
  * @param {number} millisecond
  * @returns {Kapi.Actor}
  */
-Kapi.Actor.prototype.calculatePosition (millisecond)
+Kapi.Actor.prototype.updateState (millisecond)
 ````
 
 Calculate and set the `Actor`'s position at `millisecond` in the animation.
