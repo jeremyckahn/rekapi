@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.9.2
+ * Rekapi - Rewritten Kapi. v0.9.3
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -627,13 +627,7 @@ var rekapiActor = function (context, _, Tweenable) {
   'use strict';
 
   var DEFAULT_EASING = 'linear';
-  var actorCount = 0;
   var Kapi = context.Kapi;
-
-
-  function getUniqueActorId () {
-    return actorCount++;
-  }
 
 
   /**
@@ -808,7 +802,7 @@ var rekapiActor = function (context, _, Tweenable) {
       ,'_timelinePropertyCaches': {}
       ,'_timelinePropertyCacheIndex': []
       ,'_keyframeProperties': {}
-      ,'id': getUniqueActorId()
+      ,'id': _.uniqueId()
       ,'setup': opt_config.setup || noop
       ,'update': opt_config.update || noop
       ,'teardown': opt_config.teardown || noop
