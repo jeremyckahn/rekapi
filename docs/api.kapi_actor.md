@@ -5,7 +5,7 @@
  * @param {Object=} opt_config
  *   @param {Object=} context
  *   @param {function=} setup
- *   @param {function(Object, Object)=} render
+ *   @param {function(Object, Object)=} update
  *   @param {function=} teardown
  * @constructor
  */

@@ -1,6 +1,6 @@
 You can use Rekapi to render to `<canvas>`.
 
-# Kapi method additions
+# Kapi Object additions
 
 
 ### Events
@@ -9,47 +9,6 @@ This extension adds some new events you can bind to with `Kapi.on`.
 
   * __beforeDraw__: Fires just before an actor is drawn to the screen.
   * __afterDraw__: Fires just after an actor is drawn to the screen.
-
-
-### setOrderFunction
-
-````javascript
-/**
- * @param {function(Kapi.CanvasActor, number)} sortFunction
- * @return {Kapi}
- */
-Kapi.prototype.setOrderFunction (sortFunction)
-````
-
-Set a function that defines the draw order of the `CanvasActor`s.  This is
-called each frame before the `CanvasActor`s are drawn.  The following example
-assumes that all `CanvasActor`s are circles that have a `radius` property.  The
-circles will be drawn in order of the value of their `radius`, from smallest to
-largest.  This has the effect of layering larger circles on top of smaller
-circles, giving a sense of perspective.
-
-````javascript
-kapi.setOrderFunction(function (actor) {
-  return actor.get().radius;
-});
-````
-
-__[Example](../../docs/examples/set_order_function.html)__
-
-
-### unsetOrderFunction
-
-````javascript
-/**
- * @return {Kapi}
- */
-Kapi.prototype.unsetOrderFunction ()
-````
-
-Remove the sort order function set by `setOrderFunction`.  Draw order defaults
-back to the order in which `CanvasActors` were added.
-
-__[Example](../../docs/examples/unset_order_function.html)__
 
 
 ### canvasContext
@@ -113,6 +72,47 @@ Re-`render()` the last frame that was `render()`ed.
 __[Example](../../docs/examples/redraw.html)__
 
 
+### setOrderFunction
+
+````javascript
+/**
+ * @param {function(Kapi.CanvasActor, number)} sortFunction
+ * @return {Kapi}
+ */
+Kapi.prototype.setOrderFunction (sortFunction)
+````
+
+Set a function that defines the draw order of the `CanvasActor`s.  This is
+called each frame before the `CanvasActor`s are drawn.  The following example
+assumes that all `CanvasActor`s are circles that have a `radius` property.  The
+circles will be drawn in order of the value of their `radius`, from smallest to
+largest.  This has the effect of layering larger circles on top of smaller
+circles, giving a sense of perspective.
+
+````javascript
+kapi.setOrderFunction(function (actor) {
+  return actor.get().radius;
+});
+````
+
+__[Example](../../docs/examples/set_order_function.html)__
+
+
+### unsetOrderFunction
+
+````javascript
+/**
+ * @return {Kapi}
+ */
+Kapi.prototype.unsetOrderFunction ()
+````
+
+Remove the sort order function set by `setOrderFunction`.  Draw order defaults
+back to the order in which `CanvasActors` were added.
+
+__[Example](../../docs/examples/unset_order_function.html)__
+
+
 ### moveActorToLayer
 
 ````javascript
@@ -143,7 +143,7 @@ __[Example](../../docs/examples/move_actor_to_layer.html)__
  * @param {Object=} opt_config
  *   @param {Object=} context
  *   @param {function=} setup
- *   @param {function(CanvasRenderingContext2D, Object)=} render
+ *   @param {function(CanvasRenderingContext2D, Object)=} draw
  *   @param {function=} teardown
  * @constructor
  * @extends Kapi.Actor
@@ -153,8 +153,6 @@ Kapi.CanvasActor = function (element)
 
 Note: `context` is inherited from the `Kapi` instance that a `Kapi.CanvasActor`
 is added to if it is not provided to this constructor.
-
-This extension also adds the following methods to the `Kapi` prototype:
 
 
 ### moveToLayer
