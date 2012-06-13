@@ -130,7 +130,7 @@ Return the length of the animation, in milliseconds.
 __[Example](examples/animation_length.html)__
 
 
-### lastPositionRendered
+### lastPositionUpdated
 
 ````javascript
 /**
