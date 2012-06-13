@@ -24,8 +24,8 @@ what this Object does away for you.
 ````javascript
 /**
  * @param {Object} newProperties Contains the new `millisecond`, `easing`, or
- * `value` values to update this KeyframeProperty with.  These correspond to
- * the formal parameters of the KeyframeProperty constructor.
+ *     `value` values to update this KeyframeProperty with.  These correspond
+ *     to the formal parameters of the KeyframeProperty constructor.
  */
 Kapi.KeyframeProperty.prototype.modifyWith (newProperties)
 ````
@@ -38,7 +38,7 @@ Augment a `KeyframeProperty`'s properties.
 ````javascript
 /**
  * @param {KeyframeProperty} nextProperty The KeyframeProperty that immediately
- * follows this one in an animation.
+ *     follows this one in an animation.
  */
 Kapi.KeyframeProperty.prototype.linkToNext (nextProperty)
 ````
@@ -52,7 +52,7 @@ Create the reference to the next KeyframeProperty in an `Actor`'s
 ````javascript
 /**
  * @param {number} millisecond The point in the animation to compute the
- * midpoint of the two KeyframeProperties.
+ *     midpoint of the two KeyframeProperties.
  * @return {number}
  */
 Kapi.KeyframeProperty.prototype.getValueAt (millisecond)
