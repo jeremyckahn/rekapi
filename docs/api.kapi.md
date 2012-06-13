@@ -175,23 +175,6 @@ point in going above 60.
 __[Example](examples/framerate.html)__
 
 
-### render
-
-````javascript
-/**
- * @param {number} millisecond
- * @returns {Kapi}
- */
-Kapi.prototype.update (millisecond)
-````
-
-Calculate the positions for all `Actor`s at `millisecond`.  You can define any
-millisecond in the animation to update to, so long as it is less than the
-length of the animation (see `animationLength`).
-
-__[Example](examples/render.html)__
-
-
 ### update
 
 ````javascript
