@@ -14,9 +14,9 @@ However, there are some differences from older versions.
     * kapi.unsetOrderFunction
     * actor.moveToLayer
   * Methods removed:
-    * kapi.calculateActorPositions
+    * kapi.render
   * Method name changes
-    * kapi.render -> kapi.update
+    * kapi.calculateActorPositions -> kapi.update
     * kapi.lastPositionRendered -> kapi.lastPositionUpdated
     * actor.calculatePosition -> actor.updateState
   * Actor draw ordering functionality was moved to the Canvas extension.

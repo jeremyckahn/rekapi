@@ -192,19 +192,19 @@ length of the animation (see `animationLength`).
 __[Example](examples/render.html)__
 
 
-### calculateActorPositions
+### update
 
 ````javascript
 /**
  * @param {number} millisecond
  * @returns {Kapi}
  */
-Kapi.prototype.calculateActorPositions (millisecond)
+Kapi.prototype.update (millisecond)
 ````
 
-Update the position of all the `Actor`s at `millisecond`, but do not draw them.
+Update the position of all the `Actor`s at `millisecond`.
 
-__[Example](examples/calculate_actor_positions.html)__
+__[Example](examples/update.html)__
 
 
 ### exportTimeline
@@ -220,7 +220,7 @@ Export a reference-less dump of this Kapi's animation properties and Actors.
 __[Example](examples/export_timeline.html)__
 
 
-### bind
+### on
 
 ````javascript
 /**
@@ -247,7 +247,7 @@ Bind an handler function to a Kapi event.  Possible events include:
 __[Example](examples/bind.html)__
 
 
-### unbind
+### off
 
 ````javascript
 /**
