@@ -1306,7 +1306,7 @@ var rekapiCanvasContext = function (context, _) {
 
   'use strict';
 
-  var gk = context.Kapi;
+  var Kapi = context.Kapi;
 
   /**
    * Gets (and optionally sets) height or width on a canvas.
@@ -1369,7 +1369,7 @@ var rekapiCanvasContext = function (context, _) {
 
 
   function addActor (kapi, actor) {
-    if (actor instanceof gk.CanvasActor) {
+    if (actor instanceof Kapi.CanvasActor) {
       kapi._drawOrder.push(actor.id);
       kapi._canvasActors[actor.id] = actor;
     }
@@ -1377,14 +1377,14 @@ var rekapiCanvasContext = function (context, _) {
 
 
   function removeActor (kapi, actor) {
-    if (actor instanceof gk.CanvasActor) {
+    if (actor instanceof Kapi.CanvasActor) {
       kapi._drawOrder = _.without(kapi._drawOrder, actor.id);
       delete kapi._canvasActors[actor.id];
     }
   }
 
 
-  gk.prototype._contextInitHook.canvas = function () {
+  Kapi.prototype._contextInitHook.canvas = function () {
     if (!(this.config.context && this.config.context.nodeName === 'CANVAS')) {
       return;
     }
@@ -1418,7 +1418,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {number} opt_height
    * @return {number}
    */
-  gk.prototype.canvasHeight = function (opt_height) {
+  Kapi.prototype.canvasHeight = function (opt_height) {
     return canvasDimension(this.context, 'height', opt_height);
   };
 
@@ -1427,7 +1427,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {number} opt_width
    * @return {number}
    */
-  gk.prototype.canvasWidth = function (opt_width) {
+  Kapi.prototype.canvasWidth = function (opt_width) {
     return canvasDimension(this.context, 'width', opt_width);
   };
 
@@ -1435,7 +1435,7 @@ var rekapiCanvasContext = function (context, _) {
   /**
    * @return {Kapi}
    */
-  gk.prototype.canvasClear = function () {
+  Kapi.prototype.canvasClear = function () {
     this.canvasContext().clearRect(0, 0, this.canvasWidth(),
         this.canvasHeight());
 
@@ -1446,7 +1446,7 @@ var rekapiCanvasContext = function (context, _) {
   /**
    * @return {CanvasRenderingContext2D}
    */
-  gk.prototype.canvasContext = function () {
+  Kapi.prototype.canvasContext = function () {
     return this.context.getContext('2d');
   };
 
@@ -1454,7 +1454,7 @@ var rekapiCanvasContext = function (context, _) {
   /**
    * @return {Kapi}
    */
-  gk.prototype.redraw = function () {
+  Kapi.prototype.redraw = function () {
     draw(this);
 
     return this;
@@ -1466,7 +1466,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {number} layer
    * @return {Kapi.Actor|undefined}
    */
-  gk.prototype.moveActorToLayer = function (actor, layer) {
+  Kapi.prototype.moveActorToLayer = function (actor, layer) {
     if (layer < this._drawOrder.length) {
       this._drawOrder = _.without(this._drawOrder, actor.id);
       this._drawOrder.splice(layer, 0, actor.id);
@@ -1482,7 +1482,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {function(Kapi.Actor, number)} sortFunction
    * @return {Kapi}
    */
-  gk.prototype.setOrderFunction = function (sortFunction) {
+  Kapi.prototype.setOrderFunction = function (sortFunction) {
     this._drawOrderSorter = sortFunction;
     return this;
   };
@@ -1491,7 +1491,7 @@ var rekapiCanvasContext = function (context, _) {
   /**
    * @return {Kapi}
    */
-  gk.prototype.unsetOrderFunction = function () {
+  Kapi.prototype.unsetOrderFunction = function () {
     this._drawOrderSorter = null;
     return this;
   };
@@ -1500,7 +1500,7 @@ var rekapiCanvasContext = function (context, _) {
   /**
    * @return {Object}
    */
-  gk.prototype.exportTimeline = function () {
+  Kapi.prototype.exportTimeline = function () {
     var exportData = {
       'duration': this._animationLength
       ,'actorOrder': this._drawOrder.slice(0)
