@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.9.1
+ * Rekapi - Rewritten Kapi. v0.9.2
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -1385,10 +1385,6 @@ var rekapiCanvasContext = function (context, _) {
 
 
   Kapi.prototype._contextInitHook.canvas = function () {
-    if (!(this.config.context && this.config.context.nodeName === 'CANVAS')) {
-      return;
-    }
-
     this._drawOrder = [];
     this._drawOrderSorter = null;
     this._canvasActors = {};
@@ -1436,8 +1432,10 @@ var rekapiCanvasContext = function (context, _) {
    * @return {Kapi}
    */
   Kapi.prototype.canvasClear = function () {
-    this.canvasContext().clearRect(0, 0, this.canvasWidth(),
-        this.canvasHeight());
+    if (this.context.getContext) {
+      this.canvasContext().clearRect(
+          0, 0, this.canvasWidth(), this.canvasHeight());
+    }
 
     return this;
   };

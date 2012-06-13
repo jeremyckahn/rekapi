@@ -81,10 +81,6 @@ var rekapiCanvasContext = function (context, _) {
 
 
   Kapi.prototype._contextInitHook.canvas = function () {
-    if (!(this.config.context && this.config.context.nodeName === 'CANVAS')) {
-      return;
-    }
-
     this._drawOrder = [];
     this._drawOrderSorter = null;
     this._canvasActors = {};
@@ -132,8 +128,10 @@ var rekapiCanvasContext = function (context, _) {
    * @return {Kapi}
    */
   Kapi.prototype.canvasClear = function () {
-    this.canvasContext().clearRect(0, 0, this.canvasWidth(),
-        this.canvasHeight());
+    if (this.context.getContext) {
+      this.canvasContext().clearRect(
+          0, 0, this.canvasWidth(), this.canvasHeight());
+    }
 
     return this;
   };
