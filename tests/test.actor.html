@@ -425,7 +425,7 @@
       equals(testActor.hasKeyframeAt(1000), true,
           'Keyframe exists at 1000ms');
     });
-    
+
     test('Actor can determine if it has a keyframe on a given property track' , function () {
       var testKapi
           ,testActor;
@@ -634,6 +634,36 @@
 
       equal(kapi.animationLength(), 1000,
         'Animation length reflects actor keyframes added before the Actor was added');
+    });
+
+
+    module('Contexts');
+
+
+    test('Actor inherits the Kapi instance\'s context by default',
+        function () {
+      var kapiContext = {};
+      var testKapi = new Kapi({context: kapiContext});
+      var testActor = setupTestActor(testKapi);
+
+      ok(testActor.context() === testKapi.context,
+        'Actor has the same context as the Kapi instance');
+    });
+
+
+    test('Actor can override the inherited context from the Kapi instance',
+        function () {
+      var kapiContext = {};
+      var actorContext = {};
+      var testKapi = new Kapi({context: kapiContext});
+      var testActor = setupTestActor(testKapi);
+
+      testActor.context(actorContext);
+
+      ok(testActor.context() !== testKapi.context,
+        'Actor has a different context from the Kapi instance');
+      ok(testActor.context() === actorContext,
+        'Actor has retained the context that was explicitly set');
     });
 
   } ());
