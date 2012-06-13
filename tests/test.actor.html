@@ -666,6 +666,22 @@
         'Actor has retained the context that was explicitly set');
     });
 
+
+    module('KeyframeProperty management');
+
+
+    test('KeyframePropererties created with .keyframe can be retrieved with .getKeyframeProperty',
+        function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, { x: 10 });
+
+      equals(testActor.getKeyframeProperty('x', 0).value, 10,
+        'Retrieved the value of the keyframe property that was set');
+    });
+
   } ());
   </script>
 </head>
