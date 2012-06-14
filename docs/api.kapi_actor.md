@@ -239,6 +239,8 @@ Kapi.Actor.prototype.getKeyframeProperty (property, index)
 
 Gets the `KeyframeProperty` from an `Actor`'s `KeyframeProperty` track.
 
+__[Example](examples/actor_get_keyframe_property.html)__
+
 
 ### modifyKeyframeProperty
 
