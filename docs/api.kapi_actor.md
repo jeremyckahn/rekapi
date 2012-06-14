@@ -258,6 +258,8 @@ Modify a specified `KeyframeProperty` stored on an `Actor`.  Essentially, this
 calls `modifyWith` on the targeted `KeyframeProperty` (passing along
 `newProperties`) and then performs some cleanup.
 
+__[Example](examples/actor_modify_keyframe_property.html)__
+
 
 ### getTrackNames
 
