@@ -273,6 +273,8 @@ Kapi.Actor.prototype.getTrackNames ()
 Get a list of all the track names for an `Actor`.  Each element in this Array
 is a string.
 
+__[Example](examples/actor_get_track_names.html)__
+
 
 ### getTrackLength
 
