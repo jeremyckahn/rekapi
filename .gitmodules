@@ -1,6 +1,3 @@
 [submodule "lib/shifty"]
 	path = lib/shifty
 	url = git@github.com:jeremyckahn/shifty.git
-[submodule "lib/underscore"]
-	path = lib/underscore
-	url = https://github.com/documentcloud/underscore.git

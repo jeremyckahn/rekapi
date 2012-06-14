@@ -56,11 +56,11 @@ else
 fi
 
 cat /tmp/rekapi.header.js /tmp/rekapi.compiled.js > dist/rekapi.min.js
-cp lib/underscore/underscore-min.js dist/underscore.js
+cp lib/underscore/_.min.js dist/_.js
 cp lib/shifty/dist/shifty.min.js dist/shifty.js
 
 cat /tmp/rekapi.header.js > dist/rekapi.bundle.min.js
-cat dist/underscore.js >> dist/rekapi.bundle.min.js
+cat dist/_.js >> dist/rekapi.bundle.min.js
 
 # Semicolon insertions fix bizarre Closure bugs.  They separate the libraries.
 echo ";" >> dist/rekapi.bundle.min.js

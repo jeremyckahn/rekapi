@@ -124,7 +124,7 @@ var r = require('lib/r.js');
 r.config({
   paths: {
     shifty: "dist/shifty",
-    underscore: "dist/underscore",
+    underscore: "dist/_",
     rekapi: "dist/rekapi"
   }
 });
