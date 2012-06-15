@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.9.4
+ * Rekapi - Rewritten Kapi. v0.9.5
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -241,7 +241,7 @@ var rekapiCore = function (context, _, Tweenable) {
    */
   var Kapi = context.Kapi || function Kapi (opt_config) {
     this.config = opt_config || {};
-    this.context = this.config.context;
+    this.context = this.config.context || {};
     this._actors = {};
     this._playState = playState.STOPPED;
 

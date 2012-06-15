@@ -226,7 +226,7 @@ var rekapiCore = function (context, _, Tweenable) {
    */
   var Kapi = context.Kapi || function Kapi (opt_config) {
     this.config = opt_config || {};
-    this.context = this.config.context;
+    this.context = this.config.context || {};
     this._actors = {};
     this._playState = playState.STOPPED;
 
