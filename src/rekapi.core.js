@@ -275,8 +275,8 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
-   * @type {{function}} Contains the context init function to be called in the
-   * Kapi contstructor.
+   * @type {Object.<function>} Contains the context init function to be called
+   * in the Kapi contstructor.
    */
   Kapi.prototype._contextInitHook = {};
 
