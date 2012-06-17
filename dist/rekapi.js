@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.9.5
+ * Rekapi - Rewritten Kapi. v0.9.6 (Sun, 17 Jun 2012 22:10:37 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -11,8 +11,7 @@
  *   Shifty.js (https://github.com/jeremyckahn/shifty).
  * MIT Lincense.  This code free to use, modify, distribute and enjoy.
  */
-;(function(global) {
-
+;(function (global) {
 // REKAPI-GLOBAL METHODS
 // These are global in development, but get wrapped in a closure at build-time.
 
@@ -290,8 +289,8 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
-   * @type {{function}} Contains the context init function to be called in the
-   * Kapi contstructor.
+   * @type {Object.<function>} Contains the context init function to be called
+   * in the Kapi contstructor.
    */
   Kapi.prototype._contextInitHook = {};
 

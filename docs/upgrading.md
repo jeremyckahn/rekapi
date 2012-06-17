@@ -1,3 +1,9 @@
+# Upgrading to Rekapi 0.9.6
+
+The build process has changed.  Rekapi now uses UglifyJS and Node.js to
+generate the binaries, not the Google Closure Compiler.  Please the README for
+instructions on compiling.
+
 # Upgrading to Rekapi 0.9.0
 
 Version 0.8.x had lots of API changes, but 0.9.x should be much more stable.
