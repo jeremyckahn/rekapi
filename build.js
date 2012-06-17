@@ -10,18 +10,21 @@ var
     'version' : null,
     'build_date' : (new Date()).toGMTString()
   },
-  FILE_LIST = [
-    'src/rekapi.license.js'
-    ,'src/rekapi.intro.js'
-    ,'src/rekapi.core.js'
-    ,'src/rekapi.actor.js'
-    ,'src/rekapi.keyframeprops.js'
-    ,'ext/canvas/rekapi.canvas.context.js'
-    ,'ext/canvas/rekapi.canvas.actor.js'
-    ,'ext/dom/rekapi.dom.actor.js'
-    ,'ext/to-css/rekapi.to-css.js'
-    ,'src/rekapi.init.js'
-    ,'src/rekapi.outro.js'];
+  HEAD_FILE_LIST = [
+    'src/rekapi.license.js',
+    'src/rekapi.intro.js'],
+  CORE_FILE_LIST = [
+    'src/rekapi.core.js',
+    'src/rekapi.actor.js',
+    'src/rekapi.keyframeprops.js'],
+  TAIL_FILE_LIST = [
+    'src/rekapi.init.js',
+    'src/rekapi.outro.js'],
+  EXTENSION_FILE_LIST = [
+    'ext/canvas/rekapi.canvas.context.js',
+    'ext/canvas/rekapi.canvas.actor.js',
+    'ext/dom/rekapi.dom.actor.js',
+    'ext/to-css/rekapi.to-css.js'];
 
 
 // --- SETUP --- //
@@ -37,9 +40,11 @@ var
   _distBundleName = _distBaseName + '.bundle.min.js';
 
 _cli
-  .version('0.1.1')
+  .version('0.1.2')
   .option('--ver <build version>',
       'A string representing the semver build version to record in the source (eg. 5.0.2)')
+  .option('--noext',
+      'Don\'t include optional extensions (such as DOM and Canvas renderers)')
   .parse(process.argv);
 
 
@@ -83,7 +88,16 @@ function echoFileSize(filename, explanatoryString) {
 // ---  CONCAT --- //
 
 function getFileList() {
-  return FILE_LIST;
+  var files = HEAD_FILE_LIST.slice(0);
+  files = files.concat(CORE_FILE_LIST);
+
+  if (!_cli.noext) {
+    files = files.concat(EXTENSION_FILE_LIST);
+  }
+
+  files = files.concat(TAIL_FILE_LIST);
+
+  return files;
 }
 
 function concatFiles(fileList) {
