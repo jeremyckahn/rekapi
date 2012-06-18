@@ -286,7 +286,10 @@ __[Example](examples/actor_get_track_names.html)__
 Kapi.Actor.prototype.getTrackLength (trackName)
 ````
 
-Get the property track length for an `Actor`.
+Get the property track length for an `Actor` (how many `KeyframeProperty`s are
+in a given property track).
+
+__[Example](examples/actor_get_track_length.html)__
 
 
 ### getStart
