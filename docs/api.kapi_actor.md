@@ -305,6 +305,8 @@ Kapi.Actor.prototype.getStart ()
 Get the millisecond of the first state of an `Actor` (when it first starts
 animating).
 
+__[Example](examples/actor_get_start.html)__
+
 
 ### getEnd
 
@@ -319,6 +321,8 @@ Kapi.Actor.prototype.getEnd ()
 Get the millisecond of the last state of an `Actor` (when it is done
 animating).
 
+__[Example](examples/actor_get_end.html)__
+
 
 ### getLength
 
@@ -331,6 +335,8 @@ Kapi.Actor.prototype.getLength ()
 ````
 
 Get the length of time in milliseconds that an `Actor` animates for.
+
+__[Example](examples/actor_get_length.html)__
 
 
 ### updateState
