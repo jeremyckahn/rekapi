@@ -31,141 +31,8 @@
 
   (function () {
 
-    module('Keyframe property creation');
-
-    test('Single keyframe properties are added to Actors successfully', function () {
-      var testKapi
-          ,testActor;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-      testActor.keyframe(0, {
-        'x': 50
-        ,'y': 50
-      });
-
-      var keyPropCount = 0;
-
-      for (var keyProp in testActor._keyframeProperties) {
-        keyPropCount++;
-      }
-
-      var propTrackCount = 0;
-
-      for (var propTrack in testActor._propertyTracks) {
-        propTrackCount++;
-      }
-
-      ok(testActor._keyframeProperties[keyProp] instanceof Kapi.KeyframeProperty,
-          'The Actor\'s _keyframeProperties Object contains KeyframeProperty instances')
-      equals(testActor._propertyTracks.x.length, 1, 'Property was added to the "x" track');
-      equals(testActor._propertyTracks.y.length, 1, 'Property was added to the "y" track');
-      equal(keyPropCount, 2, 'The correct amount of KeyframeProperty instances were added');
-      equal(propTrackCount, 2,
-          'The correct amount of property tracks were added.');
-    });
-
-
-    test('Multiple keyframe properties are added to Actors successfully', function () {
-      var testKapi
-          ,testActor;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-      testActor.keyframe(0, {
-          'x': 50
-          ,'y': 50
-        }).keyframe(1000, {
-          'x': 100
-          ,'y': 100
-        });
-
-      var keyPropCount = 0;
-
-      for (var keyProp in testActor._keyframeProperties) {
-        keyPropCount++;
-      }
-
-      equals(testActor._propertyTracks.x.length, 2,
-          'Properties were added to the "x" track');
-      equals(testActor._propertyTracks.y.length, 2,
-          'Properties were added to the "y" track');
-      equal(keyPropCount, 4,
-            'The correct amount of KeyframeProperty instances were added');
-      deepEqual(testActor._timelinePropertyCacheIndex, [0, 1000],
-          'The intenal _timelinePropertyCacheIndex is correct');
-      equals(testActor._propertyTracks.x[0].nextProperty,
-          testActor._propertyTracks.x[1],
-          'The first tracked "x" KeyframeProperty instance\'s nextProperty is pointing to the correct property');
-      equals(testActor._propertyTracks.y[0].nextProperty,
-          testActor._propertyTracks.y[1],
-          'The first tracked "y" KeyframeProperty instance\'s nextProperty is pointing to the correct property');
-    });
-
-
-    module('KeyframeProperty modification');
-
-    test('Can modify the position of a KeyframeProperty', function () {
-      var testKapi
-          ,testActor;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-      testActor.keyframe(0, {
-          'x': 50
-          ,'y': 50
-        }).keyframe(1000, {
-          'x': 100
-          ,'y': 100
-        });
-
-      testActor.modifyKeyframeProperty('x', 1, {
-        'millisecond': 1500
-      });
-
-      var keyPropCount = 0;
-
-      for (var keyProp in testActor._keyframeProperties) {
-        keyPropCount++;
-      }
-
-      var propTrackCount = 0;
-
-      for (var propTrack in testActor._propertyTracks) {
-        propTrackCount++;
-      }
-
-      equal(keyPropCount, 4,
-          'The number of KeyframeProperty instances on the Actor did not change');
-      deepEqual(testActor._timelinePropertyCacheIndex, [0, 1000, 1500],
-          'The intenal _timelinePropertyCacheIndex is correct');
-      equal(propTrackCount, 2,
-          'The number of property tracks did not change');
-      equals(testActor._propertyTracks.x.length, 2,
-          'Modifying the property within it\'s track did not change the number of properties in the track');
-      equals(testActor._timelinePropertyCaches[0].x.millisecond, 0,
-          'There is an "x" KeyframeProperty at 0');
-      equals(testActor._timelinePropertyCaches[0].y.millisecond, 0,
-          'There is a "y" KeyframeProperty at 0');
-      equals(testActor._timelinePropertyCaches[1000].x.millisecond, 0,
-          'The "x" KeyframeProperty at 1000 milliseconds is pointing back to "x" property at 0 millisecond');
-      equals(testActor._timelinePropertyCaches[1000].y.millisecond, 1000,
-          'There is a "y" KeyframeProperty at 1000');
-      equals(testActor._timelinePropertyCaches[1500].x.millisecond, 1500,
-          'There is an "x" KeyframeProperty at 1500');
-      equals(testActor._timelinePropertyCaches[1500].y,
-          testActor._propertyTracks.y[1],
-          'The second tracked "y" property is cached at the 1500 millisecond cache');
-      equals(testActor._propertyTracks.x[0].nextProperty,
-          testActor._propertyTracks.x[1],
-          'The first tracked "x" KeyframeProperty instance\'s nextProperty did not change');
-      equals(testActor._propertyTracks.y[0].nextProperty,
-          testActor._propertyTracks.y[1],
-          'The first tracked "y" KeyframeProperty instance\'s nextProperty did not change');
-    });
-
-
     module('KeyframeProperty export');
+
 
     test('Exported data has key data points', function () {
       var testKapi
@@ -189,6 +56,7 @@
       equals(typeof exportedProp.easing, 'string',
           'easing is a string');
     });
+
 
   } ());
   </script>
