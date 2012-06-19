@@ -368,6 +368,8 @@ Retrieve and optionally bind arbitrary data to the `Actor`.  If `opt_newData`
 is specified, it will overwrite the previous `opt_newData` Object that was
 bound with this method.
 
+__[Example](examples/actor_data.html)__
+
 
 ### exportTimeline
 
