@@ -44,8 +44,29 @@
       equals(keyprop.ownerActor, actor, 'ownerActor was set');
       equals(keyprop.millisecond, 500, 'millisecond was set');
       equals(keyprop.name, 'x', 'name was set');
-      equals(keyprop.value, '10', 'value was set');
+      equals(keyprop.value, 10, 'value was set');
       equals(keyprop.easing, 'easeInQuad', 'easing was set');
+    });
+
+
+    module('KeyframeProperty modification');
+
+
+    test('Can modify a KeyframeProperty', function () {
+
+      var actor = new Kapi.Actor();
+      var keyprop = new Kapi.KeyframeProperty(
+          actor, 500, 'x', 10, 'easeInQuad');
+
+      keyprop.modifyWith({
+        'millisecond': 1500
+        ,'easing': 'bounce'
+        ,'value': 123456
+      });
+
+      equals(keyprop.millisecond, 1500, 'millisecond was modified');
+      equals(keyprop.value, 123456, 'value was modified');
+      equals(keyprop.easing, 'bounce', 'easing was modified');
     });
 
 
