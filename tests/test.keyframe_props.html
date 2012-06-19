@@ -103,31 +103,6 @@
     });
 
 
-    test('Unmodified keyframe properties are copied.', function () {
-      var testKapi
-          ,testActor;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-      testActor.keyframe(0, {
-          'x': 50
-        });
-
-      testActor.copyProperties(1000, 0);
-
-      equals(testActor._propertyTracks.x.length, 2,
-          'Now there are two properties');
-      ok(testActor._propertyTracks.x[0] !== testActor._propertyTracks.x[1],
-          'The two properties are not the same Object reference');
-      equals(testActor._propertyTracks.x[0].value,
-          testActor._propertyTracks.x[1].value,
-          'Copied property value is the same as the source property value')
-      equals(testActor._propertyTracks.x[0].easing,
-          testActor._propertyTracks.x[1].easing,
-          'Copied property easing is the same as the source property easing')
-    });
-
-
     module('KeyframeProperty modification');
 
     test('Can modify the position of a KeyframeProperty', function () {
