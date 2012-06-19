@@ -806,6 +806,86 @@
           'getKeyframeProperty returned a KeyframeProperty');
     });
 
+
+    test('Get get the start of an Actor\'s movement in the animation',
+        function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(250, {
+          x: 1
+        }).keyframe(1000, {
+          x: 10
+        }).keyframe(2000, {
+          x: 20
+        })
+
+      equal(testActor.getStart(), 250,
+          'Retrieved the correct time of the first keyframe');
+    });
+
+
+    test('Get get the end of an Actor\'s movement in the animation',
+        function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(250, {
+          x: 1
+        }).keyframe(1000, {
+          x: 10
+        }).keyframe(2000, {
+          x: 20
+        })
+
+      equal(testActor.getEnd(), 2000,
+          'Retrieved the correct time of the last keyframe');
+    });
+
+
+    module('Actor exporting');
+
+
+    test('Exported Actor data has key data points', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      testActor.keyframe(0, {
+        'x': 1
+        ,'y': 10
+      }).keyframe(1000, {
+        'x': 2
+        ,'y': 20
+      });
+
+      var exportedTimeline = testActor.exportTimeline();
+      equals(exportedTimeline.start, 0,
+          'Actor start time is properly exported');
+      equals(exportedTimeline.end, 1000,
+          'Actor end time is properly exported');
+      ok(_.contains(exportedTimeline.trackNames, 'x'),
+          '"x"" track is in the trackName list');
+      ok(_.contains(exportedTimeline.trackNames, 'y'),
+          '"y"" track is in the trackName list');
+      equals(exportedTimeline.trackNames.length, 2,
+          'Only two track names were exported');
+      equals(exportedTimeline.propertyTracks.x.length, 2,
+          'Data for all "x" KeyframeProperties was exported')
+      equals(exportedTimeline.propertyTracks.y.length, 2,
+          'Data for all "y" KeyframeProperties was exported')
+      equals(typeof exportedTimeline.propertyTracks.x[0].id, 'string',
+          'First exported x KeyframeProperty has an id');
+      equals(typeof exportedTimeline.propertyTracks.y[0].id, 'string',
+          'First exported y KeyframeProperty has an id');
+    });
+
+
   } ());
   </script>
 </head>
