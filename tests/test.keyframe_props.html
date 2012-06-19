@@ -88,6 +88,25 @@
     });
 
 
+    module('KeyframeProperty position calculation');
+
+
+    test('Can compute midpoint values between to KeyframeProperties',
+        function () {
+
+      var actor = new Kapi.Actor();
+      var keyprop = new Kapi.KeyframeProperty(
+          actor, 500, 'x', 10, 'linear');
+      var linkedKeyprop = new Kapi.KeyframeProperty(
+          actor, 1000, 'x', 20, 'linear');
+
+      keyprop.linkToNext(linkedKeyprop);
+      var midpoint = keyprop.getValueAt(750);
+
+      equals(midpoint, 15, 'Midpoint was calculated');
+    });
+
+
     module('KeyframeProperty export');
 
 
