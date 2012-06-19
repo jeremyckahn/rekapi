@@ -31,7 +31,7 @@
 
   (function runTests () {
 
-    module('Single keyframe');
+    module('(updateState) Single keyframe');
 
     test('Correctly interpolate Actor positions at various positions mid-frame',
     function () {
@@ -118,7 +118,7 @@
 
 
 
-    module('Multiple keyframes');
+    module('(updateState) Multiple keyframes');
 
     test('Interpolate Actor positions at various positions mid-frame',
     function () {
@@ -902,6 +902,21 @@
           'First exported x KeyframeProperty has an id');
       equals(typeof exportedTimeline.propertyTracks.y[0].id, 'string',
           'First exported y KeyframeProperty has an id');
+    });
+
+
+    module('Data');
+
+
+    test('Arbitrary data can be stored on an Actor', function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor.data({ a: 'hello' });
+
+      equal(testActor.data().a, 'hello',
+          'Retrieved the data that was bound to the Actor');
     });
 
 
