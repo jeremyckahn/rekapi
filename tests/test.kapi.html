@@ -222,6 +222,118 @@
     });
 
 
+    module("Finite loop interval calculation");
+
+
+    test('Actor.tween correctly calculates position based on time'
+      ,function () {
+      var testKapi
+          ,testActor
+          ,calculatedMillisecond;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      internalDebugNow = function () {
+        return 0;
+      };
+
+      testActor
+        .keyframe(0, {
+          'x': 0
+        })
+        .keyframe(1000, {
+          'x': 100
+        });
+
+      internalDebugNow = function () {
+        return 0;
+      };
+
+      testKapi.play(2);
+
+      internalDebugNow = function () {
+        return 500;
+      };
+
+      Kapi._private.updateToCurrentMillisecond(testKapi);
+      equals(testActor.get().x, 50,
+          'Actor property has the proper value for halfway between a loop iteration');
+
+      internalDebugNow = function () {
+        return 1500;
+      };
+
+      Kapi._private.updateToCurrentMillisecond(testKapi);
+      equals(testActor.get().x, 50,
+          'Actor property has the proper value for halfway between a loop iteration');
+
+      internalDebugNow = function () {
+        return 2500;
+      };
+
+      Kapi._private.updateToCurrentMillisecond(testKapi);
+      equals(testActor.get().x, 100,
+          'Loop sequence has completed, actor is locked at final position');
+    });
+
+
+    module("Infinite loop interval calculation");
+
+
+    test('Actor.tween correctly calculates position based on time'
+      ,function () {
+      var testKapi
+          ,testActor
+          ,calculatedMillisecond;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      internalDebugNow = function () {
+        return 0;
+      };
+
+      testActor
+        .keyframe(0, {
+          'x': 0
+        })
+        .keyframe(1000, {
+          'x': 100
+        });
+
+      internalDebugNow = function () {
+        return 0;
+      };
+
+      testKapi.play();
+
+      internalDebugNow = function () {
+        return 500;
+      };
+
+      Kapi._private.updateToCurrentMillisecond(testKapi);
+      equals(testActor.get().x, 50,
+          'Actor property has the proper value for halfway between a loop iteration');
+
+      internalDebugNow = function () {
+        return 1500;
+      };
+
+      Kapi._private.updateToCurrentMillisecond(testKapi);
+      equals(testActor.get().x, 50,
+          'Actor property has the proper value for halfway between a loop iteration');
+
+      internalDebugNow = function () {
+        return 10000000500;
+      };
+
+      Kapi._private.updateToCurrentMillisecond(testKapi);
+      equals(testActor.get().x, 50,
+          'Loop sequence is still running at some distant point in the future');
+    });
+
+
     module("Internals - calculateLoopPosition");
 
 
