@@ -31,15 +31,31 @@
 
   (function () {
 
+
+    module('KeyframeProperty creation');
+
+
+    test('Can create a KeyframeProperty', function () {
+
+      var actor = new Kapi.Actor();
+      var keyprop = new Kapi.KeyframeProperty(
+          actor, 500, 'x', 10, 'easeInQuad');
+
+      equals(keyprop.ownerActor, actor, 'ownerActor was set');
+      equals(keyprop.millisecond, 500, 'millisecond was set');
+      equals(keyprop.name, 'x', 'name was set');
+      equals(keyprop.value, '10', 'value was set');
+      equals(keyprop.easing, 'easeInQuad', 'easing was set');
+    });
+
+
     module('KeyframeProperty export');
 
 
     test('Exported data has key data points', function () {
-      var testKapi
-          ,testActor;
 
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
       testActor.keyframe(0, {
         'x': 1
       });
