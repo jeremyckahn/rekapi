@@ -222,6 +222,40 @@
     });
 
 
+    module('Core events');
+
+
+    test('Event is fired when an actor is added', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testKapi.on('addActor', function(kapi, actor) {
+        ok(actor !== undefined);
+        equals(actor, testActor, 'Event data is equal to added actor');
+      });
+      testKapi.addActor(testActor);
+    });
+
+
+    test('Event is fired when an actor is removed', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testKapi.on('removeActor', function(kapi, actor) {
+        ok(actor !== undefined);
+        equals(actor, testActor, 'Event data is equal to removed actor');
+      });
+      testKapi.removeActor(testActor);
+    });
+
+
+
     module("Finite loop interval calculation");
 
 
