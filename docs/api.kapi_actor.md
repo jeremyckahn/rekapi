@@ -382,3 +382,5 @@ Kapi.Actor.prototype.exportTimeline ()
 
 Export a reference-less dump of this Actor's timeline property tracks and
 KeyframeProperties.
+
+__[Example](examples/actor_export_timeline.html)__
