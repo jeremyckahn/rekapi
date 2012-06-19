@@ -351,6 +351,8 @@ Kapi.Actor.prototype.updateState (millisecond)
 
 Calculate and set the `Actor`'s position at `millisecond` in the animation.
 
+__[Example](examples/actor_update_state.html)__
+
 
 ### data
 
