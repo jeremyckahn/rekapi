@@ -807,7 +807,7 @@
     });
 
 
-    test('Get get the start of an Actor\'s movement in the animation',
+    test('Get the start of an Actor\'s movement in the animation',
         function () {
 
       var testKapi = setupTestKapi();
@@ -827,7 +827,7 @@
     });
 
 
-    test('Get get the end of an Actor\'s movement in the animation',
+    test('Get the end of an Actor\'s movement in the animation',
         function () {
 
       var testKapi = setupTestKapi();
@@ -844,6 +844,25 @@
 
       equal(testActor.getEnd(), 2000,
           'Retrieved the correct time of the last keyframe');
+    });
+
+
+    test('Get the length of time that an Actor animates for', function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(250, {
+          x: 1
+        }).keyframe(1000, {
+          x: 10
+        }).keyframe(2000, {
+          x: 20
+        })
+
+      equal(testActor.getLength(), 1750,
+          'Retrieved the correct length of time for an actor\s total movement');
     });
 
 
