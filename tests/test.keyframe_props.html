@@ -70,6 +70,24 @@
     });
 
 
+    module('KeyframeProperty linking');
+
+
+    test('Can link one KeyframeProperty to another', function () {
+
+      var actor = new Kapi.Actor();
+      var keyprop = new Kapi.KeyframeProperty(
+          actor, 500, 'x', 10, 'easeInQuad');
+      var linkedKeyprop = new Kapi.KeyframeProperty(
+          actor, 1000, 'x', 20, 'swingTo');
+
+      keyprop.linkToNext(linkedKeyprop);
+
+      equals(keyprop.nextProperty, linkedKeyprop,
+          'KeyframeProperty was linked up');
+    });
+
+
     module('KeyframeProperty export');
 
 
