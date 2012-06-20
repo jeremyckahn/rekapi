@@ -68,13 +68,15 @@ Calculate the midpoint between this `KeyframeProperty` and the next
 `KeyframeProperty` in an `Actor`'s `KeyframeProperty` track.
 
 
-### exportTimeline
+### exportPropertyData
 
 ````javascript
 /**
  * @return {Object}
  */
-Kapi.KeyframeProperty.prototype.exportTimeline ()
+Kapi.KeyframeProperty.prototype.exportPropertyData ()
 ````
 
 Export a reference-less dump of this KeyframeProperty's state data.
+
+__[Example](examples/keyprop_export_property_data.html)__
