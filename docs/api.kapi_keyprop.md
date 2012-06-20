@@ -14,7 +14,7 @@
  */
 Kapi.KeyframeProperty (ownerActor, millisecond, name, value, opt_easing)
 ````
-Represents an individual component of an `Actor`'s keyframe state.  In most
+Represents an individual component of an `Actor`'s keyframe state.  In many
 cases you won't need to deal with this directly, `Actor` abstracts a lot of
 what this Object does away for you.
 
@@ -33,6 +33,8 @@ Kapi.KeyframeProperty.prototype.modifyWith (newProperties)
 ````
 
 Augment a `KeyframeProperty`'s properties.
+
+__[Example](examples/keyprop_modify_with.html)__
 
 
 ### linkToNext
