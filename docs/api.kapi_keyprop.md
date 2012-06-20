@@ -18,6 +18,8 @@ Represents an individual component of an `Actor`'s keyframe state.  In most
 cases you won't need to deal with this directly, `Actor` abstracts a lot of
 what this Object does away for you.
 
+__[Example](examples/keyprop.html)__
+
 
 ### modifyWith
 
