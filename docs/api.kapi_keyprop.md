@@ -67,6 +67,8 @@ Kapi.KeyframeProperty.prototype.getValueAt (millisecond)
 Calculate the midpoint between this `KeyframeProperty` and the next
 `KeyframeProperty` in an `Actor`'s `KeyframeProperty` track.
 
+__[Example](examples/keyprop_get_value_at.html)__
+
 
 ### exportPropertyData
 
