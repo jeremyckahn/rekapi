@@ -31,10 +31,10 @@
 
   (function runTests () {
 
-    module('(updateState) Single keyframe');
+    module('updateState');
 
     test('Correctly interpolate Actor positions at various positions mid-frame',
-    function () {
+        function () {
       var testKapi
           ,testActor;
 
@@ -76,9 +76,9 @@
     });
 
 
-
     test('Keyframes inherit missing properties from the previous keyframe',
-    function () {
+        function () {
+
       var testKapi
           ,testActor;
 
@@ -98,7 +98,8 @@
 
 
     test('Tweens are only valid if there is an end point',
-    function () {
+      function () {
+
       var testKapi
           ,testActor;
 
@@ -117,11 +118,9 @@
     });
 
 
-
-    module('(updateState) Multiple keyframes');
-
     test('Interpolate Actor positions at various positions mid-frame',
-    function () {
+        function () {
+
       var testKapi
           ,testActor;
 
@@ -163,8 +162,8 @@
 
 
 
-    test('Applied easing is taken from the destination frame',
-    function () {
+    test('Applied easing is taken from the destination frame', function () {
+
       var testKapi
           ,testActor
           ,tweenableComparator;
@@ -204,7 +203,65 @@
     });
 
 
-    module('Keyframe removal');
+    test('If there are no current or future properties, use the latest property',
+        function () {
+
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, {
+        'x': 50
+        ,'y': 50
+      }).keyframe(1000, {
+        'y': 100
+      }).keyframe(2000, {
+        'y': 150
+      });
+
+      testActor.updateState(500);
+
+      equal(testActor.get().x, 50
+        ,'Got the x value from one keyframe back');
+      equal(testActor.get().y, 75
+        ,'Got the corrext y midpoint');
+
+      testActor.updateState(1500);
+
+      equal(testActor.get().x, 50
+        ,'Got the x value from two keyframes back');
+    });
+
+
+    test('If a given millisecond doesn\'t have a previous keyframe, return null',
+        function () {
+
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, {
+        'x': 50
+      }).keyframe(1000, {
+        'x': 100
+        ,'y': 100
+      });
+
+      testActor.updateState(500);
+
+      equal(testActor.get().x, 75
+        ,'Got the most recent x value');
+      equal(testActor.get().y, null
+        ,'Got the corrext y midpoint');
+    });
+
+
+    module('removeKeyframe');
+
 
     test('Keyframes can be removed from the middle of the animation',
         function () {
@@ -232,6 +289,7 @@
 
     test('Single keyframe properties can be removed from an actor at a time',
         function () {
+
       var testKapi
           ,testActor;
 
@@ -258,6 +316,7 @@
 
     test('Multiple keyframe properties can be removed from an actor at a time',
         function () {
+
       var testKapi
           ,testActor;
 
@@ -344,7 +403,7 @@
     });
 
 
-    module('Keyframe copying');
+    module('copyProperties');
 
 
     test('Unmodified keyframe properties are copied.', function () {
@@ -374,7 +433,8 @@
     });
 
 
-    module('Keyframe modification');
+    module('modifyKeyframe');
+
 
     test('Original keyframe position property is changed' , function () {
       var testKapi
@@ -428,7 +488,8 @@
     });
 
 
-    module('Keyframe presence');
+    module('hasKeyframeAt');
+
 
     test('Actor can determine if it has a keyframe at a given millisecond' , function () {
       var testKapi
@@ -455,6 +516,7 @@
       equals(testActor.hasKeyframeAt(1000), true,
           'Keyframe exists at 1000ms');
     });
+
 
     test('Actor can determine if it has a keyframe on a given property track' , function () {
       var testKapi
@@ -483,7 +545,8 @@
     });
 
 
-    module('Waits');
+    module('wait');
+
 
     test('Can copy keyframes (one initial keyframe)', function () {
       var testKapi
@@ -581,67 +644,8 @@
     });
 
 
-    module('Missing keyframe properties');
-
-
-    test('If there are no current or future properties, use the latest property'
-      , function () {
-
-      var testKapi
-          ,testActor;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-
-      testActor.keyframe(0, {
-        'x': 50
-        ,'y': 50
-      }).keyframe(1000, {
-        'y': 100
-      }).keyframe(2000, {
-        'y': 150
-      });
-
-      testActor.updateState(500);
-
-      equal(testActor.get().x, 50
-        ,'Got the x value from one keyframe back');
-      equal(testActor.get().y, 75
-        ,'Got the corrext y midpoint');
-
-      testActor.updateState(1500);
-
-      equal(testActor.get().x, 50
-        ,'Got the x value from two keyframes back');
-    });
-
-
-    test('If a given millisecond doesn\'t have a previous keyframe, return null'
-      , function () {
-
-      var testKapi
-          ,testActor;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-
-      testActor.keyframe(0, {
-        'x': 50
-      }).keyframe(1000, {
-        'x': 100
-        ,'y': 100
-      });
-
-      testActor.updateState(500);
-
-      equal(testActor.get().x, 75
-        ,'Got the most recent x value');
-      equal(testActor.get().y, null
-        ,'Got the corrext y midpoint');
-    });
-
-
     module('Unattached actors');
+
 
     test('Can create keyframes on unattached actors', function () {
       var actor = new Kapi.Actor();
