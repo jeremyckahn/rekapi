@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.9.6 (Sun, 17 Jun 2012 22:10:37 GMT)
+ * Rekapi - Rewritten Kapi. v0.9.7 (Wed, 20 Jun 2012 05:50:07 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -598,12 +598,6 @@ var rekapiCore = function (context, _, Tweenable) {
 
   Kapi.util = {};
 
-  // TODO:  There are some duplicates in Kapi.util and Kapi._private, clean up
-  // the references in the tests.
-  _.extend(Kapi.util, {
-    'calculateLoopPosition': calculateLoopPosition
-    ,'calculateTimeSinceStart': calculateTimeSinceStart
-  });
 
   // Some hooks for testing.
   if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {

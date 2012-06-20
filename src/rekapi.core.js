@@ -584,12 +584,6 @@ var rekapiCore = function (context, _, Tweenable) {
 
   Kapi.util = {};
 
-  // TODO:  There are some duplicates in Kapi.util and Kapi._private, clean up
-  // the references in the tests.
-  _.extend(Kapi.util, {
-    'calculateLoopPosition': calculateLoopPosition
-    ,'calculateTimeSinceStart': calculateTimeSinceStart
-  });
 
   // Some hooks for testing.
   if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
