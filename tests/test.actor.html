@@ -644,7 +644,7 @@
     });
 
 
-    module('Unattached actors');
+    module('addActor');
 
 
     test('Can create keyframes on unattached actors', function () {
@@ -671,7 +671,7 @@
     });
 
 
-    module('Contexts');
+    module('context');
 
 
     test('Actor inherits the Kapi instance\'s context by default',
@@ -701,7 +701,7 @@
     });
 
 
-    module('KeyframeProperty management');
+    module('getKeyframeProperty');
 
 
     test('KeyframePropererties created with .keyframe can be retrieved with .getKeyframeProperty',
@@ -715,6 +715,9 @@
       equals(testActor.getKeyframeProperty('x', 0).value, 10,
         'Retrieved the value of the KeyframeProperty that was set');
     });
+
+
+    module('modifyKeyframeProperty');
 
 
     test('KeyframeProperties created with .keyframe can be modified with .modifyKeyframeProperty',
@@ -731,11 +734,12 @@
     });
 
 
-    module('Actor introspection');
+    module('getTrackLength');
 
 
     test('getTrackLength returns the number of KeyframeProperties in a track',
         function () {
+
       var testKapi
           ,testActor1;
 
@@ -749,6 +753,74 @@
 
       equals(testActor1.getTrackLength('x'), 3,
           'Track with Actors has a length');
+    });
+
+
+    module('getStart');
+
+
+    test('Get the start of an Actor\'s movement in the animation',
+        function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(250, {
+          x: 1
+        }).keyframe(1000, {
+          x: 10
+        }).keyframe(2000, {
+          x: 20
+        })
+
+      equal(testActor.getStart(), 250,
+          'Retrieved the correct time of the first keyframe');
+    });
+
+
+    module('getEnd');
+
+
+    test('Get the end of an Actor\'s movement in the animation',
+        function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(250, {
+          x: 1
+        }).keyframe(1000, {
+          x: 10
+        }).keyframe(2000, {
+          x: 20
+        })
+
+      equal(testActor.getEnd(), 2000,
+          'Retrieved the correct time of the last keyframe');
+    });
+
+
+    module('getLength');
+
+
+    test('Get the length of time that an Actor animates for', function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(250, {
+          x: 1
+        }).keyframe(1000, {
+          x: 10
+        }).keyframe(2000, {
+          x: 20
+        })
+
+      equal(testActor.getLength(), 1750,
+          'Retrieved the correct length of time for an actor\s total movement');
     });
 
 
@@ -767,6 +839,9 @@
       equals(testActor1.getTrackLength('x'), undefined,
           'Track with Actors does not have a length');
     });
+
+
+    module('getTrackNames');
 
 
     test('Actor track names can be retrieved', function () {
@@ -794,83 +869,7 @@
     });
 
 
-    test('KeyframeProperties can be retrieved from an Actor', function () {
-      var testKapi
-          ,testActor1;
-
-      testKapi = setupTestKapi();
-      testActor1 = setupTestActor(testKapi);
-
-      testActor1
-        .keyframe(0, {
-          a: 1
-        });
-
-      ok(testActor1.getKeyframeProperty('a', 0) instanceof Kapi.KeyframeProperty,
-          'getKeyframeProperty returned a KeyframeProperty');
-    });
-
-
-    test('Get the start of an Actor\'s movement in the animation',
-        function () {
-
-      var testKapi = setupTestKapi();
-      var testActor = setupTestActor(testKapi);
-
-      testActor
-        .keyframe(250, {
-          x: 1
-        }).keyframe(1000, {
-          x: 10
-        }).keyframe(2000, {
-          x: 20
-        })
-
-      equal(testActor.getStart(), 250,
-          'Retrieved the correct time of the first keyframe');
-    });
-
-
-    test('Get the end of an Actor\'s movement in the animation',
-        function () {
-
-      var testKapi = setupTestKapi();
-      var testActor = setupTestActor(testKapi);
-
-      testActor
-        .keyframe(250, {
-          x: 1
-        }).keyframe(1000, {
-          x: 10
-        }).keyframe(2000, {
-          x: 20
-        })
-
-      equal(testActor.getEnd(), 2000,
-          'Retrieved the correct time of the last keyframe');
-    });
-
-
-    test('Get the length of time that an Actor animates for', function () {
-
-      var testKapi = setupTestKapi();
-      var testActor = setupTestActor(testKapi);
-
-      testActor
-        .keyframe(250, {
-          x: 1
-        }).keyframe(1000, {
-          x: 10
-        }).keyframe(2000, {
-          x: 20
-        })
-
-      equal(testActor.getLength(), 1750,
-          'Retrieved the correct length of time for an actor\s total movement');
-    });
-
-
-    module('Actor exporting');
+    module('exportTimeline');
 
 
     test('Exported Actor data has key data points', function () {
@@ -909,7 +908,7 @@
     });
 
 
-    module('Data');
+    module('data');
 
 
     test('Arbitrary data can be stored on an Actor', function () {
@@ -924,7 +923,7 @@
     });
 
 
-    module('KeyframeProperty absraction');
+    module('Internals - KeyframeProperty tracks');
 
 
     test('Single keyframe properties are added to Actors successfully', function () {
@@ -985,7 +984,7 @@
       equals(testActor._propertyTracks.y.length, 2,
           'Properties were added to the "y" track');
       equal(keyPropCount, 4,
-            'The correct amount of KeyframeProperty instances were added');
+          'The correct amount of KeyframeProperty instances were added');
       deepEqual(testActor._timelinePropertyCacheIndex, [0, 1000],
           'The intenal _timelinePropertyCacheIndex is correct');
       equals(testActor._propertyTracks.x[0].nextProperty,
