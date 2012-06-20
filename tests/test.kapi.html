@@ -31,7 +31,7 @@
 
   (function () {
 
-    module('Actor management');
+    module('addActor');
 
     test('Actors are added successfully', function () {
       var testKapi
@@ -87,7 +87,8 @@
     });
 
 
-    module('Actor extraction');
+    module('getActorIds');
+
 
     test('Can get actor IDs', function () {
       var testKapi
@@ -109,6 +110,9 @@
     });
 
 
+    module('getAllActors');
+
+
     test('Can get actors', function () {
       var testKapi
           ,testActor1
@@ -127,6 +131,9 @@
     });
 
 
+    module('getActor');
+
+
     test('Actors can be retrieved from the Kapi', function () {
       var testKapi
           ,testActor1;
@@ -139,7 +146,8 @@
     });
 
 
-    module('Animation timeline');
+    module('animationLength');
+
 
     test('Calculate animation length with one Actor', function () {
       var testKapi
@@ -181,24 +189,7 @@
     });
 
 
-    module('Actor data');
-
-    test('Can set arbitrary data on the Actor'
-    ,function () {
-      var testKapi
-          ,testActor;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-      testActor.data({
-        'test': 'hello'
-      });
-
-      equals(testActor._data.test, 'hello', 'Data was set.');
-    });
-
-
-    module('Kapi export');
+    module('exportTimeline');
 
 
     test('Exported Kapi data has key data points', function () {
@@ -222,7 +213,7 @@
     });
 
 
-    module('Core events');
+    module('on');
 
 
     test('Event is fired when an actor is added', function () {
@@ -255,18 +246,14 @@
     });
 
 
+    module('Internals - Loops');
 
-    module("Finite loop interval calculation");
 
+    test('Actor.tween correctly calculates position based on time in a finite loop',
+        function () {
 
-    test('Actor.tween correctly calculates position based on time'
-      ,function () {
-      var testKapi
-          ,testActor
-          ,calculatedMillisecond;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
 
       internalDebugNow = function () {
         return 0;
@@ -312,11 +299,9 @@
     });
 
 
-    module("Infinite loop interval calculation");
+    test('Actor.tween correctly calculates position based on time in an infinite loop',
+        function () {
 
-
-    test('Actor.tween correctly calculates position based on time'
-      ,function () {
       var testKapi
           ,testActor
           ,calculatedMillisecond;
@@ -533,6 +518,7 @@
           'An iteration after the specified amount of iterations is considered to be complete');
     });
 
+
     test('Determine if the animation has completed in an infinite loop'
       ,function () {
       var testKapi
@@ -594,14 +580,12 @@
 
 
     test('Check the state of a playing animation', function () {
-      var testKapi
-          ,calculatedMillisecond;
 
       internalDebugNow = function () {
         return new Date();
       };
 
-      testKapi = setupTestKapi();
+      var testKapi = setupTestKapi();
       testKapi.play();
       equals(testKapi.isPlaying(), true,
           '.play() causes .isPlaying() to be true');
