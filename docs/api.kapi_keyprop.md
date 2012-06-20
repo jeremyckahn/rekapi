@@ -50,6 +50,8 @@ Kapi.KeyframeProperty.prototype.linkToNext (nextProperty)
 Create the reference to the next KeyframeProperty in an `Actor`'s
 `KeyframeProperty` track.
 
+__[Example](examples/keyprop_link_to_next.html)__
+
 
 ### getValueAt
 
