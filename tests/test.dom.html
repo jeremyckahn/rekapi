@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+  <script src="../lib/underscore/_.js"></script>
+  <script src="../lib/shifty/dist/shifty.js"></script>
+  <script src="../src/rekapi.core.js"></script>
+  <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.keyframeprops.js"></script>
+  <script src="../ext/dom/rekapi.dom.actor.js"></script>
+  <script src="../src/rekapi.init.js"></script>
+  <script>
+  function setupTestKapi () {
+    var kapi = new Kapi();
+
+    return kapi;
+  }
+
+  function  setupTestActor (forKapi) {
+    var actor = new Kapi.DOMActor(document.createElement('div'));
+    forKapi.addActor(actor);
+    return actor;
+  }
+
+  (function () {
+
+    module('DOM extension');
+
+    test('Support the transform property', function() {
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, {
+          'transform': 'translateX(100px) translateY(100px) rotate(45deg)'
+          ,'background': '#f00'
+        })
+        .keyframe(1000, {
+          'transform': 'translateX(300px) translateY(300px) rotate(135deg)'
+          ,'background': '#00f'
+        });
+
+      testKapi.update(500);
+
+      var expectedValue = 'translateX(200px) translateY(200px) rotate(90deg)';
+      equals(testActor._context.style.transform, expectedValue,
+        "The actor's DOM element has the correct transform style");
+    });
+
+
+    test('Support independent transform properties', function() {
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, {
+          'translateX': '0px'
+          ,'translateY': '0px'
+          ,'rotate': '100deg'
+          ,'height': '0px'
+        })
+        .keyframe(2000, {
+          'translateX': '100px'
+          ,'translateY': '100px'
+          ,'rotate': '150deg'
+          ,'height': '50px'
+        });
+
+      testKapi.update(1000);
+
+      var expectedValue = 'translateX(50px) translateY(50px) rotate(125deg)';
+      equals(testActor._context.style.transform, expectedValue,
+        "The actor's DOM element has the correct transform style");
+      
+      equals(testActor._context.style.height, '25px',
+        'Other non-transform properties are also updated');
+    });
+
+
+    test('Allow default transform order to be overriden', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      var setWrongFunctions = _.bind(testActor.setTransformOrder, testActor,
+        ['foo', 'bar', 'rotate']);
+
+      raises(setWrongFunctions,
+        'Throws error if passed an unknown/unsupported transform function');
+
+      var testOrder1 = ['rotate', 'translateY', 'translateX'];
+      testActor.setTransformOrder(testOrder1);
+      deepEqual(testActor._transformOrder, testOrder1,
+          'The internal _transformOrder array has the correct value');
+
+      var testOrder2 = ['rotate', 'translateX', 'rotate'];
+      testActor.setTransformOrder(testOrder2);
+      deepEqual(testActor._transformOrder, ['rotate', 'translateX'],
+          'Duplicate values passed to setTransformOrder are ignored');
+
+      testActor
+        .keyframe(0, {
+          'translateX': '0px'
+          ,'translateY': '0px'
+          ,'rotate': '100deg'
+        })
+        .keyframe(2000, {
+          'translateX': '100px'
+          ,'translateY': '100px'
+          ,'rotate': '150deg'
+        });
+
+      testActor.setTransformOrder(['rotate', 'translateY', 'translateX']);
+      testKapi.update(1000);
+
+      var expectedValue = 'rotate(125deg) translateY(50px) translateX(50px)';
+      equals(testActor._context.style.transform, expectedValue,
+        'Independent transform parameters are re-ordered as expected');
+    });
+
+  } ());
+  </script>
+</head>
+<body>
+  <h1 id="qunit-header"><a href="https://github.com/jeremyckahn/rekapi">Rekapi</a></h1>
+   <h2 id="qunit-banner"></h2>
+   <div id="qunit-testrunner-toolbar"></div>
+   <h2 id="qunit-userAgent"></h2>
+   <ol id="qunit-tests"></ol>
+   <div id="qunit-fixture"></div>
+</body>
+</html>
