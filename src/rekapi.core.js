@@ -16,6 +16,20 @@ function fireEvent (kapi, eventName, _, opt_data) {
 
 
 /**
+ * @param {Kapi} kapi
+ */
+function recalculateAnimationLength (kapi) {
+  var actorLengths = [];
+
+  _.each(kapi._actors, function (actor) {
+    actorLengths.push(actor.getEnd());
+  });
+
+  kapi._animationLength = Math.max.apply(Math, actorLengths);
+};
+
+
+/**
  * Does nothing.  Absolutely nothing at all.
  */
 function noop () {
@@ -282,24 +296,6 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
-   * @private
-   *
-   * @return {Kapi}
-   */
-  Kapi.prototype._recalculateAnimationLength = function () {
-    var actorLengths = [];
-
-    _.each(this._actors, function (actor) {
-      actorLengths.push(actor.getEnd());
-    });
-
-    this._animationLength = Math.max.apply(Math, actorLengths);
-
-    return this;
-  };
-
-
-  /**
    * @param {Kapi.Actor} actor
    * @return {Kapi}
    */
@@ -313,7 +309,7 @@ var rekapiCore = function (context, _, Tweenable) {
       actor.kapi = this;
       actor.fps = this.framerate();
       this._actors[actor.id] = actor;
-      this._recalculateAnimationLength();
+      recalculateAnimationLength(this);
       actor.setup();
 
       fireEvent(this, 'addActor', _, actor);
@@ -356,7 +352,7 @@ var rekapiCore = function (context, _, Tweenable) {
     delete this._actors[actor.id];
     delete actor.kapi;
     actor.teardown();
-    this._recalculateAnimationLength();
+    recalculateAnimationLength(this);
 
     fireEvent(this, 'removeActor', _, actor);
 

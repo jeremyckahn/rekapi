@@ -114,9 +114,7 @@
           time = generateRandomFrame(bubbles[i], time);
         }
 
-        bubbles[i]
-          .copyProperties(time += 1500, 0)
-          .wait(time += 750);
+        bubbles[i].copyProperties(time += 1500, 0);
       }
     }
 

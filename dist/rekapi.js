@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.9.7 (Wed, 20 Jun 2012 05:50:07 GMT)
+ * Rekapi - Rewritten Kapi. v0.9.8 (Thu, 21 Jun 2012 03:38:37 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -27,6 +27,20 @@ function fireEvent (kapi, eventName, _, opt_data) {
     handler(kapi, opt_data);
   });
 }
+
+
+/**
+ * @param {Kapi} kapi
+ */
+function recalculateAnimationLength (kapi) {
+  var actorLengths = [];
+
+  _.each(kapi._actors, function (actor) {
+    actorLengths.push(actor.getEnd());
+  });
+
+  kapi._animationLength = Math.max.apply(Math, actorLengths);
+};
 
 
 /**
@@ -296,24 +310,6 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
-   * @private
-   *
-   * @return {Kapi}
-   */
-  Kapi.prototype._recalculateAnimationLength = function () {
-    var actorLengths = [];
-
-    _.each(this._actors, function (actor) {
-      actorLengths.push(actor.getEnd());
-    });
-
-    this._animationLength = Math.max.apply(Math, actorLengths);
-
-    return this;
-  };
-
-
-  /**
    * @param {Kapi.Actor} actor
    * @return {Kapi}
    */
@@ -327,7 +323,7 @@ var rekapiCore = function (context, _, Tweenable) {
       actor.kapi = this;
       actor.fps = this.framerate();
       this._actors[actor.id] = actor;
-      this._recalculateAnimationLength();
+      recalculateAnimationLength(this);
       actor.setup();
 
       fireEvent(this, 'addActor', _, actor);
@@ -370,7 +366,7 @@ var rekapiCore = function (context, _, Tweenable) {
     delete this._actors[actor.id];
     delete actor.kapi;
     actor.teardown();
-    this._recalculateAnimationLength();
+    recalculateAnimationLength(this);
 
     fireEvent(this, 'removeActor', _, actor);
 
@@ -874,7 +870,7 @@ var rekapiActor = function (context, _, Tweenable) {
     }, this);
 
     if (this.kapi) {
-      this.kapi._recalculateAnimationLength();
+      recalculateAnimationLength(this.kapi);
     }
 
     invalidatePropertyCache(this);
@@ -911,6 +907,7 @@ var rekapiActor = function (context, _, Tweenable) {
 
     sortPropertyTracks(this);
     invalidatePropertyCache(this);
+    recalculateAnimationLength(this.kapi);
     return this;
   };
 
@@ -1112,7 +1109,7 @@ var rekapiActor = function (context, _, Tweenable) {
     }, this);
 
     if (this.kapi) {
-      this.kapi._recalculateAnimationLength();
+      recalculateAnimationLength(this.kapi);
     }
 
     invalidatePropertyCache(this);
