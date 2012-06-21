@@ -260,6 +260,166 @@
     });
 
 
+    module('isPlaying');
+
+
+    test('Check the state of a playing animation', function () {
+
+      internalDebugNow = function () {
+        return new Date();
+      };
+
+      var testKapi = setupTestKapi();
+      testKapi.play();
+      equals(testKapi.isPlaying(), true,
+          '.play() causes .isPlaying() to be true');
+
+      testKapi.pause();
+      equals(testKapi.isPlaying(), false,
+          '.pause() causes .isPlaying() to be false');
+
+      testKapi.stop();
+      equals(testKapi.isPlaying(), false,
+          '.stop() causes .isPlaying() to be false');
+    });
+
+
+    module('pause');
+
+
+    test('Resuming a paused animation starts where it left off', function () {
+      var testKapi
+          ,testActor
+          ,calculatedMillisecond;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, {})
+        .keyframe(1000, {})
+        .keyframe(2000, {});
+
+
+      internalDebugNow = function () {
+        return 0;
+      };
+
+      testKapi.play();
+
+      internalDebugNow = function () {
+        return 500;
+      };
+
+      testKapi.pause();
+
+      internalDebugNow = function () {
+        return 1500;
+      };
+
+      testKapi.play();
+
+      equals(testKapi._loopTimestamp, 1000,
+          '.pause() modifies the internal timestamp of the animation');
+    });
+
+
+    module('stop');
+
+
+    test('Re-starting a stopped animation starts where from the beginning',
+      function () {
+      var testKapi
+          ,testActor
+          ,calculatedMillisecond;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, {})
+        .keyframe(1000, {})
+        .keyframe(2000, {});
+
+
+      internalDebugNow = function () {
+        return 0;
+      };
+
+      testKapi.play();
+
+      internalDebugNow = function () {
+        return 500;
+      };
+
+      testKapi.stop();
+
+      internalDebugNow = function () {
+        return 1500;
+      };
+
+      testKapi.play();
+
+      equals(testKapi._loopTimestamp, 1500,
+          '.stop() resets the timestamp of the animation');
+    });
+
+
+    module('playFrom');
+
+
+    test('Can start an animation from an arbitrary point on the timeline',
+      function () {
+      var testKapi
+          ,testActor
+          ,calculatedMillisecond;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, {})
+        .keyframe(1000, {});
+
+      internalDebugNow = function () {
+        return 3000;
+      };
+
+      testKapi.playFrom(500);
+
+      equals(testKapi._loopTimestamp, 2500,
+          '.playFrom resets the timestamp');
+    });
+
+
+    module('playFromCurrent');
+
+
+    test('Can calculate any point on the timeline and playFromCurrent()',
+      function () {
+      var testKapi
+          ,testActor
+          ,calculatedMillisecond;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, {})
+        .keyframe(1000, {});
+
+      internalDebugNow = function () {
+        return 3000;
+      };
+
+      testKapi.update(500);
+      testKapi.playFromCurrent();
+
+      equals(testKapi._loopTimestamp, 2500,
+          '.playFromCurrent resets the timestamp from last updated position');
+    });
+
+
     module('Internals - Loops');
 
 
@@ -367,7 +527,7 @@
     });
 
 
-    module("Internals - calculateLoopPosition");
+    module('Internals - calculateLoopPosition');
 
 
     test('Calculate accurate position in the tween', function () {
@@ -587,157 +747,6 @@
 
       Kapi._private.updatePlayState(testKapi, 3);
       equals(testKapi.isPlaying(), false, 'The animation is still complete');
-    });
-
-
-    module("Controller - Play state");
-
-
-    test('Check the state of a playing animation', function () {
-
-      internalDebugNow = function () {
-        return new Date();
-      };
-
-      var testKapi = setupTestKapi();
-      testKapi.play();
-      equals(testKapi.isPlaying(), true,
-          '.play() causes .isPlaying() to be true');
-
-      testKapi.pause();
-      equals(testKapi.isPlaying(), false,
-          '.pause() causes .isPlaying() to be false');
-
-      testKapi.stop();
-      equals(testKapi.isPlaying(), false,
-          '.stop() causes .isPlaying() to be false');
-    });
-
-
-    module("Controller - Play/pause/stop timeline control");
-
-
-    test('Resuming a paused animation starts where it left off', function () {
-      var testKapi
-          ,testActor
-          ,calculatedMillisecond;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-
-      testActor
-        .keyframe(0, {})
-        .keyframe(1000, {})
-        .keyframe(2000, {});
-
-
-      internalDebugNow = function () {
-        return 0;
-      };
-
-      testKapi.play();
-
-      internalDebugNow = function () {
-        return 500;
-      };
-
-      testKapi.pause();
-
-      internalDebugNow = function () {
-        return 1500;
-      };
-
-      testKapi.play();
-
-      equals(testKapi._loopTimestamp, 1000,
-          '.pause() modifies the internal timestamp of the animation');
-    });
-
-
-    test('Re-starting a stopped animation starts where from the beginning',
-      function () {
-      var testKapi
-          ,testActor
-          ,calculatedMillisecond;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-
-      testActor
-        .keyframe(0, {})
-        .keyframe(1000, {})
-        .keyframe(2000, {});
-
-
-      internalDebugNow = function () {
-        return 0;
-      };
-
-      testKapi.play();
-
-      internalDebugNow = function () {
-        return 500;
-      };
-
-      testKapi.stop();
-
-      internalDebugNow = function () {
-        return 1500;
-      };
-
-      testKapi.play();
-
-      equals(testKapi._loopTimestamp, 1500,
-          '.stop() resets the timestamp of the animation');
-    });
-
-
-    test('Can start an animation from an arbitrary point on the timeline',
-      function () {
-      var testKapi
-          ,testActor
-          ,calculatedMillisecond;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-
-      testActor
-        .keyframe(0, {})
-        .keyframe(1000, {});
-
-      internalDebugNow = function () {
-        return 3000;
-      };
-
-      testKapi.playFrom(500);
-
-      equals(testKapi._loopTimestamp, 2500,
-          '.playFrom resets the timestamp');
-    });
-
-
-    test('Can calculate any point on the timeline and playFromCurrent()',
-      function () {
-      var testKapi
-          ,testActor
-          ,calculatedMillisecond;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-
-      testActor
-        .keyframe(0, {})
-        .keyframe(1000, {});
-
-      internalDebugNow = function () {
-        return 3000;
-      };
-
-      testKapi.update(500);
-      testKapi.playFromCurrent();
-
-      equals(testKapi._loopTimestamp, 2500,
-          '.playFromCurrent resets the timestamp from last updated position');
     });
 
 
