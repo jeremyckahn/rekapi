@@ -279,6 +279,28 @@
     });
 
 
+    module('actorCount');
+
+    test('Actors are accounted for', function () {
+
+      var kapi = new Kapi();
+      kapi.addActor(new Kapi.Actor());
+      kapi.addActor(new Kapi.Actor());
+      kapi.addActor(new Kapi.Actor());
+      equals(kapi.actorCount(), 3, 'All actors were added and recorded');
+    });
+
+
+    module('framerate');
+
+
+    test('Framerate can be writtena and read', function () {
+
+      var kapi = new Kapi();
+      equals(kapi.framerate(1000), 1000, 'Written framerate was read');
+    });
+
+
     module('isPlaying');
 
 
