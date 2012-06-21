@@ -165,5 +165,6 @@ is added to if it is not provided to this constructor.
 Kapi.CanvasActor.prototype.moveToLayer (layer)
 ````
 
-Move this `CanvasActor` to a different layer in the `Kapi` instance that it belongs
-to.  This returns `undefined` if the operation was unsuccessful
+Move this `CanvasActor` to a different layer in the `Kapi` instance that it
+belongs to.  This returns `undefined` if the operation was unsuccessful.  The
+method is just calls `Kapi.prototype.moveActorToLayer`.

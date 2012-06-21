@@ -31,10 +31,10 @@
 
   (function runTests () {
 
-    module('Single keyframe');
+    module('updateState');
 
     test('Correctly interpolate Actor positions at various positions mid-frame',
-    function () {
+        function () {
       var testKapi
           ,testActor;
 
@@ -76,9 +76,9 @@
     });
 
 
-
     test('Keyframes inherit missing properties from the previous keyframe',
-    function () {
+        function () {
+
       var testKapi
           ,testActor;
 
@@ -98,7 +98,8 @@
 
 
     test('Tweens are only valid if there is an end point',
-    function () {
+      function () {
+
       var testKapi
           ,testActor;
 
@@ -117,11 +118,9 @@
     });
 
 
-
-    module('Multiple keyframes');
-
     test('Interpolate Actor positions at various positions mid-frame',
-    function () {
+        function () {
+
       var testKapi
           ,testActor;
 
@@ -163,8 +162,8 @@
 
 
 
-    test('Applied easing is taken from the destination frame',
-    function () {
+    test('Applied easing is taken from the destination frame', function () {
+
       var testKapi
           ,testActor
           ,tweenableComparator;
@@ -204,7 +203,65 @@
     });
 
 
-    module('Keyframe removal');
+    test('If there are no current or future properties, use the latest property',
+        function () {
+
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, {
+        'x': 50
+        ,'y': 50
+      }).keyframe(1000, {
+        'y': 100
+      }).keyframe(2000, {
+        'y': 150
+      });
+
+      testActor.updateState(500);
+
+      equal(testActor.get().x, 50
+        ,'Got the x value from one keyframe back');
+      equal(testActor.get().y, 75
+        ,'Got the corrext y midpoint');
+
+      testActor.updateState(1500);
+
+      equal(testActor.get().x, 50
+        ,'Got the x value from two keyframes back');
+    });
+
+
+    test('If a given millisecond doesn\'t have a previous keyframe, return null',
+        function () {
+
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, {
+        'x': 50
+      }).keyframe(1000, {
+        'x': 100
+        ,'y': 100
+      });
+
+      testActor.updateState(500);
+
+      equal(testActor.get().x, 75
+        ,'Got the most recent x value');
+      equal(testActor.get().y, null
+        ,'Got the corrext y midpoint');
+    });
+
+
+    module('removeKeyframe');
+
 
     test('Keyframes can be removed from the middle of the animation',
         function () {
@@ -232,6 +289,7 @@
 
     test('Single keyframe properties can be removed from an actor at a time',
         function () {
+
       var testKapi
           ,testActor;
 
@@ -258,6 +316,7 @@
 
     test('Multiple keyframe properties can be removed from an actor at a time',
         function () {
+
       var testKapi
           ,testActor;
 
@@ -344,7 +403,38 @@
     });
 
 
-    module('Keyframe modification');
+    module('copyProperties');
+
+
+    test('Unmodified keyframe properties are copied.', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      testActor.keyframe(0, {
+          'x': 50
+        }, {
+          'x': 'easeInQuad'
+        });
+
+      testActor.copyProperties(1000, 0);
+
+      equals(testActor._propertyTracks.x.length, 2,
+          'Now there are two properties');
+      ok(testActor._propertyTracks.x[0] !== testActor._propertyTracks.x[1],
+          'The two properties are not the same Object reference');
+      equals(testActor._propertyTracks.x[0].value,
+          testActor._propertyTracks.x[1].value,
+          'Copied property value is the same as the source property value')
+      equals(testActor._propertyTracks.x[0].easing,
+          testActor._propertyTracks.x[1].easing,
+          'Copied property easing is the same as the source property easing')
+    });
+
+
+    module('modifyKeyframe');
+
 
     test('Original keyframe position property is changed' , function () {
       var testKapi
@@ -398,7 +488,8 @@
     });
 
 
-    module('Keyframe presence');
+    module('hasKeyframeAt');
+
 
     test('Actor can determine if it has a keyframe at a given millisecond' , function () {
       var testKapi
@@ -425,6 +516,7 @@
       equals(testActor.hasKeyframeAt(1000), true,
           'Keyframe exists at 1000ms');
     });
+
 
     test('Actor can determine if it has a keyframe on a given property track' , function () {
       var testKapi
@@ -453,7 +545,8 @@
     });
 
 
-    module('Waits');
+    module('wait');
+
 
     test('Can copy keyframes (one initial keyframe)', function () {
       var testKapi
@@ -551,67 +644,8 @@
     });
 
 
-    module('Missing keyframe properties');
+    module('addActor');
 
-
-    test('If there are no current or future properties, use the latest property'
-      , function () {
-
-      var testKapi
-          ,testActor;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-
-      testActor.keyframe(0, {
-        'x': 50
-        ,'y': 50
-      }).keyframe(1000, {
-        'y': 100
-      }).keyframe(2000, {
-        'y': 150
-      });
-
-      testActor.updateState(500);
-
-      equal(testActor.get().x, 50
-        ,'Got the x value from one keyframe back');
-      equal(testActor.get().y, 75
-        ,'Got the corrext y midpoint');
-
-      testActor.updateState(1500);
-
-      equal(testActor.get().x, 50
-        ,'Got the x value from two keyframes back');
-    });
-
-
-    test('If a given millisecond doesn\'t have a previous keyframe, return null'
-      , function () {
-
-      var testKapi
-          ,testActor;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-
-      testActor.keyframe(0, {
-        'x': 50
-      }).keyframe(1000, {
-        'x': 100
-        ,'y': 100
-      });
-
-      testActor.updateState(500);
-
-      equal(testActor.get().x, 75
-        ,'Got the most recent x value');
-      equal(testActor.get().y, null
-        ,'Got the corrext y midpoint');
-    });
-
-
-    module('Unattached actors');
 
     test('Can create keyframes on unattached actors', function () {
       var actor = new Kapi.Actor();
@@ -637,7 +671,7 @@
     });
 
 
-    module('Contexts');
+    module('context');
 
 
     test('Actor inherits the Kapi instance\'s context by default',
@@ -667,7 +701,7 @@
     });
 
 
-    module('KeyframeProperty management');
+    module('getKeyframeProperty');
 
 
     test('KeyframePropererties created with .keyframe can be retrieved with .getKeyframeProperty',
@@ -683,6 +717,9 @@
     });
 
 
+    module('modifyKeyframeProperty');
+
+
     test('KeyframeProperties created with .keyframe can be modified with .modifyKeyframeProperty',
         function () {
 
@@ -695,6 +732,329 @@
       equals(testActor.getKeyframeProperty('x', 0).value, 20,
         'The KeyframeProperty was modified');
     });
+
+
+    module('getTrackLength');
+
+
+    test('getTrackLength returns the number of KeyframeProperties in a track',
+        function () {
+
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+
+      testActor1
+        .keyframe(0, { x: 1 })
+        .keyframe(1000, { x: 2 })
+        .keyframe(2000, { x: 3 });
+
+      equals(testActor1.getTrackLength('x'), 3,
+          'Track with Actors has a length');
+    });
+
+
+    module('getStart');
+
+
+    test('Get the start of an Actor\'s movement in the animation',
+        function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(250, {
+          x: 1
+        }).keyframe(1000, {
+          x: 10
+        }).keyframe(2000, {
+          x: 20
+        })
+
+      equal(testActor.getStart(), 250,
+          'Retrieved the correct time of the first keyframe');
+    });
+
+
+    module('getEnd');
+
+
+    test('Get the end of an Actor\'s movement in the animation',
+        function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(250, {
+          x: 1
+        }).keyframe(1000, {
+          x: 10
+        }).keyframe(2000, {
+          x: 20
+        })
+
+      equal(testActor.getEnd(), 2000,
+          'Retrieved the correct time of the last keyframe');
+    });
+
+
+    module('getLength');
+
+
+    test('Get the length of time that an Actor animates for', function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(250, {
+          x: 1
+        }).keyframe(1000, {
+          x: 10
+        }).keyframe(2000, {
+          x: 20
+        })
+
+      equal(testActor.getLength(), 1750,
+          'Retrieved the correct length of time for an actor\s total movement');
+    });
+
+
+    test('Actor track with no KeyframeProperties cannot be measured', function () {
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+
+      testActor1
+        .keyframe(0, {})
+        .keyframe(1000, {})
+        .keyframe(2000, {});
+
+      equals(testActor1.getTrackLength('x'), undefined,
+          'Track with Actors does not have a length');
+    });
+
+
+    module('getTrackNames');
+
+
+    test('Actor track names can be retrieved', function () {
+      var testKapi
+          ,testActor1;
+
+      testKapi = setupTestKapi();
+      testActor1 = setupTestActor(testKapi);
+
+      testActor1
+        .keyframe(0, {
+          a: 1
+          ,b: 2
+          ,c: 3
+          ,d: 4
+        });
+
+      var trackNames = testActor1.getTrackNames();
+
+      ok(_.contains(trackNames, 'a'), 'Track "a" exists');
+      ok(_.contains(trackNames, 'b'), 'Track "b" exists');
+      ok(_.contains(trackNames, 'c'), 'Track "c" exists');
+      ok(_.contains(trackNames, 'd'), 'Track "d" exists');
+      equals(trackNames.length, 4, 'There are only 4 track names');
+    });
+
+
+    module('exportTimeline');
+
+
+    test('Exported Actor data has key data points', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      testActor.keyframe(0, {
+        'x': 1
+        ,'y': 10
+      }).keyframe(1000, {
+        'x': 2
+        ,'y': 20
+      });
+
+      var exportedTimeline = testActor.exportTimeline();
+      equals(exportedTimeline.start, 0,
+          'Actor start time is properly exported');
+      equals(exportedTimeline.end, 1000,
+          'Actor end time is properly exported');
+      ok(_.contains(exportedTimeline.trackNames, 'x'),
+          '"x"" track is in the trackName list');
+      ok(_.contains(exportedTimeline.trackNames, 'y'),
+          '"y"" track is in the trackName list');
+      equals(exportedTimeline.trackNames.length, 2,
+          'Only two track names were exported');
+      equals(exportedTimeline.propertyTracks.x.length, 2,
+          'Data for all "x" KeyframeProperties was exported')
+      equals(exportedTimeline.propertyTracks.y.length, 2,
+          'Data for all "y" KeyframeProperties was exported')
+      equals(typeof exportedTimeline.propertyTracks.x[0].id, 'string',
+          'First exported x KeyframeProperty has an id');
+      equals(typeof exportedTimeline.propertyTracks.y[0].id, 'string',
+          'First exported y KeyframeProperty has an id');
+    });
+
+
+    module('data');
+
+
+    test('Arbitrary data can be stored on an Actor', function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor.data({ a: 'hello' });
+
+      equal(testActor.data().a, 'hello',
+          'Retrieved the data that was bound to the Actor');
+    });
+
+
+    module('Internals - KeyframeProperty tracks');
+
+
+    test('Single keyframe properties are added to Actors successfully', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      testActor.keyframe(0, {
+        'x': 50
+        ,'y': 50
+      });
+
+      var keyPropCount = 0;
+
+      for (var keyProp in testActor._keyframeProperties) {
+        keyPropCount++;
+      }
+
+      var propTrackCount = 0;
+
+      for (var propTrack in testActor._propertyTracks) {
+        propTrackCount++;
+      }
+
+      ok(testActor._keyframeProperties[keyProp] instanceof Kapi.KeyframeProperty,
+          'The Actor\'s _keyframeProperties Object contains KeyframeProperty instances')
+      equals(testActor._propertyTracks.x.length, 1, 'Property was added to the "x" track');
+      equals(testActor._propertyTracks.y.length, 1, 'Property was added to the "y" track');
+      equal(keyPropCount, 2, 'The correct amount of KeyframeProperty instances were added');
+      equal(propTrackCount, 2,
+          'The correct amount of property tracks were added.');
+    });
+
+
+    test('Multiple keyframe properties are added to Actors successfully', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      testActor.keyframe(0, {
+          'x': 50
+          ,'y': 50
+        }).keyframe(1000, {
+          'x': 100
+          ,'y': 100
+        });
+
+      var keyPropCount = 0;
+
+      for (var keyProp in testActor._keyframeProperties) {
+        keyPropCount++;
+      }
+
+      equals(testActor._propertyTracks.x.length, 2,
+          'Properties were added to the "x" track');
+      equals(testActor._propertyTracks.y.length, 2,
+          'Properties were added to the "y" track');
+      equal(keyPropCount, 4,
+          'The correct amount of KeyframeProperty instances were added');
+      deepEqual(testActor._timelinePropertyCacheIndex, [0, 1000],
+          'The intenal _timelinePropertyCacheIndex is correct');
+      equals(testActor._propertyTracks.x[0].nextProperty,
+          testActor._propertyTracks.x[1],
+          'The first tracked "x" KeyframeProperty instance\'s nextProperty is pointing to the correct property');
+      equals(testActor._propertyTracks.y[0].nextProperty,
+          testActor._propertyTracks.y[1],
+          'The first tracked "y" KeyframeProperty instance\'s nextProperty is pointing to the correct property');
+    });
+
+
+    test('Can modify the position of a KeyframeProperty', function () {
+      var testKapi
+          ,testActor;
+
+      testKapi = setupTestKapi();
+      testActor = setupTestActor(testKapi);
+      testActor.keyframe(0, {
+          'x': 50
+          ,'y': 50
+        }).keyframe(1000, {
+          'x': 100
+          ,'y': 100
+        });
+
+      testActor.modifyKeyframeProperty('x', 1, {
+        'millisecond': 1500
+      });
+
+      var keyPropCount = 0;
+
+      for (var keyProp in testActor._keyframeProperties) {
+        keyPropCount++;
+      }
+
+      var propTrackCount = 0;
+
+      for (var propTrack in testActor._propertyTracks) {
+        propTrackCount++;
+      }
+
+      equal(keyPropCount, 4,
+          'The number of KeyframeProperty instances on the Actor did not change');
+      deepEqual(testActor._timelinePropertyCacheIndex, [0, 1000, 1500],
+          'The intenal _timelinePropertyCacheIndex is correct');
+      equal(propTrackCount, 2,
+          'The number of property tracks did not change');
+      equals(testActor._propertyTracks.x.length, 2,
+          'Modifying the property within it\'s track did not change the number of properties in the track');
+      equals(testActor._timelinePropertyCaches[0].x.millisecond, 0,
+          'There is an "x" KeyframeProperty at 0');
+      equals(testActor._timelinePropertyCaches[0].y.millisecond, 0,
+          'There is a "y" KeyframeProperty at 0');
+      equals(testActor._timelinePropertyCaches[1000].x.millisecond, 0,
+          'The "x" KeyframeProperty at 1000 milliseconds is pointing back to "x" property at 0 millisecond');
+      equals(testActor._timelinePropertyCaches[1000].y.millisecond, 1000,
+          'There is a "y" KeyframeProperty at 1000');
+      equals(testActor._timelinePropertyCaches[1500].x.millisecond, 1500,
+          'There is an "x" KeyframeProperty at 1500');
+      equals(testActor._timelinePropertyCaches[1500].y,
+          testActor._propertyTracks.y[1],
+          'The second tracked "y" property is cached at the 1500 millisecond cache');
+      equals(testActor._propertyTracks.x[0].nextProperty,
+          testActor._propertyTracks.x[1],
+          'The first tracked "x" KeyframeProperty instance\'s nextProperty did not change');
+      equals(testActor._propertyTracks.y[0].nextProperty,
+          testActor._propertyTracks.y[1],
+          'The first tracked "y" KeyframeProperty instance\'s nextProperty did not change');
+    });
+
 
   } ());
   </script>

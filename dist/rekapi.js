@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.9.5
+ * Rekapi - Rewritten Kapi. v0.9.8 (Thu, 21 Jun 2012 03:38:37 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -11,8 +11,7 @@
  *   Shifty.js (https://github.com/jeremyckahn/shifty).
  * MIT Lincense.  This code free to use, modify, distribute and enjoy.
  */
-;(function(global) {
-
+;(function (global) {
 // REKAPI-GLOBAL METHODS
 // These are global in development, but get wrapped in a closure at build-time.
 
@@ -28,6 +27,20 @@ function fireEvent (kapi, eventName, _, opt_data) {
     handler(kapi, opt_data);
   });
 }
+
+
+/**
+ * @param {Kapi} kapi
+ */
+function recalculateAnimationLength (kapi) {
+  var actorLengths = [];
+
+  _.each(kapi._actors, function (actor) {
+    actorLengths.push(actor.getEnd());
+  });
+
+  kapi._animationLength = Math.max.apply(Math, actorLengths);
+};
 
 
 /**
@@ -290,28 +303,10 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
-   * @type {{function}} Contains the context init function to be called in the
-   * Kapi contstructor.
+   * @type {Object.<function>} Contains the context init function to be called
+   * in the Kapi contstructor.
    */
   Kapi.prototype._contextInitHook = {};
-
-
-  /**
-   * @private
-   *
-   * @return {Kapi}
-   */
-  Kapi.prototype._recalculateAnimationLength = function () {
-    var actorLengths = [];
-
-    _.each(this._actors, function (actor) {
-      actorLengths.push(actor.getEnd());
-    });
-
-    this._animationLength = Math.max.apply(Math, actorLengths);
-
-    return this;
-  };
 
 
   /**
@@ -328,7 +323,7 @@ var rekapiCore = function (context, _, Tweenable) {
       actor.kapi = this;
       actor.fps = this.framerate();
       this._actors[actor.id] = actor;
-      this._recalculateAnimationLength();
+      recalculateAnimationLength(this);
       actor.setup();
 
       fireEvent(this, 'addActor', _, actor);
@@ -371,7 +366,7 @@ var rekapiCore = function (context, _, Tweenable) {
     delete this._actors[actor.id];
     delete actor.kapi;
     actor.teardown();
-    this._recalculateAnimationLength();
+    recalculateAnimationLength(this);
 
     fireEvent(this, 'removeActor', _, actor);
 
@@ -599,12 +594,6 @@ var rekapiCore = function (context, _, Tweenable) {
 
   Kapi.util = {};
 
-  // TODO:  There are some duplicates in Kapi.util and Kapi._private, clean up
-  // the references in the tests.
-  _.extend(Kapi.util, {
-    'calculateLoopPosition': calculateLoopPosition
-    ,'calculateTimeSinceStart': calculateTimeSinceStart
-  });
 
   // Some hooks for testing.
   if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
@@ -881,7 +870,7 @@ var rekapiActor = function (context, _, Tweenable) {
     }, this);
 
     if (this.kapi) {
-      this.kapi._recalculateAnimationLength();
+      recalculateAnimationLength(this.kapi);
     }
 
     invalidatePropertyCache(this);
@@ -918,6 +907,7 @@ var rekapiActor = function (context, _, Tweenable) {
 
     sortPropertyTracks(this);
     invalidatePropertyCache(this);
+    recalculateAnimationLength(this.kapi);
     return this;
   };
 
@@ -1119,7 +1109,7 @@ var rekapiActor = function (context, _, Tweenable) {
     }, this);
 
     if (this.kapi) {
-      this.kapi._recalculateAnimationLength();
+      recalculateAnimationLength(this.kapi);
     }
 
     invalidatePropertyCache(this);

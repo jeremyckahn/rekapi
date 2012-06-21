@@ -18,7 +18,7 @@
           'context': canvas
           ,'fps': 60
         });
-    
+
     return kapi;
   }
 
@@ -50,7 +50,7 @@
 
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
-      
+
       testKapi.removeActor(testActor1);
 
       equals(testKapi._drawOrder.length, 0,
@@ -185,7 +185,7 @@
 
       testKapi.update(500);
       testKapi.canvasClear();
-      
+
       testActor.draw = function(context, state) {
         equals(testKapi._lastUpdatedMillisecond, 500,
           'Last frame was redrawn');

@@ -16,6 +16,20 @@ function fireEvent (kapi, eventName, _, opt_data) {
 
 
 /**
+ * @param {Kapi} kapi
+ */
+function recalculateAnimationLength (kapi) {
+  var actorLengths = [];
+
+  _.each(kapi._actors, function (actor) {
+    actorLengths.push(actor.getEnd());
+  });
+
+  kapi._animationLength = Math.max.apply(Math, actorLengths);
+};
+
+
+/**
  * Does nothing.  Absolutely nothing at all.
  */
 function noop () {
@@ -275,28 +289,10 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
-   * @type {{function}} Contains the context init function to be called in the
-   * Kapi contstructor.
+   * @type {Object.<function>} Contains the context init function to be called
+   * in the Kapi contstructor.
    */
   Kapi.prototype._contextInitHook = {};
-
-
-  /**
-   * @private
-   *
-   * @return {Kapi}
-   */
-  Kapi.prototype._recalculateAnimationLength = function () {
-    var actorLengths = [];
-
-    _.each(this._actors, function (actor) {
-      actorLengths.push(actor.getEnd());
-    });
-
-    this._animationLength = Math.max.apply(Math, actorLengths);
-
-    return this;
-  };
 
 
   /**
@@ -313,7 +309,7 @@ var rekapiCore = function (context, _, Tweenable) {
       actor.kapi = this;
       actor.fps = this.framerate();
       this._actors[actor.id] = actor;
-      this._recalculateAnimationLength();
+      recalculateAnimationLength(this);
       actor.setup();
 
       fireEvent(this, 'addActor', _, actor);
@@ -356,7 +352,7 @@ var rekapiCore = function (context, _, Tweenable) {
     delete this._actors[actor.id];
     delete actor.kapi;
     actor.teardown();
-    this._recalculateAnimationLength();
+    recalculateAnimationLength(this);
 
     fireEvent(this, 'removeActor', _, actor);
 
@@ -584,12 +580,6 @@ var rekapiCore = function (context, _, Tweenable) {
 
   Kapi.util = {};
 
-  // TODO:  There are some duplicates in Kapi.util and Kapi._private, clean up
-  // the references in the tests.
-  _.extend(Kapi.util, {
-    'calculateLoopPosition': calculateLoopPosition
-    ,'calculateTimeSinceStart': calculateTimeSinceStart
-  });
 
   // Some hooks for testing.
   if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {

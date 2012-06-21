@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Rekapi example</title>
+    <script src="../../dist/_.js"></script>
+    <script src="../../dist/shifty.js"></script>
+    <script src="../../dist/rekapi.js"></script>
+  </head>
+  <body>
+    <canvas></canvas>
+    <script>
+      var canvas = document.getElementsByTagName('canvas')[0];
+
+      var kapi = new Kapi({
+        'context': canvas,
+        'height': 300,
+        'width': 400
+      });
+
+      var actor = new Kapi.CanvasActor({
+        'draw': function (canvas_context, state) {
+          canvas_context.beginPath();
+            canvas_context.arc(
+              state.x || 0,
+              state.y || 0,
+              state.radius || 50,
+              0,
+              Math.PI*2,
+              true);
+            canvas_context.fillStyle = state.color || '#f0f';
+            canvas_context.fill();
+            canvas_context.closePath();
+
+            return this;
+        }
+      });
+
+      actor
+        .keyframe(0,    { x: 50,  y: 50 })
+        .keyframe(1000, { x: 200, y: 150 });
+
+      console.log(actor.exportTimeline());
+    </script>
+  </body>
+</html>

@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Rekapi example</title>
+    <script src="../../dist/_.js"></script>
+    <script src="../../dist/shifty.js"></script>
+    <script src="../../dist/rekapi.js"></script>
+  </head>
+  <body>
+    <canvas></canvas>
+    <script>
+      var actor = new Kapi.Actor();
+      var keyprop = new Kapi.KeyframeProperty(actor, 500, 'x', 10, 'linear');
+
+      console.log(keyprop.millisecond, keyprop.value, keyprop.easing);
+      keyprop.modifyWith({ 'millisecond': 750 });
+      console.log(keyprop.millisecond, keyprop.value, keyprop.easing);
+      keyprop.modifyWith({ 'value': 20 });
+      console.log(keyprop.millisecond, keyprop.value, keyprop.easing);
+      keyprop.modifyWith({ 'value': 30, 'easing': 'bounce' });
+      console.log(keyprop.millisecond, keyprop.value, keyprop.easing);
+    </script>
+  </body>
+</html>
