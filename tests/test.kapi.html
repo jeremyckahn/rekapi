@@ -249,7 +249,7 @@
 
       var testKapi = setupTestKapi();
       var testActor = setupTestActor(testKapi);
-      var handlerWasCalled = false
+      var handlerWasCalled = false;
 
       testKapi.on('addActor', function(kapi, actor) {
         handlerWasCalled = true;
@@ -257,6 +257,25 @@
       testKapi.addActor(testActor);
 
       ok(!handlerWasCalled, 'Handler was not called');
+    });
+
+
+    module('lastPositionUpdated');
+
+
+    test('Last calculated state is recorded', function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor.keyframe(0, {
+        'x': 1
+      }).keyframe(1000, {
+        'x': 2
+      });
+
+      testKapi.update(500);
+      equal(testKapi.lastPositionUpdated(), .5, 'Midpoint was recorded');
     });
 
 
