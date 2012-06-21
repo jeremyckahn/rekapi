@@ -217,11 +217,9 @@
 
 
     test('Event is fired when an actor is added', function () {
-      var testKapi
-          ,testActor;
 
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
 
       testKapi.on('addActor', function(kapi, actor) {
         ok(actor !== undefined);
@@ -232,17 +230,33 @@
 
 
     test('Event is fired when an actor is removed', function () {
-      var testKapi
-          ,testActor;
 
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
 
       testKapi.on('removeActor', function(kapi, actor) {
         ok(actor !== undefined);
         equals(actor, testActor, 'Event data is equal to removed actor');
       });
       testKapi.removeActor(testActor);
+    });
+
+
+    module('off');
+
+    test('Event handlers are  are not called after being unbound',
+        function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+      var handlerWasCalled = false
+
+      testKapi.on('addActor', function(kapi, actor) {
+        handlerWasCalled = true;
+      });
+      testKapi.addActor(testActor);
+
+      ok(!handlerWasCalled, 'Handler was not called');
     });
 
 
