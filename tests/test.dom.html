@@ -94,7 +94,7 @@
       var setWrongFunctions = _.bind(testActor.setTransformOrder, testActor,
         ['foo', 'bar', 'rotate']);
 
-      raises(setWrongFunctions, Error,
+      raises(setWrongFunctions,
         'Throws error if passed an unknown/unsupported transform function');
 
       var testOrder1 = ['rotate', 'translateY', 'translateX'];

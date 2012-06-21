@@ -3,6 +3,7 @@ var rekapiDOM = function (context, _) {
   'use strict';
 
   var Kapi = context.Kapi;
+  // TODO:  Change the name of this array to a clearer name, e.g. `vendorTransforms`
   var transforms = [
     'transform'
     ,'webkitTransform'
@@ -29,19 +30,19 @@ var rekapiDOM = function (context, _) {
    * @param {string} name A transform function name
    * @return {boolean}
    */
-  function isTransformFunction(name) {
-    return _.include(transformFunctions, name);
+  function isTransformFunction (name) {
+    return _.contains(transformFunctions, name);
   }
 
 
   /**
    * Builds a concatenated string of given transform property values in order.
    *
-   * @param {Array} orderedFunctions Array of ordered transform function names
+   * @param {Array.<string>} orderedFunctions Array of ordered transform function names
    * @param {Object} transformProperties Transform properties to build together
    * @return {string}
    */
-  function buildTransformValue(orderedFunctions, transformProperties) {
+  function buildTransformValue (orderedFunctions, transformProperties) {
     var transformComponents = [];
 
     _.each(orderedFunctions, function(functionName) {
@@ -61,7 +62,7 @@ var rekapiDOM = function (context, _) {
    * @param {Object} context The actor's DOM context
    * @param {string} transformValue The transform style value
    */
-  function setTransformStyles(context, transformValue) {
+  function setTransformStyles (context, transformValue) {
     _.each(transforms, function(prefixedTransform) {
       setStyle(context, prefixedTransform, transformValue);
     });
@@ -83,7 +84,7 @@ var rekapiDOM = function (context, _) {
       this._context.className += ' ' + className;
     }
 
-    this._transformOrder = transformFunctions;
+    this._transformOrder = transformFunctions.slice(0);
 
     // Remove the instance's update method to allow the
     // ActorMethods.prototype.update method to be accessible.
@@ -105,13 +106,15 @@ var rekapiDOM = function (context, _) {
    */
   DOMActorMethods.prototype.update = function (context, state) {
     var propertyNames = _.keys(state);
+    // TODO:  Optimize the following code so that propertyNames is not looped over twice.
     var transformFunctionNames = _.filter(propertyNames, isTransformFunction);
     var otherPropertyNames = _.reject(propertyNames, isTransformFunction);
     var otherProperties = _.pick(state, otherPropertyNames);
 
-    if (transformFunctionNames.length > 0) {
-      setTransformStyles(context, buildTransformValue(this._transformOrder,
-        _.pick(state, transformFunctionNames)));
+    if (transformFunctionNames.length) {
+      var transformProperties = _.pick(state, transformFunctionNames);
+      var builtStyle = buildTransformValue(this._transformOrder, transformProperties);
+      setTransformStyles(context, builtStyle);
     } else if (state.transform) {
       setTransformStyles(context, state.transform);
     }
@@ -146,9 +149,8 @@ var rekapiDOM = function (context, _) {
   DOMActorMethods.prototype.setTransformOrder = function (orderedFunctions) {
     var unknownFunctions = _.reject(orderedFunctions, isTransformFunction);
 
-    if (unknownFunctions.length > 0) {
-      throw new Error('Unknown or unsupported transform functions: ' +
-        unknownFunctions.join(', '));
+    if (unknownFunctions.length) {
+      throw 'Unknown or unsupported transform functions: ' + unknownFunctions.join(', ');
     }
     // Ignore duplicate transform function names in the array
     this._transformOrder = _.uniq(orderedFunctions);
