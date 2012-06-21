@@ -301,6 +301,24 @@
     });
 
 
+    module('update');
+
+
+    test('update causes the actor states to be recalculated', function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, { x: 0 })
+        .keyframe(1000, { x: 10 });
+
+      testKapi.update(500);
+
+      equals(testActor.get().x, 5, 'Midpoint of the actor was computed');
+    });
+
+
     module('isPlaying');
 
 
