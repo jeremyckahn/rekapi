@@ -186,6 +186,36 @@
     });
 
 
+    $('#fancy-parameters-tween-independent').click(function () {
+      var actor;
+
+      killTest();
+      kapi = setupTestKapi();
+      actor = setupTestActor(kapi);
+
+      actor
+        .keyframe(0, {
+          'translateX': '0px'
+          ,'translateY': '0px'
+          ,'rotate': '0deg'
+          ,'background': '#f00'
+          ,'height': '50px'
+          ,'width': '50px'
+        })
+        .keyframe(1500, {
+          'translateX': '200px'
+          ,'translateY': '200px'
+          ,'rotate': '180deg'
+          ,'background': '#00f'
+          ,'height': '100px'
+          ,'width': '100px'
+        }, 'easeOutExpo');
+
+      kapi.play();
+      console.log(kapi);
+    });
+
+
     $('#delayed-start').click(function () {
       var actor;
 
@@ -232,6 +262,7 @@
     <li><button id="basic-eased-tween">Basic eased tween loop</button></li>
     <li><button id="multi-eased-tween">Tween loop with multiple easings</button></li>
     <li><button id="fancy-parameters-tween">Tween loop with fancy parameters</button></li>
+    <li><button id="fancy-parameters-tween-independent">Tween loop with independent parameters</button></li>
   </ul>
 </body>
 </html>
