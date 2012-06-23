@@ -39,11 +39,32 @@ kapi.play();
 
 ## Transforms
 
-`DOMActor` supports CSS3 `transform`s.  Typically, when writing a `transform`
-rule, it is necessary to write the same rule multiple times, in order to
-support the vendor prefixes for all of the browser rendering engines.  The DOM
-extension takes care of the cross browser inconsistencies; all you need to use
-is the `transform` property:
+`DOMActor` supports CSS3 transform functions as keyframe properties. Here is an example:
+
+````javascript
+actor
+  .keyframe(0, {
+    'translateX': '0px'
+    ,'translateY': '0px'
+    ,'rotate': '0deg'
+  })
+  .keyframe(1500, {
+    'translateX': '200px'
+    ,'translateY': '200px'
+    ,'rotate': '90deg'
+  }, 'easeOutExpo');
+````
+
+The list of supported functions is: `translateX`, `translateY`, `scale`, `scaleX`, `scaleY`,
+`rotate`, `skewX`, `skewY`.
+
+Internally, this builds a CSS3 `transform` rule applied to the DOM node on each animation tick.
+
+Typically, when writing a `transform` rule, it is necessary to write the same rule multiple times,
+in order to support the vendor prefixes for all of the browser rendering engines. The DOM
+extension takes care of the cross browser inconsistencies.
+
+You can also use the `transform` property directly:
 
 ````javascript
 actor
