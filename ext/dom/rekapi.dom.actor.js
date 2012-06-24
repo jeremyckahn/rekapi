@@ -3,9 +3,7 @@ var rekapiDOM = function (context, _) {
   'use strict';
 
   var Kapi = context.Kapi;
-  // TODO:  Change the name of this array to a clearer name, e.g.
-  // `vendorTransforms`
-  var transforms = [
+  var vendorTransforms = [
     'transform'
     ,'webkitTransform'
     ,'MozTransform'
@@ -65,7 +63,7 @@ var rekapiDOM = function (context, _) {
    * @param {string} transformValue The transform style value
    */
   function setTransformStyles (context, transformValue) {
-    _.each(transforms, function(prefixedTransform) {
+    _.each(vendorTransforms, function(prefixedTransform) {
       setStyle(context, prefixedTransform, transformValue);
     });
   }
