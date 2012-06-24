@@ -37,7 +37,6 @@ var rekapiToCSS = function (context, _) {
    */
   var CLASS_BOILERPLATE = [
     '.%s {'
-    ,'  position: absolute;'
     ,'%s'
     ,'}'
   ].join('\n');

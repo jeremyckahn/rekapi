@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.9.10 (Sun, 24 Jun 2012 03:02:15 GMT)
+ * Rekapi - Rewritten Kapi. v0.9.11 (Sun, 24 Jun 2012 22:41:29 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -1748,7 +1748,6 @@ var rekapiToCSS = function (context, _) {
    */
   var CLASS_BOILERPLATE = [
     '.%s {'
-    ,'  position: absolute;'
     ,'%s'
     ,'}'
   ].join('\n');
