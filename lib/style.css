@@ -5,7 +5,7 @@
 }
 
 #main-container {
-  font-family: 'Petrona', serif;
+  font-family: 'Georgia', 'Times New Roman', serif;
   line-height: 1.7em;
   margin: 50px auto;
   width: 800px;
@@ -191,7 +191,7 @@ canvas {
 
     #tween-controls input {
       font-size: 0.8em;
-      width: 165px;
+      width: 160px;
     }
 
     #tween-controls input[type="checkbox"] {
@@ -205,6 +205,10 @@ canvas {
 
     #tween-controls input.error {
       background: #f55;
+    }
+
+    #tween-controls .ease {
+      margin: 6px 0 12px;
     }
 
 #tweenbox {
