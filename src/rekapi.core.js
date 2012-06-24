@@ -506,18 +506,22 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
-   * @param {number} millisecond
+   * @param {number=} opt_millisecond
    * @return {Kapi}
    */
-  Kapi.prototype.update = function (millisecond) {
+  Kapi.prototype.update = function (opt_millisecond) {
+    if (opt_millisecond === undefined) {
+      opt_millisecond = this._lastUpdatedMillisecond;
+    }
+
     fireEvent(this, 'beforeUpdate', _);
     _.each(this._actors, function (actor) {
-      actor.updateState(millisecond);
+      actor.updateState(opt_millisecond);
       if (typeof actor.update === 'function') {
         actor.update(actor.context(), actor.get());
       }
     });
-    this._lastUpdatedMillisecond = millisecond;
+    this._lastUpdatedMillisecond = opt_millisecond;
     fireEvent(this, 'afterUpdate', _);
 
     return this;

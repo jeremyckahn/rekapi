@@ -319,6 +319,30 @@
     });
 
 
+    test('Calling update with no parameters causes the animation to update to the last rendered millisecond',
+        function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, { x: 0 })
+        .keyframe(1000, { x: 10 });
+
+      testKapi.update(250);
+      equal(testActor.get().x, 2.5,
+          'The explicitly defined millisecond was updated');
+
+      // Simulate the state of testKapi if it was stopped at millisecond 500
+      testKapi._lastUpdatedMillisecond = 500;
+
+      testKapi.update();
+
+      equal(testActor.get().x, 5,
+          'The last milliscond updated was recomputed');
+    });
+
+
     module('isPlaying');
 
 

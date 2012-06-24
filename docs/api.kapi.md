@@ -179,13 +179,15 @@ __[Example](examples/framerate.html)__
 
 ````javascript
 /**
- * @param {number} millisecond
+ * @param {number=} opt_millisecond
  * @returns {Kapi}
  */
-Kapi.prototype.update (millisecond)
+Kapi.prototype.update (opt_millisecond)
 ````
 
-Update the position of all the `Actor`s at `millisecond`.
+Update the position of all the `Actor`s to `opt_millisecond`.  If
+`opt_millisecond` is `undefined`, update to the last milliscond that the
+animation was updated to (it's a re-update).
 
 __[Example](examples/update.html)__
 
