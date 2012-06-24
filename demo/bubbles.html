@@ -129,7 +129,7 @@
               ,randomNumber
               ,trackLength = bubble.getTrackLength(trackName);
 
-          for (i = 1; i < trackLength - 2; i++) {
+          for (i = 1; i < trackLength - 1; i++) {
             keyProp = bubble.getKeyframeProperty(trackName, i);
             randomNumber = (Math.random() * 1000) - 50;
             newMillisecond = keyProp.millisecond + randomNumber;
