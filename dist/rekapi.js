@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.9.11 (Sun, 24 Jun 2012 22:41:29 GMT)
+ * Rekapi - Rewritten Kapi. v0.9.12 (Mon, 25 Jun 2012 05:03:56 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -1719,6 +1719,7 @@ var rekapiToCSS = function (context, _) {
   //
   var DEFAULT_GRANULARITY = 100;
   var TRANSFORM_TOKEN = 'TRANSFORM';
+  var VENDOR_TOKEN = 'VENDOR';
   var VENDOR_PREFIXES = Kapi.util.VENDOR_PREFIXES = {
     'microsoft': '-ms-'
     ,'mozilla': '-moz-'
@@ -1726,6 +1727,32 @@ var rekapiToCSS = function (context, _) {
     ,'w3': ''
     ,'webkit': '-webkit-'
   };
+  var BEZIERS = {
+    easeInQuad: '.55,.085,.68,.53'
+    ,easeInCubic: '.55,.055,.675,.19'
+    ,easeInQuart: '.895,.03,.685,.22'
+    ,easeInQuint: '.755,.05,.855,.06'
+    ,easeInSine: '.47,0,.745,.715'
+    ,easeInExpo: '.95,.05,.795,.035'
+    ,easeInCirc: '.6,.04,.98, .335'
+    ,easeInBack: '.6,-.28,.735,.045'
+    ,easeOutQuad: '.25,.46,.45,.94'
+    ,easeOutCubic: '.215,.61,.355,1'
+    ,easeOutQuart: '.165,.84,.44,1'
+    ,easeOutQuint: '.23,1,.32,1'
+    ,easeOutSine: '.39,.575,.565,1'
+    ,easeOutExpo: '.19,1,.22,1'
+    ,easeOutCirc: '.075,.82,.165,1'
+    ,easeOutBack: '.175,.885,.32,1.275'
+    ,easeInOutQuad: '.455,.03,.515,.955'
+    ,easeInOutCubic: '.645,.045,.355,1'
+    ,easeInOutQuart: '.77,0,.175,1'
+    ,easeInOutQuint: '.86,0.07,1'
+    ,easeInOutSine: '.445,.05,.55,.95'
+    ,easeInOutExpo: '1,0,0,1'
+    ,easeInOutCirc: '.785,.135,.15,.86'
+    ,easeInOutBack: '.68,-.55,.265,1.55'
+  }
 
 
   // TEMPLATES
@@ -1781,7 +1808,18 @@ var rekapiToCSS = function (context, _) {
     var granularity = opts.granularity || DEFAULT_GRANULARITY;
     var actorClass = generateCSSClass(this, opts.vendors, animName);
     actorCSS.push(actorClass);
-    var keyframes = generateActorKeyframes(this, granularity);
+
+    var optimizedEasingFormula = getOptimizedEasingFormula(this);
+    var keyframes;
+
+    // TODO: CSS optimization is _extremely_ incomplete.  It only supports
+    // single-step animations with one keyframe property.
+    if (typeof optimizedEasingFormula === 'string') {
+      keyframes = generateOptimizedKeyframes(this, optimizedEasingFormula);
+    } else {
+      keyframes = generateActorKeyframes(this, granularity);
+    }
+
     var boilerplatedKeyframes = applyVendorBoilerplates(
         keyframes, animName, opts.vendors);
     actorCSS.push(boilerplatedKeyframes);
@@ -1792,6 +1830,21 @@ var rekapiToCSS = function (context, _) {
 
   // UTILITY FUNCTIONS
   //
+
+  /**
+   * @param {Kapi.Actor} actor
+   * @return {boolean|undefined}
+   */
+  function getOptimizedEasingFormula (actor) {
+    var trackNames = actor.getTrackNames();
+    var firstTrackName = trackNames[0];
+    if (trackNames.length === 1
+        && actor.getTrackLength(firstTrackName) === 2) {
+      return BEZIERS[actor.getKeyframeProperty(firstTrackName, 1).easing];
+    }
+  }
+
+
   /**
    * @param {string} str
    */
@@ -1819,6 +1872,33 @@ var rekapiToCSS = function (context, _) {
 
     serializedProps.push('}');
     return serializedProps.join('');
+  }
+
+
+  /**
+   * @param {Kapi.Actor} actor
+   * @param {string} easingFormula
+   * @return {string}
+   */
+  function generateOptimizedKeyframes (actor, easingFormula) {
+    var propName = actor.getTrackNames()[0];
+    var firstKeyprop = actor.getKeyframeProperty(propName, 0);
+    var lastKeyprop = actor.getKeyframeProperty(propName, 1);
+    var printName = propName;
+
+    if (propName === 'transform') {
+      printName = TRANSFORM_TOKEN;
+    }
+
+    return [
+        // AAAAAAHHH!
+        printf('from { %s: %s; %sanimation-timing-function: %s; }',
+            [printName, firstKeyprop.value, VENDOR_TOKEN,
+                printf('cubic-bezier(%s)', [easingFormula])]),
+        printf('to { %s: %s; %sanimation-timing-function: %s; }',
+            [printName, lastKeyprop.value, VENDOR_TOKEN,
+                printf('cubic-bezier(%s)', [easingFormula])]),
+      ].join('\n');
   }
 
 
@@ -1860,8 +1940,8 @@ var rekapiToCSS = function (context, _) {
   /**
    * @param {string} toKeyframes Generated keyframes to wrap in boilerplates
    * @param {string} animName
-   * @param {[string]} opt_vendors Vendor boilerplates to be applied.  Should be
-   *     any of the values in Kapi.util.VENDOR_PREFIXES.
+   * @param {[string]} opt_vendors Vendor boilerplates to be applied.  Should
+   *     be any of the values in Kapi.util.VENDOR_PREFIXES.
    * @return {string}
    */
   function applyVendorBoilerplates (toKeyframes, animName, opt_vendors) {
@@ -1888,8 +1968,12 @@ var rekapiToCSS = function (context, _) {
   function applyVendorPropertyPrefixes (keyframes, vendor) {
     var transformRegExp = new RegExp(TRANSFORM_TOKEN, 'g');
     var prefixedTransformKey = VENDOR_PREFIXES[vendor] + 'transform';
+    var generalPrefixRegExp = new RegExp(VENDOR_TOKEN, 'g');
+    var generalPrefixedKey = VENDOR_PREFIXES[vendor];
     var prefixedKeyframes =
-      keyframes.replace(transformRegExp, prefixedTransformKey);
+      keyframes.replace(generalPrefixRegExp, generalPrefixedKey);
+    prefixedKeyframes =
+      prefixedKeyframes.replace(transformRegExp, prefixedTransformKey);
 
     return prefixedKeyframes;
   }

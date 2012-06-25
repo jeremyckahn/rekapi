@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>rekapi.toCSS();</title>
+    <script src="../../../lib/underscore/_.js"></script>
+    <script src="../../../lib/shifty/dist/shifty.js"></script>
+    <script src="../../../src/rekapi.core.js"></script>
+    <script src="../../../src/rekapi.actor.js"></script>
+    <script src="../../../src/rekapi.keyframeprops.js"></script>
+    <script src="../../../ext/dom/rekapi.dom.actor.js"></script>
+    <script src="../rekapi.to-css.js"></script>
+    <script src="../../../src/rekapi.init.js"></script>
+    <style type="text/css">
+      .container {
+        position: relative;
+      }
+      #actor-1 {
+        background: #f00;
+        height: 100px;
+        width: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="animation-container" class="container">
+      <div id="actor-1"></div>
+    </div>
+    <script>
+
+      var animation = new Kapi();
+      var actorDiv = document.getElementById('actor-1');
+      var actor = new Kapi.DOMActor(actorDiv);
+      animation.addActor(actor);
+
+      actor
+        .keyframe(500, {
+          'transform': 'translateX(0px)'
+        }).keyframe(3000, {
+          'transform': 'translateX(400px)'
+        }, {
+          'transform': 'easeInOutQuart'
+        });
+
+     console.log(animation);
+     var css = animation.toCSS({
+       'vendors': ['webkit', 'mozilla']
+       ,'name': 'myAwesomeAnimation'
+       ,'granularity': 150
+     });
+
+     var style = document.createElement('style');
+     style.innerHTML = css;
+     document.head.appendChild(style);
+
+     // Specifying a custom `name` property in `toCSS` creates a class that
+     // doesn't implicitly match the class that was added by the
+     // `Kapi.DOMActor` constructor, so add it here.
+     actorDiv.classList.add('myAwesomeAnimation');
+
+    </script>
+  </body>
+</html>
