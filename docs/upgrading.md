@@ -1,3 +1,8 @@
+# Upgrading to Rekapi 0.9.13
+
+`Kapi.prototype.redraw()` was removed.  You can still use
+`Kapi.prototype.update()` (with no parameters) to achieve the same effect.
+
 # Upgrading to Rekapi 0.9.6
 
 The build process has changed.  Rekapi now uses UglifyJS and Node.js to

@@ -58,20 +58,6 @@ Kapi.prototype.canvasClear ()
 Erase the canvas.
 
 
-### redraw
-
-````javascript
-/**
- * @returns {Kapi}
- */
-Kapi.prototype.redraw ()
-````
-
-Re-`render()` the last frame that was `render()`ed.
-
-__[Example](../../docs/examples/redraw.html)__
-
-
 ### setOrderFunction
 
 ````javascript

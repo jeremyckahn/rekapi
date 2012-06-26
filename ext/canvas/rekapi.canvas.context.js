@@ -146,16 +146,6 @@ var rekapiCanvasContext = function (context, _) {
 
 
   /**
-   * @return {Kapi}
-   */
-  Kapi.prototype.redraw = function () {
-    draw(this);
-
-    return this;
-  };
-
-
-  /**
    * @param {Kapi.Actor} actor
    * @param {number} layer
    * @return {Kapi.Actor|undefined}

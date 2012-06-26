@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.9.12 (Mon, 25 Jun 2012 05:03:56 GMT)
+ * Rekapi - Rewritten Kapi. v0.9.13 (Tue, 26 Jun 2012 04:42:19 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -1434,16 +1434,6 @@ var rekapiCanvasContext = function (context, _) {
    */
   Kapi.prototype.canvasContext = function () {
     return this.context.getContext('2d');
-  };
-
-
-  /**
-   * @return {Kapi}
-   */
-  Kapi.prototype.redraw = function () {
-    draw(this);
-
-    return this;
   };
 
 

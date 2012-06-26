@@ -173,26 +173,6 @@
           'Draw order was exported');
     });
 
-
-    test('Kapi can redraw last frame', function () {
-      var testKapi
-          ,testActor;
-
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
-      testActor.keyframe(0,    { x: 50,  y: 50 })
-               .keyframe(1000, { x: 200, y: 150 });
-
-      testKapi.update(500);
-      testKapi.canvasClear();
-
-      testActor.draw = function(context, state) {
-        equals(testKapi._lastUpdatedMillisecond, 500,
-          'Last frame was redrawn');
-      };
-      testKapi.redraw();
-    });
-
   } ());
   </script>
 </head>
