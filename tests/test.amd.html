@@ -3,11 +3,10 @@
 <head>
   <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script>
-  var KAPI_DEBUG = true
-      ,internalDebugNow = function () {
+  var internalDebugNow = function () {
         return +(new Date());
-      }
-      ,SHIFTY_DEBUG_NOW = function () {
+      };
+  var SHIFTY_DEBUG_NOW = function () {
         return internalDebugNow();
       };
   </script>

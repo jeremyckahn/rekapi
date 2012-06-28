@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.9.14 (Wed, 27 Jun 2012 05:25:32 GMT)
+ * Rekapi - Rewritten Kapi. v0.9.15 (Thu, 28 Jun 2012 05:26:34 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -12,6 +12,12 @@
  * MIT Lincense.  This code free to use, modify, distribute and enjoy.
  */
 ;(function (global) {
+// A hack for UglifyJS defines
+if (typeof KAPI_DEBUG === 'undefined') {
+  var KAPI_DEBUG = true;
+}
+
+
 // REKAPI-GLOBAL METHODS
 // These are global in development, but get wrapped in a closure at build-time.
 
@@ -598,9 +604,8 @@ var rekapiCore = function (context, _, Tweenable) {
 
   Kapi.util = {};
 
-
   // Some hooks for testing.
-  if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
+  if (KAPI_DEBUG) {
     Kapi._private = {
       'calculateLoopPosition': calculateLoopPosition
       ,'updateToCurrentMillisecond': updateToCurrentMillisecond
@@ -2087,7 +2092,7 @@ if (typeof define === 'function' && define.amd) {
                   underscore: underscoreSupportsAMD ? Underscore : _ };
     var Kapi = rekapi(global, deps);
 
-    if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
+    if (KAPI_DEBUG) {
       Kapi.underscore_version = deps.underscore.VERSION;
     }
 

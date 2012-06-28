@@ -1,3 +1,9 @@
+// A hack for UglifyJS defines
+if (typeof KAPI_DEBUG === 'undefined') {
+  var KAPI_DEBUG = true;
+}
+
+
 // REKAPI-GLOBAL METHODS
 // These are global in development, but get wrapped in a closure at build-time.
 
@@ -584,9 +590,8 @@ var rekapiCore = function (context, _, Tweenable) {
 
   Kapi.util = {};
 
-
   // Some hooks for testing.
-  if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
+  if (KAPI_DEBUG) {
     Kapi._private = {
       'calculateLoopPosition': calculateLoopPosition
       ,'updateToCurrentMillisecond': updateToCurrentMillisecond

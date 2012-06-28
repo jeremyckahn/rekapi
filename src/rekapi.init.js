@@ -49,7 +49,7 @@ if (typeof define === 'function' && define.amd) {
                   underscore: underscoreSupportsAMD ? Underscore : _ };
     var Kapi = rekapi(global, deps);
 
-    if (typeof KAPI_DEBUG !== 'undefined' && KAPI_DEBUG === true) {
+    if (KAPI_DEBUG) {
       Kapi.underscore_version = deps.underscore.VERSION;
     }
 
