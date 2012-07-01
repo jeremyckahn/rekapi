@@ -50,11 +50,11 @@
     }
 
     function getBubbleX () {
-      return Math.random() * kapi.canvasWidth();
+      return Math.random() * kapi.canvas.width();
     }
 
     function getBubbleY () {
-      return Math.random() * kapi.canvasHeight();
+      return Math.random() * kapi.canvas.height();
     }
 
     function getSize () {
@@ -100,8 +100,8 @@
         kapi.addActor(bubbles[i]);
 
         bubbles[i].keyframe(time, {
-          'x': kapi.canvasWidth() / 2
-          ,'y': kapi.canvasHeight() + 50
+          'x': kapi.canvas.width() / 2
+          ,'y': kapi.canvas.height() + 50
           ,'radius': 0
           ,'color': getColor()
         }, {
@@ -157,14 +157,14 @@
         ,kapi = new Kapi({
           'context': canvas
           ,'fps': 30
+          ,'height': 500
+          ,'width': 500
         })
         ,bubbles = [];
 
-    kapi.canvasHeight(500);
-    kapi.canvasWidth(500);
     kapi.on('animationComplete', generateSequence)
 
-    kapi.setOrderFunction(function (actor) {
+    kapi.canvas.setOrderFunction(function (actor) {
       return actor.get().radius;
     });
 

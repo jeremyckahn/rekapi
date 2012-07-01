@@ -55,26 +55,22 @@
 
       kapi.addActor(actor1);
       actor1
-        .keyframe(0, { x: 50,  y: 50 })
-        .wait(1000);
+        .keyframe(0, { x: 100,  y: 50, radius: 50 })
+        .wait(2000);
 
       kapi.addActor(actor2);
       actor2
-        .keyframe(0, { x: 75,  y: 75 })
-        .wait(1000);
+        .keyframe(0, { x: 100,  y: 100, radius: 25 })
+        .keyframe(2000, { radius: 75 });
+
+      // Larger circles are drawn first.  Once actor2 grows larger than actor1,
+      // it will be drawn on top.
+      kapi.canvas.setOrderFunction(function (actor) {
+        return actor.get().radius;
+      });
 
       kapi.play();
 
-      // Alternate the layers on a loop
-      var actor2IsOnTop = true;
-      setInterval(function () {
-        if (actor2IsOnTop) {
-          kapi.moveActorToLayer(actor2, 0);
-        } else {
-          kapi.moveActorToLayer(actor2, 1);
-        }
-        actor2IsOnTop = !actor2IsOnTop;
-      }, 500);
     </script>
   </body>
 </html>

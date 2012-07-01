@@ -15,24 +15,24 @@
   });
   require(['rekapi', 'underscore'], function(Kapi) {
 
-    var canvas = document.getElementsByTagName('canvas')[0]
-        ,kapi = new Kapi({
-          'context': canvas
-        });
+    var CANVAS_HEIGHT = 300;
+    var CANVAS_WIDTH = 300;
+    var PERCENTAGES = {
+        '#CFC7A4': 15
+        ,'#5A9E94': 35
+        ,'#005275': 10
+        ,'#002344': 35
+        ,'#A38650': 5
+      };
 
-    var CANVAS_HEIGHT = 300
-        ,CANVAS_WIDTH = 300
-        ,PERCENTAGES = {
-          '#CFC7A4': 15
-          ,'#5A9E94': 35
-          ,'#005275': 10
-          ,'#002344': 35
-          ,'#A38650': 5
-        }
-        ,actors = {}
+    var canvas = document.getElementsByTagName('canvas')[0];
+    var kapi = new Kapi({
+        'context': canvas
+        ,'height': CANVAS_HEIGHT
+        ,'width': CANVAS_WIDTH
+      });
 
-    kapi.canvasHeight(CANVAS_HEIGHT);
-    kapi.canvasWidth(CANVAS_WIDTH);
+    var actors = {};
 
     function percentToRad (percent) {
       return degToRad(3.6 * percent);

@@ -65,9 +65,12 @@
 
       // Larger circles are drawn first.  Once actor2 grows larger than actor1,
       // it will be drawn on top.
-      kapi.setOrderFunction(function (actor) {
+      kapi.canvas.setOrderFunction(function (actor) {
         return actor.get().radius;
       });
+
+      // Allow actors to be drawn in default order.
+      kapi.canvas.unsetOrderFunction();
 
       kapi.play();
 

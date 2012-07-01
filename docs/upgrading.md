@@ -1,3 +1,35 @@
+# Upgrading to Rekapi 0.10.0
+
+The Canvas extension APIs were reorganized.  Now instead of being attached
+directly to the `Kapi` prototype, they are attached to a new `canvas` property
+on each `Kapi` instance.  This is explained more in the Canvas README, but
+here's an example of the change:
+
+````javascript
+var kapi = new Kapi();
+
+// This won't work anymore!
+kapi.setOrderFunction();
+
+// This is the new way to do it.
+kapi.canvas.setOrderFunction();
+````
+
+Some of the Canvas extension methods have also been cleaned up to avoid
+redundancy.  Assuming the `kapi` instance from above, here's all of the
+methods:
+
+  * `kapi.canvas.height()`
+  * `kapi.canvas.width()`
+  * `kapi.canvas.clear()`
+  * `kapi.canvas.context()`
+  * `kapi.canvas.moveActorToLayer()`
+  * `kapi.canvas.setOrderFunction()`
+  * `kapi.canvas.unsetOrderFunction()`
+
+This version also removes draw order exporting functionality (in
+`Kapi.prototype.exportTimeline`).
+
 # Upgrading to Rekapi 0.9.13
 
 `Kapi.prototype.redraw()` was removed.  You can still use

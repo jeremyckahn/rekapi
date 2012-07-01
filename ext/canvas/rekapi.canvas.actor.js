@@ -39,6 +39,6 @@ var rekapiCanvasActor = function (context, _) {
    * @return {Kapi.Actor|undefined}
    */
   CanvasActor.prototype.moveToLayer = function (layer) {
-    return this.kapi.moveActorToLayer(this, layer);
+    return this.kapi.canvas.moveActorToLayer(this, layer);
   };
 };

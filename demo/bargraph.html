@@ -58,12 +58,12 @@
     var canvas = document.getElementsByTagName('canvas')[0]
         ,kapi = new Kapi({
           'context': canvas
+          ,'height': 400
+          ,'width': 250
         })
         ,BASELINE = 350
         ,bars = [];
 
-    kapi.canvasHeight(400);
-    kapi.canvasWidth(250);
     bars[0] = makeBarActor(150);
     bars[1] = makeBarActor(300);
     bars[2] = makeBarActor(270);
