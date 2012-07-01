@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.10.0 (Sun, 01 Jul 2012 16:48:27 GMT)
+ * Rekapi - Rewritten Kapi. v0.10.1 (Sun, 01 Jul 2012 17:26:35 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -2102,7 +2102,7 @@ if (typeof define === 'function' && define.amd) {
   // The rekapi module is anonymous so that it can be required with any name.
   // Example: define(['lib/rekapi.min'], function(Kapi) { ... });
   define(['shifty', 'underscore'], function (Tweenable, Underscore) {
-    var underscoreSupportsAMD = (Underscore !== null);
+    var underscoreSupportsAMD = (Underscore != null);
     var deps = {  Tweenable: Tweenable,
                   // Some versions of Underscore.js support AMD, others don't.
                   // If not, use the `_` global.

@@ -42,7 +42,7 @@ if (typeof define === 'function' && define.amd) {
   // The rekapi module is anonymous so that it can be required with any name.
   // Example: define(['lib/rekapi.min'], function(Kapi) { ... });
   define(['shifty', 'underscore'], function (Tweenable, Underscore) {
-    var underscoreSupportsAMD = (Underscore !== null);
+    var underscoreSupportsAMD = (Underscore != null);
     var deps = {  Tweenable: Tweenable,
                   // Some versions of Underscore.js support AMD, others don't.
                   // If not, use the `_` global.
