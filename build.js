@@ -130,9 +130,9 @@ var
   pro = uglifyJS.uglify,
   ast = jsp.parse( _fs.readFileSync(_distFileName, 'utf-8') );
 
-ast = pro.ast_mangle(ast, { 
+ast = pro.ast_mangle(ast, {
     'defines': {
-      KAPI_DEBUG: ['name', false ]
+      KAPI_DEBUG: ['name', 'false']
     }
   });
 ast = pro.ast_squeeze(ast);

@@ -1,6 +1,6 @@
 // A hack for UglifyJS defines
 if (typeof KAPI_DEBUG === 'undefined') {
-  var KAPI_DEBUG = true;
+  KAPI_DEBUG = true;
 }
 
 

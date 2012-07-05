@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.10.2 (Sun, 01 Jul 2012 18:06:35 GMT)
+ * Rekapi - Rewritten Kapi. v0.10.3 (Thu, 05 Jul 2012 15:17:17 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -14,7 +14,7 @@
 ;(function (global) {
 // A hack for UglifyJS defines
 if (typeof KAPI_DEBUG === 'undefined') {
-  var KAPI_DEBUG = true;
+  KAPI_DEBUG = true;
 }
 
 
