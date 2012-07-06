@@ -232,6 +232,59 @@
           ,'cubic-bezier coordinates were found');
     });
 
+
+    module('generateActorKeyframes');
+
+
+    test('Can generate un-optimized keyframe data',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0   })
+        .keyframe(1000, { 'x': 100 });
+
+      var keyframeData =
+          Kapi._private.toCSS.generateActorKeyframes(actor1, 10);
+
+      equal(
+          keyframeData
+          ,['  from {x:0;}'
+            ,'  10% {x:10;}'
+            ,'  20% {x:20;}'
+            ,'  30% {x:30;}'
+            ,'  40% {x:40;}'
+            ,'  50% {x:50;}'
+            ,'  60% {x:60;}'
+            ,'  70% {x:70;}'
+            ,'  80% {x:80;}'
+            ,'  90% {x:90;}'
+            ,'  to {x:100;}'].join('\n')
+          ,'Each stage of the animation was interpolated');
+      equal(keyframeData.split('\n').length, 11
+          ,'Correct number of steps were interpolated');
+    });
+
+
+    test('Can control granularity of un-optimized keyframe data',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0   })
+        .keyframe(1000, { 'x': 100 });
+
+      var keyframeData =
+          Kapi._private.toCSS.generateActorKeyframes(actor1, 100);
+
+      equal(keyframeData.split('\n').length, 101
+          ,'Correct number of steps were interpolated');
+    });
+
   } ());
   </script>
 </head>
