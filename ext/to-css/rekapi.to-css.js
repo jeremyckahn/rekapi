@@ -264,7 +264,7 @@ var rekapiToCSS = function (context, _) {
 
   /**
    * @param {Kapi.Actor} actor
-   * @return {boolean|undefined}
+   * @return {string}
    */
   function getOptimizedEasingFormula (actor) {
     var trackNames = actor.getTrackNames();

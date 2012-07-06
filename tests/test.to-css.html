@@ -211,6 +211,27 @@
           ,'Optimized bezier-cubic CSS was generated');
     });
 
+
+    module('getOptimizedEasingFormula');
+
+
+    test('Can lookup cubic-bezier equivalent of a valid Penner formula',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0  }, { 'x': 'easeInQuad' })
+        .keyframe(1000, { 'x': 10 }, { 'x': 'easeInQuad' });
+
+      var cubicBezier =
+          Kapi._private.toCSS.getOptimizedEasingFormula(actor1);
+
+      equal(cubicBezier, '.55,.085,.68,.53'
+          ,'cubic-bezier coordinates were found');
+    });
+
   } ());
   </script>
 </head>
