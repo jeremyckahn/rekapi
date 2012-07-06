@@ -285,6 +285,51 @@
           ,'Correct number of steps were interpolated');
     });
 
+
+    module('serializeActorStep');
+
+
+    test('Can serialize an individual Actor step',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0   })
+        .keyframe(1000, { 'x': 100 });
+
+      actor1.updateState(500);
+
+      var serializedStep =
+          Kapi._private.toCSS.serializeActorStep(actor1);
+
+      equal(serializedStep, '{x:50;}'
+          ,'Arbitrary keyframe step was serialized');
+    });
+
+
+    test('Serialized tranform properties are rewritten',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'transform': 'rotate(0deg)'   })
+        .keyframe(1000, { 'transform': 'rotate(100deg)' });
+
+      actor1.updateState(500);
+
+      var serializedStep =
+          Kapi._private.toCSS.serializeActorStep(actor1);
+
+      equal(
+          serializedStep
+          ,'{' + Kapi._private.toCSS.TRANSFORM_TOKEN + ':rotate(50deg);}'
+          ,'Arbitrary keyframe step was serialized');
+    });
+
   } ());
   </script>
 </head>
