@@ -336,7 +336,9 @@ var rekapiToCSS = function (context, _) {
 
   if (KAPI_DEBUG) {
     Kapi._private.toCSS = {
-      'applyVendorBoilerplates': applyVendorBoilerplates
+      'TRANSFORM_TOKEN': TRANSFORM_TOKEN
+      ,'VENDOR_TOKEN': VENDOR_TOKEN
+      ,'applyVendorBoilerplates': applyVendorBoilerplates
       ,'applyVendorPropertyPrefixes': applyVendorPropertyPrefixes
       ,'generateCSSClass': generateCSSClass
       ,'generateCSSAnimationProperties': generateCSSAnimationProperties

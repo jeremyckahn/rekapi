@@ -31,7 +31,9 @@
     module('applyVendorBoilerplates');
 
 
-    test('Applies boilerplate for W3 by default', function () {
+    test('Applies boilerplate for W3 by default',
+        function () {
+
       var kapi = new Kapi();
       var actor1 = setupTestActor(kapi);
 
@@ -39,11 +41,74 @@
           Kapi._private.toCSS.applyVendorBoilerplates('KEYFRAMES', 'NAME');
 
       equal(
-          vendorBoilerplates,
-            ['@keyframes NAME-keyframes {'
+          vendorBoilerplates
+            ,['@keyframes NAME-keyframes {'
             ,'KEYFRAMES'
-            ,'}'].join('\n')
+            ,'}'
+            ].join('\n')
           ,'Vendor-less W3 keyframe boilerplate was generated.');
+    });
+
+
+    test('Applies boilerplate for other vendors',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      var vendorBoilerplates =
+          Kapi._private.toCSS.applyVendorBoilerplates('KEYFRAMES', 'NAME', [
+          'w3', 'webkit']);
+
+      equal(
+          vendorBoilerplates
+            ,['@keyframes NAME-keyframes {'
+            ,'KEYFRAMES'
+            ,'}'
+            ,'@-webkit-keyframes NAME-keyframes {'
+            ,'KEYFRAMES'
+            ,'}'
+            ].join('\n')
+          ,'Webkit and W3 keyframe boilerplate was generated.');
+    });
+
+
+    module('applyVendorPropertyPrefixes');
+
+
+    test('Converts transform token into valid vendor-less property',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      var keyframe =
+          'from: { ' + Kapi._private.toCSS.TRANSFORM_TOKEN + ': foo; }';
+      var vendorBoilerplates =
+          Kapi._private.toCSS.applyVendorPropertyPrefixes(keyframe, 'w3');
+
+      equal(
+          vendorBoilerplates
+          ,'from: { transform: foo; }'
+          ,'Webkit and W3 keyframe boilerplate was generated.');
+    });
+
+
+    test('Converts transform token into valid vendor property',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      var keyframe =
+          'from: { ' + Kapi._private.toCSS.TRANSFORM_TOKEN + ': foo; }';
+      var vendorBoilerplates =
+          Kapi._private.toCSS.applyVendorPropertyPrefixes(keyframe, 'webkit');
+
+      equal(
+          vendorBoilerplates
+          ,'from: { -webkit-transform: foo; }'
+          ,'Webkit and W3 keyframe boilerplate was generated.');
     });
 
   } ());
