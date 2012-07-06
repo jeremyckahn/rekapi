@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+  var internalDebugNow = function () {
+        return +(new Date());
+      };
+  var SHIFTY_DEBUG_NOW = function () {
+        return internalDebugNow();
+      };
+  </script>
+  <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+  <script src="../lib/underscore/_.js"></script>
+  <script src="../lib/shifty/dist/shifty.js"></script>
+  <script src="../src/rekapi.core.js"></script>
+  <script src="../src/rekapi.actor.js"></script>
+  <script src="../src/rekapi.keyframeprops.js"></script>
+  <script src="../ext/to-css/rekapi.to-css.js"></script>
+  <script src="../src/rekapi.init.js"></script>
+  <script>
+
+  function  setupTestActor (forKapi) {
+    var actor = new Kapi.Actor();
+    forKapi.addActor(actor);
+    return actor;
+  }
+
+  (function () {
+
+    module('applyVendorBoilerplates');
+
+
+    test('Applies boilerplate for W3 by default', function () {
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      var vendorBoilerplates =
+          Kapi._private.toCSS.applyVendorBoilerplates('KEYFRAMES', 'NAME');
+
+      equal(
+          vendorBoilerplates,
+            ['@keyframes NAME-keyframes {'
+            ,'KEYFRAMES'
+            ,'}'].join('\n')
+          ,'Vendor-less W3 keyframe boilerplate was generated.');
+    });
+
+  } ());
+  </script>
+</head>
+<body>
+  <h1 id="qunit-header"><a href="https://github.com/jeremyckahn/rekapi">Rekapi</a></h1>
+   <h2 id="qunit-banner"></h2>
+   <div id="qunit-testrunner-toolbar"></div>
+   <h2 id="qunit-userAgent"></h2>
+   <ol id="qunit-tests"></ol>
+   <div id="qunit-fixture"></div>
+</body>
+</html>
