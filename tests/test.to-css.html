@@ -186,6 +186,31 @@
           ,'Class properties for Webkit were generated');
     });
 
+
+    module('generateOptimizedKeyframes');
+
+
+    test('Generates optimized keyframe data for an Actor',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0  })
+        .keyframe(1000, { 'x': 10 });
+
+      var keyframeData =
+          Kapi._private.toCSS.generateOptimizedKeyframes(actor1, 'easeInQuad');
+
+      equal(
+          keyframeData
+          ,['from { x: 0; VENDORanimation-timing-function: cubic-bezier(easeInQuad); }'
+          ,'to { x: 10; VENDORanimation-timing-function: cubic-bezier(easeInQuad); }']
+          .join('\n')
+          ,'Optimized bezier-cubic CSS was generated');
+    });
+
   } ());
   </script>
 </head>
