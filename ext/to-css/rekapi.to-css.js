@@ -98,7 +98,7 @@ var rekapiToCSS = function (context, _) {
     var actorCSS = [];
     var animName = opts.name || this.getCSSName();
     var granularity = opts.granularity || DEFAULT_GRANULARITY;
-    var actorClass = generateCSSClass(this, opts.vendors, animName);
+    var actorClass = generateCSSClass(this, animName, opts.vendors);
     actorCSS.push(actorClass);
 
     var optimizedEasingFormula = getOptimizedEasingFormula(this);
@@ -181,10 +181,11 @@ var rekapiToCSS = function (context, _) {
 
   /**
    * @param {Kapi.Actor} actor
-   * @param {Array.<string>} opt_vendors
    * @param {string} animName
+   * @param {Array.<string>} opt_vendors
+   * @return {string}
    */
-  function generateCSSClass (actor, opt_vendors, animName) {
+  function generateCSSClass (actor, animName, opt_vendors) {
     opt_vendors = opt_vendors || ['w3'];
     var classAttrs = [];
     var vendorAttrs;
@@ -205,6 +206,7 @@ var rekapiToCSS = function (context, _) {
    * @param {Kapi.Actor} actor
    * @param {string} vendor
    * @param {string} animName
+   * @return {string}
    */
   function generateCSSAnimationProperties (actor, vendor, animName) {
     var generatedProperties = [];

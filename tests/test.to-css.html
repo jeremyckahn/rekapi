@@ -34,9 +34,6 @@
     test('Applies boilerplate for W3 by default',
         function () {
 
-      var kapi = new Kapi();
-      var actor1 = setupTestActor(kapi);
-
       var vendorBoilerplates =
           Kapi._private.toCSS.applyVendorBoilerplates('KEYFRAMES', 'NAME');
 
@@ -44,17 +41,13 @@
           vendorBoilerplates
             ,['@keyframes NAME-keyframes {'
             ,'KEYFRAMES'
-            ,'}'
-            ].join('\n')
-          ,'Vendor-less W3 keyframe boilerplate was generated.');
+            ,'}'].join('\n')
+          ,'Vendor-less W3 keyframe boilerplate was generated');
     });
 
 
     test('Applies boilerplate for other vendors',
         function () {
-
-      var kapi = new Kapi();
-      var actor1 = setupTestActor(kapi);
 
       var vendorBoilerplates =
           Kapi._private.toCSS.applyVendorBoilerplates('KEYFRAMES', 'NAME', [
@@ -67,9 +60,8 @@
             ,'}'
             ,'@-webkit-keyframes NAME-keyframes {'
             ,'KEYFRAMES'
-            ,'}'
-            ].join('\n')
-          ,'Webkit and W3 keyframe boilerplate was generated.');
+            ,'}'].join('\n')
+          ,'Webkit and W3 keyframe boilerplate was generated');
     });
 
 
@@ -79,9 +71,6 @@
     test('Converts transform token into valid vendor-less property',
         function () {
 
-      var kapi = new Kapi();
-      var actor1 = setupTestActor(kapi);
-
       var keyframe =
           'from: { ' + Kapi._private.toCSS.TRANSFORM_TOKEN + ': foo; }';
       var vendorBoilerplates =
@@ -90,15 +79,12 @@
       equal(
           vendorBoilerplates
           ,'from: { transform: foo; }'
-          ,'Webkit and W3 keyframe boilerplate was generated.');
+          ,'Transform property was generated');
     });
 
 
     test('Converts transform token into valid vendor property',
         function () {
-
-      var kapi = new Kapi();
-      var actor1 = setupTestActor(kapi);
 
       var keyframe =
           'from: { ' + Kapi._private.toCSS.TRANSFORM_TOKEN + ': foo; }';
@@ -108,7 +94,53 @@
       equal(
           vendorBoilerplates
           ,'from: { -webkit-transform: foo; }'
-          ,'Webkit and W3 keyframe boilerplate was generated.');
+          ,'Webkit transform property was generated');
+    });
+
+
+    module('generateCSSClass');
+
+
+    test('Generates class properties for vendor-less class',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      var classProperties =
+          Kapi._private.toCSS.generateCSSClass(actor1, 'ANIM_NAME');
+
+      equal(
+          classProperties
+          ,['.ANIM_NAME {'
+          ,'  animation-name: ANIM_NAME-keyframes;'
+          ,'  animation-duration: 0ms;'
+          ,'  animation-delay: 0ms;'
+          ,'  animation-fill-mode: forwards;'
+          ,'}'].join('\n')
+          ,'Class properties were generated');
+    });
+
+
+    test('Generates class properties for a vendor class',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      var classProperties =
+          Kapi._private.toCSS.generateCSSClass(
+              actor1, 'ANIM_NAME', ['webkit']);
+
+      equal(
+          classProperties
+          ,['.ANIM_NAME {'
+          ,'  -webkit-animation-name: ANIM_NAME-keyframes;'
+          ,'  -webkit-animation-duration: 0ms;'
+          ,'  -webkit-animation-delay: 0ms;'
+          ,'  -webkit-animation-fill-mode: forwards;'
+          ,'}'].join('\n')
+          ,'Class properties for Webkit were generated');
     });
 
   } ());
