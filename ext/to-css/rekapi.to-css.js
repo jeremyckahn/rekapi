@@ -191,7 +191,7 @@ var rekapiToCSS = function (context, _) {
     var vendorAttrs;
 
     _.each(opt_vendors, function (vendor) {
-      vendorAttrs = generateCSSAnimationProperties(actor, vendor, animName);
+      vendorAttrs = generateCSSAnimationProperties(actor, animName, vendor);
       classAttrs.push(vendorAttrs);
     });
 
@@ -204,11 +204,11 @@ var rekapiToCSS = function (context, _) {
 
   /**
    * @param {Kapi.Actor} actor
-   * @param {string} vendor
    * @param {string} animName
+   * @param {string} vendor
    * @return {string}
    */
-  function generateCSSAnimationProperties (actor, vendor, animName) {
+  function generateCSSAnimationProperties (actor, animName, vendor) {
     var generatedProperties = [];
     var prefix = VENDOR_PREFIXES[vendor];
     var start = actor.getStart();

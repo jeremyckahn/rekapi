@@ -68,7 +68,7 @@
     module('applyVendorPropertyPrefixes');
 
 
-    test('Converts transform token into valid vendor-less property',
+    test('Converts transform token into valid unprefixed property',
         function () {
 
       var keyframe =
@@ -83,7 +83,7 @@
     });
 
 
-    test('Converts transform token into valid vendor property',
+    test('Converts transform token into valid prefixed property',
         function () {
 
       var keyframe =
@@ -98,10 +98,53 @@
     });
 
 
+    module('generateCSSAnimationProperties');
+
+
+    test('Generates all W3 CSS properties for an animation',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      var classProperties =
+          Kapi._private.toCSS.generateCSSAnimationProperties(
+              actor1, 'ANIM_NAME', 'w3');
+
+      equal(
+          classProperties
+          ,['  animation-name: ANIM_NAME-keyframes;'
+          ,'  animation-duration: 0ms;'
+          ,'  animation-delay: 0ms;'
+          ,'  animation-fill-mode: forwards;'].join('\n')
+          ,'Class properties for Webkit were generated');
+    });
+
+
+    test('Generates all vendor-prefixed CSS properties for an animation',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      var classProperties =
+          Kapi._private.toCSS.generateCSSAnimationProperties(
+              actor1, 'ANIM_NAME', 'webkit');
+
+      equal(
+          classProperties
+          ,['  -webkit-animation-name: ANIM_NAME-keyframes;'
+          ,'  -webkit-animation-duration: 0ms;'
+          ,'  -webkit-animation-delay: 0ms;'
+          ,'  -webkit-animation-fill-mode: forwards;'].join('\n')
+          ,'Class properties for Webkit were generated');
+    });
+
+
     module('generateCSSClass');
 
 
-    test('Generates class properties for vendor-less class',
+    test('Generates boilerplated class properties for prefix-less class',
         function () {
 
       var kapi = new Kapi();
@@ -122,7 +165,7 @@
     });
 
 
-    test('Generates class properties for a vendor class',
+    test('Generates boilerplated class properties for a vendor-prefixed class',
         function () {
 
       var kapi = new Kapi();
