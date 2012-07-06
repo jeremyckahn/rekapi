@@ -334,4 +334,17 @@ var rekapiToCSS = function (context, _) {
     return serializedProps.join('');
   }
 
+  if (KAPI_DEBUG) {
+    Kapi._private.toCSS = {
+      'applyVendorBoilerplates': applyVendorBoilerplates
+      ,'applyVendorPropertyPrefixes': applyVendorPropertyPrefixes
+      ,'generateCSSClass': generateCSSClass
+      ,'generateCSSAnimationProperties': generateCSSAnimationProperties
+      ,'generateOptimizedKeyframes': generateOptimizedKeyframes
+      ,'getOptimizedEasingFormula': getOptimizedEasingFormula
+      ,'generateActorKeyframes': generateActorKeyframes
+      ,'serializeActorStep': serializeActorStep
+    }
+  }
+
 };
