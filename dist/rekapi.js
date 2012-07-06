@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.10.3 (Thu, 05 Jul 2012 15:17:17 GMT)
+ * Rekapi - Rewritten Kapi. v0.10.4 (Fri, 06 Jul 2012 20:54:07 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -1821,7 +1821,7 @@ var rekapiToCSS = function (context, _) {
     var actorCSS = [];
     var animName = opts.name || this.getCSSName();
     var granularity = opts.granularity || DEFAULT_GRANULARITY;
-    var actorClass = generateCSSClass(this, opts.vendors, animName);
+    var actorClass = generateCSSClass(this, animName, opts.vendors);
     actorCSS.push(actorClass);
 
     var optimizedEasingFormula = getOptimizedEasingFormula(this);
@@ -1904,16 +1904,17 @@ var rekapiToCSS = function (context, _) {
 
   /**
    * @param {Kapi.Actor} actor
-   * @param {Array.<string>} opt_vendors
    * @param {string} animName
+   * @param {Array.<string>} opt_vendors
+   * @return {string}
    */
-  function generateCSSClass (actor, opt_vendors, animName) {
+  function generateCSSClass (actor, animName, opt_vendors) {
     opt_vendors = opt_vendors || ['w3'];
     var classAttrs = [];
     var vendorAttrs;
 
     _.each(opt_vendors, function (vendor) {
-      vendorAttrs = generateCSSAnimationProperties(actor, vendor, animName);
+      vendorAttrs = generateCSSAnimationProperties(actor, animName, vendor);
       classAttrs.push(vendorAttrs);
     });
 
@@ -1926,10 +1927,11 @@ var rekapiToCSS = function (context, _) {
 
   /**
    * @param {Kapi.Actor} actor
-   * @param {string} vendor
    * @param {string} animName
+   * @param {string} vendor
+   * @return {string}
    */
-  function generateCSSAnimationProperties (actor, vendor, animName) {
+  function generateCSSAnimationProperties (actor, animName, vendor) {
     var generatedProperties = [];
     var prefix = VENDOR_PREFIXES[vendor];
     var start = actor.getStart();
@@ -1985,7 +1987,7 @@ var rekapiToCSS = function (context, _) {
 
   /**
    * @param {Kapi.Actor} actor
-   * @return {boolean|undefined}
+   * @return {string}
    */
   function getOptimizedEasingFormula (actor) {
     var trackNames = actor.getTrackNames();
@@ -2055,6 +2057,21 @@ var rekapiToCSS = function (context, _) {
 
     serializedProps.push('}');
     return serializedProps.join('');
+  }
+
+  if (KAPI_DEBUG) {
+    Kapi._private.toCSS = {
+      'TRANSFORM_TOKEN': TRANSFORM_TOKEN
+      ,'VENDOR_TOKEN': VENDOR_TOKEN
+      ,'applyVendorBoilerplates': applyVendorBoilerplates
+      ,'applyVendorPropertyPrefixes': applyVendorPropertyPrefixes
+      ,'generateCSSClass': generateCSSClass
+      ,'generateCSSAnimationProperties': generateCSSAnimationProperties
+      ,'generateOptimizedKeyframes': generateOptimizedKeyframes
+      ,'getOptimizedEasingFormula': getOptimizedEasingFormula
+      ,'generateActorKeyframes': generateActorKeyframes
+      ,'serializeActorStep': serializeActorStep
+    }
   }
 
 };
