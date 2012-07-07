@@ -330,6 +330,28 @@
           ,'Arbitrary keyframe step was serialized');
     });
 
+
+    test('Multiple properties are batched together for serialization',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0,  'y': 50  })
+        .keyframe(1000, { 'x': 10, 'y': 100 });
+
+      actor1.updateState(500);
+
+      var serializedStep =
+          Kapi._private.toCSS.serializeActorStep(actor1);
+
+      ok(
+          ( serializedStep === '{x:5;y:75;}'
+              || serializedStep === '{y:75;x:5;}' )
+          ,'Batched keyframe step was serialized');
+    });
+
   } ());
   </script>
 </head>
