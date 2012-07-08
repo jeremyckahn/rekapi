@@ -232,12 +232,13 @@ __[Example](examples/actor_modify_keyframe.html)__
  * @param {string} property The name of the property.
  * @param {number} index The index of the KeyframeProperty in the Actor's
  *     KeyframeProperty track.
- * @return {Kapi.KeyframeProperty}
+ * @return {Kapi.KeyframeProperty|undefined}
  */
 Kapi.Actor.prototype.getKeyframeProperty (property, index)
 ````
 
 Gets the `KeyframeProperty` from an `Actor`'s `KeyframeProperty` track.
+Returns `undefined` if the lookup failed.
 
 __[Example](examples/actor_get_keyframe_property.html)__
 
@@ -296,14 +297,16 @@ __[Example](examples/actor_get_track_length.html)__
 
 ````javascript
 /**
+ * @param {string} opt_trackName
  * @return {number}
  */
-Kapi.Actor.prototype.getStart ()
+Kapi.Actor.prototype.getStart (opt_trackName)
 
 ````
 
 Get the millisecond of the first state of an `Actor` (when it first starts
-animating).
+animating).  You can get the start time of a specific track with
+`opt_trackName`.
 
 __[Example](examples/actor_get_start.html)__
 
@@ -312,14 +315,16 @@ __[Example](examples/actor_get_start.html)__
 
 ````javascript
 /**
+ * @param {string} opt_trackName
  * @return {number}
  */
-Kapi.Actor.prototype.getEnd ()
+Kapi.Actor.prototype.getEnd (opt_trackName)
 
 ````
 
 Get the millisecond of the last state of an `Actor` (when it is done
-animating).
+animating).  You can get the last state for a specific track with
+`opt_trackName`.
 
 __[Example](examples/actor_get_end.html)__
 
@@ -328,13 +333,15 @@ __[Example](examples/actor_get_end.html)__
 
 ````javascript
 /**
+ * @param {string} opt_trackName
  * @return {number}
  */
-Kapi.Actor.prototype.getLength ()
+Kapi.Actor.prototype.getLength (opt_trackName)
 
 ````
 
-Get the length of time in milliseconds that an `Actor` animates for.
+Get the length of time in milliseconds that an `Actor` animates for.  You can
+get the length of time that a specific track animates for with `opt_trackName`.
 
 __[Example](examples/actor_get_length.html)__
 

@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.10.4 (Fri, 06 Jul 2012 20:54:07 GMT)
+ * Rekapi - Rewritten Kapi. v0.10.5 (Sun, 08 Jul 2012 22:06:29 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -891,7 +891,7 @@ var rekapiActor = function (context, _, Tweenable) {
   /**
    * @param {string} property
    * @param {number} index
-   * @return {Kapi.KeyframeProperty}
+   * @return {Kapi.KeyframeProperty|undefined}
    */
   Actor.prototype.getKeyframeProperty = function (property, index) {
     if (this._propertyTracks[property]
@@ -996,16 +996,21 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
+   * @param {string} opt_trackName
    * @return {number}
    */
-  Actor.prototype.getStart = function () {
+  Actor.prototype.getStart = function (opt_trackName) {
     var starts = [];
 
-    _.each(this._propertyTracks, function (propertyTrack) {
-      if (propertyTrack.length) {
-        starts.push(propertyTrack[0].millisecond);
-      }
-    });
+    if (opt_trackName) {
+      starts.push(this._propertyTracks[opt_trackName][0].millisecond);
+    } else {
+      _.each(this._propertyTracks, function (propertyTrack) {
+        if (propertyTrack.length) {
+          starts.push(propertyTrack[0].millisecond);
+        }
+      });
+    }
 
     if (starts.length === 0) {
       starts = [0];
@@ -1016,12 +1021,19 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
+   * @param {string} opt_trackName
    * @return {number}
    */
-  Actor.prototype.getEnd = function () {
+  Actor.prototype.getEnd = function (opt_trackName) {
     var latest = 0;
+    var tracksToInspect = this._propertyTracks;
 
-    _.each(this._propertyTracks, function (propertyTrack) {
+    if (opt_trackName) {
+      tracksToInspect = {};
+      tracksToInspect[opt_trackName] = this._propertyTracks[opt_trackName];
+    }
+
+    _.each(tracksToInspect, function (propertyTrack) {
       if (propertyTrack.length) {
         var trackLength = _.last(propertyTrack).millisecond;
 
@@ -1036,10 +1048,11 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
+   * @param {string} opt_trackName
    * @return {number}
    */
-  Actor.prototype.getLength = function () {
-    return this.getEnd() - this.getStart();
+  Actor.prototype.getLength = function (opt_trackName) {
+    return this.getEnd(opt_trackName) - this.getStart(opt_trackName);
   };
 
 
@@ -1062,7 +1075,9 @@ var rekapiActor = function (context, _, Tweenable) {
     }
 
     return _.find(tracks, function (propertyTrack, trackName) {
-      return findPropertyAtMillisecondInTrack(this, trackName, when) !== undefined;
+      var retrievedProperty =
+          findPropertyAtMillisecondInTrack(this, trackName, when);
+      return retrievedProperty !== undefined;
     }, this) !== undefined;
   };
 

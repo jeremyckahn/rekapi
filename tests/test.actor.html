@@ -778,6 +778,24 @@
     });
 
 
+    test('Get the start of an Actor\'s property track',
+        function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, { y: 45 })
+        .keyframe(250, { x: 1 })
+        .keyframe(1000, { x: 10, y: 100 });
+
+      equal(testActor.getStart('y'), 0,
+          'Retrieved the correct time of the start of the "y" track');
+      equal(testActor.getStart('x'), 250,
+          'Retrieved the correct time of the start of the "x" track');
+    });
+
+
     module('getEnd');
 
 
@@ -801,6 +819,24 @@
     });
 
 
+    test('Get the end of an Actor\'s property track',
+        function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(250,  { x: 1,  y: 10 })
+        .keyframe(1000, { x: 10, y: 20 })
+        .keyframe(2000, { x: 20 });
+
+      equal(testActor.getEnd('x'), 2000,
+          'Retrieved the correct time of the last keyframe for the "x" track');
+      equal(testActor.getEnd('y'), 1000,
+          'Retrieved the correct time of the last keyframe for the "y" track');
+    });
+
+
     module('getLength');
 
 
@@ -820,6 +856,25 @@
 
       equal(testActor.getLength(), 1750,
           'Retrieved the correct length of time for an actor\s total movement');
+    });
+
+
+    test('Get the length of time that an Actor track animates for',
+        function () {
+
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0,    { y: 10 })
+        .keyframe(250,  { x: 1  })
+        .keyframe(1000, { x: 10 })
+        .keyframe(2000, { y: 20 });
+
+      equal(testActor.getLength('x'), 750,
+          'Retrieved the correct length of time the "x" track');
+      equal(testActor.getLength('y'), 2000,
+          'Retrieved the correct length of time the "y" track');
     });
 
 
