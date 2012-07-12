@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.10.5 (Sun, 08 Jul 2012 22:06:29 GMT)
+ * Rekapi - Rewritten Kapi. v0.10.6 (Thu, 12 Jul 2012 02:38:59 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
