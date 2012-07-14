@@ -366,14 +366,14 @@ var rekapiToCSS = function (context, _) {
    * @return {string}
    */
   function generateActorKeyframes (actor, granularity, track) {
-    var serializedFrames = [];
+    var accumulator = [];
     var actorEnd = actor.getEnd();
     var actorStart = actor.getStart();
     var actorLength = actor.getLength();
     var leadingWait = simulateLeadingWait(actor, track, actorStart);
 
     if (leadingWait) {
-      serializedFrames.push(leadingWait);
+      accumulator.push(leadingWait);
     }
 
     _.each(actor._propertyTracks[track], function (prop, propName) {
@@ -395,17 +395,17 @@ var rekapiToCSS = function (context, _) {
       var trackSegment = generateActorTrackSegment(
           actor, prop, increments, incrementSize, actorStart, fromPercent);
 
-      serializedFrames.push(trackSegment.join('\n'));
+      accumulator.push(trackSegment.join('\n'));
     });
 
     var trailingWait =
         simulateTrailingWait(actor, track, actorStart, actorEnd);
 
     if (trailingWait) {
-      serializedFrames.push(trailingWait);
+      accumulator.push(trailingWait);
     }
 
-    return serializedFrames.join('\n');
+    return accumulator.join('\n');
   }
 
 
@@ -467,7 +467,7 @@ var rekapiToCSS = function (context, _) {
   function generateActorTrackSegment (
       actor, fromProp, increments, incrementSize, actorStart, fromPercent) {
 
-    var serializedFrames = [];
+    var accumulator = [];
     var actorLength = actor.getLength();
 
     var i, adjustedPercent, stepPrefix;
@@ -476,11 +476,11 @@ var rekapiToCSS = function (context, _) {
       actor.updateState(
           ((adjustedPercent / 100) * actorLength) + actorStart);
       stepPrefix = +adjustedPercent.toFixed(2) + '% ';
-      serializedFrames.push(
+      accumulator.push(
           '  ' + stepPrefix + serializeActorStep(actor, fromProp.name));
     }
 
-    return serializedFrames;
+    return accumulator;
   };
 
 
