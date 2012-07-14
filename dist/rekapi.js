@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.10.6 (Thu, 12 Jul 2012 02:38:59 GMT)
+ * Rekapi - Rewritten Kapi. v0.11.0 (Sat, 14 Jul 2012 20:20:31 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -1837,21 +1837,10 @@ var rekapiToCSS = function (context, _) {
     var animName = opts.name || this.getCSSName();
     var granularity = opts.granularity || DEFAULT_GRANULARITY;
     var actorClass = generateCSSClass(this, animName, opts.vendors);
+    var boilerplatedKeyframes = generateBoilerplatedKeyframes(
+        this, animName, granularity, opts.vendors);
+
     actorCSS.push(actorClass);
-
-    var optimizedEasingFormula = getOptimizedEasingFormula(this);
-    var keyframes;
-
-    // TODO: CSS optimization is _extremely_ incomplete.  It only supports
-    // single-step animations with one keyframe property.
-    if (typeof optimizedEasingFormula === 'string') {
-      keyframes = generateOptimizedKeyframes(this, optimizedEasingFormula);
-    } else {
-      keyframes = generateActorKeyframes(this, granularity);
-    }
-
-    var boilerplatedKeyframes = applyVendorBoilerplates(
-        keyframes, animName, opts.vendors);
     actorCSS.push(boilerplatedKeyframes);
 
     return actorCSS.join('\n');
@@ -1877,10 +1866,49 @@ var rekapiToCSS = function (context, _) {
 
 
   /**
+   * @param {Kapi.Actor} actor
+   * @param {string} animName
+   * @param {number} granularity
+   * @param {Array.<string>=} opt_vendors
+   * @return {string}
+   */
+  function generateBoilerplatedKeyframes (
+      actor, animName, granularity, opt_vendors) {
+
+    var trackNames = _.keys(actor._propertyTracks);
+    var trackNames = actor.getTrackNames();
+    var optimizedEasingFormula = getOptimizedEasingFormula(actor);
+    var cssTracks = [];
+
+    // TODO: CSS optimization is _extremely_ incomplete.  It only supports
+    // single-step animations with one keyframe property.
+    if (typeof optimizedEasingFormula === 'string') {
+      cssTracks = [generateOptimizedKeyframes(actor, optimizedEasingFormula)];
+    } else {
+      _.each(trackNames, function (trackName) {
+        cssTracks.push(
+          generateActorKeyframes(actor, granularity, trackName));
+      });
+    }
+
+    var boilerplatedKeyframes = [];
+
+    _.each(trackNames, function (trackName, i) {
+      boilerplatedKeyframes.push(applyVendorBoilerplates(
+        cssTracks[i], (animName + '-' + trackName), opt_vendors));
+    });
+
+    boilerplatedKeyframes = boilerplatedKeyframes.join('\n');
+
+    return boilerplatedKeyframes;
+  }
+
+
+  /**
    * @param {string} toKeyframes Generated keyframes to wrap in boilerplates
    * @param {string} animName
-   * @param {Array.<string>} opt_vendors Vendor boilerplates to be applied.  Should
-   *     be any of the values in Kapi.util.VENDOR_PREFIXES.
+   * @param {Array.<string>} opt_vendors Vendor boilerplates to be applied.
+   *     Should be any of the values in Kapi.util.VENDOR_PREFIXES.
    * @return {string}
    */
   function applyVendorBoilerplates (toKeyframes, animName, opt_vendors) {
@@ -1949,24 +1977,66 @@ var rekapiToCSS = function (context, _) {
   function generateCSSAnimationProperties (actor, animName, vendor) {
     var generatedProperties = [];
     var prefix = VENDOR_PREFIXES[vendor];
-    var start = actor.getStart();
-    var duration = actor.getEnd() - start;
 
-    var animationName = printf('  %sanimation-name: %s;'
-        ,[prefix, animName + '-keyframes']);
-    generatedProperties.push(animationName);
-
-    duration = printf('  %sanimation-duration: %sms;'
-        ,[prefix, duration]);
-    generatedProperties.push(duration);
-
-    var delay = printf('  %sanimation-delay: %sms;', [prefix, start]);
-    generatedProperties.push(delay);
-
-    var fillMode = printf('  %sanimation-fill-mode: forwards;', [prefix]);
-    generatedProperties.push(fillMode);
+    generatedProperties.push(generateAnimationNameProperty(
+          actor, animName, prefix));
+    generatedProperties.push(
+        generateAnimationDurationProperty(actor, prefix));
+    generatedProperties.push(generateAnimationDelayProperty(actor, prefix));
+    generatedProperties.push(generateAnimationFillModeProperty(prefix));
 
     return generatedProperties.join('\n');
+  }
+
+
+  /**
+   * @param {Kapi.Actor} actor
+   * @param {string} animName
+   * @param {string} prefix
+   * @return {string}
+   */
+  function generateAnimationNameProperty (actor, animName, prefix) {
+    var animationName = printf('  %sanimation-name:', [prefix]);
+
+    var tracks = actor.getTrackNames();
+    _.each(tracks, function (trackName) {
+      animationName += printf(' %s-%s-keyframes,', [animName, trackName]);
+    });
+
+    animationName = animationName.slice(0, animationName.length - 1);
+    animationName += ';';
+
+    return animationName;
+  }
+
+
+  /**
+   * @param {Kapi.Actor} actor
+   * @param {string} animName
+   * @return {string}
+   */
+  function generateAnimationDurationProperty (actor, prefix) {
+    return printf('  %sanimation-duration: %sms;'
+        ,[prefix, actor.getEnd() - actor.getStart()]);
+  }
+
+
+  /**
+   * @param {Kapi.Actor} actor
+   * @param {number|string} delay
+   * @return {string}
+   */
+  function generateAnimationDelayProperty (actor, prefix) {
+    return printf('  %sanimation-delay: %sms;', [prefix, actor.getStart()]);
+  }
+
+
+  /**
+   * @param {string} prefix
+   * @return {string}
+   */
+  function generateAnimationFillModeProperty (prefix) {
+    return printf('  %sanimation-fill-mode: forwards;', [prefix]);
   }
 
 
@@ -2020,33 +2090,46 @@ var rekapiToCSS = function (context, _) {
   /**
    * @param {Kapi.Actor} actor
    * @param {number} granularity
+   * @param {string} track
    * @return {string}
    */
-  function generateActorKeyframes (actor, granularity) {
-    var animLength = actor.getLength();
-    var delay = actor.getStart();
+  function generateActorKeyframes (actor, granularity, track) {
     var serializedFrames = [];
-    var percent, adjustedPercent, stepPrefix;
-    var increment = animLength / granularity;
-    var adjustedIncrement = Math.floor(increment);
-    var animPercent = animLength / 100;
-    var loopStart = delay + increment;
-    var loopEnd = animLength + delay - increment;
+    var actorEnd = actor.getEnd();
+    var actorStart = actor.getStart();
+    var actorLength = actor.getLength();
+    var leadingWait = simulateLeadingWait(actor, track, actorStart);
 
-    actor.updateState(delay);
-    serializedFrames.push('  from ' + serializeActorStep(actor));
-
-    var i;
-    for (i = loopStart; i <= loopEnd; i += increment) {
-      actor.updateState(i);
-      percent = (i - delay) / animPercent;
-      adjustedPercent = +percent.toFixed(2);
-      stepPrefix = adjustedPercent + '% ';
-      serializedFrames.push('  ' + stepPrefix + serializeActorStep(actor));
+    if (leadingWait) {
+      serializedFrames.push(leadingWait);
     }
 
-    actor.updateState(animLength + delay);
-    serializedFrames.push('  to ' + serializeActorStep(actor));
+    _.each(actor._propertyTracks[track], function (prop, propName) {
+      var fromPercent = calculateStepPercent(prop, actorStart, actorLength);
+      var nextProp = prop.nextProperty;
+
+      var toPercent;
+      if (nextProp) {
+        toPercent = calculateStepPercent(nextProp, actorStart, actorLength);
+      } else {
+        toPercent = 100;
+      }
+
+      var delta = toPercent - fromPercent;
+      var increments = Math.floor((delta / 100) * granularity) || 1;
+      var incrementSize = delta / increments;
+      var trackSegment = generateActorTrackSegment(
+          actor, prop, increments, incrementSize, actorStart, fromPercent);
+
+      serializedFrames.push(trackSegment.join('\n'));
+    });
+
+    var trailingWait =
+        simulateTrailingWait(actor, track, actorStart, actorEnd);
+
+    if (trailingWait) {
+      serializedFrames.push(trailingWait);
+    }
 
     return serializedFrames.join('\n');
   }
@@ -2054,12 +2137,101 @@ var rekapiToCSS = function (context, _) {
 
   /**
    * @param {Kapi.Actor} actor
+   * @param {string} track
+   * @param {number} actorStart
+   * @return {string|undefined}
+   */
+  function simulateLeadingWait (actor, track, actorStart) {
+    var firstProp = actor._propertyTracks[track][0];
+
+    if (firstProp.millisecond !== actorStart) {
+      var fakeFirstProp = generateActorTrackSegment(
+          actor, firstProp, 1, 1, firstProp.millisecond, 0);
+      return fakeFirstProp.join('\n');
+    }
+  }
+
+
+  /**
+   * @param {Kapi.Actor} actor
+   * @param {string} track
+   * @param {number} actorStart
+   * @param {number} actorEnd
+   * @return {string|undefined}
+   */
+  function simulateTrailingWait (actor, track, actorStart, actorEnd) {
+    var lastProp = _.last(actor._propertyTracks[track]);
+
+    if (lastProp.millisecond !== actorEnd) {
+      var fakeLastProp = generateActorTrackSegment(
+          actor, lastProp, 1, 1, actorStart, 100);
+      return fakeLastProp.join('\n');
+    }
+  }
+
+
+  /**
+   * @param {Kapi.KeyframeProperty} property
+   * @param {number} actorStart
+   * @param {number} actorLength
+   * @return {number}
+   */
+  function calculateStepPercent (property, actorStart, actorLength) {
+    return ((property.millisecond - actorStart) / actorLength) * 100;
+  }
+
+
+  /**
+   * @param {Kapi.Actor} actor
+   * @param {Kapi.KeyframeProperty} fromProp
+   * @param {number} increments
+   * @param {number} incrementSize
+   * @param {number} actorStart
+   * @param {number} fromPercent
+   * @return {Array.<string>}
+   */
+  function generateActorTrackSegment (
+      actor, fromProp, increments, incrementSize, actorStart, fromPercent) {
+
+    var serializedFrames = [];
+    var actorLength = actor.getLength();
+
+    var i, adjustedPercent, stepPrefix;
+    for (i = 0; i < increments; i++) {
+      adjustedPercent = fromPercent + (i * incrementSize);
+      actor.updateState(
+          ((adjustedPercent / 100) * actorLength) + actorStart);
+      stepPrefix = +adjustedPercent.toFixed(2) + '% ';
+      serializedFrames.push(
+          '  ' + stepPrefix + serializeActorStep(actor, fromProp.name));
+    }
+
+    return serializedFrames;
+  };
+
+
+  /**
+   * @param {Kapi.Actor} actor
+   * @param {string} targetProp
    * @return {string}
    */
-  function serializeActorStep (actor) {
+  function serializeActorStep (actor, targetProp) {
     var serializedProps = ['{'];
+
+    var propsToSerialize;
+    if (targetProp) {
+      propsToSerialize = {};
+
+      var currentPropState = actor.get()[targetProp];
+      if (typeof currentPropState !== 'undefined') {
+        propsToSerialize[targetProp] = currentPropState;
+      }
+    } else {
+      propsToSerialize = actor.get();
+    }
+
     var printVal;
-    _.each(actor.get(), function (val, key) {
+    _.each(propsToSerialize, function (val, key) {
       printVal = val;
       var printKey = key;
 
@@ -2080,12 +2252,20 @@ var rekapiToCSS = function (context, _) {
       ,'VENDOR_TOKEN': VENDOR_TOKEN
       ,'applyVendorBoilerplates': applyVendorBoilerplates
       ,'applyVendorPropertyPrefixes': applyVendorPropertyPrefixes
+      ,'generateBoilerplatedKeyframes': generateBoilerplatedKeyframes
       ,'generateCSSClass': generateCSSClass
       ,'generateCSSAnimationProperties': generateCSSAnimationProperties
       ,'generateOptimizedKeyframes': generateOptimizedKeyframes
       ,'getOptimizedEasingFormula': getOptimizedEasingFormula
       ,'generateActorKeyframes': generateActorKeyframes
+      ,'generateActorTrackSegment': generateActorTrackSegment
       ,'serializeActorStep': serializeActorStep
+      ,'generateAnimationNameProperty': generateAnimationNameProperty
+      ,'generateAnimationDurationProperty': generateAnimationDurationProperty
+      ,'generateAnimationDelayProperty': generateAnimationDelayProperty
+      ,'generateAnimationFillModeProperty': generateAnimationFillModeProperty
+      ,'simulateLeadingWait': simulateLeadingWait
+      ,'simulateTrailingWait': simulateTrailingWait
     }
   }
 

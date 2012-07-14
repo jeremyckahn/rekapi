@@ -1,14 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script>
-  var internalDebugNow = function () {
-        return +(new Date());
-      };
-  var SHIFTY_DEBUG_NOW = function () {
-        return internalDebugNow();
-      };
-  </script>
   <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script src="../lib/shifty/tests/qunit/qunit.js"></script>
   <script src="../lib/underscore/_.js"></script>
@@ -107,13 +99,15 @@
       var kapi = new Kapi();
       var actor1 = setupTestActor(kapi);
 
+      actor1.keyframe(0, { 'x': 0 });
+
       var classProperties =
           Kapi._private.toCSS.generateCSSAnimationProperties(
               actor1, 'ANIM_NAME', 'w3');
 
       equal(
           classProperties
-          ,['  animation-name: ANIM_NAME-keyframes;'
+          ,['  animation-name: ANIM_NAME-x-keyframes;'
           ,'  animation-duration: 0ms;'
           ,'  animation-delay: 0ms;'
           ,'  animation-fill-mode: forwards;'].join('\n')
@@ -127,13 +121,15 @@
       var kapi = new Kapi();
       var actor1 = setupTestActor(kapi);
 
+      actor1.keyframe(0, { 'x': 0 });
+
       var classProperties =
           Kapi._private.toCSS.generateCSSAnimationProperties(
               actor1, 'ANIM_NAME', 'webkit');
 
       equal(
           classProperties
-          ,['  -webkit-animation-name: ANIM_NAME-keyframes;'
+          ,['  -webkit-animation-name: ANIM_NAME-x-keyframes;'
           ,'  -webkit-animation-duration: 0ms;'
           ,'  -webkit-animation-delay: 0ms;'
           ,'  -webkit-animation-fill-mode: forwards;'].join('\n')
@@ -150,13 +146,15 @@
       var kapi = new Kapi();
       var actor1 = setupTestActor(kapi);
 
+      actor1.keyframe(0, { 'x': 0 });
+
       var classProperties =
           Kapi._private.toCSS.generateCSSClass(actor1, 'ANIM_NAME');
 
       equal(
           classProperties
           ,['.ANIM_NAME {'
-          ,'  animation-name: ANIM_NAME-keyframes;'
+          ,'  animation-name: ANIM_NAME-x-keyframes;'
           ,'  animation-duration: 0ms;'
           ,'  animation-delay: 0ms;'
           ,'  animation-fill-mode: forwards;'
@@ -171,6 +169,8 @@
       var kapi = new Kapi();
       var actor1 = setupTestActor(kapi);
 
+      actor1.keyframe(0, { 'x': 0 });
+
       var classProperties =
           Kapi._private.toCSS.generateCSSClass(
               actor1, 'ANIM_NAME', ['webkit']);
@@ -178,7 +178,7 @@
       equal(
           classProperties
           ,['.ANIM_NAME {'
-          ,'  -webkit-animation-name: ANIM_NAME-keyframes;'
+          ,'  -webkit-animation-name: ANIM_NAME-x-keyframes;'
           ,'  -webkit-animation-duration: 0ms;'
           ,'  -webkit-animation-delay: 0ms;'
           ,'  -webkit-animation-fill-mode: forwards;'
@@ -233,6 +233,41 @@
     });
 
 
+    module('generateBoilerplatedKeyframes');
+
+
+    test('Can generate boilerplated keyframes',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0   })
+        .keyframe(1000, { 'x': 100 });
+
+      var keyframeData = Kapi._private.toCSS.generateBoilerplatedKeyframes(
+          actor1, 'ANIM_NAME', 10);
+
+      equal(
+          keyframeData
+          ,['@keyframes ANIM_NAME-x-keyframes {'
+            ,'  0% {x:0;}'
+            ,'  10% {x:10;}'
+            ,'  20% {x:20;}'
+            ,'  30% {x:30;}'
+            ,'  40% {x:40;}'
+            ,'  50% {x:50;}'
+            ,'  60% {x:60;}'
+            ,'  70% {x:70;}'
+            ,'  80% {x:80;}'
+            ,'  90% {x:90;}'
+            ,'  100% {x:100;}'
+            ,'}'].join('\n')
+          ,'Keyframes with W3 boilerplate was generated');
+    });
+
+
     module('generateActorKeyframes');
 
 
@@ -247,11 +282,11 @@
         .keyframe(1000, { 'x': 100 });
 
       var keyframeData =
-          Kapi._private.toCSS.generateActorKeyframes(actor1, 10);
+          Kapi._private.toCSS.generateActorKeyframes(actor1, 10, 'x');
 
       equal(
           keyframeData
-          ,['  from {x:0;}'
+          ,['  0% {x:0;}'
             ,'  10% {x:10;}'
             ,'  20% {x:20;}'
             ,'  30% {x:30;}'
@@ -261,10 +296,100 @@
             ,'  70% {x:70;}'
             ,'  80% {x:80;}'
             ,'  90% {x:90;}'
-            ,'  to {x:100;}'].join('\n')
+            ,'  100% {x:100;}'].join('\n')
           ,'Each stage of the animation was interpolated');
       equal(keyframeData.split('\n').length, 11
           ,'Correct number of steps were interpolated');
+    });
+
+
+    test('Can generate un-optimized keyframe data targeting one track',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0, 'y': 5    })
+        .keyframe(1000, { 'x': 100, 'y': 15 });
+
+      var keyframeData =
+          Kapi._private.toCSS.generateActorKeyframes(actor1, 10, 'x');
+
+      equal(
+          keyframeData
+          ,['  0% {x:0;}'
+            ,'  10% {x:10;}'
+            ,'  20% {x:20;}'
+            ,'  30% {x:30;}'
+            ,'  40% {x:40;}'
+            ,'  50% {x:50;}'
+            ,'  60% {x:60;}'
+            ,'  70% {x:70;}'
+            ,'  80% {x:80;}'
+            ,'  90% {x:90;}'
+            ,'  100% {x:100;}'].join('\n')
+          ,'Each stage of the animation was interpolated');
+      equal(keyframeData.split('\n').length, 11
+          ,'Correct number of steps were interpolated');
+    });
+
+
+    test('Late-starting track generates duplicate keyframe at the beginning to simulate a wait',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0           })
+        .keyframe(500,  { 'y': 0           })
+        .keyframe(1000, { 'x': 10, 'y': 10 });
+
+      var keyframeData =
+          Kapi._private.toCSS.generateActorKeyframes(actor1, 10, 'y');
+
+      equal(
+          keyframeData
+          ,['  0% {y:0;}'
+            ,'  50% {y:0;}'
+            ,'  60% {y:2;}'
+            ,'  70% {y:4;}'
+            ,'  80% {y:6;}'
+            ,'  90% {y:8;}'
+            ,'  100% {y:10;}'].join('\n')
+          ,'The leading wait was simulated');
+    });
+
+
+    test('Early-ending track generates duplicate keyframe at the end to simulate a wait',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0, 'y': 0 })
+        .keyframe(500,  { 'y': 10        })
+        .keyframe(1000, { 'x': 10        });
+
+      var keyframeData =
+          Kapi._private.toCSS.generateActorKeyframes(actor1, 10, 'y');
+
+      equal(
+          keyframeData
+          ,['  0% {y:0;}'
+          ,'  10% {y:2;}'
+          ,'  20% {y:4;}'
+          ,'  30% {y:6;}'
+          ,'  40% {y:8;}'
+          ,'  50% {y:10;}'
+          ,'  60% {y:10;}'
+          ,'  70% {y:10;}'
+          ,'  80% {y:10;}'
+          ,'  90% {y:10;}'
+          ,'  100% {y:10;}'].join('\n')
+          ,'The trailing wait was simulated');
     });
 
 
@@ -279,10 +404,112 @@
         .keyframe(1000, { 'x': 100 });
 
       var keyframeData =
-          Kapi._private.toCSS.generateActorKeyframes(actor1, 100);
+          Kapi._private.toCSS.generateActorKeyframes(actor1, 100, 'x');
 
       equal(keyframeData.split('\n').length, 101
           ,'Correct number of steps were interpolated');
+    });
+
+
+    module('simulateLeadingWait');
+
+
+    test('Can fake the 0% keyframe',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0           })
+        .keyframe(500,  { 'y': 0           })
+        .keyframe(1000, { 'x': 10, 'y': 10 });
+
+      var keyframeStep =
+          Kapi._private.toCSS.simulateLeadingWait(actor1, 'y', 0);
+
+      equal(keyframeStep, '  0% {y:0;}'
+          ,'0% step was generated for the first keyframe');
+    });
+
+
+    module('simulateTrailingWait');
+
+
+    test('Can fake the 100% keyframe',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0, 'y': 0 })
+        .keyframe(500,  { 'y': 10        })
+        .keyframe(1000, { 'x': 10        });
+
+      var keyframeStep =
+          Kapi._private.toCSS.simulateTrailingWait(
+              actor1, 'y', actor1.getStart(), actor1.getEnd());
+
+      equal(keyframeStep, '  100% {y:10;}'
+          ,'100% step was generated for the last keyframe');
+    });
+
+
+    module('generateActorTrackSegment');
+
+
+    test('Can get @keyframes for a three-step track segment',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0   })
+        .keyframe(1000, { 'x': 100 })
+        .keyframe(2000, { 'x': 200 });
+
+      var serializedSegment =
+          Kapi._private.toCSS.generateActorTrackSegment(
+              actor1, actor1._propertyTracks['x'][1], 5, 10, 0, 50);
+
+      deepEqual(
+          serializedSegment
+          ,['  50% {x:100;}'
+          ,'  60% {x:120;}'
+          ,'  70% {x:140;}'
+          ,'  80% {x:160;}'
+          ,'  90% {x:180;}']
+          ,'Arbitrary keyframe step was serialized');
+    });
+
+
+    test('Can get @keyframes for a five-step track segment',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0   })
+        .keyframe(1000, { 'x': 100 })
+        .keyframe(2000, { 'x': 200 })
+        .keyframe(3000, { 'x': 400 })
+        .keyframe(4000, { 'x': 600 })
+
+      var serializedSegment =
+          Kapi._private.toCSS.generateActorTrackSegment(
+              actor1, actor1._propertyTracks['x'][1], 5, 5, 0, 25);
+
+      deepEqual(
+          serializedSegment
+          ,['  25% {x:100;}'
+          ,'  30% {x:120;}'
+          ,'  35% {x:140;}'
+          ,'  40% {x:160;}'
+          ,'  45% {x:180;}']
+          ,'Arbitrary keyframe step was serialized');
     });
 
 
@@ -331,7 +558,7 @@
     });
 
 
-    test('Multiple properties are batched together for serialization',
+    test('Can target a single property to serialize',
         function () {
 
       var kapi = new Kapi();
@@ -344,12 +571,106 @@
       actor1.updateState(500);
 
       var serializedStep =
-          Kapi._private.toCSS.serializeActorStep(actor1);
+          Kapi._private.toCSS.serializeActorStep(actor1, 'x');
 
-      ok(
-          ( serializedStep === '{x:5;y:75;}'
-              || serializedStep === '{y:75;x:5;}' )
+      equal(serializedStep, '{x:5;}'
           ,'Batched keyframe step was serialized');
+    });
+
+
+    module('generateAnimationNameProperty');
+
+
+    test('Can generate the CSS name of an animation',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0,  'y': 50  })
+        .keyframe(1000, { 'x': 10, 'y': 100 });
+
+      var animName = Kapi._private.toCSS.generateAnimationNameProperty(
+          actor1, 'ANIM_NAME', 'PREFIX');
+
+      equal(animName
+          ,'  PREFIXanimation-name: ANIM_NAME-x-keyframes, ANIM_NAME-y-keyframes;'
+          ,'Generated CSS animation-name');
+    });
+
+
+    test('Can generate the CSS name of an animation with multiple properties',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0,  'y': 50  })
+        .keyframe(1000, { 'x': 10, 'y': 100 });
+
+      var animName = Kapi._private.toCSS.generateAnimationNameProperty(
+          actor1, 'ANIM_NAME', 'PREFIX');
+
+      equal(animName, '  PREFIXanimation-name: ANIM_NAME-x-keyframes, ANIM_NAME-y-keyframes;'
+          ,'Generated CSS animation-name');
+    });
+
+
+    module('generateAnimationDurationProperty');
+
+
+    test('Can generate the CSS duration of an animation',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0  })
+        .keyframe(1000, { 'x': 10 });
+
+      var animDuration = Kapi._private.toCSS.generateAnimationDurationProperty(
+          actor1, 'PREFIX');
+
+      equal(animDuration, '  PREFIXanimation-duration: 1000ms;'
+          ,'Generated CSS animation-duration');
+    });
+
+
+    module('generateAnimationDelayProperty');
+
+
+    test('Can generate the CSS delay of an animation',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(500,  { 'x': 0  })
+        .keyframe(1000, { 'x': 10 });
+
+      var animDuration = Kapi._private.toCSS.generateAnimationDelayProperty(
+          actor1, 'PREFIX');
+
+      equal(animDuration, '  PREFIXanimation-delay: 500ms;'
+          ,'Generated CSS animation-delay');
+    });
+
+
+    module('generateAnimationFillModeProperty');
+
+
+    test('Can generate the CSS fill mode of an animation',
+        function () {
+
+      var animDuration = Kapi._private.toCSS.generateAnimationFillModeProperty(
+          'PREFIX');
+
+      equal(animDuration, '  PREFIXanimation-fill-mode: forwards;'
+          ,'Generated CSS animation-fill-mode');
     });
 
   } ());

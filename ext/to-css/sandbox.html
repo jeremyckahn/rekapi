@@ -43,7 +43,10 @@
           'transform': 'easeInOutQuart swingTo'
         });
 
+     actor.modifyKeyframeProperty('background', 0, { millisecond: 1000 });
+     actor.modifyKeyframeProperty('background', 1, { millisecond: 1500 });
      console.log(animation);
+
      var css = animation.toCSS({
        'vendors': ['webkit', 'mozilla']
        ,'granularity': 150
