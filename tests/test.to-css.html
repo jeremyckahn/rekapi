@@ -110,7 +110,8 @@
           ,['  animation-name: ANIM_NAME-x-keyframes;'
           ,'  animation-duration: 0ms;'
           ,'  animation-delay: 0ms;'
-          ,'  animation-fill-mode: forwards;'].join('\n')
+          ,'  animation-fill-mode: forwards;'
+          ,'  animation-timing-function: linear;'].join('\n')
           ,'Class properties for Webkit were generated');
     });
 
@@ -132,7 +133,8 @@
           ,['  -webkit-animation-name: ANIM_NAME-x-keyframes;'
           ,'  -webkit-animation-duration: 0ms;'
           ,'  -webkit-animation-delay: 0ms;'
-          ,'  -webkit-animation-fill-mode: forwards;'].join('\n')
+          ,'  -webkit-animation-fill-mode: forwards;'
+          ,'  -webkit-animation-timing-function: linear;'].join('\n')
           ,'Class properties for Webkit were generated');
     });
 
@@ -158,6 +160,7 @@
           ,'  animation-duration: 0ms;'
           ,'  animation-delay: 0ms;'
           ,'  animation-fill-mode: forwards;'
+          ,'  animation-timing-function: linear;'
           ,'}'].join('\n')
           ,'Class properties were generated');
     });
@@ -182,6 +185,7 @@
           ,'  -webkit-animation-duration: 0ms;'
           ,'  -webkit-animation-delay: 0ms;'
           ,'  -webkit-animation-fill-mode: forwards;'
+          ,'  -webkit-animation-timing-function: linear;'
           ,'}'].join('\n')
           ,'Class properties for Webkit were generated');
     });
@@ -671,6 +675,21 @@
 
       equal(animDuration, '  PREFIXanimation-fill-mode: forwards;'
           ,'Generated CSS animation-fill-mode');
+    });
+
+
+    module('generateAnimationTimingFunctionProperty');
+
+
+    test('Can generate the CSS timing function of an animation',
+        function () {
+
+    var animDuration =
+        Kapi._private.toCSS.generateAnimationTimingFunctionProperty(
+            'PREFIX');
+
+      equal(animDuration, '  PREFIXanimation-timing-function: linear;'
+          ,'Generated CSS animation-timing-function');
     });
 
   } ());

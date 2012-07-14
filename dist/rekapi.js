@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.11.0 (Sat, 14 Jul 2012 20:20:31 GMT)
+ * Rekapi - Rewritten Kapi. v0.11.1 (Sat, 14 Jul 2012 20:44:29 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -1984,6 +1984,7 @@ var rekapiToCSS = function (context, _) {
         generateAnimationDurationProperty(actor, prefix));
     generatedProperties.push(generateAnimationDelayProperty(actor, prefix));
     generatedProperties.push(generateAnimationFillModeProperty(prefix));
+    generatedProperties.push(generateAnimationTimingFunctionProperty(prefix));
 
     return generatedProperties.join('\n');
   }
@@ -2037,6 +2038,15 @@ var rekapiToCSS = function (context, _) {
    */
   function generateAnimationFillModeProperty (prefix) {
     return printf('  %sanimation-fill-mode: forwards;', [prefix]);
+  }
+
+
+  /**
+   * @param {string} prefix
+   * @return {string}
+   */
+  function generateAnimationTimingFunctionProperty (prefix) {
+    return printf('  %sanimation-timing-function: linear;', [prefix]);
   }
 
 
@@ -2264,6 +2274,8 @@ var rekapiToCSS = function (context, _) {
       ,'generateAnimationDurationProperty': generateAnimationDurationProperty
       ,'generateAnimationDelayProperty': generateAnimationDelayProperty
       ,'generateAnimationFillModeProperty': generateAnimationFillModeProperty
+      ,'generateAnimationTimingFunctionProperty':
+          generateAnimationTimingFunctionProperty
       ,'simulateLeadingWait': simulateLeadingWait
       ,'simulateTrailingWait': simulateTrailingWait
     }

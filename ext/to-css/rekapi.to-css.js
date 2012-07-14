@@ -246,6 +246,7 @@ var rekapiToCSS = function (context, _) {
         generateAnimationDurationProperty(actor, prefix));
     generatedProperties.push(generateAnimationDelayProperty(actor, prefix));
     generatedProperties.push(generateAnimationFillModeProperty(prefix));
+    generatedProperties.push(generateAnimationTimingFunctionProperty(prefix));
 
     return generatedProperties.join('\n');
   }
@@ -299,6 +300,15 @@ var rekapiToCSS = function (context, _) {
    */
   function generateAnimationFillModeProperty (prefix) {
     return printf('  %sanimation-fill-mode: forwards;', [prefix]);
+  }
+
+
+  /**
+   * @param {string} prefix
+   * @return {string}
+   */
+  function generateAnimationTimingFunctionProperty (prefix) {
+    return printf('  %sanimation-timing-function: linear;', [prefix]);
   }
 
 
@@ -526,6 +536,8 @@ var rekapiToCSS = function (context, _) {
       ,'generateAnimationDurationProperty': generateAnimationDurationProperty
       ,'generateAnimationDelayProperty': generateAnimationDelayProperty
       ,'generateAnimationFillModeProperty': generateAnimationFillModeProperty
+      ,'generateAnimationTimingFunctionProperty':
+          generateAnimationTimingFunctionProperty
       ,'simulateLeadingWait': simulateLeadingWait
       ,'simulateTrailingWait': simulateTrailingWait
     }
