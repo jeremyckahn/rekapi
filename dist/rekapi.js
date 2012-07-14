@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.11.1 (Sat, 14 Jul 2012 20:44:29 GMT)
+ * Rekapi - Rewritten Kapi. v0.11.2 (Sat, 14 Jul 2012 20:58:42 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -2118,16 +2118,18 @@ var rekapiToCSS = function (context, _) {
       var fromPercent = calculateStepPercent(prop, actorStart, actorLength);
       var nextProp = prop.nextProperty;
 
-      var toPercent;
+      var toPercent, increments, incrementSize;
       if (nextProp) {
         toPercent = calculateStepPercent(nextProp, actorStart, actorLength);
+        var delta = toPercent - fromPercent;
+        increments = Math.floor((delta / 100) * granularity) || 1;
+        incrementSize = delta / increments;
       } else {
         toPercent = 100;
+        increments = 1;
+        incrementSize = 1;
       }
 
-      var delta = toPercent - fromPercent;
-      var increments = Math.floor((delta / 100) * granularity) || 1;
-      var incrementSize = delta / increments;
       var trackSegment = generateActorTrackSegment(
           actor, prop, increments, incrementSize, actorStart, fromPercent);
 

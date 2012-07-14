@@ -380,16 +380,18 @@ var rekapiToCSS = function (context, _) {
       var fromPercent = calculateStepPercent(prop, actorStart, actorLength);
       var nextProp = prop.nextProperty;
 
-      var toPercent;
+      var toPercent, increments, incrementSize;
       if (nextProp) {
         toPercent = calculateStepPercent(nextProp, actorStart, actorLength);
+        var delta = toPercent - fromPercent;
+        increments = Math.floor((delta / 100) * granularity) || 1;
+        incrementSize = delta / increments;
       } else {
         toPercent = 100;
+        increments = 1;
+        incrementSize = 1;
       }
 
-      var delta = toPercent - fromPercent;
-      var increments = Math.floor((delta / 100) * granularity) || 1;
-      var incrementSize = delta / increments;
       var trackSegment = generateActorTrackSegment(
           actor, prop, increments, incrementSize, actorStart, fromPercent);
 
