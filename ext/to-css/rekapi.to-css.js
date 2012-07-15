@@ -314,11 +314,29 @@ var rekapiToCSS = function (context, _) {
    * @return {boolean}
    */
   function canOptimizeKeyframeProperty (property) {
+    var canOptimize = false;
+
     if (property.nextProperty) {
-      return !!(BEZIERS[property.nextProperty.easing]);
-    } else {
-      return false;
+      var easingChunks = property.nextProperty.easing.split(' ');
+
+      var i = 0, len = easingChunks.length;
+      var previousChunk = easingChunks[0];
+      var currentChunk;
+      for (i; i < len; i++) {
+        var currentChunk = easingChunks[i];
+        if (!(BEZIERS[currentChunk])
+            || previousChunk !== currentChunk) {
+          canOptimize = false;
+          break;
+        } else {
+          canOptimize = true;
+        }
+
+        previousChunk = currentChunk;
+      }
     }
+
+    return canOptimize;
   }
 
 
@@ -338,7 +356,7 @@ var rekapiToCSS = function (context, _) {
       generalName = TRANSFORM_TOKEN;
     }
 
-    var easingFormula = BEZIERS[property.nextProperty.easing];
+    var easingFormula = BEZIERS[property.nextProperty.easing.split(' ')[0]];
     var timingFnChunk = printf('cubic-bezier(%s)', [easingFormula]);
 
     accumulator.push(printf('  %s% {%s:%s;%sanimation-timing-function: %s;}',

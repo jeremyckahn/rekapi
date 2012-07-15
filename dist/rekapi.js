@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.12.0 (Sun, 15 Jul 2012 00:10:46 GMT)
+ * Rekapi - Rewritten Kapi. v0.12.1 (Sun, 15 Jul 2012 17:20:15 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -2052,11 +2052,29 @@ var rekapiToCSS = function (context, _) {
    * @return {boolean}
    */
   function canOptimizeKeyframeProperty (property) {
+    var canOptimize = false;
+
     if (property.nextProperty) {
-      return !!(BEZIERS[property.nextProperty.easing]);
-    } else {
-      return false;
+      var easingChunks = property.nextProperty.easing.split(' ');
+
+      var i = 0, len = easingChunks.length;
+      var previousChunk = easingChunks[0];
+      var currentChunk;
+      for (i; i < len; i++) {
+        var currentChunk = easingChunks[i];
+        if (!(BEZIERS[currentChunk])
+            || previousChunk !== currentChunk) {
+          canOptimize = false;
+          break;
+        } else {
+          canOptimize = true;
+        }
+
+        previousChunk = currentChunk;
+      }
     }
+
+    return canOptimize;
   }
 
 
@@ -2076,7 +2094,7 @@ var rekapiToCSS = function (context, _) {
       generalName = TRANSFORM_TOKEN;
     }
 
-    var easingFormula = BEZIERS[property.nextProperty.easing];
+    var easingFormula = BEZIERS[property.nextProperty.easing.split(' ')[0]];
     var timingFnChunk = printf('cubic-bezier(%s)', [easingFormula]);
 
     accumulator.push(printf('  %s% {%s:%s;%sanimation-timing-function: %s;}',
