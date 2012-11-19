@@ -173,8 +173,7 @@ var rekapiActor = function (context, _, Tweenable) {
     Tweenable.call(this);
 
     _.extend(this, {
-      '_data': {}
-      ,'_propertyTracks': {}
+      '_propertyTracks': {}
       ,'_timelinePropertyCaches': {}
       ,'_timelinePropertyCacheIndex': []
       ,'_keyframeProperties': {}
@@ -182,6 +181,7 @@ var rekapiActor = function (context, _, Tweenable) {
       ,'setup': opt_config.setup || noop
       ,'update': opt_config.update || noop
       ,'teardown': opt_config.teardown || noop
+      ,'data': {}
     });
 
     if (opt_config.context) {
@@ -559,19 +559,6 @@ var rekapiActor = function (context, _, Tweenable) {
     }
 
     return this;
-  };
-
-
-  /**
-   * @param {Object} opt_newData
-   * @return {Object}
-   */
-  Actor.prototype.data = function (opt_newData) {
-    if (opt_newData) {
-      this._data = opt_newData;
-    }
-
-    return this._data;
   };
 
 

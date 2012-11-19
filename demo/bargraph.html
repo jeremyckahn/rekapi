@@ -18,9 +18,9 @@
     function makeBarActor (val) {
       return new Kapi.CanvasActor({
         'setup': function () {
-          this.data({
+          this.data = {
             'val': val
-          });
+          };
         }
         ,'draw': function (context, state) {
           context.beginPath();
@@ -84,7 +84,7 @@
         ,'height': 0
       }).keyframe(time += 750, {
         'x': xOffset
-        ,'height': bar.data().val
+        ,'height': bar.data.val
       }, 'swingTo').wait(time += 500)
       .keyframe(time += 500, {
         'x': -50

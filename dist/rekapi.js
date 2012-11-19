@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.12.3 (Mon, 19 Nov 2012 16:44:34 GMT)
+ * Rekapi - Rewritten Kapi. v0.13.0 (Mon, 19 Nov 2012 23:14:38 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -241,7 +241,7 @@ var rekapiCore = function (context, _, Tweenable) {
     }
   }
 
-  var now = Tweenable.util.now;
+  var now = Tweenable.now;
 
   var defaultConfig = {
     'fps': 60
@@ -397,13 +397,6 @@ var rekapiCore = function (context, _, Tweenable) {
     this._playState = playState.PLAYING;
     tick(this);
 
-    // Also resume any Shifty tweens that are paused.
-    _.each(this._actors, function (actor) {
-      if (actor._state.isPaused ) {
-        actor.resume();
-      }
-    });
-
     fireEvent(this, 'playStateChange', _);
     fireEvent(this, 'play', _);
 
@@ -444,13 +437,6 @@ var rekapiCore = function (context, _, Tweenable) {
     this._playState = playState.PAUSED;
     cancelLoop(this);
     this._pausedAtTime = now();
-
-    // Also pause any Shifty tweens that are running
-    _.each(this._actors, function (actor) {
-      if (actor._state.isTweening) {
-        actor.pause();
-      }
-    });
 
     fireEvent(this, 'playStateChange', _);
     fireEvent(this, 'pause', _);
@@ -795,8 +781,7 @@ var rekapiActor = function (context, _, Tweenable) {
     Tweenable.call(this);
 
     _.extend(this, {
-      '_data': {}
-      ,'_propertyTracks': {}
+      '_propertyTracks': {}
       ,'_timelinePropertyCaches': {}
       ,'_timelinePropertyCacheIndex': []
       ,'_keyframeProperties': {}
@@ -804,6 +789,7 @@ var rekapiActor = function (context, _, Tweenable) {
       ,'setup': opt_config.setup || noop
       ,'update': opt_config.update || noop
       ,'teardown': opt_config.teardown || noop
+      ,'data': {}
     });
 
     if (opt_config.context) {
@@ -1185,19 +1171,6 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
-   * @param {Object} opt_newData
-   * @return {Object}
-   */
-  Actor.prototype.data = function (opt_newData) {
-    if (opt_newData) {
-      this._data = opt_newData;
-    }
-
-    return this._data;
-  };
-
-
-  /**
    * @return {Object}
    */
   Actor.prototype.exportTimeline = function () {
@@ -1286,7 +1259,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
       toObj[this.name] = this.nextProperty.value;
       var delta = this.nextProperty.millisecond - this.millisecond;
       var interpolatedPosition = (millisecond - this.millisecond) / delta;
-      value = Tweenable.util.interpolate(fromObj, toObj, interpolatedPosition,
+      value = Tweenable.interpolate(fromObj, toObj, interpolatedPosition,
           this.nextProperty.easing)[this.name];
     } else {
       value =  this.value;

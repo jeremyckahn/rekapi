@@ -65,7 +65,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
       toObj[this.name] = this.nextProperty.value;
       var delta = this.nextProperty.millisecond - this.millisecond;
       var interpolatedPosition = (millisecond - this.millisecond) / delta;
-      value = Tweenable.util.interpolate(fromObj, toObj, interpolatedPosition,
+      value = Tweenable.interpolate(fromObj, toObj, interpolatedPosition,
           this.nextProperty.easing)[this.name];
     } else {
       value =  this.value;

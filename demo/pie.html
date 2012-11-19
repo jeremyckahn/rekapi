@@ -48,9 +48,9 @@
       var radSum = 0,
           current = actor;
 
-      while (current && current.data().previousPiece) {
-        radSum += current.data().previousPiece.data().percent;
-        current = current.data().previousPiece;
+      while (current && current.data.previousPiece) {
+        radSum += current.data.previousPiece.data.percent;
+        current = current.data.previousPiece;
       }
 
       return radSum;
@@ -102,10 +102,10 @@
           canvas_context.fill();
           canvas_context.globalAlpha = 1;
 
-          actor.data({
+          actor.data = {
             'previousPiece': previousPiece
             ,'percent': percent * state.scale
-          });
+          };
         }
       });
 

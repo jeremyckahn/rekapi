@@ -178,7 +178,7 @@
         'x': 200
       }, 'easeOutCirc');
 
-      tweenableComparator = Tweenable.util.interpolate({
+      tweenableComparator = Tweenable.interpolate({
         'x': 0
       }, {
         'x': 100
@@ -189,7 +189,7 @@
         'Value "x" was properly interpolated at position 0.5 with "easeInSine"');
 
 
-      tweenableComparator = Tweenable.util.interpolate({
+      tweenableComparator = Tweenable.interpolate({
         'x': 100
       }, {
         'x': 200
@@ -970,9 +970,9 @@
       var testKapi = setupTestKapi();
       var testActor = setupTestActor(testKapi);
 
-      testActor.data({ a: 'hello' });
+      testActor.data = { a: 'hello' };
 
-      equal(testActor.data().a, 'hello',
+      equal(testActor.data.a, 'hello',
           'Retrieved the data that was bound to the Actor');
     });
 

@@ -227,7 +227,7 @@ var rekapiCore = function (context, _, Tweenable) {
     }
   }
 
-  var now = Tweenable.util.now;
+  var now = Tweenable.now;
 
   var defaultConfig = {
     'fps': 60
@@ -383,13 +383,6 @@ var rekapiCore = function (context, _, Tweenable) {
     this._playState = playState.PLAYING;
     tick(this);
 
-    // Also resume any Shifty tweens that are paused.
-    _.each(this._actors, function (actor) {
-      if (actor._state.isPaused ) {
-        actor.resume();
-      }
-    });
-
     fireEvent(this, 'playStateChange', _);
     fireEvent(this, 'play', _);
 
@@ -430,13 +423,6 @@ var rekapiCore = function (context, _, Tweenable) {
     this._playState = playState.PAUSED;
     cancelLoop(this);
     this._pausedAtTime = now();
-
-    // Also pause any Shifty tweens that are running
-    _.each(this._actors, function (actor) {
-      if (actor._state.isTweening) {
-        actor.pause();
-      }
-    });
 
     fireEvent(this, 'playStateChange', _);
     fireEvent(this, 'pause', _);

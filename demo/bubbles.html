@@ -38,7 +38,7 @@
           ,grad = canvas_context.createRadialGradient(startX, startY,
               startRad, endX, endY, endRad);
 
-          var bgColor = Tweenable.util.interpolate({color: state.color},
+          var bgColor = Tweenable.interpolate({color: state.color},
               {color: 'rgb(0,0,0)'}, 0.3, 'linear').color;
 
           grad.addColorStop(0, state.color);
