@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
-  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+  <link href="../lib/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../lib/qunit/qunit.js"></script>
   <script src="../lib/underscore/_.js"></script>
-  <script src="../lib/shifty/dist/shifty.js"></script>
+  <script src="../lib/shifty/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
   <script src="../src/rekapi.keyframeprops.js"></script>
@@ -78,7 +78,7 @@
       var expectedValue = 'translateX(50px) translateY(50px) rotate(125deg)';
       equals(testActor._context.style.transform, expectedValue,
         "The actor's DOM element has the correct transform style");
-      
+
       equals(testActor._context.style.height, '25px',
         'Other non-transform properties are also updated');
     });

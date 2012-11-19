@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="../lib/shifty/tests/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <link href="../lib/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script>
   var internalDebugNow = function () {
         return +(new Date());
@@ -11,7 +11,7 @@
       };
   </script>
   <script src="../lib/jquery.js"></script>
-  <script src="../lib/shifty/tests/qunit/qunit.js"></script>
+  <script src="../lib/qunit/qunit.js"></script>
   <!--
   This RequireJS script is patched to add an undef() method. This allows this test suite to clean up loaded modules after each test.
   Otherwise, it's not possible to successively load modules with the same name but different paths via multiple require.config() calls.

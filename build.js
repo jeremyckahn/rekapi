@@ -149,10 +149,10 @@ _exec('echo ' + replacements.version + ' > version.txt');
 
 // -- MISCELLANEOUS FILE OPS -- //
 _exec('cp lib/underscore/_.min.js dist/_.js');
-_exec('cp lib/shifty/dist/shifty.min.js dist/shifty.js');
+_exec('cp lib/shifty/shifty.min.js dist/shifty.js');
 
 var underscoreCode = _fs.readFileSync('./lib/underscore/_.min.js', 'utf-8');
-var shiftyCode = _fs.readFileSync('./lib/shifty/dist/shifty.min.js', 'utf-8');
+var shiftyCode = _fs.readFileSync('./lib/shifty/shifty.min.js', 'utf-8');
 var rekapiCode = _fs.readFileSync('./dist/rekapi.min.js', 'utf-8');
 var bin = [underscoreCode, shiftyCode, rekapiCode].join(';');
 
