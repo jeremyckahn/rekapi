@@ -359,25 +359,6 @@ Kapi.Actor.prototype.updateState (millisecond)
 Calculate and set the `Actor`'s position at `millisecond` in the animation.
 
 __[Example](examples/actor_update_state.html)__
-
-
-### data
-
-````javascript
-/**
- * @param {Object=} opt_newData
- * @returns {Kapi.Actor}
- */
-Kapi.Actor.prototype.data (opt_newData)
-````
-
-Retrieve and optionally bind arbitrary data to the `Actor`.  If `opt_newData`
-is specified, it will overwrite the previous `opt_newData` Object that was
-bound with this method.
-
-__[Example](examples/actor_data.html)__
-
-
 ### exportTimeline
 
 ````javascript
@@ -387,7 +368,23 @@ __[Example](examples/actor_data.html)__
 Kapi.Actor.prototype.exportTimeline ()
 ````
 
-Export a reference-less dump of this Actor's timeline property tracks and
+Export a reference-less dump of this `Actor`'s timeline property tracks and
 KeyframeProperties.
 
 __[Example](examples/actor_export_timeline.html)__
+
+
+## Public Properties
+
+
+### data
+
+````javascript
+/**
+ * @type {Object}
+ */
+Kapi.Actor.prototype.data;
+````
+
+You can freely attach data to this property.  It's just a conventional way to
+associate arbitrary data to an `Actor`.
