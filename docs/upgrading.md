@@ -1,3 +1,7 @@
+# Upgrading to Rekapi 0.13.0
+
+`Kapi.Actor.prototype.data` is now just property, not a getter/setter method.
+
 # Upgrading to Rekapi 0.10.0
 
 The Canvas extension APIs were reorganized.  Now instead of being attached
