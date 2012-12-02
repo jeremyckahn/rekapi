@@ -1,3 +1,0 @@
-[submodule "lib/shifty"]
-	path = lib/shifty
-	url = git@github.com:jeremyckahn/shifty.git
