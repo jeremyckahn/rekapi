@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.13.0 (Mon, 19 Nov 2012 23:14:38 GMT)
+ * Rekapi - Rewritten Kapi. v0.13.1 (Sun, 02 Dec 2012 01:37:32 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -1952,6 +1952,8 @@ var rekapiToCSS = function (context, _) {
     generatedProperties.push(generateAnimationDelayProperty(actor, prefix));
     generatedProperties.push(generateAnimationFillModeProperty(prefix));
     generatedProperties.push(generateAnimationTimingFunctionProperty(prefix));
+    generatedProperties.push(
+        generateAnimationIterationProperty(actor.kapi, prefix));
 
     return generatedProperties.join('\n');
   }
@@ -2014,6 +2016,22 @@ var rekapiToCSS = function (context, _) {
    */
   function generateAnimationTimingFunctionProperty (prefix) {
     return printf('  %sanimation-timing-function: linear;', [prefix]);
+  }
+
+
+  /**
+   * @param {Kapi} kapi
+   * @param {string} prefix
+   * @return {string}
+   */
+  function generateAnimationIterationProperty (kapi, prefix) {
+    var iterationCount = kapi._timesToIterate === -1
+      ? 'infinite'
+      : kapi._timesToIterate;
+
+    var ruleTemplate = '  %sanimation-iteration-count: %s;';
+
+    return printf(ruleTemplate, [prefix, iterationCount]);
   }
 
 
@@ -2282,6 +2300,7 @@ var rekapiToCSS = function (context, _) {
       ,'generateAnimationFillModeProperty': generateAnimationFillModeProperty
       ,'generateAnimationTimingFunctionProperty':
           generateAnimationTimingFunctionProperty
+      ,'generateAnimationIterationProperty': generateAnimationIterationProperty
       ,'simulateLeadingWait': simulateLeadingWait
       ,'simulateTrailingWait': simulateTrailingWait
       ,'canOptimizeKeyframeProperty': canOptimizeKeyframeProperty

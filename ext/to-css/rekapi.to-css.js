@@ -241,6 +241,8 @@ var rekapiToCSS = function (context, _) {
     generatedProperties.push(generateAnimationDelayProperty(actor, prefix));
     generatedProperties.push(generateAnimationFillModeProperty(prefix));
     generatedProperties.push(generateAnimationTimingFunctionProperty(prefix));
+    generatedProperties.push(
+        generateAnimationIterationProperty(actor.kapi, prefix));
 
     return generatedProperties.join('\n');
   }
@@ -303,6 +305,22 @@ var rekapiToCSS = function (context, _) {
    */
   function generateAnimationTimingFunctionProperty (prefix) {
     return printf('  %sanimation-timing-function: linear;', [prefix]);
+  }
+
+
+  /**
+   * @param {Kapi} kapi
+   * @param {string} prefix
+   * @return {string}
+   */
+  function generateAnimationIterationProperty (kapi, prefix) {
+    var iterationCount = kapi._timesToIterate === -1
+      ? 'infinite'
+      : kapi._timesToIterate;
+
+    var ruleTemplate = '  %sanimation-iteration-count: %s;';
+
+    return printf(ruleTemplate, [prefix, iterationCount]);
   }
 
 
@@ -571,6 +589,7 @@ var rekapiToCSS = function (context, _) {
       ,'generateAnimationFillModeProperty': generateAnimationFillModeProperty
       ,'generateAnimationTimingFunctionProperty':
           generateAnimationTimingFunctionProperty
+      ,'generateAnimationIterationProperty': generateAnimationIterationProperty
       ,'simulateLeadingWait': simulateLeadingWait
       ,'simulateTrailingWait': simulateTrailingWait
       ,'canOptimizeKeyframeProperty': canOptimizeKeyframeProperty

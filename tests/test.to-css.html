@@ -121,7 +121,8 @@
           ,'  animation-duration: 0ms;'
           ,'  animation-delay: 0ms;'
           ,'  animation-fill-mode: forwards;'
-          ,'  animation-timing-function: linear;'].join('\n')
+          ,'  animation-timing-function: linear;'
+          ,'  animation-iteration-count: infinite;'].join('\n')
           ,'Class properties for Webkit were generated');
     });
 
@@ -144,7 +145,8 @@
           ,'  -webkit-animation-duration: 0ms;'
           ,'  -webkit-animation-delay: 0ms;'
           ,'  -webkit-animation-fill-mode: forwards;'
-          ,'  -webkit-animation-timing-function: linear;'].join('\n')
+          ,'  -webkit-animation-timing-function: linear;'
+          ,'  -webkit-animation-iteration-count: infinite;'].join('\n')
           ,'Class properties for Webkit were generated');
     });
 
@@ -171,6 +173,7 @@
           ,'  animation-delay: 0ms;'
           ,'  animation-fill-mode: forwards;'
           ,'  animation-timing-function: linear;'
+          ,'  animation-iteration-count: infinite;'
           ,'}'].join('\n')
           ,'Class properties were generated');
     });
@@ -196,6 +199,7 @@
           ,'  -webkit-animation-delay: 0ms;'
           ,'  -webkit-animation-fill-mode: forwards;'
           ,'  -webkit-animation-timing-function: linear;'
+          ,'  -webkit-animation-iteration-count: infinite;'
           ,'}'].join('\n')
           ,'Class properties for Webkit were generated');
     });
@@ -703,6 +707,43 @@
             'PREFIX');
 
       equal(animDuration, '  PREFIXanimation-timing-function: linear;'
+          ,'Generated CSS animation-timing-function');
+    });
+
+
+    module('generateAnimationIterationProperty');
+
+
+    test('Can generate an infinite CSS iteration count an animation',
+        function () {
+
+      var kapi = new Kapi();
+      kapi.play();
+
+      var animDuration =
+          Kapi._private.toCSS.generateAnimationIterationProperty(
+              kapi, 'PREFIX');
+
+      kapi.stop();
+
+      equal(animDuration, '  PREFIXanimation-iteration-count: infinite;'
+          ,'Generated CSS animation-timing-function');
+    });
+
+
+    test('Can generate a finite CSS iteration count an animation',
+        function () {
+
+      var kapi = new Kapi();
+      kapi.play(3);
+
+      var animDuration =
+          Kapi._private.toCSS.generateAnimationIterationProperty(
+              kapi, 'PREFIX');
+
+      kapi.stop();
+
+      equal(animDuration, '  PREFIXanimation-iteration-count: 3;'
           ,'Generated CSS animation-timing-function');
     });
 
