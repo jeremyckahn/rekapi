@@ -748,6 +748,23 @@
     });
 
 
+    test('Can generate an overridden CSS iteration count an animation',
+        function () {
+
+      var kapi = new Kapi();
+      kapi.play(3);
+
+      var animDuration =
+          Kapi._private.toCSS.generateAnimationIterationProperty(
+              kapi, 'PREFIX', 5);
+
+      kapi.stop();
+
+      equal(animDuration, '  PREFIXanimation-iteration-count: 5;'
+          ,'Generated CSS animation-timing-function');
+    });
+
+
     module('canOptimizeKeyframeProperty');
 
 

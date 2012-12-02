@@ -99,7 +99,8 @@ var rekapiToCSS = function (context, _) {
     var actorCSS = [];
     var animName = opts.name || this.getCSSName();
     var granularity = opts.granularity || DEFAULT_GRANULARITY;
-    var actorClass = generateCSSClass(this, animName, opts.vendors);
+    var actorClass = generateCSSClass(
+        this, animName, opts.vendors, opts.iterations);
     var boilerplatedKeyframes = generateBoilerplatedKeyframes(
         this, animName, granularity, opts.vendors);
 
@@ -205,15 +206,17 @@ var rekapiToCSS = function (context, _) {
    * @param {Kapi.Actor} actor
    * @param {string} animName
    * @param {Array.<string>} opt_vendors
+   * @param {number|string} opt_iterations
    * @return {string}
    */
-  function generateCSSClass (actor, animName, opt_vendors) {
+  function generateCSSClass (actor, animName, opt_vendors, opt_iterations) {
     opt_vendors = opt_vendors || ['w3'];
     var classAttrs = [];
     var vendorAttrs;
 
     _.each(opt_vendors, function (vendor) {
-      vendorAttrs = generateCSSAnimationProperties(actor, animName, vendor);
+      vendorAttrs = generateCSSAnimationProperties(
+          actor, animName, vendor, opt_iterations);
       classAttrs.push(vendorAttrs);
     });
 
@@ -228,9 +231,11 @@ var rekapiToCSS = function (context, _) {
    * @param {Kapi.Actor} actor
    * @param {string} animName
    * @param {string} vendor
+   * @param {number|string} opt_iterations
    * @return {string}
    */
-  function generateCSSAnimationProperties (actor, animName, vendor) {
+  function generateCSSAnimationProperties (
+      actor, animName, vendor, opt_iterations) {
     var generatedProperties = [];
     var prefix = VENDOR_PREFIXES[vendor];
 
@@ -241,8 +246,8 @@ var rekapiToCSS = function (context, _) {
     generatedProperties.push(generateAnimationDelayProperty(actor, prefix));
     generatedProperties.push(generateAnimationFillModeProperty(prefix));
     generatedProperties.push(generateAnimationTimingFunctionProperty(prefix));
-    generatedProperties.push(
-        generateAnimationIterationProperty(actor.kapi, prefix));
+    generatedProperties.push(generateAnimationIterationProperty(
+        actor.kapi, prefix, opt_iterations));
 
     return generatedProperties.join('\n');
   }
@@ -311,12 +316,18 @@ var rekapiToCSS = function (context, _) {
   /**
    * @param {Kapi} kapi
    * @param {string} prefix
+   * @param {number|string} opt_iterations
    * @return {string}
    */
-  function generateAnimationIterationProperty (kapi, prefix) {
-    var iterationCount = kapi._timesToIterate === -1
-      ? 'infinite'
-      : kapi._timesToIterate;
+  function generateAnimationIterationProperty (kapi, prefix, opt_iterations) {
+    var iterationCount
+    if (opt_iterations) {
+      iterationCount = opt_iterations;
+    } else {
+      iterationCount = kapi._timesToIterate === -1
+        ? 'infinite'
+        : kapi._timesToIterate;
+    }
 
     var ruleTemplate = '  %sanimation-iteration-count: %s;';
 
