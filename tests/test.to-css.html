@@ -123,7 +123,7 @@
           ,'  animation-fill-mode: forwards;'
           ,'  animation-timing-function: linear;'
           ,'  animation-iteration-count: infinite;'].join('\n')
-          ,'Class properties for Webkit were generated');
+          ,'Un-prefixed class properties for were generated');
     });
 
 
@@ -148,6 +148,31 @@
           ,'  -webkit-animation-timing-function: linear;'
           ,'  -webkit-animation-iteration-count: infinite;'].join('\n')
           ,'Class properties for Webkit were generated');
+    });
+
+
+    test('Generates all W3 CSS properties for an animation with centering offset',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1.keyframe(0, { 'x': 0 });
+
+      var classProperties =
+          Kapi._private.toCSS.generateCSSAnimationProperties(
+              actor1, 'ANIM_NAME', 'w3', null, true);
+
+      equal(
+          classProperties
+          ,['  animation-name: ANIM_NAME-x-keyframes;'
+          ,'  animation-duration: 0ms;'
+          ,'  animation-delay: 0ms;'
+          ,'  animation-fill-mode: forwards;'
+          ,'  animation-timing-function: linear;'
+          ,'  animation-iteration-count: infinite;'
+          ,'  transform-origin: 0 0;'].join('\n')
+          ,'Class properties including centering offset');
     });
 
 
@@ -744,7 +769,7 @@
       kapi.stop();
 
       equal(animDuration, '  PREFIXanimation-iteration-count: 3;'
-          ,'Generated CSS animation-timing-function');
+          ,'Generated CSS animation-iteration-count');
     });
 
 
@@ -761,7 +786,21 @@
       kapi.stop();
 
       equal(animDuration, '  PREFIXanimation-iteration-count: 5;'
-          ,'Generated CSS animation-timing-function');
+          ,'Generated CSS animation-iteration-count');
+    });
+
+
+    module('generateAnimationCenteringRule');
+
+
+    test('Can generate an offset rule for centering an element',
+        function () {
+
+    var animCenterOffset =
+        Kapi._private.toCSS.generateAnimationCenteringRule( 'PREFIX');
+
+      equal(animCenterOffset, '  PREFIXtransform-origin: 0 0;'
+          ,'Generated CSS offset rule');
     });
 
 

@@ -1,6 +1,6 @@
 /*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.13.2 (Sun, 02 Dec 2012 05:03:41 GMT)
+ * Rekapi - Rewritten Kapi. v0.13.3 (Mon, 03 Dec 2012 05:28:05 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -1811,7 +1811,7 @@ var rekapiToCSS = function (context, _) {
     var animName = opts.name || this.getCSSName();
     var granularity = opts.granularity || DEFAULT_GRANULARITY;
     var actorClass = generateCSSClass(
-        this, animName, opts.vendors, opts.iterations);
+        this, animName, opts.vendors, opts.iterations, opts.isCentered);
     var boilerplatedKeyframes = generateBoilerplatedKeyframes(
         this, animName, granularity, opts.vendors);
 
@@ -1918,16 +1918,18 @@ var rekapiToCSS = function (context, _) {
    * @param {string} animName
    * @param {Array.<string>} opt_vendors
    * @param {number|string} opt_iterations
+   * @param {boolean} opt_isCentered
    * @return {string}
    */
-  function generateCSSClass (actor, animName, opt_vendors, opt_iterations) {
+  function generateCSSClass (
+      actor, animName, opt_vendors, opt_iterations, opt_isCentered) {
     opt_vendors = opt_vendors || ['w3'];
     var classAttrs = [];
     var vendorAttrs;
 
     _.each(opt_vendors, function (vendor) {
       vendorAttrs = generateCSSAnimationProperties(
-          actor, animName, vendor, opt_iterations);
+          actor, animName, vendor, opt_iterations, opt_isCentered);
       classAttrs.push(vendorAttrs);
     });
 
@@ -1943,10 +1945,11 @@ var rekapiToCSS = function (context, _) {
    * @param {string} animName
    * @param {string} vendor
    * @param {number|string} opt_iterations
+   * @param {boolean} opt_isCentered
    * @return {string}
    */
   function generateCSSAnimationProperties (
-      actor, animName, vendor, opt_iterations) {
+      actor, animName, vendor, opt_iterations, opt_isCentered) {
     var generatedProperties = [];
     var prefix = VENDOR_PREFIXES[vendor];
 
@@ -1959,6 +1962,10 @@ var rekapiToCSS = function (context, _) {
     generatedProperties.push(generateAnimationTimingFunctionProperty(prefix));
     generatedProperties.push(generateAnimationIterationProperty(
         actor.kapi, prefix, opt_iterations));
+
+    if (opt_isCentered) {
+      generatedProperties.push(generateAnimationCenteringRule(prefix));
+    }
 
     return generatedProperties.join('\n');
   }
@@ -2043,6 +2050,15 @@ var rekapiToCSS = function (context, _) {
     var ruleTemplate = '  %sanimation-iteration-count: %s;';
 
     return printf(ruleTemplate, [prefix, iterationCount]);
+  }
+
+
+  /**
+   * @param {string} prefix
+   * @return {string}
+   */
+  function generateAnimationCenteringRule (prefix) {
+    return printf('  %stransform-origin: 0 0;', [prefix]);
   }
 
 
@@ -2312,6 +2328,7 @@ var rekapiToCSS = function (context, _) {
       ,'generateAnimationTimingFunctionProperty':
           generateAnimationTimingFunctionProperty
       ,'generateAnimationIterationProperty': generateAnimationIterationProperty
+      ,'generateAnimationCenteringRule': generateAnimationCenteringRule
       ,'simulateLeadingWait': simulateLeadingWait
       ,'simulateTrailingWait': simulateTrailingWait
       ,'canOptimizeKeyframeProperty': canOptimizeKeyframeProperty
