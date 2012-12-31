@@ -146,17 +146,6 @@ tracker](https://github.com/jeremyckahn/rekapi/issues).
 
 ## Building and contributing
 
-If you'd like to download entirety of this repo, please note that it uses Git
-submodules.  You will need to clone it like so:
-
-````
-$: git clone --recursive git@github.com:jeremyckahn/rekapi.git
-````
-
-The `--recursive` flag tells Git to download the submodules in addition to the
-Rekapi files.  You will need these submodules in order to build Rekapi or run
-the tests.
-
 Generating the Rekapi binary requires Node.js.  From the Rekapi root directory:
 
 ````
@@ -167,9 +156,14 @@ $: node build.js --ver <version>
 [SemVer](http://semver.org/) versioning scheme.  This will generate all the
 files you need and place them into the `dist/` directory.
 
-It's also important to make sure you didn't break any tests in `tests/`.  You
-can take a quick look by opening `tests/test.all_unit_tests.html` in your
-browser.
+It's also important to make sure you didn't break any tests.  To run all of the
+tests, you can either open the `.html` files in `tests/` one by one in a
+browser, or install [Grunt](http://gruntjs.com/) and
+[PhantomJS](http://phantomjs.org/) and running this in the CLI:
+
+````
+grunt qunit
+````
 
 Please make sure to follow the [style guide]
 (https://github.com/jeremyckahn/rekapi/blob/master/docs/styleguide.md).
