@@ -162,7 +162,7 @@ browser, or install [Grunt](http://gruntjs.com/) and
 [PhantomJS](http://phantomjs.org/) and running this in the CLI:
 
 ````
-grunt qunit
+$: grunt qunit
 ````
 
 Please make sure to follow the [style guide]
