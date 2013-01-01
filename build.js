@@ -1,6 +1,7 @@
+/*jshint node:true */
 // This script is inspired by the build script for Shifty, which was written by
 // Miller Medeiros.
-
+'use strict';
 // --- SETTINGS --- //
 
 var
@@ -10,21 +11,21 @@ var
     'version' : null,
     'build_date' : (new Date()).toGMTString()
   },
-  HEAD_FILE_LIST = [
-    'src/rekapi.license.js',
-    'src/rekapi.intro.js'],
   CORE_FILE_LIST = [
     'src/rekapi.core.js',
     'src/rekapi.actor.js',
     'src/rekapi.keyframeprops.js'],
   TAIL_FILE_LIST = [
-    'src/rekapi.init.js',
-    'src/rekapi.outro.js'],
+    'src/rekapi.init.js'],
   EXTENSION_FILE_LIST = [
     'ext/canvas/rekapi.canvas.context.js',
     'ext/canvas/rekapi.canvas.actor.js',
     'ext/dom/rekapi.dom.actor.js',
-    'ext/to-css/rekapi.to-css.js'];
+    'ext/to-css/rekapi.to-css.js'],
+  LICENSE_FILE = [
+    'src/rekapi.license.js'],
+  WRAPPER_FILE = [
+    'src/rekapi.wrapper.js'];
 
 
 // --- SETUP --- //
@@ -36,7 +37,7 @@ var
   _exec = require('child_process').exec,
   _distBaseName = _path.join(__dirname, DIST_FOLDER, DIST_NAME),
   _distFileName = _distBaseName + '.js',
-  _distFileNameMin = _distBaseName + '.min.js';
+  _distFileNameMin = _distBaseName + '.min.js',
   _distBundleName = _distBaseName + '.bundle.min.js';
 
 _cli
@@ -88,8 +89,7 @@ function echoFileSize(filename, explanatoryString) {
 // ---  CONCAT --- //
 
 function getFileList() {
-  var files = HEAD_FILE_LIST.slice(0);
-  files = files.concat(CORE_FILE_LIST);
+  var files = CORE_FILE_LIST;
 
   if (!_cli.noext) {
     files = files.concat(EXTENSION_FILE_LIST);
@@ -113,8 +113,13 @@ if (! _cli.ver ) {
 }
 
 replacements.version = _cli.ver;
-_fs.writeFileSync(_distFileName,
-    stache(concatFiles(getFileList()), replacements));
+var concattedFiles = concatFiles(getFileList());
+var license = concatFiles(LICENSE_FILE);
+var wrapper = concatFiles(WRAPPER_FILE);
+var wrappedCode = wrapper
+  .replace("/*license*/", license)
+  .replace("/*code*/", concattedFiles);
+_fs.writeFileSync(_distFileName, stache(wrappedCode, replacements));
 
 
 // --- MINIFICATION ---- //

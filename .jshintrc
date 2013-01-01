@@ -1,0 +1,26 @@
+{
+  "predef": {
+    "KAPI_DEBUG": true,
+    "noop": true,
+    "_": true
+  },
+
+  "asi": false,
+  "boss": true,
+  "browser": true,
+  "curly": true,
+  "eqeqeq": true,
+  "eqnull": true,
+  "immed": true,
+  "lastsemic": true,
+  "latedef": true,
+  "laxbreak": true,
+  "laxcomma": true,
+  "newcap": true,
+  "noarg": true,
+  "nomen": false,
+  "plusplus": false,
+  "sub": true,
+  "undef": true,
+  "white": false
+}

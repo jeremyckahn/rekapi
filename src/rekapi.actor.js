@@ -1,3 +1,4 @@
+/*global recalculateAnimationLength:true */
 var rekapiActor = function (context, _, Tweenable) {
 
   'use strict';

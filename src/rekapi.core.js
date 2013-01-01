@@ -32,7 +32,7 @@ function recalculateAnimationLength (kapi) {
   });
 
   kapi._animationLength = Math.max.apply(Math, actorLengths);
-};
+}
 
 
 /**
@@ -49,7 +49,7 @@ var rekapiCore = function (context, _, Tweenable) {
 
   // GLOBAL is read from for various environment properties
   // http://stackoverflow.com/questions/3277182/how-to-get-the-global-object-in-javascript
-  var Fn = Function, GLOBAL = Fn('return this')();
+  var Fn = Function, GLOBAL = new Fn('return this')();
 
 
   /**

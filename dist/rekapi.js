@@ -1,6 +1,5 @@
-/*jslint browser: true, nomen: true, plusplus: true, undef: true, vars: true, white: true */
 /**
- * Rekapi - Rewritten Kapi. v0.13.3 (Mon, 03 Dec 2012 05:28:05 GMT)
+ * Rekapi - Rewritten Kapi. v0.13.4 (Tue, 01 Jan 2013 19:38:02 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -9,8 +8,9 @@
  * Make fun keyframe animations with JavaScript.
  * Dependencies: Underscore.js (https://github.com/documentcloud/underscore),
  *   Shifty.js (https://github.com/jeremyckahn/shifty).
- * MIT Lincense.  This code free to use, modify, distribute and enjoy.
+ * MIT License.  This code free to use, modify, distribute and enjoy.
  */
+
 ;(function (global) {
 // A hack for UglifyJS defines
 if (typeof KAPI_DEBUG === 'undefined') {
@@ -46,7 +46,7 @@ function recalculateAnimationLength (kapi) {
   });
 
   kapi._animationLength = Math.max.apply(Math, actorLengths);
-};
+}
 
 
 /**
@@ -63,7 +63,7 @@ var rekapiCore = function (context, _, Tweenable) {
 
   // GLOBAL is read from for various environment properties
   // http://stackoverflow.com/questions/3277182/how-to-get-the-global-object-in-javascript
-  var Fn = Function, GLOBAL = Fn('return this')();
+  var Fn = Function, GLOBAL = new Fn('return this')();
 
 
   /**
@@ -606,6 +606,7 @@ var rekapiCore = function (context, _, Tweenable) {
   context.Kapi = Kapi;
 
 };
+/*global recalculateAnimationLength:true */
 var rekapiActor = function (context, _, Tweenable) {
 
   'use strict';
@@ -2337,6 +2338,15 @@ var rekapiToCSS = function (context, _) {
   }
 
 };
+/*global rekapiCore:true,
+ global rekapiActor:true,
+ global rekapiKeyframeProperty:true,
+ global rekapiDOM:true,
+ global rekapiToCSS:true,
+ global rekapiCanvasContext: true
+ global rekapiCanvasActor: true
+ global define: true
+*/
 var rekapi = function (global, deps) {
 
   'use strict';
@@ -2407,4 +2417,5 @@ if (typeof define === 'function' && define.amd) {
   // Note: `global` is not defined when running unit tests. Pass `this` instead.
   rekapi(typeof global !== 'undefined' ? global : this);
 }
+
 } (this));

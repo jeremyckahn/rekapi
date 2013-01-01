@@ -1,3 +1,12 @@
+/*global rekapiCore:true,
+ global rekapiActor:true,
+ global rekapiKeyframeProperty:true,
+ global rekapiDOM:true,
+ global rekapiToCSS:true,
+ global rekapiCanvasContext: true
+ global rekapiCanvasActor: true
+ global define: true
+*/
 var rekapi = function (global, deps) {
 
   'use strict';
