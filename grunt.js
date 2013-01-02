@@ -1,15 +1,20 @@
-/*global module:true */
-
+/*global module:false*/
 module.exports = function(grunt) {
-  'use strict';
 
+  // Project configuration.
   grunt.initConfig({
-    qunit: {
-      files: ['tests/*.html']
-    },
     lint: {
+      files: ['grunt.js', 'src/*.js']
+    },
+    qunit: {
+      files: ['tests/*.html']
+    },
+    watch: {
+      files: '<config:lint.files>',
+      tasks: 'lint qunit'
+    },
+    jshint: {
       options: {
-        options: {
           asi: false,
           boss: true,
           browser: true,
@@ -28,17 +33,16 @@ module.exports = function(grunt) {
           sub: true,
           undef: true,
           white: false
-        },
-        globals: {
-          KAPI_DEBUG: true,
-          noop: true,
-          _: true
-        }
       },
-      files: [
-        'src/*.js'
-      ]
+      globals: {
+        KAPI_DEBUG: true,
+        noop: true,
+        _: true
+      }
     }
   });
+
+  // Default task.
+  grunt.registerTask('default', 'lint qunit');
 
 };
