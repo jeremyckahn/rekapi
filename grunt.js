@@ -4,7 +4,11 @@ module.exports = function(grunt) {
   // Project configuration.
   grunt.initConfig({
     lint: {
-      files: ['grunt.js', 'src/rekapi.!(intro|outro)*.js']
+      files: [
+        'grunt.js',
+        'src/rekapi.!(intro|outro)*.js',
+        'ext/**/**.js'
+      ]
     },
     qunit: {
       files: ['tests/*.html']

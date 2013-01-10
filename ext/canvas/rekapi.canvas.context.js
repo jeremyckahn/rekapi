@@ -1,3 +1,4 @@
+/*global fireEvent: true */
 var rekapiCanvasContext = function (context, _) {
 
   'use strict';
@@ -11,18 +12,18 @@ var rekapiCanvasContext = function (context, _) {
   /**
    * Gets (and optionally sets) height or width on a canvas.
    * @param {HTMLCanvas} context
-   * @param {string} dimension The dimension (either "height" or "width") to
-   *    get or set.
+   * @param {string} heightOrWidth The dimension (either "height" or "width")
+   * to get or set.
    * @param {number} opt_newSize The new value to set for `dimension`.
    * @return {number}
    */
-  function dimension (context, dimension, opt_newSize) {
+  function dimension (context, heightOrWidth, opt_newSize) {
     if (typeof opt_newSize !== 'undefined') {
-      context[dimension] = opt_newSize;
-      context.style[dimension] = opt_newSize + 'px';
+      context[heightOrWidth] = opt_newSize;
+      context.style[heightOrWidth] = opt_newSize + 'px';
     }
 
-    return context[dimension];
+    return context[heightOrWidth];
   }
 
 

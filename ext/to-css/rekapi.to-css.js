@@ -44,7 +44,7 @@ var rekapiToCSS = function (context, _) {
     ,easeInOutExpo: '1,0,0,1'
     ,easeInOutCirc: '.785,.135,.15,.86'
     ,easeInOutBack: '.68,-.55,.265,1.55'
-  }
+  };
 
 
   // TEMPLATES
@@ -139,7 +139,6 @@ var rekapiToCSS = function (context, _) {
   function generateBoilerplatedKeyframes (
       actor, animName, granularity, opt_vendors) {
 
-    var trackNames = _.keys(actor._propertyTracks);
     var trackNames = actor.getTrackNames();
     var cssTracks = [];
 
@@ -327,7 +326,7 @@ var rekapiToCSS = function (context, _) {
    * @return {string}
    */
   function generateAnimationIterationProperty (kapi, prefix, opt_iterations) {
-    var iterationCount
+    var iterationCount;
     if (opt_iterations) {
       iterationCount = opt_iterations;
     } else {
@@ -368,7 +367,7 @@ var rekapiToCSS = function (context, _) {
       var previousChunk = easingChunks[0];
       var currentChunk;
       for (i; i < len; i++) {
-        var currentChunk = easingChunks[i];
+        currentChunk = easingChunks[i];
         if (!(BEZIERS[currentChunk])
             || previousChunk !== currentChunk) {
           canOptimize = false;
@@ -559,7 +558,7 @@ var rekapiToCSS = function (context, _) {
     }
 
     return accumulator;
-  };
+  }
 
 
   /**
@@ -622,7 +621,7 @@ var rekapiToCSS = function (context, _) {
       ,'simulateTrailingWait': simulateTrailingWait
       ,'canOptimizeKeyframeProperty': canOptimizeKeyframeProperty
       ,'generateOptimizedKeyframeSegment': generateOptimizedKeyframeSegment
-    }
+    };
   }
 
 };

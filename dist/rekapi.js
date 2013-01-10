@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.13.4 (Thu, 10 Jan 2013 04:59:26 GMT)
+ * Rekapi - Rewritten Kapi. v0.13.5 (Thu, 10 Jan 2013 05:49:36 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -1283,6 +1283,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
   };
 
 };
+/*global fireEvent: true */
 var rekapiCanvasContext = function (context, _) {
 
   'use strict';
@@ -1296,18 +1297,18 @@ var rekapiCanvasContext = function (context, _) {
   /**
    * Gets (and optionally sets) height or width on a canvas.
    * @param {HTMLCanvas} context
-   * @param {string} dimension The dimension (either "height" or "width") to
-   *    get or set.
+   * @param {string} heightOrWidth The dimension (either "height" or "width")
+   * to get or set.
    * @param {number} opt_newSize The new value to set for `dimension`.
    * @return {number}
    */
-  function dimension (context, dimension, opt_newSize) {
+  function dimension (context, heightOrWidth, opt_newSize) {
     if (typeof opt_newSize !== 'undefined') {
-      context[dimension] = opt_newSize;
-      context.style[dimension] = opt_newSize + 'px';
+      context[heightOrWidth] = opt_newSize;
+      context.style[heightOrWidth] = opt_newSize + 'px';
     }
 
-    return context[dimension];
+    return context[heightOrWidth];
   }
 
 
@@ -1755,7 +1756,7 @@ var rekapiToCSS = function (context, _) {
     ,easeInOutExpo: '1,0,0,1'
     ,easeInOutCirc: '.785,.135,.15,.86'
     ,easeInOutBack: '.68,-.55,.265,1.55'
-  }
+  };
 
 
   // TEMPLATES
@@ -1850,7 +1851,6 @@ var rekapiToCSS = function (context, _) {
   function generateBoilerplatedKeyframes (
       actor, animName, granularity, opt_vendors) {
 
-    var trackNames = _.keys(actor._propertyTracks);
     var trackNames = actor.getTrackNames();
     var cssTracks = [];
 
@@ -2038,7 +2038,7 @@ var rekapiToCSS = function (context, _) {
    * @return {string}
    */
   function generateAnimationIterationProperty (kapi, prefix, opt_iterations) {
-    var iterationCount
+    var iterationCount;
     if (opt_iterations) {
       iterationCount = opt_iterations;
     } else {
@@ -2079,7 +2079,7 @@ var rekapiToCSS = function (context, _) {
       var previousChunk = easingChunks[0];
       var currentChunk;
       for (i; i < len; i++) {
-        var currentChunk = easingChunks[i];
+        currentChunk = easingChunks[i];
         if (!(BEZIERS[currentChunk])
             || previousChunk !== currentChunk) {
           canOptimize = false;
@@ -2270,7 +2270,7 @@ var rekapiToCSS = function (context, _) {
     }
 
     return accumulator;
-  };
+  }
 
 
   /**
@@ -2333,7 +2333,7 @@ var rekapiToCSS = function (context, _) {
       ,'simulateTrailingWait': simulateTrailingWait
       ,'canOptimizeKeyframeProperty': canOptimizeKeyframeProperty
       ,'generateOptimizedKeyframeSegment': generateOptimizedKeyframeSegment
-    }
+    };
   }
 
 };
