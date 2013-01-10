@@ -21,7 +21,7 @@ Rekapi has been tested in and supports:
 If you have any questions at all about Rekapi, please post them to the [Google
 Group](https://groups.google.com/forum/?fromgroups#!forum/rekapi).  Also, check
 out the [Getting Started Guide
-](https://github.com/jeremyckahn/rekapi/blob/master/docs/getting_started.md)__.
+](https://github.com/jeremyckahn/rekapi/blob/master/docs/getting_started.md).
 
 Please note:  Rekapi is a rewrite of
 [Kapi](https://github.com/jeremyckahn/kapi). Rekapi is very similar to Kapi,
