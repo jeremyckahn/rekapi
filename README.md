@@ -18,6 +18,11 @@ Rekapi has been tested in and supports:
   * IE 7/8 (9 probably works; has not been tested)
   * Node.js
 
+If you have any questions at all about Rekapi, please post them to the [Google
+Group](https://groups.google.com/forum/?fromgroups#!forum/rekapi).  Also, check
+out the [Getting Started Guide
+](https://github.com/jeremyckahn/rekapi/blob/master/docs/getting_started.md)__.
+
 Please note:  Rekapi is a rewrite of
 [Kapi](https://github.com/jeremyckahn/kapi). Rekapi is very similar to Kapi,
 but they are not identical.  Rekapi is not a drop-in replacement for Kapi.
@@ -26,9 +31,6 @@ Rekapi is way awesomer, so you should use it instead.
 The API may change somewhat before reaching 1.0.  __[See how to upgrade from
 older versions.
 ](https://github.com/jeremyckahn/rekapi/blob/master/docs/upgrading.md)__.
-
-__[Please see the getting started guide
-](https://github.com/jeremyckahn/rekapi/blob/master/docs/getting_started.md)__.
 
 ## What is keyframing?
 
