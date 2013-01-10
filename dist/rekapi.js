@@ -1,5 +1,5 @@
 /**
- * Rekapi - Rewritten Kapi. v0.13.4 (Tue, 01 Jan 2013 19:38:02 GMT)
+ * Rekapi - Rewritten Kapi. v0.13.4 (Thu, 10 Jan 2013 04:59:26 GMT)
  * https://github.com/jeremyckahn/rekapi
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
@@ -10,7 +10,6 @@
  *   Shifty.js (https://github.com/jeremyckahn/shifty).
  * MIT License.  This code free to use, modify, distribute and enjoy.
  */
-
 ;(function (global) {
 // A hack for UglifyJS defines
 if (typeof KAPI_DEBUG === 'undefined') {
@@ -2417,5 +2416,4 @@ if (typeof define === 'function' && define.amd) {
   // Note: `global` is not defined when running unit tests. Pass `this` instead.
   rekapi(typeof global !== 'undefined' ? global : this);
 }
-
 } (this));
