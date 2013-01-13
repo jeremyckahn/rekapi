@@ -1,4 +1,4 @@
-/*! Rekapi - v0.13.5 - 2013-01-12 - http://rekapi.com */
+/*! Rekapi - v0.13.6 - 2013-01-12 - http://rekapi.com */
 
 /**
  * Rekapi - Rewritten Kapi.
