@@ -125,8 +125,8 @@ a lot ike the AMD approach above:
 var r = require('lib/r.js');
 r.config({
   paths: {
-    shifty: "dist/shifty",
-    underscore: "dist/_",
+    shifty: "dist/shifty.min",
+    underscore: "dist/underscore-min",
     rekapi: "dist/rekapi"
   }
 });
@@ -148,24 +148,20 @@ tracker](https://github.com/jeremyckahn/rekapi/issues).
 
 ## Building and contributing
 
-Generating the Rekapi binary requires Node.js.  From the Rekapi root directory:
+Generating the Rekapi binary requires [Node.js](http://nodejs.org/) and
+[Grunt](http://gruntjs.com/).
 
 ````
-$: node build.js --ver <version>
+$: grunt build
 ````
-
-`version` is whatever version you want to call the build.  Rekapi uses the
-[SemVer](http://semver.org/) versioning scheme.  This will generate all the
-files you need and place them into the `dist/` directory.
 
 It's also important to make sure you didn't break any tests.  To run all of the
 tests, you can either open the `.html` files in `tests/` one by one in a
-browser, or install [Grunt](http://gruntjs.com/) and
-[PhantomJS](http://phantomjs.org/) and running this in the CLI:
+browser, or run the default Grunt task:
 
 ````
-$: grunt qunit
+$: grunt
 ````
 
-Please make sure to follow the [style guide]
+This task also lints the code.  Please make sure to follow the [style guide]
 (https://github.com/jeremyckahn/rekapi/blob/master/docs/styleguide.md).

@@ -1,8 +1,9 @@
-var r = require('../lib/r.js');
+/*global require: true, global console: true */
+var r = require('../vendor/r.js');
 r.config({
   paths: {
-    shifty: "../dist/shifty",
-    underscore: "../dist/_",
+    shifty: "../dist/shifty.min",
+    underscore: "../dist/underscore-min",
     rekapi: "../dist/rekapi"
   }
 });

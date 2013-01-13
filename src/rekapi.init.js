@@ -49,7 +49,7 @@ if (typeof define === 'function' && define.amd) {
   // Shifty and Underscore are set as dependencies of this module.
   //
   // The rekapi module is anonymous so that it can be required with any name.
-  // Example: define(['lib/rekapi.min'], function(Kapi) { ... });
+  // Example: define(['vendor/rekapi.min'], function(Kapi) { ... });
   define(['shifty', 'underscore'], function (Tweenable, Underscore) {
     var underscoreSupportsAMD = (Underscore != null);
     var deps = {  Tweenable: Tweenable,

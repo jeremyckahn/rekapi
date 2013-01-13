@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="../lib/require.js"></script>
+  <script src="../vendor/require.js"></script>
 </head>
 <body>
   <div id="canvas" style="background: #eee; overflow: hidden; height: 500px; width: 600px;">
@@ -10,8 +10,8 @@
   <script>
     require.config({
       paths: {
-        shifty: "../dist/shifty",
-        underscore: "../dist/_",
+        shifty: "../dist/shifty.min",
+        underscore: "../dist/underscore-min",
         rekapi: "../dist/rekapi"
       }
     });

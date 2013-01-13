@@ -1,16 +1,19 @@
+/*! Rekapi - v0.13.5 - 2013-01-12 - http://rekapi.com */
+
 /**
- * Rekapi - Rewritten Kapi. v0.13.5 (Thu, 10 Jan 2013 05:49:36 GMT)
+ * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
  *
- * By Jeremy Kahn (jeremyckahn@gmail.com), with significant contributions from
- *   Franck Lecollinet
+ * By Jeremy Kahn (jeremyckahn@gmail.com)
  *
  * Make fun keyframe animations with JavaScript.
  * Dependencies: Underscore.js (https://github.com/documentcloud/underscore),
  *   Shifty.js (https://github.com/jeremyckahn/shifty).
  * MIT License.  This code free to use, modify, distribute and enjoy.
  */
+
 ;(function (global) {
+
 // A hack for UglifyJS defines
 if (typeof KAPI_DEBUG === 'undefined') {
   KAPI_DEBUG = true;
@@ -605,6 +608,7 @@ var rekapiCore = function (context, _, Tweenable) {
   context.Kapi = Kapi;
 
 };
+
 /*global recalculateAnimationLength:true */
 var rekapiActor = function (context, _, Tweenable) {
 
@@ -1192,6 +1196,7 @@ var rekapiActor = function (context, _, Tweenable) {
   };
 
 };
+
 var rekapiKeyframeProperty = function (context, _, Tweenable) {
 
   'use strict';
@@ -1283,6 +1288,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
   };
 
 };
+
 /*global fireEvent: true */
 var rekapiCanvasContext = function (context, _) {
 
@@ -1502,6 +1508,7 @@ var rekapiCanvasContext = function (context, _) {
   };
 
 };
+
 var rekapiCanvasActor = function (context, _) {
 
   'use strict';
@@ -1546,6 +1553,7 @@ var rekapiCanvasActor = function (context, _) {
     return this.kapi.canvas.moveActorToLayer(this, layer);
   };
 };
+
 var rekapiDOM = function (context, _) {
 
   'use strict';
@@ -1710,6 +1718,7 @@ var rekapiDOM = function (context, _) {
   };
 
 };
+
 var rekapiToCSS = function (context, _) {
 
   'use strict';
@@ -2337,6 +2346,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 };
+
 /*global rekapiCore:true,
  global rekapiActor:true,
  global rekapiKeyframeProperty:true,
@@ -2388,7 +2398,7 @@ if (typeof define === 'function' && define.amd) {
   // Shifty and Underscore are set as dependencies of this module.
   //
   // The rekapi module is anonymous so that it can be required with any name.
-  // Example: define(['lib/rekapi.min'], function(Kapi) { ... });
+  // Example: define(['vendor/rekapi.min'], function(Kapi) { ... });
   define(['shifty', 'underscore'], function (Tweenable, Underscore) {
     var underscoreSupportsAMD = (Underscore != null);
     var deps = {  Tweenable: Tweenable,
@@ -2416,4 +2426,5 @@ if (typeof define === 'function' && define.amd) {
   // Note: `global` is not defined when running unit tests. Pass `this` instead.
   rekapi(typeof global !== 'undefined' ? global : this);
 }
+
 } (this));
