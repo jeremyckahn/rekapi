@@ -155,7 +155,7 @@ Copy/paste/save this onto your machine to see a simple Rekapi animation:
 <!DOCTYPE html>
 <html>
 <head>
-  <script src="https://raw.github.com/jeremyckahn/rekapi/master/dist/rekapi.bundle.min.js"></script>
+  <script src="https://raw.github.com/jeremyckahn/rekapi/master/dist/rekapi-underscore-shifty.min.js"></script>
 </head>
 <body>
   <canvas></canvas>

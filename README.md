@@ -94,7 +94,7 @@ creating any `Kapi`, `Tweenable` (from Shifty) or `_` global variables, unlike
 in the previous code samples.
 
 Caution: You can only require `rekapi.js` or `rekapi.min.js` as AMD modules. It
-will not work with `rekapi.bundle.min.js`.
+will not work with `rekapi-underscore-shifty.min.js`.
 
 Here is an example of how you can use it with RequireJS:
 
