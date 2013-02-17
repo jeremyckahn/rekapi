@@ -3,11 +3,11 @@
 <head>
   <link href="../vendor/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script>
-  var internalDebugNow = function () {
+  var mockTime = function () {
         return +(new Date());
       };
   var SHIFTY_DEBUG_NOW = function () {
-        return internalDebugNow();
+        return mockTime();
       };
   </script>
   <script src="../vendor/qunit/qunit.js"></script>
@@ -1107,6 +1107,47 @@
       equals(testActor._propertyTracks.y[0].nextProperty,
           testActor._propertyTracks.y[1],
           'The first tracked "y" KeyframeProperty instance\'s nextProperty did not change');
+    });
+
+
+    module('Multiple Actors');
+
+
+    test('Early-ending Actors reach their final state', function () {
+
+      var testKapi = setupTestKapi();
+      var testActor1 = setupTestActor(testKapi);
+      var testActor2 = setupTestActor(testKapi);
+
+      testActor1.keyframe(0, {
+          'x': 0
+        }).keyframe(1000, {
+          'x': 100
+        });
+
+      testActor2.keyframe(0, {
+          'x': 0
+        }).keyframe(500, {
+          'x': 100
+        });
+
+      testKapi._loopTimestamp = 0;
+      mockTime = function () { return 250; };
+      Kapi._private.updateToCurrentMillisecond(testKapi);
+
+      equal(testActor1.get().x, 25,
+          'testActor1 has correct midpoint while both Actors are animating');
+      equal(testActor2.get().x, 50,
+          'testActor2 has correct midpoint while both Actors are animating');
+
+      mockTime = function () { return 750; };
+      Kapi._private.updateToCurrentMillisecond(testKapi);
+
+      equal(testActor1.get().x, 75,
+          'testActor1 has correct midpoint while still animating after testActor2 has finished');
+      equal(testActor2.get().x, 100,
+          'testActor2 has correct ending position after finishing before testActor1');
+
     });
 
 

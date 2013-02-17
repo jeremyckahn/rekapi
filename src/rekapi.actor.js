@@ -542,7 +542,9 @@ var rekapiActor = function (context, _, Tweenable) {
     var startMs = this.getStart();
     var endMs = this.getEnd();
 
-    if (startMs <= millisecond && millisecond <= endMs) {
+    millisecond = Math.min(endMs, millisecond);
+
+    if (startMs <= millisecond) {
       var latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
       var propertiesToInterpolate =
           this._timelinePropertyCaches[this._timelinePropertyCacheIndex[

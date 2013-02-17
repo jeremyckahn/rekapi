@@ -1,4 +1,4 @@
-/*! Rekapi - v0.13.6 - 2013-01-12 - http://rekapi.com */
+/*! Rekapi - v0.13.7 - 2013-02-16 - http://rekapi.com */
 
 /**
  * Rekapi - Rewritten Kapi.
@@ -1153,7 +1153,9 @@ var rekapiActor = function (context, _, Tweenable) {
     var startMs = this.getStart();
     var endMs = this.getEnd();
 
-    if (startMs <= millisecond && millisecond <= endMs) {
+    millisecond = Math.min(endMs, millisecond);
+
+    if (startMs <= millisecond) {
       var latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
       var propertiesToInterpolate =
           this._timelinePropertyCaches[this._timelinePropertyCacheIndex[
