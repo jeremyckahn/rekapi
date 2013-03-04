@@ -96,6 +96,7 @@ module.exports = function(grunt) {
         {src: ['components/ace-builds/src-min/ace.js'], dest: 'dist/asset/ace.js'},
         {src: ['components/ace-builds/src-min/theme-textmate.js'], dest: 'dist/asset/theme-textmate.js'},
         {src: ['components/ace-builds/src-min/mode-javascript.js'], dest: 'dist/asset/mode-javascript.js'},
+        {src: ['components/ace-builds/src-min/worker-javascript.js'], dest: 'dist/asset/worker-javascript.js'},
         {src: ['components/requirejs/require.js'], dest: 'dist/asset/require.js'}
         ]
       }
