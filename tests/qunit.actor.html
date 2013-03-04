@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="../vendor/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <link href="../components/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script>
   var mockTime = function () {
         return +(new Date());
@@ -10,9 +10,9 @@
         return mockTime();
       };
   </script>
-  <script src="../vendor/qunit/qunit.js"></script>
-  <script src="../vendor/underscore/underscore.js"></script>
-  <script src="../vendor/shifty/shifty.js"></script>
+  <script src="../components/qunit/qunit.js"></script>
+  <script src="../components/underscore/underscore.js"></script>
+  <script src="../components/shifty/dist/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
   <script src="../src/rekapi.keyframeprops.js"></script>
@@ -52,25 +52,25 @@
 
       testActor.updateState(0);
 
-      equals(testActor.get().x, 0,
+      equal(testActor.get().x, 0,
         'Value "x" was properly interpolated at position 0.0');
-      equals(testActor.get().y, 0,
+      equal(testActor.get().y, 0,
         'Value "y" was properly interpolated at position 0.0');
 
 
       testActor.updateState(500);
 
-      equals(testActor.get().x, 50,
+      equal(testActor.get().x, 50,
         'Value "x" was properly interpolated at position 0.5');
-      equals(testActor.get().y, 50,
+      equal(testActor.get().y, 50,
         'Value "y" was properly interpolated at position 0.5');
 
 
       testActor.updateState(1000);
 
-      equals(testActor.get().x, 100,
+      equal(testActor.get().x, 100,
         'Value "x" was properly interpolated at position 1.0');
-      equals(testActor.get().y, 100,
+      equal(testActor.get().y, 100,
         'Value "y" was properly interpolated at position 1.0');
     });
 
@@ -91,7 +91,7 @@
       });
 
       testActor.updateState(500);
-      equals(testActor.get().x, undefined,
+      equal(testActor.get().x, undefined,
           'Value only has a start point, therefore a calculated midpoint is undefined.');
     });
 
@@ -112,7 +112,7 @@
       });
 
       testActor.updateState(500);
-      equals(testActor.get().x, undefined,
+      equal(testActor.get().x, undefined,
           'Value only has an end point, therefore a calculated midpoint is undefined.');
     });
 
@@ -137,25 +137,25 @@
 
       testActor.updateState(1000);
 
-      equals(testActor.get().x, 0,
+      equal(testActor.get().x, 0,
         'Value "x" was properly interpolated at position 0.0');
-      equals(testActor.get().y, 0,
+      equal(testActor.get().y, 0,
         'Value "y" was properly interpolated at position 0.0');
 
 
       testActor.updateState(1500);
 
-      equals(testActor.get().x, 50,
+      equal(testActor.get().x, 50,
         'Value "x" was properly interpolated at position 0.5');
-      equals(testActor.get().y, 50,
+      equal(testActor.get().y, 50,
         'Value "y" was properly interpolated at position 0.5');
 
 
       testActor.updateState(2000);
 
-      equals(testActor.get().x, 100,
+      equal(testActor.get().x, 100,
         'Value "x" was properly interpolated at position 1.0');
-      equals(testActor.get().y, 100,
+      equal(testActor.get().y, 100,
         'Value "y" was properly interpolated at position 1.0');
     });
 
@@ -185,7 +185,7 @@
       }, .5, 'easeInSine');
 
       testActor.updateState(500);
-      equals(testActor.get().x, tweenableComparator.x,
+      equal(testActor.get().x, tweenableComparator.x,
         'Value "x" was properly interpolated at position 0.5 with "easeInSine"');
 
 
@@ -196,7 +196,7 @@
       }, .5, 'easeOutCirc');
 
       testActor.updateState(1500);
-      equals(testActor.get().x, tweenableComparator.x,
+      equal(testActor.get().x, tweenableComparator.x,
         'Value "x" was properly interpolated at position 0.5 with "easeOutCirc"');
 
     });
@@ -278,10 +278,10 @@
 
       testActor.removeKeyframe(1000);
 
-      equals(testActor._propertyTracks.x.length, 2,
+      equal(testActor._propertyTracks.x.length, 2,
           'A keyframe property was removed from testActor._propertyTracks.x');
 
-      equals(_.keys(testActor._keyframeProperties).length, 2,
+      equal(_.keys(testActor._keyframeProperties).length, 2,
           'A keyframe property was deleted from the internal hash');
     });
 
@@ -371,7 +371,7 @@
 
       testActor.removeKeyframe(2000);
 
-      equals(testKapi._animationLength, 1000,
+      equal(testKapi._animationLength, 1000,
           'The animation length is shortened when the final keyframe is removed');
     });
 
@@ -395,8 +395,8 @@
 
       testActor.removeAllKeyframeProperties();
 
-      equals(testKapi._animationLength, 0, 'Animation length is 0');
-      equals(testActor._propertyTracks.x.length, 0,
+      equal(testKapi._animationLength, 0, 'Animation length is 0');
+      equal(testActor._propertyTracks.x.length, 0,
           'x property track exists, but is empty');
 
     });
@@ -419,14 +419,14 @@
 
       testActor.copyProperties(1000, 0);
 
-      equals(testActor._propertyTracks.x.length, 2,
+      equal(testActor._propertyTracks.x.length, 2,
           'Now there are two properties');
       ok(testActor._propertyTracks.x[0] !== testActor._propertyTracks.x[1],
           'The two properties are not the same Object reference');
-      equals(testActor._propertyTracks.x[0].value,
+      equal(testActor._propertyTracks.x[0].value,
           testActor._propertyTracks.x[1].value,
           'Copied property value is the same as the source property value')
-      equals(testActor._propertyTracks.x[0].easing,
+      equal(testActor._propertyTracks.x[0].easing,
           testActor._propertyTracks.x[1].easing,
           'Copied property easing is the same as the source property easing')
     });
@@ -454,7 +454,7 @@
       });
 
       testActor.updateState(500);
-      equals(testActor.get().x, 100,
+      equal(testActor.get().x, 100,
           'First keyframe was modified and factored into the position calculation');
     });
 
@@ -482,7 +482,7 @@
       });
 
       testActor.updateState(500);
-      equals(testActor.get().x, 50,
+      equal(testActor.get().x, 50,
           'Second keyframe\'s easing  was modified and factored into the position calculation');
     });
 
@@ -508,11 +508,11 @@
           'x': 'elastic'
         });
 
-      equals(testActor.hasKeyframeAt(500), false,
+      equal(testActor.hasKeyframeAt(500), false,
           'Keyframe does not exist at 500ms');
-      equals(testActor.hasKeyframeAt(2000), false,
+      equal(testActor.hasKeyframeAt(2000), false,
           'Keyframe does not exist at 2000ms');
-      equals(testActor.hasKeyframeAt(1000), true,
+      equal(testActor.hasKeyframeAt(1000), true,
           'Keyframe exists at 1000ms');
     });
 
@@ -535,11 +535,11 @@
           'x': 'elastic'
         });
 
-      equals(testActor.hasKeyframeAt(0, 'y'), false,
+      equal(testActor.hasKeyframeAt(0, 'y'), false,
           'Keyframe does not exist at 0ms on an unknown track');
-      equals(testActor.hasKeyframeAt(1200, 'x'), false,
+      equal(testActor.hasKeyframeAt(1200, 'x'), false,
           'Keyframe does not exist at 1200ms on the x track');
-      equals(testActor.hasKeyframeAt(1000, 'x'), true,
+      equal(testActor.hasKeyframeAt(1000, 'x'), true,
           'Keyframe exists at 1000ms on the x track');
     });
 
@@ -559,7 +559,7 @@
       }).wait(1000);
 
 
-      equals(testActor._propertyTracks.x[1].value, 50,
+      equal(testActor._propertyTracks.x[1].value, 50,
           'The first keyframe was extended.');
     });
 
@@ -578,7 +578,7 @@
       }).wait(2000);
 
 
-      equals(testActor._propertyTracks.x[2].value, 100,
+      equal(testActor._propertyTracks.x[2].value, 100,
           'The last keyframe was extended.');
     });
 
@@ -711,7 +711,7 @@
 
       testActor.keyframe(0, { x: 10 });
 
-      equals(testActor.getKeyframeProperty('x', 0).value, 10,
+      equal(testActor.getKeyframeProperty('x', 0).value, 10,
         'Retrieved the value of the KeyframeProperty that was set');
     });
 
@@ -728,7 +728,7 @@
       testActor.keyframe(0, { x: 10 });
       testActor.modifyKeyframeProperty('x', 0, { value: 20 });
 
-      equals(testActor.getKeyframeProperty('x', 0).value, 20,
+      equal(testActor.getKeyframeProperty('x', 0).value, 20,
         'The KeyframeProperty was modified');
     });
 
@@ -750,7 +750,7 @@
         .keyframe(1000, { x: 2 })
         .keyframe(2000, { x: 3 });
 
-      equals(testActor1.getTrackLength('x'), 3,
+      equal(testActor1.getTrackLength('x'), 3,
           'Track with Actors has a length');
     });
 
@@ -890,7 +890,7 @@
         .keyframe(1000, {})
         .keyframe(2000, {});
 
-      equals(testActor1.getTrackLength('x'), undefined,
+      equal(testActor1.getTrackLength('x'), undefined,
           'Track with Actors does not have a length');
     });
 
@@ -919,7 +919,7 @@
       ok(_.contains(trackNames, 'b'), 'Track "b" exists');
       ok(_.contains(trackNames, 'c'), 'Track "c" exists');
       ok(_.contains(trackNames, 'd'), 'Track "d" exists');
-      equals(trackNames.length, 4, 'There are only 4 track names');
+      equal(trackNames.length, 4, 'There are only 4 track names');
     });
 
 
@@ -941,23 +941,23 @@
       });
 
       var exportedTimeline = testActor.exportTimeline();
-      equals(exportedTimeline.start, 0,
+      equal(exportedTimeline.start, 0,
           'Actor start time is properly exported');
-      equals(exportedTimeline.end, 1000,
+      equal(exportedTimeline.end, 1000,
           'Actor end time is properly exported');
       ok(_.contains(exportedTimeline.trackNames, 'x'),
           '"x"" track is in the trackName list');
       ok(_.contains(exportedTimeline.trackNames, 'y'),
           '"y"" track is in the trackName list');
-      equals(exportedTimeline.trackNames.length, 2,
+      equal(exportedTimeline.trackNames.length, 2,
           'Only two track names were exported');
-      equals(exportedTimeline.propertyTracks.x.length, 2,
+      equal(exportedTimeline.propertyTracks.x.length, 2,
           'Data for all "x" KeyframeProperties was exported')
-      equals(exportedTimeline.propertyTracks.y.length, 2,
+      equal(exportedTimeline.propertyTracks.y.length, 2,
           'Data for all "y" KeyframeProperties was exported')
-      equals(typeof exportedTimeline.propertyTracks.x[0].id, 'string',
+      equal(typeof exportedTimeline.propertyTracks.x[0].id, 'string',
           'First exported x KeyframeProperty has an id');
-      equals(typeof exportedTimeline.propertyTracks.y[0].id, 'string',
+      equal(typeof exportedTimeline.propertyTracks.y[0].id, 'string',
           'First exported y KeyframeProperty has an id');
     });
 
@@ -1005,8 +1005,8 @@
 
       ok(testActor._keyframeProperties[keyProp] instanceof Kapi.KeyframeProperty,
           'The Actor\'s _keyframeProperties Object contains KeyframeProperty instances')
-      equals(testActor._propertyTracks.x.length, 1, 'Property was added to the "x" track');
-      equals(testActor._propertyTracks.y.length, 1, 'Property was added to the "y" track');
+      equal(testActor._propertyTracks.x.length, 1, 'Property was added to the "x" track');
+      equal(testActor._propertyTracks.y.length, 1, 'Property was added to the "y" track');
       equal(keyPropCount, 2, 'The correct amount of KeyframeProperty instances were added');
       equal(propTrackCount, 2,
           'The correct amount of property tracks were added.');
@@ -1033,18 +1033,18 @@
         keyPropCount++;
       }
 
-      equals(testActor._propertyTracks.x.length, 2,
+      equal(testActor._propertyTracks.x.length, 2,
           'Properties were added to the "x" track');
-      equals(testActor._propertyTracks.y.length, 2,
+      equal(testActor._propertyTracks.y.length, 2,
           'Properties were added to the "y" track');
       equal(keyPropCount, 4,
           'The correct amount of KeyframeProperty instances were added');
       deepEqual(testActor._timelinePropertyCacheIndex, [0, 1000],
           'The intenal _timelinePropertyCacheIndex is correct');
-      equals(testActor._propertyTracks.x[0].nextProperty,
+      equal(testActor._propertyTracks.x[0].nextProperty,
           testActor._propertyTracks.x[1],
           'The first tracked "x" KeyframeProperty instance\'s nextProperty is pointing to the correct property');
-      equals(testActor._propertyTracks.y[0].nextProperty,
+      equal(testActor._propertyTracks.y[0].nextProperty,
           testActor._propertyTracks.y[1],
           'The first tracked "y" KeyframeProperty instance\'s nextProperty is pointing to the correct property');
     });
@@ -1086,25 +1086,25 @@
           'The intenal _timelinePropertyCacheIndex is correct');
       equal(propTrackCount, 2,
           'The number of property tracks did not change');
-      equals(testActor._propertyTracks.x.length, 2,
+      equal(testActor._propertyTracks.x.length, 2,
           'Modifying the property within it\'s track did not change the number of properties in the track');
-      equals(testActor._timelinePropertyCaches[0].x.millisecond, 0,
+      equal(testActor._timelinePropertyCaches[0].x.millisecond, 0,
           'There is an "x" KeyframeProperty at 0');
-      equals(testActor._timelinePropertyCaches[0].y.millisecond, 0,
+      equal(testActor._timelinePropertyCaches[0].y.millisecond, 0,
           'There is a "y" KeyframeProperty at 0');
-      equals(testActor._timelinePropertyCaches[1000].x.millisecond, 0,
+      equal(testActor._timelinePropertyCaches[1000].x.millisecond, 0,
           'The "x" KeyframeProperty at 1000 milliseconds is pointing back to "x" property at 0 millisecond');
-      equals(testActor._timelinePropertyCaches[1000].y.millisecond, 1000,
+      equal(testActor._timelinePropertyCaches[1000].y.millisecond, 1000,
           'There is a "y" KeyframeProperty at 1000');
-      equals(testActor._timelinePropertyCaches[1500].x.millisecond, 1500,
+      equal(testActor._timelinePropertyCaches[1500].x.millisecond, 1500,
           'There is an "x" KeyframeProperty at 1500');
-      equals(testActor._timelinePropertyCaches[1500].y,
+      equal(testActor._timelinePropertyCaches[1500].y,
           testActor._propertyTracks.y[1],
           'The second tracked "y" property is cached at the 1500 millisecond cache');
-      equals(testActor._propertyTracks.x[0].nextProperty,
+      equal(testActor._propertyTracks.x[0].nextProperty,
           testActor._propertyTracks.x[1],
           'The first tracked "x" KeyframeProperty instance\'s nextProperty did not change');
-      equals(testActor._propertyTracks.y[0].nextProperty,
+      equal(testActor._propertyTracks.y[0].nextProperty,
           testActor._propertyTracks.y[1],
           'The first tracked "y" KeyframeProperty instance\'s nextProperty did not change');
     });

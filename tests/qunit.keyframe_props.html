@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="../vendor/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <link href="../components/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script>
   var internalDebugNow = function () {
         return +(new Date());
@@ -10,9 +10,9 @@
         return internalDebugNow();
       };
   </script>
-  <script src="../vendor/qunit/qunit.js"></script>
-  <script src="../vendor/underscore/underscore.js"></script>
-  <script src="../vendor/shifty/shifty.js"></script>
+  <script src="../components/qunit/qunit.js"></script>
+  <script src="../components/underscore/underscore.js"></script>
+  <script src="../components/shifty/dist/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
   <script src="../src/rekapi.keyframeprops.js"></script>
@@ -40,11 +40,11 @@
       var keyprop = new Kapi.KeyframeProperty(
           actor, 500, 'x', 10, 'easeInQuad');
 
-      equals(keyprop.ownerActor, actor, 'ownerActor was set');
-      equals(keyprop.millisecond, 500, 'millisecond was set');
-      equals(keyprop.name, 'x', 'name was set');
-      equals(keyprop.value, 10, 'value was set');
-      equals(keyprop.easing, 'easeInQuad', 'easing was set');
+      equal(keyprop.ownerActor, actor, 'ownerActor was set');
+      equal(keyprop.millisecond, 500, 'millisecond was set');
+      equal(keyprop.name, 'x', 'name was set');
+      equal(keyprop.value, 10, 'value was set');
+      equal(keyprop.easing, 'easeInQuad', 'easing was set');
     });
 
 
@@ -63,9 +63,9 @@
         ,'value': 123456
       });
 
-      equals(keyprop.millisecond, 1500, 'millisecond was modified');
-      equals(keyprop.value, 123456, 'value was modified');
-      equals(keyprop.easing, 'bounce', 'easing was modified');
+      equal(keyprop.millisecond, 1500, 'millisecond was modified');
+      equal(keyprop.value, 123456, 'value was modified');
+      equal(keyprop.easing, 'bounce', 'easing was modified');
     });
 
 
@@ -82,7 +82,7 @@
 
       keyprop.linkToNext(linkedKeyprop);
 
-      equals(keyprop.nextProperty, linkedKeyprop,
+      equal(keyprop.nextProperty, linkedKeyprop,
           'KeyframeProperty was linked up');
     });
 
@@ -102,7 +102,7 @@
       keyprop.linkToNext(linkedKeyprop);
       var midpoint = keyprop.getValueAt(750);
 
-      equals(midpoint, 15, 'Midpoint was calculated');
+      equal(midpoint, 15, 'Midpoint was calculated');
     });
 
 
@@ -118,15 +118,15 @@
       });
 
       var exportedProp = testActor._propertyTracks.x[0].exportPropertyData();
-      equals(typeof exportedProp.id, 'string',
+      equal(typeof exportedProp.id, 'string',
           'id is a string');
-      equals(typeof exportedProp.millisecond, 'number',
+      equal(typeof exportedProp.millisecond, 'number',
           'millisecond is a number');
-      equals(typeof exportedProp.name, 'string',
+      equal(typeof exportedProp.name, 'string',
           'name is a string');
-      equals(typeof exportedProp.value, 'number',
+      equal(typeof exportedProp.value, 'number',
           'value is a number');
-      equals(typeof exportedProp.easing, 'string',
+      equal(typeof exportedProp.easing, 'string',
           'easing is a string');
     });
 

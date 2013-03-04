@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="../vendor/qunit/qunit.css" rel="stylesheet" type="text/css" />
-  <script src="../vendor/qunit/qunit.js"></script>
-  <script src="../vendor/underscore/underscore.js"></script>
-  <script src="../vendor/shifty/shifty.js"></script>
+  <link href="../components/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../components/qunit/qunit.js"></script>
+  <script src="../components/underscore/underscore.js"></script>
+  <script src="../components/shifty/dist/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
   <script src="../src/rekapi.keyframeprops.js"></script>
@@ -47,7 +47,7 @@
       testKapi.update(500);
 
       var expectedValue = 'translateX(200px) translateY(200px) rotate(90deg)';
-      equals(testActor._context.style.transform, expectedValue,
+      equal(testActor._context.style.transform, expectedValue,
         "The actor's DOM element has the correct transform style");
     });
 
@@ -76,10 +76,10 @@
       testKapi.update(1000);
 
       var expectedValue = 'translateX(50px) translateY(50px) rotate(125deg)';
-      equals(testActor._context.style.transform, expectedValue,
+      equal(testActor._context.style.transform, expectedValue,
         "The actor's DOM element has the correct transform style");
 
-      equals(testActor._context.style.height, '25px',
+      equal(testActor._context.style.height, '25px',
         'Other non-transform properties are also updated');
     });
 
@@ -123,7 +123,7 @@
       testKapi.update(1000);
 
       var expectedValue = 'rotate(125deg) translateY(50px) translateX(50px)';
-      equals(testActor._context.style.transform, expectedValue,
+      equal(testActor._context.style.transform, expectedValue,
         'Independent transform parameters are re-ordered as expected');
     });
 

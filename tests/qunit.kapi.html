@@ -9,10 +9,10 @@
         return internalDebugNow();
       };
   </script>
-  <link href="../vendor/qunit/qunit.css" rel="stylesheet" type="text/css" />
-  <script src="../vendor/qunit/qunit.js"></script>
-  <script src="../vendor/underscore/underscore.js"></script>
-  <script src="../vendor/shifty/shifty.js"></script>
+  <link href="../components/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script src="../components/qunit/qunit.js"></script>
+  <script src="../components/underscore/underscore.js"></script>
+  <script src="../components/shifty/dist/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
   <script src="../src/rekapi.keyframeprops.js"></script>
@@ -39,7 +39,7 @@
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
 
-      equals(testKapi._actors[testActor1.id], testActor1,
+      equal(testKapi._actors[testActor1.id], testActor1,
           'Actor is in the internal _actors Object');
     });
 
@@ -53,7 +53,7 @@
 
       testKapi.addActor(testActor1);
 
-      equals(testKapi.actorCount(), 1,
+      equal(testKapi.actorCount(), 1,
           'The actor was not added twice');
     });
 
@@ -65,7 +65,7 @@
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
 
-      equals(testKapi.getActor(testActor1.id), testActor1,
+      equal(testKapi.getActor(testActor1.id), testActor1,
           'Can reference the Actor inside the Kapi via the actor ID.');
     });
 
@@ -78,10 +78,10 @@
       testActor1 = setupTestActor(testKapi);
       testKapi.removeActor(testActor1)
 
-      equals(testKapi._actors[testActor1.id], undefined,
+      equal(testKapi._actors[testActor1.id], undefined,
           'Actor is no longer in the internal _actors Object');
 
-      equals(_.indexOf(testKapi._drawOrder, testActor1.id), -1,
+      equal(_.indexOf(testKapi._drawOrder, testActor1.id), -1,
           'Actor is not in the internal _drawOrder array');
     });
 
@@ -100,11 +100,11 @@
 
       var ids = testKapi.getActorIds();
 
-      equals(ids.length, 2,
+      equal(ids.length, 2,
           'Number of IDs equal the number of Actors that were added');
-      equals(_.contains(ids, testActor1.id), true,
+      equal(_.contains(ids, testActor1.id), true,
           'First Actor\'s ID is present in the ID list');
-      equals(_.contains(ids, testActor2.id), true,
+      equal(_.contains(ids, testActor2.id), true,
           'Second Actor\'s ID is present in the ID list');
     });
 
@@ -123,9 +123,9 @@
 
       var actors = testKapi.getAllActors();
 
-      equals(actors[testActor1.id], testActor1,
+      equal(actors[testActor1.id], testActor1,
           'First Actor was extracted');
-      equals(actors[testActor2.id], testActor2,
+      equal(actors[testActor2.id], testActor2,
           'Second Actor was extracted');
     });
 
@@ -140,7 +140,7 @@
       testKapi = setupTestKapi();
       testActor1 = setupTestActor(testKapi);
 
-      equals(testKapi.getActor(testActor1.id), testActor1,
+      equal(testKapi.getActor(testActor1.id), testActor1,
           'Can reference the Actor inside the Kapi via the actor ID.');
     });
 
@@ -160,7 +160,7 @@
         .keyframe(1000, { x: 2 })
         .keyframe(2000, { x: 3 });
 
-      equals(testKapi.animationLength(), 2000,
+      equal(testKapi.animationLength(), 2000,
           'Length of the animation was calculated');
     });
 
@@ -183,7 +183,7 @@
         .keyframe(0, { x: 1 })
         .keyframe(5000, { x: 2 });
 
-      equals(testKapi.animationLength(), 5000,
+      equal(testKapi.animationLength(), 5000,
           'Length of the animation was calculated');
     });
 
@@ -204,7 +204,7 @@
       });
 
       var exportedTimeline = testKapi.exportTimeline();
-      equals(exportedTimeline.duration, 1000,
+      equal(exportedTimeline.duration, 1000,
           'Duration was exported');
       deepEqual(exportedTimeline.actors[testActor.id],
           testActor.exportTimeline(),
@@ -218,11 +218,11 @@
     test('Event is fired when an actor is added', function () {
 
       var testKapi = setupTestKapi();
-      var testActor = setupTestActor(testKapi);
+      var testActor = new Kapi.Actor();
 
       testKapi.on('addActor', function(kapi, actor) {
         ok(actor !== undefined);
-        equals(actor, testActor, 'Event data is equal to added actor');
+        equal(actor, testActor, 'Event data is equal to added actor');
       });
       testKapi.addActor(testActor);
     });
@@ -235,7 +235,7 @@
 
       testKapi.on('removeActor', function(kapi, actor) {
         ok(actor !== undefined);
-        equals(actor, testActor, 'Event data is equal to removed actor');
+        equal(actor, testActor, 'Event data is equal to removed actor');
       });
       testKapi.removeActor(testActor);
     });
@@ -286,7 +286,7 @@
       kapi.addActor(new Kapi.Actor());
       kapi.addActor(new Kapi.Actor());
       kapi.addActor(new Kapi.Actor());
-      equals(kapi.actorCount(), 3, 'All actors were added and recorded');
+      equal(kapi.actorCount(), 3, 'All actors were added and recorded');
     });
 
 
@@ -296,7 +296,7 @@
     test('Framerate can be writtena and read', function () {
 
       var kapi = new Kapi();
-      equals(kapi.framerate(1000), 1000, 'Written framerate was read');
+      equal(kapi.framerate(1000), 1000, 'Written framerate was read');
     });
 
 
@@ -314,7 +314,7 @@
 
       testKapi.update(500);
 
-      equals(testActor.get().x, 5, 'Midpoint of the actor was computed');
+      equal(testActor.get().x, 5, 'Midpoint of the actor was computed');
     });
 
 
@@ -353,15 +353,15 @@
 
       var testKapi = setupTestKapi();
       testKapi.play();
-      equals(testKapi.isPlaying(), true,
+      equal(testKapi.isPlaying(), true,
           '.play() causes .isPlaying() to be true');
 
       testKapi.pause();
-      equals(testKapi.isPlaying(), false,
+      equal(testKapi.isPlaying(), false,
           '.pause() causes .isPlaying() to be false');
 
       testKapi.stop();
-      equals(testKapi.isPlaying(), false,
+      equal(testKapi.isPlaying(), false,
           '.stop() causes .isPlaying() to be false');
     });
 
@@ -401,7 +401,7 @@
 
       testKapi.play();
 
-      equals(testKapi._loopTimestamp, 1000,
+      equal(testKapi._loopTimestamp, 1000,
           '.pause() modifies the internal timestamp of the animation');
     });
 
@@ -442,7 +442,7 @@
 
       testKapi.play();
 
-      equals(testKapi._loopTimestamp, 1500,
+      equal(testKapi._loopTimestamp, 1500,
           '.stop() resets the timestamp of the animation');
     });
 
@@ -469,7 +469,7 @@
 
       testKapi.playFrom(500);
 
-      equals(testKapi._loopTimestamp, 2500,
+      equal(testKapi._loopTimestamp, 2500,
           '.playFrom resets the timestamp');
     });
 
@@ -497,7 +497,7 @@
       testKapi.update(500);
       testKapi.playFromCurrent();
 
-      equals(testKapi._loopTimestamp, 2500,
+      equal(testKapi._loopTimestamp, 2500,
           '.playFromCurrent resets the timestamp from last updated position');
     });
 
@@ -534,7 +534,7 @@
       };
 
       Kapi._private.updateToCurrentMillisecond(testKapi);
-      equals(testActor.get().x, 50,
+      equal(testActor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
 
       internalDebugNow = function () {
@@ -542,7 +542,7 @@
       };
 
       Kapi._private.updateToCurrentMillisecond(testKapi);
-      equals(testActor.get().x, 50,
+      equal(testActor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
 
       internalDebugNow = function () {
@@ -550,7 +550,7 @@
       };
 
       Kapi._private.updateToCurrentMillisecond(testKapi);
-      equals(testActor.get().x, 100,
+      equal(testActor.get().x, 100,
           'Loop sequence has completed, actor is locked at final position');
     });
 
@@ -588,7 +588,7 @@
       };
 
       Kapi._private.updateToCurrentMillisecond(testKapi);
-      equals(testActor.get().x, 50,
+      equal(testActor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
 
       internalDebugNow = function () {
@@ -596,7 +596,7 @@
       };
 
       Kapi._private.updateToCurrentMillisecond(testKapi);
-      equals(testActor.get().x, 50,
+      equal(testActor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
 
       internalDebugNow = function () {
@@ -604,7 +604,7 @@
       };
 
       Kapi._private.updateToCurrentMillisecond(testKapi);
-      equals(testActor.get().x, 50,
+      equal(testActor.get().x, 50,
           'Loop sequence is still running at some distant point in the future');
     });
 
@@ -627,7 +627,7 @@
       calculatedMillisecond =  Kapi._private
         .calculateLoopPosition(testKapi, 1000, 0);
 
-      equals(calculatedMillisecond, 1000,
+      equal(calculatedMillisecond, 1000,
           'Calculated a midpoint of the animation');
     });
 
@@ -647,7 +647,7 @@
       calculatedMillisecond =
           Kapi._private.calculateLoopPosition(testKapi, 2500, 1);
 
-      equals(calculatedMillisecond, 500,
+      equal(calculatedMillisecond, 500,
           'Calculated an overflow position of the animation');
     });
 
@@ -670,42 +670,42 @@
       calculatedIteration =
           Kapi._private.determineCurrentLoopIteration(testKapi, 0);
 
-      equals(calculatedIteration, 0,
+      equal(calculatedIteration, 0,
           'Calculated the beginning of the first iteration');
 
 
       calculatedIteration =
           Kapi._private.determineCurrentLoopIteration(testKapi, 1000);
 
-      equals(calculatedIteration, 0,
+      equal(calculatedIteration, 0,
           'Calculated the middle of the first iteration');
 
 
       calculatedIteration =
           Kapi._private.determineCurrentLoopIteration(testKapi, 1999);
 
-      equals(calculatedIteration, 0,
+      equal(calculatedIteration, 0,
           'Calculated the end of the first iteration');
 
 
       calculatedIteration =
           Kapi._private.determineCurrentLoopIteration(testKapi, 4000);
 
-      equals(calculatedIteration, 2,
+      equal(calculatedIteration, 2,
           'Calculated the beginning of an iteration greater than 1');
 
 
       calculatedIteration =
           Kapi._private.determineCurrentLoopIteration(testKapi, 5000);
 
-      equals(calculatedIteration, 2,
+      equal(calculatedIteration, 2,
           'Calculated the middle of an iteration greater than 1');
 
 
       calculatedIteration =
           Kapi._private.determineCurrentLoopIteration(testKapi, 5999);
 
-      equals(calculatedIteration, 2,
+      equal(calculatedIteration, 2,
           'Calculated the end of an iteration greater than 1');
     });
 
@@ -737,7 +737,7 @@
       };
 
       calculatedTime = Kapi._private.calculateTimeSinceStart(testKapi);
-      equals(calculatedTime, 500,
+      equal(calculatedTime, 500,
           'The expected amount of time since beginning the animation was calculated');
 
     });
@@ -762,15 +762,15 @@
       testKapi.play(3);
 
       animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 1);
-      equals(animationIsComplete, false,
+      equal(animationIsComplete, false,
           'The animation is not complete');
 
       animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 2);
-      equals(animationIsComplete, false,
+      equal(animationIsComplete, false,
           'The last iteration of a loop is condsider to be not complete');
 
       animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 3);
-      equals(animationIsComplete, true,
+      equal(animationIsComplete, true,
           'An iteration after the specified amount of iterations is considered to be complete');
     });
 
@@ -791,15 +791,15 @@
       testKapi.play();
 
       animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 1);
-      equals(animationIsComplete, false,
+      equal(animationIsComplete, false,
           'The animation is not complete');
 
       animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 3);
-      equals(animationIsComplete, false,
+      equal(animationIsComplete, false,
           'The animation is not complete');
 
       animationIsComplete = Kapi._private.isAnimationComplete(testKapi, 1000);
-      equals(animationIsComplete, false,
+      equal(animationIsComplete, false,
           'The animation is not complete');
     });
 
@@ -822,13 +822,13 @@
       testKapi.play(3);
 
       Kapi._private.updatePlayState(testKapi, 0);
-      equals(testKapi.isPlaying(), true, 'The animation is still running');
+      equal(testKapi.isPlaying(), true, 'The animation is still running');
 
       Kapi._private.updatePlayState(testKapi, 2);
-      equals(testKapi.isPlaying(), true, 'The animation is still running');
+      equal(testKapi.isPlaying(), true, 'The animation is still running');
 
       Kapi._private.updatePlayState(testKapi, 3);
-      equals(testKapi.isPlaying(), false, 'The animation is still complete');
+      equal(testKapi.isPlaying(), false, 'The animation is still complete');
     });
 
 

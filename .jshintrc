@@ -1,5 +1,5 @@
 {
-  "predef": {
+  "globals": {
     "KAPI_DEBUG": true,
     "noop": true,
     "_": true

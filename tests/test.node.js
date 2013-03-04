@@ -1,6 +1,6 @@
 /*global require: true, global console: true */
-var r = require('../vendor/r.js');
-r.config({
+var requirejs = require('requirejs');
+requirejs.config({
   paths: {
     shifty: "../dist/shifty.min",
     underscore: "../dist/underscore-min",
@@ -8,7 +8,7 @@ r.config({
   }
 });
 
-r(['rekapi'], function(Kapi) {
+requirejs(['rekapi'], function(Kapi) {
   var kapi = new Kapi();
   var actor = new Kapi.Actor();
   kapi.addActor(actor);

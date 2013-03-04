@@ -122,8 +122,8 @@ data.  Usage is the same as in the browser.  Loading the code requires the
 a lot ike the AMD approach above:
 
 ````javascript
-var r = require('lib/r.js');
-r.config({
+var requirejs = require('requirejs');
+requirejs.config({
   paths: {
     shifty: "dist/shifty.min",
     underscore: "dist/underscore-min",
@@ -131,7 +131,7 @@ r.config({
   }
 });
 
-r(['rekapi'], function(Kapi) {
+requirejs(['rekapi'], function(Kapi) {
   var kapi = new Kapi();
 });
 ````
@@ -147,6 +147,15 @@ the [Rekapi Github issue
 tracker](https://github.com/jeremyckahn/rekapi/issues).
 
 ## Building and contributing
+
+Rekapi has a number of dependencies, both for deployment and for development.
+Dependency management is automated with
+[Bower](http://twitter.github.com/bower/) and [npm](https://npmjs.org/), so
+make sure those are installed.  Once they are, install the dependencies:
+
+````
+$: bower install; npm install
+````
 
 Generating the Rekapi binary requires [Node.js](http://nodejs.org/) and
 [Grunt](http://gruntjs.com/).
