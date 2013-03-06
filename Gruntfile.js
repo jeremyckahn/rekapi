@@ -97,7 +97,13 @@ module.exports = function(grunt) {
         {src: ['components/ace-builds/src-min/theme-textmate.js'], dest: 'dist/asset/theme-textmate.js'},
         {src: ['components/ace-builds/src-min/mode-javascript.js'], dest: 'dist/asset/mode-javascript.js'},
         {src: ['components/ace-builds/src-min/worker-javascript.js'], dest: 'dist/asset/worker-javascript.js'},
-        {src: ['components/requirejs/require.js'], dest: 'dist/asset/require.js'}
+        {src: ['components/requirejs/require.js'], dest: 'dist/asset/require.js'},
+        {src: ['components/rekapi-controls/dist/jquery.dragon-slider.css'], dest: 'dist/asset/jquery.dragon-slider.css'},
+        {src: ['components/rekapi-controls/dist/rekapi-controls.css'], dest: 'dist/asset/rekapi-controls.css'},
+        {expand: true, flatten: true, src: ['components/rekapi-controls/lib/font-awesome/font/*'], dest: 'dist/font/'},
+        {src: ['components/rekapi-controls/lib/font-awesome/css/font-awesome.css'], dest: 'dist/asset/font-awesome.css'},
+        {src: ['components/rekapi-controls/dist/dragon-bundle.js'], dest: 'dist/asset/dragon-bundle.js'},
+        {src: ['components/rekapi-controls/dist/rekapi-controls.min.js'], dest: 'dist/asset/rekapi-controls.min.js'},
         ]
       }
     },

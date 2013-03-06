@@ -85,7 +85,7 @@
       var $handle = createDragHandle($el);
       $el
         .addClass('dragon-slider')
-        .width(opts.width - parseInt($el.css('border-width'), 10))
+        .width(opts.width - parseInt($el.css('border-width') || 0, 10))
         .on('mousedown', onSliderMousedown)
         .append($handle);
     });

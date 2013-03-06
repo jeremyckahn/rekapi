@@ -105,7 +105,7 @@ canvas {
   height: 400px;
   float: left;
   margin: 0 auto;
-  padding-bottom: 34px;
+  padding-bottom: 58px;
   position: relative;
   width: 500px;
 }
@@ -211,8 +211,9 @@ canvas {
       margin: 6px 0 12px;
     }
 
-#tweenbox {
-
+.dragon-slider {
+  /* !important is necessary due to a flaw in rekapi-controls. */
+  width: 412px !important;
 }
 
 #editor-wrapper {
