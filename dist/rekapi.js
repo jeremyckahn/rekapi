@@ -1,4 +1,4 @@
-/*! Rekapi - v0.13.9 - 2013-03-05 - http://rekapi.com */
+/*! Rekapi - v0.13.10 - 2013-03-12 - http://rekapi.com */
 /**
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -2348,15 +2348,8 @@ var rekapiToCSS = function (context, _) {
 
 };
 
-/*global rekapiCore:true,
- global rekapiActor:true,
- global rekapiKeyframeProperty:true,
- global rekapiDOM:true,
- global rekapiToCSS:true,
- global rekapiCanvasContext: true
- global rekapiCanvasActor: true
- global define: true
-*/
+/*global rekapiCore rekapiActor rekapiKeyframeProperty rekapiDOM rekapiToCSS
+rekapiCanvasContext rekapiCanvasActor define */
 var rekapi = function (global, deps) {
 
   'use strict';
@@ -2406,7 +2399,7 @@ if (typeof define === 'function' && define.amd) {
                   // Some versions of Underscore.js support AMD, others don't.
                   // If not, use the `_` global.
                   underscore: underscoreSupportsAMD ? Underscore : _ };
-    var Kapi = rekapi(global, deps);
+    var Kapi = rekapi({}, deps);
 
     if (KAPI_DEBUG) {
       Kapi.underscore_version = deps.underscore.VERSION;
@@ -2416,7 +2409,7 @@ if (typeof define === 'function' && define.amd) {
       // Prevent Underscore from polluting the global scope.
       // This global can be safely removed since Rekapi keeps its own reference
       // to Underscore via the `deps` object passed earlier as an argument.
-      global._ = undefined;
+      this._ = undefined;
     }
 
     return Kapi;
@@ -2425,7 +2418,7 @@ if (typeof define === 'function' && define.amd) {
   // Load Rekapi normally (creating a Kapi global) if not using an AMD loader.
 
   // Note: `global` is not defined when running unit tests. Pass `this` instead.
-  rekapi(typeof global !== 'undefined' ? global : this);
+  rekapi(this);
 }
 
 } (this));
