@@ -3,19 +3,17 @@
   <head>
     <title>Rekapi example</title>
     <script src="../../dist/underscore-min.js"></script>
-    <script src="../../dist/shifty.js"></script>
+    <script src="../../dist/shifty.min.js"></script>
     <script src="../../dist/rekapi.js"></script>
   </head>
   <body>
-    <canvas style="border: solid 1px #000;"></canvas>
     <script>
-      var canvas = document.getElementsByTagName('canvas')[0];
-
       var kapi = new Kapi({
-        'context': canvas,
         'height': 300,
         'width': 400
       });
+
+      console.log(kapi);
     </script>
   </body>
 </html>

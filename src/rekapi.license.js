@@ -1,4 +1,4 @@
-/**
+/*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
  *

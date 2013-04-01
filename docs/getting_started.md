@@ -2,18 +2,18 @@
 
 Although Rekapi can render any type of View, such as DOM, let's start off by
 making a simple `<canvas>` animation.  The first step is to  make a new `Kapi`
-instance.  Canvas animation Views require a `<canvas>` element to render to,
-which can be attached to the `Kapi` instance for convenience:
+instance.  Canvas animations require a `<canvas>` element to render to, which
+we will supply to the `Kapi` constructor:
 
 ````javascript
-var canvas = document.getElementsByTagName('canvas')[0],
-    kapi = new Kapi({
-      'context': canvas
-    });
+var canvas = document.getElementsByTagName('canvas')[0];
+var kapi = new Kapi({
+    'context': canvas
+  });
 ````
 
 So now we have a Kapi instance... but it won't do terribly much until you
-define and add some Actor Views.
+define and add some Actors.
 
 ## Defining Actors
 
@@ -21,33 +21,23 @@ Here's the boilerplate for a canvas Actor:
 
 ````javascript
 var actor = new Kapi.CanvasActor({
-  // Called once when the actor is added to the animation
-  'setup': function () {
-
-  },
 
   // Called every frame.  Receives a reference to the canvas context, and the
   // Actor's state.
   'draw': function (context, state) {
 
-  },
-
-  // Called once when the actor is removed from the animation
-  'teardown': function () {
-
   }
+
 });
 ````
 
-All of the methods described above are optional, but you should at least have a
-`render` method.  Continuing from before, here's a simple implementation for a
-canvas actor that we can use as an example:
+Continuing from before, here's a sample implementation for a canvas actor:
 
 ````javascript
-var canvas = document.getElementsByTagName('canvas')[0],
-    kapi = new Kapi({
-      'context': canvas
-    });
+var canvas = document.getElementsByTagName('canvas')[0];
+var kapi = new Kapi({
+    'context': canvas
+  });
 
 var actor = new Kapi.CanvasActor({
   // Draws a circle.
@@ -67,13 +57,11 @@ var actor = new Kapi.CanvasActor({
 });
 ````
 
-The Actor's `render` method can do whatever you want it to, really.  The idea is
-that the `context` and `state` parameters are computed by the `Kapi` Model, and
-then expressed visually on the `<canvas>` by the Actor's `render` method.
-`setup` and `teardown` are methods that get called when the Actor is added and
-removed from the Kapi instance.
+The Actor's `draw` method can do whatever you want it to, really.  The idea is
+that the `context` and `state` parameters are computed by `kapi`, and then
+rendered to the `<canvas>` by the Actor's `draw` method.
 
-Now that we have an Actor instance, we just need to add it to the Kapi:
+Now that we have an Actor instance, we just need to add it to `kapi`:
 
 ````javascript
 kapi.addActor(actor);
@@ -98,11 +86,11 @@ actor
 `keyframe` is a method that takes two or three parameters - the first is how
 many milliseconds into the animation this keyframe is going start, and the
 second is an Object whose properties define the state that the Actor should
-have.  The third parameter is a string that defines which Shifty easing formula
-to use - "linear" is the default.  The previous snippet says, "at zero
-milliseconds into the animation, place `actor` at `x` 50, and `y` 50.
-Continuing with the previous snippet, let's animate it to another point on the
-canvas:
+have.  The third parameter is a string that defines which
+[Shifty](https://github.com/jeremyckahn/shifty) easing formula to use -
+"linear" is the default.  The previous snippet says, "at zero milliseconds into
+the animation, place `actor` at `x` 50, and `y` 50.  Continuing with the
+previous snippet, let's animate it to another point on the canvas:
 
 ````javascript
 actor
@@ -116,11 +104,10 @@ actor
   }, 'easeOutExpo');
 ````
 
-The animation defined here will last one second, as the the second `keyframe`
-is placed at 1000 milliseconds.  It will have a nice `easeOutExpo` easing
-formula applied to it, as we can see from the third parameter.  Tweens get
-their easing formula from the keyframe they are animating to, not animating
-from.
+The animation defined here will last one second, as the second `keyframe` is
+placed at 1000 milliseconds.  It will have a nice `easeOutExpo` ease applied to
+it, as we can see in the third parameter.  Tweens get their easing formula from
+the keyframe they are animating to, not animating from.
 
 Rekapi inherits all of [Shifty's easing
 formulas](https://github.com/jeremyckahn/shifty/blob/master/src/shifty.formulas.js).
@@ -143,9 +130,7 @@ kapi.play(3);
 
 That will play the animation three times and stop.  When an animation stops, it
 will will just sit at the last frame that was rendered.  You can control the
-animation flow with `kapi.pause()` and `kapi.stop()`.  These methods are
-detailed in the [API
-documentation](https://github.com/jeremyckahn/rekapi/blob/master/docs/).
+animation flow with `kapi.pause()` and `kapi.stop()`.
 
 ## All together
 
@@ -199,8 +184,4 @@ Copy/paste/save this onto your machine to see a simple Rekapi animation:
   </script>
 </body>
 </html>
-
 ````
-
-To learn about the APIs not covered in this README, please view the [API
-documentation](https://github.com/jeremyckahn/rekapi/blob/master/docs/).

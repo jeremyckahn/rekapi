@@ -1,4 +1,4 @@
-/*global module:false*/
+/*global module:false, require:true, console:true */
 module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
@@ -6,11 +6,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-dox');
 
   var banner = [
         '/*! <%= pkg.name %> - v<%= pkg.version %> - ',
         '<%= grunt.template.today("yyyy-mm-dd") %> - <%= pkg.homepage %> */\n'
-      ].join('')
+      ].join('');
 
   // Project configuration.
   grunt.initConfig({
@@ -103,7 +105,7 @@ module.exports = function(grunt) {
         {expand: true, flatten: true, src: ['components/rekapi-controls/lib/font-awesome/font/*'], dest: 'dist/font/'},
         {src: ['components/rekapi-controls/lib/font-awesome/css/font-awesome.css'], dest: 'dist/asset/font-awesome.css'},
         {src: ['components/rekapi-controls/dist/dragon-bundle.js'], dest: 'dist/asset/dragon-bundle.js'},
-        {src: ['components/rekapi-controls/dist/rekapi-controls.min.js'], dest: 'dist/asset/rekapi-controls.min.js'},
+        {src: ['components/rekapi-controls/dist/rekapi-controls.min.js'], dest: 'dist/asset/rekapi-controls.min.js'}
         ]
       }
     },
@@ -128,10 +130,6 @@ module.exports = function(grunt) {
     qunit: {
       files: ['tests/qunit*.html']
     },
-    watch: {
-      files: '<config:lint.files>',
-      tasks: 'lint qunit'
-    },
     jshint: {
       all_files: [
         'grunt.js',
@@ -140,6 +138,32 @@ module.exports = function(grunt) {
       ],
       options: {
         jshintrc: '.jshintrc'
+      }
+    },
+    dox: {
+      options: {
+        title: 'Rekapi'
+      },
+      files: {
+        src: [
+          'src/rekapi.core.js',
+          'src/rekapi.actor.js',
+          'src/rekapi.keyframeprops.js',
+          'ext/canvas/rekapi.canvas.context.js',
+          'ext/canvas/rekapi.canvas.actor.js',
+          'ext/dom/rekapi.dom.actor.js',
+          'ext/to-css/rekapi.to-css.js'
+        ],
+        dest: 'dist/doc'
+      }
+    },
+    watch: {
+      scripts: {
+        files: ['src/*.js', 'ext/**/*.js'],
+        tasks: ['dox'],
+        options: {
+          interrupt: true
+        }
       }
     }
   });
@@ -151,6 +175,7 @@ module.exports = function(grunt) {
       'concat:withExtensions',
       'uglify:standardTarget',
       'uglify:underscoreBundle',
-      'concat:withExtensionsDebug']);
+      'concat:withExtensionsDebug',
+      'dox']);
 
 };

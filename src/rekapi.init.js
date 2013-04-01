@@ -1,5 +1,3 @@
-/*global rekapiCore rekapiActor rekapiKeyframeProperty rekapiDOM rekapiToCSS
-rekapiCanvasContext rekapiCanvasActor define */
 var rekapi = function (global, deps) {
 
   'use strict';

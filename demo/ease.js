@@ -225,8 +225,7 @@ $(function () {
   var showPath = $('#show-path');
   var isPathShowing = true;
   showPath.on('change', function (evt) {
-    var checked = showPath.attr('checked');
-    isPathShowing = !!checked;
+    isPathShowing = showPath.is(':checked');
     kapi.update();
   });
 

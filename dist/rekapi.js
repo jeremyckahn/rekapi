@@ -1,5 +1,5 @@
-/*! Rekapi - v0.13.10 - 2013-03-12 - http://rekapi.com */
-/**
+/*! Rekapi - v0.14.0 - 2013-03-31 - http://rekapi.com */
+/*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
  *
@@ -22,7 +22,7 @@ if (typeof KAPI_DEBUG === 'undefined') {
 // REKAPI-GLOBAL METHODS
 // These are global in development, but get wrapped in a closure at build-time.
 
-/**
+/*!
  * Fire an event bound to a Kapi.
  * @param {Kapi} kapi
  * @param {string} eventName
@@ -36,7 +36,7 @@ function fireEvent (kapi, eventName, _, opt_data) {
 }
 
 
-/**
+/*!
  * @param {Kapi} kapi
  */
 function recalculateAnimationLength (kapi) {
@@ -50,7 +50,7 @@ function recalculateAnimationLength (kapi) {
 }
 
 
-/**
+/*!
  * Does nothing.  Absolutely nothing at all.
  */
 function noop () {
@@ -58,7 +58,7 @@ function noop () {
 }
 
 
-var rekapiCore = function (context, _, Tweenable) {
+var rekapiCore = function (root, _, Tweenable) {
 
   'use strict';
 
@@ -67,7 +67,7 @@ var rekapiCore = function (context, _, Tweenable) {
   var Fn = Function, GLOBAL = new Fn('return this')();
 
 
-  /**
+  /*!
    * Determines which iteration of the loop the animation is currently in.
    * @param {Kapi} kapi
    * @param {number} timeSinceStart
@@ -79,7 +79,7 @@ var rekapiCore = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * Calculate how many milliseconds since the animation began.
    * @param {Kapi} kapi
    * @return {number}
@@ -89,7 +89,7 @@ var rekapiCore = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * Determines is the animation is complete or not.
    * @param {Kapi} kapi
    * @param {number} currentLoopIteration
@@ -100,7 +100,7 @@ var rekapiCore = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * Stops the animation if the animation is complete.
    * @param {Kapi} kapi
    * @param {number} currentLoopIteration
@@ -113,7 +113,7 @@ var rekapiCore = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * Calculate how far in the animation loop `kapi` is, in milliseconds, based
    * on the current time.  Also overflows into a new loop if necessary.
    * @param {Kapi} kapi
@@ -132,7 +132,7 @@ var rekapiCore = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * Calculate the position and state for a given millisecond.
    * Also updates the state internally and accounts for how many loop
    * iterations the animation runs for.
@@ -148,7 +148,7 @@ var rekapiCore = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * Calculate how far in the animation loop `kapi` is, in milliseconds, and
    * update based on that time.
    * @param {Kapi} kapi
@@ -158,7 +158,7 @@ var rekapiCore = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * This is the heartbeat of an animation.  Updates the state and then calls
    * itself based on the framerate of the supplied Kapi.
    * @param {Kapi} kapi
@@ -180,7 +180,7 @@ var rekapiCore = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * @param {number}
    * @return {Function}
    */
@@ -205,7 +205,7 @@ var rekapiCore = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * @param {number}
    * @return {Function}
    */
@@ -227,7 +227,7 @@ var rekapiCore = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * Cancels an update loop.  This abstraction is needed to get around the fact
    * that in IE, clearTimeout is not technically a function
    * (https://twitter.com/kitcambridge/status/206655060342603777) and thus
@@ -256,10 +256,16 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
+   * Rekapi constructor.  Valid values for `opt_config` are:
+   *
+   * - __fps__ (_number_): The frames per second at which the animation updates.  The default value is 30.
+   * - __context__ (_Object_): The context that the animation will run in.  Can be any type of `Object`; gets used by the renderer and inherited by the `Kapi.Actor`s as they are added to the animation.  This isn't always needed, it usually just applies to `<canvas>` animations.  See the documentation on the [`<canvas>` extension](../ext/canvas/rekapi.canvas.context.js.html) for more info.
+   *
+   * __[Example](../../../../docs/examples/kapi.html)__
    * @param {Object} opt_config
    * @constructor
    */
-  var Kapi = context.Kapi || function Kapi (opt_config) {
+  function Kapi (opt_config) /*!*/ {
     this.config = opt_config || {};
     this.context = this.config.context || {};
     this._actors = {};
@@ -306,21 +312,24 @@ var rekapiCore = function (context, _, Tweenable) {
     }, this);
 
     return this;
-  };
+  }
 
 
-  /**
+  /*!
    * @type {Object.<function>} Contains the context init function to be called
-   * in the Kapi contstructor.
+   * in the Kapi constructor.
    */
   Kapi.prototype._contextInitHook = {};
 
 
   /**
+   * Add a `Kapi.Actor` to the animation.
+   *
+   * __[Example](../../../../docs/examples/add_actor.html)__
    * @param {Kapi.Actor} actor
    * @return {Kapi}
    */
-  Kapi.prototype.addActor = function (actor) {
+  Kapi.prototype.addActor = function (actor) /*!*/ {
     // You can't add an actor more than once.
     if (!_.contains(this._actors, actor)) {
       if (!actor.context()) {
@@ -341,35 +350,47 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
+   * Retrieve a `Kapi.Actor` from the `Kapi` instance by its ID.  All `Actor`s have an `id` property.
+   *
+   * __[Example](../../../../docs/examples/get_actor.html)__
    * @param {number} actorId
    * @return {Kapi.Actor}
    */
-  Kapi.prototype.getActor = function (actorId) {
+  Kapi.prototype.getActor = function (actorId) /*!*/ {
     return this._actors[actorId];
   };
 
 
   /**
-   * @returns {Array}
+   * Retrieve the IDs of all `Kapi.Actor`s in a `Kapi` instance as an Array.
+   *
+   * __[Example](../../../../docs/examples/get_actor_ids.html)__
+   * @return {Array.<number>}
    */
-  Kapi.prototype.getActorIds = function () {
+  Kapi.prototype.getActorIds = function () /*!*/ {
     return _.pluck(this._actors, 'id');
   };
 
 
   /**
-   * @returns {Array}
+   * Retrieve all `Kapi.Actor`s in the animation as an Object.  Actors' IDs correspond to the property names of the returned Object.
+   *
+   * __[Example](../../../../docs/examples/get_all_actors.html)__
+   * @return {Array}
    */
-  Kapi.prototype.getAllActors = function () {
+  Kapi.prototype.getAllActors = function () /*!*/ {
     return _.clone(this._actors);
   };
 
 
   /**
+   * Remove a `Kapi.Actor` from the animation.  This does not destroy the `Actor`, it only removes the link between it and the `Kapi` instance.
+   *
+   * __[Example](../../../../docs/examples/remove_actor.html)__
    * @param {Kapi.Actor} actor
    * @return {Kapi}
    */
-  Kapi.prototype.removeActor = function (actor) {
+  Kapi.prototype.removeActor = function (actor) /*!*/ {
     delete this._actors[actor.id];
     delete actor.kapi;
     actor.teardown();
@@ -382,10 +403,13 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
+   * Play the animation on a loop, either a set amount of times or infinitely.  If `opt_howManyTimes` is omitted, the animation will loop infinitely.
+   *
+   * __[Example](../../../../docs/examples/play.html)__
    * @param {number} opt_howManyTimes
    * @return {Kapi}
    */
-  Kapi.prototype.play = function (opt_howManyTimes) {
+  Kapi.prototype.play = function (opt_howManyTimes) /*!*/ {
     cancelLoop(this);
 
     if (this._playState === playState.PAUSED) {
@@ -406,11 +430,14 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
+   * Move to a specific millisecond on the timeline and play from there. `opt_howManyTimes` works as it does in `play()`.
+   *
+   * __[Example](../../../../docs/examples/play_from.html)__
    * @param {number} millisecond
    * @param {number} opt_howManyTimes
    * @return {Kapi}
    */
-  Kapi.prototype.playFrom = function (millisecond, opt_howManyTimes) {
+  Kapi.prototype.playFrom = function (millisecond, opt_howManyTimes) /*!*/ {
     this.play(opt_howManyTimes);
     this._loopTimestamp = now() - millisecond;
 
@@ -419,18 +446,24 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
+   * Play from the last frame that was drawn with `render()`. `opt_howManyTimes` works as it does in `play()`.
+   *
+   * __[Example](../../../../docs/examples/play_from_current.html)__
    * @param {number} opt_howManyTimes
    * @return {Kapi}
    */
-  Kapi.prototype.playFromCurrent = function (opt_howManyTimes) {
+  Kapi.prototype.playFromCurrent = function (opt_howManyTimes) /*!*/ {
     return this.playFrom(this._lastUpdatedMillisecond, opt_howManyTimes);
   };
 
 
   /**
+   * Pause the animation.  A "paused" animation can be resumed from where it left off with `play()`.
+   *
+   * __[Example](../../../../docs/examples/pause.html)__
    * @return {Kapi}
    */
-  Kapi.prototype.pause = function () {
+  Kapi.prototype.pause = function () /*!*/ {
     if (this._playState === playState.PAUSED) {
       return this;
     }
@@ -447,9 +480,12 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
+   * Stop the animation.  A "stopped" animation will start from the beginning if `play()` is called.
+   *
+   * __[Example](../../../../docs/examples/stop.html)__
    * @return {Kapi}
    */
-  Kapi.prototype.stop = function () {
+  Kapi.prototype.stop = function () /*!*/ {
     this._playState = playState.STOPPED;
     cancelLoop(this);
 
@@ -466,42 +502,57 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
+   * Return whether or not the animation is playing (meaning not paused or stopped).
+   *
+   * __[Example](../../../../docs/examples/is_playing.html)__
    * @return {boolean}
    */
-  Kapi.prototype.isPlaying = function () {
+  Kapi.prototype.isPlaying = function () /*!*/ {
     return this._playState === playState.PLAYING;
   };
 
 
   /**
+   * Return the length of the animation, in milliseconds.
+   *
+   * __[Example](../../../../docs/examples/animation_length.html)__
    * @return {number}
    */
-  Kapi.prototype.animationLength = function () {
+  Kapi.prototype.animationLength = function () /*!*/ {
     return this._animationLength;
   };
 
 
   /**
+   * Return the normalized (between 0 and 1) timeline position that was last calculated.
+   *
+   * __[Example](../../../../docs/examples/last_position_updated.html)__
    * @return {number}
    */
-  Kapi.prototype.lastPositionUpdated = function () {
+  Kapi.prototype.lastPositionUpdated = function () /*!*/ {
     return (this._lastUpdatedMillisecond / this._animationLength);
   };
 
 
   /**
+   * Return the number of `Kapi.Actor`s in the animation.
+   *
+   * __[Example](../../../../docs/examples/actor_count.html)__
    * @return {number}
    */
-  Kapi.prototype.actorCount = function () {
+  Kapi.prototype.actorCount = function () /*!*/ {
     return _.size(this._actors);
   };
 
 
   /**
+   * Get and optionally set the framerate of the animation.  There's generally no point in going above 60.
+   *
+   * __[Example](../../../../docs/examples/framerate.html)__
    * @param {number} opt_newFramerate
    * @return {number}
    */
-  Kapi.prototype.framerate = function (opt_newFramerate) {
+  Kapi.prototype.framerate = function (opt_newFramerate) /*!*/ {
     if (opt_newFramerate) {
       this.config.fps = opt_newFramerate;
       this._scheduleUpdate = getUpdateMethod(this.config.fps);
@@ -513,10 +564,13 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
+   * Update the position of all the `Kapi.Actor`s to `opt_millisecond`.  If `opt_millisecond` is omitted, update to the last millisecond that the animation was updated to (it's a re-update).
+   *
+   * __[Example](../../../../docs/examples/update.html)__
    * @param {number=} opt_millisecond
    * @return {Kapi}
    */
-  Kapi.prototype.update = function (opt_millisecond) {
+  Kapi.prototype.update = function (opt_millisecond) /*!*/ {
     if (opt_millisecond === undefined) {
       opt_millisecond = this._lastUpdatedMillisecond;
     }
@@ -536,11 +590,24 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
+   * Bind a handler function to a Kapi event.  Valid events are:
+   *
+   * - __animationComplete__: Fires when all animations loops have completed.
+   * - __playStateChange__: Fires when the animation is played, paused, or stopped.
+   * - __play__: Fires when the animation is `play()`ed.
+   * - __pause__: Fires when the animation is `pause()`d.
+   * - __stop__: Fires when the animation is `stop()`ped.
+   * - __beforeUpdate__: Fires each frame before all Actors are updated.
+   * - __afterUpdate__: Fires each frame after all Actors are updated.
+   * - __addActor__: Fires when an Actor is added.
+   * - __removeActor__: Fires when an Actor is removed.
+   *
+   * __[Example](../../../../docs/examples/bind.html)__
    * @param {string} eventName
    * @param {Function} handler
    * @return {Kapi}
    */
-  Kapi.prototype.on = function (eventName, handler) {
+  Kapi.prototype.on = function (eventName, handler) /*!*/ {
     if (!this._events[eventName]) {
       return;
     }
@@ -552,11 +619,14 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
+   * Unbind `opt_handler` from a Kapi event.  If `opt_handler` is omitted, all handler functions bound to `eventName` are unbound.  Valid events correspond to the list under `bind()`.
+   *
+   * __[Example](../../../../docs/examples/unbind.html)__
    * @param {string} eventName
    * @param {Function} opt_handler
    * @return {Kapi}
    */
-  Kapi.prototype.off = function (eventName, opt_handler) {
+  Kapi.prototype.off = function (eventName, opt_handler) /*!*/ {
     if (!this._events[eventName]) {
       return;
     }
@@ -573,9 +643,12 @@ var rekapiCore = function (context, _, Tweenable) {
 
 
   /**
+   * Export the current state of the animation into a serializable `Object`.
+   *
+   * __[Example](../../../docs/examples/export_timeline.html)__
    * @return {Object}
    */
-  Kapi.prototype.exportTimeline = function () {
+  Kapi.prototype.exportTimeline = function () /*!*/ {
     var exportData = {
       'duration': this._animationLength
       ,'actors': {}
@@ -604,11 +677,10 @@ var rekapiCore = function (context, _, Tweenable) {
     };
   }
 
-  context.Kapi = Kapi;
+  root.Kapi = Kapi;
 
 };
 
-/*global recalculateAnimationLength:true */
 var rekapiActor = function (context, _, Tweenable) {
 
   'use strict';
@@ -617,7 +689,7 @@ var rekapiActor = function (context, _, Tweenable) {
   var Kapi = context.Kapi;
 
 
-  /**
+  /*!
    * Sorts an array numerically, from smallest to largest.
    * @param {Array} array The Array to sort.
    * @return {Array} The sorted Array.
@@ -629,7 +701,7 @@ var rekapiActor = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi.Actor} actor
    * @param {number} millisecond
    * @return {number}
@@ -650,7 +722,7 @@ var rekapiActor = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * Order all of an Actor's property tracks so they can be cached.
    * @param {Kapi.Actor} actor
    */
@@ -664,7 +736,7 @@ var rekapiActor = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * Compute and fill all timeline caches.
    * @param {Kapi.Actor} actor
    */
@@ -676,7 +748,7 @@ var rekapiActor = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * Gets all of the current and most recent Kapi.KeyframeProperties for a
    * given millisecond.
    * @param {Kapi.Actor} actor
@@ -713,7 +785,7 @@ var rekapiActor = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * Links each KeyframeProperty to the next one in it's respective track.
    *
    * They're linked lists!
@@ -728,7 +800,7 @@ var rekapiActor = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * Returns a requested KeyframeProperty at a millisecond on a specified
    * track.
    * @param {Kapi.Actor} actor
@@ -744,7 +816,7 @@ var rekapiActor = function (context, _, Tweenable) {
   }
 
 
-  /**
+  /*!
    * Empty out and re-cache internal KeyframeProperty data.
    * @param {Kapi.Actor}
    */
@@ -773,10 +845,22 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
+   * Create a `Kapi.Actor` instance.  Note that the rest of the API docs for `Kapi.Actor` will simply refer to this Object as `Actor`.
+   *
+   * Valid properties of `opt_config` (you can omit the ones you don't need):
+   *
+   * - __context__ (_Object_): The context that this Actor is associated with. If omitted, this Actor gets the `Kapi` instance's context when it is added with [`Kapi#addActor`](rekapi.core.js.html#addActor).
+   * - __setup__ (_Function_): A function that gets called when the `Actor` is added with [`Kapi#addActor`](rekapi.core.js.html#addActor).
+   * - __update__ (_Function(Object, Object)_): A function that gets called every time that the `Actor`'s state is updated. It receives two parameters: A reference to the `Actor`'s context and an Object containing the current state properties.
+   * - __teardown__ (_Function_): A function that gets called when the `Actor` is removed with [`Kapi#removeActor`](rekapi.core.js.html#removeActor).
+   *
+   * `Kapi.Actor` does _not_ render to any context.  It is a base class.  Use the [`Kapi.CanvasActor`](../ext/canvas/rekapi.canvas.actor.js.html) or [`Kapi.DOMActor`](../ext/dom/rekapi.dom.actor.js.html) subclasses to render to the screen.  You can also make your own rendering subclass - see the source code for the aforementioned examples.
+   *
+   * __[Example](../../../../docs/examples/actor.html)__
    * @param {Object} opt_config
    * @constructor
    */
-  var Actor = Kapi.Actor = function (opt_config) {
+  Kapi.Actor = function (opt_config) /*!*/ {
 
     opt_config = opt_config || {};
 
@@ -801,6 +885,7 @@ var rekapiActor = function (context, _, Tweenable) {
 
     return this;
   };
+  var Actor = Kapi.Actor;
 
 
   // Kind of a fun way to set up an inheritance chain.  `ActorMethods` prevents
@@ -814,10 +899,13 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
+   * Get and optionally set the `Actor`'s context.
+   *
+   * __[Example](../../../../docs/examples/actor_context.html)__
    * @param {Object} opt_context
    * @return {Object}
    */
-  Actor.prototype.context = function (opt_context) {
+  Actor.prototype.context = function (opt_context) /*!*/ {
     if (opt_context) {
       this._context = opt_context;
     }
@@ -827,12 +915,57 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
+   * Create a keyframe for the `Actor`.  `when` defines where in the animation to place the keyframe, in milliseconds (assumes that `0` is when the animation began).  The animation length will automatically "grow" to accommodate any keyframe position.
+   *
+   * `position` should contain all of the properties that define the keyframe's state.  These properties can be any value that can be tweened by [Shifty](https://github.com/jeremyckahn/shifty) (numbers, color strings, CSS properties).
+   *
+   * __Note:__ Internally, this creates [`Kapi.KeyframeProperty`](rekapi.keyframeprops.js.html)s and places them on a "track."  These [`Kapi.KeyframeProperty`](rekapi.keyframeprops.js.html)s are managed for you by the `Actor` APIs.
+   *
+   * ## Easing
+   *
+   * `opt_easing`, if specified, can be a string or an Object.  If it's a string, all properties in `position` will have the same easing formula applied to them. For example:
+   *
+   * ```javascript
+   * actor.keyframe(1000, {
+   *     'x': 100,
+   *     'y': 100
+   *   }, 'easeOutSine');
+   * ```
+   *
+   * Both `x` and `y` will have `easeOutSine` applied to them.  You can also specify multiple easing formulas with an Object:
+   *
+   * ```javascript
+   * actor.keyframe(1000, {
+   *     'x': 100,
+   *     'y': 100
+   *   }, {
+   *     'x': 'easeinSine',
+   *     'y': 'easeOutSine'
+   *   });
+   * ```
+   *
+   * `x` will ease with `easeInSine`, and `y` will ease with `easeOutSine`.  Any unspecified properties will ease with `linear`.  If `opt_easing` is omitted, all properties will default to `linear`.
+   *
+   * ## Keyframe inheritance
+   *
+   * Keyframes always inherit missing properties from the keyframes that came before them.  For example:
+   *
+   * ```javascript
+   * actor.keyframe(0, {
+   *   'x': 100
+   * }).keyframe(1000{
+   *   // Inheriting the `x` from above!
+   *   'y': 50
+   * });
+   * ```
+   *
+Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was inherited from keyframe `0`.
    * @param {number} when
    * @param {Object} position
-   * @param {string|Object} easing
+   * @param {string|Object} opt_easing
    * @return {Kapi.Actor}
    */
-  Actor.prototype.keyframe = function keyframe (when, position, opt_easing) {
+  Actor.prototype.keyframe = function keyframe (when, position, opt_easing) /*!*/ {
     var originalEasingString;
 
     // TODO:  The opt_easing logic seems way overcomplicated, it's probably out
@@ -878,11 +1011,14 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
-   * @param {string} property
-   * @param {number} index
+   * Gets the [`Kapi.KeyframeProperty`](rekapi.keyframeprops.js.html) from an `Actor`'s [`Kapi.KeyframeProperty`](rekapi.keyframeprops.js.html) track. Returns `undefined` if there were no properties found with the specified parameters.
+   *
+   * __[Example](../../../../docs/examples/actor_get_keyframe_property.html)__
+   * @param {string} property The name of the property.
+   * @param {number} index The 0-based index of the KeyframeProperty in the Actor's KeyframeProperty track.
    * @return {Kapi.KeyframeProperty|undefined}
    */
-  Actor.prototype.getKeyframeProperty = function (property, index) {
+  Actor.prototype.getKeyframeProperty = function (property, index) /*!*/ {
     if (this._propertyTracks[property]
         && this._propertyTracks[property][index]) {
       return this._propertyTracks[property][index];
@@ -891,13 +1027,15 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
-   * @param {string} property
-   * @param {number} index
-   * @param {Object} newProperties
+   * Modify a specified [`Kapi.KeyframeProperty`](rekapi.keyframeprops.js.html) stored on an `Actor`.  Essentially, this calls [`KeyframeProperty#modifyWith`](rekapi.keyframeprops.js.html#modifyWith) (passing along `newProperties`) and then performs some cleanup.
+   *
+   * __[Example](../../../../docs/examples/actor_modify_keyframe_property.html)__
+   * @param {string} property The name of the property to modify
+   * @param {number} index The property track index of the KeyframeProperty to modify
+   * @param {Object} newProperties The properties to augment the KeyframeProperty with
    * @return {Kapi.Actor}
    */
-  Actor.prototype.modifyKeyframeProperty = function (property, index,
-      newProperties) {
+  Actor.prototype.modifyKeyframeProperty = function (property, index, newProperties) /*!*/ {
     if (this._propertyTracks[property]
         && this._propertyTracks[property][index]) {
       this._propertyTracks[property][index].modifyWith(newProperties);
@@ -911,18 +1049,24 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
-   * @return {Array}
+   * Get a list of all the track names for an `Actor`.
+   *
+   * __[Example](../../../../docs/examples/actor_get_track_names.html)__
+   * @return {Array.<string>}
    */
-  Actor.prototype.getTrackNames = function () {
+  Actor.prototype.getTrackNames = function () /*!*/ {
     return _.keys(this._propertyTracks);
   };
 
 
   /**
+   * Get the property track length for an `Actor` (how many `KeyframeProperty`s are in a given property track).
+   *
+   * __[Example](../../../../docs/examples/actor_get_track_length.html)__
    * @param {string} trackName
    * @return {number}
    */
-  Actor.prototype.getTrackLength = function (trackName) {
+  Actor.prototype.getTrackLength = function (trackName) /*!*/ {
     if (!this._propertyTracks[trackName]) {
       return;
     }
@@ -932,11 +1076,14 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
-   * @param {number} copyTo
-   * @param {number} copyFrom
+   * Copy all of the properties that at one point in the timeline to another point. This is useful for many things, particularly for bringing a `Kapi.Actor` back to its original position.
+   *
+   * __[Example](../../../../docs/examples/actor_copy_properties.html)__
+   * @param {number} copyTo The millisecond to copy KeyframeProperties to
+   * @param {number} copyFrom The millisecond to copy KeyframeProperties from
    * @return {Kapi.Actor}
    */
-  Actor.prototype.copyProperties = function (copyTo, copyFrom) {
+  Actor.prototype.copyProperties = function (copyTo, copyFrom) /*!*/ {
     var sourcePositions = {};
     var sourceEasings = {};
 
@@ -956,10 +1103,13 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
-   * @param {number} until
+   * Extend the last state on this `Actor`'s timeline to create a animation wait. The state does not change during this time.
+   *
+   * __[Example](../../../../docs/examples/actor_wait.html)__
+   * @param {number} until At what point in the animation the Actor should wait until (relative to the start of the animation)
    * @return {Kapi.Actor}
    */
-  Actor.prototype.wait = function (until) {
+  Actor.prototype.wait = function (until) /*!*/ {
     var length = this.getEnd();
 
     if (until <= length) {
@@ -985,10 +1135,13 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
+   * Get the millisecond of the first state of an `Actor` (when it first starts animating).  You can get the start time of a specific track with `opt_trackName`.
+   *
+   * __[Example](../../../../docs/examples/actor_get_start.html)__
    * @param {string} opt_trackName
    * @return {number}
    */
-  Actor.prototype.getStart = function (opt_trackName) {
+  Actor.prototype.getStart = function (opt_trackName) /*!*/ {
     var starts = [];
 
     if (opt_trackName) {
@@ -1010,10 +1163,13 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
+   * Get the millisecond of the last state of an `Actor` (when it is done animating).  You can get the last state for a specific track with `opt_trackName`.
+   *
+   * __[Example](../../../../docs/examples/actor_get_end.html)__
    * @param {string} opt_trackName
    * @return {number}
    */
-  Actor.prototype.getEnd = function (opt_trackName) {
+  Actor.prototype.getEnd = function (opt_trackName) /*!*/ {
     var latest = 0;
     var tracksToInspect = this._propertyTracks;
 
@@ -1037,23 +1193,25 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
+   * Get the length of time in milliseconds that an `Actor` animates for.  You can get the length of time that a specific track animates for with `opt_trackName`.
+   *
+   * __[Example](../../../../docs/examples/actor_get_length.html)__
    * @param {string} opt_trackName
    * @return {number}
    */
-  Actor.prototype.getLength = function (opt_trackName) {
+  Actor.prototype.getLength = function (opt_trackName) /*!*/ {
     return this.getEnd(opt_trackName) - this.getStart(opt_trackName);
   };
 
 
   /*
-   * Determines if an actor has a keyframe set at a given millisecond.
-   * Can optionally look for an existing keyframe on a single property track.
+   * Determines if an actor has a keyframe set at a given millisecond.  Can optionally look for an existing keyframe on a single property track.
    *
-   * @param {number} when Millisecond
+   * @param {number} when Millisecond value to look for a property.
    * @param {string} opt_trackName Optional name of a property track
    * @return {boolean}
    */
-  Actor.prototype.hasKeyframeAt = function(when, opt_trackName) {
+  Actor.prototype.hasKeyframeAt = function(when, opt_trackName) /*!*/ {
     var tracks = this._propertyTracks;
 
     if (opt_trackName) {
@@ -1072,14 +1230,37 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
+   * Augment the `value` or `easing` of the [`Kapi.KeyframeProperty`](rekapi.keyframeprops.js.html)s at a given millisecond.  Any [`Kapi.KeyframeProperty`](rekapi.keyframeprops.js.html)s omitted in `stateModification` or `opt_easing` are not modified.  Here's how you might use it:
+   *
+   * ```javascript
+   * actor.keyframe(0, {
+   *   'x': 10,
+   *   'y': 20
+   * }).keyframe(1000, {
+   *   'x': 20,
+   *   'y': 40
+   * }).keyframe(2000, {
+   *   'x': 30,
+   *   'y': 60
+   * })
+   *
+   * // Changes the state of the keyframe at millisecond 1000.
+   * // Modifies the value of 'y' and the easing of 'x.'
+   * actor.modifyKeyframe(1000, {
+   *   'y': 150
+   * }, {
+   *   'x': 'easeFrom'
+   * });
+   * ```
+   *
+   * __[Example](../../../../docs/examples/actor_modify_keyframe.html)__
    * @param {number} when
    * @param {Object} stateModification
    * @param {Object} opt_easingModification
    * @return {Kapi.Actor}
    */
-  Actor.prototype.modifyKeyframe = function (when, stateModification,
-      opt_easingModification) {
-
+  Actor.prototype.modifyKeyframe =
+      function (when, stateModification, opt_easingModification) /*!*/ {
     opt_easingModification = opt_easingModification || {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
@@ -1098,10 +1279,13 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
-   * @param {when} when
+   * Remove all [`Kapi.KeyframeProperty`](rekapi.keyframeprops.js.html)s at a given millisecond in the animation.
+   *
+   * __[Example](../../../../docs/examples/actor_remove_keyframe.html)__
+   * @param {when} when The millisecond of the keyframe to remove.
    * @return {Kapi.Actor}
    */
-  Actor.prototype.removeKeyframe = function (when) {
+  Actor.prototype.removeKeyframe = function (when) /*!*/ {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       var i = -1;
       var foundProperty = false;
@@ -1132,9 +1316,12 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
+   * Remove all `KeyframeProperty`s set on the `Actor`.
+   *
+   * __[Example](../../../../docs/examples/actor_remove_all_keyframe_properties.html)__
    * @return {Kapi.Actor}
    */
-  Actor.prototype.removeAllKeyframeProperties = function () {
+  Actor.prototype.removeAllKeyframeProperties = function () /*!*/ {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       propertyTrack.length = 0;
     }, this);
@@ -1145,10 +1332,13 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
+   * Calculate and set the `Actor`'s position at `millisecond` in the animation.
+   *
+   * __[Example](../../../../docs/examples/actor_update_state.html)__
    * @param {number} millisecond
    * @return {Kapi.Actor}
    */
-  Actor.prototype.updateState = function (millisecond) {
+  Actor.prototype.updateState = function (millisecond) /*!*/ {
     var startMs = this.getStart();
     var endMs = this.getEnd();
 
@@ -1176,9 +1366,12 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
+   * Export a serializable `Object` of this `Actor`'s timeline property tracks and [`Kapi.KeyframeProperty`](rekapi.keyframeprops.js.html)s.
+   *
+   * __[Example](../../../../docs/examples/actor_export_timeline.html)__
    * @return {Object}
    */
-  Actor.prototype.exportTimeline = function () {
+  Actor.prototype.exportTimeline = function () /*!*/ {
     var exportData = {
       'start': this.getStart()
       ,'end': this.getEnd()
@@ -1207,15 +1400,18 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
 
 
   /**
-   * @param {Kapi.Actor} ownerActor
-   * @param {number} millisecond
-   * @param {string} name
-   * @param {number} value
-   * @param {string} opt_easing
+   * Represents an individual component of a `Kapi.Actor`'s keyframe state.  In many cases you won't need to deal with this directly, `Kapi.Actor` abstracts a lot of what this Object does away for you.
+   *
+   * __[Example](../../../../docs/examples/keyprop.html)__
+   * @param {Kapi.Actor} ownerActor The Actor to which this KeyframeProperty is associated.
+   * @param {number} millisecond Where in the animation this KeyframeProperty lives.
+   * @param {string} name The property's name, such as "x" or "opacity."
+   * @param {number|string} value The value of `name`.  This is the value to animate to.
+   * @param {string=} opt_easing The easing at which to animate to `value`.  Defaults to linear.
    * @constructor
    */
-  var KeyframeProperty = Kapi.KeyframeProperty = function (ownerActor,
-      millisecond, name, value, opt_easing) {
+  Kapi.KeyframeProperty = function (
+      ownerActor, millisecond, name, value, opt_easing) /*!*/ {
     this.id = _.uniqueId('keyframeProperty_');
     this.ownerActor = ownerActor;
     this.millisecond = millisecond;
@@ -1226,12 +1422,20 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
 
     return this;
   };
+  var KeyframeProperty = Kapi.KeyframeProperty;
 
 
   /**
+   * Modify a `KeyframeProperty`.  Any of the following are valid properties of `newProperties` and correspond to the formal parameters of `Kapi.KeyframeProperty`:
+   *
+   * - _millisecond_ (__number__)
+   * - _easing_ (__string__)
+   * - _value_ (__number,string__)
+   *
+   * __[Example](../../../../docs/examples/keyprop_modify_with.html)__
    * @param {Object} newProperties
    */
-  KeyframeProperty.prototype.modifyWith = function (newProperties) {
+  KeyframeProperty.prototype.modifyWith = function (newProperties) /*!*/ {
     var modifiedProperties = {};
 
     _.each(['millisecond', 'easing', 'value'], function (str) {
@@ -1244,18 +1448,24 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
 
 
   /**
-   * @param {KeyframeProperty} nextProperty
+   * Create the reference to the next KeyframeProperty in an `Actor`'s `KeyframeProperty` track.  Tracks are linked lists of `Kapi.KeyframeProperty`s.
+   *
+   * __[Example](../../../../docs/examples/keyprop_link_to_next.html)__
+   * @param {KeyframeProperty} nextProperty The KeyframeProperty that immediately follows this one in an animation.
    */
-  KeyframeProperty.prototype.linkToNext = function (nextProperty) {
+  KeyframeProperty.prototype.linkToNext = function (nextProperty) /*!*/ {
     this.nextProperty = nextProperty || null;
   };
 
 
   /**
-   * @param {number} millisecond
+   * Calculate the midpoint between this `Kapi.KeyframeProperty` and the next `Kapi.KeyframeProperty` in a `Kapi.Actor`'s `Kapi.KeyframeProperty` track.
+   *
+   * __[Example](../../../../docs/examples/keyprop_get_value_at.html)__
+   * @param {number} millisecond The point in the animation to compute.
    * @return {number}
    */
-  KeyframeProperty.prototype.getValueAt = function (millisecond) {
+  KeyframeProperty.prototype.getValueAt = function (millisecond) /*!*/ {
     var fromObj = {};
     var toObj = {};
     var value;
@@ -1276,9 +1486,12 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
 
 
   /**
+   * Export a serializable `Object` of this `Kapi.KeyframeProperty`'s state data.
+   *
+   * __[Example](../../../../docs/examples/keyprop_export_property_data.html)__
    * @return {Object}
    */
-  KeyframeProperty.prototype.exportPropertyData = function () {
+  KeyframeProperty.prototype.exportPropertyData = function () /*!*/ {
     return {
      'id': this.id
      ,'millisecond': this.millisecond
@@ -1290,7 +1503,6 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
 
 };
 
-/*global fireEvent: true */
 var rekapiCanvasContext = function (context, _) {
 
   'use strict';
@@ -1301,7 +1513,7 @@ var rekapiCanvasContext = function (context, _) {
   // PRIVATE UTILITY FUNCTIONS
   //
 
-  /**
+  /*!
    * Gets (and optionally sets) height or width on a canvas.
    * @param {HTMLCanvas} context
    * @param {string} heightOrWidth The dimension (either "height" or "width")
@@ -1319,9 +1531,9 @@ var rekapiCanvasContext = function (context, _) {
   }
 
 
-  /**
+  /*!
    * Takes care of some pre-drawing tasks for canvas animations.
-  * @param {Kapi}
+   * @param {Kapi}
    */
   function beforeDraw (kapi) {
     if (kapi.config.clearOnUpdate) {
@@ -1330,7 +1542,7 @@ var rekapiCanvasContext = function (context, _) {
   }
 
 
-  /**
+  /*!
    * Draw all the `Actor`s at whatever position they are currently in.
    * @param {Kapi}
    * @return {Kapi}
@@ -1362,7 +1574,7 @@ var rekapiCanvasContext = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi} kapi
    * @param {Kapi.Actor} actor
    */
@@ -1374,7 +1586,7 @@ var rekapiCanvasContext = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi} kapi
    * @param {Kapi.Actor} actor
    */
@@ -1386,12 +1598,16 @@ var rekapiCanvasContext = function (context, _) {
   }
 
 
-  /**
+  /*!
    * Sets up an instance of CanvasRenderer and attaches it to a `Kapi`
    * instance.  Also augments the Kapi instance with canvas-specific
    * functions.
    */
   Kapi.prototype._contextInitHook.canvas = function () {
+    if (!this.context.getContext) {
+      return;
+    }
+
     this.canvas = new CanvasRenderer(this);
     this.config.clearOnUpdate = true;
 
@@ -1421,40 +1637,66 @@ var rekapiCanvasContext = function (context, _) {
   //
 
   /**
+   * You can use Rekapi to render to an HTML5 `<canvas>`.  The Canvas renderer does a few things:
+   *
+   *   1. It subclasses `Kapi.Actor` as `Kapi.CanvasActor`.
+   *   2. If the  `Kapi` constructor is given a `<canvas>` as a `context`, the Canvas renderer attaches an instance of `Kapi.CanvasRenderer` to the `Kapi` instance, named `canvas`, at initialization time.  So:
+   *   3. It maintains a layer list that defines draw order for [`Kapi.CanvasActor`](rekapi.canvas.actor.js.html)s.
+   *
+   * ```
+   * // With the Rekapi Canvas renderer loaded
+   * var kapi = new Kapi({ context: document.createElement('canvas') });
+   * kapi.canvas instanceof Kapi.CanvasRenderer; // true
+   * ```
+   *
+   * __Note:__ This `Kapi.CanvasRenderer` constructor is called for you automatically - there is no need to call it explicitly.
+   *
+   * The Canvas renderer adds some new events you can bind to with [`Kapi#on`](../../src/rekapi.core.js.html#on) (and unbind from with [`Kapi#off`](../../src/rekapi.core.js.html#off)).
+   *
+   *  - __beforeDraw__: Fires just before an actor is drawn to the screen.
+   *  - __afterDraw__: Fires just after an actor is drawn to the screen.
+   *
    * @param {Kapi} kapi
    * @constructor
    */
-  var CanvasRenderer = Kapi.CanvasRenderer = function (kapi) {
+  Kapi.CanvasRenderer = function (kapi) /*!*/ {
     this.kapi = kapi;
     this._drawOrder = [];
     this._drawOrderSorter = null;
     this._canvasActors = {};
     return this;
   };
+  var CanvasRenderer = Kapi.CanvasRenderer;
 
 
   /**
+   * Get and optionally set the height of the associated `<canvas>` element.
+   *
    * @param {number} opt_height
    * @return {number}
    */
-  CanvasRenderer.prototype.height = function (opt_height) {
+  CanvasRenderer.prototype.height = function (opt_height) /*!*/ {
     return dimension(this.kapi.context, 'height', opt_height);
   };
 
 
   /**
+   * Get and optionally set the width of the associated `<canvas>` element.
+   *
    * @param {number} opt_width
    * @return {number}
    */
-  CanvasRenderer.prototype.width = function (opt_width) {
+  CanvasRenderer.prototype.width = function (opt_width) /*!*/ {
     return dimension(this.kapi.context, 'width', opt_width);
   };
 
 
   /**
+   * Erase the `<canvas>`.
+   *
    * @return {Kapi}
    */
-  CanvasRenderer.prototype.clear = function () {
+  CanvasRenderer.prototype.clear = function () /*!*/ {
     // TODO: Is this check necessary?
     if (this.kapi.context.getContext) {
       this.context().clearRect(
@@ -1466,19 +1708,23 @@ var rekapiCanvasContext = function (context, _) {
 
 
   /**
+   * Retrieve the 2d context of the `<canvas>` that is set as the `Kapi` instance's rendering context.  This is needed for all rendering operations.  It is also provided to a [`Kapi.CanvasActor`](rekapi.canvas.actor.js.html)'s `draw` method, so you mostly won't need to call it directly.  See the [MDN](https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas) for info on the Canvas context APIs.
    * @return {CanvasRenderingContext2D}
    */
-  CanvasRenderer.prototype.context = function () {
+  CanvasRenderer.prototype.context = function () /*!*/ {
     return this.kapi.context.getContext('2d');
   };
 
 
   /**
+   * Move a [`Kapi.CanvasActor`](rekapi.canvas.actor.js.html) around in the layer list.  Each layer has one [`Kapi.CanvasActor`](rekapi.canvas.actor.js.html), and [`Kapi.CanvasActor`](rekapi.canvas.actor.js.html)s are drawn in order of their layer.  Lower layers (starting with 0) are drawn earlier.  If `layer` is higher than the number of layers (which can be found with [`actorCount`](../../src/rekapi.core.js.html#actorCount)) or lower than 0, this method will return `undefined`.  Otherwise `actor` is returned.
+   *
+   * __[Example](../../../../docs/examples/canvas_move_actor_to_layer.html)__
    * @param {Kapi.Actor} actor
    * @param {number} layer
    * @return {Kapi.Actor|undefined}
    */
-  CanvasRenderer.prototype.moveActorToLayer = function (actor, layer) {
+  CanvasRenderer.prototype.moveActorToLayer = function (actor, layer) /*!*/ {
     if (layer < this._drawOrder.length) {
       this._drawOrder = _.without(this._drawOrder, actor.id);
       this._drawOrder.splice(layer, 0, actor.id);
@@ -1491,19 +1737,29 @@ var rekapiCanvasContext = function (context, _) {
 
 
   /**
-   * @param {function(Kapi.Actor, number)} sortFunction
+   * Set a function that defines the draw order of the [`Kapi.CanvasActor`](rekapi.canvas.actor.js.html)s.  This is called each frame before the [`Kapi.CanvasActor`](rekapi.canvas.actor.js.html)s are drawn.  The following example assumes that all [`Kapi.CanvasActor`](rekapi.canvas.actor.js.html)s are circles that have a `radius` [`Kapi.KeyframeProperty`](../../src/rekapi.keyframeprops.js.html).  The circles will be drawn in order of the value of their `radius`, from smallest to largest.  This has the effect of layering larger circles on top of smaller circles, giving a sense of perspective.
+   *
+   * ```
+   * kapi.canvas.setOrderFunction(function (actor) {
+   *   return actor.get().radius;
+   * });
+   * ```
+   * @param {function(Kapi.Actor,number)} sortFunction
    * @return {Kapi}
    */
-  CanvasRenderer.prototype.setOrderFunction = function (sortFunction) {
+  CanvasRenderer.prototype.setOrderFunction = function (sortFunction) /*!*/ {
     this._drawOrderSorter = sortFunction;
     return this.kapi;
   };
 
 
   /**
+   * Remove the sort order function set by [`setOrderFunction`](#setOrderFunction).  Draw order defaults back to the order in which [`Kapi.CanvasActor`](rekapi.canvas.actor.js.html)s were added.
+   *
+   * __[Example](../../../../docs/examples/canvas_unset_order_function.html)__
    * @return {Kapi}
    */
-  CanvasRenderer.prototype.unsetOrderFunction = function () {
+  CanvasRenderer.prototype.unsetOrderFunction = function () /*!*/ {
     this._drawOrderSorter = null;
     return this.kapi;
   };
@@ -1516,14 +1772,16 @@ var rekapiCanvasActor = function (context, _) {
 
   var Kapi = context.Kapi;
 
-  function CanvasActorMethods () {}
-  CanvasActorMethods.prototype = Kapi.Actor.prototype;
-
   /**
-   * @param {Object} opt_config
+   * Constructor for rendering Actors to a `<canvas>`.  Extends [`Kapi.Actor`](../../src/rekapi.actor.js.html).  Valid options for `opt_config` are the same as those for [`Kapi.Actor`](../../src/rekapi.actor.js.html), with the following additions:
+   *
+   *  - __draw__ _(function(CanvasRenderingContext2D, Object))_: A function that renders something to a canvas.
+   *
+   * _Note_: `context` is inherited from the `Kapi` instance if it is not provided here.
+   * @param {Object=} opt_config
    * @constructor
    */
-  var CanvasActor = Kapi.CanvasActor = function (opt_config) {
+  Kapi.CanvasActor = function (opt_config) /*!*/ {
     Kapi.Actor.call(this, opt_config);
 
     opt_config = opt_config || {};
@@ -1531,10 +1789,14 @@ var rekapiCanvasActor = function (context, _) {
 
     return this;
   };
+  var CanvasActor = Kapi.CanvasActor;
 
+  function CanvasActorMethods () {}
+  CanvasActorMethods.prototype = Kapi.Actor.prototype;
   CanvasActor.prototype = new CanvasActorMethods();
 
-  /**
+
+  /*!
    * @param {Object} opt_context
    * @return {Object}
    */
@@ -1546,11 +1808,13 @@ var rekapiCanvasActor = function (context, _) {
     return this._context && this._context.getContext('2d');
   };
 
+
   /**
+   * Move this `Kapi.CanvasActor` to a different layer in the `Kapi` instance that it belongs to.  This returns `undefined` if the operation was unsuccessful.  This is just a wrapper for [moveActorToLayer](rekapi.canvas.context.js.html#moveActorToLayer).
    * @param {number} layer
    * @return {Kapi.Actor|undefined}
    */
-  CanvasActor.prototype.moveToLayer = function (layer) {
+  CanvasActor.prototype.moveToLayer = function (layer) /*!*/ {
     return this.kapi.canvas.moveActorToLayer(this, layer);
   };
 };
@@ -1582,7 +1846,7 @@ var rekapiDOM = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {string} name A transform function name
    * @return {boolean}
    */
@@ -1591,7 +1855,7 @@ var rekapiDOM = function (context, _) {
   }
 
 
-  /**
+  /*!
    * Builds a concatenated string of given transform property values in order.
    *
    * @param {Array.<string>} orderedFunctions Array of ordered transform
@@ -1613,7 +1877,7 @@ var rekapiDOM = function (context, _) {
   }
 
 
-  /**
+  /*!
    * Sets value for all vendor prefixed transform properties on a given context
    *
    * @param {Object} context The actor's DOM context
@@ -1627,11 +1891,72 @@ var rekapiDOM = function (context, _) {
 
 
   /**
+   * `Kapi.DOMActor` is a subclass of [`Kapi.Actor`](../../src/rekapi.actor.js.html).  Please note that `Kapi.DOMActor` accepts `opt_config` as the second parameter, not the first.  Instantiate a `Kapi.DOMActor` with an `HTMLElement`, and then add it to the animation:
+   *
+   * ```
+   * var kapi = new Kapi();
+   * var actor = new Kapi.DOMActor(document.getElementById('actor'));
+   *
+   * kapi.addActor(actor);
+   * ```
+   *
+   * Now you can keyframe `actor` like you would any Actor.
+   *
+   * ```
+   * actor
+   *   .keyframe(0, {
+   *     'left': '0px'
+   *     ,'top': '0px'
+   *   })
+   *   .keyframe(1500, {
+   *     'left': '200px'
+   *     ,'top': '200px'
+   *   }, 'easeOutExpo');
+   *
+   * kapi.play();
+   * ```
+   *
+   * ## Transforms
+   *
+   * `Kapi.DOMActor` supports CSS3 transforms as keyframe properties. Here's an example:
+   *
+   * ```
+   * actor
+   *   .keyframe(0, {
+   *     'translateX': '0px'
+   *     ,'translateY': '0px'
+   *     ,'rotate': '0deg'
+   *   })
+   *   .keyframe(1500, {
+   *     'translateX': '200px'
+   *     ,'translateY': '200px'
+   *     ,'rotate': '90deg'
+   *   }, 'easeOutExpo');
+   * ```
+   *
+   * The list of supported transforms is: `translateX`, `translateY`, `scale`, `scaleX`, `scaleY`, `rotate`, `skewX`, `skewY`.
+   *
+   * Internally, this builds a CSS3 `transform` rule that gets applied to the `Kapi.DOMActor`'s DOM node on each animation update.
+   *
+   * Typically, when writing a `transform` rule, it is necessary to write the same rule multiple times, in order to support the vendor prefixes for all of the browser rendering engines. `Kapi.DOMActor` takes care of the cross browser inconsistencies for you.
+   *
+   * You can also use the `transform` property directly:
+   *
+   * ```
+   * actor
+   *   .keyframe(0, {
+   *     'transform': 'translateX(0px) translateY(0px) rotate(0deg)'
+   *   })
+   *   .keyframe(1500, {
+   *     'transform': 'translateX(200px) translateY(200px) rotate(90deg)'
+   *   }, 'easeOutExpo');
+   * ```
    * @param {HTMLElement} element
+   * @param {Object} opt_config
    * @constructor
    */
-  Kapi.DOMActor = function (element) {
-    Kapi.Actor.call(this);
+  Kapi.DOMActor = function (element, opt_config) /*!*/ {
+    Kapi.Actor.call(this, opt_config);
     this._context = element;
     var className = this.getCSSName();
 
@@ -1643,25 +1968,27 @@ var rekapiDOM = function (context, _) {
 
     this._transformOrder = transformFunctions.slice(0);
 
-    // Remove the instance's update method to allow the
-    // ActorMethods.prototype.update method to be accessible.
+    // Remove the instance's update method to allow the DOMActor.prototype
+    // methods to be accessible.
     delete this.update;
     delete this.teardown;
 
     return this;
   };
+  var DOMActor = Kapi.DOMActor;
 
 
   function DOMActorMethods () {}
   DOMActorMethods.prototype = Kapi.Actor.prototype;
-  Kapi.DOMActor.prototype = new DOMActorMethods();
+  DOMActor.prototype = new DOMActorMethods();
 
 
-  /**
+  /*!
    * @param {HTMLElement} context
    * @param {Object} state
+   * @override
    */
-  DOMActorMethods.prototype.update = function (context, state) {
+  DOMActor.prototype.update = function (context, state) {
     var propertyNames = _.keys(state);
     // TODO:  Optimize the following code so that propertyNames is not looped
     // over twice.
@@ -1684,7 +2011,8 @@ var rekapiDOM = function (context, _) {
   };
 
 
-  DOMActorMethods.prototype.teardown = function (context, state) {
+  // TODO:  Make this a private method.
+  DOMActor.prototype.teardown = function (context, state) {
     var classList = this._context.className.match(/\S+/g);
     var sanitizedClassList = _.without(classList, this.getCSSName());
     this._context.className = sanitizedClassList;
@@ -1692,9 +2020,10 @@ var rekapiDOM = function (context, _) {
 
 
   /**
+   * This can be useful when used with [toCSS](../to-css/rekapi.to-css.js.html).  You might not ever need to use this directly, as the class is attached to an element when you create a `Kapi.DOMActor` from said element.
    * @return {string}
    */
-  DOMActorMethods.prototype.getCSSName = function () {
+  DOMActor.prototype.getCSSName = function () /*!*/ {
     return 'actor-' + this.id;
   };
 
@@ -1703,9 +2032,10 @@ var rekapiDOM = function (context, _) {
    * Overrides the default transform function order.
    *
    * @param {Array} orderedFunctions The Array of transform function names
-   * @return {Kapi}
+   * @return {Kapi.DOMActor}
    */
-  DOMActorMethods.prototype.setTransformOrder = function (orderedFunctions) {
+  DOMActor.prototype.setTransformOrder = function (orderedFunctions) /*!*/ {
+    // TODO: Document this better...
     var unknownFunctions = _.reject(orderedFunctions, isTransformFunction);
 
     if (unknownFunctions.length) {
@@ -1772,7 +2102,7 @@ var rekapiToCSS = function (context, _) {
   // TEMPLATES
   //
 
-  /**
+  /*!
    * [0]: vendor
    * [1]: animation name
    * [2]: keyframes
@@ -1783,7 +2113,7 @@ var rekapiToCSS = function (context, _) {
     ,'}'
   ].join('\n');
 
-  /**
+  /*!
    * [0] class name
    * [1] class attributes
    */
@@ -1798,9 +2128,63 @@ var rekapiToCSS = function (context, _) {
   //
 
   /**
+   * Rekapi can export your animations as CSS `@keyframes` with `toCSS` for improved rendering performance.  `toCSS` depends on [`Kapi.DOMActor`](../dom/rekapi.dom.actor.js.html).
+   *
+   * Advantages of using CSS `@keyframes` over traditional JavaScript animations:
+   *
+   *   - Smoother animations.
+   *   - The JavaScript thread is freed from performing animation updates, resulting in more resources for other logic.
+   *
+   * Disadvantages of the `@keyframes` approach:
+   *
+   *   - Doesn't work in older browsers
+   *   - No start/stop/goto control - once the animation runs, it runs from the beginning to completion.
+   *   - Animations must either be rendered dynamically or saved to a static stylesheet, which impacts startup time.
+   *   - No framerate control.
+   *   - Currently, no `Kapi` [events](../../src/rekapi.core.js.html#on) can be bound to CSS animations.
+   *
+   * This is a feature that isn't appropriate in all situations, but can help you achieve a level of performance and smoothness that pure-JavaScript animations cannot.
+   *
+   * The vision for this feature is that you can define an animation with the standard Rekapi API, and then export it to CSS and let the browser do the actual animating.  It's essentially prerendering an animation in its entirety, rather than updating the DOM on each tick.
+   *
+   * ## Exporting
+   *
+   * There's only one command you need to export a Rekapi animation to CSS `@keyframes`:
+   *
+   * ```
+   * var container = document.getElementById('container');
+   * var animation = new Kapi(container);
+   *
+   * var css = animation.toCSS();
+   * ```
+   *
+   * All `toCSS()` does is render a string.  The most common thing to do with this string is to stick it into a `<style>` element somewhere on your page.
+   *
+   * ```
+   * var style = document.createElement('style');
+   * style.innerHTML = css;
+   * document.head.appendChild(style);
+   * ```
+   *
+   * For a working example of this method, take a look at [`ext/to-css/sandbox.html`](../../../../ext/to-css/sandbox.html).
+   *
+   * ## `opts`
+   *
+   * You can specify some parameters for your CSS animation.  They are all optional. Just supply them in the configuration parameter when calling `toCSS`:
+   *
+   *  - __vendors__ _(Array)_: Defaults to `['w3']`.  The browser vendors you want this CSS to support. Valid values are:
+   *    - `'microsoft'`
+   *    - `'mozilla'`
+   *    - `'opera'`
+   *    - `'w3'`
+   *    - `'webkit'`
+   *  - __granularity__ _(number)_: Defaults to `100`.  Defines the "resolution" of an exported animation.  CSS `@keyframes` are comprised of a series of explicitly defined steps, and more steps will result in a smoother animation.  More steps will also result in a larger CSS string, and more time to generate the string.
+   *  - __name__ _(string)_: Define a custom name for your animation.  This becomes the class name targeted in the generated CSS selector, and also the name of the `@keyframes` rule that is generated.  Note that this does not match the CSS class that is automatically added to the `Kapi.DOMActor` DOM element, so you will have to add the class to the element yourself.
+   *
    * @param {Object} opts
+   * @return {string}
    */
-  context.Kapi.prototype.toCSS = function (opts) {
+  Kapi.prototype.toCSS = function (opts) /*!*/ {
     opts = opts || {};
     var animationCSS = [];
     var actorIds = this.getActorIds();
@@ -1813,10 +2197,12 @@ var rekapiToCSS = function (context, _) {
   };
 
 
-  /**
-   * @param {Object} opts
+  /*!
+   * Exports the CSS `@keyframes` for an individual Actor.
+   * @param {Object} opts Same as opts for Kapi.prototype.toCSS.
+   * @return {string}
    */
-  context.Kapi.Actor.prototype.toCSS = function (opts) {
+  Kapi.Actor.prototype.toCSS = function (opts) /*!*/ {
     opts = opts || {};
     var actorCSS = [];
     var animName = opts.name || this.getCSSName();
@@ -1836,7 +2222,7 @@ var rekapiToCSS = function (context, _) {
   // UTILITY FUNCTIONS
   //
 
-  /**
+  /*!
    * @param {string} formatter
    * @param {[string]} args
    * @return {string}
@@ -1851,7 +2237,7 @@ var rekapiToCSS = function (context, _) {
   };
 
 
-  /**
+  /*!
    * @param {Kapi.Actor} actor
    * @param {string} animName
    * @param {number} granularity
@@ -1882,7 +2268,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {string} toKeyframes Generated keyframes to wrap in boilerplates
    * @param {string} animName
    * @param {Array.<string>} opt_vendors Vendor boilerplates to be applied.
@@ -1905,7 +2291,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {string} keyframes
    * @param {vendor} vendor
    * @return {string}
@@ -1923,7 +2309,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi.Actor} actor
    * @param {string} animName
    * @param {Array.<string>} opt_vendors
@@ -1950,7 +2336,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi.Actor} actor
    * @param {string} animName
    * @param {string} vendor
@@ -1981,7 +2367,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi.Actor} actor
    * @param {string} animName
    * @param {string} prefix
@@ -2002,7 +2388,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi.Actor} actor
    * @param {string} animName
    * @return {string}
@@ -2013,7 +2399,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi.Actor} actor
    * @param {number|string} delay
    * @return {string}
@@ -2023,7 +2409,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {string} prefix
    * @return {string}
    */
@@ -2032,7 +2418,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {string} prefix
    * @return {string}
    */
@@ -2041,7 +2427,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi} kapi
    * @param {string} prefix
    * @param {number|string} opt_iterations
@@ -2063,7 +2449,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {string} prefix
    * @return {string}
    */
@@ -2075,7 +2461,7 @@ var rekapiToCSS = function (context, _) {
   // OPTIMIZED GENERATOR FUNCTIONS
   //
 
-  /**
+  /*!
    * @param {Kapi.KeyframeProperty} property
    * @return {boolean}
    */
@@ -2106,7 +2492,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi.KeyframeProperty} property
    * @param {number} fromPercent
    * @param {number} toPercent
@@ -2138,7 +2524,7 @@ var rekapiToCSS = function (context, _) {
   // GENERAL-USE GENERATOR FUNCTIONS
   //
 
-  /**
+  /*!
    * @param {Kapi.Actor} actor
    * @param {number} granularity
    * @param {string} track
@@ -2208,7 +2594,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi.Actor} actor
    * @param {string} track
    * @param {number} actorStart
@@ -2225,7 +2611,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi.Actor} actor
    * @param {string} track
    * @param {number} actorStart
@@ -2243,7 +2629,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi.KeyframeProperty} property
    * @param {number} actorStart
    * @param {number} actorLength
@@ -2254,7 +2640,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi.Actor} actor
    * @param {Kapi.KeyframeProperty} fromProp
    * @param {number} increments
@@ -2283,7 +2669,7 @@ var rekapiToCSS = function (context, _) {
   }
 
 
-  /**
+  /*!
    * @param {Kapi.Actor} actor
    * @param {string} targetProp
    * @return {string}
@@ -2348,8 +2734,6 @@ var rekapiToCSS = function (context, _) {
 
 };
 
-/*global rekapiCore rekapiActor rekapiKeyframeProperty rekapiDOM rekapiToCSS
-rekapiCanvasContext rekapiCanvasActor define */
 var rekapi = function (global, deps) {
 
   'use strict';
