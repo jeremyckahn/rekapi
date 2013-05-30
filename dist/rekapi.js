@@ -1,4 +1,4 @@
-/*! Rekapi - v0.14.0 - 2013-03-31 - http://rekapi.com */
+/*! Rekapi - v0.14.0 - 2013-05-29 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -1259,8 +1259,8 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {Object} opt_easingModification
    * @return {Kapi.Actor}
    */
-  Actor.prototype.modifyKeyframe =
-      function (when, stateModification, opt_easingModification) /*!*/ {
+  Actor.prototype.modifyKeyframe = function (
+      when, stateModification, opt_easingModification) /*!*/ {
     opt_easingModification = opt_easingModification || {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
