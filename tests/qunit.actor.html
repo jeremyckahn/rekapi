@@ -544,6 +544,70 @@
     });
 
 
+    module('moveKeyframe');
+
+
+    test('Does not move a keyframe to a point on the timeline when there already is one', function () {
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, {x: 1})
+        .keyframe(10, {x: 2})
+        .keyframe(20, {x: 3});
+
+      var movedKeyframe = testActor.moveKeyframe(20, 10);
+      var secondKeyframeX = testActor.getKeyframeProperty('x', 1);
+      var thirdKeyframeX = testActor.getKeyframeProperty('x', 2);
+
+      equal(movedKeyframe, false,
+          'moveKeyframe indicated that keyframe was not moved');
+      equal(secondKeyframeX.value, 2,
+          'The keyframe already at the targeted time was not modified');
+      equal(thirdKeyframeX.value, 3,
+          'The keyframe requested to be moved was not modified.');
+    });
+
+
+    test('Does not move a keyframe if there is nothing at the requested point on the timeline', function () {
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, {x: 1})
+        .keyframe(10, {x: 2});
+
+      var movedKeyframe = testActor.moveKeyframe(20, 30);
+
+      equal(movedKeyframe, false,
+          'moveKeyframe indicated that keyframe was not moved');
+    });
+
+
+    test('Moves keyframe to requested point on the timeline', function () {
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, {x: 1})
+        .keyframe(10, {x: 2});
+
+      var movedKeyframe = testActor.moveKeyframe(10, 20);
+      var hasKeyframeAtTarget = testActor.hasKeyframeAt(20);
+      var hasKeyframeAtOldPosition = testActor.hasKeyframeAt(10);
+      var animationLength = testKapi.animationLength();
+
+      equal(movedKeyframe, true,
+          'moveKeyframe indicated that keyframe was moved');
+      equal(hasKeyframeAtTarget, true,
+          'Keyframe exists at requested destination');
+      equal(hasKeyframeAtOldPosition, false,
+          'Keyframe does not exist at previous position on the timeline');
+      equal(animationLength, 20,
+          'Animation length was updated');
+    });
+
+
     module('wait');
 
 

@@ -161,6 +161,18 @@ var rekapiActor = function (context, _, Tweenable) {
   }
 
 
+  /*!
+   * Updates internal Kapi and Actor data after a KeyframeProperty
+   * modification method is called.
+   * @param {Kapi.Actor} actor
+   */
+  function cleanupAfterKeyframeModification (actor) {
+    sortPropertyTracks(actor);
+    invalidatePropertyCache(actor);
+    recalculateAnimationLength(actor.kapi);
+  }
+
+
   /**
    * Create a `Kapi.Actor` instance.  Note that the rest of the API docs for `Kapi.Actor` will simply refer to this Object as `Actor`.
    *
@@ -358,9 +370,8 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
       this._propertyTracks[property][index].modifyWith(newProperties);
     }
 
-    sortPropertyTracks(this);
-    invalidatePropertyCache(this);
-    recalculateAnimationLength(this.kapi);
+    cleanupAfterKeyframeModification(this);
+
     return this;
   };
 
@@ -543,6 +554,35 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
           findPropertyAtMillisecondInTrack(this, trackName, when);
       return retrievedProperty !== undefined;
     }, this) !== undefined;
+  };
+
+
+  /**
+   * Moves a Keyframe from one point on the timeline to another.  Although this method does error checking for you to make sure the operation can be safely performed, an effective pattern is to use [`hasKeyframeAt`](#hasKeyframeAt) to see if there is already a keyframe at the requested `to` destination.
+   *
+   * __[Example](../../../../docs/examples/actor_move_keyframe.html)__
+   * @param {number} from The millisecond of the keyframe to be moved.
+   * @param {number} to The millisecond of where the keyframe should be moved to.
+   * @return {boolean} Whether or not the keyframe was successfully moved.
+   */
+  Actor.prototype.moveKeyframe = function (from, to) /*!*/ {
+    if (!this.hasKeyframeAt(from) || this.hasKeyframeAt(to)) {
+      return false;
+    }
+
+    _.each(this._propertyTracks, function (propertyTrack, trackName) {
+      var property = findPropertyAtMillisecondInTrack(this, trackName, from);
+
+      if (property) {
+        property.modifyWith({
+          'millisecond': to
+        });
+      }
+    }, this);
+
+    cleanupAfterKeyframeModification(this);
+
+    return true;
   };
 
 
