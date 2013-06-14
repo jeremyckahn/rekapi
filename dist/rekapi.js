@@ -1,4 +1,4 @@
-/*! Rekapi - v0.14.1 - 2013-05-30 - http://rekapi.com */
+/*! Rekapi - v0.14.2 - 2013-06-13 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -927,15 +927,15 @@ var rekapiActor = function (context, _, Tweenable) {
 
 
   /**
-   * Create a keyframe for the `Actor`.  `when` defines where in the animation to place the keyframe, in milliseconds (assumes that `0` is when the animation began).  The animation length will automatically "grow" to accommodate any keyframe position.
+   * Create a keyframe for the `Actor`.  `millisecond` defines where in the animation to place the keyframe, in milliseconds (assumes that `0` is when the animation began).  The animation length will automatically "grow" to accommodate any keyframe position.
    *
-   * `position` should contain all of the properties that define the keyframe's state.  These properties can be any value that can be tweened by [Shifty](https://github.com/jeremyckahn/shifty) (numbers, color strings, CSS properties).
+   * `properties` should contain all of the properties that define the keyframe's state.  These properties can be any value that can be tweened by [Shifty](https://github.com/jeremyckahn/shifty) (numbers, color strings, CSS properties).
    *
    * __Note:__ Internally, this creates [`Kapi.KeyframeProperty`](rekapi.keyframeprops.js.html)s and places them on a "track."  These [`Kapi.KeyframeProperty`](rekapi.keyframeprops.js.html)s are managed for you by the `Actor` APIs.
    *
    * ## Easing
    *
-   * `opt_easing`, if specified, can be a string or an Object.  If it's a string, all properties in `position` will have the same easing formula applied to them. For example:
+   * `opt_easing`, if specified, can be a string or an Object.  If it's a string, all properties in `properties` will have the same easing formula applied to them. For example:
    *
    * ```javascript
    * actor.keyframe(1000, {
@@ -972,12 +972,14 @@ var rekapiActor = function (context, _, Tweenable) {
    * ```
    *
 Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was inherited from keyframe `0`.
-   * @param {number} when
-   * @param {Object} position
-   * @param {string|Object} opt_easing
+   * @param {number} millisecond Where on the timeline to set the keyframe.
+   * @param {Object} properties Keyframe properties to set for the keyframe.
+   * @param {string|Object} opt_easing Optional easing string or configuration object.
    * @return {Kapi.Actor}
    */
-  Actor.prototype.keyframe = function keyframe (when, position, opt_easing) /*!*/ {
+  Actor.prototype.keyframe = function keyframe (
+      millisecond, properties, opt_easing) /*!*/ {
+
     var originalEasingString;
 
     // TODO:  The opt_easing logic seems way overcomplicated, it's probably out
@@ -988,20 +990,21 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
     if (typeof opt_easing === 'string') {
       originalEasingString = opt_easing;
       opt_easing = {};
-      _.each(position, function (positionVal, positionName) {
-        opt_easing[positionName] = originalEasingString;
+      _.each(properties, function (property, propertyName) {
+        opt_easing[propertyName] = originalEasingString;
       });
     }
 
     // If `opt_easing` was passed as an Object, this will fill in any missing
     // opt_easing properties with the default equation.
-    _.each(position, function (positionVal, positionName) {
-      opt_easing[positionName] = opt_easing[positionName] || DEFAULT_EASING;
+    _.each(properties, function (property, propertyName) {
+      opt_easing[propertyName] = opt_easing[propertyName] || DEFAULT_EASING;
     });
 
-    _.each(position, function (value, name) {
-      var newKeyframeProperty = new Kapi.KeyframeProperty(this, when, name, value,
-          opt_easing[name]);
+    _.each(properties, function (value, name) {
+      var newKeyframeProperty = new Kapi.KeyframeProperty(
+          this, millisecond, name, value, opt_easing[name]);
+
       this._keyframeProperties[newKeyframeProperty.id] = newKeyframeProperty;
 
       if (!this._propertyTracks[name]) {
@@ -1047,7 +1050,9 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {Object} newProperties The properties to augment the KeyframeProperty with
    * @return {Kapi.Actor}
    */
-  Actor.prototype.modifyKeyframeProperty = function (property, index, newProperties) /*!*/ {
+  Actor.prototype.modifyKeyframeProperty = function (
+      property, index, newProperties) /*!*/ {
+
     if (this._propertyTracks[property]
         && this._propertyTracks[property][index]) {
       this._propertyTracks[property][index].modifyWith(newProperties);
@@ -1216,13 +1221,13 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
 
 
   /*
-   * Determines if an actor has a keyframe set at a given millisecond.  Can optionally look for an existing keyframe on a single property track.
+   * Determines if an actor has a keyframe set at a given millisecond.  Can optionally scope the lookup to a specific property name.
    *
-   * @param {number} when Millisecond value to look for a property.
-   * @param {string} opt_trackName Optional name of a property track
+   * @param {number} millisecond Point on the timeline to query.
+   * @param {string} opt_trackName Optional name of a property track.
    * @return {boolean}
    */
-  Actor.prototype.hasKeyframeAt = function(when, opt_trackName) /*!*/ {
+  Actor.prototype.hasKeyframeAt = function(millisecond, opt_trackName) /*!*/ {
     var tracks = this._propertyTracks;
 
     if (opt_trackName) {
@@ -1234,7 +1239,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
 
     return _.find(tracks, function (propertyTrack, trackName) {
       var retrievedProperty =
-          findPropertyAtMillisecondInTrack(this, trackName, when);
+          findPropertyAtMillisecondInTrack(this, trackName, millisecond);
       return retrievedProperty !== undefined;
     }, this) !== undefined;
   };
@@ -1294,17 +1299,18 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * ```
    *
    * __[Example](../../../../docs/examples/actor_modify_keyframe.html)__
-   * @param {number} when
+   * @param {number} millisecond
    * @param {Object} stateModification
    * @param {Object} opt_easingModification
    * @return {Kapi.Actor}
    */
   Actor.prototype.modifyKeyframe = function (
-      when, stateModification, opt_easingModification) /*!*/ {
+      millisecond, stateModification, opt_easingModification) /*!*/ {
     opt_easingModification = opt_easingModification || {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var property = findPropertyAtMillisecondInTrack(this, trackName, when);
+      var property = findPropertyAtMillisecondInTrack(
+          this, trackName, millisecond);
 
       if (property) {
         property.modifyWith({
@@ -1322,17 +1328,17 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * Remove all [`Kapi.KeyframeProperty`](rekapi.keyframeprops.js.html)s at a given millisecond in the animation.
    *
    * __[Example](../../../../docs/examples/actor_remove_keyframe.html)__
-   * @param {when} when The millisecond of the keyframe to remove.
+   * @param {number} millisecond The location on the timeline of the keyframe to remove.
    * @return {Kapi.Actor}
    */
-  Actor.prototype.removeKeyframe = function (when) /*!*/ {
+  Actor.prototype.removeKeyframe = function (millisecond) /*!*/ {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       var i = -1;
       var foundProperty = false;
 
       _.find(propertyTrack, function (keyframeProperty) {
         i++;
-        foundProperty = (when === keyframeProperty.millisecond);
+        foundProperty = (millisecond === keyframeProperty.millisecond);
         return foundProperty;
       });
 
