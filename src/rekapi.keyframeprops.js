@@ -18,7 +18,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
    * @constructor
    */
   Kapi.KeyframeProperty = function (
-      ownerActor, millisecond, name, value, opt_easing) /*!*/ {
+      ownerActor, millisecond, name, value, opt_easing)  {
     this.id = _.uniqueId('keyframeProperty_');
     this.ownerActor = ownerActor;
     this.millisecond = millisecond;
@@ -42,7 +42,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
    * __[Example](../../../../docs/examples/keyprop_modify_with.html)__
    * @param {Object} newProperties
    */
-  KeyframeProperty.prototype.modifyWith = function (newProperties) /*!*/ {
+  KeyframeProperty.prototype.modifyWith = function (newProperties)  {
     var modifiedProperties = {};
 
     _.each(['millisecond', 'easing', 'value'], function (str) {
@@ -60,7 +60,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
    * __[Example](../../../../docs/examples/keyprop_link_to_next.html)__
    * @param {KeyframeProperty} nextProperty The KeyframeProperty that immediately follows this one in an animation.
    */
-  KeyframeProperty.prototype.linkToNext = function (nextProperty) /*!*/ {
+  KeyframeProperty.prototype.linkToNext = function (nextProperty)  {
     this.nextProperty = nextProperty || null;
   };
 
@@ -72,7 +72,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
    * @param {number} millisecond The point in the animation to compute.
    * @return {number}
    */
-  KeyframeProperty.prototype.getValueAt = function (millisecond) /*!*/ {
+  KeyframeProperty.prototype.getValueAt = function (millisecond)  {
     var fromObj = {};
     var toObj = {};
     var value;
@@ -98,7 +98,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
    * __[Example](../../../../docs/examples/keyprop_export_property_data.html)__
    * @return {Object}
    */
-  KeyframeProperty.prototype.exportPropertyData = function () /*!*/ {
+  KeyframeProperty.prototype.exportPropertyData = function ()  {
     return {
      'id': this.id
      ,'millisecond': this.millisecond
