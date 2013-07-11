@@ -250,7 +250,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {Object} opt_config
    * @constructor
    */
-  function Kapi (opt_config)  {
+  function Kapi (opt_config) {
     this.config = opt_config || {};
     this.context = this.config.context || {};
     this._actors = {};
@@ -314,7 +314,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {Kapi.Actor} actor
    * @return {Kapi}
    */
-  Kapi.prototype.addActor = function (actor)  {
+  Kapi.prototype.addActor = function (actor) {
     // You can't add an actor more than once.
     if (!_.contains(this._actors, actor)) {
       if (!actor.context()) {
@@ -341,7 +341,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} actorId
    * @return {Kapi.Actor}
    */
-  Kapi.prototype.getActor = function (actorId)  {
+  Kapi.prototype.getActor = function (actorId) {
     return this._actors[actorId];
   };
 
@@ -352,7 +352,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/get_actor_ids.html)__
    * @return {Array.<number>}
    */
-  Kapi.prototype.getActorIds = function ()  {
+  Kapi.prototype.getActorIds = function () {
     return _.pluck(this._actors, 'id');
   };
 
@@ -363,7 +363,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/get_all_actors.html)__
    * @return {Array}
    */
-  Kapi.prototype.getAllActors = function ()  {
+  Kapi.prototype.getAllActors = function () {
     return _.clone(this._actors);
   };
 
@@ -375,7 +375,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {Kapi.Actor} actor
    * @return {Kapi}
    */
-  Kapi.prototype.removeActor = function (actor)  {
+  Kapi.prototype.removeActor = function (actor) {
     delete this._actors[actor.id];
     delete actor.kapi;
     actor.teardown();
@@ -394,7 +394,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} opt_howManyTimes
    * @return {Kapi}
    */
-  Kapi.prototype.play = function (opt_howManyTimes)  {
+  Kapi.prototype.play = function (opt_howManyTimes) {
     cancelLoop(this);
 
     if (this._playState === playState.PAUSED) {
@@ -422,7 +422,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} opt_howManyTimes
    * @return {Kapi}
    */
-  Kapi.prototype.playFrom = function (millisecond, opt_howManyTimes)  {
+  Kapi.prototype.playFrom = function (millisecond, opt_howManyTimes) {
     this.play(opt_howManyTimes);
     this._loopTimestamp = now() - millisecond;
 
@@ -437,7 +437,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} opt_howManyTimes
    * @return {Kapi}
    */
-  Kapi.prototype.playFromCurrent = function (opt_howManyTimes)  {
+  Kapi.prototype.playFromCurrent = function (opt_howManyTimes) {
     return this.playFrom(this._lastUpdatedMillisecond, opt_howManyTimes);
   };
 
@@ -448,7 +448,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/pause.html)__
    * @return {Kapi}
    */
-  Kapi.prototype.pause = function ()  {
+  Kapi.prototype.pause = function () {
     if (this._playState === playState.PAUSED) {
       return this;
     }
@@ -470,7 +470,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/stop.html)__
    * @return {Kapi}
    */
-  Kapi.prototype.stop = function ()  {
+  Kapi.prototype.stop = function () {
     this._playState = playState.STOPPED;
     cancelLoop(this);
 
@@ -492,7 +492,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/is_playing.html)__
    * @return {boolean}
    */
-  Kapi.prototype.isPlaying = function ()  {
+  Kapi.prototype.isPlaying = function () {
     return this._playState === playState.PLAYING;
   };
 
@@ -503,7 +503,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/animation_length.html)__
    * @return {number}
    */
-  Kapi.prototype.animationLength = function ()  {
+  Kapi.prototype.animationLength = function () {
     return this._animationLength;
   };
 
@@ -514,7 +514,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/last_position_updated.html)__
    * @return {number}
    */
-  Kapi.prototype.lastPositionUpdated = function ()  {
+  Kapi.prototype.lastPositionUpdated = function () {
     return (this._lastUpdatedMillisecond / this._animationLength);
   };
 
@@ -525,7 +525,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/actor_count.html)__
    * @return {number}
    */
-  Kapi.prototype.actorCount = function ()  {
+  Kapi.prototype.actorCount = function () {
     return _.size(this._actors);
   };
 
@@ -537,7 +537,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} opt_newFramerate
    * @return {number}
    */
-  Kapi.prototype.framerate = function (opt_newFramerate)  {
+  Kapi.prototype.framerate = function (opt_newFramerate) {
     if (opt_newFramerate) {
       this.config.fps = opt_newFramerate;
       this._scheduleUpdate = getUpdateMethod(this.config.fps);
@@ -555,7 +555,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number=} opt_millisecond
    * @return {Kapi}
    */
-  Kapi.prototype.update = function (opt_millisecond)  {
+  Kapi.prototype.update = function (opt_millisecond) {
     if (opt_millisecond === undefined) {
       opt_millisecond = this._lastUpdatedMillisecond;
     }
@@ -592,7 +592,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {Function} handler
    * @return {Kapi}
    */
-  Kapi.prototype.on = function (eventName, handler)  {
+  Kapi.prototype.on = function (eventName, handler) {
     if (!this._events[eventName]) {
       return;
     }
@@ -611,7 +611,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {Function} opt_handler
    * @return {Kapi}
    */
-  Kapi.prototype.off = function (eventName, opt_handler)  {
+  Kapi.prototype.off = function (eventName, opt_handler) {
     if (!this._events[eventName]) {
       return;
     }
@@ -633,7 +633,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../docs/examples/export_timeline.html)__
    * @return {Object}
    */
-  Kapi.prototype.exportTimeline = function ()  {
+  Kapi.prototype.exportTimeline = function () {
     var exportData = {
       'duration': this._animationLength
       ,'actors': {}

@@ -268,7 +268,48 @@ kapi.play();
   .keyframe(1500, {
     'transform': 'translateX(200px) translateY(200px) rotate(90deg)'
   }, 'easeOutExpo');
-</pre></div></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Kapi.DOMActor = function (element, opt_config)</code></pre></div></div></div></article><article class="comment"><header><h1 id="getCSSName">getCSSName</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>DOMActor.prototype.getCSSName()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{string}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>This can be useful when used with <a href="../to-css/rekapi.to-css.js.html">toCSS</a>.  You might not ever need to use this directly, as the class is attached to an element when you create a <code>Kapi.DOMActor</code> from said element.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">DOMActor.prototype.getCSSName = function ()</code></pre></div></div></div></article><article class="comment"><header><h1 id="setTransformOrder">setTransformOrder</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>DOMActor.prototype.setTransformOrder()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Array}</span><span class="name">orderedFunctions</span><span class="description">The Array of transform function names</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Kapi.DOMActor}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Overrides the default transform function order.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">DOMActor.prototype.setTransformOrder = function (orderedFunctions)</code></pre></div></div></div></article></div></div><!-- Foundation JS--><script type="text/javascript">document.write('<script src=' +
+</pre></div></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Kapi.DOMActor = function (element, opt_config) {
+    Kapi.Actor.call(this, opt_config);
+    this._context = element;
+    var className = this.getCSSName();
+
+    // Add the class if it's not already there.
+    // Using className instead of classList to make IE happy.
+    if (!this._context.className.match(className)) {
+      this._context.className += ' ' + className;
+    }
+
+    this._transformOrder = transformFunctions.slice(0);
+
+    // Remove the instance's update method to allow the DOMActor.prototype
+    // methods to be accessible.
+    delete this.update;
+    delete this.teardown;
+
+    return this;
+  };
+  var DOMActor = Kapi.DOMActor;
+
+
+  function DOMActorMethods () {}
+  DOMActorMethods.prototype = Kapi.Actor.prototype;
+  DOMActor.prototype = new DOMActorMethods();</code></pre></div></div></div></article><article class="comment"><header><h1 id="getCSSName">getCSSName</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>DOMActor.prototype.getCSSName()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{string}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>This can be useful when used with <a href="../to-css/rekapi.to-css.js.html">toCSS</a>.  You might not ever need to use this directly, as the class is attached to an element when you create a <code>Kapi.DOMActor</code> from said element.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">DOMActor.prototype.getCSSName = function () {
+    return 'actor-' + this.id;
+  };</code></pre></div></div></div></article><article class="comment"><header><h1 id="setTransformOrder">setTransformOrder</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>DOMActor.prototype.setTransformOrder()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Array}</span><span class="name">orderedFunctions</span><span class="description">The Array of transform function names</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Kapi.DOMActor}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Overrides the default transform function order.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">DOMActor.prototype.setTransformOrder = function (orderedFunctions) {
+    // TODO: Document this better...
+    var unknownFunctions = _.reject(orderedFunctions, isTransformFunction);
+
+    if (unknownFunctions.length) {
+      throw 'Unknown or unsupported transform functions: ' +
+        unknownFunctions.join(', ');
+    }
+    // Ignore duplicate transform function names in the array
+    this._transformOrder = _.uniq(orderedFunctions);
+
+    return this;
+  };
+
+};</code></pre></div></div></div></article></div></div><!-- Foundation JS--><script type="text/javascript">document.write('<script src=' +
 ('__proto__' in {} ? 'http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min' : 'http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min') +
 '.js><\/script>')
 </script><script src="http://cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/foundation.min.js"></script><script src="http://cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/foundation/foundation.reveal.min.js"></script><!-- Prism js--><script type="text/javascript">

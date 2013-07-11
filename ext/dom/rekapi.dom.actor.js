@@ -134,7 +134,7 @@ var rekapiDOM = function (context, _) {
    * @param {Object} opt_config
    * @constructor
    */
-  Kapi.DOMActor = function (element, opt_config) /*!*/ {
+  Kapi.DOMActor = function (element, opt_config) {
     Kapi.Actor.call(this, opt_config);
     this._context = element;
     var className = this.getCSSName();
@@ -202,7 +202,7 @@ var rekapiDOM = function (context, _) {
    * This can be useful when used with [toCSS](../to-css/rekapi.to-css.js.html).  You might not ever need to use this directly, as the class is attached to an element when you create a `Kapi.DOMActor` from said element.
    * @return {string}
    */
-  DOMActor.prototype.getCSSName = function () /*!*/ {
+  DOMActor.prototype.getCSSName = function () {
     return 'actor-' + this.id;
   };
 
@@ -213,7 +213,7 @@ var rekapiDOM = function (context, _) {
    * @param {Array} orderedFunctions The Array of transform function names
    * @return {Kapi.DOMActor}
    */
-  DOMActor.prototype.setTransformOrder = function (orderedFunctions) /*!*/ {
+  DOMActor.prototype.setTransformOrder = function (orderedFunctions) {
     // TODO: Document this better...
     var unknownFunctions = _.reject(orderedFunctions, isTransformFunction);
 

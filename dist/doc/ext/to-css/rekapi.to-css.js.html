@@ -268,7 +268,17 @@ document.head.appendChild(style);
 <li><code>'webkit'</code></li></ul></li>
 <li><strong>granularity</strong> <em>(number)</em>: Defaults to <code>100</code>.  Defines the "resolution" of an exported animation.  CSS <code>@keyframes</code> are comprised of a series of explicitly defined steps, and more steps will result in a smoother animation.  More steps will also result in a larger CSS string, and more time to generate the string.</li>
 <li><strong>name</strong> <em>(string)</em>: Define a custom name for your animation.  This becomes the class name targeted in the generated CSS selector, and also the name of the <code>@keyframes</code> rule that is generated.  Note that this does not match the CSS class that is automatically added to the <code>Kapi.DOMActor</code> DOM element, so you will have to add the class to the element yourself.</li>
-</ul></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Kapi.prototype.toCSS = function (opts)</code></pre></div></div></div></article></div></div><!-- Foundation JS--><script type="text/javascript">document.write('<script src=' +
+</ul></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Kapi.prototype.toCSS = function (opts) {
+    opts = opts || {};
+    var animationCSS = [];
+    var actorIds = this.getActorIds();
+
+    _.each(actorIds, function (id) {
+      animationCSS.push(this.getActor(id).toCSS(opts));
+    }, this);
+
+    return animationCSS.join('\n');
+  };</code></pre></div></div></div></article></div></div><!-- Foundation JS--><script type="text/javascript">document.write('<script src=' +
 ('__proto__' in {} ? 'http://cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min' : 'http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min') +
 '.js><\/script>')
 </script><script src="http://cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/foundation.min.js"></script><script src="http://cdnjs.cloudflare.com/ajax/libs/foundation/4.1.6/js/foundation/foundation.reveal.min.js"></script><!-- Prism js--><script type="text/javascript">

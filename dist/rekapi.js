@@ -1,4 +1,4 @@
-/*! Rekapi - v0.14.2 - 2013-07-08 - http://rekapi.com */
+/*! Rekapi - v0.14.3 - 2013-07-10 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -265,7 +265,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {Object} opt_config
    * @constructor
    */
-  function Kapi (opt_config)  {
+  function Kapi (opt_config) {
     this.config = opt_config || {};
     this.context = this.config.context || {};
     this._actors = {};
@@ -329,7 +329,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {Kapi.Actor} actor
    * @return {Kapi}
    */
-  Kapi.prototype.addActor = function (actor)  {
+  Kapi.prototype.addActor = function (actor) {
     // You can't add an actor more than once.
     if (!_.contains(this._actors, actor)) {
       if (!actor.context()) {
@@ -356,7 +356,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} actorId
    * @return {Kapi.Actor}
    */
-  Kapi.prototype.getActor = function (actorId)  {
+  Kapi.prototype.getActor = function (actorId) {
     return this._actors[actorId];
   };
 
@@ -367,7 +367,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/get_actor_ids.html)__
    * @return {Array.<number>}
    */
-  Kapi.prototype.getActorIds = function ()  {
+  Kapi.prototype.getActorIds = function () {
     return _.pluck(this._actors, 'id');
   };
 
@@ -378,7 +378,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/get_all_actors.html)__
    * @return {Array}
    */
-  Kapi.prototype.getAllActors = function ()  {
+  Kapi.prototype.getAllActors = function () {
     return _.clone(this._actors);
   };
 
@@ -390,7 +390,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {Kapi.Actor} actor
    * @return {Kapi}
    */
-  Kapi.prototype.removeActor = function (actor)  {
+  Kapi.prototype.removeActor = function (actor) {
     delete this._actors[actor.id];
     delete actor.kapi;
     actor.teardown();
@@ -409,7 +409,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} opt_howManyTimes
    * @return {Kapi}
    */
-  Kapi.prototype.play = function (opt_howManyTimes)  {
+  Kapi.prototype.play = function (opt_howManyTimes) {
     cancelLoop(this);
 
     if (this._playState === playState.PAUSED) {
@@ -437,7 +437,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} opt_howManyTimes
    * @return {Kapi}
    */
-  Kapi.prototype.playFrom = function (millisecond, opt_howManyTimes)  {
+  Kapi.prototype.playFrom = function (millisecond, opt_howManyTimes) {
     this.play(opt_howManyTimes);
     this._loopTimestamp = now() - millisecond;
 
@@ -452,7 +452,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} opt_howManyTimes
    * @return {Kapi}
    */
-  Kapi.prototype.playFromCurrent = function (opt_howManyTimes)  {
+  Kapi.prototype.playFromCurrent = function (opt_howManyTimes) {
     return this.playFrom(this._lastUpdatedMillisecond, opt_howManyTimes);
   };
 
@@ -463,7 +463,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/pause.html)__
    * @return {Kapi}
    */
-  Kapi.prototype.pause = function ()  {
+  Kapi.prototype.pause = function () {
     if (this._playState === playState.PAUSED) {
       return this;
     }
@@ -485,7 +485,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/stop.html)__
    * @return {Kapi}
    */
-  Kapi.prototype.stop = function ()  {
+  Kapi.prototype.stop = function () {
     this._playState = playState.STOPPED;
     cancelLoop(this);
 
@@ -507,7 +507,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/is_playing.html)__
    * @return {boolean}
    */
-  Kapi.prototype.isPlaying = function ()  {
+  Kapi.prototype.isPlaying = function () {
     return this._playState === playState.PLAYING;
   };
 
@@ -518,7 +518,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/animation_length.html)__
    * @return {number}
    */
-  Kapi.prototype.animationLength = function ()  {
+  Kapi.prototype.animationLength = function () {
     return this._animationLength;
   };
 
@@ -529,7 +529,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/last_position_updated.html)__
    * @return {number}
    */
-  Kapi.prototype.lastPositionUpdated = function ()  {
+  Kapi.prototype.lastPositionUpdated = function () {
     return (this._lastUpdatedMillisecond / this._animationLength);
   };
 
@@ -540,7 +540,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/actor_count.html)__
    * @return {number}
    */
-  Kapi.prototype.actorCount = function ()  {
+  Kapi.prototype.actorCount = function () {
     return _.size(this._actors);
   };
 
@@ -552,7 +552,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} opt_newFramerate
    * @return {number}
    */
-  Kapi.prototype.framerate = function (opt_newFramerate)  {
+  Kapi.prototype.framerate = function (opt_newFramerate) {
     if (opt_newFramerate) {
       this.config.fps = opt_newFramerate;
       this._scheduleUpdate = getUpdateMethod(this.config.fps);
@@ -570,7 +570,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number=} opt_millisecond
    * @return {Kapi}
    */
-  Kapi.prototype.update = function (opt_millisecond)  {
+  Kapi.prototype.update = function (opt_millisecond) {
     if (opt_millisecond === undefined) {
       opt_millisecond = this._lastUpdatedMillisecond;
     }
@@ -607,7 +607,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {Function} handler
    * @return {Kapi}
    */
-  Kapi.prototype.on = function (eventName, handler)  {
+  Kapi.prototype.on = function (eventName, handler) {
     if (!this._events[eventName]) {
       return;
     }
@@ -626,7 +626,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {Function} opt_handler
    * @return {Kapi}
    */
-  Kapi.prototype.off = function (eventName, opt_handler)  {
+  Kapi.prototype.off = function (eventName, opt_handler) {
     if (!this._events[eventName]) {
       return;
     }
@@ -648,7 +648,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../docs/examples/export_timeline.html)__
    * @return {Object}
    */
-  Kapi.prototype.exportTimeline = function ()  {
+  Kapi.prototype.exportTimeline = function () {
     var exportData = {
       'duration': this._animationLength
       ,'actors': {}
@@ -872,7 +872,7 @@ var rekapiActor = function (context, _, Tweenable) {
    * @param {Object} opt_config
    * @constructor
    */
-  Kapi.Actor = function (opt_config)  {
+  Kapi.Actor = function (opt_config) {
 
     opt_config = opt_config || {};
 
@@ -917,7 +917,7 @@ var rekapiActor = function (context, _, Tweenable) {
    * @param {Object} opt_context
    * @return {Object}
    */
-  Actor.prototype.context = function (opt_context)  {
+  Actor.prototype.context = function (opt_context) {
     if (opt_context) {
       this._context = opt_context;
     }
@@ -978,7 +978,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @return {Kapi.Actor}
    */
   Actor.prototype.keyframe = function keyframe (
-      millisecond, properties, opt_easing)  {
+      millisecond, properties, opt_easing) {
 
     var originalEasingString;
 
@@ -1033,7 +1033,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {number} index The 0-based index of the KeyframeProperty in the Actor's KeyframeProperty track.
    * @return {Kapi.KeyframeProperty|undefined}
    */
-  Actor.prototype.getKeyframeProperty = function (property, index)  {
+  Actor.prototype.getKeyframeProperty = function (property, index) {
     if (this._propertyTracks[property]
         && this._propertyTracks[property][index]) {
       return this._propertyTracks[property][index];
@@ -1051,7 +1051,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @return {Kapi.Actor}
    */
   Actor.prototype.modifyKeyframeProperty = function (
-      property, index, newProperties)  {
+      property, index, newProperties) {
 
     if (this._propertyTracks[property]
         && this._propertyTracks[property][index]) {
@@ -1070,7 +1070,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * __[Example](../../../../docs/examples/actor_get_track_names.html)__
    * @return {Array.<string>}
    */
-  Actor.prototype.getTrackNames = function ()  {
+  Actor.prototype.getTrackNames = function () {
     return _.keys(this._propertyTracks);
   };
 
@@ -1082,7 +1082,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {string} trackName
    * @return {number}
    */
-  Actor.prototype.getTrackLength = function (trackName)  {
+  Actor.prototype.getTrackLength = function (trackName) {
     if (!this._propertyTracks[trackName]) {
       return;
     }
@@ -1099,7 +1099,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {number} copyFrom The millisecond to copy KeyframeProperties from
    * @return {Kapi.Actor}
    */
-  Actor.prototype.copyProperties = function (copyTo, copyFrom)  {
+  Actor.prototype.copyProperties = function (copyTo, copyFrom) {
     var sourcePositions = {};
     var sourceEasings = {};
 
@@ -1125,7 +1125,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {number} until At what point in the animation the Actor should wait until (relative to the start of the animation)
    * @return {Kapi.Actor}
    */
-  Actor.prototype.wait = function (until)  {
+  Actor.prototype.wait = function (until) {
     var length = this.getEnd();
 
     if (until <= length) {
@@ -1157,7 +1157,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {string} opt_trackName
    * @return {number}
    */
-  Actor.prototype.getStart = function (opt_trackName)  {
+  Actor.prototype.getStart = function (opt_trackName) {
     var starts = [];
 
     if (opt_trackName) {
@@ -1185,7 +1185,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {string} opt_trackName
    * @return {number}
    */
-  Actor.prototype.getEnd = function (opt_trackName)  {
+  Actor.prototype.getEnd = function (opt_trackName) {
     var latest = 0;
     var tracksToInspect = this._propertyTracks;
 
@@ -1215,7 +1215,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {string} opt_trackName
    * @return {number}
    */
-  Actor.prototype.getLength = function (opt_trackName)  {
+  Actor.prototype.getLength = function (opt_trackName) {
     return this.getEnd(opt_trackName) - this.getStart(opt_trackName);
   };
 
@@ -1227,7 +1227,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {string} opt_trackName Optional name of a property track.
    * @return {boolean}
    */
-  Actor.prototype.hasKeyframeAt = function(millisecond, opt_trackName)  {
+  Actor.prototype.hasKeyframeAt = function(millisecond, opt_trackName) {
     var tracks = this._propertyTracks;
 
     if (opt_trackName) {
@@ -1253,7 +1253,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {number} to The millisecond of where the keyframe should be moved to.
    * @return {boolean} Whether or not the keyframe was successfully moved.
    */
-  Actor.prototype.moveKeyframe = function (from, to)  {
+  Actor.prototype.moveKeyframe = function (from, to) {
     if (!this.hasKeyframeAt(from) || this.hasKeyframeAt(to)) {
       return false;
     }
@@ -1305,7 +1305,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @return {Kapi.Actor}
    */
   Actor.prototype.modifyKeyframe = function (
-      millisecond, stateModification, opt_easingModification)  {
+      millisecond, stateModification, opt_easingModification) {
     opt_easingModification = opt_easingModification || {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
@@ -1331,7 +1331,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {number} millisecond The location on the timeline of the keyframe to remove.
    * @return {Kapi.Actor}
    */
-  Actor.prototype.removeKeyframe = function (millisecond)  {
+  Actor.prototype.removeKeyframe = function (millisecond) {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       var i = -1;
       var foundProperty = false;
@@ -1367,7 +1367,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * __[Example](../../../../docs/examples/actor_remove_all_keyframe_properties.html)__
    * @return {Kapi.Actor}
    */
-  Actor.prototype.removeAllKeyframeProperties = function ()  {
+  Actor.prototype.removeAllKeyframeProperties = function () {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       propertyTrack.length = 0;
     }, this);
@@ -1384,7 +1384,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {number} millisecond
    * @return {Kapi.Actor}
    */
-  Actor.prototype.updateState = function (millisecond)  {
+  Actor.prototype.updateState = function (millisecond) {
     var startMs = this.getStart();
     var endMs = this.getEnd();
 
@@ -1417,7 +1417,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * __[Example](../../../../docs/examples/actor_export_timeline.html)__
    * @return {Object}
    */
-  Actor.prototype.exportTimeline = function ()  {
+  Actor.prototype.exportTimeline = function () {
     var exportData = {
       'start': this.getStart()
       ,'end': this.getEnd()
@@ -1457,7 +1457,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
    * @constructor
    */
   Kapi.KeyframeProperty = function (
-      ownerActor, millisecond, name, value, opt_easing)  {
+      ownerActor, millisecond, name, value, opt_easing) {
     this.id = _.uniqueId('keyframeProperty_');
     this.ownerActor = ownerActor;
     this.millisecond = millisecond;
@@ -1481,7 +1481,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
    * __[Example](../../../../docs/examples/keyprop_modify_with.html)__
    * @param {Object} newProperties
    */
-  KeyframeProperty.prototype.modifyWith = function (newProperties)  {
+  KeyframeProperty.prototype.modifyWith = function (newProperties) {
     var modifiedProperties = {};
 
     _.each(['millisecond', 'easing', 'value'], function (str) {
@@ -1499,7 +1499,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
    * __[Example](../../../../docs/examples/keyprop_link_to_next.html)__
    * @param {KeyframeProperty} nextProperty The KeyframeProperty that immediately follows this one in an animation.
    */
-  KeyframeProperty.prototype.linkToNext = function (nextProperty)  {
+  KeyframeProperty.prototype.linkToNext = function (nextProperty) {
     this.nextProperty = nextProperty || null;
   };
 
@@ -1511,7 +1511,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
    * @param {number} millisecond The point in the animation to compute.
    * @return {number}
    */
-  KeyframeProperty.prototype.getValueAt = function (millisecond)  {
+  KeyframeProperty.prototype.getValueAt = function (millisecond) {
     var fromObj = {};
     var toObj = {};
     var value;
@@ -1537,7 +1537,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
    * __[Example](../../../../docs/examples/keyprop_export_property_data.html)__
    * @return {Object}
    */
-  KeyframeProperty.prototype.exportPropertyData = function ()  {
+  KeyframeProperty.prototype.exportPropertyData = function () {
     return {
      'id': this.id
      ,'millisecond': this.millisecond
@@ -1705,7 +1705,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {Kapi} kapi
    * @constructor
    */
-  Kapi.CanvasRenderer = function (kapi) /*!*/ {
+  Kapi.CanvasRenderer = function (kapi) {
     this.kapi = kapi;
     this._drawOrder = [];
     this._drawOrderSorter = null;
@@ -1721,7 +1721,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {number} opt_height
    * @return {number}
    */
-  CanvasRenderer.prototype.height = function (opt_height) /*!*/ {
+  CanvasRenderer.prototype.height = function (opt_height) {
     return dimension(this.kapi.context, 'height', opt_height);
   };
 
@@ -1732,7 +1732,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {number} opt_width
    * @return {number}
    */
-  CanvasRenderer.prototype.width = function (opt_width) /*!*/ {
+  CanvasRenderer.prototype.width = function (opt_width) {
     return dimension(this.kapi.context, 'width', opt_width);
   };
 
@@ -1742,7 +1742,7 @@ var rekapiCanvasContext = function (context, _) {
    *
    * @return {Kapi}
    */
-  CanvasRenderer.prototype.clear = function () /*!*/ {
+  CanvasRenderer.prototype.clear = function () {
     // TODO: Is this check necessary?
     if (this.kapi.context.getContext) {
       this.context().clearRect(
@@ -1757,7 +1757,7 @@ var rekapiCanvasContext = function (context, _) {
    * Retrieve the 2d context of the `<canvas>` that is set as the `Kapi` instance's rendering context.  This is needed for all rendering operations.  It is also provided to a [`Kapi.CanvasActor`](rekapi.canvas.actor.js.html)'s `draw` method, so you mostly won't need to call it directly.  See the [MDN](https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas) for info on the Canvas context APIs.
    * @return {CanvasRenderingContext2D}
    */
-  CanvasRenderer.prototype.context = function () /*!*/ {
+  CanvasRenderer.prototype.context = function () {
     return this.kapi.context.getContext('2d');
   };
 
@@ -1770,7 +1770,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {number} layer
    * @return {Kapi.Actor|undefined}
    */
-  CanvasRenderer.prototype.moveActorToLayer = function (actor, layer) /*!*/ {
+  CanvasRenderer.prototype.moveActorToLayer = function (actor, layer) {
     if (layer < this._drawOrder.length) {
       this._drawOrder = _.without(this._drawOrder, actor.id);
       this._drawOrder.splice(layer, 0, actor.id);
@@ -1793,7 +1793,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {function(Kapi.Actor,number)} sortFunction
    * @return {Kapi}
    */
-  CanvasRenderer.prototype.setOrderFunction = function (sortFunction) /*!*/ {
+  CanvasRenderer.prototype.setOrderFunction = function (sortFunction) {
     this._drawOrderSorter = sortFunction;
     return this.kapi;
   };
@@ -1805,7 +1805,7 @@ var rekapiCanvasContext = function (context, _) {
    * __[Example](../../../../docs/examples/canvas_unset_order_function.html)__
    * @return {Kapi}
    */
-  CanvasRenderer.prototype.unsetOrderFunction = function () /*!*/ {
+  CanvasRenderer.prototype.unsetOrderFunction = function () {
     this._drawOrderSorter = null;
     return this.kapi;
   };
@@ -1827,7 +1827,7 @@ var rekapiCanvasActor = function (context, _) {
    * @param {Object=} opt_config
    * @constructor
    */
-  Kapi.CanvasActor = function (opt_config) /*!*/ {
+  Kapi.CanvasActor = function (opt_config) {
     Kapi.Actor.call(this, opt_config);
 
     opt_config = opt_config || {};
@@ -1860,7 +1860,7 @@ var rekapiCanvasActor = function (context, _) {
    * @param {number} layer
    * @return {Kapi.Actor|undefined}
    */
-  CanvasActor.prototype.moveToLayer = function (layer) /*!*/ {
+  CanvasActor.prototype.moveToLayer = function (layer) {
     return this.kapi.canvas.moveActorToLayer(this, layer);
   };
 };
@@ -2001,7 +2001,7 @@ var rekapiDOM = function (context, _) {
    * @param {Object} opt_config
    * @constructor
    */
-  Kapi.DOMActor = function (element, opt_config) /*!*/ {
+  Kapi.DOMActor = function (element, opt_config) {
     Kapi.Actor.call(this, opt_config);
     this._context = element;
     var className = this.getCSSName();
@@ -2069,7 +2069,7 @@ var rekapiDOM = function (context, _) {
    * This can be useful when used with [toCSS](../to-css/rekapi.to-css.js.html).  You might not ever need to use this directly, as the class is attached to an element when you create a `Kapi.DOMActor` from said element.
    * @return {string}
    */
-  DOMActor.prototype.getCSSName = function () /*!*/ {
+  DOMActor.prototype.getCSSName = function () {
     return 'actor-' + this.id;
   };
 
@@ -2080,7 +2080,7 @@ var rekapiDOM = function (context, _) {
    * @param {Array} orderedFunctions The Array of transform function names
    * @return {Kapi.DOMActor}
    */
-  DOMActor.prototype.setTransformOrder = function (orderedFunctions) /*!*/ {
+  DOMActor.prototype.setTransformOrder = function (orderedFunctions) {
     // TODO: Document this better...
     var unknownFunctions = _.reject(orderedFunctions, isTransformFunction);
 
@@ -2230,7 +2230,7 @@ var rekapiToCSS = function (context, _) {
    * @param {Object} opts
    * @return {string}
    */
-  Kapi.prototype.toCSS = function (opts) /*!*/ {
+  Kapi.prototype.toCSS = function (opts) {
     opts = opts || {};
     var animationCSS = [];
     var actorIds = this.getActorIds();
@@ -2248,7 +2248,7 @@ var rekapiToCSS = function (context, _) {
    * @param {Object} opts Same as opts for Kapi.prototype.toCSS.
    * @return {string}
    */
-  Kapi.Actor.prototype.toCSS = function (opts) /*!*/ {
+  Kapi.Actor.prototype.toCSS = function (opts) {
     opts = opts || {};
     var actorCSS = [];
     var animName = opts.name || this.getCSSName();

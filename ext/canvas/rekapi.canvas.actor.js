@@ -13,7 +13,7 @@ var rekapiCanvasActor = function (context, _) {
    * @param {Object=} opt_config
    * @constructor
    */
-  Kapi.CanvasActor = function (opt_config) /*!*/ {
+  Kapi.CanvasActor = function (opt_config) {
     Kapi.Actor.call(this, opt_config);
 
     opt_config = opt_config || {};
@@ -46,7 +46,7 @@ var rekapiCanvasActor = function (context, _) {
    * @param {number} layer
    * @return {Kapi.Actor|undefined}
    */
-  CanvasActor.prototype.moveToLayer = function (layer) /*!*/ {
+  CanvasActor.prototype.moveToLayer = function (layer) {
     return this.kapi.canvas.moveActorToLayer(this, layer);
   };
 };

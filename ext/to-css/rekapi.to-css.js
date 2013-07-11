@@ -132,7 +132,7 @@ var rekapiToCSS = function (context, _) {
    * @param {Object} opts
    * @return {string}
    */
-  Kapi.prototype.toCSS = function (opts) /*!*/ {
+  Kapi.prototype.toCSS = function (opts) {
     opts = opts || {};
     var animationCSS = [];
     var actorIds = this.getActorIds();
@@ -150,7 +150,7 @@ var rekapiToCSS = function (context, _) {
    * @param {Object} opts Same as opts for Kapi.prototype.toCSS.
    * @return {string}
    */
-  Kapi.Actor.prototype.toCSS = function (opts) /*!*/ {
+  Kapi.Actor.prototype.toCSS = function (opts) {
     opts = opts || {};
     var actorCSS = [];
     var animName = opts.name || this.getCSSName();

@@ -154,7 +154,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {Kapi} kapi
    * @constructor
    */
-  Kapi.CanvasRenderer = function (kapi) /*!*/ {
+  Kapi.CanvasRenderer = function (kapi) {
     this.kapi = kapi;
     this._drawOrder = [];
     this._drawOrderSorter = null;
@@ -170,7 +170,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {number} opt_height
    * @return {number}
    */
-  CanvasRenderer.prototype.height = function (opt_height) /*!*/ {
+  CanvasRenderer.prototype.height = function (opt_height) {
     return dimension(this.kapi.context, 'height', opt_height);
   };
 
@@ -181,7 +181,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {number} opt_width
    * @return {number}
    */
-  CanvasRenderer.prototype.width = function (opt_width) /*!*/ {
+  CanvasRenderer.prototype.width = function (opt_width) {
     return dimension(this.kapi.context, 'width', opt_width);
   };
 
@@ -191,7 +191,7 @@ var rekapiCanvasContext = function (context, _) {
    *
    * @return {Kapi}
    */
-  CanvasRenderer.prototype.clear = function () /*!*/ {
+  CanvasRenderer.prototype.clear = function () {
     // TODO: Is this check necessary?
     if (this.kapi.context.getContext) {
       this.context().clearRect(
@@ -206,7 +206,7 @@ var rekapiCanvasContext = function (context, _) {
    * Retrieve the 2d context of the `<canvas>` that is set as the `Kapi` instance's rendering context.  This is needed for all rendering operations.  It is also provided to a [`Kapi.CanvasActor`](rekapi.canvas.actor.js.html)'s `draw` method, so you mostly won't need to call it directly.  See the [MDN](https://developer.mozilla.org/en/Drawing_Graphics_with_Canvas) for info on the Canvas context APIs.
    * @return {CanvasRenderingContext2D}
    */
-  CanvasRenderer.prototype.context = function () /*!*/ {
+  CanvasRenderer.prototype.context = function () {
     return this.kapi.context.getContext('2d');
   };
 
@@ -219,7 +219,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {number} layer
    * @return {Kapi.Actor|undefined}
    */
-  CanvasRenderer.prototype.moveActorToLayer = function (actor, layer) /*!*/ {
+  CanvasRenderer.prototype.moveActorToLayer = function (actor, layer) {
     if (layer < this._drawOrder.length) {
       this._drawOrder = _.without(this._drawOrder, actor.id);
       this._drawOrder.splice(layer, 0, actor.id);
@@ -242,7 +242,7 @@ var rekapiCanvasContext = function (context, _) {
    * @param {function(Kapi.Actor,number)} sortFunction
    * @return {Kapi}
    */
-  CanvasRenderer.prototype.setOrderFunction = function (sortFunction) /*!*/ {
+  CanvasRenderer.prototype.setOrderFunction = function (sortFunction) {
     this._drawOrderSorter = sortFunction;
     return this.kapi;
   };
@@ -254,7 +254,7 @@ var rekapiCanvasContext = function (context, _) {
    * __[Example](../../../../docs/examples/canvas_unset_order_function.html)__
    * @return {Kapi}
    */
-  CanvasRenderer.prototype.unsetOrderFunction = function () /*!*/ {
+  CanvasRenderer.prototype.unsetOrderFunction = function () {
     this._drawOrderSorter = null;
     return this.kapi;
   };

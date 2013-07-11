@@ -189,7 +189,7 @@ var rekapiActor = function (context, _, Tweenable) {
    * @param {Object} opt_config
    * @constructor
    */
-  Kapi.Actor = function (opt_config)  {
+  Kapi.Actor = function (opt_config) {
 
     opt_config = opt_config || {};
 
@@ -234,7 +234,7 @@ var rekapiActor = function (context, _, Tweenable) {
    * @param {Object} opt_context
    * @return {Object}
    */
-  Actor.prototype.context = function (opt_context)  {
+  Actor.prototype.context = function (opt_context) {
     if (opt_context) {
       this._context = opt_context;
     }
@@ -295,7 +295,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @return {Kapi.Actor}
    */
   Actor.prototype.keyframe = function keyframe (
-      millisecond, properties, opt_easing)  {
+      millisecond, properties, opt_easing) {
 
     var originalEasingString;
 
@@ -350,7 +350,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {number} index The 0-based index of the KeyframeProperty in the Actor's KeyframeProperty track.
    * @return {Kapi.KeyframeProperty|undefined}
    */
-  Actor.prototype.getKeyframeProperty = function (property, index)  {
+  Actor.prototype.getKeyframeProperty = function (property, index) {
     if (this._propertyTracks[property]
         && this._propertyTracks[property][index]) {
       return this._propertyTracks[property][index];
@@ -368,7 +368,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @return {Kapi.Actor}
    */
   Actor.prototype.modifyKeyframeProperty = function (
-      property, index, newProperties)  {
+      property, index, newProperties) {
 
     if (this._propertyTracks[property]
         && this._propertyTracks[property][index]) {
@@ -387,7 +387,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * __[Example](../../../../docs/examples/actor_get_track_names.html)__
    * @return {Array.<string>}
    */
-  Actor.prototype.getTrackNames = function ()  {
+  Actor.prototype.getTrackNames = function () {
     return _.keys(this._propertyTracks);
   };
 
@@ -399,7 +399,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {string} trackName
    * @return {number}
    */
-  Actor.prototype.getTrackLength = function (trackName)  {
+  Actor.prototype.getTrackLength = function (trackName) {
     if (!this._propertyTracks[trackName]) {
       return;
     }
@@ -416,7 +416,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {number} copyFrom The millisecond to copy KeyframeProperties from
    * @return {Kapi.Actor}
    */
-  Actor.prototype.copyProperties = function (copyTo, copyFrom)  {
+  Actor.prototype.copyProperties = function (copyTo, copyFrom) {
     var sourcePositions = {};
     var sourceEasings = {};
 
@@ -442,7 +442,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {number} until At what point in the animation the Actor should wait until (relative to the start of the animation)
    * @return {Kapi.Actor}
    */
-  Actor.prototype.wait = function (until)  {
+  Actor.prototype.wait = function (until) {
     var length = this.getEnd();
 
     if (until <= length) {
@@ -474,7 +474,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {string} opt_trackName
    * @return {number}
    */
-  Actor.prototype.getStart = function (opt_trackName)  {
+  Actor.prototype.getStart = function (opt_trackName) {
     var starts = [];
 
     if (opt_trackName) {
@@ -502,7 +502,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {string} opt_trackName
    * @return {number}
    */
-  Actor.prototype.getEnd = function (opt_trackName)  {
+  Actor.prototype.getEnd = function (opt_trackName) {
     var latest = 0;
     var tracksToInspect = this._propertyTracks;
 
@@ -532,7 +532,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {string} opt_trackName
    * @return {number}
    */
-  Actor.prototype.getLength = function (opt_trackName)  {
+  Actor.prototype.getLength = function (opt_trackName) {
     return this.getEnd(opt_trackName) - this.getStart(opt_trackName);
   };
 
@@ -544,7 +544,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {string} opt_trackName Optional name of a property track.
    * @return {boolean}
    */
-  Actor.prototype.hasKeyframeAt = function(millisecond, opt_trackName)  {
+  Actor.prototype.hasKeyframeAt = function(millisecond, opt_trackName) {
     var tracks = this._propertyTracks;
 
     if (opt_trackName) {
@@ -570,7 +570,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {number} to The millisecond of where the keyframe should be moved to.
    * @return {boolean} Whether or not the keyframe was successfully moved.
    */
-  Actor.prototype.moveKeyframe = function (from, to)  {
+  Actor.prototype.moveKeyframe = function (from, to) {
     if (!this.hasKeyframeAt(from) || this.hasKeyframeAt(to)) {
       return false;
     }
@@ -622,7 +622,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @return {Kapi.Actor}
    */
   Actor.prototype.modifyKeyframe = function (
-      millisecond, stateModification, opt_easingModification)  {
+      millisecond, stateModification, opt_easingModification) {
     opt_easingModification = opt_easingModification || {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
@@ -648,7 +648,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {number} millisecond The location on the timeline of the keyframe to remove.
    * @return {Kapi.Actor}
    */
-  Actor.prototype.removeKeyframe = function (millisecond)  {
+  Actor.prototype.removeKeyframe = function (millisecond) {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       var i = -1;
       var foundProperty = false;
@@ -684,7 +684,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * __[Example](../../../../docs/examples/actor_remove_all_keyframe_properties.html)__
    * @return {Kapi.Actor}
    */
-  Actor.prototype.removeAllKeyframeProperties = function ()  {
+  Actor.prototype.removeAllKeyframeProperties = function () {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       propertyTrack.length = 0;
     }, this);
@@ -701,7 +701,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * @param {number} millisecond
    * @return {Kapi.Actor}
    */
-  Actor.prototype.updateState = function (millisecond)  {
+  Actor.prototype.updateState = function (millisecond) {
     var startMs = this.getStart();
     var endMs = this.getEnd();
 
@@ -734,7 +734,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
    * __[Example](../../../../docs/examples/actor_export_timeline.html)__
    * @return {Object}
    */
-  Actor.prototype.exportTimeline = function ()  {
+  Actor.prototype.exportTimeline = function () {
     var exportData = {
       'start': this.getStart()
       ,'end': this.getEnd()
