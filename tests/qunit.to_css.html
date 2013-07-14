@@ -458,6 +458,27 @@
     });
 
 
+    test('Does not generate redundant optimized keyframes when they are back-to-back', function () {
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0  })
+        .keyframe(500,  { 'x': 5  })
+        .keyframe(1000, { 'x': 10 });
+
+      var keyframeData =
+          Kapi._private.toCSS.generateActorKeyframes(actor1, 99, 'x');
+
+      equal(
+          keyframeData
+          ,['  0% {x:0;VENDORanimation-timing-function: cubic-bezier(.25,.25,.75,.75);}'
+          ,'  50% {x:5;VENDORanimation-timing-function: cubic-bezier(.25,.25,.75,.75);}'
+          ,'  100% {x:10;}'].join('\n')
+          ,'Redundant optimized keyframes were not generated');
+    });
+
+
     module('simulateLeadingWait');
 
 

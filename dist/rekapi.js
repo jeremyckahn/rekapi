@@ -1,4 +1,4 @@
-/*! Rekapi - v0.14.3 - 2013-07-10 - http://rekapi.com */
+/*! Rekapi - v0.14.4 - 2013-07-13 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -2608,6 +2608,18 @@ var rekapiToCSS = function (context, _) {
       if (canOptimizeKeyframeProperty(prop)) {
         trackSegment = generateOptimizedKeyframeSegment(
             prop, fromPercent, toPercent);
+
+        // If this and the previous segment are optimized, remove the
+        // destination keyframe of the previous step.  The starting keyframe of
+        // the newest segment makes it redundant.
+        if (previousSegmentWasOptimized) {
+          var accumulatorLength = accumulator.length;
+          var previousTrackSegment = accumulator[accumulatorLength - 1];
+          var optimizedPreviousTrackSegment =
+              previousTrackSegment.split('\n')[0];
+          accumulator[accumulatorLength - 1] = optimizedPreviousTrackSegment;
+        }
+
         previousSegmentWasOptimized = true;
       } else {
         trackSegment = generateActorTrackSegment(
