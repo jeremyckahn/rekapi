@@ -127,7 +127,9 @@ var rekapiToCSS = function (context, _) {
    *    - `'w3'`
    *    - `'webkit'`
    *  - __granularity__ _(number)_: Defaults to `100`.  Defines the "resolution" of an exported animation.  CSS `@keyframes` are comprised of a series of explicitly defined steps, and more steps will result in a smoother animation.  More steps will also result in a larger CSS string, and more time to generate the string.
-   *  - __name__ _(string)_: Define a custom name for your animation.  This becomes the class name targeted in the generated CSS selector, and also the name of the `@keyframes` rule that is generated.  Note that this does not match the CSS class that is automatically added to the `Kapi.DOMActor` DOM element, so you will have to add the class to the element yourself.
+   *  - __name__ _(string)_: Define a custom name for your animation.  This becomes the class name targeted in the generated CSS selector, and also the name of the `@keyframes` rule that is generated.  If omitted, the CSS class is the same as the class that was added when the DOM element was used to initialize `Kapi.DOMActor`.
+   *  - __isCentered__ _(boolean)_: If `true`, the generated CSS will contain `transform-origin: 0 0;`, which centers the DOM element along the path of motion.  If `false` or omitted, no `transform-origin` rule is specified and the element is aligned to the path of motion with its top-left corner.
+   *  - __iterations__ _(number)_: How many times the generated animation should repeat.  If omitted, the animation will loop infinitely.
    *
    * @param {Object} opts
    * @return {string}
