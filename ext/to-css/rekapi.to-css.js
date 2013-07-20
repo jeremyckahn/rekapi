@@ -137,12 +137,12 @@ var rekapiToCSS = function (context, _) {
   Kapi.prototype.toCSS = function (opts) {
     opts = opts || {};
     var animationCSS = [];
-    var actorIds = this.getActorIds();
 
-    _.each(actorIds, function (id) {
-      // TODO: Need to check that the actor is a DOMActor, not a regular Actor.
-      animationCSS.push(this.getActor(id).toCSS(opts));
-    }, this);
+    _.each(this.getAllActors(), function (actor) {
+      if (actor instanceof Kapi.DOMActor) {
+        animationCSS.push(actor.toCSS(opts));
+      }
+    });
 
     return animationCSS.join('\n');
   };

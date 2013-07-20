@@ -9,6 +9,8 @@
   <script src="../src/rekapi.actor.js"></script>
   <script src="../src/rekapi.keyframeprops.js"></script>
   <script src="../ext/dom/rekapi.dom.actor.js"></script>
+  <script src="../ext/canvas/rekapi.canvas.context.js"></script>
+  <script src="../ext/canvas/rekapi.canvas.actor.js"></script>
   <script src="../ext/to-css/rekapi.to-css.js"></script>
   <script src="../src/rekapi.init.js"></script>
   <script>
@@ -687,18 +689,6 @@
     });
 
 
-    test('Custom class name is added to the DOM element', function () {
-      var kapi = new Kapi();
-      var testActorEl = document.createElement('div');
-      var actor1 = new Kapi.DOMActor(testActorEl);
-      kapi.addActor(actor1);
-      kapi.toCSS({name: 'testName'});
-
-      equal(!!testActorEl.className.match('testName'), true
-          ,'The custom class name was added to the element');
-    });
-
-
     module('generateAnimationDurationProperty');
 
 
@@ -960,6 +950,41 @@
         ,['  0% {TRANSFORM:translateX(0);VENDORanimation-timing-function: cubic-bezier(.55,.085,.68,.53);}'
         ,'  100% {TRANSFORM:translateX(10);}'].join('\n')
         ,'Generated optimized segement');
+    });
+
+
+    module('Kapi.prototype.toCSS');
+
+
+    test('Custom class name is added to the DOM element', function () {
+      var kapi = new Kapi();
+      var testActorEl = document.createElement('div');
+      var actor1 = new Kapi.DOMActor(testActorEl);
+      kapi.addActor(actor1);
+      kapi.toCSS({name: 'testName'});
+
+      ok(!!testActorEl.className.match('testName')
+          ,'The custom class name was added to the element');
+    });
+
+
+    test('CSS is only generated for DOMActors', function () {
+      var kapi = new Kapi();
+      var testActorEl = document.createElement('div');
+      var testCanvasEl = document.createElement('canvas');
+      var domActor = new Kapi.DOMActor(testActorEl);
+      var canvasActor = new Kapi.CanvasActor();
+      canvasActor.context(testCanvasEl);
+      kapi.addActor(domActor);
+      kapi.addActor(canvasActor);
+
+      var css = kapi.toCSS();
+      var singleLineCss = css.split('\n').join('')
+
+      ok(!!singleLineCss.match('actor-' + domActor.id)
+          ,'CSS for DOMActor was generated');
+      ok(!singleLineCss.match('actor-' + canvasActor.id)
+          ,'CSS for CanvasActor was not generated');
     });
 
   } ());
