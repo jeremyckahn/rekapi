@@ -1,4 +1,4 @@
-/*! Rekapi - v0.14.4 - 2013-07-20 - http://rekapi.com */
+/*! Rekapi - v0.14.5 - 2013-07-20 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -2238,6 +2238,7 @@ var rekapiToCSS = function (context, _) {
     var actorIds = this.getActorIds();
 
     _.each(actorIds, function (id) {
+      // TODO: Need to check that the actor is a DOMActor, not a regular Actor.
       animationCSS.push(this.getActor(id).toCSS(opts));
     }, this);
 
@@ -2254,6 +2255,11 @@ var rekapiToCSS = function (context, _) {
     opts = opts || {};
     var actorCSS = [];
     var animName = opts.name || this.getCSSName();
+
+    if (!this._context.className.match(animName)) {
+      this._context.className += ' ' + animName;
+    }
+
     var granularity = opts.granularity || DEFAULT_GRANULARITY;
     var actorClass = generateCSSClass(
         this, animName, opts.vendors, opts.iterations, opts.isCentered);

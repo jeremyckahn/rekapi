@@ -8,6 +8,7 @@
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
   <script src="../src/rekapi.keyframeprops.js"></script>
+  <script src="../ext/dom/rekapi.dom.actor.js"></script>
   <script src="../ext/to-css/rekapi.to-css.js"></script>
   <script src="../src/rekapi.init.js"></script>
   <script>
@@ -683,6 +684,18 @@
 
       equal(animName, '  PREFIXanimation-name: ANIM_NAME-x-keyframes, ANIM_NAME-y-keyframes;'
           ,'Generated CSS animation-name');
+    });
+
+
+    test('Custom class name is added to the DOM element', function () {
+      var kapi = new Kapi();
+      var testActorEl = document.createElement('div');
+      var actor1 = new Kapi.DOMActor(testActorEl);
+      kapi.addActor(actor1);
+      kapi.toCSS({name: 'testName'});
+
+      equal(!!testActorEl.className.match('testName'), true
+          ,'The custom class name was added to the element');
     });
 
 

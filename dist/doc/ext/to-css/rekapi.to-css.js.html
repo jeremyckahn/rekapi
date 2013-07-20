@@ -276,6 +276,7 @@ document.head.appendChild(style);
     var actorIds = this.getActorIds();
 
     _.each(actorIds, function (id) {
+      // TODO: Need to check that the actor is a DOMActor, not a regular Actor.
       animationCSS.push(this.getActor(id).toCSS(opts));
     }, this);
 
