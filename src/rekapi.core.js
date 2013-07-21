@@ -24,7 +24,7 @@ function fireEvent (kapi, eventName, _, opt_data) {
 /*!
  * @param {Kapi} kapi
  */
-function recalculateAnimationLength (kapi) {
+function recalculateAnimationLength (kapi, _) {
   var actorLengths = [];
 
   _.each(kapi._actors, function (actor) {
@@ -324,7 +324,7 @@ var rekapiCore = function (root, _, Tweenable) {
       actor.kapi = this;
       actor.fps = this.framerate();
       this._actors[actor.id] = actor;
-      recalculateAnimationLength(this);
+      recalculateAnimationLength(this, _);
       actor.setup();
 
       fireEvent(this, 'addActor', _, actor);
@@ -379,7 +379,7 @@ var rekapiCore = function (root, _, Tweenable) {
     delete this._actors[actor.id];
     delete actor.kapi;
     actor.teardown();
-    recalculateAnimationLength(this);
+    recalculateAnimationLength(this, _);
 
     fireEvent(this, 'removeActor', _, actor);
 

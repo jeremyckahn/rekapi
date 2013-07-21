@@ -169,7 +169,7 @@ var rekapiActor = function (context, _, Tweenable) {
   function cleanupAfterKeyframeModification (actor) {
     sortPropertyTracks(actor);
     invalidatePropertyCache(actor);
-    recalculateAnimationLength(actor.kapi);
+    recalculateAnimationLength(actor.kapi, _);
   }
 
 
@@ -333,7 +333,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
     }, this);
 
     if (this.kapi) {
-      recalculateAnimationLength(this.kapi);
+      recalculateAnimationLength(this.kapi, _);
     }
 
     invalidatePropertyCache(this);
@@ -669,7 +669,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
     }, this);
 
     if (this.kapi) {
-      recalculateAnimationLength(this.kapi);
+      recalculateAnimationLength(this.kapi, _);
     }
 
     invalidatePropertyCache(this);
