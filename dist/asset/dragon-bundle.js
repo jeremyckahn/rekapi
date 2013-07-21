@@ -49,6 +49,8 @@
 
   /**
    * @param {number} val Between 0 and 1.
+   * @param {boolean} triggerDrag True to trigger the drag event handler, false
+   *     not to.
    */
   $.fn.dragonSliderSet = function (val, triggerDrag) {
     val = Math.min(1, val);
@@ -69,7 +71,7 @@
    */
   $.fn.dragonSliderGet = function () {
     var $handle = this.find('.dragon-slider-handle');
-    var left = $handle.position().left;
+    var left = +$handle.css('left').replace(/px/, '');
     return left / getInnerSliderWidth(this, $handle);
   };
 

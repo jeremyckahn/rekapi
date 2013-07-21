@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="../components/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <link href="../bower_components/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script>
   var internalDebugNow = function () {
         return +(new Date());
@@ -10,8 +10,8 @@
         return internalDebugNow();
       };
   </script>
-  <script src="../components/jquery/jquery.js"></script>
-  <script src="../components/qunit/qunit.js"></script>
+  <script src="../bower_components/jquery/jquery.js"></script>
+  <script src="../bower_components/qunit/qunit.js"></script>
   <!--
   This RequireJS script is patched to add an undef() method. This allows this test suite to clean up loaded modules after each test.
   Otherwise, it's not possible to successively load modules with the same name but different paths via multiple require.config() calls.
