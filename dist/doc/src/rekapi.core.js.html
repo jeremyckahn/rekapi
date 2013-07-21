@@ -279,7 +279,7 @@ code {
       actor.kapi = this;
       actor.fps = this.framerate();
       this._actors[actor.id] = actor;
-      recalculateAnimationLength(this);
+      recalculateAnimationLength(this, _);
       actor.setup();
 
       fireEvent(this, 'addActor', _, actor);
@@ -304,7 +304,7 @@ code {
     delete this._actors[actor.id];
     delete actor.kapi;
     actor.teardown();
-    recalculateAnimationLength(this);
+    recalculateAnimationLength(this, _);
 
     fireEvent(this, 'removeActor', _, actor);
 
