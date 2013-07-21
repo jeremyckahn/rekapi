@@ -349,7 +349,7 @@ code {
     }, this);
 
     if (this.kapi) {
-      recalculateAnimationLength(this.kapi);
+      recalculateAnimationLength(this.kapi, _);
     }
 
     invalidatePropertyCache(this);
@@ -572,7 +572,7 @@ actor.modifyKeyframe(1000, {
     }, this);
 
     if (this.kapi) {
-      recalculateAnimationLength(this.kapi);
+      recalculateAnimationLength(this.kapi, _);
     }
 
     invalidatePropertyCache(this);

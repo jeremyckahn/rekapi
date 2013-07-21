@@ -1,4 +1,4 @@
-/*! Rekapi - v0.14.6 - 2013-07-20 - http://rekapi.com */
+/*! Rekapi - v0.14.7 - 2013-07-21 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -39,7 +39,7 @@ function fireEvent (kapi, eventName, _, opt_data) {
 /*!
  * @param {Kapi} kapi
  */
-function recalculateAnimationLength (kapi) {
+function recalculateAnimationLength (kapi, _) {
   var actorLengths = [];
 
   _.each(kapi._actors, function (actor) {
@@ -339,7 +339,7 @@ var rekapiCore = function (root, _, Tweenable) {
       actor.kapi = this;
       actor.fps = this.framerate();
       this._actors[actor.id] = actor;
-      recalculateAnimationLength(this);
+      recalculateAnimationLength(this, _);
       actor.setup();
 
       fireEvent(this, 'addActor', _, actor);
@@ -394,7 +394,7 @@ var rekapiCore = function (root, _, Tweenable) {
     delete this._actors[actor.id];
     delete actor.kapi;
     actor.teardown();
-    recalculateAnimationLength(this);
+    recalculateAnimationLength(this, _);
 
     fireEvent(this, 'removeActor', _, actor);
 
@@ -852,7 +852,7 @@ var rekapiActor = function (context, _, Tweenable) {
   function cleanupAfterKeyframeModification (actor) {
     sortPropertyTracks(actor);
     invalidatePropertyCache(actor);
-    recalculateAnimationLength(actor.kapi);
+    recalculateAnimationLength(actor.kapi, _);
   }
 
 
@@ -1016,7 +1016,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
     }, this);
 
     if (this.kapi) {
-      recalculateAnimationLength(this.kapi);
+      recalculateAnimationLength(this.kapi, _);
     }
 
     invalidatePropertyCache(this);
@@ -1352,7 +1352,7 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
     }, this);
 
     if (this.kapi) {
-      recalculateAnimationLength(this.kapi);
+      recalculateAnimationLength(this.kapi, _);
     }
 
     invalidatePropertyCache(this);
