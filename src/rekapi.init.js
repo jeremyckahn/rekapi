@@ -28,6 +28,9 @@ var rekapi = function (global, deps) {
   if (typeof rekapiCanvasActor === 'function') {
     rekapiCanvasActor(context, _, Tweenable);
   }
+  if (typeof rekapiCSSContext === 'function') {
+    rekapiCSSContext(context, _, Tweenable);
+  }
 
   return context.Kapi;
 };

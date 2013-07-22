@@ -33,6 +33,7 @@ module.exports = function(grunt) {
           'ext/canvas/rekapi.canvas.actor.js',
           'ext/dom/rekapi.dom.actor.js',
           'ext/to-css/rekapi.to-css.js',
+          'ext/css-animate/rekapi.css-animate.context.js',
           'src/rekapi.init.js',
           'src/rekapi.outro.js'
         ],
@@ -52,6 +53,7 @@ module.exports = function(grunt) {
           'ext/canvas/rekapi.canvas.actor.js',
           'ext/dom/rekapi.dom.actor.js',
           'ext/to-css/rekapi.to-css.js',
+          'ext/css-animate/rekapi.css-animate.context.js',
           'src/rekapi.init.js',
           'src/rekapi.outro.js'
         ],
@@ -152,7 +154,8 @@ module.exports = function(grunt) {
           'ext/canvas/rekapi.canvas.context.js',
           'ext/canvas/rekapi.canvas.actor.js',
           'ext/dom/rekapi.dom.actor.js',
-          'ext/to-css/rekapi.to-css.js'
+          'ext/to-css/rekapi.to-css.js',
+          'ext/css-animate/rekapi.css-animate.context.js'
         ],
         dest: 'dist/doc'
       }

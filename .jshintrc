@@ -12,6 +12,7 @@
     "rekapiToCSS": true,
     "rekapiCanvasContext": true,
     "rekapiCanvasActor": true,
+    "rekapiCSSContext": true,
     "define": true,
     "noop": true,
     "_": true
