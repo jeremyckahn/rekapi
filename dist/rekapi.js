@@ -1,4 +1,4 @@
-/*! Rekapi - v0.15.0 - 2013-07-21 - http://rekapi.com */
+/*! Rekapi - v0.15.1 - 2013-07-21 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -2807,7 +2807,6 @@ var rekapiCSSContext = function (root, _) {
   var Kapi = root.Kapi;
 
   var DEFAULT_GRANULARITY = 25;
-  var STYLE_REMOVAL_BUFFER_MS = 100;
 
 
   // PRIVATE UTILITY FUNCTIONS
@@ -2948,8 +2947,7 @@ var rekapiCSSContext = function (root, _) {
 
     if (opt_iterations) {
       var scheduledStyleRemoval =
-          (opt_iterations * this.kapi.animationLength())
-          + STYLE_REMOVAL_BUFFER_MS;
+          (opt_iterations * this.kapi.animationLength());
 
       setTimeout(
           _.bind(this.stop, this), scheduledStyleRemoval);
@@ -2960,7 +2958,7 @@ var rekapiCSSContext = function (root, _) {
   /**
    * Stop an animation.  This also removes any `<style>` elements that were dynamically injected into the DOM.
    *
-   * @param {boolean} opt_goToBeginning If true, reset the elements to their starting position when the animation completes.  If false or omitted, set inline styles on Actor elements to keep them in their ending position.
+   * @param {boolean} opt_goToBeginning If true, reset the elements to their starting position when the animation completes.  If false or omitted, set inline styles on Actor elements to keep them in their target position.
    */
   CSSRenderer.prototype.stop = function (opt_goToBeginning) {
     if (this.isPlaying()) {
@@ -2968,8 +2966,7 @@ var rekapiCSSContext = function (root, _) {
       this.styleElement_ = null;
 
       if (!opt_goToBeginning) {
-        this.kapi.update(
-             (now() - this.startingTime_) % this.kapi.animationLength());
+        this.kapi.update(this.kapi.animationLength());
       }
     }
   };
