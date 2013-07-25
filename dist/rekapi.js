@@ -1,4 +1,4 @@
-/*! Rekapi - v0.15.1 - 2013-07-21 - http://rekapi.com */
+/*! Rekapi - v0.15.2 - 2013-07-24 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -2566,10 +2566,10 @@ var rekapiToCSS = function (context, _) {
     var timingFnChunk = printf('cubic-bezier(%s)', [easingFormula]);
 
     accumulator.push(printf('  %s% {%s:%s;%sanimation-timing-function: %s;}',
-          [fromPercent, generalName, property.value, VENDOR_TOKEN
+          [fromPercent.toFixed(2), generalName, property.value, VENDOR_TOKEN
           ,timingFnChunk]));
     accumulator.push(printf('  %s% {%s:%s;}',
-          [toPercent, generalName, property.nextProperty.value]));
+          [toPercent.toFixed(2), generalName, property.nextProperty.value]));
 
     return accumulator.join('\n');
   }
