@@ -194,6 +194,16 @@ var rekapiToCSS = function (context, _) {
 
 
   /*!
+   * http://stackoverflow.com/a/3886106
+   *
+   * @param {number} number
+   */
+  function isInt (number) {
+    return number % 1 === 0;
+  }
+
+
+  /*!
    * @param {Kapi.Actor} actor
    * @param {string} animName
    * @param {number} granularity
@@ -467,11 +477,16 @@ var rekapiToCSS = function (context, _) {
     var easingFormula = BEZIERS[property.nextProperty.easing.split(' ')[0]];
     var timingFnChunk = printf('cubic-bezier(%s)', [easingFormula]);
 
+    var adjustedFromPercent = isInt(fromPercent) ?
+        fromPercent : fromPercent.toFixed(2);
+    var adjustedToPercent = isInt(toPercent) ?
+        toPercent : toPercent.toFixed(2);
+
     accumulator.push(printf('  %s% {%s:%s;%sanimation-timing-function: %s;}',
-          [fromPercent.toFixed(2), generalName, property.value, VENDOR_TOKEN
+          [adjustedFromPercent, generalName, property.value, VENDOR_TOKEN
           ,timingFnChunk]));
     accumulator.push(printf('  %s% {%s:%s;}',
-          [toPercent.toFixed(2), generalName, property.nextProperty.value]));
+          [adjustedToPercent, generalName, property.nextProperty.value]));
 
     return accumulator.join('\n');
   }
