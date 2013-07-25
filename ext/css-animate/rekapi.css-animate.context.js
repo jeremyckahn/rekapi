@@ -1,4 +1,4 @@
-var rekapiCSSContext = function (root, _) {
+var rekapiCSSContext = function (root, _, Tweenable) {
 
   'use strict';
 
@@ -13,15 +13,6 @@ var rekapiCSSContext = function (root, _) {
   Kapi.prototype._contextInitHook.cssAnimate = function () {
     this.css = new CSSRenderer(this);
   };
-
-
-  /*!
-   * TODO: Reuse the core now function.
-   * @return {number}
-   */
-  function now () {
-    return +(new Date());
-  }
 
 
   /*!
@@ -141,7 +132,7 @@ var rekapiCSSContext = function (root, _) {
     });
 
     this.styleElement_ = injectStyle(css);
-    this.startingTime_ = now();
+    this.startingTime_ = Tweenable.now();
 
     if (opt_iterations) {
       var scheduledStyleRemoval =
