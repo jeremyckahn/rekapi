@@ -586,6 +586,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * - __afterUpdate__: Fires each frame after all Actors are updated.
    * - __addActor__: Fires when an Actor is added.
    * - __removeActor__: Fires when an Actor is removed.
+   * - __timelineModified__: Fires when a keyframe is added, modified or removed.
    *
    * __[Example](../../../../docs/examples/bind.html)__
    * @param {string} eventName

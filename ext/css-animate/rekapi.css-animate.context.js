@@ -91,7 +91,14 @@ var rekapiCSSContext = function (root, _, Tweenable) {
     }
 
     this.kapi = kapi;
-    this.startingTime_ = 0;
+    this._startingTime = 0;
+
+    // @type {string}
+    this._cachedCSS = null;
+
+    kapi.on('timelineModified', _.bind(function () {
+      this._cachedCSS = null;
+    }, this));
 
     return this;
   };
@@ -103,7 +110,7 @@ var rekapiCSSContext = function (root, _, Tweenable) {
    *
    * @private {HTMLStyleElement)
    */
-  Kapi.CSSRenderer.prototype.styleElement_ = null;
+  Kapi.CSSRenderer.prototype._styleElement = null;
 
 
   /**
@@ -117,6 +124,22 @@ var rekapiCSSContext = function (root, _, Tweenable) {
 
 
   /**
+   * Prerender and cache CSS so that it is ready to be used when it is needed in the future.  Function signature is identical to [`CSSRenderer#play`](#play).  This is necessary to run a CSS animation and will be called for you automatically, but calling this ahead of time (such as on page load) will reduce perceived lag when a CSS animation starts.
+   *
+   * @param {number=} opt_iterations How many times the animation should loop.  This can be null or 0 if you want to loop the animation endlessly and also specify a granularity.
+   * @param {number=} opt_granularity How precise the CSS animation should be.  The higher this number, the smoother the CSS animation will be, but the longer it will take to prerender.  The default value is 25.
+   * @return {string} The prerendered CSS string.  You likely won't need this, as it is also cached internally.
+   */
+  CSSRenderer.prototype.prerender = function (opt_iterations, opt_granularity) {
+    return this._cachedCSS = this.kapi.toCSS({
+      'vendors': [getVendorPrefix()]
+      ,'granularity': opt_granularity || DEFAULT_GRANULARITY
+      ,'iterations': opt_iterations
+    });
+  };
+
+
+  /**
    * Play the Rekapi animation as a `@keyframe` animation.
    *
    * @param {number=} opt_iterations How many times the animation should loop.  This can be null or 0 if you want to loop the animation endlessly and also specify a granularity.
@@ -125,14 +148,10 @@ var rekapiCSSContext = function (root, _, Tweenable) {
   CSSRenderer.prototype.play = function (opt_iterations, opt_granularity) {
     this.stop();
 
-    var css = this.kapi.toCSS({
-      'vendors': [getVendorPrefix()]
-      ,'granularity': opt_granularity || DEFAULT_GRANULARITY
-      ,'iterations': opt_iterations
-    });
+    var css = this._cachedCSS || this.prerender.apply(this, arguments);
 
-    this.styleElement_ = injectStyle(css);
-    this.startingTime_ = Tweenable.now();
+    this._styleElement = injectStyle(css);
+    this._startingTime = Tweenable.now();
 
     if (opt_iterations) {
       var scheduledStyleRemoval =
@@ -151,8 +170,8 @@ var rekapiCSSContext = function (root, _, Tweenable) {
    */
   CSSRenderer.prototype.stop = function (opt_goToBeginning) {
     if (this.isPlaying()) {
-      document.body.removeChild(this.styleElement_);
-      this.styleElement_ = null;
+      document.body.removeChild(this._styleElement);
+      this._styleElement = null;
 
       if (!opt_goToBeginning) {
         this.kapi.update(this.kapi.animationLength());
@@ -167,7 +186,7 @@ var rekapiCSSContext = function (root, _, Tweenable) {
    * @return {boolean}
    */
   CSSRenderer.prototype.isPlaying = function () {
-    return !!this.styleElement_;
+    return !!this._styleElement;
   };
 
 };

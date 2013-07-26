@@ -137,7 +137,7 @@ var rekapiActor = function (context, _, Tweenable) {
    * Empty out and re-cache internal KeyframeProperty data.
    * @param {Kapi.Actor}
    */
-  function invalidatePropertyCache  (actor) {
+  function invalidatePropertyCache (actor) {
     actor._timelinePropertyCaches = {};
 
     _.each(actor._keyframeProperties, function (keyframeProperty) {
@@ -158,12 +158,19 @@ var rekapiActor = function (context, _, Tweenable) {
     sortNumerically(actor._timelinePropertyCacheIndex);
     cachePropertiesToSegments(actor);
     linkTrackedProperties(actor);
+
+    if (actor.kapi) {
+      fireEvent(actor.kapi, 'timelineModified', _);
+    }
   }
 
 
   /*!
    * Updates internal Kapi and Actor data after a KeyframeProperty
    * modification method is called.
+   *
+   * TODO: This should be moved to core.
+   *
    * @param {Kapi.Actor} actor
    */
   function cleanupAfterKeyframeModification (actor) {

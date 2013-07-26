@@ -1,4 +1,4 @@
-/*! Rekapi - v0.15.4 - 2013-07-24 - http://rekapi.com */
+/*! Rekapi - v0.15.5 - 2013-07-25 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -601,6 +601,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * - __afterUpdate__: Fires each frame after all Actors are updated.
    * - __addActor__: Fires when an Actor is added.
    * - __removeActor__: Fires when an Actor is removed.
+   * - __timelineModified__: Fires when a keyframe is added, modified or removed.
    *
    * __[Example](../../../../docs/examples/bind.html)__
    * @param {string} eventName
@@ -820,7 +821,7 @@ var rekapiActor = function (context, _, Tweenable) {
    * Empty out and re-cache internal KeyframeProperty data.
    * @param {Kapi.Actor}
    */
-  function invalidatePropertyCache  (actor) {
+  function invalidatePropertyCache (actor) {
     actor._timelinePropertyCaches = {};
 
     _.each(actor._keyframeProperties, function (keyframeProperty) {
@@ -841,12 +842,19 @@ var rekapiActor = function (context, _, Tweenable) {
     sortNumerically(actor._timelinePropertyCacheIndex);
     cachePropertiesToSegments(actor);
     linkTrackedProperties(actor);
+
+    if (actor.kapi) {
+      fireEvent(actor.kapi, 'timelineModified', _);
+    }
   }
 
 
   /*!
    * Updates internal Kapi and Actor data after a KeyframeProperty
    * modification method is called.
+   *
+   * TODO: This should be moved to core.
+   *
    * @param {Kapi.Actor} actor
    */
   function cleanupAfterKeyframeModification (actor) {
@@ -2905,7 +2913,14 @@ var rekapiCSSContext = function (root, _, Tweenable) {
     }
 
     this.kapi = kapi;
-    this.startingTime_ = 0;
+    this._startingTime = 0;
+
+    // @type {string}
+    this._cachedCSS = null;
+
+    kapi.on('timelineModified', _.bind(function () {
+      this._cachedCSS = null;
+    }, this));
 
     return this;
   };
@@ -2917,7 +2932,7 @@ var rekapiCSSContext = function (root, _, Tweenable) {
    *
    * @private {HTMLStyleElement)
    */
-  Kapi.CSSRenderer.prototype.styleElement_ = null;
+  Kapi.CSSRenderer.prototype._styleElement = null;
 
 
   /**
@@ -2931,6 +2946,22 @@ var rekapiCSSContext = function (root, _, Tweenable) {
 
 
   /**
+   * Prerender and cache CSS so that it is ready to be used when it is needed in the future.  Function signature is identical to [`CSSRenderer#play`](#play).  This is necessary to run a CSS animation and will be called for you automatically, but calling this ahead of time (such as on page load) will reduce perceived lag when a CSS animation starts.
+   *
+   * @param {number=} opt_iterations How many times the animation should loop.  This can be null or 0 if you want to loop the animation endlessly and also specify a granularity.
+   * @param {number=} opt_granularity How precise the CSS animation should be.  The higher this number, the smoother the CSS animation will be, but the longer it will take to prerender.  The default value is 25.
+   * @return {string} The prerendered CSS string.  You likely won't need this, as it is also cached internally.
+   */
+  CSSRenderer.prototype.prerender = function (opt_iterations, opt_granularity) {
+    return this._cachedCSS = this.kapi.toCSS({
+      'vendors': [getVendorPrefix()]
+      ,'granularity': opt_granularity || DEFAULT_GRANULARITY
+      ,'iterations': opt_iterations
+    });
+  };
+
+
+  /**
    * Play the Rekapi animation as a `@keyframe` animation.
    *
    * @param {number=} opt_iterations How many times the animation should loop.  This can be null or 0 if you want to loop the animation endlessly and also specify a granularity.
@@ -2939,14 +2970,10 @@ var rekapiCSSContext = function (root, _, Tweenable) {
   CSSRenderer.prototype.play = function (opt_iterations, opt_granularity) {
     this.stop();
 
-    var css = this.kapi.toCSS({
-      'vendors': [getVendorPrefix()]
-      ,'granularity': opt_granularity || DEFAULT_GRANULARITY
-      ,'iterations': opt_iterations
-    });
+    var css = this._cachedCSS || this.prerender.apply(this, arguments);
 
-    this.styleElement_ = injectStyle(css);
-    this.startingTime_ = Tweenable.now();
+    this._styleElement = injectStyle(css);
+    this._startingTime = Tweenable.now();
 
     if (opt_iterations) {
       var scheduledStyleRemoval =
@@ -2965,8 +2992,8 @@ var rekapiCSSContext = function (root, _, Tweenable) {
    */
   CSSRenderer.prototype.stop = function (opt_goToBeginning) {
     if (this.isPlaying()) {
-      document.body.removeChild(this.styleElement_);
-      this.styleElement_ = null;
+      document.body.removeChild(this._styleElement);
+      this._styleElement = null;
 
       if (!opt_goToBeginning) {
         this.kapi.update(this.kapi.animationLength());
@@ -2981,7 +3008,7 @@ var rekapiCSSContext = function (root, _, Tweenable) {
    * @return {boolean}
    */
   CSSRenderer.prototype.isPlaying = function () {
-    return !!this.styleElement_;
+    return !!this._styleElement;
   };
 
 };
