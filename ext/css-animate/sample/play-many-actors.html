@@ -13,6 +13,7 @@
     <script src="../../../src/rekapi.init.js"></script>
     <style type="text/css">
       #container {
+        margin-top: 15px;
         position: relative;
       }
 
@@ -66,7 +67,7 @@
 
       document.getElementById('btn-css').addEventListener('click', function () {
         kapi.stop();
-        kapi.css.play(0, 25);
+        kapi.css.play();
       });
 
       document.getElementById('btn-stop').addEventListener('click', function () {
