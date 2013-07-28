@@ -8,8 +8,8 @@ would like to make changes to the code yourself, read on!
 ## Getting started
 
 To get started with hacking on Rekapi, you'll need to get all of the
-dependencies with [Bower](http://twitter.github.com/bower/) and
-[npm](https://npmjs.org/) (and, by extension, [Node](http://nodejs.org/)):
+dependencies with [Bower](http://bower.io/) and [npm](https://npmjs.org/) (and,
+by extension, [Node](http://nodejs.org/)):
 
 ````
 $: bower install; npm install
