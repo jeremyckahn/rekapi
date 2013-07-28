@@ -282,6 +282,11 @@ code {
     var css = this._cachedCSS || this.prerender.apply(this, arguments);
 
     this._styleElement = injectStyle(css);
+
+    if (navigator.userAgent.match(/Presto/)) {
+      forceStyleInjection(this.kapi);
+    }
+
     this._startingTime = Tweenable.now();
 
     if (opt_iterations) {

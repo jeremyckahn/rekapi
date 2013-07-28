@@ -2,10 +2,23 @@
 <html>
 <head>
   <script src="../dist/asset/require.js"></script>
+  <style>
+    #actor-container {
+      background: #eee;
+      height: 500px;
+      overflow: hidden;
+      width: 600px;
+      position: relative;
+    }
+    #actor {
+      display: none;
+      position: absolute;
+    }
+  </style>
 </head>
 <body>
-  <div id="canvas" style="background: #eee; overflow: hidden; height: 500px; width: 600px;">
-    <img src="img/octocat.png" style="display: none;">
+  <div id="actor-container">
+    <img id="actor" src="img/octocat.png">
   </div>
   <script>
     require.config({
@@ -18,12 +31,11 @@
 
     // Dependencies (Underscore and Shifty) are automatically loaded.
     require(['rekapi'], function(Kapi) {
-      var canvas = document.getElementById('canvas')
-          ,kapi = new Kapi()
+      var kapi = new Kapi()
           ,cat
           ,time = 0;
 
-      var catImg = document.getElementsByTagName('img')[0];
+      var catImg = document.getElementById('actor');
       cat = new Kapi.DOMActor(catImg);
       kapi.addActor(cat);
 
@@ -55,7 +67,6 @@
       } else {
         kapi.play();
       }
-
     });
   </script>
 </body>

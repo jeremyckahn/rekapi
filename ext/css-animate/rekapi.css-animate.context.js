@@ -51,6 +51,32 @@ var rekapiCSSContext = function (root, _, Tweenable) {
   }
 
 
+  /*!
+   * Fixes a really bizarre issue that only seems to affect Presto/Opera.  In
+   * some situations, DOM nodes will not detect dynamically injected <style>
+   * elements.  Explicitly re-inserting DOM nodes seems to fix the issue.  Not
+   * sure what causes this issue.  Not sure why this fixes it.  Not sure if
+   * this affects Blink-based Opera browsers.
+   *
+   * @param {Kapi} kapi
+   */
+  function forceStyleInjection (kapi) {
+    var dummyDiv = document.createElement('div');
+
+    _.each(kapi.getAllActors(), function (actor) {
+      if (actor instanceof Kapi.DOMActor) {
+        var actorEl = actor._context;
+        var actorElParent = actorEl.parentElement;
+
+        actorElParent.replaceChild(dummyDiv, actorEl);
+        actorElParent.replaceChild(actorEl, dummyDiv);
+      }
+    });
+
+    dummyDiv = null;
+  }
+
+
   // CSS RENDERER OBJECT
   //
 
@@ -161,6 +187,11 @@ var rekapiCSSContext = function (root, _, Tweenable) {
     var css = this._cachedCSS || this.prerender.apply(this, arguments);
 
     this._styleElement = injectStyle(css);
+
+    if (navigator.userAgent.match(/Presto/)) {
+      forceStyleInjection(this.kapi);
+    }
+
     this._startingTime = Tweenable.now();
 
     if (opt_iterations) {
