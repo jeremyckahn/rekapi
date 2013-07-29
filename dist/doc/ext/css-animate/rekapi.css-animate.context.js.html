@@ -283,26 +283,47 @@ code {
       ,'iterations': opt_iterations
     });
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="play">play</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>CSSRenderer.prototype.play()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{number=}</span><span class="name">opt_iterations</span><span class="description">How many times the animation should loop. This can be null or 0 if you want to loop the animation endlessly but also specify a value for opt_fps.</span></li><li class="tag"><span class="type">@param: </span><span class="types">{number=}</span><span class="name">opt_fps</span><span class="description">How many @keyframes to prerender per second of the animation. The higher this number, the smoother the CSS animation will be, but the longer it will take to prerender. The default value is 30, and you should not need to go higher than 60.</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Play the Rekapi animation as a <code>@keyframe</code> animation.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">CSSRenderer.prototype.play = function (opt_iterations, opt_fps) {
-    this.stop();
+    // This method looks overly complicated because it is designed to get
+    // around a quirk in how browsers handle dynamically-injected &lt;style&gt;
+    // elements.  The browser doesn't notice removing a &lt;style&gt; element and
+    // then re-injecting it.  This is a problem if you want to restart a CSS
+    // animation with JavaScript, which this function does.  The workaround is
+    // to check if a CSS animation is already running, and if it is, wait to
+    // inject the &lt;style&gt; until the current JavaScript thread completes (with
+    // setTimeout(Function, 0)).  Here, an inner private function is defined,
+    // and below it either gets called synchronously or asynchronously,
+    // depending on if the animation is already running.
+    var _arguments = arguments;
 
-    var css = this._cachedCSS || this.prerender.apply(this, arguments);
+    function _play (cssRenderer) {
+      var css = cssRenderer._cachedCSS
+          || cssRenderer.prerender.apply(cssRenderer, _arguments);
 
-    this._styleElement = injectStyle(css);
-    this._playTimestamp = Tweenable.now();
+      cssRenderer._styleElement = injectStyle(css);
+      cssRenderer._playTimestamp = Tweenable.now();
 
-    if (navigator.userAgent.match(/Presto/)) {
-      forceStyleInjection(this.kapi);
+      if (navigator.userAgent.match(/Presto/)) {
+        forceStyleInjection(cssRenderer.kapi);
+      }
+
+      if (opt_iterations) {
+        var scheduledStyleRemoval =
+            (opt_iterations * cssRenderer.kapi.animationLength());
+
+        setTimeout(
+            _.bind(cssRenderer.stop, cssRenderer, true),
+            scheduledStyleRemoval);
+      }
+
+      fireEvent(cssRenderer.kapi, 'play', _);
     }
 
-    if (opt_iterations) {
-      var scheduledStyleRemoval =
-          (opt_iterations * this.kapi.animationLength());
-
-      setTimeout(
-          _.bind(this.stop, this, true), scheduledStyleRemoval);
+    if (this.isPlaying()) {
+      this.stop();
+      setTimeout(_.bind(_play, this, this), 0);
+    } else {
+      _play(this);
     }
-
-    fireEvent(this.kapi, 'play', _);
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="stop">stop</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>CSSRenderer.prototype.stop()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{boolean}</span><span class="name">opt_goToEnd</span><span class="description">If true, set the elements to their target position (in other words, skip to the end of the animation). If false or omitted, set the Actor elements to stay in their current position.</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Stop a CSS animation.  This also removes any <code>&lt;style&gt;</code> elements that were dynamically injected into the DOM.  This method sets inline styles on Actor elements to stay either in their target or current position.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">CSSRenderer.prototype.stop = function (opt_goToEnd) {
     if (this.isPlaying()) {
       document.head.removeChild(this._styleElement);

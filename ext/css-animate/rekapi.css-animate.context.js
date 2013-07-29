@@ -180,26 +180,47 @@ var rekapiCSSContext = function (root, _, Tweenable) {
    * @param {number=} opt_fps How many @keyframes to prerender per second of the animation.  The higher this number, the smoother the CSS animation will be, but the longer it will take to prerender.  The default value is 30, and you should not need to go higher than 60.
    */
   CSSRenderer.prototype.play = function (opt_iterations, opt_fps) {
-    this.stop();
+    // This method looks overly complicated because it is designed to get
+    // around a quirk in how browsers handle dynamically-injected <style>
+    // elements.  The browser doesn't notice removing a <style> element and
+    // then re-injecting it.  This is a problem if you want to restart a CSS
+    // animation with JavaScript, which this function does.  The workaround is
+    // to check if a CSS animation is already running, and if it is, wait to
+    // inject the <style> until the current JavaScript thread completes (with
+    // setTimeout(Function, 0)).  Here, an inner private function is defined,
+    // and below it either gets called synchronously or asynchronously,
+    // depending on if the animation is already running.
+    var _arguments = arguments;
 
-    var css = this._cachedCSS || this.prerender.apply(this, arguments);
+    function _play (cssRenderer) {
+      var css = cssRenderer._cachedCSS
+          || cssRenderer.prerender.apply(cssRenderer, _arguments);
 
-    this._styleElement = injectStyle(css);
-    this._playTimestamp = Tweenable.now();
+      cssRenderer._styleElement = injectStyle(css);
+      cssRenderer._playTimestamp = Tweenable.now();
 
-    if (navigator.userAgent.match(/Presto/)) {
-      forceStyleInjection(this.kapi);
+      if (navigator.userAgent.match(/Presto/)) {
+        forceStyleInjection(cssRenderer.kapi);
+      }
+
+      if (opt_iterations) {
+        var scheduledStyleRemoval =
+            (opt_iterations * cssRenderer.kapi.animationLength());
+
+        setTimeout(
+            _.bind(cssRenderer.stop, cssRenderer, true),
+            scheduledStyleRemoval);
+      }
+
+      fireEvent(cssRenderer.kapi, 'play', _);
     }
 
-    if (opt_iterations) {
-      var scheduledStyleRemoval =
-          (opt_iterations * this.kapi.animationLength());
-
-      setTimeout(
-          _.bind(this.stop, this, true), scheduledStyleRemoval);
+    if (this.isPlaying()) {
+      this.stop();
+      setTimeout(_.bind(_play, this, this), 0);
+    } else {
+      _play(this);
     }
-
-    fireEvent(this.kapi, 'play', _);
   };
 
 
