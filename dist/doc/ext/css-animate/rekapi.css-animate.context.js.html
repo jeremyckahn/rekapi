@@ -257,10 +257,16 @@ code {
     }
 
     this.kapi = kapi;
-    this._startingTime = 0;
 
-    // @type {string}
+    // @private {number}
+    this._playTimestamp = null;
+
+    // @private {string}
     this._cachedCSS = null;
+
+    // The HTMLStyleElement that gets injected into the DOM.
+    // @private {HTMLStyleElement)
+    this._styleElement = null;
 
     kapi.on('timelineModified', _.bind(function () {
       this._cachedCSS = null;
@@ -282,28 +288,36 @@ code {
     var css = this._cachedCSS || this.prerender.apply(this, arguments);
 
     this._styleElement = injectStyle(css);
+    this._playTimestamp = Tweenable.now();
 
     if (navigator.userAgent.match(/Presto/)) {
       forceStyleInjection(this.kapi);
     }
-
-    this._startingTime = Tweenable.now();
 
     if (opt_iterations) {
       var scheduledStyleRemoval =
           (opt_iterations * this.kapi.animationLength());
 
       setTimeout(
-          _.bind(this.stop, this), scheduledStyleRemoval);
+          _.bind(this.stop, this, true), scheduledStyleRemoval);
     }
-  };</code></pre></div></div></div></article><article class="comment"><header><h1 id="stop">stop</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>CSSRenderer.prototype.stop()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{boolean}</span><span class="name">opt_goToBeginning</span><span class="description">If true, reset the elements to their starting position when the animation completes. If false or omitted, set inline styles on the Actor elements to keep them in their target position.</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Stop an animation.  This also removes any <code>&lt;style&gt;</code> elements that were dynamically injected into the DOM.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">CSSRenderer.prototype.stop = function (opt_goToBeginning) {
+
+    fireEvent(this.kapi, 'play', _);
+  };</code></pre></div></div></div></article><article class="comment"><header><h1 id="stop">stop</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>CSSRenderer.prototype.stop()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{boolean}</span><span class="name">opt_goToEnd</span><span class="description">If true, set the elements to their target position (in other words, skip to the end of the animation). If false or omitted, set the Actor elements to stay in their current position.</span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Stop a CSS animation.  This also removes any <code>&lt;style&gt;</code> elements that were dynamically injected into the DOM.  This method sets inline styles on Actor elements to stay either in their target or current position.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">CSSRenderer.prototype.stop = function (opt_goToEnd) {
     if (this.isPlaying()) {
       document.head.removeChild(this._styleElement);
       this._styleElement = null;
 
-      if (!opt_goToBeginning) {
-        this.kapi.update(this.kapi.animationLength());
+      var updateTime;
+      if (opt_goToEnd) {
+        updateTime = this.kapi.animationLength();
+      } else {
+        updateTime = (Tweenable.now() - this._playTimestamp)
+            % this.kapi.animationLength();
       }
+
+      this.kapi.update(updateTime);
+      fireEvent(this.kapi, 'stop', _);
     }
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="isPlaying">isPlaying</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>CSSRenderer.prototype.isPlaying()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{boolean}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Whether or not a CSS animation is running.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">CSSRenderer.prototype.isPlaying = function () {
     return !!this._styleElement;

@@ -127,10 +127,16 @@ var rekapiCSSContext = function (root, _, Tweenable) {
     }
 
     this.kapi = kapi;
-    this._startingTime = 0;
 
-    // @type {string}
+    // @private {number}
+    this._playTimestamp = null;
+
+    // @private {string}
     this._cachedCSS = null;
+
+    // The HTMLStyleElement that gets injected into the DOM.
+    // @private {HTMLStyleElement)
+    this._styleElement = null;
 
     kapi.on('timelineModified', _.bind(function () {
       this._cachedCSS = null;
@@ -139,14 +145,6 @@ var rekapiCSSContext = function (root, _, Tweenable) {
     return this;
   };
   var CSSRenderer = Kapi.CSSRenderer;
-
-
-  /*!
-   * The HTMLStyleElement that was injected into the DOM.
-   *
-   * @private {HTMLStyleElement)
-   */
-  Kapi.CSSRenderer.prototype._styleElement = null;
 
 
   /**
@@ -187,36 +185,44 @@ var rekapiCSSContext = function (root, _, Tweenable) {
     var css = this._cachedCSS || this.prerender.apply(this, arguments);
 
     this._styleElement = injectStyle(css);
+    this._playTimestamp = Tweenable.now();
 
     if (navigator.userAgent.match(/Presto/)) {
       forceStyleInjection(this.kapi);
     }
-
-    this._startingTime = Tweenable.now();
 
     if (opt_iterations) {
       var scheduledStyleRemoval =
           (opt_iterations * this.kapi.animationLength());
 
       setTimeout(
-          _.bind(this.stop, this), scheduledStyleRemoval);
+          _.bind(this.stop, this, true), scheduledStyleRemoval);
     }
+
+    fireEvent(this.kapi, 'play', _);
   };
 
 
   /**
-   * Stop an animation.  This also removes any `<style>` elements that were dynamically injected into the DOM.
+   * Stop a CSS animation.  This also removes any `<style>` elements that were dynamically injected into the DOM.  This method sets inline styles on Actor elements to stay either in their target or current position.
    *
-   * @param {boolean} opt_goToBeginning If true, reset the elements to their starting position when the animation completes.  If false or omitted, set inline styles on the Actor elements to keep them in their target position.
+   * @param {boolean} opt_goToEnd If true, set the elements to their target position (in other words, skip to the end of the animation).  If false or omitted, set the Actor elements to stay in their current position.
    */
-  CSSRenderer.prototype.stop = function (opt_goToBeginning) {
+  CSSRenderer.prototype.stop = function (opt_goToEnd) {
     if (this.isPlaying()) {
       document.head.removeChild(this._styleElement);
       this._styleElement = null;
 
-      if (!opt_goToBeginning) {
-        this.kapi.update(this.kapi.animationLength());
+      var updateTime;
+      if (opt_goToEnd) {
+        updateTime = this.kapi.animationLength();
+      } else {
+        updateTime = (Tweenable.now() - this._playTimestamp)
+            % this.kapi.animationLength();
       }
+
+      this.kapi.update(updateTime);
+      fireEvent(this.kapi, 'stop', _);
     }
   };
 
