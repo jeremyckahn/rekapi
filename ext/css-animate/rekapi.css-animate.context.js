@@ -138,6 +138,9 @@ var rekapiCSSContext = function (root, _, Tweenable) {
     // @private {HTMLStyleElement)
     this._styleElement = null;
 
+    // @private {number}
+    this._stopSetTimeoutHandle = null;
+
     kapi.on('timelineModified', _.bind(function () {
       this._cachedCSS = null;
     }, this));
@@ -180,47 +183,25 @@ var rekapiCSSContext = function (root, _, Tweenable) {
    * @param {number=} opt_fps How many @keyframes to prerender per second of the animation.  The higher this number, the smoother the CSS animation will be, but the longer it will take to prerender.  The default value is 30, and you should not need to go higher than 60.
    */
   CSSRenderer.prototype.play = function (opt_iterations, opt_fps) {
-    // This method looks overly complicated because it is designed to get
-    // around a quirk in how browsers handle dynamically-injected <style>
-    // elements.  The browser doesn't notice removing a <style> element and
-    // then re-injecting it.  This is a problem if you want to restart a CSS
-    // animation with JavaScript, which this function does.  The workaround is
-    // to check if a CSS animation is already running, and if it is, wait to
-    // inject the <style> until the current JavaScript thread completes (with
-    // setTimeout(Function, 0)).  Here, an inner private function is defined,
-    // and below it either gets called synchronously or asynchronously,
-    // depending on if the animation is already running.
-    var _arguments = arguments;
-
-    function _play (cssRenderer) {
-      var css = cssRenderer._cachedCSS
-          || cssRenderer.prerender.apply(cssRenderer, _arguments);
-
-      cssRenderer._styleElement = injectStyle(css);
-      cssRenderer._playTimestamp = Tweenable.now();
-
-      if (navigator.userAgent.match(/Presto/)) {
-        forceStyleInjection(cssRenderer.kapi);
-      }
-
-      if (opt_iterations) {
-        var scheduledStyleRemoval =
-            (opt_iterations * cssRenderer.kapi.animationLength());
-
-        setTimeout(
-            _.bind(cssRenderer.stop, cssRenderer, true),
-            scheduledStyleRemoval);
-      }
-
-      fireEvent(cssRenderer.kapi, 'play', _);
-    }
-
     if (this.isPlaying()) {
       this.stop();
-      setTimeout(_.bind(_play, this, this), 0);
-    } else {
-      _play(this);
     }
+
+    var css = this._cachedCSS || this.prerender.apply(this, arguments);
+    this._styleElement = injectStyle(css);
+    this._playTimestamp = Tweenable.now();
+
+    if (navigator.userAgent.match(/Presto/)) {
+      forceStyleInjection(this.kapi);
+    }
+
+    if (opt_iterations) {
+      var animationLength = (opt_iterations * this.kapi.animationLength());
+      this._stopSetTimeoutHandle = setTimeout(
+          _.bind(this.stop, this, true), animationLength);
+    }
+
+    fireEvent(this.kapi, 'play', _);
   };
 
 
@@ -231,6 +212,11 @@ var rekapiCSSContext = function (root, _, Tweenable) {
    */
   CSSRenderer.prototype.stop = function (opt_goToEnd) {
     if (this.isPlaying()) {
+      clearTimeout(this._stopSetTimeoutHandle);
+
+      // Forces a style update in WebKit/Presto
+      this._styleElement.innerHTML = '';
+
       document.head.removeChild(this._styleElement);
       this._styleElement = null;
 

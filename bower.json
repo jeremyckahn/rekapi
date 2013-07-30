@@ -1,6 +1,6 @@
 {
   "name": "rekapi",
-  "version": "0.15.9",
+  "version": "0.15.10",
   "main": "./dist/rekapi.min.js",
   "dependencies": {
     "shifty": "~0.8.6",
