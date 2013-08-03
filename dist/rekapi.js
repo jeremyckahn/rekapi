@@ -1,4 +1,4 @@
-/*! Rekapi - v0.15.11 - 2013-08-01 - http://rekapi.com */
+/*! Rekapi - v0.15.12 - 2013-08-03 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -2806,6 +2806,15 @@ var rekapiCSSContext = function (root, _, Tweenable) {
   var Kapi = root.Kapi;
 
 
+  // CONSTANTS
+  //
+
+  // The timer to remove an injected style isn't likely to match the actual
+  // length of the CSS animation, so give it some extra time to complete so it
+  // doesn't cut off the end.
+  var INJECTED_STYLE_REMOVAL_BUFFER_MS = 250;
+
+
   // PRIVATE UTILITY FUNCTIONS
   //
 
@@ -2999,7 +3008,8 @@ var rekapiCSSContext = function (root, _, Tweenable) {
     if (opt_iterations) {
       var animationLength = (opt_iterations * this.kapi.animationLength());
       this._stopSetTimeoutHandle = setTimeout(
-          _.bind(this.stop, this, true), animationLength);
+          _.bind(this.stop, this, true),
+          animationLength + INJECTED_STYLE_REMOVAL_BUFFER_MS);
     }
 
     fireEvent(this.kapi, 'play', _);
