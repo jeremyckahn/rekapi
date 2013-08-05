@@ -1,4 +1,4 @@
-/*! Rekapi - v0.15.12 - 2013-08-03 - http://rekapi.com */
+/*! Rekapi - v0.15.13 - 2013-08-04 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -1406,17 +1406,42 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
       var interpolatedObject = {};
 
       _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
+        // TODO: Try to get rid of this null check
         if (keyframeProperty) {
+          if (this._beforeKeyframePropertyInterpolate !== noop) {
+            this._beforeKeyframePropertyInterpolate(keyframeProperty);
+          }
+
           interpolatedObject[propName] =
               keyframeProperty.getValueAt(millisecond);
+
+          if (this._afterKeyframePropertyInterpolate !== noop) {
+            this._afterKeyframePropertyInterpolate(
+                keyframeProperty, interpolatedObject);
+          }
         }
-      });
+      }, this);
 
       this.set(interpolatedObject);
     }
 
     return this;
   };
+
+
+  /*!
+   * @param {Kapi.KeyframeProperty} keyframeProperty
+   * @abstract
+   */
+  Actor.prototype._beforeKeyframePropertyInterpolate = noop;
+
+
+  /*!
+   * @param {Kapi.KeyframeProperty} keyframeProperty
+   * @param {Object} interpolatedObject
+   * @abstract
+   */
+  Actor.prototype._afterKeyframePropertyInterpolate = noop;
 
 
   /**
@@ -2062,6 +2087,55 @@ var rekapiDOM = function (context, _) {
     _.each(otherProperties, function (styleValue, styleName) {
       setStyle(context, styleName, styleValue);
     }, this);
+  };
+
+
+  /*!
+   * transform properties like translate3d and rotate3d break the cardinality
+   * of multi-ease easing strings, because the "3" gets treated like a
+   * tweenable value.  Transform "3d" to "__THREED__" to prevent this, and
+   * transform it back in _afterKeyframePropertyInterpolate.
+   *
+   * @param {Kapi.KeyframeProperty} keyframeProperty
+   * @override
+   */
+  DOMActor.prototype._beforeKeyframePropertyInterpolate =
+      function (keyframeProperty) {
+    if (keyframeProperty.name !== 'transform') {
+      return;
+    }
+
+    var value = keyframeProperty.value;
+    var nextProp = keyframeProperty.nextProperty;
+
+    if (nextProp && value.match(/3d/g)) {
+      keyframeProperty.value = value.replace(/3d/g, '__THREED__');
+      nextProp.value = nextProp.value.replace(/3d/g, '__THREED__');
+    }
+  };
+
+
+  /*!
+   * @param {Kapi.KeyframeProperty} keyframeProperty
+   * @param {Object} interpolatedObject
+   * @override
+   */
+  DOMActor.prototype._afterKeyframePropertyInterpolate =
+      function (keyframeProperty, interpolatedObject) {
+    if (keyframeProperty.name !== 'transform') {
+      return;
+    }
+
+    var value = keyframeProperty.value;
+    var nextProp = keyframeProperty.nextProperty;
+
+    if (nextProp && value.match(/__THREED__/g)) {
+      keyframeProperty.value = value.replace(/__THREED__/g, '3d');
+      nextProp.value = nextProp.value.replace(/__THREED__/g, '3d');
+      var keyPropName = keyframeProperty.name;
+      interpolatedObject[keyPropName] =
+          interpolatedObject[keyPropName].replace(/__THREED__/g, '3d');
+    }
   };
 
 

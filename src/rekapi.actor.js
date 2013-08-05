@@ -722,17 +722,42 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
       var interpolatedObject = {};
 
       _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
+        // TODO: Try to get rid of this null check
         if (keyframeProperty) {
+          if (this._beforeKeyframePropertyInterpolate !== noop) {
+            this._beforeKeyframePropertyInterpolate(keyframeProperty);
+          }
+
           interpolatedObject[propName] =
               keyframeProperty.getValueAt(millisecond);
+
+          if (this._afterKeyframePropertyInterpolate !== noop) {
+            this._afterKeyframePropertyInterpolate(
+                keyframeProperty, interpolatedObject);
+          }
         }
-      });
+      }, this);
 
       this.set(interpolatedObject);
     }
 
     return this;
   };
+
+
+  /*!
+   * @param {Kapi.KeyframeProperty} keyframeProperty
+   * @abstract
+   */
+  Actor.prototype._beforeKeyframePropertyInterpolate = noop;
+
+
+  /*!
+   * @param {Kapi.KeyframeProperty} keyframeProperty
+   * @param {Object} interpolatedObject
+   * @abstract
+   */
+  Actor.prototype._afterKeyframePropertyInterpolate = noop;
 
 
   /**

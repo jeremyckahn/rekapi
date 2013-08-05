@@ -127,6 +127,35 @@
         'Independent transform parameters are re-ordered as expected');
     });
 
+
+    test('translate3d does not break easing value cardinality', function () {
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, {
+          transform: 'translate3d(0, 0, 0)'})
+        .keyframe(100, {
+          transform: 'translate3d(1, 1, 1)'
+        }, 'linear easeInQuad easeOutQuad');
+
+        testKapi.update(50);
+
+        var transformChunks = testActor.get().transform.match(/(\d|\.)+/g);
+        equal(
+        transformChunks[1],
+          Tweenable.interpolate({x:0}, {x:1}, 0.5, 'linear').x,
+          'First translate3d value was eased with linear');
+        equal(
+          transformChunks[2],
+          Tweenable.interpolate({x:0}, {x:1}, 0.5, 'easeInQuad').x,
+          'Second translate3d value was eased with easeInQuad');
+        equal(
+          transformChunks[3],
+          Tweenable.interpolate({x:0}, {x:1}, 0.5, 'easeOutQuad').x,
+          'Third translate3d value was eased with easeOutQuad');
+    });
+
   } ());
   </script>
 </head>

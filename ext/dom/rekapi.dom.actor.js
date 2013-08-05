@@ -190,6 +190,55 @@ var rekapiDOM = function (context, _) {
   };
 
 
+  /*!
+   * transform properties like translate3d and rotate3d break the cardinality
+   * of multi-ease easing strings, because the "3" gets treated like a
+   * tweenable value.  Transform "3d" to "__THREED__" to prevent this, and
+   * transform it back in _afterKeyframePropertyInterpolate.
+   *
+   * @param {Kapi.KeyframeProperty} keyframeProperty
+   * @override
+   */
+  DOMActor.prototype._beforeKeyframePropertyInterpolate =
+      function (keyframeProperty) {
+    if (keyframeProperty.name !== 'transform') {
+      return;
+    }
+
+    var value = keyframeProperty.value;
+    var nextProp = keyframeProperty.nextProperty;
+
+    if (nextProp && value.match(/3d/g)) {
+      keyframeProperty.value = value.replace(/3d/g, '__THREED__');
+      nextProp.value = nextProp.value.replace(/3d/g, '__THREED__');
+    }
+  };
+
+
+  /*!
+   * @param {Kapi.KeyframeProperty} keyframeProperty
+   * @param {Object} interpolatedObject
+   * @override
+   */
+  DOMActor.prototype._afterKeyframePropertyInterpolate =
+      function (keyframeProperty, interpolatedObject) {
+    if (keyframeProperty.name !== 'transform') {
+      return;
+    }
+
+    var value = keyframeProperty.value;
+    var nextProp = keyframeProperty.nextProperty;
+
+    if (nextProp && value.match(/__THREED__/g)) {
+      keyframeProperty.value = value.replace(/__THREED__/g, '3d');
+      nextProp.value = nextProp.value.replace(/__THREED__/g, '3d');
+      var keyPropName = keyframeProperty.name;
+      interpolatedObject[keyPropName] =
+          interpolatedObject[keyPropName].replace(/__THREED__/g, '3d');
+    }
+  };
+
+
   // TODO:  Make this a private method.
   DOMActor.prototype.teardown = function (context, state) {
     var classList = this._context.className.match(/\S+/g);

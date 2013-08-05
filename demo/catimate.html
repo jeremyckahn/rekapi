@@ -41,22 +41,22 @@
 
       cat
         .keyframe(time, {
-          'transform': 'translateX(-240px) translateY(-160px) rotate(0deg)'
+          'transform': 'translate(-240px, -160px) rotate(0deg)'
         }).keyframe(time += 1200, {
-          'transform': 'translateX(300px) translateY(250px) rotate(0deg)'
+          'transform': 'translate(300px, 250px) rotate(0deg)'
         }, 'bouncePast')
         .wait(time += 400)
         .keyframe(time += 700, {
-          'transform': 'translateX(50px) translateY(250px) rotate(0deg)'
+          'transform': 'translate(50px, 250px) rotate(0deg)'
         }, 'easeInOutBack')
         .wait(time += 150)
         .keyframe(time += 850, {
-          'transform': 'translateX(344px) translateY(0px) rotate(-90deg)'
+          'transform': 'translate(344px, 0px) rotate(-90deg)'
         }, {
           'transform': 'easeFromTo easeInOutCubic bouncePast'
         })
         .keyframe(time += 700, {
-          'transform': 'translateX(344px) translateY(800px) rotate(-90deg)'
+          'transform': 'translate(344px, 800px) rotate(-90deg)'
         }, 'easeFrom')
         .wait(time += 500);
 
