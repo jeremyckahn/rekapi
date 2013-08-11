@@ -156,6 +156,26 @@
           'Third translate3d value was eased with easeOutQuad');
     });
 
+
+    test('3d hack does not break "3deg" case', function () {
+      var testKapi = setupTestKapi();
+      var testActor = setupTestActor(testKapi);
+
+      testActor
+        .keyframe(0, {
+          transform: 'rotate(3deg)'})
+        .keyframe(100, {
+          transform: 'rotate(6deg)'});
+
+        testKapi.update(50);
+
+        var transformMatch = testActor.get().transform.match(/(\d|\.)+/g);
+        equal(
+        transformMatch,
+          Tweenable.interpolate({x:3}, {x:6}, 0.5, 'linear').x,
+          'Calculated midpoint of 3deg and 6deg.');
+    });
+
   } ());
   </script>
 </head>
