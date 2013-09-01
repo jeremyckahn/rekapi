@@ -121,7 +121,7 @@ module.exports = function(grunt) {
         files: {
           'dist/rekapi-underscore-shifty.min.js': [
             'bower_components/underscore/underscore.js',
-            'bower_components/shifty/dist/shifty.js',
+            'bower_components/shifty/dist/shifty.min.js',
             'dist/rekapi.js']
         }
       },
