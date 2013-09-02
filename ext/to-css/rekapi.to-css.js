@@ -630,19 +630,19 @@ var rekapiToCSS = function (context, _) {
 
   /*!
    * @param {Kapi.Actor} actor
-   * @param {string} targetProp
+   * @param {string=} opt_targetProp
    * @return {string}
    */
-  function serializeActorStep (actor, targetProp) {
+  function serializeActorStep (actor, opt_targetProp) {
     var serializedProps = ['{'];
 
     var propsToSerialize;
-    if (targetProp) {
+    if (opt_targetProp) {
       propsToSerialize = {};
 
-      var currentPropState = actor.get()[targetProp];
+      var currentPropState = actor.get()[opt_targetProp];
       if (typeof currentPropState !== 'undefined') {
-        propsToSerialize[targetProp] = currentPropState;
+        propsToSerialize[opt_targetProp] = currentPropState;
       }
     } else {
       propsToSerialize = actor.get();

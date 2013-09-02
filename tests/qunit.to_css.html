@@ -649,6 +649,25 @@
     });
 
 
+    test('Can serialize multiple keyframes into a single step', function () {
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0,  'y': 0  })
+        .keyframe(1000, { 'x': 10, 'y': 20 }, 'fakeLinear');
+
+
+      actor1.updateState(500);
+
+      var serializedStep =
+          Kapi._private.toCSS.serializeActorStep(actor1);
+
+      equal(serializedStep, '{x:5;y:10;}'
+          ,'Keyframes were combined');
+    });
+
+
     module('generateAnimationNameProperty');
 
 
