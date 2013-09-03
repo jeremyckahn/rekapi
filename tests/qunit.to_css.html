@@ -116,7 +116,7 @@
 
       var classProperties =
           Kapi._private.toCSS.generateCSSAnimationProperties(
-              actor1, 'ANIM_NAME', 'w3');
+              actor1, 'ANIM_NAME', 'w3', false);
 
       equal(
           classProperties
@@ -140,7 +140,7 @@
 
       var classProperties =
           Kapi._private.toCSS.generateCSSAnimationProperties(
-              actor1, 'ANIM_NAME', 'webkit');
+              actor1, 'ANIM_NAME', 'webkit', false);
 
       equal(
           classProperties
@@ -164,7 +164,7 @@
 
       var classProperties =
           Kapi._private.toCSS.generateCSSAnimationProperties(
-              actor1, 'ANIM_NAME', 'w3', null, true);
+              actor1, 'ANIM_NAME', 'w3', false, null, true);
 
       equal(
           classProperties
@@ -191,7 +191,7 @@
       actor1.keyframe(0, { 'x': 0 });
 
       var classProperties =
-          Kapi._private.toCSS.generateCSSClass(actor1, 'ANIM_NAME');
+          Kapi._private.toCSS.generateCSSClass(actor1, 'ANIM_NAME', false);
 
       equal(
           classProperties
@@ -217,7 +217,7 @@
 
       var classProperties =
           Kapi._private.toCSS.generateCSSClass(
-              actor1, 'ANIM_NAME', ['webkit']);
+              actor1, 'ANIM_NAME', false, ['webkit']);
 
       equal(
           classProperties
@@ -247,7 +247,7 @@
         .keyframe(1000, { 'x': 100 }, { 'x': 'fakeLinear' });
 
       var keyframeData = Kapi._private.toCSS.generateBoilerplatedKeyframes(
-          actor1, 'ANIM_NAME', 10);
+          actor1, 'ANIM_NAME', 10, false);
 
       equal(
           keyframeData
@@ -543,7 +543,7 @@
 
       var serializedSegment =
           Kapi._private.toCSS.generateActorTrackSegment(
-              actor1, actor1._propertyTracks['x'][1], 5, 10, 0, 50);
+              actor1, 5, 10, 0, 50, actor1._propertyTracks['x'][1]);
 
       deepEqual(
           serializedSegment
@@ -571,7 +571,7 @@
 
       var serializedSegment =
           Kapi._private.toCSS.generateActorTrackSegment(
-              actor1, actor1._propertyTracks['x'][1], 5, 5, 0, 25);
+              actor1, 5, 5, 0, 25, actor1._propertyTracks['x'][1]);
 
       deepEqual(
           serializedSegment
@@ -682,7 +682,7 @@
         .keyframe(1000, { 'x': 10, 'y': 100 });
 
       var animName = Kapi._private.toCSS.generateAnimationNameProperty(
-          actor1, 'ANIM_NAME', 'PREFIX');
+          actor1, 'ANIM_NAME', 'PREFIX', false);
 
       equal(animName
           ,'  PREFIXanimation-name: ANIM_NAME-x-keyframes, ANIM_NAME-y-keyframes;'
@@ -701,9 +701,27 @@
         .keyframe(1000, { 'x': 10, 'y': 100 });
 
       var animName = Kapi._private.toCSS.generateAnimationNameProperty(
-          actor1, 'ANIM_NAME', 'PREFIX');
+          actor1, 'ANIM_NAME', 'PREFIX', false);
 
       equal(animName, '  PREFIXanimation-name: ANIM_NAME-x-keyframes, ANIM_NAME-y-keyframes;'
+          ,'Generated CSS animation-name');
+    });
+
+
+    test('Can generate single CSS name of an animation with combined keyframes',
+        function () {
+
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0,  'y': 50  }, 'fakeLinear')
+        .keyframe(1000, { 'x': 10, 'y': 100 });
+
+      var animName = Kapi._private.toCSS.generateAnimationNameProperty(
+          actor1, 'ANIM_NAME', 'PREFIX', true);
+
+      equal(animName, '  PREFIXanimation-name: ANIM_NAME-keyframes;'
           ,'Generated CSS animation-name');
     });
 
@@ -923,6 +941,57 @@
 
       equal(canBeOptimized, false
           ,'Detected transform that cannot be optimized');
+    });
+
+
+    module('canOptimizeAnyKeyframeProperties');
+
+
+    test('Detects that all optimizable keyframes can be optimized', function () {
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0,  'y': 0  })
+        .keyframe(1000, { 'x': 10, 'y': 20 });
+
+      var canBeOptimized =
+          Kapi._private.toCSS.canOptimizeAnyKeyframeProperties(actor1);
+
+      equal(canBeOptimized, true
+          ,'Detected that all properties can be optimized');
+    });
+
+
+    test('Detects that a mixed set of keyframes has some keyframes that can be optimized', function () {
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0,  'y': 0  })
+        .keyframe(1000, { 'x': 10, 'y': 20 }, { 'x': 'fakeLinear' });
+
+      var canBeOptimized =
+          Kapi._private.toCSS.canOptimizeAnyKeyframeProperties(actor1);
+
+      equal(canBeOptimized, true
+          ,'Detected that some properties can be optimized');
+    });
+
+
+    test('Detects that all un-optimizable keyframes cannot be optimized', function () {
+      var kapi = new Kapi();
+      var actor1 = setupTestActor(kapi);
+
+      actor1
+        .keyframe(0,    { 'x': 0,  'y': 0  })
+        .keyframe(1000, { 'x': 10, 'y': 20 }, 'fakeLinear');
+
+      var canBeOptimized =
+          Kapi._private.toCSS.canOptimizeAnyKeyframeProperties(actor1);
+
+      equal(canBeOptimized, false
+          ,'Detected that all properties cannot be optimized');
     });
 
 
