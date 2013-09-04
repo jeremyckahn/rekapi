@@ -1,9 +1,9 @@
 {
   "name": "rekapi",
-  "version": "0.15.17",
+  "version": "0.15.18",
   "main": "./dist/rekapi.min.js",
   "dependencies": {
-    "shifty": "~0.10.2",
+    "shifty": "~0.11.0",
     "underscore": "~1.5.1",
     "qunit": "~1.11.0",
     "requirejs": "~2.1.4",
