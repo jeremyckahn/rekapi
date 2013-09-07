@@ -1,4 +1,4 @@
-/*! Rekapi - v0.15.18 - 2013-09-03 - http://rekapi.com */
+/*! Rekapi - v0.16.0 - 2013-09-07 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -65,6 +65,10 @@ var rekapiCore = function (root, _, Tweenable) {
   // GLOBAL is read from for various environment properties
   // http://stackoverflow.com/questions/3277182/how-to-get-the-global-object-in-javascript
   var Fn = Function, GLOBAL = new Fn('return this')();
+
+  // CONSTANTS
+  //
+  var UPDATE_TIME = 1000 / 60;
 
 
   /*!
@@ -160,7 +164,7 @@ var rekapiCore = function (root, _, Tweenable) {
 
   /*!
    * This is the heartbeat of an animation.  Updates the state and then calls
-   * itself based on the framerate of the supplied Kapi.
+   * itself continuously.
    * @param {Kapi} kapi
    */
   function tick (kapi) {
@@ -173,57 +177,39 @@ var rekapiCore = function (root, _, Tweenable) {
     // See annotation for cancelLoop for more info.
     if (kapi._scheduleUpdate.call) {
       kapi._loopId = kapi._scheduleUpdate.call(GLOBAL,
-          updateFn, 1000 / kapi.config.fps);
+          updateFn, UPDATE_TIME);
     } else {
-      kapi._loopId = setTimeout(updateFn, 1000 / kapi.config.fps);
+      kapi._loopId = setTimeout(updateFn, UPDATE_TIME);
     }
   }
 
 
   /*!
-   * @param {number}
    * @return {Function}
    */
-  function getUpdateMethod (framerate) {
-    var updateMethod;
-
-    if (framerate !== 60) {
-      updateMethod = GLOBAL.setTimeout;
-    } else {
-      // requestAnimationFrame() shim by Paul Irish (modified for Rekapi)
-      // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-      updateMethod = GLOBAL.requestAnimationFrame ||
-        GLOBAL.webkitRequestAnimationFrame ||
-        GLOBAL.oRequestAnimationFrame      ||
-        GLOBAL.msRequestAnimationFrame     ||
-        (GLOBAL.mozCancelRequestAnimationFrame
-          && GLOBAL.mozRequestAnimationFrame) ||
-        GLOBAL.setTimeout;
-    }
-
-    return updateMethod;
+  function getUpdateMethod () {
+    // requestAnimationFrame() shim by Paul Irish (modified for Rekapi)
+    // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+    return GLOBAL.requestAnimationFrame  ||
+      GLOBAL.webkitRequestAnimationFrame ||
+      GLOBAL.oRequestAnimationFrame      ||
+      GLOBAL.msRequestAnimationFrame     ||
+      (GLOBAL.mozCancelRequestAnimationFrame
+        && GLOBAL.mozRequestAnimationFrame) ||
+      GLOBAL.setTimeout;
   }
 
 
   /*!
-   * @param {number}
    * @return {Function}
    */
-  function getCancelMethod (framerate) {
-    var cancelMethod;
-
-    if (framerate !== 60) {
-      cancelMethod = GLOBAL.clearTimeout;
-    } else {
-      cancelMethod = GLOBAL.cancelAnimationFrame ||
-        GLOBAL.webkitCancelAnimationFrame ||
-        GLOBAL.oCancelAnimationFrame      ||
-        GLOBAL.msCancelAnimationFrame     ||
-        GLOBAL.mozCancelRequestAnimationFrame ||
-        GLOBAL.clearTimeout;
-    }
-
-    return cancelMethod;
+  function getCancelMethod () {
+    return GLOBAL.cancelAnimationFrame  ||
+      GLOBAL.webkitCancelAnimationFrame ||
+      GLOBAL.oCancelAnimationFrame      ||
+      GLOBAL.msCancelAnimationFrame     ||
+      GLOBAL.mozCancelRequestAnimationFrame ||
+      GLOBAL.clearTimeout;
   }
 
 
@@ -244,10 +230,6 @@ var rekapiCore = function (root, _, Tweenable) {
 
   var now = Tweenable.now;
 
-  var defaultConfig = {
-    'fps': 60
-  };
-
   var playState = {
     'STOPPED': 'stopped'
     ,'PAUSED': 'paused'
@@ -258,7 +240,6 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Rekapi constructor.  Valid values for `opt_config` are:
    *
-   * - __fps__ (_number_): The frames per second at which the animation updates.  The default value is 30.
    * - __context__ (_Object_): The context that the animation will run in.  Can be any type of `Object`; gets used by the renderer and inherited by the `Kapi.Actor`s as they are added to the animation.  This isn't always needed, it usually just applies to `<canvas>` animations.  See the documentation on the [`<canvas>` extension](../ext/canvas/rekapi.canvas.context.js.html) for more info.
    *
    * __[Example](../../../../docs/examples/kapi.html)__
@@ -302,10 +283,9 @@ var rekapiCore = function (root, _, Tweenable) {
     this._lastUpdatedMillisecond = 0;
 
     _.extend(this.config, opt_config);
-    _.defaults(this.config, defaultConfig);
 
-    this._scheduleUpdate = getUpdateMethod(this.config.fps);
-    this._cancelUpdate = getCancelMethod(this.config.fps);
+    this._scheduleUpdate = getUpdateMethod();
+    this._cancelUpdate = getCancelMethod();
 
     _.each(this._contextInitHook, function (fn) {
       fn.call(this);
@@ -337,7 +317,6 @@ var rekapiCore = function (root, _, Tweenable) {
       }
 
       actor.kapi = this;
-      actor.fps = this.framerate();
       this._actors[actor.id] = actor;
       recalculateAnimationLength(this, _);
       actor.setup();
@@ -542,24 +521,6 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   Kapi.prototype.actorCount = function () {
     return _.size(this._actors);
-  };
-
-
-  /**
-   * Get and optionally set the framerate of the animation.  There's generally no point in going above 60.
-   *
-   * __[Example](../../../../docs/examples/framerate.html)__
-   * @param {number} opt_newFramerate
-   * @return {number}
-   */
-  Kapi.prototype.framerate = function (opt_newFramerate) {
-    if (opt_newFramerate) {
-      this.config.fps = opt_newFramerate;
-      this._scheduleUpdate = getUpdateMethod(this.config.fps);
-      this._cancelUpdate = getCancelMethod(this.config.fps);
-    }
-
-    return this.config.fps;
   };
 
 
