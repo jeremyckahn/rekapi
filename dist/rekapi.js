@@ -1,4 +1,4 @@
-/*! Rekapi - v0.16.0 - 2013-09-07 - http://rekapi.com */
+/*! Rekapi - v0.16.1 - 2013-09-08 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -1437,6 +1437,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
 
   var DEFAULT_EASING = 'linear';
   var Kapi = context.Kapi;
+  var interpolate = Tweenable.interpolate;
 
 
   /**
@@ -1515,7 +1516,7 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
       toObj[this.name] = this.nextProperty.value;
       var delta = this.nextProperty.millisecond - this.millisecond;
       var interpolatedPosition = (millisecond - this.millisecond) / delta;
-      value = Tweenable.interpolate(fromObj, toObj, interpolatedPosition,
+      value = interpolate(fromObj, toObj, interpolatedPosition,
           this.nextProperty.easing)[this.name];
     } else {
       value =  this.value;
