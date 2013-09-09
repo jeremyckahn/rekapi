@@ -1,8 +1,8 @@
-var rekapiCSSContext = function (root) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
-  var Kapi = root.Kapi;
+  var Kapi = context.Kapi;
   var _ = Kapi._;
   var now = Kapi.Tweenable.now;
 
@@ -255,4 +255,4 @@ var rekapiCSSContext = function (root) {
     return !!this._styleElement;
   };
 
-};
+});

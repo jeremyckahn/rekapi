@@ -1,4 +1,4 @@
-var rekapiKeyframeProperty = function (context) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
@@ -111,4 +111,4 @@ var rekapiKeyframeProperty = function (context) {
     };
   };
 
-};
+});

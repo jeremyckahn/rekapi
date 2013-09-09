@@ -1,4 +1,4 @@
-var rekapiCanvasActor = function (context) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
@@ -50,4 +50,4 @@ var rekapiCanvasActor = function (context) {
   CanvasActor.prototype.moveToLayer = function (layer) {
     return this.kapi.canvas.moveActorToLayer(this, layer);
   };
-};
+});

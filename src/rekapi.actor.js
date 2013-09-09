@@ -1,4 +1,4 @@
-var rekapiActor = function (context) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
@@ -786,4 +786,4 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
     return exportData;
   };
 
-};
+});

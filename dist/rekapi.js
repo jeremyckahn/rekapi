@@ -1,4 +1,4 @@
-/*! Rekapi - v0.16.2 - 2013-09-08 - http://rekapi.com */
+/*! Rekapi - v0.16.3 - 2013-09-08 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -12,6 +12,8 @@
  */
 
 ;(function (global) {
+
+var rekapiModules = [];
 
 // A hack for UglifyJS defines
 if (typeof KAPI_DEBUG === 'undefined') {
@@ -649,7 +651,7 @@ var rekapiCore = function (root, _, Tweenable) {
 
 };
 
-var rekapiActor = function (context) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
@@ -1437,9 +1439,9 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
     return exportData;
   };
 
-};
+});
 
-var rekapiKeyframeProperty = function (context) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
@@ -1552,9 +1554,9 @@ var rekapiKeyframeProperty = function (context) {
     };
   };
 
-};
+});
 
-var rekapiCanvasContext = function (context) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
@@ -1816,9 +1818,9 @@ var rekapiCanvasContext = function (context) {
     return this.kapi;
   };
 
-};
+});
 
-var rekapiCanvasActor = function (context) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
@@ -1870,9 +1872,9 @@ var rekapiCanvasActor = function (context) {
   CanvasActor.prototype.moveToLayer = function (layer) {
     return this.kapi.canvas.moveActorToLayer(this, layer);
   };
-};
+});
 
-var rekapiDOM = function (context) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
@@ -2151,9 +2153,9 @@ var rekapiDOM = function (context) {
     return this;
   };
 
-};
+});
 
-var rekapiToCSS = function (context) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
@@ -2898,13 +2900,13 @@ var rekapiToCSS = function (context) {
     };
   }
 
-};
+});
 
-var rekapiCSSContext = function (root) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
-  var Kapi = root.Kapi;
+  var Kapi = context.Kapi;
   var _ = Kapi._;
   var now = Kapi.Tweenable.now;
 
@@ -3157,7 +3159,7 @@ var rekapiCSSContext = function (root) {
     return !!this._styleElement;
   };
 
-};
+});
 
 var rekapi = function (global, deps) {
 
@@ -3173,25 +3175,10 @@ var rekapi = function (global, deps) {
       deps.Tweenable : context.Tweenable;
 
   rekapiCore(context, _, Tweenable);
-  rekapiActor(context);
-  rekapiKeyframeProperty(context);
 
-  // Extensions
-  if (typeof rekapiDOM === 'function') {
-    rekapiDOM(context);
-  }
-  if (typeof rekapiToCSS === 'function') {
-    rekapiToCSS(context);
-  }
-  if (typeof rekapiCanvasContext === 'function') {
-    rekapiCanvasContext(context);
-  }
-  if (typeof rekapiCanvasActor === 'function') {
-    rekapiCanvasActor(context);
-  }
-  if (typeof rekapiCSSContext === 'function') {
-    rekapiCSSContext(context);
-  }
+  _.each(rekapiModules, function (module) {
+    module(context);
+  });
 
   return context.Kapi;
 };

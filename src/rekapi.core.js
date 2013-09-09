@@ -1,3 +1,5 @@
+var rekapiModules = [];
+
 // A hack for UglifyJS defines
 if (typeof KAPI_DEBUG === 'undefined') {
   KAPI_DEBUG = true;

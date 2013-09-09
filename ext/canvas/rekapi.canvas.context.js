@@ -1,4 +1,4 @@
-var rekapiCanvasContext = function (context) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
@@ -260,4 +260,4 @@ var rekapiCanvasContext = function (context) {
     return this.kapi;
   };
 
-};
+});

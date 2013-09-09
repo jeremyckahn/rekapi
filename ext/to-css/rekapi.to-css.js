@@ -1,4 +1,4 @@
-var rekapiToCSS = function (context) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
@@ -743,4 +743,4 @@ var rekapiToCSS = function (context) {
     };
   }
 
-};
+});

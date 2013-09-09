@@ -1,4 +1,4 @@
-var rekapiDOM = function (context) {
+rekapiModules.push(function (context) {
 
   'use strict';
 
@@ -277,4 +277,4 @@ var rekapiDOM = function (context) {
     return this;
   };
 
-};
+});
