@@ -1,8 +1,9 @@
-var rekapiToCSS = function (context, _) {
+var rekapiToCSS = function (context) {
 
   'use strict';
 
   var Kapi = context.Kapi;
+  var _ = Kapi._;
 
 
   // CONSTANTS

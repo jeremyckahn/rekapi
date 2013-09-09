@@ -12,24 +12,24 @@ var rekapi = function (global, deps) {
       deps.Tweenable : context.Tweenable;
 
   rekapiCore(context, _, Tweenable);
-  rekapiActor(context, _, Tweenable);
-  rekapiKeyframeProperty(context, _, Tweenable);
+  rekapiActor(context);
+  rekapiKeyframeProperty(context);
 
   // Extensions
   if (typeof rekapiDOM === 'function') {
-    rekapiDOM(context, _, Tweenable);
+    rekapiDOM(context);
   }
   if (typeof rekapiToCSS === 'function') {
-    rekapiToCSS(context, _, Tweenable);
+    rekapiToCSS(context);
   }
   if (typeof rekapiCanvasContext === 'function') {
-    rekapiCanvasContext(context, _, Tweenable);
+    rekapiCanvasContext(context);
   }
   if (typeof rekapiCanvasActor === 'function') {
-    rekapiCanvasActor(context, _, Tweenable);
+    rekapiCanvasActor(context);
   }
   if (typeof rekapiCSSContext === 'function') {
-    rekapiCSSContext(context, _, Tweenable);
+    rekapiCSSContext(context);
   }
 
   return context.Kapi;

@@ -280,6 +280,12 @@ var rekapiCore = function (root, _, Tweenable) {
   }
 
 
+  // Decorate the Kapi object with the dependencies so that other modules can
+  // access them.
+  Kapi.Tweenable = Tweenable;
+  Kapi._ = _;
+
+
   /*!
    * @type {Object.<function>} Contains the context init function to be called
    * in the Kapi constructor.

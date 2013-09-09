@@ -1,9 +1,11 @@
-var rekapiKeyframeProperty = function (context, _, Tweenable) {
+var rekapiKeyframeProperty = function (context) {
 
   'use strict';
 
   var DEFAULT_EASING = 'linear';
   var Kapi = context.Kapi;
+  var Tweenable = Kapi.Tweenable;
+  var _ = Kapi._;
   var interpolate = Tweenable.interpolate;
 
 

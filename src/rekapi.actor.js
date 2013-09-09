@@ -1,9 +1,11 @@
-var rekapiActor = function (context, _, Tweenable) {
+var rekapiActor = function (context) {
 
   'use strict';
 
   var DEFAULT_EASING = 'linear';
   var Kapi = context.Kapi;
+  var Tweenable = Kapi.Tweenable;
+  var _ = Kapi._;
 
 
   /*!

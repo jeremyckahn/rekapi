@@ -1,8 +1,9 @@
-var rekapiDOM = function (context, _) {
+var rekapiDOM = function (context) {
 
   'use strict';
 
   var Kapi = context.Kapi;
+  var _ = Kapi._;
   var vendorTransforms = [
     'transform'
     ,'webkitTransform'

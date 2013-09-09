@@ -1,8 +1,10 @@
-var rekapiCSSContext = function (root, _, Tweenable) {
+var rekapiCSSContext = function (root) {
 
   'use strict';
 
   var Kapi = root.Kapi;
+  var _ = Kapi._;
+  var now = Kapi.Tweenable.now;
 
 
   // CONSTANTS
@@ -198,7 +200,7 @@ var rekapiCSSContext = function (root, _, Tweenable) {
 
     var css = this._cachedCSS || this.prerender.apply(this, arguments);
     this._styleElement = injectStyle(css);
-    this._playTimestamp = Tweenable.now();
+    this._playTimestamp = now();
 
     if (navigator.userAgent.match(/Presto/)) {
       forceStyleInjection(this.kapi);
@@ -234,7 +236,7 @@ var rekapiCSSContext = function (root, _, Tweenable) {
       if (opt_goToEnd) {
         updateTime = this.kapi.animationLength();
       } else {
-        updateTime = (Tweenable.now() - this._playTimestamp)
+        updateTime = (now() - this._playTimestamp)
             % this.kapi.animationLength();
       }
 

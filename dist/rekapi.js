@@ -1,4 +1,4 @@
-/*! Rekapi - v0.16.1 - 2013-09-08 - http://rekapi.com */
+/*! Rekapi - v0.16.2 - 2013-09-08 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -293,6 +293,12 @@ var rekapiCore = function (root, _, Tweenable) {
 
     return this;
   }
+
+
+  // Decorate the Kapi object with the dependencies so that other modules can
+  // access them.
+  Kapi.Tweenable = Tweenable;
+  Kapi._ = _;
 
 
   /*!
@@ -643,12 +649,14 @@ var rekapiCore = function (root, _, Tweenable) {
 
 };
 
-var rekapiActor = function (context, _, Tweenable) {
+var rekapiActor = function (context) {
 
   'use strict';
 
   var DEFAULT_EASING = 'linear';
   var Kapi = context.Kapi;
+  var Tweenable = Kapi.Tweenable;
+  var _ = Kapi._;
 
 
   /*!
@@ -1431,12 +1439,14 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
 
 };
 
-var rekapiKeyframeProperty = function (context, _, Tweenable) {
+var rekapiKeyframeProperty = function (context) {
 
   'use strict';
 
   var DEFAULT_EASING = 'linear';
   var Kapi = context.Kapi;
+  var Tweenable = Kapi.Tweenable;
+  var _ = Kapi._;
   var interpolate = Tweenable.interpolate;
 
 
@@ -1544,11 +1554,12 @@ var rekapiKeyframeProperty = function (context, _, Tweenable) {
 
 };
 
-var rekapiCanvasContext = function (context, _) {
+var rekapiCanvasContext = function (context) {
 
   'use strict';
 
   var Kapi = context.Kapi;
+  var _ = Kapi._;
 
 
   // PRIVATE UTILITY FUNCTIONS
@@ -1807,11 +1818,12 @@ var rekapiCanvasContext = function (context, _) {
 
 };
 
-var rekapiCanvasActor = function (context, _) {
+var rekapiCanvasActor = function (context) {
 
   'use strict';
 
   var Kapi = context.Kapi;
+  var _ = Kapi._;
 
   /**
    * Constructor for rendering Actors to a `<canvas>`.  Extends [`Kapi.Actor`](../../src/rekapi.actor.js.html).  Valid options for `opt_config` are the same as those for [`Kapi.Actor`](../../src/rekapi.actor.js.html), with the following additions:
@@ -1860,11 +1872,12 @@ var rekapiCanvasActor = function (context, _) {
   };
 };
 
-var rekapiDOM = function (context, _) {
+var rekapiDOM = function (context) {
 
   'use strict';
 
   var Kapi = context.Kapi;
+  var _ = Kapi._;
   var vendorTransforms = [
     'transform'
     ,'webkitTransform'
@@ -2140,11 +2153,12 @@ var rekapiDOM = function (context, _) {
 
 };
 
-var rekapiToCSS = function (context, _) {
+var rekapiToCSS = function (context) {
 
   'use strict';
 
   var Kapi = context.Kapi;
+  var _ = Kapi._;
 
 
   // CONSTANTS
@@ -2886,11 +2900,13 @@ var rekapiToCSS = function (context, _) {
 
 };
 
-var rekapiCSSContext = function (root, _, Tweenable) {
+var rekapiCSSContext = function (root) {
 
   'use strict';
 
   var Kapi = root.Kapi;
+  var _ = Kapi._;
+  var now = Kapi.Tweenable.now;
 
 
   // CONSTANTS
@@ -3086,7 +3102,7 @@ var rekapiCSSContext = function (root, _, Tweenable) {
 
     var css = this._cachedCSS || this.prerender.apply(this, arguments);
     this._styleElement = injectStyle(css);
-    this._playTimestamp = Tweenable.now();
+    this._playTimestamp = now();
 
     if (navigator.userAgent.match(/Presto/)) {
       forceStyleInjection(this.kapi);
@@ -3122,7 +3138,7 @@ var rekapiCSSContext = function (root, _, Tweenable) {
       if (opt_goToEnd) {
         updateTime = this.kapi.animationLength();
       } else {
-        updateTime = (Tweenable.now() - this._playTimestamp)
+        updateTime = (now() - this._playTimestamp)
             % this.kapi.animationLength();
       }
 
@@ -3157,24 +3173,24 @@ var rekapi = function (global, deps) {
       deps.Tweenable : context.Tweenable;
 
   rekapiCore(context, _, Tweenable);
-  rekapiActor(context, _, Tweenable);
-  rekapiKeyframeProperty(context, _, Tweenable);
+  rekapiActor(context);
+  rekapiKeyframeProperty(context);
 
   // Extensions
   if (typeof rekapiDOM === 'function') {
-    rekapiDOM(context, _, Tweenable);
+    rekapiDOM(context);
   }
   if (typeof rekapiToCSS === 'function') {
-    rekapiToCSS(context, _, Tweenable);
+    rekapiToCSS(context);
   }
   if (typeof rekapiCanvasContext === 'function') {
-    rekapiCanvasContext(context, _, Tweenable);
+    rekapiCanvasContext(context);
   }
   if (typeof rekapiCanvasActor === 'function') {
-    rekapiCanvasActor(context, _, Tweenable);
+    rekapiCanvasActor(context);
   }
   if (typeof rekapiCSSContext === 'function') {
-    rekapiCSSContext(context, _, Tweenable);
+    rekapiCSSContext(context);
   }
 
   return context.Kapi;

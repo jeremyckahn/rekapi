@@ -1,8 +1,9 @@
-var rekapiCanvasActor = function (context, _) {
+var rekapiCanvasActor = function (context) {
 
   'use strict';
 
   var Kapi = context.Kapi;
+  var _ = Kapi._;
 
   /**
    * Constructor for rendering Actors to a `<canvas>`.  Extends [`Kapi.Actor`](../../src/rekapi.actor.js.html).  Valid options for `opt_config` are the same as those for [`Kapi.Actor`](../../src/rekapi.actor.js.html), with the following additions:

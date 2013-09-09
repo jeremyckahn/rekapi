@@ -1,8 +1,9 @@
-var rekapiCanvasContext = function (context, _) {
+var rekapiCanvasContext = function (context) {
 
   'use strict';
 
   var Kapi = context.Kapi;
+  var _ = Kapi._;
 
 
   // PRIVATE UTILITY FUNCTIONS

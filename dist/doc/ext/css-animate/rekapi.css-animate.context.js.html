@@ -292,7 +292,7 @@ code {
 
     var css = this._cachedCSS || this.prerender.apply(this, arguments);
     this._styleElement = injectStyle(css);
-    this._playTimestamp = Tweenable.now();
+    this._playTimestamp = now();
 
     if (navigator.userAgent.match(/Presto/)) {
       forceStyleInjection(this.kapi);
@@ -320,7 +320,7 @@ code {
       if (opt_goToEnd) {
         updateTime = this.kapi.animationLength();
       } else {
-        updateTime = (Tweenable.now() - this._playTimestamp)
+        updateTime = (now() - this._playTimestamp)
             % this.kapi.animationLength();
       }
 
