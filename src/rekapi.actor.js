@@ -786,4 +786,20 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
     return exportData;
   };
 
+
+  /**
+   * Import an `Object` to augment this actor's state.  Does not remove keyframe properties before importing new ones, so this could be used to "merge" keyframes across multiple actors.
+   *
+   * @param {Object} actorData Any object that has the same data format as the object generated from Actor#exportTimeline.
+   */
+  Actor.prototype.importTimeline = function (actorData) {
+    _.each(actorData.propertyTracks, function (propertyTrack) {
+      _.each(propertyTrack, function (property) {
+        var obj = {};
+        obj[property.name] = property.value;
+        this.keyframe(property.millisecond, obj, property.easing);
+      }, this);
+    }, this);
+  };
+
 });

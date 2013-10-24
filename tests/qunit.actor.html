@@ -1004,25 +1004,80 @@
         ,'y': 20
       });
 
-      var exportedTimeline = testActor.exportTimeline();
-      equal(exportedTimeline.start, 0,
+      var exportedActorData = testActor.exportTimeline();
+      equal(exportedActorData.start, 0,
           'Actor start time is properly exported');
-      equal(exportedTimeline.end, 1000,
+      equal(exportedActorData.end, 1000,
           'Actor end time is properly exported');
-      ok(_.contains(exportedTimeline.trackNames, 'x'),
+      ok(_.contains(exportedActorData.trackNames, 'x'),
           '"x"" track is in the trackName list');
-      ok(_.contains(exportedTimeline.trackNames, 'y'),
+      ok(_.contains(exportedActorData.trackNames, 'y'),
           '"y"" track is in the trackName list');
-      equal(exportedTimeline.trackNames.length, 2,
+      equal(exportedActorData.trackNames.length, 2,
           'Only two track names were exported');
-      equal(exportedTimeline.propertyTracks.x.length, 2,
+      equal(exportedActorData.propertyTracks.x.length, 2,
           'Data for all "x" KeyframeProperties was exported')
-      equal(exportedTimeline.propertyTracks.y.length, 2,
+      equal(exportedActorData.propertyTracks.y.length, 2,
           'Data for all "y" KeyframeProperties was exported')
-      equal(typeof exportedTimeline.propertyTracks.x[0].id, 'string',
-          'First exported x KeyframeProperty has an id');
-      equal(typeof exportedTimeline.propertyTracks.y[0].id, 'string',
-          'First exported y KeyframeProperty has an id');
+    });
+
+
+    module('importTimeline');
+
+
+    test('Imported data matches exported data', function () {
+      var exportKapi
+          ,exportActor;
+
+      exportKapi = setupTestKapi();
+      exportActor = setupTestActor(exportKapi);
+      exportActor.keyframe(0, {
+        'x': 1
+        ,'y': 10
+      }).keyframe(1000, {
+        'x': 2
+        ,'y': 20
+      });
+
+      var exportedActorData = exportActor.exportTimeline();
+      var importActor = new Kapi.Actor();
+      importActor.importTimeline(exportedActorData);
+
+      var firstImportXKeyProp = importActor.getKeyframeProperty('x', 0);
+      var firstExportXKeyProp = exportActor.getKeyframeProperty('x', 0);
+      equal(
+          firstImportXKeyProp.value, firstExportXKeyProp.value,
+          'First "X" keyframe value is the same in both actors');
+      equal(
+          firstImportXKeyProp.millisecond, firstExportXKeyProp.millisecond,
+          'First "X" keyframe millisecond is the same in both actors');
+
+      var secondImportXKeyProp = importActor.getKeyframeProperty('x', 1);
+      var secondExportXKeyProp = exportActor.getKeyframeProperty('x', 1);
+      equal(
+          secondImportXKeyProp.value, secondExportXKeyProp.value,
+          'First "X" keyframe value is the same in both actors');
+      equal(
+          secondImportXKeyProp.millisecond, secondExportXKeyProp.millisecond,
+          'First "X" keyframe millisecond is the same in both actors');
+
+      var firstImportYKeyProp = importActor.getKeyframeProperty('y', 0);
+      var firstExportYKeyProp = exportActor.getKeyframeProperty('y', 0);
+      equal(
+          firstImportYKeyProp.value, firstExportYKeyProp.value,
+          'First "Y" keyframe value is the same in both actors');
+      equal(
+          firstImportYKeyProp.millisecond, firstExportYKeyProp.millisecond,
+          'First "Y" keyframe millisecond is the same in both actors');
+
+      var secondImportYKeyProp = importActor.getKeyframeProperty('y', 1);
+      var secondExportYKeyProp = exportActor.getKeyframeProperty('y', 1);
+      equal(
+          secondImportYKeyProp.value, secondExportYKeyProp.value,
+          'First "Y" keyframe value is the same in both actors');
+      equal(
+          secondImportYKeyProp.millisecond, secondExportYKeyProp.millisecond,
+          'First "Y" keyframe millisecond is the same in both actors');
     });
 
 

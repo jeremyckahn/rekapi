@@ -118,8 +118,6 @@
       });
 
       var exportedProp = testActor._propertyTracks.x[0].exportPropertyData();
-      equal(typeof exportedProp.id, 'string',
-          'id is a string');
       equal(typeof exportedProp.millisecond, 'number',
           'millisecond is a number');
       equal(typeof exportedProp.name, 'string',

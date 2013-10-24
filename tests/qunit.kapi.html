@@ -206,9 +206,33 @@
       var exportedTimeline = testKapi.exportTimeline();
       equal(exportedTimeline.duration, 1000,
           'Duration was exported');
-      deepEqual(exportedTimeline.actors[testActor.id],
+      deepEqual(exportedTimeline.actors[0],
           testActor.exportTimeline(),
           'Actor was exported');
+    });
+
+
+    module('importTimeline');
+
+
+    test('Exported Kapi data re-imports correctly', function () {
+      var exportKapi
+          ,exportActor;
+
+      exportKapi = setupTestKapi();
+      exportActor = setupTestActor(exportKapi);
+      exportActor.keyframe(0, {
+        'x': 1
+      }).keyframe(1000, {
+        'x': 2
+      });
+
+      var exportedTimeline = exportKapi.exportTimeline();
+      var importKapi = new Kapi();
+      importKapi.importTimeline(exportedTimeline);
+
+      deepEqual(importKapi.exportTimeline(), exportedTimeline,
+          'Kapi exports the same data that was imported');
     });
 
 

@@ -103,8 +103,7 @@ rekapiModules.push(function (context) {
    */
   KeyframeProperty.prototype.exportPropertyData = function () {
     return {
-     'id': this.id
-     ,'millisecond': this.millisecond
+     'millisecond': this.millisecond
      ,'name': this.name
      ,'value': this.value
      ,'easing': this.easing

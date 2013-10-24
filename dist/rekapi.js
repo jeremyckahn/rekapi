@@ -1,4 +1,4 @@
-/*! Rekapi - v0.16.3 - 2013-09-08 - http://rekapi.com */
+/*! Rekapi - v0.16.4 - 2013-10-23 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -621,14 +621,28 @@ var rekapiCore = function (root, _, Tweenable) {
   Kapi.prototype.exportTimeline = function () {
     var exportData = {
       'duration': this._animationLength
-      ,'actors': {}
+      ,'actors': []
     };
 
     _.each(this._actors, function (actor) {
-      exportData.actors[actor.id] = actor.exportTimeline();
+      exportData.actors.push(actor.exportTimeline());
     }, this);
 
     return exportData;
+  };
+
+
+  /**
+   * Import data that was created as a result of [Kapi#exportTimeline](#exportTimeline).  Sets up all necessary actors and keyframes.  Note that this method only creates `Kapi.Actor` instances, not subclasses.
+   *
+   * @param {Object} KapiData Any object that has the same data format as the object generated from Kapi#exportTimeline.
+   */
+  Kapi.prototype.importTimeline = function (kapiData) {
+    _.each(kapiData.actors, function (actorData) {
+      var actor = new Kapi.Actor();
+      actor.importTimeline(actorData);
+      this.addActor(actor);
+    }, this);
   };
 
 
@@ -1439,6 +1453,22 @@ Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was in
     return exportData;
   };
 
+
+  /**
+   * Import an `Object` to augment this actor's state.  Does not remove keyframe properties before importing new ones, so this could be used to "merge" keyframes across multiple actors.
+   *
+   * @param {Object} actorData Any object that has the same data format as the object generated from Actor#exportTimeline.
+   */
+  Actor.prototype.importTimeline = function (actorData) {
+    _.each(actorData.propertyTracks, function (propertyTrack) {
+      _.each(propertyTrack, function (property) {
+        var obj = {};
+        obj[property.name] = property.value;
+        this.keyframe(property.millisecond, obj, property.easing);
+      }, this);
+    }, this);
+  };
+
 });
 
 rekapiModules.push(function (context) {
@@ -1546,8 +1576,7 @@ rekapiModules.push(function (context) {
    */
   KeyframeProperty.prototype.exportPropertyData = function () {
     return {
-     'id': this.id
-     ,'millisecond': this.millisecond
+     'millisecond': this.millisecond
      ,'name': this.name
      ,'value': this.value
      ,'easing': this.easing

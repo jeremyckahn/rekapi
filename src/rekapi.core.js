@@ -606,14 +606,28 @@ var rekapiCore = function (root, _, Tweenable) {
   Kapi.prototype.exportTimeline = function () {
     var exportData = {
       'duration': this._animationLength
-      ,'actors': {}
+      ,'actors': []
     };
 
     _.each(this._actors, function (actor) {
-      exportData.actors[actor.id] = actor.exportTimeline();
+      exportData.actors.push(actor.exportTimeline());
     }, this);
 
     return exportData;
+  };
+
+
+  /**
+   * Import data that was created as a result of [Kapi#exportTimeline](#exportTimeline).  Sets up all necessary actors and keyframes.  Note that this method only creates `Kapi.Actor` instances, not subclasses.
+   *
+   * @param {Object} KapiData Any object that has the same data format as the object generated from Kapi#exportTimeline.
+   */
+  Kapi.prototype.importTimeline = function (kapiData) {
+    _.each(kapiData.actors, function (actorData) {
+      var actor = new Kapi.Actor();
+      actor.importTimeline(actorData);
+      this.addActor(actor);
+    }, this);
   };
 
 
