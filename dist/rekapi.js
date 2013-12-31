@@ -1,4 +1,4 @@
-/*! Rekapi - v0.16.4 - 2013-10-23 - http://rekapi.com */
+/*! Rekapi - v0.16.4 - 2013-12-30 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -589,7 +589,7 @@ var rekapiCore = function (root, _, Tweenable) {
 
 
   /**
-   * Unbind `opt_handler` from a Kapi event.  If `opt_handler` is omitted, all handler functions bound to `eventName` are unbound.  Valid events correspond to the list under `bind()`.
+   * Unbind `opt_handler` from a Kapi event.  If `opt_handler` is omitted, all handler functions bound to `eventName` are unbound.  Valid events correspond to the list under [`on()`](#on).
    *
    * __[Example](../../../../docs/examples/unbind.html)__
    * @param {string} eventName
@@ -633,7 +633,7 @@ var rekapiCore = function (root, _, Tweenable) {
 
 
   /**
-   * Import data that was created as a result of [Kapi#exportTimeline](#exportTimeline).  Sets up all necessary actors and keyframes.  Note that this method only creates `Kapi.Actor` instances, not subclasses.
+   * Import data that was created by [`Kapi#exportTimeline`](#exportTimeline).  Sets up all necessary actors and keyframes.  Note that this method only creates `Kapi.Actor` instances, not subclasses.
    *
    * @param {Object} KapiData Any object that has the same data format as the object generated from Kapi#exportTimeline.
    */
