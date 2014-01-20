@@ -20,13 +20,13 @@
   -->
   <script src="test-amd/require-1.0.7+undef.js"></script>
   <script>
-  function setupTestKapi (Kapi) {
-    return new Kapi();
+  function setupTestRekapi (Rekapi) {
+    return new Rekapi();
   }
 
-  function  setupTestActor (Kapi, forKapi) {
-    var actor = new Kapi.Actor();
-    forKapi.addActor(actor);
+  function  setupTestActor (Rekapi, forRekapi) {
+    var actor = new Rekapi.Actor();
+    forRekapi.addActor(actor);
     return actor;
   }
 
@@ -58,42 +58,42 @@
         rekapi: '../dist/rekapi.min'
       });
 
-      require(['rekapi'], function(Kapi) {
-        var testKapi
+      require(['rekapi'], function(Rekapi) {
+        var testRekapi
             ,testActor;
 
-        testKapi = setupTestKapi(Kapi);
-        testActor = setupTestActor(Kapi, testKapi);
+        testRekapi = setupTestRekapi(Rekapi);
+        testActor = setupTestActor(Rekapi, testRekapi);
 
-        ok(testKapi !== undefined);
+        ok(testRekapi !== undefined);
         ok(testActor !== undefined);
         start();
       });
     });
 
-    asyncTest("Can instantiate Kapi and Actor objects", function() {
+    asyncTest("Can instantiate Rekapi and Actor objects", function() {
       requireConfig();
 
-      require(['rekapi'], function(Kapi) {
-        var testKapi
+      require(['rekapi'], function(Rekapi) {
+        var testRekapi
             ,testActor;
 
-        testKapi = setupTestKapi(Kapi);
-        testActor = setupTestActor(Kapi, testKapi);
+        testRekapi = setupTestRekapi(Rekapi);
+        testActor = setupTestActor(Rekapi, testRekapi);
 
-        ok(testKapi !== undefined);
+        ok(testRekapi !== undefined);
         ok(testActor !== undefined);
         start();
       });
     });
 
-    asyncTest("Global scope is not polluted by Kapi and its dependencies", function() {
+    asyncTest("Global scope is not polluted by Rekapi and its dependencies", function() {
       requireConfig();
 
-      require(['rekapi'], function(Kapi) {
-        var k = new Kapi({});
+      require(['rekapi'], function(Rekapi) {
+        var k = new Rekapi();
 
-        ok(window.Kapi === undefined);
+        ok(window.Rekapi === undefined);
         ok(window.Tweenable === undefined);
 
         // The loaded version of Underscore does not support AMD, so it will
@@ -109,11 +109,11 @@
         underscore: "test-amd/underscore-1.2.2"
       });
 
-      require(['rekapi'], function(Kapi) {
-        ok(Kapi !== undefined);
-        ok(Kapi.underscore_version === '1.2.2');
+      require(['rekapi'], function(Rekapi) {
+        ok(Rekapi !== undefined);
+        ok(Rekapi.underscore_version === '1.2.2');
 
-        var k = new Kapi({});
+        var k = new Rekapi();
         ok(k !== undefined);
         start();
       });
@@ -125,11 +125,11 @@
         underscore: "test-amd/underscore-1.3.3"
       });
 
-      require(['rekapi'], function(Kapi) {
-        ok(Kapi !== undefined);
-        ok(Kapi.underscore_version === '1.3.3');
+      require(['rekapi'], function(Rekapi) {
+        ok(Rekapi !== undefined);
+        ok(Rekapi.underscore_version === '1.3.3');
 
-        var k = new Kapi({});
+        var k = new Rekapi();
         ok(k !== undefined);
         // Make sure that Rekapi did not touch the global _ property.
         ok(window._ !== undefined);
@@ -156,10 +156,10 @@
           }
         });
 
-        require(['rekapi'], function(Kapi) {
-          ok(Kapi !== undefined);
+        require(['rekapi'], function(Rekapi) {
+          ok(Rekapi !== undefined);
 
-          var k = new Kapi({});
+          var k = new Rekapi();
           ok(k !== undefined);
 
           // Make sure that `_` still has its mixin
@@ -167,23 +167,6 @@
 
           start();
         });
-      });
-    });
-
-    asyncTest("Can instantiate a DOMActor", function() {
-      requireConfig();
-
-      require(['rekapi'], function(Kapi) {
-        var actor, el;
-
-        ok(Kapi.DOMActor !== undefined);
-
-        if (Kapi.DOMActor) {
-          el = document.createElement("div");
-          actor = new Kapi.DOMActor(el);
-          ok(actor !== undefined);
-        }
-        start();
       });
     });
 
@@ -197,6 +180,5 @@
  <h2 id="qunit-userAgent"></h2>
  <ol id="qunit-tests"></ol>
  <div id="qunit-fixture"></div>
-<canvas id="sandbox"></canvas>
 </body>
 </html>

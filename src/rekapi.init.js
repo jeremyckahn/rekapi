@@ -4,7 +4,7 @@ var rekapi = function (global, deps) {
 
   // If `deps` is defined, it means that Rekapi is loaded via AMD.
   // Don't use global context in this case so that the global scope
-  // is not polluted by the Kapi object.
+  // is not polluted by the Rekapi object.
   var context = deps ? {} : global;
 
   var _ = (deps && deps.underscore) ? deps.underscore : context._;
@@ -17,9 +17,8 @@ var rekapi = function (global, deps) {
     module(context);
   });
 
-  return context.Kapi;
+  return context.Rekapi;
 };
-
 
 if (typeof define === 'function' && define.amd) {
   var underscoreAlreadyInUse = (typeof _ !== 'undefined');
@@ -28,17 +27,17 @@ if (typeof define === 'function' && define.amd) {
   // Shifty and Underscore are set as dependencies of this module.
   //
   // The rekapi module is anonymous so that it can be required with any name.
-  // Example: define(['vendor/rekapi.min'], function(Kapi) { ... });
+  // Example: define(['vendor/rekapi.min'], function(Rekapi) { ... });
   define(['shifty', 'underscore'], function (Tweenable, Underscore) {
     var underscoreSupportsAMD = (Underscore != null);
     var deps = {  Tweenable: Tweenable,
                   // Some versions of Underscore.js support AMD, others don't.
                   // If not, use the `_` global.
                   underscore: underscoreSupportsAMD ? Underscore : _ };
-    var Kapi = rekapi({}, deps);
+    var Rekapi = rekapi({}, deps);
 
-    if (KAPI_DEBUG) {
-      Kapi.underscore_version = deps.underscore.VERSION;
+    if (REKAPI_DEBUG) {
+      Rekapi.underscore_version = deps.underscore.VERSION;
     }
 
     if (!underscoreAlreadyInUse && underscoreSupportsAMD) {
@@ -48,10 +47,10 @@ if (typeof define === 'function' && define.amd) {
       this._ = undefined;
     }
 
-    return Kapi;
+    return Rekapi;
   });
 } else {
-  // Load Rekapi normally (creating a Kapi global) if not using an AMD loader.
+  // Load Rekapi normally (creating a Rekapi global) if not using an AMD loader.
 
   // Note: `global` is not defined when running unit tests. Pass `this` instead.
   rekapi(this);

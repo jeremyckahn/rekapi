@@ -1,29 +1,31 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <script>
+  var global = window;
+  </script>
   <script src="../bower_components/jquery/jquery.js"></script>
   <script src="../bower_components/underscore/underscore.js"></script>
   <script src="../bower_components/shifty/dist/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
-  <script src="../src/rekapi.keyframeprops.js"></script>
-  <script src="../ext/canvas/rekapi.canvas.context.js"></script>
-  <script src="../ext/canvas/rekapi.canvas.actor.js"></script>
+  <script src="../src/rekapi.keyframe-property.js"></script>
+  <script src="../renderers/canvas/rekapi.renderer.canvas.js"></script>
   <script src="../src/rekapi.init.js"></script>
   <script>
-  function setupTestKapi () {
-    return new Kapi({
-      'context': document.getElementById('sandbox')
-      ,'height': 300
-      ,'width': 300
-    });
+  function setupTestRekapi () {
+    var rekapi = new Rekapi(document.querySelector('canvas').getContext('2d'));
+    rekapi.renderer.height(300);
+    rekapi.renderer.width(300);
+
+    return rekapi;
   }
 
-  function  setupTestActor (forKapi) {
+  function  setupTestActor (forRekapi) {
     var actor;
 
-    actor = new Kapi.CanvasActor({
-      'draw': function (canvas_context, state) {
+    actor = new Rekapi.Actor({
+      'render': function (canvas_context, state) {
         if (isNaN(state.x)) {
           return;
         }
@@ -42,39 +44,39 @@
       }
     });
 
-    forKapi.addActor(actor);
+    forRekapi.addActor(actor);
     return actor;
   }
 
   $(function () {
 
-    var kapi;
+    var rekapi;
 
     function killTest () {
-      kapi && kapi.stop(true);
-      kapi = undefined;
+      rekapi && rekapi.stop(true);
+      rekapi = undefined;
     }
 
     $('#kill-test').click(killTest);
 
     $('#play').click(function () {
-      kapi && kapi.play();
+      rekapi && rekapi.play();
     });
 
     $('#pause').click(function () {
-      kapi && kapi.pause();
+      rekapi && rekapi.pause();
     });
 
     $('#stop').click(function () {
-      kapi && kapi.stop(true);
+      rekapi && rekapi.stop(true);
     });
 
     $('#basic-linear-tween').click(function () {
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -86,8 +88,8 @@
           ,'y': 200
         });
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -95,8 +97,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -108,8 +110,8 @@
           ,'y': 200
         });
 
-      kapi.play(2);
-      console.log(kapi);
+      rekapi.play(2);
+      console.log(rekapi);
     });
 
 
@@ -118,8 +120,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -131,8 +133,8 @@
           ,'y': 200
         }, 'easeOutExpo');
 
-      kapi.playFrom(300);
-      console.log(kapi);
+      rekapi.playFrom(300);
+      console.log(rekapi);
     });
 
 
@@ -140,8 +142,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(500, {
@@ -153,8 +155,8 @@
           ,'y': 200
         });
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -162,8 +164,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -175,8 +177,8 @@
           ,'y': 200
         }, 'easeOutExpo');
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -184,8 +186,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -202,8 +204,8 @@
         }, 'easeOutExpo');
 
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -211,8 +213,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -223,10 +225,10 @@
           'x': 200
           ,'y': 200
         }, 'easeOutExpo')
-        .copyProperties(1500, 0);
+        .copyKeyframe(1500, 0);
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -234,8 +236,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -254,8 +256,8 @@
       actor.removeKeyframe(750);
 
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -263,8 +265,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -282,8 +284,8 @@
           ,'y': 'easeInSine'
         });
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -291,8 +293,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -308,8 +310,8 @@
           ,'color': '#0f0'
         },'easeOutExpo');
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -318,9 +320,9 @@
           ,actor2;
 
       killTest();
-      kapi = setupTestKapi();
-      actor1 = setupTestActor(kapi);
-      actor2 = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor1 = setupTestActor(rekapi);
+      actor2 = setupTestActor(rekapi);
 
       actor1
         .keyframe(0, {
@@ -344,8 +346,8 @@
           ,'y': 200
         }, 'easeOutExpo');
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -353,8 +355,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .tween({
@@ -369,8 +371,8 @@
           ,'duration': 1000
         });
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
   });

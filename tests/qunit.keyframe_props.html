@@ -9,22 +9,23 @@
   var SHIFTY_DEBUG_NOW = function () {
         return internalDebugNow();
       };
+  var global = window;
   </script>
   <script src="../bower_components/qunit/qunit/qunit.js"></script>
   <script src="../bower_components/underscore/underscore.js"></script>
   <script src="../bower_components/shifty/dist/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
-  <script src="../src/rekapi.keyframeprops.js"></script>
+  <script src="../src/rekapi.keyframe-property.js"></script>
   <script src="../src/rekapi.init.js"></script>
   <script>
-  function setupTestKapi () {
-    return new Kapi();
+  function setupTestRekapi () {
+    return new Rekapi();
   }
 
-  function  setupTestActor (forKapi) {
-    var actor = new Kapi.Actor();
-    forKapi.addActor(actor);
+  function  setupTestActor (forRekapi) {
+    var actor = new Rekapi.Actor();
+    forRekapi.addActor(actor);
     return actor;
   }
 
@@ -36,11 +37,9 @@
 
     test('Can create a KeyframeProperty', function () {
 
-      var actor = new Kapi.Actor();
-      var keyprop = new Kapi.KeyframeProperty(
-          actor, 500, 'x', 10, 'easeInQuad');
+      var actor = new Rekapi.Actor();
+      var keyprop = new Rekapi.KeyframeProperty(500, 'x', 10, 'easeInQuad');
 
-      equal(keyprop.ownerActor, actor, 'ownerActor was set');
       equal(keyprop.millisecond, 500, 'millisecond was set');
       equal(keyprop.name, 'x', 'name was set');
       equal(keyprop.value, 10, 'value was set');
@@ -53,9 +52,8 @@
 
     test('Can modify a KeyframeProperty', function () {
 
-      var actor = new Kapi.Actor();
-      var keyprop = new Kapi.KeyframeProperty(
-          actor, 500, 'x', 10, 'easeInQuad');
+      var actor = new Rekapi.Actor();
+      var keyprop = new Rekapi.KeyframeProperty(500, 'x', 10, 'easeInQuad');
 
       keyprop.modifyWith({
         'millisecond': 1500
@@ -74,11 +72,9 @@
 
     test('Can link one KeyframeProperty to another', function () {
 
-      var actor = new Kapi.Actor();
-      var keyprop = new Kapi.KeyframeProperty(
-          actor, 500, 'x', 10, 'easeInQuad');
-      var linkedKeyprop = new Kapi.KeyframeProperty(
-          actor, 1000, 'x', 20, 'swingTo');
+      var actor = new Rekapi.Actor();
+      var keyprop = new Rekapi.KeyframeProperty(500, 'x', 10, 'easeInQuad');
+      var linkedKeyprop = new Rekapi.KeyframeProperty(1000, 'x', 20, 'swingTo');
 
       keyprop.linkToNext(linkedKeyprop);
 
@@ -93,11 +89,9 @@
     test('Can compute midpoint values between to KeyframeProperties',
         function () {
 
-      var actor = new Kapi.Actor();
-      var keyprop = new Kapi.KeyframeProperty(
-          actor, 500, 'x', 10, 'linear');
-      var linkedKeyprop = new Kapi.KeyframeProperty(
-          actor, 1000, 'x', 20, 'linear');
+      var actor = new Rekapi.Actor();
+      var keyprop = new Rekapi.KeyframeProperty(500, 'x', 10, 'linear');
+      var linkedKeyprop = new Rekapi.KeyframeProperty(1000, 'x', 20, 'linear');
 
       keyprop.linkToNext(linkedKeyprop);
       var midpoint = keyprop.getValueAt(750);
@@ -111,8 +105,8 @@
 
     test('Exported data has key data points', function () {
 
-      var testKapi = setupTestKapi();
-      var testActor = setupTestActor(testKapi);
+      var testRekapi = setupTestRekapi();
+      var testActor = setupTestActor(testRekapi);
       testActor.keyframe(0, {
         'x': 1
       });

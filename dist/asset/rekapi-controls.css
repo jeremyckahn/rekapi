@@ -67,6 +67,7 @@
 .dragon-slider-handle {
     height: 21px;
     width: 21px;
+    padding: 0;
 
     -moz-box-shadow:     0px 0px 8px #222;
     -ms-box-shadow:      0px 0px 8px #222;

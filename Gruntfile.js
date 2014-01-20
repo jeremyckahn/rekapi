@@ -28,12 +28,9 @@ module.exports = function(grunt) {
           'src/rekapi.const.js',
           'src/rekapi.core.js',
           'src/rekapi.actor.js',
-          'src/rekapi.keyframeprops.js',
-          'ext/canvas/rekapi.canvas.context.js',
-          'ext/canvas/rekapi.canvas.actor.js',
-          'ext/dom/rekapi.dom.actor.js',
-          'ext/to-css/rekapi.to-css.js',
-          'ext/css-animate/rekapi.css-animate.context.js',
+          'src/rekapi.keyframe-property.js',
+          'renderers/canvas/rekapi.renderer.canvas.js',
+          'renderers/dom/rekapi.renderer.dom.js',
           'src/rekapi.init.js',
           'src/rekapi.outro.js'
         ],
@@ -48,12 +45,9 @@ module.exports = function(grunt) {
           'src/rekapi.intro.js',
           'src/rekapi.core.js',
           'src/rekapi.actor.js',
-          'src/rekapi.keyframeprops.js',
-          'ext/canvas/rekapi.canvas.context.js',
-          'ext/canvas/rekapi.canvas.actor.js',
-          'ext/dom/rekapi.dom.actor.js',
-          'ext/to-css/rekapi.to-css.js',
-          'ext/css-animate/rekapi.css-animate.context.js',
+          'src/rekapi.keyframe-property.js',
+          'renderers/canvas/rekapi.renderer.canvas.js',
+          'renderers/dom/rekapi.renderer.dom.js',
           'src/rekapi.init.js',
           'src/rekapi.outro.js'
         ],
@@ -69,7 +63,7 @@ module.exports = function(grunt) {
           'src/rekapi.const.js',
           'src/rekapi.core.js',
           'src/rekapi.actor.js',
-          'src/rekapi.keyframeprops.js',
+          'src/rekapi.keyframe-property.js',
           'src/rekapi.init.js',
           'src/rekapi.outro.js'
         ],
@@ -84,7 +78,7 @@ module.exports = function(grunt) {
           'src/rekapi.intro.js',
           'src/rekapi.core.js',
           'src/rekapi.actor.js',
-          'src/rekapi.keyframeprops.js',
+          'src/rekapi.keyframe-property.js',
           'src/rekapi.init.js',
           'src/rekapi.outro.js'
         ],
@@ -136,7 +130,7 @@ module.exports = function(grunt) {
       all_files: [
         'grunt.js',
         'src/rekapi.!(intro|outro|const)*.js',
-        'ext/**/**.js'
+        'renderers/**/**.js'
       ],
       options: {
         jshintrc: '.jshintrc'
@@ -150,19 +144,16 @@ module.exports = function(grunt) {
         src: [
           'src/rekapi.core.js',
           'src/rekapi.actor.js',
-          'src/rekapi.keyframeprops.js',
-          'ext/canvas/rekapi.canvas.context.js',
-          'ext/canvas/rekapi.canvas.actor.js',
-          'ext/dom/rekapi.dom.actor.js',
-          'ext/to-css/rekapi.to-css.js',
-          'ext/css-animate/rekapi.css-animate.context.js'
+          'src/rekapi.keyframe-property.js',
+          'renderers/canvas/rekapi.renderer.canvas.js',
+          'renderers/dom/rekapi.renderer.dom.js'
         ],
         dest: 'dist/doc'
       }
     },
     watch: {
       scripts: {
-        files: ['src/*.js', 'ext/**/*.js'],
+        files: ['src/*.js', 'renderers/**/*.js'],
         tasks: ['dox'],
         options: {
           interrupt: true

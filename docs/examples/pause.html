@@ -9,16 +9,13 @@
   <body>
     <canvas></canvas>
     <script>
-      var canvas = document.getElementsByTagName('canvas')[0];
+      var rekapi = new Rekapi(document.querySelector('canvas').getContext('2d'));
 
-      var kapi = new Kapi({
-        'context': canvas,
-        'height': 300,
-        'width': 400
-      });
+      rekapi.renderer.height(300);
+      rekapi.renderer.width(400);
 
-      var actor = new Kapi.CanvasActor({
-        'draw': function (canvas_context, state) {
+      var actor = new Rekapi.Actor({
+        render: function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
               state.x || 0,
@@ -35,15 +32,15 @@
         }
       });
 
-      kapi.addActor(actor);
+      rekapi.addActor(actor);
       actor
         .keyframe(0,    { x: 50,  y: 50 })
         .keyframe(1000, { x: 200, y: 150 });
 
-      kapi.play();
+      rekapi.play();
 
       setTimeout(function () {
-        kapi.pause();
+        rekapi.pause();
       }, 500);
     </script>
   </body>

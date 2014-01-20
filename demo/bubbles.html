@@ -13,11 +13,11 @@
       rekapi: "../dist/rekapi"
     }
   });
-  require(['rekapi', 'shifty', 'underscore'], function(Kapi, Tweenable) {
+  require(['rekapi', 'shifty', 'underscore'], function(Rekapi, Tweenable) {
 
     function makeBubble () {
-      return new Kapi.CanvasActor({
-        'draw': function (canvas_context, state) {
+      return new Rekapi.Actor({
+        'render': function (canvas_context, state) {
           canvas_context.beginPath();
           canvas_context.arc(
             state.x || 0,
@@ -50,11 +50,11 @@
     }
 
     function getBubbleX () {
-      return Math.random() * kapi.canvas.width();
+      return Math.random() * rekapi.renderer.width();
     }
 
     function getBubbleY () {
-      return Math.random() * kapi.canvas.height();
+      return Math.random() * rekapi.renderer.height();
     }
 
     function getSize () {
@@ -97,11 +97,11 @@
       for (i = 0; i < 30; i++) {
         time = 0;
         bubbles[i] = makeBubble();
-        kapi.addActor(bubbles[i]);
+        rekapi.addActor(bubbles[i]);
 
         bubbles[i].keyframe(time, {
-          'x': kapi.canvas.width() / 2
-          ,'y': kapi.canvas.height() + 50
+          'x': rekapi.renderer.width() / 2
+          ,'y': rekapi.renderer.height() + 50
           ,'radius': 0
           ,'color': getColor()
         }, {
@@ -114,7 +114,7 @@
           time = generateRandomFrame(bubbles[i], time);
         }
 
-        bubbles[i].copyProperties(time += 1500, 0);
+        bubbles[i].copyKeyframe(time += 1500, 0);
       }
     }
 
@@ -127,13 +127,14 @@
               ,keyProp
               ,newMillisecond
               ,randomNumber
-              ,trackLength = bubble.getTrackLength(trackName);
+              ,track = bubble.getPropertiesInTrack(trackName)
+              ,trackLength = track.length;
 
           for (i = 1; i < trackLength - 1; i++) {
-            keyProp = bubble.getKeyframeProperty(trackName, i);
+            keyProp = bubble.getKeyframeProperty(trackName, track[i].millisecond);
             randomNumber = (Math.random() * 1000) - 50;
             newMillisecond = keyProp.millisecond + randomNumber;
-            bubble.modifyKeyframeProperty(trackName, i, {
+            bubble.modifyKeyframeProperty(trackName, track[i].millisecond, {
               'millisecond': newMillisecond
             });
           }
@@ -143,27 +144,26 @@
 
     function generateSequence() {
       _.each(bubbles, function (bubble) {
-        bubble.removeAllKeyframeProperties();
-        kapi.removeActor(bubble)
+        bubble.removeAllKeyframes();
+        rekapi.removeActor(bubble)
       });
 
       bubbles = [];
       generateKeyframes(bubbles);
       mungeKeyframes(bubbles);
-      kapi.play(1);
+      rekapi.play(1);
     }
 
-    var canvas = document.getElementsByTagName('canvas')[0]
-        ,kapi = new Kapi({
-          'context': canvas
-          ,'height': 500
-          ,'width': 500
-        })
+    var context = document.querySelector('canvas').getContext('2d')
+        ,rekapi = new Rekapi(context)
         ,bubbles = [];
 
-    kapi.on('animationComplete', generateSequence)
+    rekapi.renderer.height(500);
+    rekapi.renderer.width(500);
 
-    kapi.canvas.setOrderFunction(function (actor) {
+    rekapi.on('animationComplete', generateSequence)
+
+    rekapi.renderer.setOrderFunction(function (actor) {
       return actor.get().radius;
     });
 

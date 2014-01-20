@@ -7,33 +7,10 @@
     <script src="../../dist/rekapi.js"></script>
   </head>
   <body>
-    <canvas></canvas>
+    <p>Open your browser's JavaScript console to see the exported timeline data.</p>
     <script>
-      var canvas = document.getElementsByTagName('canvas')[0];
-
-      var kapi = new Kapi({
-        'context': canvas,
-        'height': 300,
-        'width': 400
-      });
-
-      var actor = new Kapi.CanvasActor({
-        'draw': function (canvas_context, state) {
-          canvas_context.beginPath();
-            canvas_context.arc(
-              state.x || 0,
-              state.y || 0,
-              state.radius || 50,
-              0,
-              Math.PI*2,
-              true);
-            canvas_context.fillStyle = state.color || '#f0f';
-            canvas_context.fill();
-            canvas_context.closePath();
-
-            return this;
-        }
-      });
+      var rekapi = new Rekapi();
+      var actor = rekapi.addActor();
 
       actor
         .keyframe(0,    { x: 50,  y: 50 })

@@ -1,6 +1,5 @@
 /**
  * jQuery Dragon Slider.  It's a slider plugin!
- *   v0.1.0
  *   By Jeremy Kahn (jeremyckahn@gmail.com)
  *   Depends on jQuery jquery.dragon.js
  *   MIT License.
@@ -17,7 +16,7 @@
   // CONSTANTS
   var DEFAULTS = {
     'width': 250
-    ,'increment': .02
+    ,'increment': 0.02
     ,'drag': $.noop
   };
   var KEY_RIGHT = 39;
@@ -34,7 +33,13 @@
   }
 
 
+  // PUBLIC $.fn FUNCTIONS
+  //
+
+
   /**
+   * Initialize a slider.
+   *
    * @param {Object=} opts
    *   @param {number} width Width of the slider.
    *   @param {Function(number)} drag The drag event handler.  Receives the
@@ -44,10 +49,14 @@
     opts = opts || {};
     var defaultsCopy = $.extend({}, DEFAULTS);
     initDragonSliderEls(this, $.extend(defaultsCopy, opts));
+
+    return this;
   };
 
 
   /**
+   * Set the normalized value of the slider.
+   *
    * @param {number} val Between 0 and 1.
    * @param {boolean} triggerDrag True to trigger the drag event handler, false
    *     not to.
@@ -63,22 +72,30 @@
     if (triggerDrag !== false) {
       data.drag(this.dragonSliderGet());
     }
+
+    return this;
   };
 
 
   /**
+   * Get the normalized value of the slider.
+   *
    * @return {number} Between 0 and 1.
    */
   $.fn.dragonSliderGet = function () {
     var $handle = this.find('.dragon-slider-handle');
-    var left = +$handle.css('left').replace(/px/, '');
+    var left = parseInt($handle.css('left'), 10);
     return left / getInnerSliderWidth(this, $handle);
   };
 
 
+  // PRIVATE HELPER FUNCTIONS
+  //
+
+
   /**
    * @param {jQuery} $els
-   * @param {Object} opts
+   * @param {Object} opts Same as opts from $.fn.dragonSlider.
    */
   function initDragonSliderEls ($els, opts) {
     $els.each(function (i, el) {
@@ -95,10 +112,10 @@
 
 
   /**
-   * @param {jQuery} $container
+   * @param {jQuery} $container The element to contain the handle.
    */
   function createDragHandle ($container) {
-    var $handle = $(document.createElement('BUTTON'));
+    var $handle = $(document.createElement('button'));
     var data = $container.data('dragon-slider');
     $handle.addClass('dragon-slider-handle');
     $handle.dragon({
@@ -115,15 +132,15 @@
 
 
   /**
-   * @param {Object} ev
+   * @param {jQuery.Event} evt
    */
-  function onHandleKeydown (ev) {
+  function onHandleKeydown (evt) {
     var $el = $(this);
     var $parent = $el.parent();
     var current = $parent.dragonSliderGet();
     var data = $parent.data('dragon-slider');
     var increment = data.increment;
-    var key = ev.which;
+    var key = evt.which;
 
     if (key === KEY_LEFT) {
       $parent.dragonSliderSet(current - increment);
@@ -135,23 +152,22 @@
 
 
   /**
-   * @param {Object} ev
+   * @param {jQuery.Event} evt
    */
-  function onSliderMousedown (ev) {
-    if (ev.target === this) {
+  function onSliderMousedown (evt) {
+    if (evt.target === this) {
       var $el = $(this);
       var $handle = $el.find('.dragon-slider-handle');
-      var offset = ev.clientX - $el.offset().left;
+      var offset = evt.clientX - $el.offset().left;
       offset -= $handle.outerWidth() / 2;
       $el.dragonSliderSet(offset / getInnerSliderWidth($el, $handle));
-      $handle.trigger('mousedown', [ev.pageX, ev.pageY]);
+      $handle.trigger('mousedown', [evt.pageX, evt.pageY]);
     }
   }
 
 } (this.jQuery));
 /**
  * jQuery Dragon.  It's a dragging plugin!
- *   v0.1.3
  *   By Jeremy Kahn (jeremyckahn@gmail.com)
  *   MIT License.
  *   For more info: https://github.com/jeremyckahn/dragon
@@ -362,7 +378,11 @@
     var handler = $el.data('dragon-opts')[event];
     // Patch the proxied Event Object
     evt.target = $el[0];
-    handler && handler(evt);
+    if (handler) {
+      handler(evt);
+    }
+
+    $el.trigger(event);
   }
 
 } (this.jQuery));

@@ -16,7 +16,7 @@
       <h2>A keyframe animation library for JavaScript</h2>
     </header>
     <p class="center">
-      Learn about the Actor API <a href="/dist/doc/src/rekapi.actor.js.html" target="_blank">here</a>. Preview the available easing formulae <a href="ease.html">here</a>.
+      Learn about the Actor API <a href="/dist/doc/src/rekapi.actor.js.html" target="_blank">here</a>. Preview the available easing curves <a href="ease.html">here</a>.
     </p>
     <p class="center">
 
@@ -61,14 +61,14 @@
       var JavaScriptMode = require("ace/mode/javascript").Mode;
       editor.getSession().setMode(new JavaScriptMode());
 
-      canvas = $('canvas')
-      ,kapi = new Kapi({
-          'context': canvas[0]
-          ,'height': 480
-          ,'width': 400
-        })
-      ,actor = new Kapi.CanvasActor({
-        'draw': function (canvas_context, state) {
+      var $canvas = $('canvas');
+      var rekapi = new Rekapi($canvas[0].getContext('2d'));
+
+      rekapi.renderer.height(480);
+      rekapi.renderer.width(400);
+
+      var actor = new Rekapi.Actor({
+        'render': function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
               state.x || 0,
@@ -84,8 +84,8 @@
         }
       });
 
-      canvas.css('background', '#eee');
-      kapi.addActor(actor);
+      $canvas.css('background', '#eee');
+      rekapi.addActor(actor);
       var update = $('#update')
           ,oldCode = editor.getSession().getValue();
 
@@ -93,21 +93,21 @@
         var newCode = editor.getSession().getValue();
 
         try {
-          kapi.stop();
-          actor.removeAllKeyframeProperties();
+          rekapi.stop();
+          actor.removeAllKeyframes();
           eval(newCode);
-          kapi.play();
+          rekapi.play();
           oldCode = newCode;
         } catch (ex) {
           // eval failed, run the last code that didn't error out
-          kapi.stop();
-          actor.removeAllKeyframeProperties();
+          rekapi.stop();
+          actor.removeAllKeyframes();
           eval(oldCode);
-          kapi.play();
-          canvas.css('background', '#ff45b1');
+          rekapi.play();
+          $canvas.css('background', '#ff45b1');
 
           setTimeout(function () {
-            canvas.css('background', '#eee');
+            $canvas.css('background', '#eee');
           }, 1200);
         }
       });
@@ -125,11 +125,11 @@
       });
 
       $('#play').on('click', function () {
-        kapi.play();
+        rekapi.play();
       });
 
       $('#pause').on('click', function () {
-        kapi.pause();
+        rekapi.pause();
       });
 
       update.click();

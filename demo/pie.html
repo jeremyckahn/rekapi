@@ -13,7 +13,7 @@
       rekapi: "../dist/rekapi"
     }
   });
-  require(['rekapi', 'underscore'], function(Kapi) {
+  require(['rekapi', 'underscore'], function(Rekapi) {
 
     var CANVAS_HEIGHT = 300;
     var CANVAS_WIDTH = 300;
@@ -25,12 +25,10 @@
         ,'#A38650': 5
       };
 
-    var canvas = document.getElementsByTagName('canvas')[0];
-    var kapi = new Kapi({
-        'context': canvas
-        ,'height': CANVAS_HEIGHT
-        ,'width': CANVAS_WIDTH
-      });
+    var rekapi = new Rekapi(document.querySelector('canvas').getContext('2d'));
+
+    rekapi.renderer.height(CANVAS_HEIGHT);
+    rekapi.renderer.width(CANVAS_WIDTH);
 
     var actors = {};
 
@@ -58,8 +56,8 @@
 
 
     function getActor (basePercentage, color, previousPiece) {
-      var actor = new Kapi.CanvasActor({
-        'draw': function (canvas_context, state) {
+      var actor = new Rekapi.Actor({
+        'render': function (canvas_context, state) {
           var percent = basePercentage
               ,previousSum = getStartRad(this)
               ,x ,y
@@ -118,7 +116,7 @@
 
     _.each(PERCENTAGES, function (percent, color) {
       actors[color] = getActor(percent, color, previousActor);
-      kapi.addActor(actors[color]);
+      rekapi.addActor(actors[color]);
       previousSum += percent;
       previousActor = actors[color];
     });
@@ -171,7 +169,7 @@
       });
     });
 
-    kapi.play();
+    rekapi.play();
 
   });
   </script>

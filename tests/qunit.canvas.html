@@ -2,28 +2,28 @@
 <html>
 <head>
   <link href="../bower_components/qunit/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script>
+  var global = window;
+  </script>
   <script src="../bower_components/qunit/qunit/qunit.js"></script>
   <script src="../bower_components/underscore/underscore.js"></script>
   <script src="../bower_components/shifty/dist/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
-  <script src="../src/rekapi.keyframeprops.js"></script>
-  <script src="../ext/canvas/rekapi.canvas.actor.js"></script>
-  <script src="../ext/canvas/rekapi.canvas.context.js"></script>
+  <script src="../src/rekapi.keyframe-property.js"></script>
+  <script src="../renderers/canvas/rekapi.renderer.canvas.js"></script>
   <script src="../src/rekapi.init.js"></script>
   <script>
-  function setupTestKapi () {
+  function setupTestRekapi () {
     var canvas = document.createElement('canvas')
-        ,kapi = new Kapi({
-          'context': canvas
-        });
+        ,rekapi = new Rekapi(canvas.getContext('2d'));
 
-    return kapi;
+    return rekapi;
   }
 
-  function  setupTestActor (forKapi) {
-    var actor = new Kapi.CanvasActor();
-    forKapi.addActor(actor);
+  function  setupTestActor (forRekapi) {
+    var actor = new Rekapi.Actor();
+    forRekapi.addActor(actor);
     return actor;
   }
 
@@ -31,128 +31,71 @@
 
     module('Canvas extension');
 
-    test('Actors are added to the drawOrder array', function () {
-      var testKapi
+    test('Actors are added to the renderOrder array', function () {
+      var testRekapi
           ,testActor1;
 
-      testKapi = setupTestKapi();
-      testActor1 = setupTestActor(testKapi);
+      testRekapi = setupTestRekapi();
+      testActor1 = setupTestActor(testRekapi);
 
-      equal(testKapi.canvas._drawOrder[0], testActor1.id,
-          'Actor is the first element in the internal _drawOrder array');
+      equal(testRekapi.renderer._renderOrder[0], testActor1.id,
+          'Actor is the first element in the internal _renderOrder array');
     });
 
 
-    test('Actors are removed from the drawOrder array', function () {
-      var testKapi
+    test('Actors are removed from the renderOrder array', function () {
+      var testRekapi
           ,testActor1;
 
-      testKapi = setupTestKapi();
-      testActor1 = setupTestActor(testKapi);
+      testRekapi = setupTestRekapi();
+      testActor1 = setupTestActor(testRekapi);
 
-      testKapi.removeActor(testActor1);
+      testRekapi.removeActor(testActor1);
 
-      equal(testKapi.canvas._drawOrder.length, 0,
-          'Actor is no longer present in the internal _drawOrder array');
+      equal(testRekapi.renderer._renderOrder.length, 0,
+          'Actor is no longer present in the internal _renderOrder array');
     });
 
 
-    test('Only CanvasActors are added to the drawOrder array', function () {
-      var testKapi
-          ,testCanvasActor1
-          ,testCanvasActor2
-          ,testActor;
-
-      testKapi = setupTestKapi();
-      testCanvasActor1 = setupTestActor(testKapi);
-      testCanvasActor2 = setupTestActor(testKapi);
-      testActor = new Kapi.Actor();
-      testKapi.addActor(testActor);
-
-      equal(testKapi.canvas._drawOrder.length, 2,
-          'There are only two canvas actors in the drawOrder array');
-      equal(testKapi.canvas._drawOrder.indexOf(testActor.id), -1,
-          'testActor is not present inside the drawOrder array');
-
-      testCanvasActor1.keyframe(0, { 'x': 1 }).keyframe(1000, { 'x': 2 });
-      testCanvasActor2.keyframe(0, { 'x': 1 }).keyframe(1000, { 'x': 2 });
-      testActor.keyframe(0, { 'x': 1 }).keyframe(1000, { 'x': 2 });
-
-      testCanvasActor1.draw = function(context, state) {
-        ok(state != undefined);
-      };
-      testCanvasActor2.draw = function(context, state) {
-        ok(state != undefined);
-      };
-      // This is only for testing. Regular actors don't have a `draw` method.
-      testActor.draw = function() {
-        throw new Error('draw() should not be called on non-canvas actors');
-      };
-
-      testKapi.update(500);
-    });
-
-
-    test('Actors can be moved to the beginning of the draw list', function () {
-      var testKapi
+    test('Actors can be moved to the beginning of the render list', function () {
+      var testRekapi
           ,testActor1
           ,testActor2;
 
-      testKapi = setupTestKapi();
-      testActor1 = setupTestActor(testKapi);
-      testActor2 = setupTestActor(testKapi);
-      testKapi.canvas.moveActorToLayer(testActor2, 0);
+      testRekapi = setupTestRekapi();
+      testActor1 = setupTestActor(testRekapi);
+      testActor2 = setupTestActor(testRekapi);
+      testRekapi.renderer.moveActorToLayer(testActor2, 0);
 
-      equal(testKapi.canvas._drawOrder[0], testActor2.id,
+      equal(testRekapi.renderer._renderOrder[0], testActor2.id,
           'Second actor was moved to the first position.');
 
-      equal(testKapi.canvas._drawOrder[1], testActor1.id,
+      equal(testRekapi.renderer._renderOrder[1], testActor1.id,
           'First actor was moved to the second position.');
 
-      equal(testKapi.actorCount(), 2,
-          'Draw list size did not change.');
+      equal(testRekapi.getActorCount(), 2,
+          'Render list size did not change.');
     });
 
 
-    test('Actors can be moved to the end of the draw list', function () {
-      var testKapi
+    test('Actors can be moved to the end of the render list', function () {
+      var testRekapi
           ,testActor1
           ,testActor2;
 
-      testKapi = setupTestKapi();
-      testActor1 = setupTestActor(testKapi);
-      testActor2 = setupTestActor(testKapi);
-      testKapi.canvas.moveActorToLayer(testActor1, 1);
+      testRekapi = setupTestRekapi();
+      testActor1 = setupTestActor(testRekapi);
+      testActor2 = setupTestActor(testRekapi);
+      testRekapi.renderer.moveActorToLayer(testActor1, 1);
 
-      equal(testKapi.canvas._drawOrder[0], testActor2.id,
+      equal(testRekapi.renderer._renderOrder[0], testActor2.id,
           'Second actor was moved to the first position.');
 
-      equal(testKapi.canvas._drawOrder[1], testActor1.id,
+      equal(testRekapi.renderer._renderOrder[1], testActor1.id,
           'First actor was moved to the second position.');
 
-      equal(testKapi.actorCount(), 2,
-          'Draw list size did not change.');
-    });
-
-
-    test('Actors can move themselves.', function () {
-      var testKapi
-          ,testActor1
-          ,testActor2;
-
-      testKapi = setupTestKapi();
-      testActor1 = setupTestActor(testKapi);
-      testActor2 = setupTestActor(testKapi);
-      testActor1.moveToLayer(1);
-
-      equal(testKapi.canvas._drawOrder[0], testActor2.id,
-          'Second actor was moved to the first position.');
-
-      equal(testKapi.canvas._drawOrder[1], testActor1.id,
-          'First actor was moved to the second position.');
-
-      equal(testKapi.actorCount(), 2,
-          'Draw list size did not change.');
+      equal(testRekapi.getActorCount(), 2,
+          'Render list size did not change.');
     });
 
   } ());

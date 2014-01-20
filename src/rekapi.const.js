@@ -1,1 +1,1 @@
-const KAPI_DEBUG = false;
+const REKAPI_DEBUG = false;

@@ -9,16 +9,13 @@
   <body>
     <canvas></canvas>
     <script>
-      var canvas = document.getElementsByTagName('canvas')[0];
+      var rekapi = new Rekapi(document.querySelector('canvas').getContext('2d'));
 
-      var kapi = new Kapi({
-        'context': canvas,
-        'height': 300,
-        'width': 400
-      });
+      rekapi.renderer.height(300);
+      rekapi.renderer.width(400);
 
-      var actor1 = new Kapi.CanvasActor({
-        'draw': function (canvas_context, state) {
+      var actor1 = new Rekapi.Actor({
+        render: function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
               state.x || 0,
@@ -35,8 +32,8 @@
         }
       });
 
-      var actor2 = new Kapi.CanvasActor({
-        'draw': function (canvas_context, state) {
+      var actor2 = new Rekapi.Actor({
+        render: function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
               state.x || 0,
@@ -53,23 +50,23 @@
         }
       });
 
-      kapi.addActor(actor1);
+      rekapi.addActor(actor1);
       actor1
         .keyframe(0, { x: 100,  y: 50, radius: 50 })
         .wait(2000);
 
-      kapi.addActor(actor2);
+      rekapi.addActor(actor2);
       actor2
         .keyframe(0, { x: 100,  y: 100, radius: 25 })
         .keyframe(2000, { radius: 75 });
 
-      // Larger circles are drawn first.  Once actor2 grows larger than actor1,
-      // it will be drawn on top.
-      kapi.canvas.setOrderFunction(function (actor) {
+      // Larger circles are rendered first.  Once actor2 grows larger than
+      // actor1, it will be rendered on top.
+      rekapi.renderer.setOrderFunction(function (actor) {
         return actor.get().radius;
       });
 
-      kapi.play();
+      rekapi.play();
 
     </script>
   </body>

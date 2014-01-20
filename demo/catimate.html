@@ -30,14 +30,14 @@
     });
 
     // Dependencies (Underscore and Shifty) are automatically loaded.
-    require(['rekapi'], function(Kapi) {
-      var kapi = new Kapi()
+    require(['rekapi'], function(Rekapi) {
+      var rekapi = new Rekapi(document.body)
           ,cat
           ,time = 0;
 
       var catImg = document.getElementById('actor');
-      cat = new Kapi.DOMActor(catImg);
-      kapi.addActor(cat);
+      cat = new Rekapi.Actor({ context: catImg });
+      rekapi.addActor(cat);
 
       cat
         .keyframe(time, {
@@ -62,10 +62,10 @@
 
       catImg.style.display = 'block';
 
-      if (kapi.css.canAnimateWithCSS()) {
-        kapi.css.play();
+      if (rekapi.renderer.canAnimateWithCSS()) {
+        rekapi.renderer.play();
       } else {
-        kapi.play();
+        rekapi.play();
       }
     });
   </script>

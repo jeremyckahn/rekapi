@@ -2,24 +2,27 @@
 <html>
 <head>
   <link href="../bower_components/qunit/qunit/qunit.css" rel="stylesheet" type="text/css" />
+  <script>
+  var global = window;
+  </script>
   <script src="../bower_components/qunit/qunit/qunit.js"></script>
   <script src="../bower_components/underscore/underscore.js"></script>
   <script src="../bower_components/shifty/dist/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
-  <script src="../src/rekapi.keyframeprops.js"></script>
-  <script src="../ext/dom/rekapi.dom.actor.js"></script>
+  <script src="../src/rekapi.keyframe-property.js"></script>
+  <script src="../renderers/dom/rekapi.renderer.dom.js"></script>
   <script src="../src/rekapi.init.js"></script>
   <script>
-  function setupTestKapi () {
-    var kapi = new Kapi();
+  function setupTestRekapi () {
+    var rekapi = new Rekapi(document.body);
 
-    return kapi;
+    return rekapi;
   }
 
-  function  setupTestActor (forKapi) {
-    var actor = new Kapi.DOMActor(document.createElement('div'));
-    forKapi.addActor(actor);
+  function  setupTestActor (forRekapi) {
+    var actor = new Rekapi.Actor({ context: document.createElement('div') });
+    forRekapi.addActor(actor);
     return actor;
   }
 
@@ -28,11 +31,11 @@
     module('DOM extension');
 
     test('Support the transform property', function() {
-      var testKapi
+      var testRekapi
           ,testActor1;
 
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
+      testRekapi = setupTestRekapi();
+      testActor = setupTestActor(testRekapi);
 
       testActor
         .keyframe(0, {
@@ -44,20 +47,20 @@
           ,'background': '#00f'
         });
 
-      testKapi.update(500);
+      testRekapi.update(500);
 
       var expectedValue = 'translateX(200px) translateY(200px) rotate(90deg)';
-      equal(testActor._context.style.transform, expectedValue,
+      equal(testActor.context.style.transform, expectedValue,
         "The actor's DOM element has the correct transform style");
     });
 
 
     test('Support independent transform properties', function() {
-      var testKapi
+      var testRekapi
           ,testActor1;
 
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
+      testRekapi = setupTestRekapi();
+      testActor = setupTestActor(testRekapi);
 
       testActor
         .keyframe(0, {
@@ -73,37 +76,38 @@
           ,'height': '50px'
         });
 
-      testKapi.update(1000);
+      testRekapi.update(1000);
 
       var expectedValue = 'translateX(50px) translateY(50px) rotate(125deg)';
-      equal(testActor._context.style.transform, expectedValue,
+      equal(testActor.context.style.transform, expectedValue,
         "The actor's DOM element has the correct transform style");
 
-      equal(testActor._context.style.height, '25px',
+      equal(testActor.context.style.height, '25px',
         'Other non-transform properties are also updated');
     });
 
 
     test('Allow default transform order to be overriden', function () {
-      var testKapi
+      var testRekapi
           ,testActor;
 
-      testKapi = setupTestKapi();
-      testActor = setupTestActor(testKapi);
+      testRekapi = setupTestRekapi();
+      testActor = setupTestActor(testRekapi);
 
-      var setWrongFunctions = _.bind(testActor.setTransformOrder, testActor,
-        ['foo', 'bar', 'rotate']);
+      var setWrongFunctions = function () {
+        testRekapi.renderer.setActorTransformOrder(testActor, ['foo', 'bar', 'rotate']);
+      }
 
       raises(setWrongFunctions,
         'Throws error if passed an unknown/unsupported transform function');
 
       var testOrder1 = ['rotate', 'translateY', 'translateX'];
-      testActor.setTransformOrder(testOrder1);
+      testRekapi.renderer.setActorTransformOrder(testActor, testOrder1)
       deepEqual(testActor._transformOrder, testOrder1,
           'The internal _transformOrder array has the correct value');
 
       var testOrder2 = ['rotate', 'translateX', 'rotate'];
-      testActor.setTransformOrder(testOrder2);
+      testRekapi.renderer.setActorTransformOrder(testActor, testOrder2)
       deepEqual(testActor._transformOrder, ['rotate', 'translateX'],
           'Duplicate values passed to setTransformOrder are ignored');
 
@@ -119,18 +123,19 @@
           ,'rotate': '150deg'
         });
 
-      testActor.setTransformOrder(['rotate', 'translateY', 'translateX']);
-      testKapi.update(1000);
+      testRekapi.renderer.setActorTransformOrder(
+          testActor, ['rotate', 'translateY', 'translateX']);
+      testRekapi.update(1000);
 
       var expectedValue = 'rotate(125deg) translateY(50px) translateX(50px)';
-      equal(testActor._context.style.transform, expectedValue,
+      equal(testActor.context.style.transform, expectedValue,
         'Independent transform parameters are re-ordered as expected');
     });
 
 
     test('translate3d does not break easing value cardinality', function () {
-      var testKapi = setupTestKapi();
-      var testActor = setupTestActor(testKapi);
+      var testRekapi = setupTestRekapi();
+      var testActor = setupTestActor(testRekapi);
 
       testActor
         .keyframe(0, {
@@ -139,7 +144,7 @@
           transform: 'translate3d(1, 1, 1)'
         }, 'linear easeInQuad easeOutQuad');
 
-        testKapi.update(50);
+        testRekapi.update(50);
 
         var transformChunks = testActor.get().transform.match(/(\d|\.)+/g);
         equal(
@@ -158,8 +163,8 @@
 
 
     test('3d hack does not break "3deg" case', function () {
-      var testKapi = setupTestKapi();
-      var testActor = setupTestActor(testKapi);
+      var testRekapi = setupTestRekapi();
+      var testActor = setupTestActor(testRekapi);
 
       testActor
         .keyframe(0, {
@@ -167,7 +172,7 @@
         .keyframe(100, {
           transform: 'rotate(6deg)'});
 
-        testKapi.update(50);
+        testRekapi.update(50);
 
         var transformMatch = testActor.get().transform.match(/(\d|\.)+/g);
         equal(

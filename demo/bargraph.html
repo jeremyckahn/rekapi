@@ -13,16 +13,16 @@
       rekapi: "../dist/rekapi"
     }
   });
-  require(['rekapi', 'underscore'], function(Kapi) {
+  require(['rekapi', 'underscore'], function(Rekapi) {
 
     function makeBarActor (val) {
-      return new Kapi.CanvasActor({
+      return new Rekapi.Actor({
         'setup': function () {
           this.data = {
             'val': val
           };
         }
-        ,'draw': function (context, state) {
+        ,'render': function (context, state) {
           context.beginPath();
           context.lineWidth = 20;
           context.moveTo(state.x, state.y);
@@ -55,14 +55,13 @@
       return getColor();
     }
 
-    var canvas = document.getElementsByTagName('canvas')[0]
-        ,kapi = new Kapi({
-          'context': canvas
-          ,'height': 400
-          ,'width': 250
-        })
+    var context = document.querySelector('canvas').getContext('2d')
+        ,rekapi = new Rekapi(context)
         ,BASELINE = 350
         ,bars = [];
+
+    rekapi.renderer.height(400);
+    rekapi.renderer.width(250);
 
     bars[0] = makeBarActor(150);
     bars[1] = makeBarActor(300);
@@ -75,7 +74,7 @@
       var time = 0;
       var xOffset = getXOffset();
 
-      kapi.addActor(bar);
+      rekapi.addActor(bar);
 
       bar.keyframe(time, {
         'x': xOffset
@@ -93,7 +92,7 @@
     });
 
 
-    kapi.play();
+    rekapi.play();
 
   });
   </script>

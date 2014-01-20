@@ -8,77 +8,74 @@
   var SHIFTY_DEBUG_NOW = function () {
         return internalDebugNow();
       };
+  var global = window;
   </script>
   <script src="../bower_components/jquery/jquery.js"></script>
   <script src="../bower_components/underscore/underscore.js"></script>
   <script src="../bower_components/shifty/dist/shifty.js"></script>
   <script src="../src/rekapi.core.js"></script>
   <script src="../src/rekapi.actor.js"></script>
-  <script src="../src/rekapi.keyframeprops.js"></script>
-  <script src="../ext/dom/rekapi.dom.actor.js"></script>
+  <script src="../src/rekapi.keyframe-property.js"></script>
+  <script src="../renderers/dom/rekapi.renderer.dom.js"></script>
   <script src="../src/rekapi.init.js"></script>
   <script>
-  function setupTestKapi () {
+  function setupTestRekapi () {
     var sandbox
-        ,kapi
+        ,rekapi
         ,actor;
 
     sandbox = document.getElementById('sandbox');
-    kapi = new Kapi({
-      'context': sandbox
-      ,'height': 300
-      ,'width': 300
-    });
+    rekapi = new Rekapi(sandbox);
 
-    return kapi;
+    return rekapi;
   }
 
-  function  setupTestActor (forKapi) {
+  function  setupTestActor (forRekapi) {
     var actor
         ,element;
 
     element = document.getElementById('actor');
     element.removeAttribute('style');
     element.style.position = 'absolute';
-    actor = new Kapi.DOMActor(element);
-    forKapi.addActor(actor);
+    actor = new Rekapi.Actor({ context: element });
+    forRekapi.addActor(actor);
     return actor;
   }
 
   $(function () {
 
-    var kapi;
+    var rekapi;
 
     function killTest () {
-      if (kapi) {
-        var ids = kapi.getActorIds();
-        var actor = kapi.getActor(ids[0]);
-        kapi.removeActor(actor);
-        kapi.stop(true);
-        kapi = undefined;
+      if (rekapi) {
+        var ids = rekapi.getActorIds();
+        var actor = rekapi.getActor(ids[0]);
+        rekapi.removeActor(actor);
+        rekapi.stop(true);
+        rekapi = undefined;
       }
     }
 
     $('#kill-test').click(killTest);
 
     $('#play').click(function () {
-      kapi && kapi.play();
+      rekapi && rekapi.play();
     });
 
     $('#pause').click(function () {
-      kapi && kapi.pause();
+      rekapi && rekapi.pause();
     });
 
     $('#stop').click(function () {
-      kapi && kapi.stop(true);
+      rekapi && rekapi.stop(true);
     });
 
     $('#basic-linear-tween').click(function () {
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -88,8 +85,8 @@
           'transform': 'translateX(200px) translateY(200px)'
         });
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -97,8 +94,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -110,8 +107,8 @@
           ,'top': '200px'
         });
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -119,8 +116,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -130,8 +127,8 @@
           'transform': 'translateX(200px) translateY(200px)'
         }, 'easeOutExpo');
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -139,8 +136,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -152,8 +149,8 @@
           'transform': 'easeOutExpo easeInSine'
         });
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -161,8 +158,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -178,8 +175,8 @@
           ,'width': '100px'
         }, 'easeOutExpo');
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -187,8 +184,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(0, {
@@ -208,8 +205,8 @@
           ,'width': '100px'
         }, 'easeOutExpo');
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
 
 
@@ -217,8 +214,8 @@
       var actor;
 
       killTest();
-      kapi = setupTestKapi();
-      actor = setupTestActor(kapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       actor
         .keyframe(500, {
@@ -228,8 +225,8 @@
           'transform': 'translateX(200px) translateY(200px)'
         });
 
-      kapi.play();
-      console.log(kapi);
+      rekapi.play();
+      console.log(rekapi);
     });
   });
 

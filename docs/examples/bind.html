@@ -9,16 +9,13 @@
   <body>
     <canvas></canvas>
     <script>
-      var canvas = document.getElementsByTagName('canvas')[0];
+      var rekapi = new Rekapi(document.querySelector('canvas').getContext('2d'));
 
-      var kapi = new Kapi({
-        'context': canvas,
-        'height': 300,
-        'width': 400
-      });
+      rekapi.renderer.height(300);
+      rekapi.renderer.width(400);
 
-      var actor = new Kapi.CanvasActor({
-        'draw': function (canvas_context, state) {
+      var actor = new Rekapi.Actor({
+        render: function (canvas_context, state) {
           canvas_context.beginPath();
             canvas_context.arc(
               state.x || 0,
@@ -35,22 +32,22 @@
         }
       });
 
-      kapi.addActor(actor);
+      rekapi.addActor(actor);
       actor
         .keyframe(0,    { x: 50,  y: 50 })
         .keyframe(1000, { x: 200, y: 150 });
 
-      kapi.on('play', function (kapi) {
-        console.log(kapi, 'is now playing');
+      rekapi.on('play', function (rekapi) {
+        console.log(rekapi, 'is now playing');
       });
-      kapi.on('afterDraw', function (kapi) {
-        console.log(kapi, 'just rendered a frame');
+      rekapi.on('afterRender', function (rekapi) {
+        console.log(rekapi, 'just rendered a frame');
       });
-      kapi.on('stop', function (kapi) {
-        console.log(kapi, 'has stopped');
+      rekapi.on('stop', function (rekapi) {
+        console.log(rekapi, 'has stopped');
       });
 
-      kapi.play(1);
+      rekapi.play(1);
     </script>
   </body>
 </html>

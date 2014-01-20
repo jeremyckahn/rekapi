@@ -47,8 +47,8 @@ $(function () {
   var prerenderedPath;
   function generatePathPrerender (x1, y1, x2, y2, easeX, easeY) {
     prerenderedPath = document.createElement('canvas');
-    prerenderedPath.width = kapi.canvas.width();
-    prerenderedPath.height = kapi.canvas.height();
+    prerenderedPath.width = rekapi.renderer.width();
+    prerenderedPath.height = rekapi.renderer.height();
     var ctx = prerenderedPath.ctx = prerenderedPath.getContext('2d');
     var points = generatePathPoints.apply(this, arguments);
 
@@ -112,44 +112,45 @@ $(function () {
 
   function  moveLastKeyframe (actor, toMillisecond) {
     var trackNames = actor.getTrackNames();
-    var lastFrameIndex = actor.getTrackLength(trackNames[0]) - 1;
+    var lastKeyframeMillisecond =
+        _.last(actor.getPropertiesInTrack(trackNames[0])).millisecond;
 
     _.each(trackNames, function (trackName) {
-      actor.modifyKeyframeProperty(trackName, lastFrameIndex, {
-            'millisecond': toMillisecond
-          });
+      actor.modifyKeyframeProperty(trackName, lastKeyframeMillisecond, {
+          'millisecond': toMillisecond
+        });
     });
 
     animationDuration = toMillisecond;
   }
 
-  var canvas = $('canvas')[0];
-  var kapi = new Kapi({
-      'context': canvas
-      ,'height': 400
-      ,'width': 500
-    })
-    ,circle = new Kapi.CanvasActor({
-      'draw': function (canvas_context, state) {
+  var canvas = document.querySelector('canvas');
+  var rekapi = new Rekapi(canvas.getContext('2d'));
 
-        if (isPathShowing && prerenderedPath) {
-          canvas_context.drawImage(prerenderedPath, 0, 0);
-        }
+  rekapi.renderer.height(400);
+  rekapi.renderer.width(500);
 
-        canvas_context.beginPath();
-          canvas_context.arc(
-            state.x || 0,
-            state.y || 0,
-            state.radius || 50,
-            0,
-            Math.PI*2,
-            true);
-          canvas_context.fillStyle = state.color || '#444';
-          canvas_context.fill();
-          canvas_context.closePath();
-          return this;
-        }
-      });
+  var circle = new Rekapi.Actor({
+    'render': function (canvas_context, state) {
+
+      if (isPathShowing && prerenderedPath) {
+        canvas_context.drawImage(prerenderedPath, 0, 0);
+      }
+
+      canvas_context.beginPath();
+        canvas_context.arc(
+          state.x || 0,
+          state.y || 0,
+          state.radius || 50,
+          0,
+          Math.PI*2,
+          true);
+        canvas_context.fillStyle = state.color || '#444';
+        canvas_context.fill();
+        canvas_context.closePath();
+        return this;
+      }
+    });
 
   var crosshairs = {
     'from': $('.crosshair.from')
@@ -174,12 +175,10 @@ $(function () {
     var pos = target.data('pos');
     var timeToModify = pos === 'from' ? 0 : animationDuration;
 
-    circle
-      .modifyKeyframe(timeToModify, getCrosshairCoords(crosshairs[pos]))
-      .updateState(kapi._lastUpdatedMillisecond);
+    circle.modifyKeyframe(timeToModify, getCrosshairCoords(crosshairs[pos]));
 
-    kapi
-      .canvas.clear()
+    rekapi
+      .renderer.clear()
       .update();
 
     updatePath();
@@ -217,8 +216,8 @@ $(function () {
     easingObj[target.data('axis')] = target.val();
     circle.modifyKeyframe(animationDuration, {}, easingObj)
     updatePath();
-    kapi
-      .canvas.clear()
+    rekapi
+      .renderer.clear()
       .update();
   });
 
@@ -226,7 +225,7 @@ $(function () {
   var isPathShowing = true;
   showPath.on('change', function (evt) {
     isPathShowing = showPath.is(':checked');
-    kapi.update();
+    rekapi.update();
   });
 
   duration.on('keyup', function (evt) {
@@ -255,7 +254,7 @@ $(function () {
     duration.trigger('keyup');
   });
 
-  kapi.addActor(circle);
+  rekapi.addActor(circle);
   circle.keyframe(0, _.extend(getCrosshairCoords(crosshairs.from), {
       'color': '#777'
       ,'radius': 15
@@ -264,8 +263,8 @@ $(function () {
       'color': '#333'
     }));
 
-  var controls = new RekapiScrubber(kapi, canvas);
+  var controls = new RekapiScrubber(rekapi, canvas);
   updatePath();
-  kapi.play();
+  rekapi.play();
 
 });
