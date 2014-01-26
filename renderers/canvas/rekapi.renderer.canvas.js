@@ -27,33 +27,34 @@ rekapiModules.push(function (context) {
 
   /*!
    * Takes care of some pre-rendering tasks for canvas animations.
-   * @param {Rekapi}
+   * @param {Rekapi.CanvasRenderer} canvasRenderer
    */
-  function beforeRender (rekapi) {
-    rekapi.renderer.clear();
+  function beforeRender (canvasRenderer) {
+    canvasRenderer.clear();
   }
 
   /*!
    * Render all the `Actor`s at whatever position they are currently in.
    * @param {Rekapi}
+   * @param {Rekapi.CanvasRenderer} canvasRenderer
    * @return {Rekapi}
    */
-  function render (rekapi) {
+  function render (rekapi, canvasRenderer) {
     fireEvent(rekapi, 'beforeRender', _);
-    var renderer = rekapi.renderer;
-    var renderOrderSorter = renderer._renderOrderSorter;
-    var len = renderer._renderOrder.length;
+    var renderOrderSorter = canvasRenderer._renderOrderSorter;
+    var len = canvasRenderer._renderOrder.length;
     var renderOrder;
 
     if (renderOrderSorter) {
-      var orderedActors = _.sortBy(renderer._canvasActors, renderOrderSorter);
+      var orderedActors =
+          _.sortBy(canvasRenderer._canvasActors, renderOrderSorter);
       renderOrder = _.pluck(orderedActors, 'id');
     } else {
-      renderOrder = renderer._renderOrder;
+      renderOrder = canvasRenderer._renderOrder;
     }
 
     var currentActor;
-    var canvasActors = renderer._canvasActors;
+    var canvasActors = canvasRenderer._canvasActors;
 
     var i;
     for (i = 0; i < len; i++) {
@@ -66,21 +67,21 @@ rekapiModules.push(function (context) {
   }
 
   /*!
-   * @param {Rekapi} rekapi
    * @param {Rekapi.Actor} actor
+   * @param {Rekapi.CanvasRenderer} canvasRenderer
    */
-  function addActor (rekapi, actor) {
-    rekapi.renderer._renderOrder.push(actor.id);
-    rekapi.renderer._canvasActors[actor.id] = actor;
+  function addActor (actor, canvasRenderer) {
+    canvasRenderer._renderOrder.push(actor.id);
+    canvasRenderer._canvasActors[actor.id] = actor;
   }
 
   /*!
-   * @param {Rekapi} rekapi
    * @param {Rekapi.Actor} actor
+   * @param {Rekapi.CanvasRenderer} canvasRenderer
    */
-  function removeActor (rekapi, actor) {
-    rekapi.renderer._renderOrder = _.without(rekapi.renderer._renderOrder, actor.id);
-    delete rekapi.renderer._canvasActors[actor.id];
+  function removeActor (actor, canvasRenderer) {
+    canvasRenderer._renderOrder = _.without(canvasRenderer._renderOrder, actor.id);
+    delete canvasRenderer._canvasActors[actor.id];
   }
 
   /*!
@@ -96,16 +97,6 @@ rekapiModules.push(function (context) {
     }
 
     rekapi.renderer = new CanvasRenderer(rekapi);
-
-    _.extend(rekapi._events, {
-      'beforeRender': []
-      ,'afterRender': []
-    });
-
-    rekapi.on('afterUpdate', render);
-    rekapi.on('addActor', addActor);
-    rekapi.on('removeActor', removeActor);
-    rekapi.on('beforeRender', beforeRender);
   };
 
   // CANVAS RENDERER OBJECT
@@ -125,16 +116,58 @@ rekapiModules.push(function (context) {
    *  - __beforeRender__: Fires just before an actor is rendered to the screen.
    *  - __afterRender__: Fires just after an actor is rendered to the screen.
    *
-   *  __Note__: `Rekapi.CanvasRenderer` is instantiated for you automatically as `renderer`, there is no reason to call it yourself for most use cases.
+   * __Note__: `Rekapi.CanvasRenderer` is instantiated for you automatically as `renderer`, there is no reason to call it yourself for most use cases.
+   *
+   * ## Advanced usage
+   *
+   * Rekapi supports multiple renderers per instance.  Do do this, you must not provide a `CanvasRenderingContext2D` to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor, you must instead initialize the renderer yourself.  The `CanvasRenderingContext2D` that would have been provided to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor instead is provided as the second parameter to `Rekapi.CanvasRenderer`:
+   *
+   * ```
+   * var canvasContext = document.querySelector('canvas').getContext('2d');
+   *
+   * // No context gets passed to the Rekapi constructor
+   * var rekapi = new Rekapi();
+   *
+   * // Initialize Rekapi.CanvasRenderer manually and give it a
+   * // CanvasRenderingContext2D.  You can name it anything you want on the
+   * // Rekapi instance.
+   * rekapi.canvasRenderer = new Rekapi.CanvasRenderer(rekapi, canvasContext);
+   * ```
    *
    * @param {Rekapi} rekapi
+   * @param {CanvasRenderingContext2D=} opt_context
    * @constructor
    */
-  Rekapi.CanvasRenderer = function (rekapi) {
+  Rekapi.CanvasRenderer = function (rekapi, opt_context) {
     this.rekapi = rekapi;
+    this.canvasContext = opt_context || rekapi.context;
     this._renderOrder = [];
     this._renderOrderSorter = null;
     this._canvasActors = {};
+
+    _.extend(rekapi._events, {
+      'beforeRender': []
+      ,'afterRender': []
+    });
+
+    var self = this;
+
+    rekapi.on('afterUpdate', function () {
+      render(rekapi, self);
+    });
+
+    rekapi.on('addActor', function (rekapi, actor) {
+      addActor(actor, self);
+    });
+
+    rekapi.on('removeActor', function (rekapi, actor) {
+      removeActor(actor, self);
+    });
+
+    rekapi.on('beforeRender', function () {
+      beforeRender(self);
+    });
+
     return this;
   };
   var CanvasRenderer = Rekapi.CanvasRenderer;
@@ -146,7 +179,7 @@ rekapiModules.push(function (context) {
    * @return {number}
    */
   CanvasRenderer.prototype.height = function (opt_height) {
-    return dimension(this.rekapi.context.canvas, 'height', opt_height);
+    return dimension(this.canvasContext.canvas, 'height', opt_height);
   };
 
   /**
@@ -156,7 +189,7 @@ rekapiModules.push(function (context) {
    * @return {number}
    */
   CanvasRenderer.prototype.width = function (opt_width) {
-    return dimension(this.rekapi.context.canvas, 'width', opt_width);
+    return dimension(this.canvasContext.canvas, 'width', opt_width);
   };
 
   /**
@@ -165,7 +198,7 @@ rekapiModules.push(function (context) {
    * @return {Rekapi}
    */
   CanvasRenderer.prototype.clear = function () {
-    this.rekapi.context.clearRect(0, 0, this.width(), this.height());
+    this.canvasContext.clearRect(0, 0, this.width(), this.height());
 
     return this.rekapi;
   };

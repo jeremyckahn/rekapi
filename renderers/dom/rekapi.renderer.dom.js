@@ -60,11 +60,9 @@ rekapiModules.push(function (context) {
    * @param {Rekapi} rekapi
    */
   Rekapi._rendererInitHook.cssAnimate = function (rekapi) {
-    var context = rekapi.context;
-
     // Node.nodeType 1 is an ELEMENT_NODE.
     // https://developer.mozilla.org/en-US/docs/Web/API/Node.nodeType
-    if (context.nodeType === 1) {
+    if (rekapi.context.nodeType === 1) {
       rekapi.renderer = new DOMRenderer(rekapi);
     }
   };
@@ -188,7 +186,7 @@ rekapiModules.push(function (context) {
   function onAddActor (rekapi, actor) {
     var actorElement = actor.context;
 
-    if (!(actorElement.nodeType === 1)) {
+    if (actorElement.nodeType !== 1) {
       return;
     }
 
