@@ -7,6 +7,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-dox');
 
   var banner = [
@@ -158,6 +159,16 @@ module.exports = function(grunt) {
         options: {
           interrupt: true
         }
+      }
+    },
+    bump: {
+      options: {
+        files: ['package.json', 'bower.json'],
+        commit: false,
+        createTag: false,
+        tagName: '%VERSION%',
+        tagMessage: 'Version %VERSION%',
+        push: false
       }
     }
   });
