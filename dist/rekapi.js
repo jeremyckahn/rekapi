@@ -1,4 +1,4 @@
-/*! rekapi - v1.0.2 - 2014-02-01 - http://rekapi.com */
+/*! rekapi - v1.0.3 - 2014-02-01 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -2814,6 +2814,12 @@ rekapiModules.push(function (context) {
       if (nextProp && isSegmentAWait(prop, nextProp)) {
         trackSegment = generateActorTrackWaitSegment(
             actor, actorStart, prop, nextProp, fromPercent, toPercent);
+
+        if (previousSegmentWasOptimized) {
+          trackSegment.shift();
+        }
+
+        previousSegmentWasOptimized = false;
 
       } else if (canOptimizeKeyframeProperty(prop)) {
         trackSegment = generateOptimizedKeyframeSegment(

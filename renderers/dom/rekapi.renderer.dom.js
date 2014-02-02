@@ -1036,6 +1036,12 @@ rekapiModules.push(function (context) {
         trackSegment = generateActorTrackWaitSegment(
             actor, actorStart, prop, nextProp, fromPercent, toPercent);
 
+        if (previousSegmentWasOptimized) {
+          trackSegment.shift();
+        }
+
+        previousSegmentWasOptimized = false;
+
       } else if (canOptimizeKeyframeProperty(prop)) {
         trackSegment = generateOptimizedKeyframeSegment(
             prop, fromPercent, toPercent);

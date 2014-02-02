@@ -362,6 +362,28 @@
     });
 
 
+    test('Waits do not generate redundant @keyframes for optimized easing curves',
+        function () {
+      var rekapi = new Rekapi();
+      var actor = rekapi.addActor();
+
+      actor
+        .keyframe(0, { y: 0 })
+        .keyframe(500, { y: 5 })
+        .wait(1000);
+
+      var keyframeData =
+          Rekapi._private.cssRenderer.generateActorKeyframes(actor, 10, 'y');
+
+      equal(
+          keyframeData
+           ,['  0% {y:0;VENDORanimation-timing-function: cubic-bezier(.25,.25,.75,.75);}'
+            ,'  50% {y:5;}'
+            ,'  100% {y:5;}'].join('\n')
+          ,'Redundant wait keyframes were not generated');
+    });
+
+
     test('Waits do not generate redundant @keyframes for unoptimized easing curves - transforms',
         function () {
       var rekapi = new Rekapi();
