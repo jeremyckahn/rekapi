@@ -910,9 +910,14 @@ rekapiModules.push(function (context) {
    */
   function canOptimizeKeyframeProperty (property) {
     var canOptimize = false;
+    var nextProperty = property.nextProperty;
 
-    if (property.nextProperty) {
-      var easingChunks = property.nextProperty.easing.split(' ');
+    if (nextProperty) {
+      if (isSegmentAWait(property, nextProperty)) {
+        return true;
+      }
+
+      var easingChunks = nextProperty.easing.split(' ');
 
       var i = 0, len = easingChunks.length;
       var previousChunk = easingChunks[0];
@@ -932,6 +937,20 @@ rekapiModules.push(function (context) {
     }
 
     return canOptimize;
+  }
+
+  /*!
+   * @param {Rekapi.KeyframeProperty} property
+   * @param {Rekapi.KeyframeProperty} nextProperty
+   * @return {boolean}
+   */
+  function isSegmentAWait (property, nextProperty) {
+    if (property.name === nextProperty.name &&
+        property.value === nextProperty.value) {
+      return true;
+    }
+
+    return false;
   }
 
   /*!
@@ -1013,7 +1032,11 @@ rekapiModules.push(function (context) {
       }
 
       var trackSegment;
-      if (canOptimizeKeyframeProperty(prop)) {
+      if (nextProp && isSegmentAWait(prop, nextProp)) {
+        trackSegment = generateActorTrackWaitSegment(
+            actor, actorStart, prop, nextProp, fromPercent, toPercent);
+
+      } else if (canOptimizeKeyframeProperty(prop)) {
         trackSegment = generateOptimizedKeyframeSegment(
             prop, fromPercent, toPercent);
 
@@ -1144,6 +1167,22 @@ rekapiModules.push(function (context) {
     }
 
     return accumulator;
+  }
+
+  /*!
+   * @param {Rekapi.Actor} actor
+   * @param {number} actorStart
+   * @param {Rekapi.KeyframeProperty} fromProp
+   * @param {Rekapi.KeyframeProperty} toProp
+   * @param {number} fromPercent
+   * @param {number} toPercent
+   * @return {Array.<string>}
+   */
+  function generateActorTrackWaitSegment (
+      actor, actorStart, fromProp, toProp, fromPercent, toPercent) {
+    var segment = generateActorTrackSegment(
+        actor, 1, toPercent - fromPercent, actorStart, fromPercent, fromProp);
+    return segment;
   }
 
   /*!

@@ -336,6 +336,58 @@
     });
 
 
+    test('Waits do not generate redundant @keyframes for unoptimized easing curves',
+        function () {
+      var rekapi = new Rekapi();
+      var actor = rekapi.addActor();
+
+      actor
+        .keyframe(0, { y: 0 })
+        .keyframe(500, { y: 5 }, 'fakeLinear')
+        .wait(1000);
+
+      var keyframeData =
+          Rekapi._private.cssRenderer.generateActorKeyframes(actor, 10, 'y');
+
+      equal(
+          keyframeData
+           ,['  0% {y:0;}'
+            ,'  10% {y:1;}'
+            ,'  20% {y:2;}'
+            ,'  30% {y:3;}'
+            ,'  40% {y:4;}'
+            ,'  50% {y:5;}'
+            ,'  100% {y:5;}'].join('\n')
+          ,'Redundant wait keyframes were not generated');
+    });
+
+
+    test('Waits do not generate redundant @keyframes for unoptimized easing curves - transforms',
+        function () {
+      var rekapi = new Rekapi();
+      var actor = rekapi.addActor();
+
+      actor
+        .keyframe(0, { transform: 'translateX(0px)' })
+        .keyframe(500, { transform: 'translateX(5px)' }, 'fakeLinear')
+        .wait(1000);
+
+      var keyframeData =
+          Rekapi._private.cssRenderer.generateActorKeyframes(actor, 10, 'transform');
+
+      equal(
+          keyframeData
+           ,['  0% {TRANSFORM:translateX(0px);}'
+            ,'  10% {TRANSFORM:translateX(1px);}'
+            ,'  20% {TRANSFORM:translateX(2px);}'
+            ,'  30% {TRANSFORM:translateX(3px);}'
+            ,'  40% {TRANSFORM:translateX(4px);}'
+            ,'  50% {TRANSFORM:translateX(5px);}'
+            ,'  100% {TRANSFORM:translateX(5px);}'].join('\n')
+          ,'Redundant wait keyframes were not generated');
+    });
+
+
     test('Late-starting track generates duplicate keyframe at the beginning to simulate a wait',
         function () {
 
@@ -942,6 +994,22 @@
 
       equal(canBeOptimized, false
           ,'Detected transform that cannot be optimized');
+    });
+
+
+    test('Detects that a wait can be optimized', function () {
+      var rekapi = new Rekapi();
+      var actor = rekapi.addActor();
+
+      actor
+        .keyframe(0, { y: 0 })
+        .keyframe(500, { y: 5 })
+        .wait(1000);
+
+      var canBeOptimized = Rekapi._private.cssRenderer.canOptimizeKeyframeProperty(
+        actor.getKeyframeProperty('y', 500));
+
+      equal(canBeOptimized, true, 'Detected wait that can be optimized');
     });
 
 
