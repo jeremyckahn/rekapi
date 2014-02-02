@@ -2,13 +2,24 @@
   "name": "rekapi",
   "version": "1.0.3",
   "main": "./dist/rekapi.min.js",
+  "homepage": "http://rekapi.com",
+  "author": "Jeremy Kahn <jeremyckahn@gmail.com>",
+  "description": "A keyframe animation library for JavaScript",
+  "contributors": [
+    {
+      "name": "Franck Lecollinet"
+    }
+  ],
   "dependencies": {
     "shifty": "1.0.0",
-    "underscore": "1.5.2",
+    "underscore": "1.5.2"
+  },
+  "devDependencies": {
     "qunit": "1.11.0",
     "requirejs": "2.1.10",
     "jquery": "1.9.1",
     "ace-builds": "1.0.0",
     "rekapi-controls": "0.4.0"
-  }
+  },
+  "license": "MIT"
 }
