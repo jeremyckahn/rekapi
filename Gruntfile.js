@@ -100,6 +100,8 @@ module.exports = function(grunt) {
         {src: ['bower_components/rekapi-controls/dist/jquery.dragon-slider.css'], dest: 'dist/asset/jquery.dragon-slider.css'},
         {src: ['bower_components/rekapi-controls/dist/rekapi-controls.css'], dest: 'dist/asset/rekapi-controls.css'},
         {expand: true, flatten: true, src: ['bower_components/rekapi-controls/lib/font-awesome/font/*'], dest: 'dist/font/'},
+        {flattern: true, src: ['bower_components/bootstrap/dist/css/bootstrap.min.css'], dest: 'dist/bootstrap/css/bootstrap.min.css'},
+        {expand: true, flatten: true, src: ['bower_components/bootstrap/dist/fonts/*'], dest: 'dist/bootstrap/fonts/'},
         {src: ['bower_components/rekapi-controls/lib/font-awesome/css/font-awesome.css'], dest: 'dist/asset/font-awesome.css'},
         {src: ['bower_components/rekapi-controls/dist/dragon-bundle.js'], dest: 'dist/asset/dragon-bundle.js'},
         {src: ['bower_components/rekapi-controls/dist/rekapi-controls.min.js'], dest: 'dist/asset/rekapi-controls.min.js'}
