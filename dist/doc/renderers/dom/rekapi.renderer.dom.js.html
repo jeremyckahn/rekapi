@@ -305,12 +305,8 @@ rekapi.renderer instanceof Rekapi.DOMRenderer; // true
     }
 
     var css = this._cachedCSS || this.prerender.apply(this, arguments);
-    this._styleElement = injectStyle(css);
+    this._styleElement = injectStyle(this.rekapi, css);
     this._playTimestamp = now();
-
-    if (navigator.userAgent.match(/Presto/)) {
-      forceStyleInjection(this.rekapi);
-    }
 
     if (opt_iterations) {
       var animationLength = (opt_iterations * this.rekapi.getAnimationLength());
@@ -384,7 +380,7 @@ rekapi.renderer instanceof Rekapi.DOMRenderer; // true
 <li><code>skewY</code></li>
 </ul>
 
-<p>FYI: If you prefer a more standards-oriented approach, Rekapi also supports combining the transform components yourself:</p>
+<p>If you prefer a more standards-oriented approach, Rekapi also supports combining the transform components yourself:</p>
 
 <div class="highlight"><pre lang="">actor
   .keyframe(0, {
@@ -397,7 +393,9 @@ rekapi.renderer instanceof Rekapi.DOMRenderer; // true
   });
 </pre></div>
 
-<p>This example and the one above it are equivalent.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">DOMRenderer.prototype.setActorTransformOrder = function (actor, orderedTransforms) {
+<p>This example and the one above it are equivalent.</p>
+
+<p><strong>Note</strong>: The decoupled form of <code>transform</code> animations is not supported in CSS <code>@keyframe</code> animations, only inline style animations.  This is due to the tightly-coupled nature of the CSS <code>@keyframes</code> spec.  If you intend to play a CSS-based <code>@keyframe</code> animation, <strong>do not</strong> use the non-standard decoupled API form for <code>transform</code> properties.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">DOMRenderer.prototype.setActorTransformOrder = function (actor, orderedTransforms) {
     // TODO: Document this better...
     var unknownFunctions = _.reject(orderedTransforms, isTransformFunction);
 

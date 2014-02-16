@@ -1,4 +1,4 @@
-/*! rekapi - v1.0.4 - 2014-02-04 - http://rekapi.com */
+/*! rekapi - v1.0.5 - 2014-02-15 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -241,6 +241,7 @@ var rekapiCore = function (root, _, Tweenable) {
       ,'afterUpdate': []
       ,'addActor': []
       ,'removeActor': []
+      ,'timelineModified': []
     };
 
     // How many times to loop the animation before stopping.
@@ -1869,29 +1870,30 @@ rekapiModules.push(function (context) {
 
   var styleID = 0;
   /*!
+   * @param {Rekapi} rekapi
    * @param {string} css The css content that the <style> element should have.
    * @return {HTMLStyleElement} The unique ID of the injected <style> element.
    */
-  function injectStyle (css) {
+  function injectStyle (rekapi, css) {
     var style = document.createElement('style');
     var id = 'rekapi-' + styleID++;
     style.id = id;
     style.innerHTML = css;
     document.head.appendChild(style);
+    forceStyleReset(rekapi);
 
     return style;
   }
 
   /*!
-   * Fixes a really bizarre issue that only seems to affect Presto/Opera.  In
-   * some situations, DOM nodes will not detect dynamically injected <style>
+   * Fixes a really bizarre issue that only seems to affect Presto and Blink.
+   * In some situations, DOM nodes will not detect dynamically injected <style>
    * elements.  Explicitly re-inserting DOM nodes seems to fix the issue.  Not
-   * sure what causes this issue.  Not sure why this fixes it.  Not sure if
-   * this affects Blink-based Opera browsers.
+   * sure what causes this issue.  Not sure why this fixes it.
    *
    * @param {Rekapi} rekapi
    */
-  function forceStyleInjection (rekapi) {
+  function forceStyleReset (rekapi) {
     var dummyDiv = document.createElement('div');
 
     _.each(rekapi.getAllActors(), function (actor) {
@@ -2176,12 +2178,8 @@ rekapiModules.push(function (context) {
     }
 
     var css = this._cachedCSS || this.prerender.apply(this, arguments);
-    this._styleElement = injectStyle(css);
+    this._styleElement = injectStyle(this.rekapi, css);
     this._playTimestamp = now();
-
-    if (navigator.userAgent.match(/Presto/)) {
-      forceStyleInjection(this.rekapi);
-    }
 
     if (opt_iterations) {
       var animationLength = (opt_iterations * this.rekapi.getAnimationLength());
@@ -2279,7 +2277,7 @@ rekapiModules.push(function (context) {
    * - `skewX`
    * - `skewY`
    *
-   * FYI: If you prefer a more standards-oriented approach, Rekapi also supports combining the transform components yourself:
+   * If you prefer a more standards-oriented approach, Rekapi also supports combining the transform components yourself:
    *
    * ```
    * actor
@@ -2294,6 +2292,8 @@ rekapiModules.push(function (context) {
    * ```
    *
    * This example and the one above it are equivalent.
+   *
+   * __Note__: The decoupled form of `transform` animations is not supported in CSS `@keyframe` animations, only inline style animations.  This is due to the tightly-coupled nature of the CSS `@keyframes` spec.  If you intend to play a CSS-based `@keyframe` animation, __do not__ use the non-standard decoupled API form for `transform` properties.
    *
    * @param {Rekapi.Actor} actor
    * @param {Array.<string>} orderedTransforms The array of transform names.
@@ -2886,7 +2886,8 @@ rekapiModules.push(function (context) {
   function simulateLeadingWait (actor, track, actorStart) {
     var firstProp = actor._propertyTracks[track][0];
 
-    if (firstProp.millisecond !== actorStart) {
+    if (typeof firstProp !== 'undefined'
+        && firstProp.millisecond !== actorStart) {
       var fakeFirstProp = generateActorTrackSegment(
           actor, 1, 1, firstProp.millisecond, 0, firstProp);
       return fakeFirstProp.join('\n');
@@ -2903,7 +2904,8 @@ rekapiModules.push(function (context) {
   function simulateTrailingWait (actor, track, actorStart, actorEnd) {
     var lastProp = _.last(actor._propertyTracks[track]);
 
-    if (lastProp.millisecond !== actorEnd) {
+    if (typeof lastProp !== 'undefined'
+        && lastProp.millisecond !== actorEnd) {
       var fakeLastProp = generateActorTrackSegment(
           actor, 1, 1, actorStart, 100, lastProp);
       return fakeLastProp.join('\n');

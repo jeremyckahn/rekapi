@@ -226,6 +226,7 @@ var rekapiCore = function (root, _, Tweenable) {
       ,'afterUpdate': []
       ,'addActor': []
       ,'removeActor': []
+      ,'timelineModified': []
     };
 
     // How many times to loop the animation before stopping.
