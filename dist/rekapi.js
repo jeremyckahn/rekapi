@@ -1,4 +1,4 @@
-/*! rekapi - v1.0.5 - 2014-02-15 - http://rekapi.com */
+/*! rekapi - v1.0.6 - 2014-03-02 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
