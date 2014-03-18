@@ -23,6 +23,7 @@ function fireEvent (rekapi, eventName, _, opt_data) {
 
 /*!
  * @param {Rekapi} rekapi
+ * @param {Underscore} _
  */
 function recalculateAnimationLength (rekapi, _) {
   var actorLengths = [];
@@ -96,12 +97,15 @@ var rekapiCore = function (root, _, Tweenable) {
    * Calculate how far in the animation loop `rekapi` is, in milliseconds,
    * based on the current time.  Also overflows into a new loop if necessary.
    * @param {Rekapi} rekapi
+   * @param {number} forMillisecond
+   * @param {number} currentLoopIteration
    * @return {number}
    */
   function calculateLoopPosition (rekapi, forMillisecond, currentLoopIteration) {
     var currentLoopPosition;
 
     if (isAnimationComplete(rekapi, currentLoopIteration)) {
+      // Rewind to the end if the playhead has gone past it
       currentLoopPosition = rekapi._animationLength;
     } else {
       currentLoopPosition = forMillisecond % rekapi._animationLength;
@@ -119,8 +123,9 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   function updateToMillisecond (rekapi, forMillisecond) {
     var currentIteration = determineCurrentLoopIteration(rekapi, forMillisecond);
-    var loopPosition = calculateLoopPosition(rekapi, forMillisecond,
-        currentIteration);
+    var loopPosition = calculateLoopPosition(
+        rekapi, forMillisecond, currentIteration);
+
     rekapi.update(loopPosition);
     updatePlayState(rekapi, currentIteration);
   }
@@ -292,7 +297,6 @@ var rekapiCore = function (root, _, Tweenable) {
       rekapiActor = new Rekapi.Actor(actor);
     }
 
-
     // You can't add an actor more than once.
     if (!_.contains(this._actors, rekapiActor)) {
       if (typeof rekapiActor.context === 'undefined') {
@@ -300,7 +304,10 @@ var rekapiCore = function (root, _, Tweenable) {
       }
 
       rekapiActor.rekapi = this;
+
+      // Store a reference to the actor internally
       this._actors[rekapiActor.id] = rekapiActor;
+
       recalculateAnimationLength(this, _);
       rekapiActor.setup();
 
@@ -350,8 +357,10 @@ var rekapiCore = function (root, _, Tweenable) {
    * @return {Rekapi.Actor}
    */
   Rekapi.prototype.removeActor = function (actor) {
+    // Remove the link between Rekapi and actor
     delete this._actors[actor.id];
     delete actor.rekapi;
+
     actor.teardown();
     recalculateAnimationLength(this, _);
 
@@ -371,6 +380,8 @@ var rekapiCore = function (root, _, Tweenable) {
     cancelLoop(this);
 
     if (this._playState === playState.PAUSED) {
+      // Move the playhead to the correct position in the timeline if resuming
+      // from a pause
       this._loopTimestamp += now() - this._pausedAtTime;
     } else {
       this._loopTimestamp = now();
@@ -378,6 +389,8 @@ var rekapiCore = function (root, _, Tweenable) {
 
     this._timesToIterate = opt_howManyTimes || -1;
     this._playState = playState.PLAYING;
+
+    // Start the update loop
     tick(this);
 
     fireEvent(this, 'playStateChange', _);
@@ -475,12 +488,15 @@ var rekapiCore = function (root, _, Tweenable) {
     }
 
     fireEvent(this, 'beforeUpdate', _);
+
+    // Update and render each of the actors
     _.each(this._actors, function (actor) {
       actor._updateState(opt_millisecond);
       if (typeof actor.render === 'function') {
         actor.render(actor.context, actor.get());
       }
     });
+
     this._lastUpdatedMillisecond = opt_millisecond;
     fireEvent(this, 'afterUpdate', _);
 
@@ -548,10 +564,12 @@ var rekapiCore = function (root, _, Tweenable) {
     }
 
     if (!opt_handler) {
+      // Remove all handlers
       this._events[eventName] = [];
     } else {
-      this._events[eventName] = _.without(this._events[eventName],
-        opt_handler);
+      // Remove just the handler specified
+      this._events[eventName] = _.without(
+          this._events[eventName], opt_handler);
     }
 
     return this;
@@ -591,7 +609,7 @@ var rekapiCore = function (root, _, Tweenable) {
 
   Rekapi.util = {};
 
-  // Some hooks for testing.
+  // Some hooks for testing.  Gets compiled away at build time.
   if (REKAPI_DEBUG) {
     Rekapi._private = {
       'calculateLoopPosition': calculateLoopPosition
