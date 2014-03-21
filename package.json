@@ -1,6 +1,6 @@
 {
   "name": "rekapi",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "homepage": "http://rekapi.com",
   "author": "Jeremy Kahn <jeremyckahn@gmail.com>",
   "description": "A keyframe animation library for JavaScript",

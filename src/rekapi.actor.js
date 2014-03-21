@@ -19,16 +19,17 @@ rekapiModules.push(function (context) {
   }
 
   /*!
+   * Retrieves the most recent property cache ID for a given millisecond.
    * @param {Rekapi.Actor} actor
    * @param {number} millisecond
-   * @return {number}
+   * @return {number} -1 if there is no property cache for the millisecond
+   * (this should never happen).
    */
   //TODO:  Oh noes, this is a linear search!  Maybe optimize it?
   function getPropertyCacheIdForMillisecond (actor, millisecond) {
-    var list = actor._timelinePropertyCacheIndex;
-    var len = list.length;
+    var list = actor._timelinePropertyCacheKeys;
 
-    var i;
+    var i, len = list.length;
     for (i = 1; i < len; i++) {
       if (list[i] >= millisecond) {
         return (i - 1);
@@ -39,14 +40,13 @@ rekapiModules.push(function (context) {
   }
 
   /*!
-   * Order all of an Actor's property tracks so they can be cached.
+   * Sort all of an Actor's property tracks so they can be cached.
    * @param {Rekapi.Actor} actor
    */
   function sortPropertyTracks (actor) {
-    _.each(actor._propertyTracks, function (track, name) {
-      actor._propertyTracks[name] = _.sortBy(actor._propertyTracks[name],
-        function (keyframeProperty) {
-        return keyframeProperty.millisecond;
+    _.each(actor._propertyTracks, function (track) {
+      track.sort(function (current, next) {
+        return current.millisecond - next.millisecond;
       });
     });
   }
@@ -56,8 +56,8 @@ rekapiModules.push(function (context) {
    * @param {Rekapi.Actor} actor
    */
   function cachePropertiesToSegments (actor) {
-    _.each(actor._timelinePropertyCaches, function (propertyCache, cacheId) {
-      var latestProperties = getLatestPropeties(actor, +cacheId);
+    _.each(actor._timelinePropertyCache, function (propertyCache, cacheId) {
+      var latestProperties = getLatestPropeties(actor, cacheId);
       _.defaults(propertyCache, latestProperties);
     });
   }
@@ -74,18 +74,31 @@ rekapiModules.push(function (context) {
 
     _.each(actor._propertyTracks, function (propertyTrack, propertyName) {
       var previousKeyframeProperty = null;
+      var i = 0, len = propertyTrack.length, keyframeProperty;
 
-      _.find(propertyTrack, function (keyframeProperty) {
+      for (i; i < len; i++) {
+        keyframeProperty = propertyTrack[i];
+
         if (keyframeProperty.millisecond > forMillisecond) {
+          // We went to far, use the previous keyframeProperty
           latestProperties[propertyName] = previousKeyframeProperty;
         } else if (keyframeProperty.millisecond === forMillisecond) {
+          // Found it!
           latestProperties[propertyName] = keyframeProperty;
         }
 
         previousKeyframeProperty = keyframeProperty;
-        return !!latestProperties[propertyName];
-      });
 
+        // Quit the loop if something was found.  We can't early-return above,
+        // because latestProperties[propertyName] might be null, which is not
+        // what we want.
+        if (latestProperties[propertyName]) {
+          break;
+        }
+      }
+
+      // If nothing was found, attempt to use the last keyframeProperty in the
+      // track.
       if (!latestProperties[propertyName]) {
         var lastProp = _.last(propertyTrack);
 
@@ -99,15 +112,15 @@ rekapiModules.push(function (context) {
   }
 
   /*!
-   * Links each KeyframeProperty to the next one in it's respective track.
+   * Links each KeyframeProperty to the next one in its respective track.
    *
    * They're linked lists!
    * @param {Rekapi.Actor} actor
    */
   function linkTrackedProperties (actor) {
-    _.each(actor._propertyTracks, function (propertyTrack, trackName) {
-      _.each(propertyTrack, function (trackProperty, i) {
-        trackProperty.linkToNext(propertyTrack[i + 1]);
+    _.each(actor._propertyTracks, function (propertyTrack) {
+      _.each(propertyTrack, function (keyframeProperty, i) {
+        keyframeProperty.linkToNext(propertyTrack[i + 1]);
       });
     });
   }
@@ -118,7 +131,7 @@ rekapiModules.push(function (context) {
    * @param {Rekapi.Actor} actor
    * @param {string} trackName
    * @param {number} millisecond
-   * @return {Rekapi.KeyframeProperty}
+   * @return {Rekapi.KeyframeProperty|undefined}
    */
   function findPropertyAtMillisecondInTrack (actor, trackName, millisecond) {
     return _.find(actor._propertyTracks[trackName],
@@ -128,29 +141,37 @@ rekapiModules.push(function (context) {
   }
 
   /*!
-   * Empty out and re-cache internal KeyframeProperty data.
+   * Empty out and rebuild the cache of internal KeyframeProperty data.
    * @param {Rekapi.Actor}
    */
   function invalidatePropertyCache (actor) {
-    actor._timelinePropertyCaches = {};
+    actor._timelinePropertyCache = {};
+    var timelinePropertyCache = actor._timelinePropertyCache;
 
+    // Build the cache map
+    var millisecond;
     _.each(actor._keyframeProperties, function (keyframeProperty) {
-      if (!actor._timelinePropertyCaches[keyframeProperty.millisecond]) {
-        actor._timelinePropertyCaches[keyframeProperty.millisecond] = {};
+      millisecond = keyframeProperty.millisecond;
+      if (!timelinePropertyCache[millisecond]) {
+        timelinePropertyCache[millisecond] = {};
       }
 
-      actor._timelinePropertyCaches[keyframeProperty.millisecond][
-          keyframeProperty.name] = keyframeProperty;
-    }, actor);
+      timelinePropertyCache[millisecond][keyframeProperty.name]
+          = keyframeProperty;
+    });
 
-    actor._timelinePropertyCacheIndex = _.keys(actor._timelinePropertyCaches);
+    actor._timelinePropertyCacheKeys = _.map(timelinePropertyCache,
+        function (val, key) {
+      return +key;
+    });
 
-    _.each(actor._timelinePropertyCacheIndex, function (listId, i) {
-      actor._timelinePropertyCacheIndex[i] = +listId;
-    }, actor);
+    // Optimize the cache lookup
+    sortNumerically(actor._timelinePropertyCacheKeys);
 
-    sortNumerically(actor._timelinePropertyCacheIndex);
+    // Associate cache map elements to their respective points on the timeline
     cachePropertiesToSegments(actor);
+
+    // Re-link the linked list of keyframeProperties
     linkTrackedProperties(actor);
 
     if (actor.rekapi) {
@@ -193,8 +214,8 @@ rekapiModules.push(function (context) {
 
     _.extend(this, {
       '_propertyTracks': {}
-      ,'_timelinePropertyCaches': {}
-      ,'_timelinePropertyCacheIndex': []
+      ,'_timelinePropertyCache': {}
+      ,'_timelinePropertyCacheKeys': []
       ,'_keyframeProperties': {}
       ,'id': _.uniqueId()
       ,'context': opt_config.context // This may be undefined
@@ -271,30 +292,13 @@ rekapiModules.push(function (context) {
   Actor.prototype.keyframe = function keyframe (
       millisecond, properties, opt_easing) {
 
-    var originalEasingString;
-
-    // TODO:  The opt_easing logic seems way overcomplicated, it's probably out
-    // of date.  Multiple eases landed first in Rekapi, then were pushed
-    // upstream into Shifty.  There's likely some redundant logic here.
     opt_easing = opt_easing || DEFAULT_EASING;
+    var easing = Tweenable.composeEasingObject(properties, opt_easing);
 
-    if (typeof opt_easing === 'string') {
-      originalEasingString = opt_easing;
-      opt_easing = {};
-      _.each(properties, function (property, propertyName) {
-        opt_easing[propertyName] = originalEasingString;
-      });
-    }
-
-    // If `opt_easing` was passed as an Object, this will fill in any missing
-    // opt_easing properties with the default equation.
-    _.each(properties, function (property, propertyName) {
-      opt_easing[propertyName] = opt_easing[propertyName] || DEFAULT_EASING;
-    });
-
+    // Create and add all of the KeyframeProperties
     _.each(properties, function (value, name) {
       var newKeyframeProperty = new Rekapi.KeyframeProperty(
-          millisecond, name, value, opt_easing[name]);
+          millisecond, name, value, easing[name]);
 
       this._addKeyframeProperty(newKeyframeProperty);
     }, this);
@@ -325,11 +329,16 @@ rekapiModules.push(function (context) {
       tracks = _.pick(tracks, opt_trackName);
     }
 
-    return _.find(tracks, function (propertyTrack, trackName) {
-      var retrievedProperty =
-          findPropertyAtMillisecondInTrack(this, trackName, millisecond);
-      return retrievedProperty !== undefined;
-    }, this) !== undefined;
+    // Search through the tracks and determine if a property can be found.
+    var track;
+    for (track in tracks) {
+      if (tracks.hasOwnProperty(track)
+          && findPropertyAtMillisecondInTrack(this, track, millisecond)) {
+        return true;
+      }
+    }
+
+    return false;
   };
 
   /**
@@ -355,12 +364,13 @@ rekapiModules.push(function (context) {
    * @return {Rekapi.Actor}
    */
   Actor.prototype.copyKeyframe = function (copyTo, copyFrom) {
+    // Build the configuation objects to be passed to Actor#keyframe
     var sourcePositions = {};
     var sourceEasings = {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var foundProperty = findPropertyAtMillisecondInTrack(this, trackName,
-          copyFrom);
+      var foundProperty =
+          findPropertyAtMillisecondInTrack(this, trackName, copyFrom);
 
       if (foundProperty) {
         sourcePositions[trackName] = foundProperty.value;
@@ -385,13 +395,13 @@ rekapiModules.push(function (context) {
       return false;
     }
 
+    // Move each of the relevant KeyframeProperties to the new location in the
+    // timeline
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
       var property = findPropertyAtMillisecondInTrack(this, trackName, from);
 
       if (property) {
-        property.modifyWith({
-          'millisecond': to
-        });
+        property.millisecond = to;
       }
     }, this);
 
@@ -461,12 +471,10 @@ rekapiModules.push(function (context) {
   Actor.prototype.removeKeyframe = function (millisecond) {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       var i = -1;
-      var foundProperty = false;
 
-      _.find(propertyTrack, function (keyframeProperty) {
+      var foundProperty = _.find(propertyTrack, function (keyframeProperty) {
         i++;
-        foundProperty = (millisecond === keyframeProperty.millisecond);
-        return foundProperty;
+        return millisecond === keyframeProperty.millisecond;
       });
 
       if (foundProperty) {
@@ -494,11 +502,15 @@ rekapiModules.push(function (context) {
    * @return {Rekapi.Actor}
    */
   Actor.prototype.removeAllKeyframes = function () {
-    _.each(this._propertyTracks, function (propertyTrack, propertyName) {
+    _.each(this._propertyTracks, function (propertyTrack) {
       propertyTrack.length = 0;
-    }, this);
+    });
 
     this._keyframeProperties = {};
+
+    // Calling removeKeyframe performs some necessary post-removal cleanup, the
+    // earlier part of this method skipped all of that for the sake of
+    // efficiency.
     return this.removeKeyframe(0);
   };
 
@@ -549,6 +561,7 @@ rekapiModules.push(function (context) {
       var keyframeProperty = this.getKeyframeProperty(property, millisecond);
       propertyTracks[property] =
           _.without(propertyTracks[property], keyframeProperty);
+
       cleanupAfterKeyframeModification(this);
 
       return keyframeProperty;
@@ -566,7 +579,7 @@ rekapiModules.push(function (context) {
   /**
    * Get all of the [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s for a track.
    * @param {string} trackName
-   * @return {Array.<Rekapi.KeyframeProperty>}
+   * @return {Array.<Rekapi.KeyframeProperty>|undefined}
    */
   Actor.prototype.getPropertiesInTrack = function (trackName) {
     var propertyTrack = this._propertyTracks[trackName];
@@ -583,11 +596,19 @@ rekapiModules.push(function (context) {
    */
   Actor.prototype.getStart = function (opt_trackName) {
     var starts = [];
+    var propertyTracks = this._propertyTracks;
 
-    if (opt_trackName) {
-      starts.push(this._propertyTracks[opt_trackName][0].millisecond);
+    // Null check to see if opt_trackName was provided and is valid
+    if (propertyTracks.hasOwnProperty(opt_trackName)) {
+      var firstKeyframeProperty = propertyTracks[opt_trackName][0];
+
+      if (firstKeyframeProperty) {
+        starts.push(firstKeyframeProperty.millisecond);
+      }
     } else {
-      _.each(this._propertyTracks, function (propertyTrack) {
+      // Loop over all property tracks and accumulate the first
+      // keyframeProperties from non-empty tracks
+      _.each(propertyTracks, function (propertyTrack) {
         if (propertyTrack.length) {
           starts.push(propertyTrack[0].millisecond);
         }
@@ -712,7 +733,7 @@ rekapiModules.push(function (context) {
     if (startMs <= millisecond) {
       var latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
       var propertiesToInterpolate =
-          this._timelinePropertyCaches[this._timelinePropertyCacheIndex[
+          this._timelinePropertyCache[this._timelinePropertyCacheKeys[
           latestCacheId]];
       var interpolatedObject = {};
 

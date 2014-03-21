@@ -284,7 +284,6 @@ code {
       rekapiActor = new Rekapi.Actor(actor);
     }
 
-
     // You can't add an actor more than once.
     if (!_.contains(this._actors, rekapiActor)) {
       if (typeof rekapiActor.context === 'undefined') {
@@ -292,7 +291,10 @@ code {
       }
 
       rekapiActor.rekapi = this;
+
+      // Store a reference to the actor internally
       this._actors[rekapiActor.id] = rekapiActor;
+
       recalculateAnimationLength(this, _);
       rekapiActor.setup();
 
@@ -309,8 +311,10 @@ code {
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="getActorCount">getActorCount</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Rekapi.prototype.getActorCount()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{number}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Return the number of actors in the animation.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Rekapi.prototype.getActorCount = function () {
     return _.size(this._actors);
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="removeActor">removeActor</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Rekapi.prototype.removeActor()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{Rekapi.Actor}</span><span class="name">actor</span><span class="description"></span></li><li class="tag"><span class="type">@return: </span><span class="types">{Rekapi.Actor}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Remove an actor from the animation.  This does not destroy the actor, it only removes the link between it and the <code>Rekapi</code> instance.  This method calls the actor's <code>teardown</code> method, if it is defined.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Rekapi.prototype.removeActor = function (actor) {
+    // Remove the link between Rekapi and actor
     delete this._actors[actor.id];
     delete actor.rekapi;
+
     actor.teardown();
     recalculateAnimationLength(this, _);
 
@@ -323,6 +327,8 @@ code {
     cancelLoop(this);
 
     if (this._playState === playState.PAUSED) {
+      // Move the playhead to the correct position in the timeline if resuming
+      // from a pause
       this._loopTimestamp += now() - this._pausedAtTime;
     } else {
       this._loopTimestamp = now();
@@ -330,6 +336,8 @@ code {
 
     this._timesToIterate = opt_howManyTimes || -1;
     this._playState = playState.PLAYING;
+
+    // Start the update loop
     tick(this);
 
     fireEvent(this, 'playStateChange', _);
@@ -387,12 +395,15 @@ code {
     }
 
     fireEvent(this, 'beforeUpdate', _);
+
+    // Update and render each of the actors
     _.each(this._actors, function (actor) {
       actor._updateState(opt_millisecond);
       if (typeof actor.render === 'function') {
         actor.render(actor.context, actor.get());
       }
     });
+
     this._lastUpdatedMillisecond = opt_millisecond;
     fireEvent(this, 'afterUpdate', _);
 
@@ -434,10 +445,12 @@ code {
     }
 
     if (!opt_handler) {
+      // Remove all handlers
       this._events[eventName] = [];
     } else {
-      this._events[eventName] = _.without(this._events[eventName],
-        opt_handler);
+      // Remove just the handler specified
+      this._events[eventName] = _.without(
+          this._events[eventName], opt_handler);
     }
 
     return this;
@@ -464,7 +477,7 @@ code {
 
   Rekapi.util = {};
 
-  // Some hooks for testing.
+  // Some hooks for testing.  Gets compiled away at build time.
   if (REKAPI_DEBUG) {
     Rekapi._private = {
       'calculateLoopPosition': calculateLoopPosition

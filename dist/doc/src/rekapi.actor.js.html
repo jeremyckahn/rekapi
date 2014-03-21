@@ -231,8 +231,8 @@ code {
 
     _.extend(this, {
       '_propertyTracks': {}
-      ,'_timelinePropertyCaches': {}
-      ,'_timelinePropertyCacheIndex': []
+      ,'_timelinePropertyCache': {}
+      ,'_timelinePropertyCacheKeys': []
       ,'_keyframeProperties': {}
       ,'id': _.uniqueId()
       ,'context': opt_config.context // This may be undefined
@@ -297,30 +297,13 @@ code {
 <p>Keyframe <code>1000</code> will have a <code>y</code> of <code>50</code>, and an <code>x</code> of <code>100</code>, because <code>x</code> was inherited from keyframe <code>0</code>.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.keyframe = function keyframe (
       millisecond, properties, opt_easing) {
 
-    var originalEasingString;
-
-    // TODO:  The opt_easing logic seems way overcomplicated, it's probably out
-    // of date.  Multiple eases landed first in Rekapi, then were pushed
-    // upstream into Shifty.  There's likely some redundant logic here.
     opt_easing = opt_easing || DEFAULT_EASING;
+    var easing = Tweenable.composeEasingObject(properties, opt_easing);
 
-    if (typeof opt_easing === 'string') {
-      originalEasingString = opt_easing;
-      opt_easing = {};
-      _.each(properties, function (property, propertyName) {
-        opt_easing[propertyName] = originalEasingString;
-      });
-    }
-
-    // If `opt_easing` was passed as an Object, this will fill in any missing
-    // opt_easing properties with the default equation.
-    _.each(properties, function (property, propertyName) {
-      opt_easing[propertyName] = opt_easing[propertyName] || DEFAULT_EASING;
-    });
-
+    // Create and add all of the KeyframeProperties
     _.each(properties, function (value, name) {
       var newKeyframeProperty = new Rekapi.KeyframeProperty(
-          millisecond, name, value, opt_easing[name]);
+          millisecond, name, value, easing[name]);
 
       this._addKeyframeProperty(newKeyframeProperty);
     }, this);
@@ -342,11 +325,16 @@ code {
       tracks = _.pick(tracks, opt_trackName);
     }
 
-    return _.find(tracks, function (propertyTrack, trackName) {
-      var retrievedProperty =
-          findPropertyAtMillisecondInTrack(this, trackName, millisecond);
-      return retrievedProperty !== undefined;
-    }, this) !== undefined;
+    // Search through the tracks and determine if a property can be found.
+    var track;
+    for (track in tracks) {
+      if (tracks.hasOwnProperty(track)
+          &amp;&amp; findPropertyAtMillisecondInTrack(this, track, millisecond)) {
+        return true;
+      }
+    }
+
+    return false;
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="copyKeyframe">copyKeyframe</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.copyKeyframe()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{number}</span><span class="name">copyTo</span><span class="description">The timeline millisecond to copy KeyframeProperties to.</span></li><li class="tag"><span class="type">@param: </span><span class="types">{number}</span><span class="name">copyFrom</span><span class="description">The timeline millisecond to copy KeyframeProperties from.</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Rekapi.Actor}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Copies all of the <a href="rekapi.keyframe-property.js.html"><code>Rekapi.KeyframeProperty</code></a>s from one point on the actor's timeline to another. This is particularly useful for animating an actor back to its original position.</p>
 
 <div class="highlight"><pre lang="">actor
@@ -363,12 +351,13 @@ actor.copyFrom(2000, 0);
 </pre></div>
 
 <p><strong><a href="../../../../docs/examples/actor_copy_keyframe.html">Example</a></strong></p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.copyKeyframe = function (copyTo, copyFrom) {
+    // Build the configuation objects to be passed to Actor#keyframe
     var sourcePositions = {};
     var sourceEasings = {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var foundProperty = findPropertyAtMillisecondInTrack(this, trackName,
-          copyFrom);
+      var foundProperty =
+          findPropertyAtMillisecondInTrack(this, trackName, copyFrom);
 
       if (foundProperty) {
         sourcePositions[trackName] = foundProperty.value;
@@ -385,13 +374,13 @@ actor.copyFrom(2000, 0);
       return false;
     }
 
+    // Move each of the relevant KeyframeProperties to the new location in the
+    // timeline
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
       var property = findPropertyAtMillisecondInTrack(this, trackName, from);
 
       if (property) {
-        property.modifyWith({
-          'millisecond': to
-        });
+        property.millisecond = to;
       }
     }, this);
 
@@ -444,12 +433,10 @@ actor.modifyKeyframe(1000, {
 <p><strong><a href="../../../../docs/examples/actor_remove_keyframe.html">Example</a></strong></p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.removeKeyframe = function (millisecond) {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       var i = -1;
-      var foundProperty = false;
 
-      _.find(propertyTrack, function (keyframeProperty) {
+      var foundProperty = _.find(propertyTrack, function (keyframeProperty) {
         i++;
-        foundProperty = (millisecond === keyframeProperty.millisecond);
-        return foundProperty;
+        return millisecond === keyframeProperty.millisecond;
       });
 
       if (foundProperty) {
@@ -471,11 +458,15 @@ actor.modifyKeyframe(1000, {
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="removeAllKeyframes">removeAllKeyframes</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.removeAllKeyframes()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{Rekapi.Actor}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Remove all <a href="rekapi.keyframe-property.js.html"><code>Rekapi.KeyframeProperty</code></a>s set on the actor.</p>
 
 <p><strong><a href="../../../../docs/examples/actor_remove_all_keyframes.html">Example</a></strong></p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.removeAllKeyframes = function () {
-    _.each(this._propertyTracks, function (propertyTrack, propertyName) {
+    _.each(this._propertyTracks, function (propertyTrack) {
       propertyTrack.length = 0;
-    }, this);
+    });
 
     this._keyframeProperties = {};
+
+    // Calling removeKeyframe performs some necessary post-removal cleanup, the
+    // earlier part of this method skipped all of that for the sake of
+    // efficiency.
     return this.removeKeyframe(0);
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="getKeyframeProperty">getKeyframeProperty</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.getKeyframeProperty()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{string}</span><span class="name">property</span><span class="description">The name of the property.</span></li><li class="tag"><span class="type">@param: </span><span class="types">{number}</span><span class="name">index</span><span class="description">The millisecond of the property in the timeline.</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Rekapi.KeyframeProperty,undefined}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Get the <a href="rekapi.keyframe-property.js.html"><code>Rekapi.KeyframeProperty</code></a> from an actor's property track. Returns <code>undefined</code> if no properties were found.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.getKeyframeProperty = function (property, millisecond) {
     var propertyTrack = this._propertyTracks[property];
@@ -501,13 +492,14 @@ actor.modifyKeyframe(1000, {
       var keyframeProperty = this.getKeyframeProperty(property, millisecond);
       propertyTracks[property] =
           _.without(propertyTracks[property], keyframeProperty);
+
       cleanupAfterKeyframeModification(this);
 
       return keyframeProperty;
     }
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="getTrackNames">getTrackNames</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.getTrackNames()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{Array.&lt;string&gt;}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Get a list of all the track names for an actor.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.getTrackNames = function () {
     return _.keys(this._propertyTracks);
-  };</code></pre></div></div></div></article><article class="comment"><header><h1 id="getPropertiesInTrack">getPropertiesInTrack</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.getPropertiesInTrack()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{string}</span><span class="name">trackName</span><span class="description"></span></li><li class="tag"><span class="type">@return: </span><span class="types">{Array.&lt;Rekapi.KeyframeProperty&gt;}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Get all of the <a href="rekapi.keyframe-property.js.html"><code>Rekapi.KeyframeProperty</code></a>s for a track.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.getPropertiesInTrack = function (trackName) {
+  };</code></pre></div></div></div></article><article class="comment"><header><h1 id="getPropertiesInTrack">getPropertiesInTrack</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.getPropertiesInTrack()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{string}</span><span class="name">trackName</span><span class="description"></span></li><li class="tag"><span class="type">@return: </span><span class="types">{Array.&lt;Rekapi.KeyframeProperty&gt;,undefined}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Get all of the <a href="rekapi.keyframe-property.js.html"><code>Rekapi.KeyframeProperty</code></a>s for a track.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.getPropertiesInTrack = function (trackName) {
     var propertyTrack = this._propertyTracks[trackName];
 
     if (propertyTrack) {
@@ -515,11 +507,19 @@ actor.modifyKeyframe(1000, {
     }
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="getStart">getStart</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.getStart()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{string=}</span><span class="name">opt_trackName</span><span class="description"></span></li><li class="tag"><span class="type">@return: </span><span class="types">{number}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Get the millisecond of the first animated state of an actor (for instance, if the actor's first keyframe is later than millisecond <code>0</code>).  You can scope this and get the start time of a specific track with <code>opt_trackName</code>.  If there are no keyframes, this returns <code>0</code>.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.getStart = function (opt_trackName) {
     var starts = [];
+    var propertyTracks = this._propertyTracks;
 
-    if (opt_trackName) {
-      starts.push(this._propertyTracks[opt_trackName][0].millisecond);
+    // Null check to see if opt_trackName was provided and is valid
+    if (propertyTracks.hasOwnProperty(opt_trackName)) {
+      var firstKeyframeProperty = propertyTracks[opt_trackName][0];
+
+      if (firstKeyframeProperty) {
+        starts.push(firstKeyframeProperty.millisecond);
+      }
     } else {
-      _.each(this._propertyTracks, function (propertyTrack) {
+      // Loop over all property tracks and accumulate the first
+      // keyframeProperties from non-empty tracks
+      _.each(propertyTracks, function (propertyTrack) {
         if (propertyTrack.length) {
           starts.push(propertyTrack[0].millisecond);
         }

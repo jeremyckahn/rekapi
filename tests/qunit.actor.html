@@ -1203,8 +1203,8 @@
           'Properties were added to the "y" track');
       equal(keyPropCount, 4,
           'The correct amount of KeyframeProperty instances were added');
-      deepEqual(testActor._timelinePropertyCacheIndex, [0, 1000],
-          'The intenal _timelinePropertyCacheIndex is correct');
+      deepEqual(testActor._timelinePropertyCacheKeys, [0, 1000],
+          'The intenal _timelinePropertyCacheKeys is correct');
       equal(testActor._propertyTracks.x[0].nextProperty,
           testActor._propertyTracks.x[1],
           'The first tracked "x" KeyframeProperty instance\'s nextProperty is pointing to the correct property');
@@ -1246,23 +1246,23 @@
 
       equal(keyPropCount, 4,
           'The number of KeyframeProperty instances on the Actor did not change');
-      deepEqual(testActor._timelinePropertyCacheIndex, [0, 1000, 1500],
-          'The intenal _timelinePropertyCacheIndex is correct');
+      deepEqual(testActor._timelinePropertyCacheKeys, [0, 1000, 1500],
+          'The intenal _timelinePropertyCacheKeys is correct');
       equal(propTrackCount, 2,
           'The number of property tracks did not change');
       equal(testActor._propertyTracks.x.length, 2,
           'Modifying the property within it\'s track did not change the number of properties in the track');
-      equal(testActor._timelinePropertyCaches[0].x.millisecond, 0,
+      equal(testActor._timelinePropertyCache[0].x.millisecond, 0,
           'There is an "x" KeyframeProperty at 0');
-      equal(testActor._timelinePropertyCaches[0].y.millisecond, 0,
+      equal(testActor._timelinePropertyCache[0].y.millisecond, 0,
           'There is a "y" KeyframeProperty at 0');
-      equal(testActor._timelinePropertyCaches[1000].x.millisecond, 0,
+      equal(testActor._timelinePropertyCache[1000].x.millisecond, 0,
           'The "x" KeyframeProperty at 1000 milliseconds is pointing back to "x" property at 0 millisecond');
-      equal(testActor._timelinePropertyCaches[1000].y.millisecond, 1000,
+      equal(testActor._timelinePropertyCache[1000].y.millisecond, 1000,
           'There is a "y" KeyframeProperty at 1000');
-      equal(testActor._timelinePropertyCaches[1500].x.millisecond, 1500,
+      equal(testActor._timelinePropertyCache[1500].x.millisecond, 1500,
           'There is an "x" KeyframeProperty at 1500');
-      equal(testActor._timelinePropertyCaches[1500].y,
+      equal(testActor._timelinePropertyCache[1500].y,
           testActor._propertyTracks.y[1],
           'The second tracked "y" property is cached at the 1500 millisecond cache');
       equal(testActor._propertyTracks.x[0].nextProperty,
