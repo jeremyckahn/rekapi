@@ -237,6 +237,8 @@ code {
       ,'afterUpdate': []
       ,'addActor': []
       ,'removeActor': []
+      ,'addKeyframeProperty': []
+      ,'removeKeyframeProperty': []
       ,'timelineModified': []
     };
 
@@ -429,8 +431,10 @@ code {
 <li><strong>stop</strong>: Fires when the animation is <a href="#stop"><code>stop()</code></a>ped.</li>
 <li><strong>beforeUpdate</strong>: Fires each frame before all actors are rendered.</li>
 <li><strong>afterUpdate</strong>: Fires each frame after all actors are rendered.</li>
-<li><strong>addActor</strong>: Fires when an actor is added.  opt_data is the actor that was added.</li>
-<li><strong>removeActor</strong>: Fires when an actor is removed.</li>
+<li><strong>addActor</strong>: Fires when an actor is added.  opt_data is the <a href="rekapi.actor.js.html#Actor"><code>Actor</code></a> that was added.</li>
+<li><strong>removeActor</strong>: Fires when an actor is removed.  opt_data is the <a href="rekapi.actor.js.html#Actor"><code>Actor</code></a> that was removed.</li>
+<li><strong>addKeyframeProperty</strong>: Fires when a keyframe property is added.  opt_data is the <a href="rekapi.keyframe-property.js.html#KeyframeProperty"><code>KeyframeProperty</code></a> that was added.</li>
+<li><strong>removeKeyframeProperty</strong>: Fires when a keyframe property is removed.  opt_data is the <a href="rekapi.keyframe-property.js.html#KeyframeProperty"><code>KeyframeProperty</code></a> that was removed.</li>
 <li><strong>timelineModified</strong>: Fires when a keyframe is added, modified or removed.</li>
 </ul>
 

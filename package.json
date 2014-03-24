@@ -1,6 +1,6 @@
 {
   "name": "rekapi",
-  "version": "1.0.7",
+  "version": "1.1.0",
   "homepage": "http://rekapi.com",
   "author": "Jeremy Kahn <jeremyckahn@gmail.com>",
   "description": "A keyframe animation library for JavaScript",
@@ -17,7 +17,8 @@
     "grunt-contrib-uglify": "0.3.0",
     "grunt-contrib-copy": "0.4.0",
     "grunt-dox": "0.5.0",
-    "grunt-contrib-watch": "0.3.1"
+    "grunt-contrib-watch": "0.3.1",
+    "grunt-bump": "0.0.13"
   },
   "license": "MIT",
   "dependencies": {

@@ -472,6 +472,8 @@ rekapiModules.push(function (context) {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       var i = -1;
 
+      // This is a weird way of getting the index of the property to remove,
+      // but it obviates the need to loop through the array twice.
       var foundProperty = _.find(propertyTrack, function (keyframeProperty) {
         i++;
         return millisecond === keyframeProperty.millisecond;
@@ -481,8 +483,13 @@ rekapiModules.push(function (context) {
         var removedProperty = propertyTrack.splice(i, 1)[0];
 
         if (removedProperty) {
+          if (this.rekapi) {
+            fireEvent(this.rekapi, 'removeKeyframeProperty', _, removedProperty);
+          }
+
           delete this._keyframeProperties[removedProperty.id];
         }
+
       }
     }, this);
 
@@ -505,6 +512,10 @@ rekapiModules.push(function (context) {
     _.each(this._propertyTracks, function (propertyTrack) {
       propertyTrack.length = 0;
     });
+
+    _.each(this._keyframeProperties, function (keyframeProperty) {
+        fireEvent(this.rekapi, 'removeKeyframeProperty', _, keyframeProperty);
+    }, this);
 
     this._keyframeProperties = {};
 
@@ -715,6 +726,10 @@ rekapiModules.push(function (context) {
     }
 
     sortPropertyTracks(this);
+
+    if (this.rekapi) {
+      fireEvent(this.rekapi, 'addKeyframeProperty', _, keyframeProperty);
+    }
 
     return this;
   };

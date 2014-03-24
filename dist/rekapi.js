@@ -1,4 +1,4 @@
-/*! rekapi - v1.0.7 - 2014-03-20 - http://rekapi.com */
+/*! rekapi - v1.1.0 - 2014-03-23 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -246,6 +246,8 @@ var rekapiCore = function (root, _, Tweenable) {
       ,'afterUpdate': []
       ,'addActor': []
       ,'removeActor': []
+      ,'addKeyframeProperty': []
+      ,'removeKeyframeProperty': []
       ,'timelineModified': []
     };
 
@@ -546,8 +548,10 @@ var rekapiCore = function (root, _, Tweenable) {
    * - __stop__: Fires when the animation is [`stop()`](#stop)ped.
    * - __beforeUpdate__: Fires each frame before all actors are rendered.
    * - __afterUpdate__: Fires each frame after all actors are rendered.
-   * - __addActor__: Fires when an actor is added.  opt_data is the actor that was added.
-   * - __removeActor__: Fires when an actor is removed.
+   * - __addActor__: Fires when an actor is added.  opt_data is the [`Actor`](rekapi.actor.js.html#Actor) that was added.
+   * - __removeActor__: Fires when an actor is removed.  opt_data is the [`Actor`](rekapi.actor.js.html#Actor) that was removed.
+   * - __addKeyframeProperty__: Fires when a keyframe property is added.  opt_data is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was added.
+   * - __removeKeyframeProperty__: Fires when a keyframe property is removed.  opt_data is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was removed.
    * - __timelineModified__: Fires when a keyframe is added, modified or removed.
    *
    * __[Example](../../../../docs/examples/bind.html)__
@@ -1115,6 +1119,8 @@ rekapiModules.push(function (context) {
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       var i = -1;
 
+      // This is a weird way of getting the index of the property to remove,
+      // but it obviates the need to loop through the array twice.
       var foundProperty = _.find(propertyTrack, function (keyframeProperty) {
         i++;
         return millisecond === keyframeProperty.millisecond;
@@ -1124,8 +1130,13 @@ rekapiModules.push(function (context) {
         var removedProperty = propertyTrack.splice(i, 1)[0];
 
         if (removedProperty) {
+          if (this.rekapi) {
+            fireEvent(this.rekapi, 'removeKeyframeProperty', _, removedProperty);
+          }
+
           delete this._keyframeProperties[removedProperty.id];
         }
+
       }
     }, this);
 
@@ -1148,6 +1159,10 @@ rekapiModules.push(function (context) {
     _.each(this._propertyTracks, function (propertyTrack) {
       propertyTrack.length = 0;
     });
+
+    _.each(this._keyframeProperties, function (keyframeProperty) {
+        fireEvent(this.rekapi, 'removeKeyframeProperty', _, keyframeProperty);
+    }, this);
 
     this._keyframeProperties = {};
 
@@ -1358,6 +1373,10 @@ rekapiModules.push(function (context) {
     }
 
     sortPropertyTracks(this);
+
+    if (this.rekapi) {
+      fireEvent(this.rekapi, 'addKeyframeProperty', _, keyframeProperty);
+    }
 
     return this;
   };

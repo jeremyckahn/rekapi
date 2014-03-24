@@ -231,6 +231,8 @@ var rekapiCore = function (root, _, Tweenable) {
       ,'afterUpdate': []
       ,'addActor': []
       ,'removeActor': []
+      ,'addKeyframeProperty': []
+      ,'removeKeyframeProperty': []
       ,'timelineModified': []
     };
 
@@ -531,8 +533,10 @@ var rekapiCore = function (root, _, Tweenable) {
    * - __stop__: Fires when the animation is [`stop()`](#stop)ped.
    * - __beforeUpdate__: Fires each frame before all actors are rendered.
    * - __afterUpdate__: Fires each frame after all actors are rendered.
-   * - __addActor__: Fires when an actor is added.  opt_data is the actor that was added.
-   * - __removeActor__: Fires when an actor is removed.
+   * - __addActor__: Fires when an actor is added.  opt_data is the [`Actor`](rekapi.actor.js.html#Actor) that was added.
+   * - __removeActor__: Fires when an actor is removed.  opt_data is the [`Actor`](rekapi.actor.js.html#Actor) that was removed.
+   * - __addKeyframeProperty__: Fires when a keyframe property is added.  opt_data is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was added.
+   * - __removeKeyframeProperty__: Fires when a keyframe property is removed.  opt_data is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was removed.
    * - __timelineModified__: Fires when a keyframe is added, modified or removed.
    *
    * __[Example](../../../../docs/examples/bind.html)__
