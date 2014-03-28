@@ -1,4 +1,4 @@
-/*! rekapi - v1.1.0 - 2014-03-23 - http://rekapi.com */
+/*! rekapi - v1.1.1 - 2014-03-27 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -248,6 +248,7 @@ var rekapiCore = function (root, _, Tweenable) {
       ,'removeActor': []
       ,'addKeyframeProperty': []
       ,'removeKeyframeProperty': []
+      ,'addKeyframePropertyTrack': []
       ,'timelineModified': []
     };
 
@@ -548,15 +549,16 @@ var rekapiCore = function (root, _, Tweenable) {
    * - __stop__: Fires when the animation is [`stop()`](#stop)ped.
    * - __beforeUpdate__: Fires each frame before all actors are rendered.
    * - __afterUpdate__: Fires each frame after all actors are rendered.
-   * - __addActor__: Fires when an actor is added.  opt_data is the [`Actor`](rekapi.actor.js.html#Actor) that was added.
-   * - __removeActor__: Fires when an actor is removed.  opt_data is the [`Actor`](rekapi.actor.js.html#Actor) that was removed.
-   * - __addKeyframeProperty__: Fires when a keyframe property is added.  opt_data is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was added.
-   * - __removeKeyframeProperty__: Fires when a keyframe property is removed.  opt_data is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was removed.
+   * - __addActor__: Fires when an actor is added.  `opt_data` is the [`Actor`](rekapi.actor.js.html#Actor) that was added.
+   * - __removeActor__: Fires when an actor is removed.  `opt_data` is the [`Actor`](rekapi.actor.js.html#Actor) that was removed.
+   * - __addKeyframeProperty__: Fires when a keyframe property is added.  `opt_data` is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was added.
+   * - __removeKeyframeProperty__: Fires when a keyframe property is removed.  `opt_data` is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was removed.
+   * - __addKeyframePropertyTrack__: Fires when the a keyframe is added to an actor that creates a new keyframe property track.  `opt_data` is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was added to create the property track.  A reference to the actor that the keyframe property is associated with can be accessed via `.actor` and the track name that was added can be determined via `.name`.
    * - __timelineModified__: Fires when a keyframe is added, modified or removed.
    *
    * __[Example](../../../../docs/examples/bind.html)__
    * @param {string} eventName
-   * @param {Function(Rekapi, Object=)} handler Receives the Rekapi instance as the first parameter and event-specific data as the second.
+   * @param {Function(Rekapi,Object=)} handler Receives the Rekapi instance as the first parameter and event-specific data as the second (opt_data).
    * @return {Rekapi}
    */
   Rekapi.prototype.on = function (eventName, handler) {
@@ -1368,6 +1370,9 @@ rekapiModules.push(function (context) {
 
     if (typeof this._propertyTracks[name] === 'undefined') {
       propertyTracks[name] = [keyframeProperty];
+      if (this.rekapi) {
+        fireEvent(this.rekapi, 'addKeyframePropertyTrack', _, keyframeProperty);
+      }
     } else {
       propertyTracks[name].push(keyframeProperty);
     }

@@ -239,6 +239,7 @@ code {
       ,'removeActor': []
       ,'addKeyframeProperty': []
       ,'removeKeyframeProperty': []
+      ,'addKeyframePropertyTrack': []
       ,'timelineModified': []
     };
 
@@ -421,7 +422,7 @@ code {
     return (this._lastUpdatedMillisecond / this._animationLength);
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="getAnimationLength">getAnimationLength</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Rekapi.prototype.getAnimationLength()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{number}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Return the length of the animation timeline, in milliseconds.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Rekapi.prototype.getAnimationLength = function () {
     return this._animationLength;
-  };</code></pre></div></div></div></article><article class="comment"><header><h1 id="on">on</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Rekapi.prototype.on()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{string}</span><span class="name">eventName</span><span class="description"></span></li><li class="tag"><span class="type">@param: </span><span class="types">{Function(Rekapi,}</span><span class="name">Object=)}</span><span class="description">handler Receives the Rekapi instance as the first parameter and event-specific data as the second.</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Rekapi}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Bind a handler function to a Rekapi event.  Valid events are:</p>
+  };</code></pre></div></div></div></article><article class="comment"><header><h1 id="on">on</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Rekapi.prototype.on()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{string}</span><span class="name">eventName</span><span class="description"></span></li><li class="tag"><span class="type">@param: </span><span class="types">{Function(Rekapi,Object=)}</span><span class="name">handler</span><span class="description">Receives the Rekapi instance as the first parameter and event-specific data as the second (opt_data).</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Rekapi}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Bind a handler function to a Rekapi event.  Valid events are:</p>
 
 <ul>
 <li><strong>animationComplete</strong>: Fires when all animation loops have completed.</li>
@@ -431,10 +432,11 @@ code {
 <li><strong>stop</strong>: Fires when the animation is <a href="#stop"><code>stop()</code></a>ped.</li>
 <li><strong>beforeUpdate</strong>: Fires each frame before all actors are rendered.</li>
 <li><strong>afterUpdate</strong>: Fires each frame after all actors are rendered.</li>
-<li><strong>addActor</strong>: Fires when an actor is added.  opt_data is the <a href="rekapi.actor.js.html#Actor"><code>Actor</code></a> that was added.</li>
-<li><strong>removeActor</strong>: Fires when an actor is removed.  opt_data is the <a href="rekapi.actor.js.html#Actor"><code>Actor</code></a> that was removed.</li>
-<li><strong>addKeyframeProperty</strong>: Fires when a keyframe property is added.  opt_data is the <a href="rekapi.keyframe-property.js.html#KeyframeProperty"><code>KeyframeProperty</code></a> that was added.</li>
-<li><strong>removeKeyframeProperty</strong>: Fires when a keyframe property is removed.  opt_data is the <a href="rekapi.keyframe-property.js.html#KeyframeProperty"><code>KeyframeProperty</code></a> that was removed.</li>
+<li><strong>addActor</strong>: Fires when an actor is added.  <code>opt_data</code> is the <a href="rekapi.actor.js.html#Actor"><code>Actor</code></a> that was added.</li>
+<li><strong>removeActor</strong>: Fires when an actor is removed.  <code>opt_data</code> is the <a href="rekapi.actor.js.html#Actor"><code>Actor</code></a> that was removed.</li>
+<li><strong>addKeyframeProperty</strong>: Fires when a keyframe property is added.  <code>opt_data</code> is the <a href="rekapi.keyframe-property.js.html#KeyframeProperty"><code>KeyframeProperty</code></a> that was added.</li>
+<li><strong>removeKeyframeProperty</strong>: Fires when a keyframe property is removed.  <code>opt_data</code> is the <a href="rekapi.keyframe-property.js.html#KeyframeProperty"><code>KeyframeProperty</code></a> that was removed.</li>
+<li><strong>addKeyframePropertyTrack</strong>: Fires when the a keyframe is added to an actor that creates a new keyframe property track.  <code>opt_data</code> is the <a href="rekapi.keyframe-property.js.html#KeyframeProperty"><code>KeyframeProperty</code></a> that was added to create the property track.  A reference to the actor that the keyframe property is associated with can be accessed via <code>.actor</code> and the track name that was added can be determined via <code>.name</code>.</li>
 <li><strong>timelineModified</strong>: Fires when a keyframe is added, modified or removed.</li>
 </ul>
 

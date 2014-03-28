@@ -721,6 +721,9 @@ rekapiModules.push(function (context) {
 
     if (typeof this._propertyTracks[name] === 'undefined') {
       propertyTracks[name] = [keyframeProperty];
+      if (this.rekapi) {
+        fireEvent(this.rekapi, 'addKeyframePropertyTrack', _, keyframeProperty);
+      }
     } else {
       propertyTracks[name].push(keyframeProperty);
     }
