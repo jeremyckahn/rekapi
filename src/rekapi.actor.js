@@ -134,10 +134,9 @@ rekapiModules.push(function (context) {
    * @return {Rekapi.KeyframeProperty|undefined}
    */
   function findPropertyAtMillisecondInTrack (actor, trackName, millisecond) {
-    return _.find(actor._propertyTracks[trackName],
-        function (keyframeProperty) {
-      return keyframeProperty.millisecond === millisecond;
-    });
+    return _.findWhere(actor._propertyTracks[trackName], {
+        millisecond: millisecond
+      });
   }
 
   /*!
@@ -369,12 +368,12 @@ rekapiModules.push(function (context) {
     var sourceEasings = {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var foundProperty =
+      var keyframeProperty =
           findPropertyAtMillisecondInTrack(this, trackName, copyFrom);
 
-      if (foundProperty) {
-        sourcePositions[trackName] = foundProperty.value;
-        sourceEasings[trackName] = foundProperty.easing;
+      if (keyframeProperty) {
+        sourcePositions[trackName] = keyframeProperty.value;
+        sourceEasings[trackName] = keyframeProperty.easing;
       }
     }, this);
 
@@ -469,27 +468,14 @@ rekapiModules.push(function (context) {
    * @return {Rekapi.Actor}
    */
   Actor.prototype.removeKeyframe = function (millisecond) {
+    var propertyTracks = this._propertyTracks;
+
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
-      var i = -1;
+      var keyframeProperty = _.findWhere(propertyTrack, { millisecond: millisecond });
 
-      // This is a weird way of getting the index of the property to remove,
-      // but it obviates the need to loop through the array twice.
-      var foundProperty = _.find(propertyTrack, function (keyframeProperty) {
-        i++;
-        return millisecond === keyframeProperty.millisecond;
-      });
-
-      if (foundProperty) {
-        var removedProperty = propertyTrack.splice(i, 1)[0];
-
-        if (removedProperty) {
-          if (this.rekapi) {
-            fireEvent(this.rekapi, 'removeKeyframeProperty', _, removedProperty);
-          }
-
-          delete this._keyframeProperties[removedProperty.id];
-        }
-
+      if (keyframeProperty) {
+        propertyTracks[propertyName] = _.without(propertyTrack, keyframeProperty);
+        keyframeProperty.detach();
       }
     }, this);
 
@@ -514,7 +500,7 @@ rekapiModules.push(function (context) {
     });
 
     _.each(this._keyframeProperties, function (keyframeProperty) {
-        fireEvent(this.rekapi, 'removeKeyframeProperty', _, keyframeProperty);
+      keyframeProperty.detach();
     }, this);
 
     this._keyframeProperties = {};
@@ -572,6 +558,7 @@ rekapiModules.push(function (context) {
       var keyframeProperty = this.getKeyframeProperty(property, millisecond);
       propertyTracks[property] =
           _.without(propertyTracks[property], keyframeProperty);
+      keyframeProperty.detach();
 
       cleanupAfterKeyframeModification(this);
 

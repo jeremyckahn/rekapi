@@ -100,6 +100,111 @@
     });
 
 
+    module('detach');
+
+
+    test('Detaching destroys actor/keyframeProperty association',
+        function () {
+
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
+
+      actor.keyframe(0, { x: 10 });
+      var keyframeProperty = actor.getKeyframeProperty('x', 0);
+
+      equal(actor, keyframeProperty.actor,
+          'The KeyframeProperty has a reference to the actor');
+
+      keyframeProperty.detach();
+
+      equal(null, keyframeProperty.actor,
+          'The KeyframeProperty\'s Actor reference was removed');
+    });
+
+
+    module('removeKeyframeProperty event');
+
+
+    test('Directly detaching triggers the removeKeyframeProperty event',
+        function () {
+
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
+
+      actor.keyframe(0, { x: 10 });
+      var keyframeProperty = actor.getKeyframeProperty('x', 0);
+      var eventWasTriggered = false;
+
+      rekapi.on('removeKeyframeProperty', function () {
+        eventWasTriggered = true;
+      });
+
+      keyframeProperty.detach();
+
+      ok(eventWasTriggered, 'removeKeyframeProperty was triggered');
+    });
+
+
+    test('Actor#removeKeyframe triggers the removeKeyframeProperty event',
+        function () {
+
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
+
+      actor.keyframe(0, { x: 10 });
+      var keyframeProperty = actor.getKeyframeProperty('x', 0);
+      var eventWasTriggered = false;
+
+      rekapi.on('removeKeyframeProperty', function () {
+        eventWasTriggered = true;
+      });
+
+      actor.removeKeyframe(0);
+
+      ok(eventWasTriggered, 'removeKeyframeProperty was triggered');
+    });
+
+
+    test('Actor#removeAllKeyframes triggers the removeKeyframeProperty event',
+        function () {
+
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
+
+      actor.keyframe(0, { x: 10 });
+      var keyframeProperty = actor.getKeyframeProperty('x', 0);
+      var eventWasTriggered = false;
+
+      rekapi.on('removeKeyframeProperty', function () {
+        eventWasTriggered = true;
+      });
+
+      actor.removeAllKeyframes();
+
+      ok(eventWasTriggered, 'removeKeyframeProperty was triggered');
+    });
+
+
+    test('Actor#removeKeyframeProperty triggers the removeKeyframeProperty event',
+        function () {
+
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
+
+      actor.keyframe(0, { x: 10 });
+      var keyframeProperty = actor.getKeyframeProperty('x', 0);
+      var eventWasTriggered = false;
+
+      rekapi.on('removeKeyframeProperty', function () {
+        eventWasTriggered = true;
+      });
+
+      actor.removeKeyframeProperty('x', 0);
+
+      ok(eventWasTriggered, 'removeKeyframeProperty was triggered');
+    });
+
+
     module('exportPropertyData');
 
 

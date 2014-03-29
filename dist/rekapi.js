@@ -1,4 +1,4 @@
-/*! rekapi - v1.1.1 - 2014-03-27 - http://rekapi.com */
+/*! rekapi - v1.2.0 - 2014-03-29 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -783,10 +783,9 @@ rekapiModules.push(function (context) {
    * @return {Rekapi.KeyframeProperty|undefined}
    */
   function findPropertyAtMillisecondInTrack (actor, trackName, millisecond) {
-    return _.find(actor._propertyTracks[trackName],
-        function (keyframeProperty) {
-      return keyframeProperty.millisecond === millisecond;
-    });
+    return _.findWhere(actor._propertyTracks[trackName], {
+        millisecond: millisecond
+      });
   }
 
   /*!
@@ -1018,12 +1017,12 @@ rekapiModules.push(function (context) {
     var sourceEasings = {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var foundProperty =
+      var keyframeProperty =
           findPropertyAtMillisecondInTrack(this, trackName, copyFrom);
 
-      if (foundProperty) {
-        sourcePositions[trackName] = foundProperty.value;
-        sourceEasings[trackName] = foundProperty.easing;
+      if (keyframeProperty) {
+        sourcePositions[trackName] = keyframeProperty.value;
+        sourceEasings[trackName] = keyframeProperty.easing;
       }
     }, this);
 
@@ -1118,27 +1117,14 @@ rekapiModules.push(function (context) {
    * @return {Rekapi.Actor}
    */
   Actor.prototype.removeKeyframe = function (millisecond) {
+    var propertyTracks = this._propertyTracks;
+
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
-      var i = -1;
+      var keyframeProperty = _.findWhere(propertyTrack, { millisecond: millisecond });
 
-      // This is a weird way of getting the index of the property to remove,
-      // but it obviates the need to loop through the array twice.
-      var foundProperty = _.find(propertyTrack, function (keyframeProperty) {
-        i++;
-        return millisecond === keyframeProperty.millisecond;
-      });
-
-      if (foundProperty) {
-        var removedProperty = propertyTrack.splice(i, 1)[0];
-
-        if (removedProperty) {
-          if (this.rekapi) {
-            fireEvent(this.rekapi, 'removeKeyframeProperty', _, removedProperty);
-          }
-
-          delete this._keyframeProperties[removedProperty.id];
-        }
-
+      if (keyframeProperty) {
+        propertyTracks[propertyName] = _.without(propertyTrack, keyframeProperty);
+        keyframeProperty.detach();
       }
     }, this);
 
@@ -1163,7 +1149,7 @@ rekapiModules.push(function (context) {
     });
 
     _.each(this._keyframeProperties, function (keyframeProperty) {
-        fireEvent(this.rekapi, 'removeKeyframeProperty', _, keyframeProperty);
+      keyframeProperty.detach();
     }, this);
 
     this._keyframeProperties = {};
@@ -1221,6 +1207,7 @@ rekapiModules.push(function (context) {
       var keyframeProperty = this.getKeyframeProperty(property, millisecond);
       propertyTracks[property] =
           _.without(propertyTracks[property], keyframeProperty);
+      keyframeProperty.detach();
 
       cleanupAfterKeyframeModification(this);
 
@@ -1492,7 +1479,7 @@ rekapiModules.push(function (context) {
   var interpolate = Tweenable.interpolate;
 
   /**
-   * Represents an individual component of an actor's keyframe state.  In most cases you won't need to deal with this object directly, as the [`Rekapi.Actor`](rekapi.actor.js.html) APIs abstract a lot of what this Object does away for you.
+   * Represents an individual component of an actor's keyframe state.  In most cases you won't need to deal with this object directly, as the [`Rekapi.Actor`](rekapi.actor.js.html#Actor) APIs abstract a lot of what this Object does away for you.
    * @param {number} millisecond Where on the animation timeline this KeyframeProperty is.
    * @param {string} name The property's name, such as "x" or "opacity."
    * @param {number|string} value The value that this KeyframeProperty represents.
@@ -1563,6 +1550,23 @@ rekapiModules.push(function (context) {
    */
   KeyframeProperty.prototype.linkToNext = function (nextProperty) {
     this.nextProperty = nextProperty || null;
+  };
+
+  /**
+   * Disassociates this [`Rekapi.KeyframeProperty`](#KeyframeProperty) from its [`Rekapi.Actor`](rekapi.actor.js.html#Actor), if it has one.  This is called automatically by various [`Rekapi.Actor`](rekapi.actor.js.html#Actor) methods and triggers the [`removeKeyframeProperty`](rekapi.core.js.html#on) event on the associated [`Rekapi`](rekapi.core.js.html#Rekapi) instance, if there is one.
+   * @return {Rekapi.KeyframeProperty}
+   */
+  KeyframeProperty.prototype.detach = function () {
+    var actor = this.actor;
+    if (actor) {
+      if (actor.rekapi) {
+        fireEvent(actor.rekapi, 'removeKeyframeProperty', _, this);
+        delete actor._keyframeProperties[this.id];
+        this.actor = null;
+      }
+    }
+
+    return this;
   };
 
   /**
