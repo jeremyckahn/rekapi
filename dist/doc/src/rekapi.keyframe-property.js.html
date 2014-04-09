@@ -250,14 +250,22 @@ code {
     var fromObj = {};
     var toObj = {};
     var value;
+    var nextProperty = this.nextProperty;
+    var correctedMillisecond = Math.max(millisecond, this.millisecond);
 
-    if (this.nextProperty) {
+    if (nextProperty) {
+      correctedMillisecond =
+          Math.min(correctedMillisecond, nextProperty.millisecond);
+
       fromObj[this.name] = this.value;
-      toObj[this.name] = this.nextProperty.value;
-      var delta = this.nextProperty.millisecond - this.millisecond;
-      var interpolatedPosition = (millisecond - this.millisecond) / delta;
+      toObj[this.name] = nextProperty.value;
+
+      var delta = nextProperty.millisecond - this.millisecond;
+      var interpolatedPosition =
+          (correctedMillisecond - this.millisecond) / delta;
+
       value = interpolate(fromObj, toObj, interpolatedPosition,
-          this.nextProperty.easing)[this.name];
+          nextProperty.easing)[this.name];
     } else {
       value = this.value;
     }

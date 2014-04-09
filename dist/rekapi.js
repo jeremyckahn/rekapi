@@ -1,4 +1,4 @@
-/*! rekapi - v1.2.0 - 2014-03-29 - http://rekapi.com */
+/*! rekapi - v1.3.0 - 2014-04-06 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -137,9 +137,15 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} forMillisecond
    */
   function updateToMillisecond (rekapi, forMillisecond) {
-    var currentIteration = determineCurrentLoopIteration(rekapi, forMillisecond);
-    var loopPosition = calculateLoopPosition(
-        rekapi, forMillisecond, currentIteration);
+    var loopPosition = 0;
+    var currentIteration = 0;
+
+    if (rekapi._animationLength > 0) {
+      currentIteration =
+          determineCurrentLoopIteration(rekapi, forMillisecond);
+      loopPosition = calculateLoopPosition(
+          rekapi, forMillisecond, currentIteration);
+    }
 
     rekapi.update(loopPosition);
     updatePlayState(rekapi, currentIteration);
@@ -674,11 +680,17 @@ rekapiModules.push(function (context) {
    * @return {number} -1 if there is no property cache for the millisecond
    * (this should never happen).
    */
-  //TODO:  Oh noes, this is a linear search!  Maybe optimize it?
   function getPropertyCacheIdForMillisecond (actor, millisecond) {
     var list = actor._timelinePropertyCacheKeys;
 
     var i, len = list.length;
+
+    // If there is only one keyframe, use that
+    if (len === 1) {
+      return 0;
+    }
+
+    //TODO:  Oh noes, this is a linear search!  Maybe optimize it?
     for (i = 1; i < len; i++) {
       if (list[i] >= millisecond) {
         return (i - 1);
@@ -722,7 +734,7 @@ rekapiModules.push(function (context) {
     var latestProperties = {};
 
     _.each(actor._propertyTracks, function (propertyTrack, propertyName) {
-      var previousKeyframeProperty = null;
+      var previousKeyframeProperty = propertyTrack[0] || null;
       var i = 0, len = propertyTrack.length, keyframeProperty;
 
       for (i; i < len; i++) {
@@ -1381,35 +1393,40 @@ rekapiModules.push(function (context) {
   Actor.prototype._updateState = function (millisecond) {
     var startMs = this.getStart();
     var endMs = this.getEnd();
+    var interpolatedObject = {};
 
     millisecond = Math.min(endMs, millisecond);
 
-    if (startMs <= millisecond) {
-      var latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
-      var propertiesToInterpolate =
-          this._timelinePropertyCache[this._timelinePropertyCacheKeys[
-          latestCacheId]];
-      var interpolatedObject = {};
+    var latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
+    var propertiesToInterpolate =
+        this._timelinePropertyCache[this._timelinePropertyCacheKeys[
+        latestCacheId]];
+
+    if (startMs === endMs) {
+
+      // If there is only one keyframe, use that for the state of the actor
+      _.each(propertiesToInterpolate, function (property, propertyName) {
+        interpolatedObject[propertyName] = property.value;
+      });
+
+    } else {
 
       _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
-        // TODO: Try to get rid of this null check
-        if (keyframeProperty) {
-          if (this._beforeKeyframePropertyInterpolate !== noop) {
-            this._beforeKeyframePropertyInterpolate(keyframeProperty);
-          }
+        if (this._beforeKeyframePropertyInterpolate !== noop) {
+          this._beforeKeyframePropertyInterpolate(keyframeProperty);
+        }
 
-          interpolatedObject[propName] =
-              keyframeProperty.getValueAt(millisecond);
+        interpolatedObject[propName] =
+            keyframeProperty.getValueAt(millisecond);
 
-          if (this._afterKeyframePropertyInterpolate !== noop) {
-            this._afterKeyframePropertyInterpolate(
-                keyframeProperty, interpolatedObject);
-          }
+        if (this._afterKeyframePropertyInterpolate !== noop) {
+          this._afterKeyframePropertyInterpolate(
+              keyframeProperty, interpolatedObject);
         }
       }, this);
-
-      this.set(interpolatedObject);
     }
+
+    this.set(interpolatedObject);
 
     return this;
   };
@@ -1529,14 +1546,22 @@ rekapiModules.push(function (context) {
     var fromObj = {};
     var toObj = {};
     var value;
+    var nextProperty = this.nextProperty;
+    var correctedMillisecond = Math.max(millisecond, this.millisecond);
 
-    if (this.nextProperty) {
+    if (nextProperty) {
+      correctedMillisecond =
+          Math.min(correctedMillisecond, nextProperty.millisecond);
+
       fromObj[this.name] = this.value;
-      toObj[this.name] = this.nextProperty.value;
-      var delta = this.nextProperty.millisecond - this.millisecond;
-      var interpolatedPosition = (millisecond - this.millisecond) / delta;
+      toObj[this.name] = nextProperty.value;
+
+      var delta = nextProperty.millisecond - this.millisecond;
+      var interpolatedPosition =
+          (correctedMillisecond - this.millisecond) / delta;
+
       value = interpolate(fromObj, toObj, interpolatedPosition,
-          this.nextProperty.easing)[this.name];
+          nextProperty.easing)[this.name];
     } else {
       value = this.value;
     }

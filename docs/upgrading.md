@@ -1,3 +1,9 @@
+# Upgrading to Rekapi 1.3.0
+
+This version of Rekapi changes how undefined keyframe states are handled, as well as single-keyframe states.  Animations that have a single keyframe will just compute and render that keyframe continuously.  The previous behavior was to not render the keyframe at all.
+
+Rekapi will no longer provide `undefined` for keyframe properties when the playhead is outside of its track bounds.  If the playhead is before first keyframe for a given track, the first keyframe's state is the one that will be rendered.  If the playhead is after the last keyframe for a track, the final keyframe state is the one that will be rendered.
+
 # Upgrading to Rekapi 1.0.0
 
 There are several breaking changes in this release.  The most significant is that the globally-exposed object is renamed from `Kapi` to `Rekapi`, to match the name of the project.  It is recommended that you update your code, but in lieu of that you might be able to get away with this:

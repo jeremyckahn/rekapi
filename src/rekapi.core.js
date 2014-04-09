@@ -122,9 +122,15 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} forMillisecond
    */
   function updateToMillisecond (rekapi, forMillisecond) {
-    var currentIteration = determineCurrentLoopIteration(rekapi, forMillisecond);
-    var loopPosition = calculateLoopPosition(
-        rekapi, forMillisecond, currentIteration);
+    var loopPosition = 0;
+    var currentIteration = 0;
+
+    if (rekapi._animationLength > 0) {
+      currentIteration =
+          determineCurrentLoopIteration(rekapi, forMillisecond);
+      loopPosition = calculateLoopPosition(
+          rekapi, forMillisecond, currentIteration);
+    }
 
     rekapi.update(loopPosition);
     updatePlayState(rekapi, currentIteration);
