@@ -19,6 +19,16 @@ rekapiModules.push(function (context) {
   }
 
   /*!
+   * @param {Rekapi.Actor} actor
+   * @param {string} event
+   */
+  function fireRekapiEventForActor (actor, event) {
+    if (actor.rekapi) {
+      fireEvent(actor.rekapi, event, _);
+    }
+  }
+
+  /*!
    * Retrieves the most recent property cache ID for a given millisecond.
    * @param {Rekapi.Actor} actor
    * @param {number} millisecond
@@ -178,10 +188,6 @@ rekapiModules.push(function (context) {
 
     // Re-link the linked list of keyframeProperties
     linkTrackedProperties(actor);
-
-    if (actor.rekapi) {
-      fireEvent(actor.rekapi, 'timelineModified', _);
-    }
   }
 
   /*!
@@ -196,6 +202,7 @@ rekapiModules.push(function (context) {
     sortPropertyTracks(actor);
     invalidatePropertyCache(actor);
     recalculateAnimationLength(actor.rekapi, _);
+    fireRekapiEventForActor(actor, 'timelineModified');
   }
 
   /**
@@ -313,6 +320,7 @@ rekapiModules.push(function (context) {
     }
 
     invalidatePropertyCache(this);
+    fireRekapiEventForActor(this, 'timelineModified');
 
     return this;
   };
@@ -490,6 +498,7 @@ rekapiModules.push(function (context) {
     }
 
     invalidatePropertyCache(this);
+    fireRekapiEventForActor(this, 'timelineModified');
 
     return this;
   };

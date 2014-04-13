@@ -318,6 +318,7 @@ code {
     }
 
     invalidatePropertyCache(this);
+    fireRekapiEventForActor(this, 'timelineModified');
 
     return this;
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="hasKeyframeAt">hasKeyframeAt</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.hasKeyframeAt()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{number}</span><span class="name">millisecond</span><span class="description">Point on the timeline to query.</span></li><li class="tag"><span class="type">@param: </span><span class="types">{string=}</span><span class="name">opt_trackName</span><span class="description">Optional name of a property track.</span></li><li class="tag"><span class="type">@return: </span><span class="types">{boolean}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Determines if an actor has any properties of a keyframe set at a given millisecond.  You can scope this and determine if a property exists on a particular track with <code>opt_trackName</code>.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.hasKeyframeAt = function(millisecond, opt_trackName) {
@@ -452,6 +453,7 @@ actor.modifyKeyframe(1000, {
     }
 
     invalidatePropertyCache(this);
+    fireRekapiEventForActor(this, 'timelineModified');
 
     return this;
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="removeAllKeyframes">removeAllKeyframes</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.removeAllKeyframes()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@return: </span><span class="types">{Rekapi.Actor}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Remove all <a href="rekapi.keyframe-property.js.html"><code>Rekapi.KeyframeProperty</code></a>s set on the actor.</p>
