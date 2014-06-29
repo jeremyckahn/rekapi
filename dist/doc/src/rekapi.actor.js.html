@@ -300,7 +300,7 @@ code {
 </pre></div>
 
 <p>Keyframe <code>1000</code> will have a <code>y</code> of <code>50</code>, and an <code>x</code> of <code>100</code>, because <code>x</code> was inherited from keyframe <code>0</code>.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.keyframe = function keyframe (
-      millisecond, properties, opt_easing) {
+    millisecond, properties, opt_easing) {
 
     opt_easing = opt_easing || DEFAULT_EASING;
     var easing = Tweenable.composeEasingObject(properties, opt_easing);
@@ -308,7 +308,7 @@ code {
     // Create and add all of the KeyframeProperties
     _.each(properties, function (value, name) {
       var newKeyframeProperty = new Rekapi.KeyframeProperty(
-          millisecond, name, value, easing[name]);
+        millisecond, name, value, easing[name]);
 
       this._addKeyframeProperty(newKeyframeProperty);
     }, this);
@@ -321,7 +321,7 @@ code {
     fireRekapiEventForActor(this, 'timelineModified');
 
     return this;
-  };</code></pre></div></div></div></article><article class="comment"><header><h1 id="hasKeyframeAt">hasKeyframeAt</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.hasKeyframeAt()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{number}</span><span class="name">millisecond</span><span class="description">Point on the timeline to query.</span></li><li class="tag"><span class="type">@param: </span><span class="types">{string=}</span><span class="name">opt_trackName</span><span class="description">Optional name of a property track.</span></li><li class="tag"><span class="type">@return: </span><span class="types">{boolean}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Determines if an actor has any properties of a keyframe set at a given millisecond.  You can scope this and determine if a property exists on a particular track with <code>opt_trackName</code>.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.hasKeyframeAt = function(millisecond, opt_trackName) {
+  };</code></pre></div></div></div></article><article class="comment"><header><h1 id="hasKeyframeAt">hasKeyframeAt</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.hasKeyframeAt()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{number}</span><span class="name">millisecond</span><span class="description">Point on the timeline to query.</span></li><li class="tag"><span class="type">@param: </span><span class="types">{string=}</span><span class="name">opt_trackName</span><span class="description">Optional name of a property track.</span></li><li class="tag"><span class="type">@return: </span><span class="types">{boolean}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Determines if an actor has any properties of a keyframe set at a given millisecond.  You can scope this and determine if a property exists on a particular track with <code>opt_trackName</code>.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.hasKeyframeAt = function (millisecond, opt_trackName) {
     var tracks = this._propertyTracks;
 
     if (opt_trackName) {
@@ -335,7 +335,7 @@ code {
     var track;
     for (track in tracks) {
       if (tracks.hasOwnProperty(track)
-          &amp;&amp; findPropertyAtMillisecondInTrack(this, track, millisecond)) {
+         &amp;&amp; findPropertyAtMillisecondInTrack(this, track, millisecond)) {
         return true;
       }
     }
@@ -363,7 +363,7 @@ actor.copyFrom(2000, 0);
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
       var keyframeProperty =
-          findPropertyAtMillisecondInTrack(this, trackName, copyFrom);
+      findPropertyAtMillisecondInTrack(this, trackName, copyFrom);
 
       if (keyframeProperty) {
         sourcePositions[trackName] = keyframeProperty.value;
@@ -416,12 +416,12 @@ actor.modifyKeyframe(1000, {
 </pre></div>
 
 <p><strong><a href="../../../../docs/examples/actor_modify_keyframe.html">Example</a></strong></p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.modifyKeyframe = function (
-      millisecond, stateModification, opt_easingModification) {
+    millisecond, stateModification, opt_easingModification) {
     opt_easingModification = opt_easingModification || {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
       var property = findPropertyAtMillisecondInTrack(
-          this, trackName, millisecond);
+        this, trackName, millisecond);
 
       if (property) {
         property.modifyWith({
@@ -440,7 +440,7 @@ actor.modifyKeyframe(1000, {
     var propertyTracks = this._propertyTracks;
 
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
-      var keyframeProperty = _.findWhere(propertyTrack, { millisecond: millisecond });
+      var keyframeProperty = _.findWhere(propertyTrack, {millisecond: millisecond});
 
       if (keyframeProperty) {
         propertyTracks[propertyName] = _.without(propertyTrack, keyframeProperty);
@@ -476,12 +476,12 @@ actor.modifyKeyframe(1000, {
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="getKeyframeProperty">getKeyframeProperty</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.getKeyframeProperty()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{string}</span><span class="name">property</span><span class="description">The name of the property.</span></li><li class="tag"><span class="type">@param: </span><span class="types">{number}</span><span class="name">index</span><span class="description">The millisecond of the property in the timeline.</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Rekapi.KeyframeProperty,undefined}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Get the <a href="rekapi.keyframe-property.js.html"><code>Rekapi.KeyframeProperty</code></a> from an actor's property track. Returns <code>undefined</code> if no properties were found.</p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.getKeyframeProperty = function (property, millisecond) {
     var propertyTrack = this._propertyTracks[property];
     if (propertyTrack) {
-      return _.findWhere(propertyTrack, { millisecond: millisecond });
+      return _.findWhere(propertyTrack, {millisecond: millisecond});
     }
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="modifyKeyframeProperty">modifyKeyframeProperty</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.modifyKeyframeProperty()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{string}</span><span class="name">property</span><span class="description">The name of the property to modify.</span></li><li class="tag"><span class="type">@param: </span><span class="types">{number}</span><span class="name">millisecond</span><span class="description">The timeline millisecond of the KeyframeProperty to modify.</span></li><li class="tag"><span class="type">@param: </span><span class="types">{Object}</span><span class="name">newProperties</span><span class="description">The properties to augment the KeyframeProperty with.</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Rekapi.Actor}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Modify a <a href="rekapi.keyframe-property.js.html"><code>Rekapi.KeyframeProperty</code></a> stored on an actor.  This calls <a href="rekapi.keyframe-property.js.html#modifyWith"><code>KeyframeProperty#modifyWith</code></a> (passing along <code>newProperties</code>) and then performs some cleanup.</p>
 
 <p><strong><a href="../../../../docs/examples/actor_modify_keyframe_property.html">Example</a></strong></p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.modifyKeyframeProperty = function (
-      property, millisecond, newProperties) {
+    property, millisecond, newProperties) {
 
     var keyframeProperty = this.getKeyframeProperty(property, millisecond);
     if (keyframeProperty) {
@@ -496,7 +496,7 @@ actor.modifyKeyframe(1000, {
     if (typeof propertyTracks[property] !== 'undefined') {
       var keyframeProperty = this.getKeyframeProperty(property, millisecond);
       propertyTracks[property] =
-          _.without(propertyTracks[property], keyframeProperty);
+      _.without(propertyTracks[property], keyframeProperty);
       keyframeProperty.detach();
 
       cleanupAfterKeyframeModification(this);

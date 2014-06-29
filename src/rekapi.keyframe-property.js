@@ -64,14 +64,14 @@ rekapiModules.push(function (context) {
 
     if (nextProperty) {
       correctedMillisecond =
-          Math.min(correctedMillisecond, nextProperty.millisecond);
+      Math.min(correctedMillisecond, nextProperty.millisecond);
 
       fromObj[this.name] = this.value;
       toObj[this.name] = nextProperty.value;
 
       var delta = nextProperty.millisecond - this.millisecond;
       var interpolatedPosition =
-          (correctedMillisecond - this.millisecond) / delta;
+      (correctedMillisecond - this.millisecond) / delta;
 
       value = interpolate(fromObj, toObj, interpolatedPosition,
           nextProperty.easing)[this.name];
@@ -115,10 +115,10 @@ rekapiModules.push(function (context) {
    */
   KeyframeProperty.prototype.exportPropertyData = function () {
     return {
-     'millisecond': this.millisecond
-     ,'name': this.name
-     ,'value': this.value
-     ,'easing': this.easing
+      'millisecond': this.millisecond
+      ,'name': this.name
+      ,'value': this.value
+      ,'easing': this.easing
     };
   };
 

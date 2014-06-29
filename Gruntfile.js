@@ -8,6 +8,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-bump');
+  grunt.loadNpmTasks('grunt-codepainter');
   grunt.loadNpmTasks('grunt-dox');
 
   var banner = [
@@ -171,6 +172,19 @@ module.exports = function(grunt) {
         tagName: '%VERSION%',
         tagMessage: 'Version %VERSION%',
         push: false
+      }
+    },
+    codepainter: {
+      source: {
+        options: {
+          json: '.codepainterrc'
+        },
+        files: [{
+          expand: true,
+          cwd: 'src/',
+          src: ['rekapi.!(intro|outro|const)*.js'],
+          dest: 'src/'
+        }]
       }
     }
   });

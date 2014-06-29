@@ -30,10 +30,10 @@ if (typeof define === 'function' && define.amd) {
   // Example: define(['vendor/rekapi.min'], function(Rekapi) { ... });
   define(['shifty', 'underscore'], function (Tweenable, Underscore) {
     var underscoreSupportsAMD = (Underscore != null);
-    var deps = {  Tweenable: Tweenable,
-                  // Some versions of Underscore.js support AMD, others don't.
-                  // If not, use the `_` global.
-                  underscore: underscoreSupportsAMD ? Underscore : _ };
+    var deps = {Tweenable: Tweenable,
+      // Some versions of Underscore.js support AMD, others don't.
+      // If not, use the `_` global.
+      underscore: underscoreSupportsAMD ? Underscore : _};
     var Rekapi = rekapi({}, deps);
 
     if (REKAPI_DEBUG) {

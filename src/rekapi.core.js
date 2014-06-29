@@ -57,7 +57,7 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   function determineCurrentLoopIteration (rekapi, timeSinceStart) {
     var currentIteration = Math.floor(
-        (timeSinceStart) / rekapi._animationLength);
+    (timeSinceStart) / rekapi._animationLength);
     return currentIteration;
   }
 
@@ -78,7 +78,7 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   function isAnimationComplete (rekapi, currentLoopIteration) {
     return currentLoopIteration >= rekapi._timesToIterate
-        && rekapi._timesToIterate !== -1;
+       && rekapi._timesToIterate !== -1;
   }
 
   /*!
@@ -127,9 +127,9 @@ var rekapiCore = function (root, _, Tweenable) {
 
     if (rekapi._animationLength > 0) {
       currentIteration =
-          determineCurrentLoopIteration(rekapi, forMillisecond);
+      determineCurrentLoopIteration(rekapi, forMillisecond);
       loopPosition = calculateLoopPosition(
-          rekapi, forMillisecond, currentIteration);
+        rekapi, forMillisecond, currentIteration);
     }
 
     rekapi.update(loopPosition);
@@ -155,7 +155,7 @@ var rekapiCore = function (root, _, Tweenable) {
     // annotation for cancelLoop for more info.
     if (rekapi._scheduleUpdate.call) {
       rekapi._loopId = rekapi._scheduleUpdate.call(global,
-          rekapi._updateFn, UPDATE_TIME);
+        rekapi._updateFn, UPDATE_TIME);
     } else {
       rekapi._loopId = setTimeout(rekapi._updateFn, UPDATE_TIME);
     }
@@ -168,12 +168,12 @@ var rekapiCore = function (root, _, Tweenable) {
     // requestAnimationFrame() shim by Paul Irish (modified for Rekapi)
     // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
     return global.requestAnimationFrame  ||
-      global.webkitRequestAnimationFrame ||
-      global.oRequestAnimationFrame      ||
-      global.msRequestAnimationFrame     ||
+    global.webkitRequestAnimationFrame ||
+    global.oRequestAnimationFrame      ||
+    global.msRequestAnimationFrame     ||
       (global.mozCancelRequestAnimationFrame
-        && global.mozRequestAnimationFrame) ||
-      global.setTimeout;
+       && global.mozRequestAnimationFrame) ||
+    global.setTimeout;
   }
 
   /*!
@@ -181,11 +181,11 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   function getCancelMethod () {
     return global.cancelAnimationFrame  ||
-      global.webkitCancelAnimationFrame ||
-      global.oCancelAnimationFrame      ||
-      global.msCancelAnimationFrame     ||
-      global.mozCancelRequestAnimationFrame ||
-      global.clearTimeout;
+    global.webkitCancelAnimationFrame ||
+    global.oCancelAnimationFrame      ||
+    global.msCancelAnimationFrame     ||
+    global.mozCancelRequestAnimationFrame ||
+    global.clearTimeout;
   }
 
   /*!
@@ -581,7 +581,7 @@ var rekapiCore = function (root, _, Tweenable) {
     } else {
       // Remove just the handler specified
       this._events[eventName] = _.without(
-          this._events[eventName], opt_handler);
+        this._events[eventName], opt_handler);
     }
 
     return this;

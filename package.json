@@ -18,7 +18,8 @@
     "grunt-contrib-copy": "0.4.0",
     "grunt-dox": "0.5.0",
     "grunt-contrib-watch": "0.3.1",
-    "grunt-bump": "0.0.13"
+    "grunt-bump": "0.0.13",
+    "grunt-codepainter": "^0.2.0"
   },
   "license": "MIT",
   "dependencies": {

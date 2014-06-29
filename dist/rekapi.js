@@ -1,4 +1,4 @@
-/*! rekapi - v1.3.2 - 2014-04-26 - http://rekapi.com */
+/*! rekapi - v1.3.2 - 2014-06-29 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * https://github.com/jeremyckahn/rekapi
@@ -72,7 +72,7 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   function determineCurrentLoopIteration (rekapi, timeSinceStart) {
     var currentIteration = Math.floor(
-        (timeSinceStart) / rekapi._animationLength);
+    (timeSinceStart) / rekapi._animationLength);
     return currentIteration;
   }
 
@@ -93,7 +93,7 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   function isAnimationComplete (rekapi, currentLoopIteration) {
     return currentLoopIteration >= rekapi._timesToIterate
-        && rekapi._timesToIterate !== -1;
+       && rekapi._timesToIterate !== -1;
   }
 
   /*!
@@ -142,9 +142,9 @@ var rekapiCore = function (root, _, Tweenable) {
 
     if (rekapi._animationLength > 0) {
       currentIteration =
-          determineCurrentLoopIteration(rekapi, forMillisecond);
+      determineCurrentLoopIteration(rekapi, forMillisecond);
       loopPosition = calculateLoopPosition(
-          rekapi, forMillisecond, currentIteration);
+        rekapi, forMillisecond, currentIteration);
     }
 
     rekapi.update(loopPosition);
@@ -170,7 +170,7 @@ var rekapiCore = function (root, _, Tweenable) {
     // annotation for cancelLoop for more info.
     if (rekapi._scheduleUpdate.call) {
       rekapi._loopId = rekapi._scheduleUpdate.call(global,
-          rekapi._updateFn, UPDATE_TIME);
+        rekapi._updateFn, UPDATE_TIME);
     } else {
       rekapi._loopId = setTimeout(rekapi._updateFn, UPDATE_TIME);
     }
@@ -183,12 +183,12 @@ var rekapiCore = function (root, _, Tweenable) {
     // requestAnimationFrame() shim by Paul Irish (modified for Rekapi)
     // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
     return global.requestAnimationFrame  ||
-      global.webkitRequestAnimationFrame ||
-      global.oRequestAnimationFrame      ||
-      global.msRequestAnimationFrame     ||
+    global.webkitRequestAnimationFrame ||
+    global.oRequestAnimationFrame      ||
+    global.msRequestAnimationFrame     ||
       (global.mozCancelRequestAnimationFrame
-        && global.mozRequestAnimationFrame) ||
-      global.setTimeout;
+       && global.mozRequestAnimationFrame) ||
+    global.setTimeout;
   }
 
   /*!
@@ -196,11 +196,11 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   function getCancelMethod () {
     return global.cancelAnimationFrame  ||
-      global.webkitCancelAnimationFrame ||
-      global.oCancelAnimationFrame      ||
-      global.msCancelAnimationFrame     ||
-      global.mozCancelRequestAnimationFrame ||
-      global.clearTimeout;
+    global.webkitCancelAnimationFrame ||
+    global.oCancelAnimationFrame      ||
+    global.msCancelAnimationFrame     ||
+    global.mozCancelRequestAnimationFrame ||
+    global.clearTimeout;
   }
 
   /*!
@@ -596,7 +596,7 @@ var rekapiCore = function (root, _, Tweenable) {
     } else {
       // Remove just the handler specified
       this._events[eventName] = _.without(
-          this._events[eventName], opt_handler);
+        this._events[eventName], opt_handler);
     }
 
     return this;
@@ -806,8 +806,8 @@ rekapiModules.push(function (context) {
    */
   function findPropertyAtMillisecondInTrack (actor, trackName, millisecond) {
     return _.findWhere(actor._propertyTracks[trackName], {
-        millisecond: millisecond
-      });
+      millisecond: millisecond
+    });
   }
 
   /*!
@@ -827,11 +827,11 @@ rekapiModules.push(function (context) {
       }
 
       timelinePropertyCache[millisecond][keyframeProperty.name]
-          = keyframeProperty;
+         = keyframeProperty;
     });
 
     actor._timelinePropertyCacheKeys = _.map(timelinePropertyCache,
-        function (val, key) {
+    function (val, key) {
       return +key;
     });
 
@@ -957,7 +957,7 @@ rekapiModules.push(function (context) {
    * @return {Rekapi.Actor}
    */
   Actor.prototype.keyframe = function keyframe (
-      millisecond, properties, opt_easing) {
+    millisecond, properties, opt_easing) {
 
     opt_easing = opt_easing || DEFAULT_EASING;
     var easing = Tweenable.composeEasingObject(properties, opt_easing);
@@ -965,7 +965,7 @@ rekapiModules.push(function (context) {
     // Create and add all of the KeyframeProperties
     _.each(properties, function (value, name) {
       var newKeyframeProperty = new Rekapi.KeyframeProperty(
-          millisecond, name, value, easing[name]);
+        millisecond, name, value, easing[name]);
 
       this._addKeyframeProperty(newKeyframeProperty);
     }, this);
@@ -987,7 +987,7 @@ rekapiModules.push(function (context) {
    * @param {string=} opt_trackName Optional name of a property track.
    * @return {boolean}
    */
-  Actor.prototype.hasKeyframeAt = function(millisecond, opt_trackName) {
+  Actor.prototype.hasKeyframeAt = function (millisecond, opt_trackName) {
     var tracks = this._propertyTracks;
 
     if (opt_trackName) {
@@ -1001,7 +1001,7 @@ rekapiModules.push(function (context) {
     var track;
     for (track in tracks) {
       if (tracks.hasOwnProperty(track)
-          && findPropertyAtMillisecondInTrack(this, track, millisecond)) {
+         && findPropertyAtMillisecondInTrack(this, track, millisecond)) {
         return true;
       }
     }
@@ -1038,7 +1038,7 @@ rekapiModules.push(function (context) {
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
       var keyframeProperty =
-          findPropertyAtMillisecondInTrack(this, trackName, copyFrom);
+      findPropertyAtMillisecondInTrack(this, trackName, copyFrom);
 
       if (keyframeProperty) {
         sourcePositions[trackName] = keyframeProperty.value;
@@ -1109,12 +1109,12 @@ rekapiModules.push(function (context) {
    * @return {Rekapi.Actor}
    */
   Actor.prototype.modifyKeyframe = function (
-      millisecond, stateModification, opt_easingModification) {
+    millisecond, stateModification, opt_easingModification) {
     opt_easingModification = opt_easingModification || {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
       var property = findPropertyAtMillisecondInTrack(
-          this, trackName, millisecond);
+        this, trackName, millisecond);
 
       if (property) {
         property.modifyWith({
@@ -1140,7 +1140,7 @@ rekapiModules.push(function (context) {
     var propertyTracks = this._propertyTracks;
 
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
-      var keyframeProperty = _.findWhere(propertyTrack, { millisecond: millisecond });
+      var keyframeProperty = _.findWhere(propertyTrack, {millisecond: millisecond});
 
       if (keyframeProperty) {
         propertyTracks[propertyName] = _.without(propertyTrack, keyframeProperty);
@@ -1190,7 +1190,7 @@ rekapiModules.push(function (context) {
   Actor.prototype.getKeyframeProperty = function (property, millisecond) {
     var propertyTrack = this._propertyTracks[property];
     if (propertyTrack) {
-      return _.findWhere(propertyTrack, { millisecond: millisecond });
+      return _.findWhere(propertyTrack, {millisecond: millisecond});
     }
   };
 
@@ -1204,7 +1204,7 @@ rekapiModules.push(function (context) {
    * @return {Rekapi.Actor}
    */
   Actor.prototype.modifyKeyframeProperty = function (
-      property, millisecond, newProperties) {
+    property, millisecond, newProperties) {
 
     var keyframeProperty = this.getKeyframeProperty(property, millisecond);
     if (keyframeProperty) {
@@ -1227,7 +1227,7 @@ rekapiModules.push(function (context) {
     if (typeof propertyTracks[property] !== 'undefined') {
       var keyframeProperty = this.getKeyframeProperty(property, millisecond);
       propertyTracks[property] =
-          _.without(propertyTracks[property], keyframeProperty);
+      _.without(propertyTracks[property], keyframeProperty);
       keyframeProperty.detach();
 
       cleanupAfterKeyframeModification(this);
@@ -1408,8 +1408,8 @@ rekapiModules.push(function (context) {
 
     var latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
     var propertiesToInterpolate =
-        this._timelinePropertyCache[this._timelinePropertyCacheKeys[
-        latestCacheId]];
+      this._timelinePropertyCache[this._timelinePropertyCacheKeys[
+          latestCacheId]];
 
     if (startMs === endMs) {
 
@@ -1426,11 +1426,11 @@ rekapiModules.push(function (context) {
         }
 
         interpolatedObject[propName] =
-            keyframeProperty.getValueAt(millisecond);
+        keyframeProperty.getValueAt(millisecond);
 
         if (this._afterKeyframePropertyInterpolate !== noop) {
           this._afterKeyframePropertyInterpolate(
-              keyframeProperty, interpolatedObject);
+            keyframeProperty, interpolatedObject);
         }
       }, this);
     }
@@ -1560,14 +1560,14 @@ rekapiModules.push(function (context) {
 
     if (nextProperty) {
       correctedMillisecond =
-          Math.min(correctedMillisecond, nextProperty.millisecond);
+      Math.min(correctedMillisecond, nextProperty.millisecond);
 
       fromObj[this.name] = this.value;
       toObj[this.name] = nextProperty.value;
 
       var delta = nextProperty.millisecond - this.millisecond;
       var interpolatedPosition =
-          (correctedMillisecond - this.millisecond) / delta;
+      (correctedMillisecond - this.millisecond) / delta;
 
       value = interpolate(fromObj, toObj, interpolatedPosition,
           nextProperty.easing)[this.name];
@@ -1611,10 +1611,10 @@ rekapiModules.push(function (context) {
    */
   KeyframeProperty.prototype.exportPropertyData = function () {
     return {
-     'millisecond': this.millisecond
-     ,'name': this.name
-     ,'value': this.value
-     ,'easing': this.easing
+      'millisecond': this.millisecond
+      ,'name': this.name
+      ,'value': this.value
+      ,'easing': this.easing
     };
   };
 
@@ -3173,10 +3173,10 @@ if (typeof define === 'function' && define.amd) {
   // Example: define(['vendor/rekapi.min'], function(Rekapi) { ... });
   define(['shifty', 'underscore'], function (Tweenable, Underscore) {
     var underscoreSupportsAMD = (Underscore != null);
-    var deps = {  Tweenable: Tweenable,
-                  // Some versions of Underscore.js support AMD, others don't.
-                  // If not, use the `_` global.
-                  underscore: underscoreSupportsAMD ? Underscore : _ };
+    var deps = {Tweenable: Tweenable,
+      // Some versions of Underscore.js support AMD, others don't.
+      // If not, use the `_` global.
+      underscore: underscoreSupportsAMD ? Underscore : _};
     var Rekapi = rekapi({}, deps);
 
     if (REKAPI_DEBUG) {

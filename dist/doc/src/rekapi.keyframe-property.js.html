@@ -255,14 +255,14 @@ code {
 
     if (nextProperty) {
       correctedMillisecond =
-          Math.min(correctedMillisecond, nextProperty.millisecond);
+      Math.min(correctedMillisecond, nextProperty.millisecond);
 
       fromObj[this.name] = this.value;
       toObj[this.name] = nextProperty.value;
 
       var delta = nextProperty.millisecond - this.millisecond;
       var interpolatedPosition =
-          (correctedMillisecond - this.millisecond) / delta;
+      (correctedMillisecond - this.millisecond) / delta;
 
       value = interpolate(fromObj, toObj, interpolatedPosition,
           nextProperty.easing)[this.name];
@@ -288,10 +288,10 @@ code {
 
 <p><strong><a href="../../../../docs/examples/keyprop_export_property_data.html">Example</a></strong></p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">KeyframeProperty.prototype.exportPropertyData = function () {
     return {
-     'millisecond': this.millisecond
-     ,'name': this.name
-     ,'value': this.value
-     ,'easing': this.easing
+      'millisecond': this.millisecond
+      ,'name': this.name
+      ,'value': this.value
+      ,'easing': this.easing
     };
   };
 
