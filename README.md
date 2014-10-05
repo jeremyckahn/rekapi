@@ -141,3 +141,12 @@ requirejs(['rekapi'], function(Rekapi) {
 ## Core contributors
 
 * [Franck Lecollinet](https://github.com/sork)
+
+## A note about project activity
+
+While Rekapi doesn't see much development lately, the project is still very
+much alive and maintained.  It serves my needs, so I don't have much reason to
+make changes to it.  As a post-1.0 project, Rekapi is considered stable and
+ready for production use.  If you find a bug or have a feature request, please
+file it in the [issue tracker](https://github.com/jeremyckahn/rekapi/issues/)
+and it will be addressed as soon as possible.
