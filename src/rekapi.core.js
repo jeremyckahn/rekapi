@@ -12,7 +12,8 @@ var rekapiModules = [];
  * Fire an event bound to a Rekapi.
  * @param {Rekapi} rekapi
  * @param {string} eventName
- * @param {Underscore} _ A reference to the scoped Underscore dependency
+ * @param {Underscore} _ A reference to the scoped Underscore/Lo-Dash
+ * dependency
  * @param {Object=} opt_data Optional event-specific data
  */
 function fireEvent (rekapi, eventName, _, opt_data) {

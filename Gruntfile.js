@@ -91,6 +91,7 @@ module.exports = function(grunt) {
       dist: {
         files: [
         {src: ['bower_components/underscore/underscore-min.js'], dest: 'dist/underscore-min.js'},
+        {src: ['bower_components/lodash/dist/lodash.min.js'], dest: 'dist/lodash.min.js'},
         {src: ['bower_components/shifty/dist/shifty.min.js'], dest: 'dist/shifty.min.js'},
         {src: ['bower_components/jquery/jquery.min.js'], dest: 'dist/asset/jquery.js'},
         {src: ['bower_components/ace-builds/src-min/ace.js'], dest: 'dist/asset/ace.js'},
@@ -119,6 +120,14 @@ module.exports = function(grunt) {
         files: {
           'dist/rekapi-underscore-shifty.min.js': [
             'bower_components/underscore/underscore.js',
+            'bower_components/shifty/dist/shifty.min.js',
+            'dist/rekapi.js']
+        }
+      },
+      lodashBundle: {
+        files: {
+          'dist/rekapi-lodash-shifty.min.js': [
+            'bower_components/lodash/dist/lodash.js',
             'bower_components/shifty/dist/shifty.min.js',
             'dist/rekapi.js']
         }
@@ -196,6 +205,7 @@ module.exports = function(grunt) {
       'concat:withExtensions',
       'uglify:standardTarget',
       'uglify:underscoreBundle',
+      'uglify:lodashBundle',
       'concat:withExtensionsDebug',
       'dox']);
 

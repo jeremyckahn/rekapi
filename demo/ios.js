@@ -1,6 +1,6 @@
 require.config({
   paths: {
-    underscore: '../dist/underscore-min'
+    underscore: '../dist/lodash.min'
     ,shifty: '../dist/shifty.min'
     ,rekapi: '../dist/rekapi.min'
   }

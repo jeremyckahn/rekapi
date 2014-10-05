@@ -12,7 +12,8 @@ standard distribution comes bundled with renderers for the HTML DOM and HTML5
 2D `<canvas>`.
 
 Rekapi has two dependencies:
-[Underscore](https://github.com/documentcloud/underscore) and
+[Underscore](https://github.com/documentcloud/underscore) (or
+[Lo-Dash](https://github.com/lodash/lodash)) and
 [Shifty](https://github.com/jeremyckahn/shifty).
 
 Rekapi has been tested in and supports:

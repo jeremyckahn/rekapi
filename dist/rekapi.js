@@ -1,13 +1,16 @@
-/*! rekapi - v1.3.2 - 2014-06-29 - http://rekapi.com */
+/*! rekapi - v1.3.3 - 2014-10-05 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
- * https://github.com/jeremyckahn/rekapi
+ * http://rekapi.com/
  *
  * By Jeremy Kahn (jeremyckahn@gmail.com)
  *
  * Make fun keyframe animations with JavaScript.
- * Dependencies: Underscore.js (https://github.com/documentcloud/underscore),
- *   Shifty.js (https://github.com/jeremyckahn/shifty).
+ *
+ * Dependencies:
+ *   * Underscore.js (https://github.com/documentcloud/underscore) or Lo-Dash (http://lodash.com/)
+ *   * Shifty.js (https://github.com/jeremyckahn/shifty).
+ *
  * MIT License.  This code free to use, modify, distribute and enjoy.
  */
 
@@ -27,7 +30,8 @@ var rekapiModules = [];
  * Fire an event bound to a Rekapi.
  * @param {Rekapi} rekapi
  * @param {string} eventName
- * @param {Underscore} _ A reference to the scoped Underscore dependency
+ * @param {Underscore} _ A reference to the scoped Underscore/Lo-Dash
+ * dependency
  * @param {Object=} opt_data Optional event-specific data
  */
 function fireEvent (rekapi, eventName, _, opt_data) {
