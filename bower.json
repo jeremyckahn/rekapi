@@ -1,6 +1,6 @@
 {
   "name": "rekapi",
-  "version": "1.3.3",
+  "version": "1.3.4",
   "main": "./dist/rekapi.min.js",
   "homepage": "http://rekapi.com",
   "author": "Jeremy Kahn <jeremyckahn@gmail.com>",
@@ -11,7 +11,7 @@
     }
   ],
   "dependencies": {
-    "shifty": "1.2.1",
+    "shifty": "1.2.2",
     "underscore": "1.5.2",
     "lodash": "~2.4.1"
   },
