@@ -12,7 +12,7 @@ rekapiModules.push(function (context) {
    * Represents an individual component of an actor's keyframe state.  In most cases you won't need to deal with this object directly, as the [`Rekapi.Actor`](rekapi.actor.js.html#Actor) APIs abstract a lot of what this Object does away for you.
    * @param {number} millisecond Where on the animation timeline this KeyframeProperty is.
    * @param {string} name The property's name, such as "x" or "opacity."
-   * @param {number|string} value The value that this KeyframeProperty represents.
+   * @param {number|string|Function} value The value that this KeyframeProperty represents.
    * @param {string=} opt_easing The easing curve at which this KeyframeProperty should be animated to.  Defaults to "linear".
    * @constructor
    */
@@ -21,6 +21,7 @@ rekapiModules.push(function (context) {
     this.millisecond = millisecond;
     this.name = name;
     this.value = value;
+    this.hasFired = null;
     this.easing = opt_easing || DEFAULT_EASING;
     this.nextProperty = null;
 
@@ -120,6 +121,29 @@ rekapiModules.push(function (context) {
       ,'value': this.value
       ,'easing': this.easing
     };
+  };
+
+  /*!
+   * Whether or not this is a function keyframe and should be invoked for the
+   * current frame.  Helper method for Rekapi.Actor.
+   * @return {boolean}
+   */
+  KeyframeProperty.prototype.shouldInvokeForMillisecond =
+      function (millisecond) {
+    return (millisecond >= this.millisecond &&
+      this.name === 'function' &&
+      !this.hasFired);
+  };
+
+  /**
+   * Assuming this is a function keyframe, call the function.
+   * @return {*} Whatever value is returned from the bound function.
+   */
+  KeyframeProperty.prototype.invoke = function () {
+    var drift = this.actor.rekapi._loopPosition - this.millisecond;
+    var returnValue = this.value.call(this.actor, drift);
+    this.hasFired = true;
+    return returnValue;
   };
 
 });

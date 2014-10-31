@@ -296,20 +296,38 @@ rekapiModules.push(function (context) {
    * ```
    *
    * Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was inherited from keyframe `0`.
+   *
+   * ## Function keyframes
+   *
+   * Instead of providing an object to be used to interpolate state values, you can provide a function to be called at a specific point on the timeline.  This function does not need to return a value, as it does not get used to renderthe actor state.  Function keyframes are called once per animation loop and do not have any tweening relationship with one another.  This is a primarily a mechanism for scheduling arbitrary code to be executed at specific points in an animation.
+   *
+   * ```javascript
+   * // drift is the number of milliseconds that this function was executed
+   * // after the scheduled time.  There is typically some amount of delay due
+   * // to the nature of JavaScript timers.
+   * actor.keyframe(1000, function (drift) {
+   *   console.log(this); // Logs the actor instance
+   * });
+   * ```
    * @param {number} millisecond Where on the timeline to set the keyframe.
-   * @param {Object} properties The state properties of the keyframe.
-   * @param {string|Object=} opt_easing Optional easing string or Object.
+   * @param {Object|Function(number)} state The state properties of the keyframe.  If this is an Object, the properties will be interpolated between this and those of the following keyframe for a given point between the two on the animation timeline.  If this is a function, it will be executed at the specified keyframe.  The function will receive a number that represents the delay between when the function is called and when it was scheduled.
+   * @param {string|Object=} opt_easing Optional easing string or Object.  If state is passed as a function, this is not used.
    * @return {Rekapi.Actor}
    */
   Actor.prototype.keyframe = function keyframe (
-    millisecond, properties, opt_easing) {
+    millisecond, state, opt_easing) {
+
+    if (state instanceof Function) {
+      state = { 'function': state };
+    }
 
     opt_easing = opt_easing || DEFAULT_EASING;
-    var easing = Tweenable.composeEasingObject(properties, opt_easing);
+    var easing = Tweenable.composeEasingObject(state, opt_easing);
+    var newKeyframeProperty;
 
     // Create and add all of the KeyframeProperties
-    _.each(properties, function (value, name) {
-      var newKeyframeProperty = new Rekapi.KeyframeProperty(
+    _.each(state, function (value, name) {
+      newKeyframeProperty = new Rekapi.KeyframeProperty(
         millisecond, name, value, easing[name]);
 
       this._addKeyframeProperty(newKeyframeProperty);
@@ -759,15 +777,25 @@ rekapiModules.push(function (context) {
     if (startMs === endMs) {
 
       // If there is only one keyframe, use that for the state of the actor
-      _.each(propertiesToInterpolate, function (property, propertyName) {
-        interpolatedObject[propertyName] = property.value;
-      });
+      _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
+        if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
+          keyframeProperty.invoke();
+          return;
+        }
+
+        interpolatedObject[propName] = keyframeProperty.value;
+      }, this);
 
     } else {
 
       _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
         if (this._beforeKeyframePropertyInterpolate !== noop) {
           this._beforeKeyframePropertyInterpolate(keyframeProperty);
+        }
+
+        if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
+          keyframeProperty.invoke();
+          return;
         }
 
         interpolatedObject[propName] =

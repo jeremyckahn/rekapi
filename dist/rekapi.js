@@ -1,4 +1,4 @@
-/*! rekapi - v1.3.4 - 2014-10-09 - http://rekapi.com */
+/*! rekapi - v1.4.0 - 2014-10-30 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -75,8 +75,12 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} timeSinceStart
    */
   function determineCurrentLoopIteration (rekapi, timeSinceStart) {
-    var currentIteration = Math.floor(
-    (timeSinceStart) / rekapi._animationLength);
+    var animationLength = rekapi._animationLength;
+    if (animationLength === 0) {
+      return timeSinceStart;
+    }
+
+    var currentIteration = Math.floor(timeSinceStart / animationLength);
     return currentIteration;
   }
 
@@ -122,12 +126,17 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   function calculateLoopPosition (rekapi, forMillisecond, currentLoopIteration) {
     var currentLoopPosition;
+    var animationLength = rekapi._animationLength;
+
+    if (animationLength === 0) {
+      return 0;
+    }
 
     if (isAnimationComplete(rekapi, currentLoopIteration)) {
       // Rewind to the end if the playhead has gone past it
-      currentLoopPosition = rekapi._animationLength;
+      currentLoopPosition = animationLength;
     } else {
-      currentLoopPosition = forMillisecond % rekapi._animationLength;
+      currentLoopPosition = forMillisecond % animationLength;
     }
 
     return currentLoopPosition;
@@ -144,12 +153,32 @@ var rekapiCore = function (root, _, Tweenable) {
     var loopPosition = 0;
     var currentIteration = 0;
 
-    if (rekapi._animationLength > 0) {
-      currentIteration =
-      determineCurrentLoopIteration(rekapi, forMillisecond);
-      loopPosition = calculateLoopPosition(
-        rekapi, forMillisecond, currentIteration);
+    currentIteration = determineCurrentLoopIteration(rekapi, forMillisecond);
+    loopPosition = calculateLoopPosition(
+      rekapi, forMillisecond, currentIteration);
+    rekapi._loopPosition = loopPosition;
+
+    if (currentIteration > rekapi._latestIteration) {
+      fireEvent(rekapi, 'animationLooped', _);
+
+      // Reset function keyframes
+      var lookupObject = { name: 'function' };
+      _.each(rekapi._actors, function (actor) {
+        var fnKeyframes = _.where(actor._keyframeProperties, lookupObject);
+
+        var lastFnKeyframe = _.last(fnKeyframes);
+
+        if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
+          lastFnKeyframe.invoke();
+        }
+
+        _.each(fnKeyframes, function (fnKeyframe) {
+          fnKeyframe.hasFired = false;
+        });
+      });
     }
+
+    rekapi._latestIteration = currentIteration;
 
     rekapi.update(loopPosition);
     updatePlayState(rekapi, currentIteration);
@@ -260,9 +289,10 @@ var rekapiCore = function (root, _, Tweenable) {
       ,'removeKeyframeProperty': []
       ,'addKeyframePropertyTrack': []
       ,'timelineModified': []
+      ,'animationLooped': []
     };
 
-    // How many times to loop the animation before stopping.
+    // How many times to loop the animation before stopping
     this._timesToIterate = -1;
 
     // Millisecond duration of the animation
@@ -274,11 +304,18 @@ var rekapiCore = function (root, _, Tweenable) {
     // The UNIX time at which the animation loop started
     this._loopTimestamp = null;
 
-    // Used for maintaining position when the animation is paused.
+    // Used for maintaining position when the animation is paused
     this._pausedAtTime = null;
 
     // The last millisecond position that was updated
     this._lastUpdatedMillisecond = 0;
+
+    // The most recent loop iteration a frame was calculated for
+    this._latestIteration = 0;
+
+    // The most recent millisecond position within the loop that the animation
+    // was updated to
+    this._loopPosition = null;
 
     this._scheduleUpdate = getUpdateMethod();
     this._cancelUpdate = getCancelMethod();
@@ -565,6 +602,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * - __removeKeyframeProperty__: Fires when a keyframe property is removed.  `opt_data` is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was removed.
    * - __addKeyframePropertyTrack__: Fires when the a keyframe is added to an actor that creates a new keyframe property track.  `opt_data` is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was added to create the property track.  A reference to the actor that the keyframe property is associated with can be accessed via `.actor` and the track name that was added can be determined via `.name`.
    * - __timelineModified__: Fires when a keyframe is added, modified or removed.
+   * - __animationLooped__: Fires when an animation loop ends and a new one begins.
    *
    * __[Example](../../../../docs/examples/bind.html)__
    * @param {string} eventName
@@ -955,20 +993,38 @@ rekapiModules.push(function (context) {
    * ```
    *
    * Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was inherited from keyframe `0`.
+   *
+   * ## Function keyframes
+   *
+   * Instead of providing an object to be used to interpolate state values, you can provide a function to be called at a specific point on the timeline.  This function does not need to return a value, as it does not get used to renderthe actor state.  Function keyframes are called once per animation loop and do not have any tweening relationship with one another.  This is a primarily a mechanism for scheduling arbitrary code to be executed at specific points in an animation.
+   *
+   * ```javascript
+   * // drift is the number of milliseconds that this function was executed
+   * // after the scheduled time.  There is typically some amount of delay due
+   * // to the nature of JavaScript timers.
+   * actor.keyframe(1000, function (drift) {
+   *   console.log(this); // Logs the actor instance
+   * });
+   * ```
    * @param {number} millisecond Where on the timeline to set the keyframe.
-   * @param {Object} properties The state properties of the keyframe.
-   * @param {string|Object=} opt_easing Optional easing string or Object.
+   * @param {Object|Function(number)} state The state properties of the keyframe.  If this is an Object, the properties will be interpolated between this and those of the following keyframe for a given point between the two on the animation timeline.  If this is a function, it will be executed at the specified keyframe.  The function will receive a number that represents the delay between when the function is called and when it was scheduled.
+   * @param {string|Object=} opt_easing Optional easing string or Object.  If state is passed as a function, this is not used.
    * @return {Rekapi.Actor}
    */
   Actor.prototype.keyframe = function keyframe (
-    millisecond, properties, opt_easing) {
+    millisecond, state, opt_easing) {
+
+    if (state instanceof Function) {
+      state = { 'function': state };
+    }
 
     opt_easing = opt_easing || DEFAULT_EASING;
-    var easing = Tweenable.composeEasingObject(properties, opt_easing);
+    var easing = Tweenable.composeEasingObject(state, opt_easing);
+    var newKeyframeProperty;
 
     // Create and add all of the KeyframeProperties
-    _.each(properties, function (value, name) {
-      var newKeyframeProperty = new Rekapi.KeyframeProperty(
+    _.each(state, function (value, name) {
+      newKeyframeProperty = new Rekapi.KeyframeProperty(
         millisecond, name, value, easing[name]);
 
       this._addKeyframeProperty(newKeyframeProperty);
@@ -1418,15 +1474,25 @@ rekapiModules.push(function (context) {
     if (startMs === endMs) {
 
       // If there is only one keyframe, use that for the state of the actor
-      _.each(propertiesToInterpolate, function (property, propertyName) {
-        interpolatedObject[propertyName] = property.value;
-      });
+      _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
+        if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
+          keyframeProperty.invoke();
+          return;
+        }
+
+        interpolatedObject[propName] = keyframeProperty.value;
+      }, this);
 
     } else {
 
       _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
         if (this._beforeKeyframePropertyInterpolate !== noop) {
           this._beforeKeyframePropertyInterpolate(keyframeProperty);
+        }
+
+        if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
+          keyframeProperty.invoke();
+          return;
         }
 
         interpolatedObject[propName] =
@@ -1512,7 +1578,7 @@ rekapiModules.push(function (context) {
    * Represents an individual component of an actor's keyframe state.  In most cases you won't need to deal with this object directly, as the [`Rekapi.Actor`](rekapi.actor.js.html#Actor) APIs abstract a lot of what this Object does away for you.
    * @param {number} millisecond Where on the animation timeline this KeyframeProperty is.
    * @param {string} name The property's name, such as "x" or "opacity."
-   * @param {number|string} value The value that this KeyframeProperty represents.
+   * @param {number|string|Function} value The value that this KeyframeProperty represents.
    * @param {string=} opt_easing The easing curve at which this KeyframeProperty should be animated to.  Defaults to "linear".
    * @constructor
    */
@@ -1521,6 +1587,7 @@ rekapiModules.push(function (context) {
     this.millisecond = millisecond;
     this.name = name;
     this.value = value;
+    this.hasFired = null;
     this.easing = opt_easing || DEFAULT_EASING;
     this.nextProperty = null;
 
@@ -1620,6 +1687,29 @@ rekapiModules.push(function (context) {
       ,'value': this.value
       ,'easing': this.easing
     };
+  };
+
+  /*!
+   * Whether or not this is a function keyframe and should be invoked for the
+   * current frame.  Helper method for Rekapi.Actor.
+   * @return {boolean}
+   */
+  KeyframeProperty.prototype.shouldInvokeForMillisecond =
+      function (millisecond) {
+    return (millisecond >= this.millisecond &&
+      this.name === 'function' &&
+      !this.hasFired);
+  };
+
+  /**
+   * Assuming this is a function keyframe, call the function.
+   * @return {*} Whatever value is returned from the bound function.
+   */
+  KeyframeProperty.prototype.invoke = function () {
+    var drift = this.actor.rekapi._loopPosition - this.millisecond;
+    var returnValue = this.value.call(this.actor, drift);
+    this.hasFired = true;
+    return returnValue;
   };
 
 });

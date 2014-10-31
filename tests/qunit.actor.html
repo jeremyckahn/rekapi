@@ -1331,6 +1331,147 @@
     });
 
 
+    module('Function keyframes');
+
+
+    test('A lone function keyframe on the timeline gets called', function () {
+      var rekapi = new Rekapi();
+      var actor = rekapi.addActor();
+
+      var functionWasCalled = false;
+      actor.keyframe(0, function () {
+        functionWasCalled = true;
+      });
+
+      rekapi._loopTimestamp = 0;
+      mockTime = function () { return 0; };
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+
+      ok(functionWasCalled, 'The function at keyframe 10 was called.');
+    });
+
+    test('A function keyframe on the timeline with other properties gets called', function () {
+      var rekapi = new Rekapi();
+      var actor = rekapi.addActor();
+
+      var functionWasCalled = false;
+      actor.keyframe(10, function () {
+        functionWasCalled = true;
+      });
+
+      actor.keyframe(20, { x: 1 });
+
+      rekapi._loopTimestamp = 0;
+      mockTime = function () { return 5; };
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      ok(!functionWasCalled, 'The function at keyframe 10 was not yet called.');
+
+      // Note: 20 causes the loop to start over and be evaluated as 0 in
+      // KeyframeProperty#shouldInvokeForMillisecond.
+      mockTime = function () { return 19; };
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+
+      ok(functionWasCalled, 'The function at keyframe 10 was called.');
+    });
+
+    test('Function keyframe callbacks receive drift value and context', function () {
+      var rekapi = new Rekapi();
+      var actor = rekapi.addActor();
+
+      var receivedDrift = null;
+      var context;
+      actor.keyframe(0, function (drift) {
+        context = this;
+        receivedDrift = drift;
+      });
+
+      actor.keyframe(20, { x: 1 });
+
+      rekapi._loopTimestamp = 0;
+      mockTime = function () { return 5; };
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+
+      equal(receivedDrift, 5, 'drift was passed along');
+      equal(context, actor, 'Callback was called in the context of the actor');
+    });
+
+    test('A function keyframe only gets called once per loop iteration', function () {
+      var rekapi = new Rekapi();
+      var actor = rekapi.addActor();
+
+      var functionCalls = 0;
+      actor.keyframe(10, function () {
+        functionCalls += 1;
+      });
+
+      actor.keyframe(20, { x: 1 });
+
+      rekapi._loopTimestamp = 0;
+      mockTime = function () { return 12; };
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      mockTime = function () { return 13; };
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      equal(functionCalls, 1, 'The function was called once');
+
+      // Reset the loop
+      mockTime = function () { return 21; };
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      mockTime = function () { return 12; };
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      equal(functionCalls, 2, 'The loop was reset and the function was called again');
+    });
+
+    test('A function keyframe doesn\'t require non-function keyframes in the timeline to be invoked', function () {
+      var rekapi = new Rekapi();
+      var actor = rekapi.addActor();
+
+      var calledFn1 = false;
+      actor.keyframe(10, function () {
+        calledFn1 = true;
+      });
+
+      var calledFn2 = false;
+      actor.keyframe(20, function () {
+        calledFn2 = true;
+      });
+
+      rekapi._loopTimestamp = 0;
+      mockTime = function () { return 5; };
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      ok(!calledFn1, 'The first function was not called');
+      ok(!calledFn2, 'The second function was not called');
+
+      mockTime = function () { return 15; };
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      ok(calledFn1, 'The first function was called');
+      ok(!calledFn2, 'The second function was not called');
+
+      mockTime = function () { return 20; };
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      ok(calledFn1, 'The first function was called');
+      ok(calledFn2, 'The second function was called');
+    });
+
+    test('A lone function keyframe at millisecond 0 is called with each loop iteration', function () {
+      var rekapi = new Rekapi();
+      var actor = rekapi.addActor();
+
+      var callCount = 0;
+      actor.keyframe(0, function () {
+        callCount++;
+      });
+
+      rekapi._loopTimestamp = 0;
+      mockTime = function () { return 0; };
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      equal(callCount, 1, 'The function was called for the first iteration');
+
+      mockTime = function () { return 1; };
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      equal(callCount, 2, 'The function was called for the second iteration');
+    });
+
+
   } ());
   </script>
 </head>

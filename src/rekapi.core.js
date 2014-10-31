@@ -57,8 +57,12 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} timeSinceStart
    */
   function determineCurrentLoopIteration (rekapi, timeSinceStart) {
-    var currentIteration = Math.floor(
-    (timeSinceStart) / rekapi._animationLength);
+    var animationLength = rekapi._animationLength;
+    if (animationLength === 0) {
+      return timeSinceStart;
+    }
+
+    var currentIteration = Math.floor(timeSinceStart / animationLength);
     return currentIteration;
   }
 
@@ -104,12 +108,17 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   function calculateLoopPosition (rekapi, forMillisecond, currentLoopIteration) {
     var currentLoopPosition;
+    var animationLength = rekapi._animationLength;
+
+    if (animationLength === 0) {
+      return 0;
+    }
 
     if (isAnimationComplete(rekapi, currentLoopIteration)) {
       // Rewind to the end if the playhead has gone past it
-      currentLoopPosition = rekapi._animationLength;
+      currentLoopPosition = animationLength;
     } else {
-      currentLoopPosition = forMillisecond % rekapi._animationLength;
+      currentLoopPosition = forMillisecond % animationLength;
     }
 
     return currentLoopPosition;
@@ -126,12 +135,32 @@ var rekapiCore = function (root, _, Tweenable) {
     var loopPosition = 0;
     var currentIteration = 0;
 
-    if (rekapi._animationLength > 0) {
-      currentIteration =
-      determineCurrentLoopIteration(rekapi, forMillisecond);
-      loopPosition = calculateLoopPosition(
-        rekapi, forMillisecond, currentIteration);
+    currentIteration = determineCurrentLoopIteration(rekapi, forMillisecond);
+    loopPosition = calculateLoopPosition(
+      rekapi, forMillisecond, currentIteration);
+    rekapi._loopPosition = loopPosition;
+
+    if (currentIteration > rekapi._latestIteration) {
+      fireEvent(rekapi, 'animationLooped', _);
+
+      // Reset function keyframes
+      var lookupObject = { name: 'function' };
+      _.each(rekapi._actors, function (actor) {
+        var fnKeyframes = _.where(actor._keyframeProperties, lookupObject);
+
+        var lastFnKeyframe = _.last(fnKeyframes);
+
+        if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
+          lastFnKeyframe.invoke();
+        }
+
+        _.each(fnKeyframes, function (fnKeyframe) {
+          fnKeyframe.hasFired = false;
+        });
+      });
     }
+
+    rekapi._latestIteration = currentIteration;
 
     rekapi.update(loopPosition);
     updatePlayState(rekapi, currentIteration);
@@ -242,9 +271,10 @@ var rekapiCore = function (root, _, Tweenable) {
       ,'removeKeyframeProperty': []
       ,'addKeyframePropertyTrack': []
       ,'timelineModified': []
+      ,'animationLooped': []
     };
 
-    // How many times to loop the animation before stopping.
+    // How many times to loop the animation before stopping
     this._timesToIterate = -1;
 
     // Millisecond duration of the animation
@@ -256,11 +286,18 @@ var rekapiCore = function (root, _, Tweenable) {
     // The UNIX time at which the animation loop started
     this._loopTimestamp = null;
 
-    // Used for maintaining position when the animation is paused.
+    // Used for maintaining position when the animation is paused
     this._pausedAtTime = null;
 
     // The last millisecond position that was updated
     this._lastUpdatedMillisecond = 0;
+
+    // The most recent loop iteration a frame was calculated for
+    this._latestIteration = 0;
+
+    // The most recent millisecond position within the loop that the animation
+    // was updated to
+    this._loopPosition = null;
 
     this._scheduleUpdate = getUpdateMethod();
     this._cancelUpdate = getCancelMethod();
@@ -547,6 +584,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * - __removeKeyframeProperty__: Fires when a keyframe property is removed.  `opt_data` is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was removed.
    * - __addKeyframePropertyTrack__: Fires when the a keyframe is added to an actor that creates a new keyframe property track.  `opt_data` is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was added to create the property track.  A reference to the actor that the keyframe property is associated with can be accessed via `.actor` and the track name that was added can be determined via `.name`.
    * - __timelineModified__: Fires when a keyframe is added, modified or removed.
+   * - __animationLooped__: Fires when an animation loop ends and a new one begins.
    *
    * __[Example](../../../../docs/examples/bind.html)__
    * @param {string} eventName
