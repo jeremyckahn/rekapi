@@ -328,10 +328,9 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Add an actor to the animation.  Decorates the actor with a reference to this `Rekapi` instance as `rekapi`.  If `actor` is just an Object, that Object is used to as the constructor parameters for a new `Rekapi.Actor` instance that is created by this method.
    *
-   * ```
-   *  var rekapi = new Rekapi();
-   *  var actor = rekapi.addActor(actor);
-   * ```
+   *     var rekapi = new Rekapi();
+   *     var actor = rekapi.addActor(actor);
+   * ` `
    * @param {Rekapi.Actor|Object} actor
    * @return {Rekapi.Actor} The actor that was added.
    */

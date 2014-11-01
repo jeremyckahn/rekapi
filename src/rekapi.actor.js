@@ -261,24 +261,22 @@ rekapiModules.push(function (context) {
    *
    * `opt_easing`, if provided, can be a string or an Object.  If it's a string, all `properties` will have the same easing curve applied to them. For example:
    *
-   * ```javascript
-   * actor.keyframe(1000, {
-   *     'x': 100,
-   *     'y': 100
-   *   }, 'easeOutSine');
-   * ```
+   *     actor.keyframe(1000, {
+   *         'x': 100,
+   *         'y': 100
+   *       }, 'easeOutSine');
+   * ` `
    *
    * Both `x` and `y` will have `easeOutSine` applied to them.  You can also specify multiple easing curves with an Object:
    *
-   * ```javascript
-   * actor.keyframe(1000, {
-   *     'x': 100,
-   *     'y': 100
-   *   }, {
-   *     'x': 'easeinSine',
-   *     'y': 'easeOutSine'
-   *   });
-   * ```
+   *     actor.keyframe(1000, {
+   *         'x': 100,
+   *         'y': 100
+   *       }, {
+   *         'x': 'easeinSine',
+   *         'y': 'easeOutSine'
+   *       });
+   * ` `
    *
    * `x` will ease with `easeInSine`, and `y` will ease with `easeOutSine`.  Any unspecified properties will ease with `linear`.  If `opt_easing` is omitted, all properties will default to `linear`.
    *
@@ -286,14 +284,13 @@ rekapiModules.push(function (context) {
    *
    * Keyframes always inherit missing properties from the previous keyframe.  For example:
    *
-   * ```javascript
-   * actor.keyframe(0, {
-   *   'x': 100
-   * }).keyframe(1000{
-   *   // Inherits the `x: 100` from above
-   *   'y': 50
-   * });
-   * ```
+   *     actor.keyframe(0, {
+   *       'x': 100
+   *     }).keyframe(1000{
+   *       // Inherits the `x: 100` from above
+   *       'y': 50
+   *     });
+   * ` `
    *
    * Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was inherited from keyframe `0`.
    *
@@ -301,14 +298,13 @@ rekapiModules.push(function (context) {
    *
    * Instead of providing an object to be used to interpolate state values, you can provide a function to be called at a specific point on the timeline.  This function does not need to return a value, as it does not get used to renderthe actor state.  Function keyframes are called once per animation loop and do not have any tweening relationship with one another.  This is a primarily a mechanism for scheduling arbitrary code to be executed at specific points in an animation.
    *
-   * ```javascript
-   * // drift is the number of milliseconds that this function was executed
-   * // after the scheduled time.  There is typically some amount of delay due
-   * // to the nature of JavaScript timers.
-   * actor.keyframe(1000, function (drift) {
-   *   console.log(this); // Logs the actor instance
-   * });
-   * ```
+   *     // drift is the number of milliseconds that this function was executed
+   *     // after the scheduled time.  There is typically some amount of delay due
+   *     // to the nature of JavaScript timers.
+   *     actor.keyframe(1000, function (drift) {
+   *       console.log(this); // Logs the actor instance
+   *     });
+   * ` `
    * @param {number} millisecond Where on the timeline to set the keyframe.
    * @param {Object|Function(number)} state The state properties of the keyframe.  If this is an Object, the properties will be interpolated between this and those of the following keyframe for a given point between the two on the animation timeline.  If this is a function, it will be executed at the specified keyframe.  The function will receive a number that represents the delay between when the function is called and when it was scheduled.
    * @param {string|Object=} opt_easing Optional easing string or Object.  If state is passed as a function, this is not used.
@@ -375,19 +371,18 @@ rekapiModules.push(function (context) {
   /**
    * Copies all of the [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s from one point on the actor's timeline to another. This is particularly useful for animating an actor back to its original position.
    *
-   * ```
-   * actor
-   *   .keyframe(0, {
-   *     x: 10,
-   *     y: 15
-   *   }).keyframe(1000, {
-   *     x: 50,
-   *     y: 75
-   *   });
+   *     actor
+   *       .keyframe(0, {
+   *         x: 10,
+   *         y: 15
+   *       }).keyframe(1000, {
+   *         x: 50,
+   *         y: 75
+   *       });
    *
-   * // Return the actor to its original position
-   * actor.copyFrom(2000, 0);
-   * ```
+   *     // Return the actor to its original position
+   *     actor.copyFrom(2000, 0);
+   * ` `
    *
    * __[Example](../../../../docs/examples/actor_copy_keyframe.html)__
    * @param {number} copyTo The timeline millisecond to copy KeyframeProperties to.
@@ -444,26 +439,25 @@ rekapiModules.push(function (context) {
   /**
    * Augment the `value` or `easing` of the [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s at a given millisecond.  Any [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s omitted in `stateModification` or `opt_easing` are not modified.  Here's how you might use it:
    *
-   * ```javascript
-   * actor.keyframe(0, {
-   *   'x': 10,
-   *   'y': 20
-   * }).keyframe(1000, {
-   *   'x': 20,
-   *   'y': 40
-   * }).keyframe(2000, {
-   *   'x': 30,
-   *   'y': 60
-   * })
+   *     actor.keyframe(0, {
+   *       'x': 10,
+   *       'y': 20
+   *     }).keyframe(1000, {
+   *       'x': 20,
+   *       'y': 40
+   *     }).keyframe(2000, {
+   *       'x': 30,
+   *       'y': 60
+   *     })
    *
-   * // Changes the state of the keyframe at millisecond 1000.
-   * // Modifies the value of 'y' and the easing of 'x.'
-   * actor.modifyKeyframe(1000, {
-   *   'y': 150
-   * }, {
-   *   'x': 'easeFrom'
-   * });
-   * ```
+   *     // Changes the state of the keyframe at millisecond 1000.
+   *     // Modifies the value of 'y' and the easing of 'x.'
+   *     actor.modifyKeyframe(1000, {
+   *       'y': 150
+   *     }, {
+   *       'x': 'easeFrom'
+   *     });
+   * ` `
    *
    * __[Example](../../../../docs/examples/actor_modify_keyframe.html)__
    * @param {number} millisecond

@@ -105,11 +105,10 @@ rekapiModules.push(function (context) {
   /**
    * You can use Rekapi to render to an HTML5 `<canvas>`.  To do so, just provide a `CanvasRenderingContext2D` instance to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor to automatically set up the renderer:
    *
-   * ```
-   * var context = document.createElement('canvas').getContext('2d');
-   * var rekapi = new Rekapi(context);
-   * rekapi.renderer instanceof Rekapi.CanvasRenderer; // true
-   * ```
+   *     var context = document.createElement('canvas').getContext('2d');
+   *     var rekapi = new Rekapi(context);
+   *     rekapi.renderer instanceof Rekapi.CanvasRenderer; // true
+   * ` `
    *
    * `Rekapi.CanvasRenderer` adds some canvas-specific events you can bind to with [`Rekapi#on`](../../src/rekapi.core.js.html#on) (and unbind from with [`Rekapi#off`](../../src/rekapi.core.js.html#off)):
    *
@@ -122,18 +121,16 @@ rekapiModules.push(function (context) {
    *
    * Rekapi supports multiple renderers per instance.  Do do this, you must not provide a `CanvasRenderingContext2D` to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor, you must instead initialize the renderer yourself.  The `CanvasRenderingContext2D` that would have been provided to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor instead is provided as the second parameter to `Rekapi.CanvasRenderer`:
    *
-   * ```
-   * var canvasContext = document.querySelector('canvas').getContext('2d');
    *
-   * // No context gets passed to the Rekapi constructor
-   * var rekapi = new Rekapi();
+   *     var canvasContext = document.querySelector('canvas').getContext('2d');
    *
-   * // Initialize Rekapi.CanvasRenderer manually and give it a
-   * // CanvasRenderingContext2D.  You can name it anything you want on the
-   * // Rekapi instance.
-   * rekapi.canvasRenderer = new Rekapi.CanvasRenderer(rekapi, canvasContext);
-   * ```
+   *     // No context gets passed to the Rekapi constructor
+   *     var rekapi = new Rekapi();
    *
+   *     // Initialize Rekapi.CanvasRenderer manually and give it a
+   *     // CanvasRenderingContext2D.  You can name it anything you want on the
+   *     // Rekapi instance.
+   *     rekapi.canvasRenderer = new Rekapi.CanvasRenderer(rekapi, canvasContext);
    * @param {Rekapi} rekapi
    * @param {CanvasRenderingContext2D=} opt_context
    * @constructor
@@ -231,11 +228,9 @@ rekapiModules.push(function (context) {
    *
    * If a render order function is specified, layer changes made [`moveActorToLayer`](#moveActorToLayer) will be ignored.
    *
-   * ```
-   * rekapi.renderer.setOrderFunction(function (actor) {
-   *   return actor.get().radius;
-   * });
-   * ```
+   *     rekapi.renderer.setOrderFunction(function (actor) {
+   *       return actor.get().radius;
+   *     });
    * @param {function(Rekapi.Actor,number)} sortFunction
    * @return {Rekapi}
    */

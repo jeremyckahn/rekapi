@@ -1,4 +1,4 @@
-/*! rekapi - v1.4.0 - 2014-10-30 - http://rekapi.com */
+/*! rekapi - v1.4.0 - 2014-11-01 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -346,10 +346,9 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Add an actor to the animation.  Decorates the actor with a reference to this `Rekapi` instance as `rekapi`.  If `actor` is just an Object, that Object is used to as the constructor parameters for a new `Rekapi.Actor` instance that is created by this method.
    *
-   * ```
-   *  var rekapi = new Rekapi();
-   *  var actor = rekapi.addActor(actor);
-   * ```
+   *     var rekapi = new Rekapi();
+   *     var actor = rekapi.addActor(actor);
+   * ` `
    * @param {Rekapi.Actor|Object} actor
    * @return {Rekapi.Actor} The actor that was added.
    */
@@ -958,24 +957,22 @@ rekapiModules.push(function (context) {
    *
    * `opt_easing`, if provided, can be a string or an Object.  If it's a string, all `properties` will have the same easing curve applied to them. For example:
    *
-   * ```javascript
-   * actor.keyframe(1000, {
-   *     'x': 100,
-   *     'y': 100
-   *   }, 'easeOutSine');
-   * ```
+   *     actor.keyframe(1000, {
+   *         'x': 100,
+   *         'y': 100
+   *       }, 'easeOutSine');
+   * ` `
    *
    * Both `x` and `y` will have `easeOutSine` applied to them.  You can also specify multiple easing curves with an Object:
    *
-   * ```javascript
-   * actor.keyframe(1000, {
-   *     'x': 100,
-   *     'y': 100
-   *   }, {
-   *     'x': 'easeinSine',
-   *     'y': 'easeOutSine'
-   *   });
-   * ```
+   *     actor.keyframe(1000, {
+   *         'x': 100,
+   *         'y': 100
+   *       }, {
+   *         'x': 'easeinSine',
+   *         'y': 'easeOutSine'
+   *       });
+   * ` `
    *
    * `x` will ease with `easeInSine`, and `y` will ease with `easeOutSine`.  Any unspecified properties will ease with `linear`.  If `opt_easing` is omitted, all properties will default to `linear`.
    *
@@ -983,14 +980,13 @@ rekapiModules.push(function (context) {
    *
    * Keyframes always inherit missing properties from the previous keyframe.  For example:
    *
-   * ```javascript
-   * actor.keyframe(0, {
-   *   'x': 100
-   * }).keyframe(1000{
-   *   // Inherits the `x: 100` from above
-   *   'y': 50
-   * });
-   * ```
+   *     actor.keyframe(0, {
+   *       'x': 100
+   *     }).keyframe(1000{
+   *       // Inherits the `x: 100` from above
+   *       'y': 50
+   *     });
+   * ` `
    *
    * Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was inherited from keyframe `0`.
    *
@@ -998,14 +994,13 @@ rekapiModules.push(function (context) {
    *
    * Instead of providing an object to be used to interpolate state values, you can provide a function to be called at a specific point on the timeline.  This function does not need to return a value, as it does not get used to renderthe actor state.  Function keyframes are called once per animation loop and do not have any tweening relationship with one another.  This is a primarily a mechanism for scheduling arbitrary code to be executed at specific points in an animation.
    *
-   * ```javascript
-   * // drift is the number of milliseconds that this function was executed
-   * // after the scheduled time.  There is typically some amount of delay due
-   * // to the nature of JavaScript timers.
-   * actor.keyframe(1000, function (drift) {
-   *   console.log(this); // Logs the actor instance
-   * });
-   * ```
+   *     // drift is the number of milliseconds that this function was executed
+   *     // after the scheduled time.  There is typically some amount of delay due
+   *     // to the nature of JavaScript timers.
+   *     actor.keyframe(1000, function (drift) {
+   *       console.log(this); // Logs the actor instance
+   *     });
+   * ` `
    * @param {number} millisecond Where on the timeline to set the keyframe.
    * @param {Object|Function(number)} state The state properties of the keyframe.  If this is an Object, the properties will be interpolated between this and those of the following keyframe for a given point between the two on the animation timeline.  If this is a function, it will be executed at the specified keyframe.  The function will receive a number that represents the delay between when the function is called and when it was scheduled.
    * @param {string|Object=} opt_easing Optional easing string or Object.  If state is passed as a function, this is not used.
@@ -1072,19 +1067,18 @@ rekapiModules.push(function (context) {
   /**
    * Copies all of the [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s from one point on the actor's timeline to another. This is particularly useful for animating an actor back to its original position.
    *
-   * ```
-   * actor
-   *   .keyframe(0, {
-   *     x: 10,
-   *     y: 15
-   *   }).keyframe(1000, {
-   *     x: 50,
-   *     y: 75
-   *   });
+   *     actor
+   *       .keyframe(0, {
+   *         x: 10,
+   *         y: 15
+   *       }).keyframe(1000, {
+   *         x: 50,
+   *         y: 75
+   *       });
    *
-   * // Return the actor to its original position
-   * actor.copyFrom(2000, 0);
-   * ```
+   *     // Return the actor to its original position
+   *     actor.copyFrom(2000, 0);
+   * ` `
    *
    * __[Example](../../../../docs/examples/actor_copy_keyframe.html)__
    * @param {number} copyTo The timeline millisecond to copy KeyframeProperties to.
@@ -1141,26 +1135,25 @@ rekapiModules.push(function (context) {
   /**
    * Augment the `value` or `easing` of the [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s at a given millisecond.  Any [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s omitted in `stateModification` or `opt_easing` are not modified.  Here's how you might use it:
    *
-   * ```javascript
-   * actor.keyframe(0, {
-   *   'x': 10,
-   *   'y': 20
-   * }).keyframe(1000, {
-   *   'x': 20,
-   *   'y': 40
-   * }).keyframe(2000, {
-   *   'x': 30,
-   *   'y': 60
-   * })
+   *     actor.keyframe(0, {
+   *       'x': 10,
+   *       'y': 20
+   *     }).keyframe(1000, {
+   *       'x': 20,
+   *       'y': 40
+   *     }).keyframe(2000, {
+   *       'x': 30,
+   *       'y': 60
+   *     })
    *
-   * // Changes the state of the keyframe at millisecond 1000.
-   * // Modifies the value of 'y' and the easing of 'x.'
-   * actor.modifyKeyframe(1000, {
-   *   'y': 150
-   * }, {
-   *   'x': 'easeFrom'
-   * });
-   * ```
+   *     // Changes the state of the keyframe at millisecond 1000.
+   *     // Modifies the value of 'y' and the easing of 'x.'
+   *     actor.modifyKeyframe(1000, {
+   *       'y': 150
+   *     }, {
+   *       'x': 'easeFrom'
+   *     });
+   * ` `
    *
    * __[Example](../../../../docs/examples/actor_modify_keyframe.html)__
    * @param {number} millisecond
@@ -1821,11 +1814,10 @@ rekapiModules.push(function (context) {
   /**
    * You can use Rekapi to render to an HTML5 `<canvas>`.  To do so, just provide a `CanvasRenderingContext2D` instance to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor to automatically set up the renderer:
    *
-   * ```
-   * var context = document.createElement('canvas').getContext('2d');
-   * var rekapi = new Rekapi(context);
-   * rekapi.renderer instanceof Rekapi.CanvasRenderer; // true
-   * ```
+   *     var context = document.createElement('canvas').getContext('2d');
+   *     var rekapi = new Rekapi(context);
+   *     rekapi.renderer instanceof Rekapi.CanvasRenderer; // true
+   * ` `
    *
    * `Rekapi.CanvasRenderer` adds some canvas-specific events you can bind to with [`Rekapi#on`](../../src/rekapi.core.js.html#on) (and unbind from with [`Rekapi#off`](../../src/rekapi.core.js.html#off)):
    *
@@ -1838,18 +1830,16 @@ rekapiModules.push(function (context) {
    *
    * Rekapi supports multiple renderers per instance.  Do do this, you must not provide a `CanvasRenderingContext2D` to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor, you must instead initialize the renderer yourself.  The `CanvasRenderingContext2D` that would have been provided to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor instead is provided as the second parameter to `Rekapi.CanvasRenderer`:
    *
-   * ```
-   * var canvasContext = document.querySelector('canvas').getContext('2d');
    *
-   * // No context gets passed to the Rekapi constructor
-   * var rekapi = new Rekapi();
+   *     var canvasContext = document.querySelector('canvas').getContext('2d');
    *
-   * // Initialize Rekapi.CanvasRenderer manually and give it a
-   * // CanvasRenderingContext2D.  You can name it anything you want on the
-   * // Rekapi instance.
-   * rekapi.canvasRenderer = new Rekapi.CanvasRenderer(rekapi, canvasContext);
-   * ```
+   *     // No context gets passed to the Rekapi constructor
+   *     var rekapi = new Rekapi();
    *
+   *     // Initialize Rekapi.CanvasRenderer manually and give it a
+   *     // CanvasRenderingContext2D.  You can name it anything you want on the
+   *     // Rekapi instance.
+   *     rekapi.canvasRenderer = new Rekapi.CanvasRenderer(rekapi, canvasContext);
    * @param {Rekapi} rekapi
    * @param {CanvasRenderingContext2D=} opt_context
    * @constructor
@@ -1947,11 +1937,9 @@ rekapiModules.push(function (context) {
    *
    * If a render order function is specified, layer changes made [`moveActorToLayer`](#moveActorToLayer) will be ignored.
    *
-   * ```
-   * rekapi.renderer.setOrderFunction(function (actor) {
-   *   return actor.get().radius;
-   * });
-   * ```
+   *     rekapi.renderer.setOrderFunction(function (actor) {
+   *       return actor.get().radius;
+   *     });
    * @param {function(Rekapi.Actor,number)} sortFunction
    * @return {Rekapi}
    */
@@ -2268,10 +2256,9 @@ rekapiModules.push(function (context) {
   /**
    * `DOMRenderer` allows you to animate DOM elements.  This is achieved either by browser-accelerated [CSS `@keyframe` animations](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes), or by traditional inline style updates on every frame (like how [`jQuery.fn.animate`](http://api.jquery.com/animate/) works).  Animations are defined with the same API in either case, but you can gracefully fall back to the inline style approach if CSS `@keyframe` animations are not supported by the browser or not preferred.  To render animations with the DOM, just supply any DOM element to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor.  You may use `document.body`, since it is generally always available:
    *
-   * ```
-   * var rekapi = new Rekapi(document.body);
-   * rekapi.renderer instanceof Rekapi.DOMRenderer; // true
-   * ```
+   *     var rekapi = new Rekapi(document.body);
+   *     rekapi.renderer instanceof Rekapi.DOMRenderer; // true
+   * ` `
    *
    * There are separate APIs for playing inline style animations and CSS `@keyframe` animations.  Advantages of playing an animation with CSS `@keyframes`:
    *
@@ -2289,24 +2276,23 @@ rekapiModules.push(function (context) {
    *
    * `DOMRenderer` can gracefully fall back to an inline style animation if CSS `@keyframe` animations are not supported by the browser:
    *
-   * ```
-   *  var rekapi = new Rekapi(document.body);
+   *      var rekapi = new Rekapi(document.body);
    *
-   *  // Each actor needs a reference to the DOM element it represents
-   *  var actor = rekapi.addActor({ context: document.getElementById('actor-1') });
+   *      // Each actor needs a reference to the DOM element it represents
+   *      var actor = rekapi.addActor({ context: document.getElementById('actor-1') });
    *
-   *  actor.keyframe(0,    { left: '0px'   });
-   *  actor.keyframe(1000, { left: '250px' }, 'easeOutQuad');
+   *      actor.keyframe(0,    { left: '0px'   });
+   *      actor.keyframe(1000, { left: '250px' }, 'easeOutQuad');
    *
-   *  // Feature detect for CSS @keyframe support
-   *  if (rekapi.renderer.canAnimateWithCSS()) {
-   *    // Animate with CSS @keyframes
-   *    rekapi.renderer.play();
-   *  } else {
-   *    // Animate inline styles instead
-   *    rekapi.play();
-   *  }
-   * ```
+   *      // Feature detect for CSS @keyframe support
+   *      if (rekapi.renderer.canAnimateWithCSS()) {
+   *        // Animate with CSS @keyframes
+   *        rekapi.renderer.play();
+   *      } else {
+   *        // Animate inline styles instead
+   *        rekapi.play();
+   *      }
+   * ` `
    *
    * ## CSS `@keyframe` animations are controlled differently from inline style animations
    *
@@ -2442,23 +2428,22 @@ rekapiModules.push(function (context) {
   /**
    * You can decouple transform components in order to animate each property with its own easing curve:
    *
-   * ```
-   * actor
-   *   .keyframe(0, {
-   *     'translateX': '0px'
-   *     ,'translateY': '0px'
-   *     ,'rotate': '0deg'
-   *   })
-   *   .keyframe(1500, {
-   *     'translateX': '200px'
-   *     ,'translateY': '200px'
-   *     ,'rotate': '90deg'
-   *   }, {
-   *     'translateX': 'easeOutExpo'
-   *     ,'translateY': 'easeInSine'
-   *     ,'rotate': 'elastic'
-   *   });
-   * ```
+   *     actor
+   *       .keyframe(0, {
+   *         'translateX': '0px'
+   *         ,'translateY': '0px'
+   *         ,'rotate': '0deg'
+   *       })
+   *       .keyframe(1500, {
+   *         'translateX': '200px'
+   *         ,'translateY': '200px'
+   *         ,'rotate': '90deg'
+   *       }, {
+   *         'translateX': 'easeOutExpo'
+   *         ,'translateY': 'easeInSine'
+   *         ,'rotate': 'elastic'
+   *       });
+   * ` `
    *
    * CSS transform string components are order-dependent, but JavaScript object properties have an unpredictable order.  Rekapi must combine transform properties supplied to [`Rekapi.Actor.keyframe`](../../src/rekapi.actor.js.html#keyframe) (as shown above) into a single string when it renders each frame.  This method lets you change that order from the default.  The supported array values for `orderedTransforms` are:
    *
@@ -2474,17 +2459,16 @@ rekapiModules.push(function (context) {
    *
    * If you prefer a more standards-oriented approach, Rekapi also supports combining the transform components yourself:
    *
-   * ```
-   * actor
-   *   .keyframe(0, {
-   *     'transform': 'translateX(0px) translateY(0px) rotate(0deg)'
-   *   })
-   *   .keyframe(1500, {
-   *     'transform': 'translateX(200px) translateY(200px) rotate(90deg)'
-   *   }, {
-   *     'transform': 'easeOutExpo easeInSine elastic'
-   *   });
-   * ```
+   *     actor
+   *       .keyframe(0, {
+   *         'transform': 'translateX(0px) translateY(0px) rotate(0deg)'
+   *       })
+   *       .keyframe(1500, {
+   *         'transform': 'translateX(200px) translateY(200px) rotate(90deg)'
+   *       }, {
+   *         'transform': 'easeOutExpo easeInSine elastic'
+   *       });
+   * ` `
    *
    * This example and the one above it are equivalent.
    *

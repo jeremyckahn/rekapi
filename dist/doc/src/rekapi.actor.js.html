@@ -268,22 +268,26 @@ code {
 
 <p><code>opt_easing</code>, if provided, can be a string or an Object.  If it's a string, all <code>properties</code> will have the same easing curve applied to them. For example:</p>
 
-<div class="highlight"><pre lang="javascript">actor.keyframe(1000, {
+<pre><code>actor.keyframe(1000, {
     'x': 100,
     'y': 100
   }, 'easeOutSine');
-</pre></div>
+</code></pre>
+
+<p><code></code></p>
 
 <p>Both <code>x</code> and <code>y</code> will have <code>easeOutSine</code> applied to them.  You can also specify multiple easing curves with an Object:</p>
 
-<div class="highlight"><pre lang="javascript">actor.keyframe(1000, {
+<pre><code>actor.keyframe(1000, {
     'x': 100,
     'y': 100
   }, {
     'x': 'easeinSine',
     'y': 'easeOutSine'
   });
-</pre></div>
+</code></pre>
+
+<p><code></code></p>
 
 <p><code>x</code> will ease with <code>easeInSine</code>, and <code>y</code> will ease with <code>easeOutSine</code>.  Any unspecified properties will ease with <code>linear</code>.  If <code>opt_easing</code> is omitted, all properties will default to <code>linear</code>.</p>
 
@@ -291,13 +295,15 @@ code {
 
 <p>Keyframes always inherit missing properties from the previous keyframe.  For example:</p>
 
-<div class="highlight"><pre lang="javascript">actor.keyframe(0, {
+<pre><code>actor.keyframe(0, {
   'x': 100
 }).keyframe(1000{
   // Inherits the `x: 100` from above
   'y': 50
 });
-</pre></div>
+</code></pre>
+
+<p><code></code></p>
 
 <p>Keyframe <code>1000</code> will have a <code>y</code> of <code>50</code>, and an <code>x</code> of <code>100</code>, because <code>x</code> was inherited from keyframe <code>0</code>.</p>
 
@@ -305,13 +311,15 @@ code {
 
 <p>Instead of providing an object to be used to interpolate state values, you can provide a function to be called at a specific point on the timeline.  This function does not need to return a value, as it does not get used to renderthe actor state.  Function keyframes are called once per animation loop and do not have any tweening relationship with one another.  This is a primarily a mechanism for scheduling arbitrary code to be executed at specific points in an animation.</p>
 
-<div class="highlight"><pre lang="javascript">// drift is the number of milliseconds that this function was executed
+<pre><code>// drift is the number of milliseconds that this function was executed
 // after the scheduled time.  There is typically some amount of delay due
 // to the nature of JavaScript timers.
 actor.keyframe(1000, function (drift) {
   console.log(this); // Logs the actor instance
 });
-</pre></div></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.keyframe = function keyframe (
+</code></pre>
+
+<p><code></code></p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.keyframe = function keyframe (
     millisecond, state, opt_easing) {
 
     if (state instanceof Function) {
@@ -360,7 +368,7 @@ actor.keyframe(1000, function (drift) {
     return false;
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="copyKeyframe">copyKeyframe</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.copyKeyframe()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{number}</span><span class="name">copyTo</span><span class="description">The timeline millisecond to copy KeyframeProperties to.</span></li><li class="tag"><span class="type">@param: </span><span class="types">{number}</span><span class="name">copyFrom</span><span class="description">The timeline millisecond to copy KeyframeProperties from.</span></li><li class="tag"><span class="type">@return: </span><span class="types">{Rekapi.Actor}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Copies all of the <a href="rekapi.keyframe-property.js.html"><code>Rekapi.KeyframeProperty</code></a>s from one point on the actor's timeline to another. This is particularly useful for animating an actor back to its original position.</p>
 
-<div class="highlight"><pre lang="">actor
+<pre><code>actor
   .keyframe(0, {
     x: 10,
     y: 15
@@ -371,7 +379,9 @@ actor.keyframe(1000, function (drift) {
 
 // Return the actor to its original position
 actor.copyFrom(2000, 0);
-</pre></div>
+</code></pre>
+
+<p><code></code></p>
 
 <p><strong><a href="../../../../docs/examples/actor_copy_keyframe.html">Example</a></strong></p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.copyKeyframe = function (copyTo, copyFrom) {
     // Build the configuation objects to be passed to Actor#keyframe
@@ -412,7 +422,7 @@ actor.copyFrom(2000, 0);
     return true;
   };</code></pre></div></div></div></article><article class="comment"><header><h1 id="modifyKeyframe">modifyKeyframe</h1><h5 class="subheader"><div class="label radius ctx-type">method</div>Actor.prototype.modifyKeyframe()</h5></header><ul class="no-bullet tags"><li class="tag"><span class="type">@param: </span><span class="types">{number}</span><span class="name">millisecond</span><span class="description"></span></li><li class="tag"><span class="type">@param: </span><span class="types">{Object}</span><span class="name">stateModification</span><span class="description"></span></li><li class="tag"><span class="type">@param: </span><span class="types">{Object=}</span><span class="name">opt_easingModification</span><span class="description"></span></li><li class="tag"><span class="type">@return: </span><span class="types">{Rekapi.Actor}</span><span class="description"></span></li></ul><div data-section="accordian" data-options="one_up: false;" class="section-container code auto"><div class="section"><p data-section-title class="title"><a href="#">Description</a></p><div data-section-content class="content description"><p>Augment the <code>value</code> or <code>easing</code> of the <a href="rekapi.keyframe-property.js.html"><code>Rekapi.KeyframeProperty</code></a>s at a given millisecond.  Any <a href="rekapi.keyframe-property.js.html"><code>Rekapi.KeyframeProperty</code></a>s omitted in <code>stateModification</code> or <code>opt_easing</code> are not modified.  Here's how you might use it:</p>
 
-<div class="highlight"><pre lang="javascript">actor.keyframe(0, {
+<pre><code>actor.keyframe(0, {
   'x': 10,
   'y': 20
 }).keyframe(1000, {
@@ -430,7 +440,9 @@ actor.modifyKeyframe(1000, {
 }, {
   'x': 'easeFrom'
 });
-</pre></div>
+</code></pre>
+
+<p><code></code></p>
 
 <p><strong><a href="../../../../docs/examples/actor_modify_keyframe.html">Example</a></strong></p></div></div><div class="section"><p data-section-title class="title"><a href="#">Source</a></p><div data-section-content class="content"><pre><code class="language-javascript">Actor.prototype.modifyKeyframe = function (
     millisecond, stateModification, opt_easingModification) {

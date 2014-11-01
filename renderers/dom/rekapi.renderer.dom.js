@@ -293,10 +293,9 @@ rekapiModules.push(function (context) {
   /**
    * `DOMRenderer` allows you to animate DOM elements.  This is achieved either by browser-accelerated [CSS `@keyframe` animations](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes), or by traditional inline style updates on every frame (like how [`jQuery.fn.animate`](http://api.jquery.com/animate/) works).  Animations are defined with the same API in either case, but you can gracefully fall back to the inline style approach if CSS `@keyframe` animations are not supported by the browser or not preferred.  To render animations with the DOM, just supply any DOM element to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor.  You may use `document.body`, since it is generally always available:
    *
-   * ```
-   * var rekapi = new Rekapi(document.body);
-   * rekapi.renderer instanceof Rekapi.DOMRenderer; // true
-   * ```
+   *     var rekapi = new Rekapi(document.body);
+   *     rekapi.renderer instanceof Rekapi.DOMRenderer; // true
+   * ` `
    *
    * There are separate APIs for playing inline style animations and CSS `@keyframe` animations.  Advantages of playing an animation with CSS `@keyframes`:
    *
@@ -314,24 +313,23 @@ rekapiModules.push(function (context) {
    *
    * `DOMRenderer` can gracefully fall back to an inline style animation if CSS `@keyframe` animations are not supported by the browser:
    *
-   * ```
-   *  var rekapi = new Rekapi(document.body);
+   *      var rekapi = new Rekapi(document.body);
    *
-   *  // Each actor needs a reference to the DOM element it represents
-   *  var actor = rekapi.addActor({ context: document.getElementById('actor-1') });
+   *      // Each actor needs a reference to the DOM element it represents
+   *      var actor = rekapi.addActor({ context: document.getElementById('actor-1') });
    *
-   *  actor.keyframe(0,    { left: '0px'   });
-   *  actor.keyframe(1000, { left: '250px' }, 'easeOutQuad');
+   *      actor.keyframe(0,    { left: '0px'   });
+   *      actor.keyframe(1000, { left: '250px' }, 'easeOutQuad');
    *
-   *  // Feature detect for CSS @keyframe support
-   *  if (rekapi.renderer.canAnimateWithCSS()) {
-   *    // Animate with CSS @keyframes
-   *    rekapi.renderer.play();
-   *  } else {
-   *    // Animate inline styles instead
-   *    rekapi.play();
-   *  }
-   * ```
+   *      // Feature detect for CSS @keyframe support
+   *      if (rekapi.renderer.canAnimateWithCSS()) {
+   *        // Animate with CSS @keyframes
+   *        rekapi.renderer.play();
+   *      } else {
+   *        // Animate inline styles instead
+   *        rekapi.play();
+   *      }
+   * ` `
    *
    * ## CSS `@keyframe` animations are controlled differently from inline style animations
    *
@@ -467,23 +465,22 @@ rekapiModules.push(function (context) {
   /**
    * You can decouple transform components in order to animate each property with its own easing curve:
    *
-   * ```
-   * actor
-   *   .keyframe(0, {
-   *     'translateX': '0px'
-   *     ,'translateY': '0px'
-   *     ,'rotate': '0deg'
-   *   })
-   *   .keyframe(1500, {
-   *     'translateX': '200px'
-   *     ,'translateY': '200px'
-   *     ,'rotate': '90deg'
-   *   }, {
-   *     'translateX': 'easeOutExpo'
-   *     ,'translateY': 'easeInSine'
-   *     ,'rotate': 'elastic'
-   *   });
-   * ```
+   *     actor
+   *       .keyframe(0, {
+   *         'translateX': '0px'
+   *         ,'translateY': '0px'
+   *         ,'rotate': '0deg'
+   *       })
+   *       .keyframe(1500, {
+   *         'translateX': '200px'
+   *         ,'translateY': '200px'
+   *         ,'rotate': '90deg'
+   *       }, {
+   *         'translateX': 'easeOutExpo'
+   *         ,'translateY': 'easeInSine'
+   *         ,'rotate': 'elastic'
+   *       });
+   * ` `
    *
    * CSS transform string components are order-dependent, but JavaScript object properties have an unpredictable order.  Rekapi must combine transform properties supplied to [`Rekapi.Actor.keyframe`](../../src/rekapi.actor.js.html#keyframe) (as shown above) into a single string when it renders each frame.  This method lets you change that order from the default.  The supported array values for `orderedTransforms` are:
    *
@@ -499,17 +496,16 @@ rekapiModules.push(function (context) {
    *
    * If you prefer a more standards-oriented approach, Rekapi also supports combining the transform components yourself:
    *
-   * ```
-   * actor
-   *   .keyframe(0, {
-   *     'transform': 'translateX(0px) translateY(0px) rotate(0deg)'
-   *   })
-   *   .keyframe(1500, {
-   *     'transform': 'translateX(200px) translateY(200px) rotate(90deg)'
-   *   }, {
-   *     'transform': 'easeOutExpo easeInSine elastic'
-   *   });
-   * ```
+   *     actor
+   *       .keyframe(0, {
+   *         'transform': 'translateX(0px) translateY(0px) rotate(0deg)'
+   *       })
+   *       .keyframe(1500, {
+   *         'transform': 'translateX(200px) translateY(200px) rotate(90deg)'
+   *       }, {
+   *         'transform': 'easeOutExpo easeInSine elastic'
+   *       });
+   * ` `
    *
    * This example and the one above it are equivalent.
    *
