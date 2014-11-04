@@ -2489,7 +2489,7 @@ rekapiModules.push(function (context) {
     var classList = element.className.match(/\S+/g);
     var sanitizedClassList =
         _.without(classList, DOMRenderer.getActorClassName(actor));
-    element.className = sanitizedClassList;
+    element.className = sanitizedClassList.join(' ');
   }
 
   // CSS RENDERER OBJECT
