@@ -1,0 +1,2482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Rekapi.Actor - Rekapi</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../../demo/img/rekapi-logo-200.png" title="Rekapi"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.4.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Rekapi.html">Rekapi</a></li>
+            
+                <li><a href="../classes/Rekapi.Actor.html">Rekapi.Actor</a></li>
+            
+                <li><a href="../classes/Rekapi.CanvasRenderer.html">Rekapi.CanvasRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.DOMRenderer.html">Rekapi.DOMRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.KeyframeProperty.html">Rekapi.KeyframeProperty</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>Rekapi.Actor Class</h1>
+<div class="box meta">
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="../files/src_rekapi.actor.js.html#l208"><code>src&#x2F;rekapi.actor.js:208</code></a>
+        </div>
+    
+
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>An actor represents an individual component of an animation.  An animation
+may have one or many actors.</p>
+
+</div>
+
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_Rekapi.Actor" class="method item">
+    <h3 class="name"><code>Rekapi.Actor</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>opt_config</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l208"><code>src&#x2F;rekapi.actor.js:208</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_config</code>
+                        <span class="type">Object=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Valid properties:</p>
+<ul>
+<li><strong>context</strong> (<em>Object|CanvasRenderingContext2D|HTMLElement</em>): The
+rendering context for this actor. If omitted, this Actor gets the parent
+<code><a href="../classes/Rekapi.html" class="crosslink">Rekapi</a></code> instance&#39;s <code>context</code> when it is
+added with <code><a href="../classes/Rekapi.html#method_addActor" class="crosslink">addActor</a></code>.</li>
+<li><strong>setup</strong> (<em>Function</em>): A function that gets called when the actor is
+added to an animation with
+<code><a href="../classes/Rekapi.html#method_addActor" class="crosslink">addActor</a></code>.</li>
+<li><strong>render</strong> (<em>Function(Object, Object)</em>): A function that gets called
+every time the actor&#39;s state is updated (once every frame). This
+function should do something meaningful with state of the actor (for
+example, visually rendering to the screen).  This function receives two
+parameters: The first is a reference to the actor&#39;s <code>context</code> and the
+second is an Object containing the current state properties.</li>
+<li><strong>teardown</strong> (<em>Function</em>): A function that gets called when the actor
+is removed from an animation with
+<code><a href="../classes/Rekapi.html#method_removeActor" class="crosslink">removeActor</a></code>.</li>
+</ul>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+    </div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method">
+                                <a href="#method_copyKeyframe">copyKeyframe</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_exportTimeline">exportTimeline</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getEnd">getEnd</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getKeyframeProperty">getKeyframeProperty</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getLength">getLength</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getPropertiesInTrack">getPropertiesInTrack</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getStart">getStart</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getTrackNames">getTrackNames</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_hasKeyframeAt">hasKeyframeAt</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_importTimeline">importTimeline</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_keyframe">keyframe</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_modifyKeyframe">modifyKeyframe</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_modifyKeyframeProperty">modifyKeyframeProperty</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_moveKeyframe">moveKeyframe</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_removeAllKeyframes">removeAllKeyframes</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_removeKeyframe">removeKeyframe</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_removeKeyframeProperty">removeKeyframeProperty</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_wait">wait</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_copyKeyframe" class="method item">
+    <h3 class="name"><code>copyKeyframe</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>copyTo</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>copyFrom</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l410"><code>src&#x2F;rekapi.actor.js:410</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Copies all of the <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>s from one point on the actor&#39;s
+timeline to another. This is particularly useful for animating an actor
+back to its original position.</p>
+<pre class="code prettyprint"><code>actor
+  .keyframe(0, {
+    x: 10,
+    y: 15
+  }).keyframe(1000, {
+    x: 50,
+    y: 75
+  });
+
+// Return the actor to its original position
+actor.copyKeyframe(2000, 0);</code></pre>
+<p><strong><a href="../../../../docs/examples/actor_copy_keyframe.html">Example</a></strong></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">copyTo</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The timeline millisecond to copy KeyframeProperties
+to.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">copyFrom</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The timeline millisecond to copy
+KeyframeProperties from.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_exportTimeline" class="method item">
+    <h3 class="name"><code>exportTimeline</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l924"><code>src&#x2F;rekapi.actor.js:924</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p><strong><a href="../../../../docs/examples/actor_export_timeline.html">Example</a></strong></p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                    <p>A serializable Object of this actor&#39;s timeline property
+tracks and <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>s.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getEnd" class="method item">
+    <h3 class="name"><code>getEnd</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>opt_trackName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l741"><code>src&#x2F;rekapi.actor.js:741</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_trackName</code>
+                        <span class="type">String=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Optionally scope the lookup to a particular
+keyframe track.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Number</span>:
+                    
+                    <p>The millisecond of the last state of an actor (the point
+in the timeline in which it is done animating).  If there are no
+keyframes, this is <code>0</code>.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getKeyframeProperty" class="method item">
+    <h3 class="name"><code>getKeyframeProperty</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>property</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>millisecond</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a> | Undefined</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l603"><code>src&#x2F;rekapi.actor.js:603</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">property</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The name of the property track.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">millisecond</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The millisecond of the property in the
+timeline.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a> | Undefined</span>:
+                    
+                    <p>A <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code> that is stored on the actor, as
+specified by the <code>property</code> and <code>millisecond</code> parameters. This is
+<code>undefined</code> if no properties were found.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getLength" class="method item">
+    <h3 class="name"><code>getLength</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>opt_trackName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l771"><code>src&#x2F;rekapi.actor.js:771</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_trackName</code>
+                        <span class="type">String=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Optionally scope the lookup to a particular
+track.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Number</span>:
+                    
+                    <p>The length of time in milliseconds that the actor
+animates for.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getPropertiesInTrack" class="method item">
+    <h3 class="name"><code>getPropertiesInTrack</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>trackName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty[]</a> | Undefined</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l683"><code>src&#x2F;rekapi.actor.js:683</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get all of the <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>s
+for a track.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">trackName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The track name to query.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty[]</a> | Undefined</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getStart" class="method item">
+    <h3 class="name"><code>getStart</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>opt_trackName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l698"><code>src&#x2F;rekapi.actor.js:698</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_trackName</code>
+                        <span class="type">String=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Optionally scope the lookup to a particular
+track.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Number</span>:
+                    
+                    <p>The millisecond of the first animating state of an actor
+(for instance, if the actor&#39;s first keyframe is later than millisecond
+<code>0</code>).  If there are no keyframes, this returns <code>0</code>.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getTrackNames" class="method item">
+    <h3 class="name"><code>getTrackNames</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Array(string)</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l674"><code>src&#x2F;rekapi.actor.js:674</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Array(string)</span>:
+                    
+                    <p>A list of all the track names for an actor.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_hasKeyframeAt" class="method item">
+    <h3 class="name"><code>hasKeyframeAt</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>millisecond</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>opt_trackName</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l380"><code>src&#x2F;rekapi.actor.js:380</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">millisecond</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Point on the timeline to query.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_trackName</code>
+                        <span class="type">String=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Optionally scope the lookup to a particular
+track.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Boolean</span>:
+                    
+                    <p>Whether or not the actor has any <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>s set at <code>millisecond</code>.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_importTimeline" class="method item">
+    <h3 class="name"><code>importTimeline</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>actorData</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l948"><code>src&#x2F;rekapi.actor.js:948</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Import an Object to augment this actor&#39;s state.  This does not remove
+keyframe properties before importing new ones.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">actorData</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Any object that has the same data format as the
+object generated from <code><a href="../classes/Rekapi.Actor.html#method_exportTimeline" class="crosslink">exportTimeline</a></code>.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_keyframe" class="method item">
+    <h3 class="name"><code>keyframe</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>millisecond</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>state</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>opt_easing</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l265"><code>src&#x2F;rekapi.actor.js:265</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Create a keyframe for the actor.  The animation timeline begins at <code>0</code>.
+The timeline&#39;s length will automatically "grow" to accommodate new
+keyframes as they are added.</p>
+<p><code>state</code> should contain all of the properties that define this
+keyframe&#39;s state.  These properties can be any value that can be tweened
+by <a href="http://jeremyckahn.github.io/shifty/">Shifty</a> (numbers,
+RGB/hexadecimal color strings, and CSS property strings).  <code>state</code> can
+also be a function, but this works differently (see "Function keyframes"
+below).</p>
+<p><strong>Note:</strong> Internally, this creates <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>s and places them on a "track."
+These <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>s are
+managed for you by the <code><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></code> APIs.</p>
+<h2 id="keyframe-inheritance">Keyframe inheritance</h2>
+<p>Keyframes always inherit missing properties from the previous keyframe.
+For example:</p>
+<pre class="code prettyprint"><code>actor.keyframe(0, {
+  &#39;x&#39;: 100
+}).keyframe(1000, {
+  // Implicitly specifies the <code>x: 100</code> from above
+  &#39;y&#39;: 50
+});</code></pre>
+<p>Keyframe <code>1000</code> will have a <code>y</code> of <code>50</code>, and an <code>x</code> of <code>100</code>, because <code>x</code>
+was inherited from keyframe <code>0</code>.</p>
+<h2 id="function-keyframes">Function keyframes</h2>
+<p>Instead of providing an Object to be used to interpolate state values, you
+can provide a function to be called at a specific point on the timeline.
+This function does not need to return a value, as it does not get used to
+render the actor state.  Function keyframes are called once per animation
+loop and do not have any tweening relationship with one another.  This is
+a primarily a mechanism for scheduling arbitrary code to be executed at
+specific points in an animation.</p>
+<pre class="code prettyprint"><code>// drift is the number of milliseconds that this function was executed
+// after the scheduled time.  There is typically some amount of delay
+// due to the nature of JavaScript timers.
+actor.keyframe(1000, function (drift) {
+  console.log(this); // Logs the actor instance
+});</code></pre>
+<h2 id="easing">Easing</h2>
+<p><code>opt_easing</code>, if provided, can be a string or an Object.  If <code>opt_easing</code>
+is a string, all animated properties will have the same easing curve
+applied to them.  For example:</p>
+<pre class="code prettyprint"><code>actor.keyframe(1000, {
+    &#39;x&#39;: 100,
+    &#39;y&#39;: 100
+  }, &#39;easeOutSine&#39;);</code></pre>
+<p>Both <code>x</code> and <code>y</code> will have <code>easeOutSine</code> applied to them.  You can also
+specify multiple easing curves with an Object:</p>
+<pre class="code prettyprint"><code>actor.keyframe(1000, {
+    &#39;x&#39;: 100,
+    &#39;y&#39;: 100
+  }, {
+    &#39;x&#39;: &#39;easeinSine&#39;,
+    &#39;y&#39;: &#39;easeOutSine&#39;
+  });</code></pre>
+<p><code>x</code> will ease with <code>easeInSine</code>, and <code>y</code> will ease with <code>easeOutSine</code>.
+Any unspecified properties will ease with <code>linear</code>.  If <code>opt_easing</code> is
+omitted, all properties will default to <code>linear</code>.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">millisecond</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Where on the timeline to set the keyframe.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">state</code>
+                        <span class="type">Object | Function(number)</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The state properties of the
+keyframe.  If this is an Object, the properties will be interpolated
+between this and those of the following keyframe for a given point on the
+animation timeline.  If this is a function, it will be executed at the
+specified keyframe.  The function will receive a number that represents
+the delay between when the function is called and when it was scheduled.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_easing</code>
+                        <span class="type">String | Object=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Optional easing string or Object.  If
+<code>state</code> is a function, this is ignored.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_modifyKeyframe" class="method item">
+    <h3 class="name"><code>modifyKeyframe</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>millisecond</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>stateModification</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>opt_easingModification</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l491"><code>src&#x2F;rekapi.actor.js:491</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Augment the <code>value</code> or <code>easing</code> of the <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>s at a given millisecond.  Any
+<code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>s omitted in
+<code>stateModification</code> or <code>opt_easing</code> are not modified.</p>
+<pre class="code prettyprint"><code>actor.keyframe(0, {
+  &#39;x&#39;: 10,
+  &#39;y&#39;: 20
+}).keyframe(1000, {
+  &#39;x&#39;: 20,
+  &#39;y&#39;: 40
+}).keyframe(2000, {
+  &#39;x&#39;: 30,
+  &#39;y&#39;: 60
+})
+
+// Changes the state of the keyframe at millisecond 1000.
+// Modifies the value of &#39;y&#39; and the easing of &#39;x.&#39;
+actor.modifyKeyframe(1000, {
+  &#39;y&#39;: 150
+}, {
+  &#39;x&#39;: &#39;easeFrom&#39;
+});</code></pre>
+<p><strong><a href="../../../../docs/examples/actor_modify_keyframe.html">Example</a></strong></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">millisecond</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">stateModification</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_easingModification</code>
+                        <span class="type">Object=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_modifyKeyframeProperty" class="method item">
+    <h3 class="name"><code>modifyKeyframeProperty</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>property</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>millisecond</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>newProperties</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l620"><code>src&#x2F;rekapi.actor.js:620</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Modify a <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code> stored
+on an actor.  Internally, this calls <code><a href="../classes/Rekapi.KeyframeProperty.html#method_modifyWith" class="crosslink">modifyWith</a></code> and then
+performs some cleanup.</p>
+<p><strong><a href="../../../../docs/examples/actor_modify_keyframe_property.html">Example</a></strong></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">property</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The name of the <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code> to modify.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">millisecond</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The timeline millisecond of the <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code> to modify.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">newProperties</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The properties to augment the <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code> with.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_moveKeyframe" class="method item">
+    <h3 class="name"><code>moveKeyframe</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>from</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>to</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l455"><code>src&#x2F;rekapi.actor.js:455</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Moves all of the
+<code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>s from one
+point on the actor&#39;s timeline to another.  Although this method does error
+checking for you to make sure the operation can be safely performed, an
+effective pattern is to use <code><a href="../classes/Rekapi.Actor.html#method_hasKeyframeAt" class="crosslink">hasKeyframeAt</a></code> to see if there is
+already a keyframe at the requested <code>to</code> destination.</p>
+<p><strong><a href="../../../../docs/examples/actor_move_keyframe.html">Example</a></strong></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">from</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The millisecond of the keyframe to be moved.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">to</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The millisecond of where the keyframe should be moved
+to.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Boolean</span>:
+                    
+                    <p>Whether or not the keyframe was successfully moved.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_removeAllKeyframes" class="method item">
+    <h3 class="name"><code>removeAllKeyframes</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l578"><code>src&#x2F;rekapi.actor.js:578</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Remove all <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>s set
+on the actor.</p>
+<p><strong><a href="../../../../docs/examples/actor_remove_all_keyframes.html">Example</a></strong></p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_removeKeyframe" class="method item">
+    <h3 class="name"><code>removeKeyframe</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>millisecond</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l544"><code>src&#x2F;rekapi.actor.js:544</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Remove all <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>s set
+on the actor at a given millisecond in the animation.</p>
+<p><strong><a href="../../../../docs/examples/actor_remove_keyframe.html">Example</a></strong></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">millisecond</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The location on the timeline of the keyframe
+to remove.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_removeKeyframeProperty" class="method item">
+    <h3 class="name"><code>removeKeyframeProperty</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>property</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>millisecond</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a> | Undefined</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l648"><code>src&#x2F;rekapi.actor.js:648</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Remove a single <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>
+from the actor.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">property</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The name of the <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code> to remove.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">millisecond</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Where in the timeline the <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code> to remove is.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a> | Undefined</span>:
+                    
+                    <p>The removed KeyframeProperty,
+if one was found.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_wait" class="method item">
+    <h3 class="name"><code>wait</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>until</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.actor.js.html#l782"><code>src&#x2F;rekapi.actor.js:782</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Extend the last state on this actor&#39;s timeline to simulate a pause.
+Internally, this method copies the final state of the actor in the
+timeline to the millisecond defined by <code>until</code>.</p>
+<p><strong><a href="../../../../docs/examples/actor_wait.html">Example</a></strong></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">until</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>At what point in the animation the Actor should wait
+until (relative to the start of the animation timeline).  If this number
+is less than the value returned from <code><a href="../classes/Rekapi.Actor.html#method_getLength" class="crosslink">getLength</a></code>, this method does
+nothing.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+
+        
+
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

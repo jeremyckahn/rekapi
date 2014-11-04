@@ -1,0 +1,1311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Rekapi.DOMRenderer - Rekapi</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../../demo/img/rekapi-logo-200.png" title="Rekapi"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.4.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Rekapi.html">Rekapi</a></li>
+            
+                <li><a href="../classes/Rekapi.Actor.html">Rekapi.Actor</a></li>
+            
+                <li><a href="../classes/Rekapi.CanvasRenderer.html">Rekapi.CanvasRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.DOMRenderer.html">Rekapi.DOMRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.KeyframeProperty.html">Rekapi.KeyframeProperty</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>Rekapi.DOMRenderer Class</h1>
+<div class="box meta">
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="../files/renderers_dom_rekapi.renderer.dom.js.html#l293"><code>renderers&#x2F;dom&#x2F;rekapi.renderer.dom.js:293</code></a>
+        </div>
+    
+
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p><code>Rekapi.DOMRenderer</code> allows you to animate DOM elements.  This is achieved
+either by browser-accelerated <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes">CSS <code>@keyframe</code>
+animations</a>,
+or by traditional inline style updates on every frame (like how
+<a href="http://api.jquery.com/animate/"><code>jQuery.fn.animate</code></a> works).  Animations
+are defined with the same API in either case, but you can gracefully fall
+back to the inline style approach if CSS <code>@keyframe</code> animations are not
+supported by the browser or not preferred.  To render animations with the
+DOM, just supply any DOM element to the <code><a href="../classes/Rekapi.html" class="crosslink">Rekapi</a></code> constructor.  You may use <code>document.body</code>, since
+it is generally always available:</p>
+<pre class="code prettyprint"><code>var rekapi = new Rekapi(document.body);
+rekapi.renderer instanceof Rekapi.DOMRenderer; // true</code></pre>
+<p>There are separate APIs for playing inline style animations and CSS
+<code>@keyframe</code> animations.  Advantages of playing an animation with CSS
+<code>@keyframes</code>:</p>
+<ul>
+<li>Smoother animations in newer browsers.</li>
+<li>The JavaScript thread is freed from performing animation updates,
+making it available for other logic.</li>
+</ul>
+<p>Disadvantages:</p>
+<ul>
+<li>Not all browsers support CSS <code>@keyframe</code> animations.</li>
+<li>Limited playback control: You can only play and stop an animation, you
+cannot jump to or start from a specific point in the timeline.</li>
+<li>Generating the CSS for <code>@keyframe</code> animations can take a noticeable
+amount of time.  This blocks all other logic, including rendering, so
+you may have to be clever with how to spend the cycles to do it.</li>
+<li>No <code><a href="../classes/Rekapi.html#method_on" class="crosslink">events</a></code> can be
+bound to CSS <code>@keyframe</code> animations.</li>
+</ul>
+<p>So, the results are a little more predictable and flexible with inline
+style animations, but CSS <code>@keyframe</code> may give you better performance.
+Choose whichever approach makes the most sense for your needs.</p>
+<p><code>Rekapi.DOMRenderer</code> can gracefully fall back to an inline style animation
+if CSS <code>@keyframe</code> animations are not supported by the browser:</p>
+<pre class="code prettyprint"><code> var rekapi = new Rekapi(document.body);
+
+ // Each actor needs a reference to the DOM element it represents
+ var actor = rekapi.addActor({
+   context: document.getElementById(&#39;actor-1&#39;)
+ });
+
+ actor
+   .keyframe(0,    { left: &#39;0px&#39;   })
+   .keyframe(1000, { left: &#39;250px&#39; }, &#39;easeOutQuad&#39;);
+
+ // Feature detect for CSS @keyframe support
+ if (rekapi.renderer.canAnimateWithCSS()) {
+   // Animate with CSS @keyframes
+   rekapi.renderer.play();
+ } else {
+   // Animate with inline styles instead
+   rekapi.play();
+ }</code></pre>
+<h2 id="-keyframe-animations-work-differently-than-inline-style-animations"><code>@keyframe</code> animations work differently than inline style animations</h2>
+<p>Inline style animations are compatible with all of the playback and
+timeline control methods defined by <code><a href="../classes/Rekapi.html" class="crosslink">Rekapi</a></code>, such as <code><a href="../classes/Rekapi.html#method_play" class="crosslink">play</a></code>, <code><a href="../classes/Rekapi.html#method_playFrom" class="crosslink">playFrom</a></code> and <code><a href="../classes/Rekapi.html#method_update" class="crosslink">update</a></code>.  CSS <code>@keyframe</code> playback cannot
+be controlled in all browsers, so <code>Rekapi.DOMRenderer</code> defines analogous,
+renderer-specific CSS playback methods that you should use:</p>
+<ul>
+<li><a href="../classes/Rekapi.DOMRenderer.html#method_play" class="crosslink">play</a></li>
+<li><a href="../classes/Rekapi.DOMRenderer.html#method_isPlaying" class="crosslink">isPlaying</a></li>
+<li><a href="../classes/Rekapi.DOMRenderer.html#method_stop" class="crosslink">stop</a></li>
+</ul>
+<p><strong>Note</strong>: <code>Rekapi.DOMRenderer</code> is added to the <code><a href="../classes/Rekapi.html" class="crosslink">Rekapi</a></code> instance automatically as <code>this.renderer</code>,
+there is no reason to call the constructor yourself in most cases.</p>
+<p><strong><a href="/renderers/dom/sample/play-many-actors.html">Example</a></strong></p>
+
+</div>
+
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_Rekapi.DOMRenderer" class="method item">
+    <h3 class="name"><code>Rekapi.DOMRenderer</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>rekapi</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/renderers_dom_rekapi.renderer.dom.js.html#l293"><code>renderers&#x2F;dom&#x2F;rekapi.renderer.dom.js:293</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">rekapi</code>
+                        <span class="type"><a href="../classes/Rekapi.html" class="crosslink">Rekapi</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+    </div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method">
+                                <a href="#method_canAnimateWithCSS">canAnimateWithCSS</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getActorClassName">getActorClassName</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_isPlaying">isPlaying</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_play">play</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_prerender">prerender</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_setActorTransformOrder">setActorTransformOrder</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_stop">stop</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_toString">toString</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_canAnimateWithCSS" class="method item">
+    <h3 class="name"><code>canAnimateWithCSS</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/renderers_dom_rekapi.renderer.dom.js.html#l406"><code>renderers&#x2F;dom&#x2F;rekapi.renderer.dom.js:406</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Boolean</span>:
+                    
+                    <p>Whether or not the browser supports CSS <code>@keyframe</code>
+animations.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getActorClassName" class="method item">
+    <h3 class="name"><code>getActorClassName</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>actor</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/renderers_dom_rekapi.renderer.dom.js.html#l601"><code>renderers&#x2F;dom&#x2F;rekapi.renderer.dom.js:601</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">actor</code>
+                        <span class="type"><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">String</span>:
+                    
+                    <p>The default CSS class that is targeted by <code><a href="../classes/Rekapi.DOMRenderer.html#method_toString" class="crosslink">toString</a></code> if a custom class is
+not specified.  This may be useful for getting a standard and consistent
+CSS class name for an actor&#39;s DOM element.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_isPlaying" class="method item">
+    <h3 class="name"><code>isPlaying</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/renderers_dom_rekapi.renderer.dom.js.html#l484"><code>renderers&#x2F;dom&#x2F;rekapi.renderer.dom.js:484</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Boolean</span>:
+                    
+                    <p>Whether or not a CSS <code>@keyframe</code> animation is running.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_play" class="method item">
+    <h3 class="name"><code>play</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>opt_iterations</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>opt_fps</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/renderers_dom_rekapi.renderer.dom.js.html#l415"><code>renderers&#x2F;dom&#x2F;rekapi.renderer.dom.js:415</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Play the Rekapi animation as a CSS <code>@keyframe</code> animation.</p>
+<p>Note that this is different from <code><a href="../classes/Rekapi.html#method_play" class="crosslink">play</a></code>.  This method only applies to CSS
+<code>@keyframe</code> animations.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_iterations</code>
+                        <span class="type">Number=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>How many times the animation should loop.
+This can be <code>null</code> or <code>0</code> if you want to loop the animation endlessly but
+also specify a value for <code>opt_fps</code>.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_fps</code>
+                        <span class="type">Number=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>How many <code>@keyframes</code> to generate per second of
+the animation.  A higher value results in a more precise CSS animation,
+but it will take longer to generate.  The default value is <code>30</code>.  You
+should not need to go higher than <code>60</code>.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_prerender" class="method item">
+    <h3 class="name"><code>prerender</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>opt_iterations</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>opt_fps</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/renderers_dom_rekapi.renderer.dom.js.html#l492"><code>renderers&#x2F;dom&#x2F;rekapi.renderer.dom.js:492</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Prerender and cache the CSS animation so that it is immediately ready to
+be used when it is needed in the future.  The function signature is
+identical to <a href="../classes/Rekapi.DOMRenderer.html#method_play" class="crosslink">play</a>.  This is necessary to
+play a CSS animation and will be automatically called for you if you don&#39;t
+call it manually, but calling it ahead of time (such as on page load) will
+prevent any perceived lag when a CSS <code>@keyframe</code> animation is started.
+The prerendered animation is cached for reuse until the timeline or a
+keyframe is modified.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_iterations</code>
+                        <span class="type">Number=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>How many times the animation should loop.
+This can be <code>null</code> or <code>0</code> if you want to loop the animation endlessly but
+also specify a value for <code>opt_fps</code>.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_fps</code>
+                        <span class="type">Number=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>How many <code>@keyframes</code> to generate per second of
+the animation.  A higher value results in a more precise CSS animation,
+but it will take longer to generate.  The default value is <code>30</code>.  You
+should not need to go higher than <code>60</code>.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">String</span>:
+                    
+                    <p>The prerendered CSS string.  You likely won&#39;t need this,
+as it is also cached internally.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_setActorTransformOrder" class="method item">
+    <h3 class="name"><code>setActorTransformOrder</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>actor</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>orderedTransforms</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/Rekapi.html" class="crosslink">Rekapi</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/renderers_dom_rekapi.renderer.dom.js.html#l522"><code>renderers&#x2F;dom&#x2F;rekapi.renderer.dom.js:522</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>You can decouple transform components in order to animate each property
+with its own easing curve:</p>
+<pre class="code prettyprint"><code>actor
+  .keyframe(0, {
+    translateX: &#39;0px&#39;,
+    translateY: &#39;0px&#39;,
+    rotate: &#39;0deg&#39;
+  })
+  .keyframe(1500, {
+    translateX: &#39;200px&#39;,
+    translateY: &#39;200px&#39;,
+    rotate: &#39;90deg&#39;
+  }, {
+    translateX: &#39;easeOutExpo&#39;,
+    translateY: &#39;easeInSine&#39;,
+    rotate: &#39;elastic&#39;
+  });</code></pre>
+<p>CSS transform string components are order-dependent, but JavaScript object
+properties have an unpredictable order.  Rekapi must combine transform
+properties supplied to <code><a href="../classes/Rekapi.Actor.html#method_keyframe" class="crosslink">keyframe</a></code> (as shown above) into a
+single string when it renders each frame.  This method lets you change
+that order from the default.  The supported array values for
+<code>orderedTransforms</code> are:</p>
+<ul>
+<li><code>translateX</code></li>
+<li><code>translateY</code></li>
+<li><code>translateZ</code></li>
+<li><code>scale</code></li>
+<li><code>scaleX</code></li>
+<li><code>scaleY</code></li>
+<li><code>rotate</code></li>
+<li><code>skewX</code></li>
+<li><code>skewY</code></li>
+</ul>
+<p>If you prefer a more standards-oriented approach, Rekapi also supports
+combining the transform components yourself:</p>
+<pre class="code prettyprint"><code>actor
+  .keyframe(0, {
+    transform: &#39;translateX(0px) translateY(0px) rotate(0deg)&#39;
+  })
+  .keyframe(1500, {
+    transform: &#39;translateX(200px) translateY(200px) rotate(90deg)&#39;
+  }, {
+    transform: &#39;easeOutExpo easeInSine elastic&#39;
+  });</code></pre>
+<p>This example and the one above it are equivalent.</p>
+<p><strong>Note</strong>: The decoupled form of <code>transform</code> animations is not supported in
+CSS <code>@keyframe</code> animations, only inline style animations.  This is due to
+the tightly-coupled nature of the CSS <code>@keyframes</code> spec.  If you intend to
+play a CSS-based <code>@keyframe</code> animation, <strong>do not</strong> use the non-standard
+decoupled API form for <code>transform</code> properties.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">actor</code>
+                        <span class="type"><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">orderedTransforms</code>
+                        <span class="type">Array(string)</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The array of transform names.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/Rekapi.html" class="crosslink">Rekapi</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_stop" class="method item">
+    <h3 class="name"><code>stop</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>opt_goToEnd</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/renderers_dom_rekapi.renderer.dom.js.html#l449"><code>renderers&#x2F;dom&#x2F;rekapi.renderer.dom.js:449</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Stop a CSS <code>@keyframe</code> animation.  This also removes any <code>&lt;style&gt;</code>
+elements that were dynamically injected into the DOM.</p>
+<p>Note that this is different from
+<code><a href="../classes/Rekapi.html#method_stop" class="crosslink">stop</a></code>.  This method only
+applies to CSS <code>@keyframe</code> animations.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_goToEnd</code>
+                        <span class="type">Boolean=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>If true, skip to the end of the animation.
+If false or omitted, set inline styles on the actor elements to keep them
+in their current position.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_toString" class="method item">
+    <h3 class="name"><code>toString</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>opts</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">String</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/renderers_dom_rekapi.renderer.dom.js.html#l613"><code>renderers&#x2F;dom&#x2F;rekapi.renderer.dom.js:613</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Converts Rekapi animations to CSS <code>@keyframes</code>.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">opts</code>
+                        <span class="type">Object=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <ul>
+<li><strong>vendors</strong> <em>(Array(string))</em>: Defaults to <code>[&#39;w3&#39;]</code>.  The browser vendors you
+want to support. Valid values are:<ul>
+<li><code>&#39;microsoft&#39;</code></li>
+<li><code>&#39;mozilla&#39;</code></li>
+<li><code>&#39;opera&#39;</code></li>
+<li><code>&#39;w3&#39;</code></li>
+<li><code>&#39;webkit&#39;</code></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><strong>fps</strong> <em>(number)</em>: Defaults to 30.  Defines the number of CSS
+<code>@keyframe</code> frames rendered per second of an animation.  CSS <code>@keyframes</code>
+are comprised of a series of explicitly defined steps, and more steps
+will allow for a more complex animation.  More steps will also result in
+a larger CSS string, and more time needed to generate the string.</li>
+<li><strong>name</strong> <em>(string)</em>: Define a custom name for your animation.  This
+becomes the class name targeted by the generated CSS.  The default value
+is determined by a call to <a href="../classes/Rekapi.DOMRenderer.html#method_getActorClassName" class="crosslink">getActorClassName</a>.</li>
+<li><strong>isCentered</strong> <em>(boolean)</em>: If <code>true</code>, the generated CSS will contain
+<code>transform-origin: 0 0;</code>, which centers the DOM element along the path of
+motion.  If <code>false</code> or omitted, no <code>transform-origin</code> rule is specified
+and the element is aligned to the path of motion with its top-left
+corner.</li>
+<li><strong>iterations</strong> <em>(number)</em>: How many times the generated animation
+should repeat.  If omitted, the animation will loop indefinitely.</li>
+</ul>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">String</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+
+        
+
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

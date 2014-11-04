@@ -1,33 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>renderers/dom/rekapi.renderer.dom.js - Rekapi</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../../demo/img/rekapi-logo-200.png" title="Rekapi"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.4.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Rekapi.html">Rekapi</a></li>
+            
+                <li><a href="../classes/Rekapi.Actor.html">Rekapi.Actor</a></li>
+            
+                <li><a href="../classes/Rekapi.CanvasRenderer.html">Rekapi.CanvasRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.DOMRenderer.html">Rekapi.DOMRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.KeyframeProperty.html">Rekapi.KeyframeProperty</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: renderers/dom/rekapi.renderer.dom.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
 rekapiModules.push(function (context) {
 
-  'use strict';
+  &#x27;use strict&#x27;;
 
   var Rekapi = context.Rekapi;
   var _ = Rekapi._;
   var now = Rekapi.Tweenable.now;
   var vendorTransforms = [
-    'transform'
-    ,'webkitTransform'
-    ,'MozTransform'
-    ,'oTransform'
-    ,'msTransform'];
+    &#x27;transform&#x27;
+    ,&#x27;webkitTransform&#x27;
+    ,&#x27;MozTransform&#x27;
+    ,&#x27;oTransform&#x27;
+    ,&#x27;msTransform&#x27;];
   var transformFunctions = [
-    'translateX',
-    'translateY',
-    'translateZ',
-    'scale',
-    'scaleX',
-    'scaleY',
-    'rotate',
-    'skewX',
-    'skewY'];
+    &#x27;translateX&#x27;,
+    &#x27;translateY&#x27;,
+    &#x27;translateZ&#x27;,
+    &#x27;scale&#x27;,
+    &#x27;scaleX&#x27;,
+    &#x27;scaleY&#x27;,
+    &#x27;rotate&#x27;,
+    &#x27;skewX&#x27;,
+    &#x27;skewY&#x27;];
 
   // CONSTANTS
   //
 
-  // The timer to remove an injected style isn't likely to match the actual
+  // The timer to remove an injected style isn&#x27;t likely to match the actual
   // length of the CSS animation, so give it some extra time to complete so it
-  // doesn't cut off the end.
+  // doesn&#x27;t cut off the end.
   var INJECTED_STYLE_REMOVAL_BUFFER_MS = 250;
 
   // PRIVATE UTILITY FUNCTIONS
@@ -41,7 +137,7 @@ rekapiModules.push(function (context) {
   var printf = function (formatter, args) {
     var composedStr = formatter;
     _.each(args, function (arg) {
-      composedStr = composedStr.replace('%s', arg);
+      composedStr = composedStr.replace(&#x27;%s&#x27;, arg);
     });
 
     return composedStr;
@@ -73,30 +169,30 @@ rekapiModules.push(function (context) {
   function getVendorPrefix () {
     var style = document.body.style;
 
-    if ('-webkit-animation' in style) {
-      return 'webkit';
-    } else if ('-moz-animation' in style) {
-      return 'mozilla';
-    } else if ('-ms-animation' in style) {
-      return 'microsoft';
-    } else if ('-o-animation' in style) {
-      return 'opera';
-    } else if ('animation' in style) {
-      return 'w3';
+    if (&#x27;-webkit-animation&#x27; in style) {
+      return &#x27;webkit&#x27;;
+    } else if (&#x27;-moz-animation&#x27; in style) {
+      return &#x27;mozilla&#x27;;
+    } else if (&#x27;-ms-animation&#x27; in style) {
+      return &#x27;microsoft&#x27;;
+    } else if (&#x27;-o-animation&#x27; in style) {
+      return &#x27;opera&#x27;;
+    } else if (&#x27;animation&#x27; in style) {
+      return &#x27;w3&#x27;;
     }
 
-    return '';
+    return &#x27;&#x27;;
   }
 
   var styleID = 0;
   /*!
    * @param {Rekapi} rekapi
-   * @param {string} css The css content that the <style> element should have.
-   * @return {HTMLStyleElement} The unique ID of the injected <style> element.
+   * @param {string} css The css content that the &lt;style&gt; element should have.
+   * @return {HTMLStyleElement} The unique ID of the injected &lt;style&gt; element.
    */
   function injectStyle (rekapi, css) {
-    var style = document.createElement('style');
-    var id = 'rekapi-' + styleID++;
+    var style = document.createElement(&#x27;style&#x27;);
+    var id = &#x27;rekapi-&#x27; + styleID++;
     style.id = id;
     style.innerHTML = css;
     document.head.appendChild(style);
@@ -107,14 +203,14 @@ rekapiModules.push(function (context) {
 
   /*!
    * Fixes a really bizarre issue that only seems to affect Presto and Blink.
-   * In some situations, DOM nodes will not detect dynamically injected <style>
+   * In some situations, DOM nodes will not detect dynamically injected &lt;style&gt;
    * elements.  Explicitly re-inserting DOM nodes seems to fix the issue.  Not
    * sure what causes this issue.  Not sure why this fixes it.
    *
    * @param {Rekapi} rekapi
    */
   function forceStyleReset (rekapi) {
-    var dummyDiv = document.createElement('div');
+    var dummyDiv = document.createElement(&#x27;div&#x27;);
 
     _.each(rekapi.getAllActors(), function (actor) {
       if (actor.context.nodeType === 1) {
@@ -149,7 +245,7 @@ rekapiModules.push(function (context) {
   /*!
    * Builds a concatenated string of given transform property values in order.
    *
-   * @param {Array.<string>} orderedTransforms Array of ordered transform
+   * @param {Array.&lt;string&gt;} orderedTransforms Array of ordered transform
    *     function names
    * @param {Object} transformProperties Transform properties to build together
    * @return {string}
@@ -159,18 +255,18 @@ rekapiModules.push(function (context) {
 
     _.each(orderedTransforms, function(functionName) {
       if (transformProperties[functionName]) {
-        transformComponents.push(functionName + '(' +
-          transformProperties[functionName] + ')');
+        transformComponents.push(functionName + &#x27;(&#x27; +
+          transformProperties[functionName] + &#x27;)&#x27;);
       }
     });
 
-    return transformComponents.join(' ');
+    return transformComponents.join(&#x27; &#x27;);
   }
 
   /*!
    * Sets value for all vendor prefixed transform properties on an element
    *
-   * @param {HTMLElement} element The actor's DOM element
+   * @param {HTMLElement} element The actor&#x27;s DOM element
    * @param {string} transformValue The transform style value
    */
   function setTransformStyles (element, transformValue) {
@@ -193,10 +289,10 @@ rekapiModules.push(function (context) {
 
     var className = DOMRenderer.getActorClassName(actor);
 
-    // Add the class if it's not already there.
+    // Add the class if it&#x27;s not already there.
     // Using className instead of classList to make IE happy.
     if (!actorElement.className.match(className)) {
-      actorElement.className += ' ' + className;
+      actorElement.className += &#x27; &#x27; + className;
     }
 
     actor._transformOrder = transformFunctions.slice(0);
@@ -208,23 +304,23 @@ rekapiModules.push(function (context) {
 
   /*!
    * transform properties like translate3d and rotate3d break the cardinality
-   * of multi-ease easing strings, because the "3" gets treated like a
-   * tweenable value.  Transform "3d(" to "__THREED__" to prevent this, and
+   * of multi-ease easing strings, because the &quot;3&quot; gets treated like a
+   * tweenable value.  Transform &quot;3d(&quot; to &quot;__THREED__&quot; to prevent this, and
    * transform it back in _afterKeyframePropertyInterpolate.
    *
    * @param {Rekapi.KeyframeProperty} keyframeProperty
    */
   function actorBeforeInterpolate (keyframeProperty) {
-    if (keyframeProperty.name !== 'transform') {
+    if (keyframeProperty.name !== &#x27;transform&#x27;) {
       return;
     }
 
     var value = keyframeProperty.value;
     var nextProp = keyframeProperty.nextProperty;
 
-    if (nextProp && value.match(/3d\(/g)) {
-      keyframeProperty.value = value.replace(/3d\(/g, '__THREED__');
-      nextProp.value = nextProp.value.replace(/3d\(/g, '__THREED__');
+    if (nextProp &amp;&amp; value.match(/3d\(/g)) {
+      keyframeProperty.value = value.replace(/3d\(/g, &#x27;__THREED__&#x27;);
+      nextProp.value = nextProp.value.replace(/3d\(/g, &#x27;__THREED__&#x27;);
     }
   }
 
@@ -233,19 +329,19 @@ rekapiModules.push(function (context) {
    * @param {Object} interpolatedObject
    */
   function actorAfterInterpolate (keyframeProperty, interpolatedObject) {
-    if (keyframeProperty.name !== 'transform') {
+    if (keyframeProperty.name !== &#x27;transform&#x27;) {
       return;
     }
 
     var value = keyframeProperty.value;
     var nextProp = keyframeProperty.nextProperty;
 
-    if (nextProp && value.match(/__THREED__/g)) {
-      keyframeProperty.value = value.replace(/__THREED__/g, '3d(');
-      nextProp.value = nextProp.value.replace(/__THREED__/g, '3d(');
+    if (nextProp &amp;&amp; value.match(/__THREED__/g)) {
+      keyframeProperty.value = value.replace(/__THREED__/g, &#x27;3d(&#x27;);
+      nextProp.value = nextProp.value.replace(/__THREED__/g, &#x27;3d(&#x27;);
       var keyPropName = keyframeProperty.name;
       interpolatedObject[keyPropName] =
-          interpolatedObject[keyPropName].replace(/__THREED__/g, '3d(');
+          interpolatedObject[keyPropName].replace(/__THREED__/g, &#x27;3d(&#x27;);
     }
   }
 
@@ -291,24 +387,24 @@ rekapiModules.push(function (context) {
   //
 
   /**
-   * `Rekapi.DOMRenderer` allows you to animate DOM elements.  This is achieved
-   * either by browser-accelerated [CSS `@keyframe`
+   * &#x60;Rekapi.DOMRenderer&#x60; allows you to animate DOM elements.  This is achieved
+   * either by browser-accelerated [CSS &#x60;@keyframe&#x60;
    * animations](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes),
    * or by traditional inline style updates on every frame (like how
-   * [`jQuery.fn.animate`](http://api.jquery.com/animate/) works).  Animations
+   * [&#x60;jQuery.fn.animate&#x60;](http://api.jquery.com/animate/) works).  Animations
    * are defined with the same API in either case, but you can gracefully fall
-   * back to the inline style approach if CSS `@keyframe` animations are not
+   * back to the inline style approach if CSS &#x60;@keyframe&#x60; animations are not
    * supported by the browser or not preferred.  To render animations with the
-   * DOM, just supply any DOM element to the `{{#crossLink
-   * "Rekapi"}}{{/crossLink}}` constructor.  You may use `document.body`, since
+   * DOM, just supply any DOM element to the &#x60;{{#crossLink
+   * &quot;Rekapi&quot;}}{{/crossLink}}&#x60; constructor.  You may use &#x60;document.body&#x60;, since
    * it is generally always available:
    *
    *     var rekapi = new Rekapi(document.body);
    *     rekapi.renderer instanceof Rekapi.DOMRenderer; // true
    *
    * There are separate APIs for playing inline style animations and CSS
-   * `@keyframe` animations.  Advantages of playing an animation with CSS
-   * `@keyframes`:
+   * &#x60;@keyframe&#x60; animations.  Advantages of playing an animation with CSS
+   * &#x60;@keyframes&#x60;:
    *
    *   - Smoother animations in newer browsers.
    *   - The JavaScript thread is freed from performing animation updates,
@@ -316,32 +412,32 @@ rekapiModules.push(function (context) {
    *
    * Disadvantages:
    *
-   *   - Not all browsers support CSS `@keyframe` animations.
+   *   - Not all browsers support CSS &#x60;@keyframe&#x60; animations.
    *   - Limited playback control: You can only play and stop an animation, you
    *   cannot jump to or start from a specific point in the timeline.
-   *   - Generating the CSS for `@keyframe` animations can take a noticeable
+   *   - Generating the CSS for &#x60;@keyframe&#x60; animations can take a noticeable
    *   amount of time.  This blocks all other logic, including rendering, so
    *   you may have to be clever with how to spend the cycles to do it.
-   *   - No `{{#crossLink "Rekapi/on:method"}}events{{/crossLink}}` can be
-   *   bound to CSS `@keyframe` animations.
+   *   - No &#x60;{{#crossLink &quot;Rekapi/on:method&quot;}}events{{/crossLink}}&#x60; can be
+   *   bound to CSS &#x60;@keyframe&#x60; animations.
    *
    * So, the results are a little more predictable and flexible with inline
-   * style animations, but CSS `@keyframe` may give you better performance.
+   * style animations, but CSS &#x60;@keyframe&#x60; may give you better performance.
    * Choose whichever approach makes the most sense for your needs.
    *
-   * `Rekapi.DOMRenderer` can gracefully fall back to an inline style animation
-   * if CSS `@keyframe` animations are not supported by the browser:
+   * &#x60;Rekapi.DOMRenderer&#x60; can gracefully fall back to an inline style animation
+   * if CSS &#x60;@keyframe&#x60; animations are not supported by the browser:
    *
    *      var rekapi = new Rekapi(document.body);
    *
    *      // Each actor needs a reference to the DOM element it represents
    *      var actor = rekapi.addActor({
-   *        context: document.getElementById('actor-1')
+   *        context: document.getElementById(&#x27;actor-1&#x27;)
    *      });
    *
    *      actor
-   *        .keyframe(0,    { left: '0px'   })
-   *        .keyframe(1000, { left: '250px' }, 'easeOutQuad');
+   *        .keyframe(0,    { left: &#x27;0px&#x27;   })
+   *        .keyframe(1000, { left: &#x27;250px&#x27; }, &#x27;easeOutQuad&#x27;);
    *
    *      // Feature detect for CSS @keyframe support
    *      if (rekapi.renderer.canAnimateWithCSS()) {
@@ -352,23 +448,23 @@ rekapiModules.push(function (context) {
    *        rekapi.play();
    *      }
    *
-   * ## `@keyframe` animations work differently than inline style animations
+   * ## &#x60;@keyframe&#x60; animations work differently than inline style animations
    *
    * Inline style animations are compatible with all of the playback and
-   * timeline control methods defined by `{{#crossLink
-   * "Rekapi"}}{{/crossLink}}`, such as `{{#crossLink
-   * "Rekapi/play:method"}}{{/crossLink}}`, `{{#crossLink
-   * "Rekapi/playFrom:method"}}{{/crossLink}}` and `{{#crossLink
-   * "Rekapi/update:method"}}{{/crossLink}}`.  CSS `@keyframe` playback cannot
-   * be controlled in all browsers, so `Rekapi.DOMRenderer` defines analogous,
+   * timeline control methods defined by &#x60;{{#crossLink
+   * &quot;Rekapi&quot;}}{{/crossLink}}&#x60;, such as &#x60;{{#crossLink
+   * &quot;Rekapi/play:method&quot;}}{{/crossLink}}&#x60;, &#x60;{{#crossLink
+   * &quot;Rekapi/playFrom:method&quot;}}{{/crossLink}}&#x60; and &#x60;{{#crossLink
+   * &quot;Rekapi/update:method&quot;}}{{/crossLink}}&#x60;.  CSS &#x60;@keyframe&#x60; playback cannot
+   * be controlled in all browsers, so &#x60;Rekapi.DOMRenderer&#x60; defines analogous,
    * renderer-specific CSS playback methods that you should use:
    *
-   *   - {{#crossLink "Rekapi.DOMRenderer/play:method"}}{{/crossLink}}
-   *   - {{#crossLink "Rekapi.DOMRenderer/isPlaying:method"}}{{/crossLink}}
-   *   - {{#crossLink "Rekapi.DOMRenderer/stop:method"}}{{/crossLink}}
+   *   - {{#crossLink &quot;Rekapi.DOMRenderer/play:method&quot;}}{{/crossLink}}
+   *   - {{#crossLink &quot;Rekapi.DOMRenderer/isPlaying:method&quot;}}{{/crossLink}}
+   *   - {{#crossLink &quot;Rekapi.DOMRenderer/stop:method&quot;}}{{/crossLink}}
    *
-   * __Note__: `Rekapi.DOMRenderer` is added to the `{{#crossLink
-   * "Rekapi"}}{{/crossLink}}` instance automatically as `this.renderer`,
+   * __Note__: &#x60;Rekapi.DOMRenderer&#x60; is added to the &#x60;{{#crossLink
+   * &quot;Rekapi&quot;}}{{/crossLink}}&#x60; instance automatically as &#x60;this.renderer&#x60;,
    * there is no reason to call the constructor yourself in most cases.
    *
    * __[Example](/renderers/dom/sample/play-many-actors.html)__
@@ -393,11 +489,11 @@ rekapiModules.push(function (context) {
     // @private {number}
     this._stopSetTimeoutHandle = null;
 
-    rekapi.on('timelineModified', _.bind(function () {
+    rekapi.on(&#x27;timelineModified&#x27;, _.bind(function () {
       this._cachedCSS = null;
     }, this));
 
-    rekapi.on('addActor', onAddActor);
+    rekapi.on(&#x27;addActor&#x27;, onAddActor);
 
     return this;
   };
@@ -405,7 +501,7 @@ rekapiModules.push(function (context) {
 
   /**
    * @method canAnimateWithCSS
-   * @return {boolean} Whether or not the browser supports CSS `@keyframe`
+   * @return {boolean} Whether or not the browser supports CSS &#x60;@keyframe&#x60;
    * animations.
    */
   DOMRenderer.prototype.canAnimateWithCSS = function () {
@@ -413,19 +509,19 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Play the Rekapi animation as a CSS `@keyframe` animation.
+   * Play the Rekapi animation as a CSS &#x60;@keyframe&#x60; animation.
    *
-   * Note that this is different from `{{#crossLink
-   * "Rekapi/play:method"}}{{/crossLink}}`.  This method only applies to CSS
-   * `@keyframe` animations.
+   * Note that this is different from &#x60;{{#crossLink
+   * &quot;Rekapi/play:method&quot;}}{{/crossLink}}&#x60;.  This method only applies to CSS
+   * &#x60;@keyframe&#x60; animations.
    * @method play
    * @param {number=} opt_iterations How many times the animation should loop.
-   * This can be `null` or `0` if you want to loop the animation endlessly but
-   * also specify a value for `opt_fps`.
-   * @param {number=} opt_fps How many `@keyframes` to generate per second of
+   * This can be &#x60;null&#x60; or &#x60;0&#x60; if you want to loop the animation endlessly but
+   * also specify a value for &#x60;opt_fps&#x60;.
+   * @param {number=} opt_fps How many &#x60;@keyframes&#x60; to generate per second of
    * the animation.  A higher value results in a more precise CSS animation,
-   * but it will take longer to generate.  The default value is `30`.  You
-   * should not need to go higher than `60`.
+   * but it will take longer to generate.  The default value is &#x60;30&#x60;.  You
+   * should not need to go higher than &#x60;60&#x60;.
    */
   DOMRenderer.prototype.play = function (opt_iterations, opt_fps) {
     if (this.isPlaying()) {
@@ -443,16 +539,16 @@ rekapiModules.push(function (context) {
           animationLength + INJECTED_STYLE_REMOVAL_BUFFER_MS);
     }
 
-    fireEvent(this.rekapi, 'play', _);
+    fireEvent(this.rekapi, &#x27;play&#x27;, _);
   };
 
   /**
-   * Stop a CSS `@keyframe` animation.  This also removes any `<style>`
+   * Stop a CSS &#x60;@keyframe&#x60; animation.  This also removes any &#x60;&lt;style&gt;&#x60;
    * elements that were dynamically injected into the DOM.
    *
    * Note that this is different from
-   * `{{#crossLink "Rekapi/stop:method"}}{{/crossLink}}`.  This method only
-   * applies to CSS `@keyframe` animations.
+   * &#x60;{{#crossLink &quot;Rekapi/stop:method&quot;}}{{/crossLink}}&#x60;.  This method only
+   * applies to CSS &#x60;@keyframe&#x60; animations.
    * @method stop
    * @param {boolean=} opt_goToEnd If true, skip to the end of the animation.
    * If false or omitted, set inline styles on the actor elements to keep them
@@ -463,7 +559,7 @@ rekapiModules.push(function (context) {
       clearTimeout(this._stopSetTimeoutHandle);
 
       // Forces a style update in WebKit/Presto
-      this._styleElement.innerHTML = '';
+      this._styleElement.innerHTML = &#x27;&#x27;;
 
       document.head.removeChild(this._styleElement);
       this._styleElement = null;
@@ -477,13 +573,13 @@ rekapiModules.push(function (context) {
       }
 
       this.rekapi.update(updateTime);
-      fireEvent(this.rekapi, 'stop', _);
+      fireEvent(this.rekapi, &#x27;stop&#x27;, _);
     }
   };
 
   /**
    * @method isPlaying
-   * @return {boolean} Whether or not a CSS `@keyframe` animation is running.
+   * @return {boolean} Whether or not a CSS &#x60;@keyframe&#x60; animation is running.
    */
   DOMRenderer.prototype.isPlaying = function () {
     return !!this._styleElement;
@@ -493,29 +589,29 @@ rekapiModules.push(function (context) {
    * Prerender and cache the CSS animation so that it is immediately ready to
    * be used when it is needed in the future.  The function signature is
    * identical to {{#crossLink
-   * "Rekapi.DOMRenderer/play:method"}}{{/crossLink}}.  This is necessary to
-   * play a CSS animation and will be automatically called for you if you don't
+   * &quot;Rekapi.DOMRenderer/play:method&quot;}}{{/crossLink}}.  This is necessary to
+   * play a CSS animation and will be automatically called for you if you don&#x27;t
    * call it manually, but calling it ahead of time (such as on page load) will
-   * prevent any perceived lag when a CSS `@keyframe` animation is started.
+   * prevent any perceived lag when a CSS &#x60;@keyframe&#x60; animation is started.
    * The prerendered animation is cached for reuse until the timeline or a
    * keyframe is modified.
    *
    * @method prerender
    * @param {number=} opt_iterations How many times the animation should loop.
-   * This can be `null` or `0` if you want to loop the animation endlessly but
-   * also specify a value for `opt_fps`.
-   * @param {number=} opt_fps How many `@keyframes` to generate per second of
+   * This can be &#x60;null&#x60; or &#x60;0&#x60; if you want to loop the animation endlessly but
+   * also specify a value for &#x60;opt_fps&#x60;.
+   * @param {number=} opt_fps How many &#x60;@keyframes&#x60; to generate per second of
    * the animation.  A higher value results in a more precise CSS animation,
-   * but it will take longer to generate.  The default value is `30`.  You
-   * should not need to go higher than `60`.
-   * @return {string} The prerendered CSS string.  You likely won't need this,
+   * but it will take longer to generate.  The default value is &#x60;30&#x60;.  You
+   * should not need to go higher than &#x60;60&#x60;.
+   * @return {string} The prerendered CSS string.  You likely won&#x27;t need this,
    * as it is also cached internally.
    */
   DOMRenderer.prototype.prerender = function (opt_iterations, opt_fps) {
     return this._cachedCSS = this.toString({
-      'vendors': [getVendorPrefix()]
-      ,'fps': opt_fps
-      ,'iterations': opt_iterations
+      &#x27;vendors&#x27;: [getVendorPrefix()]
+      ,&#x27;fps&#x27;: opt_fps
+      ,&#x27;iterations&#x27;: opt_iterations
     });
   };
 
@@ -525,58 +621,58 @@ rekapiModules.push(function (context) {
    *
    *     actor
    *       .keyframe(0, {
-   *         translateX: '0px',
-   *         translateY: '0px',
-   *         rotate: '0deg'
+   *         translateX: &#x27;0px&#x27;,
+   *         translateY: &#x27;0px&#x27;,
+   *         rotate: &#x27;0deg&#x27;
    *       })
    *       .keyframe(1500, {
-   *         translateX: '200px',
-   *         translateY: '200px',
-   *         rotate: '90deg'
+   *         translateX: &#x27;200px&#x27;,
+   *         translateY: &#x27;200px&#x27;,
+   *         rotate: &#x27;90deg&#x27;
    *       }, {
-   *         translateX: 'easeOutExpo',
-   *         translateY: 'easeInSine',
-   *         rotate: 'elastic'
+   *         translateX: &#x27;easeOutExpo&#x27;,
+   *         translateY: &#x27;easeInSine&#x27;,
+   *         rotate: &#x27;elastic&#x27;
    *       });
    *
    * CSS transform string components are order-dependent, but JavaScript object
    * properties have an unpredictable order.  Rekapi must combine transform
-   * properties supplied to `{{#crossLink
-   * "Rekapi.Actor/keyframe:method"}}{{/crossLink}}` (as shown above) into a
+   * properties supplied to &#x60;{{#crossLink
+   * &quot;Rekapi.Actor/keyframe:method&quot;}}{{/crossLink}}&#x60; (as shown above) into a
    * single string when it renders each frame.  This method lets you change
    * that order from the default.  The supported array values for
-   * `orderedTransforms` are:
+   * &#x60;orderedTransforms&#x60; are:
    *
-   * - `translateX`
-   * - `translateY`
-   * - `translateZ`
-   * - `scale`
-   * - `scaleX`
-   * - `scaleY`
-   * - `rotate`
-   * - `skewX`
-   * - `skewY`
+   * - &#x60;translateX&#x60;
+   * - &#x60;translateY&#x60;
+   * - &#x60;translateZ&#x60;
+   * - &#x60;scale&#x60;
+   * - &#x60;scaleX&#x60;
+   * - &#x60;scaleY&#x60;
+   * - &#x60;rotate&#x60;
+   * - &#x60;skewX&#x60;
+   * - &#x60;skewY&#x60;
    *
    * If you prefer a more standards-oriented approach, Rekapi also supports
    * combining the transform components yourself:
    *
    *     actor
    *       .keyframe(0, {
-   *         transform: 'translateX(0px) translateY(0px) rotate(0deg)'
+   *         transform: &#x27;translateX(0px) translateY(0px) rotate(0deg)&#x27;
    *       })
    *       .keyframe(1500, {
-   *         transform: 'translateX(200px) translateY(200px) rotate(90deg)'
+   *         transform: &#x27;translateX(200px) translateY(200px) rotate(90deg)&#x27;
    *       }, {
-   *         transform: 'easeOutExpo easeInSine elastic'
+   *         transform: &#x27;easeOutExpo easeInSine elastic&#x27;
    *       });
    *
    * This example and the one above it are equivalent.
    *
-   * __Note__: The decoupled form of `transform` animations is not supported in
-   * CSS `@keyframe` animations, only inline style animations.  This is due to
-   * the tightly-coupled nature of the CSS `@keyframes` spec.  If you intend to
-   * play a CSS-based `@keyframe` animation, __do not__ use the non-standard
-   * decoupled API form for `transform` properties.
+   * __Note__: The decoupled form of &#x60;transform&#x60; animations is not supported in
+   * CSS &#x60;@keyframe&#x60; animations, only inline style animations.  This is due to
+   * the tightly-coupled nature of the CSS &#x60;@keyframes&#x60; spec.  If you intend to
+   * play a CSS-based &#x60;@keyframe&#x60; animation, __do not__ use the non-standard
+   * decoupled API form for &#x60;transform&#x60; properties.
    *
    * @method setActorTransformOrder
    * @param {Rekapi.Actor} actor
@@ -589,8 +685,8 @@ rekapiModules.push(function (context) {
     var unknownFunctions = _.reject(orderedTransforms, isTransformFunction);
 
     if (unknownFunctions.length) {
-      throw 'Unknown or unsupported transform functions: ' +
-        unknownFunctions.join(', ');
+      throw &#x27;Unknown or unsupported transform functions: &#x27; +
+        unknownFunctions.join(&#x27;, &#x27;);
     }
     // Ignore duplicate transform function names in the array
     actor._transformOrder = _.uniq(orderedTransforms);
@@ -601,40 +697,40 @@ rekapiModules.push(function (context) {
   /**
    * @method getActorClassName
    * @param {Rekapi.Actor} actor
-   * @return {string} The default CSS class that is targeted by `{{#crossLink
-   * "Rekapi.DOMRenderer/toString:method"}}{{/crossLink}}` if a custom class is
+   * @return {string} The default CSS class that is targeted by &#x60;{{#crossLink
+   * &quot;Rekapi.DOMRenderer/toString:method&quot;}}{{/crossLink}}&#x60; if a custom class is
    * not specified.  This may be useful for getting a standard and consistent
-   * CSS class name for an actor's DOM element.
+   * CSS class name for an actor&#x27;s DOM element.
    */
   DOMRenderer.getActorClassName = function (actor) {
-    return 'actor-' + actor.id;
+    return &#x27;actor-&#x27; + actor.id;
   };
 
   /**
-   * Converts Rekapi animations to CSS `@keyframes`.
+   * Converts Rekapi animations to CSS &#x60;@keyframes&#x60;.
    * @method toString
    * @param {Object=} opts
-   *   * __vendors__ _(Array(string))_: Defaults to `['w3']`.  The browser vendors you
+   *   * __vendors__ _(Array(string))_: Defaults to &#x60;[&#x27;w3&#x27;]&#x60;.  The browser vendors you
    *   want to support. Valid values are:
-   *     * `'microsoft'`
-   *     * `'mozilla'`
-   *     * `'opera'`
-   *     * `'w3'`
-   *     * `'webkit'`
+   *     * &#x60;&#x27;microsoft&#x27;&#x60;
+   *     * &#x60;&#x27;mozilla&#x27;&#x60;
+   *     * &#x60;&#x27;opera&#x27;&#x60;
+   *     * &#x60;&#x27;w3&#x27;&#x60;
+   *     * &#x60;&#x27;webkit&#x27;&#x60;
    *
    *
    *   * __fps__ _(number)_: Defaults to 30.  Defines the number of CSS
-   *   `@keyframe` frames rendered per second of an animation.  CSS `@keyframes`
+   *   &#x60;@keyframe&#x60; frames rendered per second of an animation.  CSS &#x60;@keyframes&#x60;
    *   are comprised of a series of explicitly defined steps, and more steps
    *   will allow for a more complex animation.  More steps will also result in
    *   a larger CSS string, and more time needed to generate the string.
    *   * __name__ _(string)_: Define a custom name for your animation.  This
    *   becomes the class name targeted by the generated CSS.  The default value
    *   is determined by a call to {{#crossLink
-   *   "Rekapi.DOMRenderer/getActorClassName:method"}}{{/crossLink}}.
-   *   * __isCentered__ _(boolean)_: If `true`, the generated CSS will contain
-   *   `transform-origin: 0 0;`, which centers the DOM element along the path of
-   *   motion.  If `false` or omitted, no `transform-origin` rule is specified
+   *   &quot;Rekapi.DOMRenderer/getActorClassName:method&quot;}}{{/crossLink}}.
+   *   * __isCentered__ _(boolean)_: If &#x60;true&#x60;, the generated CSS will contain
+   *   &#x60;transform-origin: 0 0;&#x60;, which centers the DOM element along the path of
+   *   motion.  If &#x60;false&#x60; or omitted, no &#x60;transform-origin&#x60; rule is specified
    *   and the element is aligned to the path of motion with its top-left
    *   corner.
    *   * __iterations__ _(number)_: How many times the generated animation
@@ -651,7 +747,7 @@ rekapiModules.push(function (context) {
       }
     });
 
-    return animationCSS.join('\n');
+    return animationCSS.join(&#x27;\n&#x27;);
   };
 
   // DOMRenderer.prototype.toString-SPECIFIC CODE
@@ -661,38 +757,38 @@ rekapiModules.push(function (context) {
   //
 
   var DEFAULT_FPS = 30;
-  var TRANSFORM_TOKEN = 'TRANSFORM';
-  var VENDOR_TOKEN = 'VENDOR';
+  var TRANSFORM_TOKEN = &#x27;TRANSFORM&#x27;;
+  var VENDOR_TOKEN = &#x27;VENDOR&#x27;;
   var VENDOR_PREFIXES = {
-    'microsoft': '-ms-'
-    ,'mozilla': '-moz-'
-    ,'opera': '-o-'
-    ,'w3': ''
-    ,'webkit': '-webkit-'
+    &#x27;microsoft&#x27;: &#x27;-ms-&#x27;
+    ,&#x27;mozilla&#x27;: &#x27;-moz-&#x27;
+    ,&#x27;opera&#x27;: &#x27;-o-&#x27;
+    ,&#x27;w3&#x27;: &#x27;&#x27;
+    ,&#x27;webkit&#x27;: &#x27;-webkit-&#x27;
   };
   var BEZIERS = {
-    linear: '.25,.25,.75,.75'
-    ,easeInQuad: '.55,.085,.68,.53'
-    ,easeInCubic: '.55,.055,.675,.19'
-    ,easeInQuart: '.895,.03,.685,.22'
-    ,easeInQuint: '.755,.05,.855,.06'
-    ,easeInSine: '.47,0,.745,.715'
-    ,easeInExpo: '.95,.05,.795,.035'
-    ,easeInCirc: '.6,.04,.98, .335'
-    ,easeOutQuad: '.25,.46,.45,.94'
-    ,easeOutCubic: '.215,.61,.355,1'
-    ,easeOutQuart: '.165,.84,.44,1'
-    ,easeOutQuint: '.23,1,.32,1'
-    ,easeOutSine: '.39,.575,.565,1'
-    ,easeOutExpo: '.19,1,.22,1'
-    ,easeOutCirc: '.075,.82,.165,1'
-    ,easeInOutQuad: '.455,.03,.515,.955'
-    ,easeInOutCubic: '.645,.045,.355,1'
-    ,easeInOutQuart: '.77,0,.175,1'
-    ,easeInOutQuint: '.86,0.07,1'
-    ,easeInOutSine: '.445,.05,.55,.95'
-    ,easeInOutExpo: '1,0,0,1'
-    ,easeInOutCirc: '.785,.135,.15,.86'
+    linear: &#x27;.25,.25,.75,.75&#x27;
+    ,easeInQuad: &#x27;.55,.085,.68,.53&#x27;
+    ,easeInCubic: &#x27;.55,.055,.675,.19&#x27;
+    ,easeInQuart: &#x27;.895,.03,.685,.22&#x27;
+    ,easeInQuint: &#x27;.755,.05,.855,.06&#x27;
+    ,easeInSine: &#x27;.47,0,.745,.715&#x27;
+    ,easeInExpo: &#x27;.95,.05,.795,.035&#x27;
+    ,easeInCirc: &#x27;.6,.04,.98, .335&#x27;
+    ,easeOutQuad: &#x27;.25,.46,.45,.94&#x27;
+    ,easeOutCubic: &#x27;.215,.61,.355,1&#x27;
+    ,easeOutQuart: &#x27;.165,.84,.44,1&#x27;
+    ,easeOutQuint: &#x27;.23,1,.32,1&#x27;
+    ,easeOutSine: &#x27;.39,.575,.565,1&#x27;
+    ,easeOutExpo: &#x27;.19,1,.22,1&#x27;
+    ,easeOutCirc: &#x27;.075,.82,.165,1&#x27;
+    ,easeInOutQuad: &#x27;.455,.03,.515,.955&#x27;
+    ,easeInOutCubic: &#x27;.645,.045,.355,1&#x27;
+    ,easeInOutQuart: &#x27;.77,0,.175,1&#x27;
+    ,easeInOutQuint: &#x27;.86,0.07,1&#x27;
+    ,easeInOutSine: &#x27;.445,.05,.55,.95&#x27;
+    ,easeInOutExpo: &#x27;1,0,0,1&#x27;
+    ,easeInOutCirc: &#x27;.785,.135,.15,.86&#x27;
   };
 
   // TEMPLATES
@@ -704,23 +800,23 @@ rekapiModules.push(function (context) {
    * [2]: keyframes
    */
   var KEYFRAME_TEMPLATE = [
-    '@%skeyframes %s-keyframes {'
-    ,'%s'
-    ,'}'
-  ].join('\n');
+    &#x27;@%skeyframes %s-keyframes {&#x27;
+    ,&#x27;%s&#x27;
+    ,&#x27;}&#x27;
+  ].join(&#x27;\n&#x27;);
 
   /*!
    * [0] class name
    * [1] class attributes
    */
   var CLASS_BOILERPLATE = [
-    '.%s {'
-    ,'%s'
-    ,'}'
-  ].join('\n');
+    &#x27;.%s {&#x27;
+    ,&#x27;%s&#x27;
+    ,&#x27;}&#x27;
+  ].join(&#x27;\n&#x27;);
 
   /*!
-   * Creates the CSS `@keyframes` for an individual actor.
+   * Creates the CSS &#x60;@keyframes&#x60; for an individual actor.
    * @param {Rekapi.Actor} actor
    * @param {Object=} opts Same as opts for Rekapi.prototype.toCSS.
    * @return {string}
@@ -741,7 +837,7 @@ rekapiModules.push(function (context) {
     actorCSS.push(actorClass);
     actorCSS.push(boilerplatedKeyframes);
 
-    return actorCSS.join('\n');
+    return actorCSS.join(&#x27;\n&#x27;);
   }
 
   // toString-SPECIFIC PRIVATE UTILITY FUNCTIONS
@@ -752,7 +848,7 @@ rekapiModules.push(function (context) {
    * @param {string} animName
    * @param {number} steps
    * @param {boolean} combineProperties
-   * @param {Array.<string>=} opt_vendors
+   * @param {Array.&lt;string&gt;=} opt_vendors
    * @return {string}
    */
   function generateBoilerplatedKeyframes (
@@ -778,11 +874,11 @@ rekapiModules.push(function (context) {
     } else {
       _.each(trackNames, function (trackName, i) {
         boilerplatedKeyframes.push(applyVendorBoilerplates(
-          cssTracks[i], (animName + '-' + trackName), opt_vendors));
+          cssTracks[i], (animName + &#x27;-&#x27; + trackName), opt_vendors));
       });
     }
 
-    boilerplatedKeyframes = boilerplatedKeyframes.join('\n');
+    boilerplatedKeyframes = boilerplatedKeyframes.join(&#x27;\n&#x27;);
 
     return boilerplatedKeyframes;
   }
@@ -790,12 +886,12 @@ rekapiModules.push(function (context) {
   /*!
    * @param {string} toKeyframes Generated keyframes to wrap in boilerplates
    * @param {string} animName
-   * @param {Array.<string>=} opt_vendors Vendor boilerplates to be applied.
+   * @param {Array.&lt;string&gt;=} opt_vendors Vendor boilerplates to be applied.
    *     Should be any of the values in Rekapi.util.VENDOR_PREFIXES.
    * @return {string}
    */
   function applyVendorBoilerplates (toKeyframes, animName, opt_vendors) {
-    opt_vendors = opt_vendors || ['w3'];
+    opt_vendors = opt_vendors || [&#x27;w3&#x27;];
     var renderedKeyframes = [];
 
     _.each(opt_vendors, function (vendor) {
@@ -806,7 +902,7 @@ rekapiModules.push(function (context) {
       renderedKeyframes.push(prefixedKeyframes);
     });
 
-    return renderedKeyframes.join('\n');
+    return renderedKeyframes.join(&#x27;\n&#x27;);
   }
 
   /*!
@@ -815,9 +911,9 @@ rekapiModules.push(function (context) {
    * @return {string}
    */
   function applyVendorPropertyPrefixes (keyframes, vendor) {
-    var transformRegExp = new RegExp(TRANSFORM_TOKEN, 'g');
-    var prefixedTransformKey = VENDOR_PREFIXES[vendor] + 'transform';
-    var generalPrefixRegExp = new RegExp(VENDOR_TOKEN, 'g');
+    var transformRegExp = new RegExp(TRANSFORM_TOKEN, &#x27;g&#x27;);
+    var prefixedTransformKey = VENDOR_PREFIXES[vendor] + &#x27;transform&#x27;;
+    var generalPrefixRegExp = new RegExp(VENDOR_TOKEN, &#x27;g&#x27;);
     var generalPrefixedKey = VENDOR_PREFIXES[vendor];
     var prefixedKeyframes = keyframes
         .replace(generalPrefixRegExp, generalPrefixedKey)
@@ -830,7 +926,7 @@ rekapiModules.push(function (context) {
    * @param {Rekapi.Actor} actor
    * @param {string} animName
    * @param {boolean} combineProperties
-   * @param {Array.<string>=} opt_vendors
+   * @param {Array.&lt;string&gt;=} opt_vendors
    * @param {number|string=} opt_iterations
    * @param {boolean=} opt_isCentered
    * @return {string}
@@ -839,7 +935,7 @@ rekapiModules.push(function (context) {
       actor, animName, combineProperties, opt_vendors, opt_iterations,
       opt_isCentered) {
 
-    opt_vendors = opt_vendors || ['w3'];
+    opt_vendors = opt_vendors || [&#x27;w3&#x27;];
     var classAttrs = [];
     var vendorAttrs;
 
@@ -851,7 +947,7 @@ rekapiModules.push(function (context) {
     });
 
     var boilerplatedClass = printf(CLASS_BOILERPLATE
-        ,[animName, classAttrs.join('\n')]);
+        ,[animName, classAttrs.join(&#x27;\n&#x27;)]);
 
     return boilerplatedClass;
   }
@@ -885,7 +981,7 @@ rekapiModules.push(function (context) {
       generatedProperties.push(generateAnimationCenteringRule(prefix));
     }
 
-    return generatedProperties.join('\n');
+    return generatedProperties.join(&#x27;\n&#x27;);
   }
 
   /*!
@@ -898,18 +994,18 @@ rekapiModules.push(function (context) {
   function generateAnimationNameProperty (
       actor, animName, prefix, combineProperties) {
 
-    var animationName = printf('  %sanimation-name:', [prefix]);
+    var animationName = printf(&#x27;  %sanimation-name:&#x27;, [prefix]);
 
     var tracks = actor.getTrackNames();
 
     if (combineProperties) {
-      animationName += printf(' %s-keyframes;', [animName]);
+      animationName += printf(&#x27; %s-keyframes;&#x27;, [animName]);
     } else {
       _.each(tracks, function (trackName) {
-        animationName += printf(' %s-%s-keyframes,', [animName, trackName]);
+        animationName += printf(&#x27; %s-%s-keyframes,&#x27;, [animName, trackName]);
       });
       animationName = animationName.slice(0, animationName.length - 1);
-      animationName += ';';
+      animationName += &#x27;;&#x27;;
     }
 
     return animationName;
@@ -921,7 +1017,7 @@ rekapiModules.push(function (context) {
    * @return {string}
    */
   function generateAnimationDurationProperty (actor, prefix) {
-    return printf('  %sanimation-duration: %sms;'
+    return printf(&#x27;  %sanimation-duration: %sms;&#x27;
         ,[prefix, actor.getEnd() - actor.getStart()]);
   }
 
@@ -931,7 +1027,7 @@ rekapiModules.push(function (context) {
    * @return {string}
    */
   function generateAnimationDelayProperty (actor, prefix) {
-    return printf('  %sanimation-delay: %sms;', [prefix, actor.getStart()]);
+    return printf(&#x27;  %sanimation-delay: %sms;&#x27;, [prefix, actor.getStart()]);
   }
 
   /*!
@@ -939,7 +1035,7 @@ rekapiModules.push(function (context) {
    * @return {string}
    */
   function generateAnimationFillModeProperty (prefix) {
-    return printf('  %sanimation-fill-mode: forwards;', [prefix]);
+    return printf(&#x27;  %sanimation-fill-mode: forwards;&#x27;, [prefix]);
   }
 
   /*!
@@ -947,7 +1043,7 @@ rekapiModules.push(function (context) {
    * @return {string}
    */
   function generateAnimationTimingFunctionProperty (prefix) {
-    return printf('  %sanimation-timing-function: linear;', [prefix]);
+    return printf(&#x27;  %sanimation-timing-function: linear;&#x27;, [prefix]);
   }
 
   /*!
@@ -962,11 +1058,11 @@ rekapiModules.push(function (context) {
       iterationCount = opt_iterations;
     } else {
       iterationCount = rekapi._timesToIterate === -1
-        ? 'infinite'
+        ? &#x27;infinite&#x27;
         : rekapi._timesToIterate;
     }
 
-    var ruleTemplate = '  %sanimation-iteration-count: %s;';
+    var ruleTemplate = &#x27;  %sanimation-iteration-count: %s;&#x27;;
 
     return printf(ruleTemplate, [prefix, iterationCount]);
   }
@@ -976,7 +1072,7 @@ rekapiModules.push(function (context) {
    * @return {string}
    */
   function generateAnimationCenteringRule (prefix) {
-    return printf('  %stransform-origin: 0 0;', [prefix]);
+    return printf(&#x27;  %stransform-origin: 0 0;&#x27;, [prefix]);
   }
 
   // OPTIMIZED OUTPUT GENERATOR FUNCTIONS
@@ -995,12 +1091,12 @@ rekapiModules.push(function (context) {
         return true;
       }
 
-      var easingChunks = nextProperty.easing.split(' ');
+      var easingChunks = nextProperty.easing.split(&#x27; &#x27;);
 
       var i = 0, len = easingChunks.length;
       var previousChunk = easingChunks[0];
       var currentChunk;
-      for (i; i < len; i++) {
+      for (i; i &lt; len; i++) {
         currentChunk = easingChunks[i];
         if (!(BEZIERS[currentChunk])
             || previousChunk !== currentChunk) {
@@ -1023,7 +1119,7 @@ rekapiModules.push(function (context) {
    * @return {boolean}
    */
   function isSegmentAWait (property, nextProperty) {
-    if (property.name === nextProperty.name &&
+    if (property.name === nextProperty.name &amp;&amp;
         property.value === nextProperty.value) {
       return true;
     }
@@ -1051,25 +1147,25 @@ rekapiModules.push(function (context) {
     var accumulator = [];
     var generalName = property.name;
 
-    if (property.name === 'transform') {
+    if (property.name === &#x27;transform&#x27;) {
       generalName = TRANSFORM_TOKEN;
     }
 
-    var easingFormula = BEZIERS[property.nextProperty.easing.split(' ')[0]];
-    var timingFnChunk = printf('cubic-bezier(%s)', [easingFormula]);
+    var easingFormula = BEZIERS[property.nextProperty.easing.split(&#x27; &#x27;)[0]];
+    var timingFnChunk = printf(&#x27;cubic-bezier(%s)&#x27;, [easingFormula]);
 
     var adjustedFromPercent = isInt(fromPercent) ?
         fromPercent : fromPercent.toFixed(2);
     var adjustedToPercent = isInt(toPercent) ?
         toPercent : toPercent.toFixed(2);
 
-    accumulator.push(printf('  %s% {%s:%s;%sanimation-timing-function: %s;}',
+    accumulator.push(printf(&#x27;  %s% {%s:%s;%sanimation-timing-function: %s;}&#x27;,
           [adjustedFromPercent, generalName, property.value, VENDOR_TOKEN
           ,timingFnChunk]));
-    accumulator.push(printf('  %s% {%s:%s;}',
+    accumulator.push(printf(&#x27;  %s% {%s:%s;}&#x27;,
           [adjustedToPercent, generalName, property.nextProperty.value]));
 
-    return accumulator.join('\n');
+    return accumulator.join(&#x27;\n&#x27;);
   }
 
   // UN-OPTIMIZED OUTPUT GENERATOR FUNCTIONS
@@ -1110,7 +1206,7 @@ rekapiModules.push(function (context) {
       }
 
       var trackSegment;
-      if (nextProp && isSegmentAWait(prop, nextProp)) {
+      if (nextProp &amp;&amp; isSegmentAWait(prop, nextProp)) {
         trackSegment = generateActorTrackWaitSegment(
             actor, actorStart, prop, nextProp, fromPercent, toPercent);
 
@@ -1131,7 +1227,7 @@ rekapiModules.push(function (context) {
           var accumulatorLength = accumulator.length;
           var previousTrackSegment = accumulator[accumulatorLength - 1];
           var optimizedPreviousTrackSegment =
-              previousTrackSegment.split('\n')[0];
+              previousTrackSegment.split(&#x27;\n&#x27;)[0];
           accumulator[accumulatorLength - 1] = optimizedPreviousTrackSegment;
         }
 
@@ -1145,7 +1241,7 @@ rekapiModules.push(function (context) {
         }
 
         if (trackSegment.length) {
-          trackSegment = trackSegment.join('\n');
+          trackSegment = trackSegment.join(&#x27;\n&#x27;);
         }
 
         previousSegmentWasOptimized = false;
@@ -1163,7 +1259,7 @@ rekapiModules.push(function (context) {
       accumulator.push(trailingWait);
     }
 
-    return accumulator.join('\n');
+    return accumulator.join(&#x27;\n&#x27;);
   }
 
   /*!
@@ -1173,7 +1269,7 @@ rekapiModules.push(function (context) {
    */
   function generateCombinedActorKeyframes (actor, steps) {
     return generateActorTrackSegment(
-        actor, steps + 1, 100 / steps, 0, 0).join('\n');
+        actor, steps + 1, 100 / steps, 0, 0).join(&#x27;\n&#x27;);
   }
 
   /*!
@@ -1185,11 +1281,11 @@ rekapiModules.push(function (context) {
   function simulateLeadingWait (actor, track, actorStart) {
     var firstProp = actor._propertyTracks[track][0];
 
-    if (typeof firstProp !== 'undefined'
-        && firstProp.millisecond !== actorStart) {
+    if (typeof firstProp !== &#x27;undefined&#x27;
+        &amp;&amp; firstProp.millisecond !== actorStart) {
       var fakeFirstProp = generateActorTrackSegment(
           actor, 1, 1, firstProp.millisecond, 0, firstProp);
-      return fakeFirstProp.join('\n');
+      return fakeFirstProp.join(&#x27;\n&#x27;);
     }
   }
 
@@ -1203,11 +1299,11 @@ rekapiModules.push(function (context) {
   function simulateTrailingWait (actor, track, actorStart, actorEnd) {
     var lastProp = _.last(actor._propertyTracks[track]);
 
-    if (typeof lastProp !== 'undefined'
-        && lastProp.millisecond !== actorEnd) {
+    if (typeof lastProp !== &#x27;undefined&#x27;
+        &amp;&amp; lastProp.millisecond !== actorEnd) {
       var fakeLastProp = generateActorTrackSegment(
           actor, 1, 1, actorStart, 100, lastProp);
-      return fakeLastProp.join('\n');
+      return fakeLastProp.join(&#x27;\n&#x27;);
     }
   }
 
@@ -1228,7 +1324,7 @@ rekapiModules.push(function (context) {
    * @param {number} actorStart
    * @param {number} fromPercent
    * @param {Rekapi.KeyframeProperty=} opt_fromProp
-   * @return {Array.<string>}
+   * @return {Array.&lt;string&gt;}
    */
   function generateActorTrackSegment (
       actor, increments, incrementSize, actorStart, fromPercent,
@@ -1238,17 +1334,17 @@ rekapiModules.push(function (context) {
     var actorLength = actor.getLength();
     var i, adjustedPercent, stepPrefix;
 
-    for (i = 0; i < increments; i++) {
+    for (i = 0; i &lt; increments; i++) {
       adjustedPercent = fromPercent + (i * incrementSize);
       actor._updateState(
           ((adjustedPercent / 100) * actorLength) + actorStart);
-      stepPrefix = +adjustedPercent.toFixed(2) + '% ';
+      stepPrefix = +adjustedPercent.toFixed(2) + &#x27;% &#x27;;
 
       if (opt_fromProp) {
         accumulator.push(
-            '  ' + stepPrefix + serializeActorStep(actor, opt_fromProp.name));
+            &#x27;  &#x27; + stepPrefix + serializeActorStep(actor, opt_fromProp.name));
       } else {
-        accumulator.push('  ' + stepPrefix + serializeActorStep(actor));
+        accumulator.push(&#x27;  &#x27; + stepPrefix + serializeActorStep(actor));
       }
     }
 
@@ -1262,7 +1358,7 @@ rekapiModules.push(function (context) {
    * @param {Rekapi.KeyframeProperty} toProp
    * @param {number} fromPercent
    * @param {number} toPercent
-   * @return {Array.<string>}
+   * @return {Array.&lt;string&gt;}
    */
   function generateActorTrackWaitSegment (
       actor, actorStart, fromProp, toProp, fromPercent, toPercent) {
@@ -1277,14 +1373,14 @@ rekapiModules.push(function (context) {
    * @return {string}
    */
   function serializeActorStep (actor, opt_targetProp) {
-    var serializedProps = ['{'];
+    var serializedProps = [&#x27;{&#x27;];
 
     var propsToSerialize;
     if (opt_targetProp) {
       propsToSerialize = {};
 
       var currentPropState = actor.get()[opt_targetProp];
-      if (typeof currentPropState !== 'undefined') {
+      if (typeof currentPropState !== &#x27;undefined&#x27;) {
         propsToSerialize[opt_targetProp] = currentPropState;
       }
     } else {
@@ -1296,45 +1392,65 @@ rekapiModules.push(function (context) {
       printVal = val;
       var printKey = key;
 
-      if (key === 'transform') {
+      if (key === &#x27;transform&#x27;) {
         printKey = TRANSFORM_TOKEN;
       }
 
-      serializedProps.push(printKey + ':' + printVal + ';');
+      serializedProps.push(printKey + &#x27;:&#x27; + printVal + &#x27;;&#x27;);
     });
 
-    serializedProps.push('}');
-    return serializedProps.join('');
+    serializedProps.push(&#x27;}&#x27;);
+    return serializedProps.join(&#x27;&#x27;);
   }
 
   // Exposes helper functions for unit testing.  Gets compiled away in build
   // process.
   if (REKAPI_DEBUG) {
     Rekapi._private.cssRenderer = {
-      'TRANSFORM_TOKEN': TRANSFORM_TOKEN
-      ,'VENDOR_TOKEN': VENDOR_TOKEN
-      ,'applyVendorBoilerplates': applyVendorBoilerplates
-      ,'applyVendorPropertyPrefixes': applyVendorPropertyPrefixes
-      ,'generateBoilerplatedKeyframes': generateBoilerplatedKeyframes
-      ,'generateCSSClass': generateCSSClass
-      ,'generateCSSAnimationProperties': generateCSSAnimationProperties
-      ,'generateActorKeyframes': generateActorKeyframes
-      ,'generateActorTrackSegment': generateActorTrackSegment
-      ,'serializeActorStep': serializeActorStep
-      ,'generateAnimationNameProperty': generateAnimationNameProperty
-      ,'generateAnimationDurationProperty': generateAnimationDurationProperty
-      ,'generateAnimationDelayProperty': generateAnimationDelayProperty
-      ,'generateAnimationFillModeProperty': generateAnimationFillModeProperty
-      ,'generateAnimationTimingFunctionProperty':
+      &#x27;TRANSFORM_TOKEN&#x27;: TRANSFORM_TOKEN
+      ,&#x27;VENDOR_TOKEN&#x27;: VENDOR_TOKEN
+      ,&#x27;applyVendorBoilerplates&#x27;: applyVendorBoilerplates
+      ,&#x27;applyVendorPropertyPrefixes&#x27;: applyVendorPropertyPrefixes
+      ,&#x27;generateBoilerplatedKeyframes&#x27;: generateBoilerplatedKeyframes
+      ,&#x27;generateCSSClass&#x27;: generateCSSClass
+      ,&#x27;generateCSSAnimationProperties&#x27;: generateCSSAnimationProperties
+      ,&#x27;generateActorKeyframes&#x27;: generateActorKeyframes
+      ,&#x27;generateActorTrackSegment&#x27;: generateActorTrackSegment
+      ,&#x27;serializeActorStep&#x27;: serializeActorStep
+      ,&#x27;generateAnimationNameProperty&#x27;: generateAnimationNameProperty
+      ,&#x27;generateAnimationDurationProperty&#x27;: generateAnimationDurationProperty
+      ,&#x27;generateAnimationDelayProperty&#x27;: generateAnimationDelayProperty
+      ,&#x27;generateAnimationFillModeProperty&#x27;: generateAnimationFillModeProperty
+      ,&#x27;generateAnimationTimingFunctionProperty&#x27;:
           generateAnimationTimingFunctionProperty
-      ,'generateAnimationIterationProperty': generateAnimationIterationProperty
-      ,'generateAnimationCenteringRule': generateAnimationCenteringRule
-      ,'simulateLeadingWait': simulateLeadingWait
-      ,'simulateTrailingWait': simulateTrailingWait
-      ,'canOptimizeKeyframeProperty': canOptimizeKeyframeProperty
-      ,'canOptimizeAnyKeyframeProperties': canOptimizeAnyKeyframeProperties
-      ,'generateOptimizedKeyframeSegment': generateOptimizedKeyframeSegment
-      ,'getActorCSS': getActorCSS
+      ,&#x27;generateAnimationIterationProperty&#x27;: generateAnimationIterationProperty
+      ,&#x27;generateAnimationCenteringRule&#x27;: generateAnimationCenteringRule
+      ,&#x27;simulateLeadingWait&#x27;: simulateLeadingWait
+      ,&#x27;simulateTrailingWait&#x27;: simulateTrailingWait
+      ,&#x27;canOptimizeKeyframeProperty&#x27;: canOptimizeKeyframeProperty
+      ,&#x27;canOptimizeAnyKeyframeProperties&#x27;: canOptimizeAnyKeyframeProperties
+      ,&#x27;generateOptimizedKeyframeSegment&#x27;: generateOptimizedKeyframeSegment
+      ,&#x27;getActorCSS&#x27;: getActorCSS
     };
   }
 });
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

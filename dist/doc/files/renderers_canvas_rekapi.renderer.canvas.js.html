@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>renderers/canvas/rekapi.renderer.canvas.js - Rekapi</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../../demo/img/rekapi-logo-200.png" title="Rekapi"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.4.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Rekapi.html">Rekapi</a></li>
+            
+                <li><a href="../classes/Rekapi.Actor.html">Rekapi.Actor</a></li>
+            
+                <li><a href="../classes/Rekapi.CanvasRenderer.html">Rekapi.CanvasRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.DOMRenderer.html">Rekapi.DOMRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.KeyframeProperty.html">Rekapi.KeyframeProperty</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: renderers/canvas/rekapi.renderer.canvas.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
+rekapiModules.push(function (context) {
+
+  &#x27;use strict&#x27;;
+
+  var Rekapi = context.Rekapi;
+  var _ = Rekapi._;
+
+  // PRIVATE UTILITY FUNCTIONS
+  //
+
+  /*!
+   * Gets (and optionally sets) height or width on a canvas.
+   * @param {HTMLCanvas} canvas
+   * @param {string} heightOrWidth The dimension (either &quot;height&quot; or &quot;width&quot;)
+   * to get or set.
+   * @param {number=} opt_newSize The new value to set for &#x60;dimension&#x60;.
+   * @return {number}
+   */
+  function dimension (canvas, heightOrWidth, opt_newSize) {
+    if (typeof opt_newSize !== &#x27;undefined&#x27;) {
+      canvas[heightOrWidth] = opt_newSize;
+      canvas.style[heightOrWidth] = opt_newSize + &#x27;px&#x27;;
+    }
+
+    return canvas[heightOrWidth];
+  }
+
+  /*!
+   * Takes care of some pre-rendering tasks for canvas animations.
+   * @param {Rekapi.CanvasRenderer} canvasRenderer
+   */
+  function beforeRender (canvasRenderer) {
+    canvasRenderer.clear();
+  }
+
+  /*!
+   * Render all the &#x60;Actor&#x60;s at whatever position they are currently in.
+   * @param {Rekapi}
+   * @param {Rekapi.CanvasRenderer} canvasRenderer
+   * @return {Rekapi}
+   */
+  function render (rekapi, canvasRenderer) {
+    fireEvent(rekapi, &#x27;beforeRender&#x27;, _);
+    var renderOrderSorter = canvasRenderer._renderOrderSorter;
+    var len = canvasRenderer._renderOrder.length;
+    var renderOrder;
+
+    if (renderOrderSorter) {
+      var orderedActors =
+          _.sortBy(canvasRenderer._canvasActors, renderOrderSorter);
+      renderOrder = _.pluck(orderedActors, &#x27;id&#x27;);
+    } else {
+      renderOrder = canvasRenderer._renderOrder;
+    }
+
+    var currentActor;
+    var canvasActors = canvasRenderer._canvasActors;
+
+    var i;
+    for (i = 0; i &lt; len; i++) {
+      currentActor = canvasActors[renderOrder[i]];
+      currentActor.render(currentActor.context, currentActor.get());
+    }
+    fireEvent(rekapi, &#x27;afterRender&#x27;, _);
+
+    return rekapi;
+  }
+
+  /*!
+   * @param {Rekapi.Actor} actor
+   * @param {Rekapi.CanvasRenderer} canvasRenderer
+   */
+  function addActor (actor, canvasRenderer) {
+    canvasRenderer._renderOrder.push(actor.id);
+    canvasRenderer._canvasActors[actor.id] = actor;
+  }
+
+  /*!
+   * @param {Rekapi.Actor} actor
+   * @param {Rekapi.CanvasRenderer} canvasRenderer
+   */
+  function removeActor (actor, canvasRenderer) {
+    canvasRenderer._renderOrder = _.without(canvasRenderer._renderOrder, actor.id);
+    delete canvasRenderer._canvasActors[actor.id];
+  }
+
+  /*!
+   * Sets up an instance of CanvasRenderer and attaches it to a &#x60;Rekapi&#x60;
+   * instance.  Also augments the Rekapi instance with canvas-specific
+   * functions.
+   * @param {Rekapi} rekapi
+   */
+  Rekapi._rendererInitHook.canvas = function (rekapi) {
+    if (typeof CanvasRenderingContext2D === &#x27;undefined&#x27; ||
+        !(rekapi.context instanceof CanvasRenderingContext2D)) {
+      return;
+    }
+
+    rekapi.renderer = new CanvasRenderer(rekapi);
+  };
+
+  // CANVAS RENDERER OBJECT
+  //
+
+  /**
+   * You can use Rekapi to render animations to an HTML5 &#x60;&lt;canvas&gt;&#x60;.  To do so,
+   * just provide a
+   * [&#x60;CanvasRenderingContext2D&#x60;](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+   * instance to the &#x60;{{#crossLink &quot;Rekapi&quot;}}{{/crossLink}}&#x60; constructor to
+   * automatically set up the renderer:
+   *
+   *     var context = document.createElement(&#x27;canvas&#x27;).getContext(&#x27;2d&#x27;);
+   *     var rekapi = new Rekapi(context);
+   *     rekapi.renderer instanceof Rekapi.CanvasRenderer; // true
+   *
+   * &#x60;Rekapi.CanvasRenderer&#x60; adds some canvas-specific events you can bind to
+   * with &#x60;{{#crossLink &quot;Rekapi/on:method&quot;}}{{/crossLink}}&#x60; (and unbind from
+   * with &#x60;{{#crossLink &quot;Rekapi/off:method&quot;}}{{/crossLink}}&#x60;:
+   *
+   *  - __beforeRender__: Fires just before an actor is rendered to the canvas.
+   *  - __afterRender__: Fires just after an actor is rendered to the canvas.
+   *
+   * __Note__: &#x60;Rekapi.CanvasRenderer&#x60; is added to the &#x60;{{#crossLink
+   * &quot;Rekapi&quot;}}{{/crossLink}}&#x60; instance automatically as &#x60;this.renderer&#x60;, there
+   * is no reason to call the constructor yourself in most cases.
+   *
+   * ## Multiple renderers
+   *
+   * Rekapi supports multiple renderers per instance.  Do do this, you must not
+   * provide a
+   * [&#x60;CanvasRenderingContext2D&#x60;](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+   * to the &#x60;{{#crossLink &quot;Rekapi&quot;}}{{/crossLink}}&#x60; constructor, you must
+   * instead initialize the renderer yourself.  The
+   * [&#x60;CanvasRenderingContext2D&#x60;](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+   * that would have been provided to the &#x60;{{#crossLink
+   * &quot;Rekapi&quot;}}{{/crossLink}}&#x60; constructor instead is provided as the second
+   * parameter to &#x60;Rekapi.CanvasRenderer&#x60;:
+   *
+   *
+   *     var canvasContext = document.querySelector(&#x27;canvas&#x27;).getContext(&#x27;2d&#x27;);
+   *
+   *     // No context gets passed to the Rekapi constructor
+   *     var rekapi = new Rekapi();
+   *
+   *     // Initialize Rekapi.CanvasRenderer manually and give it a
+   *     // CanvasRenderingContext2D.  You can name it anything you want on the
+   *     // Rekapi instance.
+   *     rekapi.canvasRenderer =
+   *         new Rekapi.CanvasRenderer(rekapi, canvasContext);
+   * @class Rekapi.CanvasRenderer
+   * @param {Rekapi} rekapi
+   * @param {CanvasRenderingContext2D=} opt_context
+   * @constructor
+   */
+  Rekapi.CanvasRenderer = function (rekapi, opt_context) {
+    this.rekapi = rekapi;
+    this.canvasContext = opt_context || rekapi.context;
+    this._renderOrder = [];
+    this._renderOrderSorter = null;
+    this._canvasActors = {};
+
+    _.extend(rekapi._events, {
+      &#x27;beforeRender&#x27;: []
+      ,&#x27;afterRender&#x27;: []
+    });
+
+    var self = this;
+
+    rekapi.on(&#x27;afterUpdate&#x27;, function () {
+      render(rekapi, self);
+    });
+
+    rekapi.on(&#x27;addActor&#x27;, function (rekapi, actor) {
+      addActor(actor, self);
+    });
+
+    rekapi.on(&#x27;removeActor&#x27;, function (rekapi, actor) {
+      removeActor(actor, self);
+    });
+
+    rekapi.on(&#x27;beforeRender&#x27;, function () {
+      beforeRender(self);
+    });
+
+    return this;
+  };
+  var CanvasRenderer = Rekapi.CanvasRenderer;
+
+  /**
+   * Get and optionally set the height of the associated &#x60;&lt;canvas&gt;&#x60; element.
+   * @method height
+   * @param {number=} opt_height The height to optionally set.
+   * @return {number}
+   */
+  CanvasRenderer.prototype.height = function (opt_height) {
+    return dimension(this.canvasContext.canvas, &#x27;height&#x27;, opt_height);
+  };
+
+  /**
+   * Get and optionally set the width of the associated &#x60;&lt;canvas&gt;&#x60; element.
+   * @method width
+   * @param {number=} opt_width The width to optionally set.
+   * @return {number}
+   */
+  CanvasRenderer.prototype.width = function (opt_width) {
+    return dimension(this.canvasContext.canvas, &#x27;width&#x27;, opt_width);
+  };
+
+  /**
+   * Erase the &#x60;&lt;canvas&gt;&#x60;.
+   * @method clear
+   * @return {Rekapi}
+   */
+  CanvasRenderer.prototype.clear = function () {
+    this.canvasContext.clearRect(0, 0, this.width(), this.height());
+
+    return this.rekapi;
+  };
+
+  /**
+   * Move an actor around within the render order list.  Each actor is rendered
+   * in order of its layer (layers and actors have a 1:1 relationship).  The
+   * later an actor is added to an animation (with &#x60;{{#crossLink
+   * &quot;Rekapi/addActor:method&quot;}}{{/crossLink}}&#x60;), the higher its layer.  Lower
+   * layers (starting with 0) are rendered earlier.
+   *
+   *
+   * This method has no effect if an order function is set with &#x60;{{#crossLink
+   * &quot;Rekapi.CanvasRenderer/setOrderFunction:method&quot;}}{{/crossLink}}&#x60;.
+   *
+   * __[Example](../../../../docs/examples/canvas_move_actor_to_layer.html)__
+   * @method moveActorToLayer
+   * @param {Rekapi.Actor} actor
+   * @param {number} layer This should be within &#x60;0&#x60; and the total number of
+   * actors in the animation.  That number can be found with &#x60;{{#crossLink
+   * &quot;Rekapi/getActorCount:method&quot;}}{{/crossLink}}&#x60;.
+   * @return {Rekapi.Actor}
+   */
+  CanvasRenderer.prototype.moveActorToLayer = function (actor, layer) {
+    if (layer &lt; this._renderOrder.length &amp;&amp; layer &gt; -1) {
+      this._renderOrder = _.without(this._renderOrder, actor.id);
+      this._renderOrder.splice(layer, 0, actor.id);
+    }
+
+    return actor;
+  };
+
+  /**
+   * Set a function that defines the render order of the actors.  This is
+   * called each frame before the actors are rendered.
+   *
+   * The following example assumes that all actors are circles that have a
+   * &#x60;radius&#x60; &#x60;{{#crossLink &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}}&#x60;.  The
+   * circles will be rendered in order of the value of their &#x60;radius&#x60;, from
+   * smallest to largest.  This has the effect of layering larger circles on
+   * top of smaller circles, thus giving a sense of perspective.
+   *
+   * If a render order function is specified, &#x60;{{#crossLink
+   * &quot;Rekapi.CanvasRenderer/moveActorToLayer:method&quot;}}{{/crossLink}}&#x60; will have
+   * no effect.
+   *
+   *     rekapi.renderer.setOrderFunction(function (actor) {
+   *       return actor.get().radius;
+   *     });
+   * __[Example](../../../../docs/examples/canvas_set_order_function.html)__
+   * @method setOrderFunction
+   * @param {function(Rekapi.Actor)} sortFunction
+   * @return {Rekapi}
+   */
+  CanvasRenderer.prototype.setOrderFunction = function (sortFunction) {
+    this._renderOrderSorter = sortFunction;
+    return this.rekapi;
+  };
+
+  /**
+   * Remove the order function set by &#x60;{{#crossLink
+   * &quot;Rekapi.CanvasRenderer/setOrderFunction:method&quot;}}{{/crossLink}}&#x60;.  The
+   * render order defaults back to the order in which the actors were added to
+   * the animation.
+   *
+   * __[Example](../../../../docs/examples/canvas_unset_order_function.html)__
+   * @method unsetOrderFunction
+   * @return {Rekapi}
+   */
+  CanvasRenderer.prototype.unsetOrderFunction = function () {
+    this._renderOrderSorter = null;
+    return this.rekapi;
+  };
+
+});
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

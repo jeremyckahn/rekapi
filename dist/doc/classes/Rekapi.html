@@ -1,0 +1,2145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Rekapi - Rekapi</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../../demo/img/rekapi-logo-200.png" title="Rekapi"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.4.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Rekapi.html">Rekapi</a></li>
+            
+                <li><a href="../classes/Rekapi.Actor.html">Rekapi.Actor</a></li>
+            
+                <li><a href="../classes/Rekapi.CanvasRenderer.html">Rekapi.CanvasRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.DOMRenderer.html">Rekapi.DOMRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.KeyframeProperty.html">Rekapi.KeyframeProperty</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>Rekapi Class</h1>
+<div class="box meta">
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="../files/src_rekapi.core.js.html#l246"><code>src&#x2F;rekapi.core.js:246</code></a>
+        </div>
+    
+
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>If this is a rendered animation, the appropriate renderer is accessible as
+<code>this.renderer</code>.  If provided, a reference to <code>opt_context</code> is accessible
+as <code>this.context</code>.</p>
+
+</div>
+
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_Rekapi" class="method item">
+    <h3 class="name"><code>Rekapi</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>opt_context</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l246"><code>src&#x2F;rekapi.core.js:246</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_context</code>
+                        <span class="type">Object | CanvasRenderingContext2D | HTMLElement=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>This
+determines how to render the animation.  If this is not provided or is a
+plain object (<code>{}</code>), the animation will not render anything and
+<code>this.renderer</code> will be <code>undefined</code>.  If this is a reference to a
+<a href="https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D"><code>CanvasRenderingContext2D</code></a>,
+<code><a href="../classes/Rekapi.CanvasRenderer.html" class="crosslink">Rekapi.CanvasRenderer</a></code> will be initialized
+as <code>this.renderer</code> for HTML5 canvas-based rendering.  This this is a
+reference to a DOM element, <code><a href="../classes/Rekapi.DOMRenderer.html" class="crosslink">Rekapi.DOMRenderer</a></code> will be initialized as
+<code>this.renderer</code> for either a DOM or CSS <code>@keyframe</code>-based rendering.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+    </div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method">
+                                <a href="#method_addActor">addActor</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_exportTimeline">exportTimeline</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getActor">getActor</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getActorCount">getActorCount</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getActorIds">getActorIds</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getAllActors">getAllActors</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getAnimationLength">getAnimationLength</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getLastPositionUpdated">getLastPositionUpdated</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_importTimeline">importTimeline</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_isPlaying">isPlaying</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_off">off</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_on">on</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_pause">pause</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_play">play</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_playFrom">playFrom</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_playFromCurrent">playFromCurrent</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_removeActor">removeActor</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_stop">stop</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_update">update</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_addActor" class="method item">
+    <h3 class="name"><code>addActor</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>actor</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l337"><code>src&#x2F;rekapi.core.js:337</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Add an actor to the animation.  Decorates the added <code>actor</code> with a
+reference to this <code>Rekapi</code> instance as <code>this.rekapi</code>.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">actor</code>
+                        <span class="type"><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a> | Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>If this is an <code>Object</code>, it is used to
+as the constructor parameters for a new <code><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></code> instance that is created by this method.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></span>:
+                    
+                    <p>The actor that was added.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_exportTimeline" class="method item">
+    <h3 class="name"><code>exportTimeline</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l686"><code>src&#x2F;rekapi.core.js:686</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Export the timeline to a JSON-serializable <code>Object</code>.</p>
+<p><strong><a href="../../../docs/examples/export_timeline.html">Example</a></strong></p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                    <p>This data can later be consumed by <a href="../classes/Rekapi.html#method_importTimeline" class="crosslink">importTimeline</a>.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getActor" class="method item">
+    <h3 class="name"><code>getActor</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>actorId</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l376"><code>src&#x2F;rekapi.core.js:376</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get a reference to an actor from the animation by its <code>id</code>.  You can use
+<code><a href="../classes/Rekapi.html#method_getActorIds" class="crosslink">getActorIds</a></code> to get a list
+of IDs for all actors in the animation.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">actorId</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getActorCount" class="method item">
+    <h3 class="name"><code>getActorCount</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l407"><code>src&#x2F;rekapi.core.js:407</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Return the number of actors in the animation.</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Number</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getActorIds" class="method item">
+    <h3 class="name"><code>getActorIds</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Array(number)</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l388"><code>src&#x2F;rekapi.core.js:388</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Retrieve the <code>id</code>&#39;s of all actors in an animation.</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Array(number)</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getAllActors" class="method item">
+    <h3 class="name"><code>getAllActors</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l398"><code>src&#x2F;rekapi.core.js:398</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Retrieve all actors in the animation as an Object.</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                    <p>The keys of this Object correspond to the Actors&#39; <code>id</code>s.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getAnimationLength" class="method item">
+    <h3 class="name"><code>getAnimationLength</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l597"><code>src&#x2F;rekapi.core.js:597</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Number</span>:
+                    
+                    <p>The length of the animation timeline, in milliseconds.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getLastPositionUpdated" class="method item">
+    <h3 class="name"><code>getLastPositionUpdated</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l587"><code>src&#x2F;rekapi.core.js:587</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p><strong><a href="../../../../docs/examples/get_last_position_updated.html">Example</a></strong></p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Number</span>:
+                    
+                    <p>The normalized timeline position (between 0 and 1) that
+was last rendered.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_importTimeline" class="method item">
+    <h3 class="name"><code>importTimeline</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>rekapiData</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l707"><code>src&#x2F;rekapi.core.js:707</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Import data that was created by <a href="../classes/Rekapi.html#method_exportTimeline" class="crosslink">exportTimeline</a>.  This sets up all actors
+and keyframes specified in the <code>rekapiData</code> parameter.  These two methods
+collectively allow you serialize an animation (for sending to a server for
+persistence, for example) and later recreating an identical animation.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">rekapiData</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Any object that has the same data format as the
+object generated from Rekapi#exportTimeline.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_isPlaying" class="method item">
+    <h3 class="name"><code>isPlaying</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Boolean</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l547"><code>src&#x2F;rekapi.core.js:547</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Boolean</span>:
+                    
+                    <p>Whether or not the animation is playing (meaning not paused or
+stopped).</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_off" class="method item">
+    <h3 class="name"><code>off</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>eventName</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>opt_handler</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l658"><code>src&#x2F;rekapi.core.js:658</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Unbind one or more handlers from a Rekapi event.</p>
+<p><strong><a href="../../../../docs/examples/unbind.html">Example</a></strong></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">eventName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Valid values correspond to the list under
+<a href="../classes/Rekapi.html#method_on" class="crosslink">on</a>.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_handler</code>
+                        <span class="type">Function=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>If omitted, all handler functions bound to
+<code>eventName</code> are unbound.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_on" class="method item">
+    <h3 class="name"><code>on</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>eventName</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>handler</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l605"><code>src&#x2F;rekapi.core.js:605</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Bind a handler function to a Rekapi event.</p>
+<p><strong><a href="../../../../docs/examples/bind.html">Example</a></strong></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">eventName</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Valid values are:</p>
+<ul>
+<li><strong>animationComplete</strong>: Fires when all animation loops have completed.</li>
+<li><strong>playStateChange</strong>: Fires when the animation is played, paused, or
+stopped.</li>
+<li><strong>play</strong>: Fires when the animation is <a href="../classes/Rekapi.html#method_play" class="crosslink">play</a>ed.</li>
+<li><strong>pause</strong>: Fires when the animation is <a href="../classes/Rekapi.html#method_pause" class="crosslink">pause</a>d.</li>
+<li><strong>stop</strong>: Fires when the animation is <a href="../classes/Rekapi.html#method_stop" class="crosslink">stop</a>ped.</li>
+<li><strong>beforeUpdate</strong>: Fires each frame before all actors are rendered.</li>
+<li><strong>afterUpdate</strong>: Fires each frame after all actors are rendered.</li>
+<li><strong>addActor</strong>: Fires when an actor is added.  <code>opt_data</code> is the
+<a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a> that was added.</li>
+<li><strong>removeActor</strong>: Fires when an actor is removed.  <code>opt_data</code> is the
+<a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a> that was removed.</li>
+<li><strong>addKeyframeProperty</strong>: Fires when a keyframe property is added.
+<code>opt_data</code> is the <a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a>
+that was added.</li>
+<li><strong>removeKeyframeProperty</strong>: Fires when a <a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a> is removed.  <code>opt_data</code> is the
+<a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a> that was removed.</li>
+<li><strong>addKeyframePropertyTrack</strong>: Fires when the a keyframe is added to an
+actor that creates a new keyframe property track.  <code>opt_data</code> is the
+<a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a>
+that was added to create the property track.  A reference to the actor
+that the keyframe property is associated with can be accessed via
+<code>opt_data.actor</code> and the track name that was added can be determined via
+<code>opt_data.name</code>.</li>
+<li><strong>timelineModified</strong>: Fires when a keyframe is added, modified or
+removed.</li>
+<li><strong>animationLooped</strong>: Fires when an animation loop ends and a new one
+begins.</li>
+</ul>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">handler</code>
+                        <span class="type">Function(Rekapi,Object=)</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Receives the Rekapi instance as
+the first parameter and event-specific data as the second (<code>opt_data</code>).</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_pause" class="method item">
+    <h3 class="name"><code>pause</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>pause</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l500"><code>src&#x2F;rekapi.core.js:500</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Pause the animation.  A "paused" animation can be resumed from where it
+left off with <a href="../classes/Rekapi.html#method_play" class="crosslink">play</a>.</p>
+<p><strong><a href="../../../../docs/examples/pause.html">Example</a></strong></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">pause</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_play" class="method item">
+    <h3 class="name"><code>play</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>opt_howManyTimes</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l437"><code>src&#x2F;rekapi.core.js:437</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Play the animation.</p>
+<p><strong><a href="../../../../docs/examples/play.html">Example</a></strong></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_howManyTimes</code>
+                        <span class="type">Number=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>If omitted, the animation will loop
+endlessly.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_playFrom" class="method item">
+    <h3 class="name"><code>playFrom</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>millisecond</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>opt_howManyTimes</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l469"><code>src&#x2F;rekapi.core.js:469</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Move to a specific millisecond on the timeline and play from there.</p>
+<p><strong><a href="../../../../docs/examples/play_from.html">Example</a></strong></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">millisecond</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_howManyTimes</code>
+                        <span class="type">Number=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Works as it does in <a href="../classes/Rekapi.html#method_play" class="crosslink">play</a>.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_playFromCurrent" class="method item">
+    <h3 class="name"><code>playFromCurrent</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>opt_howManyTimes</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l486"><code>src&#x2F;rekapi.core.js:486</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Play from the last frame that was rendered with <a href="../classes/Rekapi.html#method_update" class="crosslink">update</a>.</p>
+<p><strong><a href="../../../../docs/examples/play_from_current.html">Example</a></strong></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_howManyTimes</code>
+                        <span class="type">Number=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Works as it does in <a href="../classes/Rekapi.html#method_play" class="crosslink">play</a>.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_removeActor" class="method item">
+    <h3 class="name"><code>removeActor</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>actor</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l416"><code>src&#x2F;rekapi.core.js:416</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Remove an actor from the animation.  This does not destroy the actor, it
+only removes the link between it and the <code>Rekapi</code> instance.  This method
+calls the actor&#39;s <code>teardown</code> method, if it is defined.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">actor</code>
+                        <span class="type"><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_stop" class="method item">
+    <h3 class="name"><code>stop</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l524"><code>src&#x2F;rekapi.core.js:524</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Stop the animation.  A "stopped" animation will start from the beginning
+if <a href="../classes/Rekapi.html#method_play" class="crosslink">play</a> is called.</p>
+<p><strong><a href="../../../../docs/examples/stop.html">Example</a></strong></p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_update" class="method item">
+    <h3 class="name"><code>update</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>opt_millisecond</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l556"><code>src&#x2F;rekapi.core.js:556</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Render an animation frame at a specific point in the timeline.</p>
+<p><strong><a href="../../../../docs/examples/update.html">Example</a></strong></p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_millisecond</code>
+                        <span class="type">Number=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The point in the timeline at which to
+render.  If omitted, this renders the last millisecond that was rendered
+(it&#39;s a re-render).</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+
+        
+
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

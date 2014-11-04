@@ -1,8 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>src/rekapi.core.js - Rekapi</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../../demo/img/rekapi-logo-200.png" title="Rekapi"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.4.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Rekapi.html">Rekapi</a></li>
+            
+                <li><a href="../classes/Rekapi.Actor.html">Rekapi.Actor</a></li>
+            
+                <li><a href="../classes/Rekapi.CanvasRenderer.html">Rekapi.CanvasRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.DOMRenderer.html">Rekapi.DOMRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.KeyframeProperty.html">Rekapi.KeyframeProperty</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: src/rekapi.core.js</h1>
+
+<div class="file">
+    <pre class="code prettyprint linenums">
 // REKAPI-GLOBALS
 // These are global in development, but get wrapped in a closure at build-time.
 
 // A hack for UglifyJS defines.  Gets removes in the build process.
-if (typeof REKAPI_DEBUG === 'undefined') {
+if (typeof REKAPI_DEBUG === &#x27;undefined&#x27;) {
   REKAPI_DEBUG = true;
 }
 
@@ -45,7 +141,7 @@ function noop () {
 
 var rekapiCore = function (root, _, Tweenable) {
 
-  'use strict';
+  &#x27;use strict&#x27;;
 
   // CONSTANTS
   //
@@ -82,8 +178,8 @@ var rekapiCore = function (root, _, Tweenable) {
    * @return {boolean}
    */
   function isAnimationComplete (rekapi, currentLoopIteration) {
-    return currentLoopIteration >= rekapi._timesToIterate
-       && rekapi._timesToIterate !== -1;
+    return currentLoopIteration &gt;= rekapi._timesToIterate
+       &amp;&amp; rekapi._timesToIterate !== -1;
   }
 
   /*!
@@ -94,12 +190,12 @@ var rekapiCore = function (root, _, Tweenable) {
   function updatePlayState (rekapi, currentLoopIteration) {
     if (isAnimationComplete(rekapi, currentLoopIteration)) {
       rekapi.stop();
-      fireEvent(rekapi, 'animationComplete', _);
+      fireEvent(rekapi, &#x27;animationComplete&#x27;, _);
     }
   }
 
   /*!
-   * Calculate how far in the animation loop `rekapi` is, in milliseconds,
+   * Calculate how far in the animation loop &#x60;rekapi&#x60; is, in milliseconds,
    * based on the current time.  Also overflows into a new loop if necessary.
    * @param {Rekapi} rekapi
    * @param {number} forMillisecond
@@ -126,7 +222,7 @@ var rekapiCore = function (root, _, Tweenable) {
 
   /*!
    * Calculate the timeline position and state for a given millisecond.
-   * Updates the `rekapi` state internally and accounts for how many loop
+   * Updates the &#x60;rekapi&#x60; state internally and accounts for how many loop
    * iterations the animation runs for.
    * @param {Rekapi} rekapi
    * @param {number} forMillisecond
@@ -140,17 +236,17 @@ var rekapiCore = function (root, _, Tweenable) {
       rekapi, forMillisecond, currentIteration);
     rekapi._loopPosition = loopPosition;
 
-    if (currentIteration > rekapi._latestIteration) {
-      fireEvent(rekapi, 'animationLooped', _);
+    if (currentIteration &gt; rekapi._latestIteration) {
+      fireEvent(rekapi, &#x27;animationLooped&#x27;, _);
 
       // Reset function keyframes
-      var lookupObject = { name: 'function' };
+      var lookupObject = { name: &#x27;function&#x27; };
       _.each(rekapi._actors, function (actor) {
         var fnKeyframes = _.where(actor._keyframeProperties, lookupObject);
 
         var lastFnKeyframe = _.last(fnKeyframes);
 
-        if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
+        if (lastFnKeyframe &amp;&amp; !lastFnKeyframe.hasFired) {
           lastFnKeyframe.invoke();
         }
 
@@ -167,7 +263,7 @@ var rekapiCore = function (root, _, Tweenable) {
   }
 
   /*!
-   * Calculate how far into the animation loop `rekapi` is, in milliseconds,
+   * Calculate how far into the animation loop &#x60;rekapi&#x60; is, in milliseconds,
    * and update based on that time.
    * @param {Rekapi} rekapi
    */
@@ -176,7 +272,7 @@ var rekapiCore = function (root, _, Tweenable) {
   }
 
   /*!
-   * This is the heartbeat of an animation.  This updates `rekapi`'s state and
+   * This is the heartbeat of an animation.  This updates &#x60;rekapi&#x60;&#x27;s state and
    * then calls itself continuously.
    * @param {Rekapi} rekapi
    */
@@ -202,7 +298,7 @@ var rekapiCore = function (root, _, Tweenable) {
     global.oRequestAnimationFrame      ||
     global.msRequestAnimationFrame     ||
       (global.mozCancelRequestAnimationFrame
-       && global.mozRequestAnimationFrame) ||
+       &amp;&amp; global.mozRequestAnimationFrame) ||
     global.setTimeout;
   }
 
@@ -238,26 +334,26 @@ var rekapiCore = function (root, _, Tweenable) {
   var now = Tweenable.now;
 
   var playState = {
-    'STOPPED': 'stopped'
-    ,'PAUSED': 'paused'
-    ,'PLAYING': 'playing'
+    &#x27;STOPPED&#x27;: &#x27;stopped&#x27;
+    ,&#x27;PAUSED&#x27;: &#x27;paused&#x27;
+    ,&#x27;PLAYING&#x27;: &#x27;playing&#x27;
   };
 
   /**
    * If this is a rendered animation, the appropriate renderer is accessible as
-   * `this.renderer`.  If provided, a reference to `opt_context` is accessible
-   * as `this.context`.
+   * &#x60;this.renderer&#x60;.  If provided, a reference to &#x60;opt_context&#x60; is accessible
+   * as &#x60;this.context&#x60;.
    * @class Rekapi
    * @param {Object|CanvasRenderingContext2D|HTMLElement=} opt_context This
    * determines how to render the animation.  If this is not provided or is a
-   * plain object (`{}`), the animation will not render anything and
-   * `this.renderer` will be `undefined`.  If this is a reference to a
-   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D),
-   * `{{#crossLink "Rekapi.CanvasRenderer"}}{{/crossLink}}` will be initialized
-   * as `this.renderer` for HTML5 canvas-based rendering.  This this is a
-   * reference to a DOM element, `{{#crossLink
-   * "Rekapi.DOMRenderer"}}{{/crossLink}}` will be initialized as
-   * `this.renderer` for either a DOM or CSS `@keyframe`-based rendering.
+   * plain object (&#x60;{}&#x60;), the animation will not render anything and
+   * &#x60;this.renderer&#x60; will be &#x60;undefined&#x60;.  If this is a reference to a
+   * [&#x60;CanvasRenderingContext2D&#x60;](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D),
+   * &#x60;{{#crossLink &quot;Rekapi.CanvasRenderer&quot;}}{{/crossLink}}&#x60; will be initialized
+   * as &#x60;this.renderer&#x60; for HTML5 canvas-based rendering.  This this is a
+   * reference to a DOM element, &#x60;{{#crossLink
+   * &quot;Rekapi.DOMRenderer&quot;}}{{/crossLink}}&#x60; will be initialized as
+   * &#x60;this.renderer&#x60; for either a DOM or CSS &#x60;@keyframe&#x60;-based rendering.
    * @constructor
    * @chainable
    */
@@ -267,20 +363,20 @@ var rekapiCore = function (root, _, Tweenable) {
     this._playState = playState.STOPPED;
 
     this._events = {
-      'animationComplete': []
-      ,'playStateChange': []
-      ,'play': []
-      ,'pause': []
-      ,'stop': []
-      ,'beforeUpdate': []
-      ,'afterUpdate': []
-      ,'addActor': []
-      ,'removeActor': []
-      ,'addKeyframeProperty': []
-      ,'removeKeyframeProperty': []
-      ,'addKeyframePropertyTrack': []
-      ,'timelineModified': []
-      ,'animationLooped': []
+      &#x27;animationComplete&#x27;: []
+      ,&#x27;playStateChange&#x27;: []
+      ,&#x27;play&#x27;: []
+      ,&#x27;pause&#x27;: []
+      ,&#x27;stop&#x27;: []
+      ,&#x27;beforeUpdate&#x27;: []
+      ,&#x27;afterUpdate&#x27;: []
+      ,&#x27;addActor&#x27;: []
+      ,&#x27;removeActor&#x27;: []
+      ,&#x27;addKeyframeProperty&#x27;: []
+      ,&#x27;removeKeyframeProperty&#x27;: []
+      ,&#x27;addKeyframePropertyTrack&#x27;: []
+      ,&#x27;timelineModified&#x27;: []
+      ,&#x27;animationLooped&#x27;: []
     };
 
     // How many times to loop the animation before stopping
@@ -289,7 +385,7 @@ var rekapiCore = function (root, _, Tweenable) {
     // Millisecond duration of the animation
     this._animationLength = 0;
 
-    // The setTimeout ID of `tick`
+    // The setTimeout ID of &#x60;tick&#x60;
     this._loopId = null;
 
     // The UNIX time at which the animation loop started
@@ -329,19 +425,19 @@ var rekapiCore = function (root, _, Tweenable) {
   Rekapi._ = _;
 
   /*!
-   * @type {Object.<function>} Contains the context init function to be called
+   * @type {Object.&lt;function&gt;} Contains the context init function to be called
    * in the Rekapi constructor.
    */
   Rekapi._rendererInitHook = {};
 
   /**
-   * Add an actor to the animation.  Decorates the added `actor` with a
-   * reference to this `Rekapi` instance as `this.rekapi`.
+   * Add an actor to the animation.  Decorates the added &#x60;actor&#x60; with a
+   * reference to this &#x60;Rekapi&#x60; instance as &#x60;this.rekapi&#x60;.
    *
    * @method addActor
-   * @param {Rekapi.Actor|Object} actor If this is an `Object`, it is used to
-   * as the constructor parameters for a new `{{#crossLink
-   * "Rekapi.Actor"}}{{/crossLink}}` instance that is created by this method.
+   * @param {Rekapi.Actor|Object} actor If this is an &#x60;Object&#x60;, it is used to
+   * as the constructor parameters for a new &#x60;{{#crossLink
+   * &quot;Rekapi.Actor&quot;}}{{/crossLink}}&#x60; instance that is created by this method.
    * @return {Rekapi.Actor} The actor that was added.
    */
   Rekapi.prototype.addActor = function (actor) {
@@ -353,9 +449,9 @@ var rekapiCore = function (root, _, Tweenable) {
       rekapiActor = new Rekapi.Actor(actor);
     }
 
-    // You can't add an actor more than once.
+    // You can&#x27;t add an actor more than once.
     if (!_.contains(this._actors, rekapiActor)) {
-      if (typeof rekapiActor.context === 'undefined') {
+      if (typeof rekapiActor.context === &#x27;undefined&#x27;) {
         rekapiActor.context = this.context;
       }
 
@@ -367,15 +463,15 @@ var rekapiCore = function (root, _, Tweenable) {
       recalculateAnimationLength(this, _);
       rekapiActor.setup();
 
-      fireEvent(this, 'addActor', _, rekapiActor);
+      fireEvent(this, &#x27;addActor&#x27;, _, rekapiActor);
     }
 
     return rekapiActor;
   };
 
   /**
-   * Get a reference to an actor from the animation by its `id`.  You can use
-   * `{{#crossLink "Rekapi/getActorIds:method"}}{{/crossLink}}` to get a list
+   * Get a reference to an actor from the animation by its &#x60;id&#x60;.  You can use
+   * &#x60;{{#crossLink &quot;Rekapi/getActorIds:method&quot;}}{{/crossLink}}&#x60; to get a list
    * of IDs for all actors in the animation.
    * @method getActor
    * @param {number} actorId
@@ -386,19 +482,19 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Retrieve the `id`'s of all actors in an animation.
+   * Retrieve the &#x60;id&#x60;&#x27;s of all actors in an animation.
    *
    * @method getActorIds
    * @return {Array(number)}
    */
   Rekapi.prototype.getActorIds = function () {
-    return _.pluck(this._actors, 'id');
+    return _.pluck(this._actors, &#x27;id&#x27;);
   };
 
   /**
    * Retrieve all actors in the animation as an Object.
    * @method getAllActors
-   * @return {Object} The keys of this Object correspond to the Actors' `id`s.
+   * @return {Object} The keys of this Object correspond to the Actors&#x27; &#x60;id&#x60;s.
    */
   Rekapi.prototype.getAllActors = function () {
     return _.clone(this._actors);
@@ -415,8 +511,8 @@ var rekapiCore = function (root, _, Tweenable) {
 
   /**
    * Remove an actor from the animation.  This does not destroy the actor, it
-   * only removes the link between it and the `Rekapi` instance.  This method
-   * calls the actor's `teardown` method, if it is defined.
+   * only removes the link between it and the &#x60;Rekapi&#x60; instance.  This method
+   * calls the actor&#x27;s &#x60;teardown&#x60; method, if it is defined.
    * @method removeActor
    * @param {Rekapi.Actor} actor
    * @return {Rekapi.Actor}
@@ -429,7 +525,7 @@ var rekapiCore = function (root, _, Tweenable) {
     actor.teardown();
     recalculateAnimationLength(this, _);
 
-    fireEvent(this, 'removeActor', _, actor);
+    fireEvent(this, &#x27;removeActor&#x27;, _, actor);
 
     return actor;
   };
@@ -460,8 +556,8 @@ var rekapiCore = function (root, _, Tweenable) {
     // Start the update loop
     tick(this);
 
-    fireEvent(this, 'playStateChange', _);
-    fireEvent(this, 'play', _);
+    fireEvent(this, &#x27;playStateChange&#x27;, _);
+    fireEvent(this, &#x27;play&#x27;, _);
 
     return this;
   };
@@ -473,7 +569,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @method playFrom
    * @param {number} millisecond
    * @param {number=} opt_howManyTimes Works as it does in {{#crossLink
-   * "Rekapi/play:method"}}{{/crossLink}}.
+   * &quot;Rekapi/play:method&quot;}}{{/crossLink}}.
    * @chainable
    */
   Rekapi.prototype.playFrom = function (millisecond, opt_howManyTimes) {
@@ -485,12 +581,12 @@ var rekapiCore = function (root, _, Tweenable) {
 
   /**
    * Play from the last frame that was rendered with {{#crossLink
-   * "Rekapi/update:method"}}{{/crossLink}}.
+   * &quot;Rekapi/update:method&quot;}}{{/crossLink}}.
    *
    * __[Example](../../../../docs/examples/play_from_current.html)__
    * @method playFromCurrent
    * @param {number=} opt_howManyTimes Works as it does in {{#crossLink
-   * "Rekapi/play:method"}}{{/crossLink}}.
+   * &quot;Rekapi/play:method&quot;}}{{/crossLink}}.
    * @chainable
    */
   Rekapi.prototype.playFromCurrent = function (opt_howManyTimes) {
@@ -498,8 +594,8 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Pause the animation.  A "paused" animation can be resumed from where it
-   * left off with {{#crossLink "Rekapi/play:method"}}{{/crossLink}}.
+   * Pause the animation.  A &quot;paused&quot; animation can be resumed from where it
+   * left off with {{#crossLink &quot;Rekapi/play:method&quot;}}{{/crossLink}}.
    *
    * __[Example](../../../../docs/examples/pause.html)__
    * @method pause
@@ -515,15 +611,15 @@ var rekapiCore = function (root, _, Tweenable) {
     cancelLoop(this);
     this._pausedAtTime = now();
 
-    fireEvent(this, 'playStateChange', _);
-    fireEvent(this, 'pause', _);
+    fireEvent(this, &#x27;playStateChange&#x27;, _);
+    fireEvent(this, &#x27;pause&#x27;, _);
 
     return this;
   };
 
   /**
-   * Stop the animation.  A "stopped" animation will start from the beginning
-   * if {{#crossLink "Rekapi/play:method"}}{{/crossLink}} is called.
+   * Stop the animation.  A &quot;stopped&quot; animation will start from the beginning
+   * if {{#crossLink &quot;Rekapi/play:method&quot;}}{{/crossLink}} is called.
    *
    * __[Example](../../../../docs/examples/stop.html)__
    * @method stop
@@ -538,8 +634,8 @@ var rekapiCore = function (root, _, Tweenable) {
       actor.stop();
     });
 
-    fireEvent(this, 'playStateChange', _);
-    fireEvent(this, 'stop', _);
+    fireEvent(this, &#x27;playStateChange&#x27;, _);
+    fireEvent(this, &#x27;stop&#x27;, _);
 
     return this;
   };
@@ -560,7 +656,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @method update
    * @param {number=} opt_millisecond The point in the timeline at which to
    * render.  If omitted, this renders the last millisecond that was rendered
-   * (it's a re-render).
+   * (it&#x27;s a re-render).
    * @chainable
    */
   Rekapi.prototype.update = function (opt_millisecond) {
@@ -568,18 +664,18 @@ var rekapiCore = function (root, _, Tweenable) {
       opt_millisecond = this._lastUpdatedMillisecond;
     }
 
-    fireEvent(this, 'beforeUpdate', _);
+    fireEvent(this, &#x27;beforeUpdate&#x27;, _);
 
     // Update and render each of the actors
     _.each(this._actors, function (actor) {
       actor._updateState(opt_millisecond);
-      if (typeof actor.render === 'function') {
+      if (typeof actor.render === &#x27;function&#x27;) {
         actor.render(actor.context, actor.get());
       }
     });
 
     this._lastUpdatedMillisecond = opt_millisecond;
-    fireEvent(this, 'afterUpdate', _);
+    fireEvent(this, &#x27;afterUpdate&#x27;, _);
 
     return this;
   };
@@ -613,36 +709,36 @@ var rekapiCore = function (root, _, Tweenable) {
    * - __playStateChange__: Fires when the animation is played, paused, or
    *   stopped.
    * - __play__: Fires when the animation is {{#crossLink
-   *   "Rekapi/play:method"}}{{/crossLink}}ed.
+   *   &quot;Rekapi/play:method&quot;}}{{/crossLink}}ed.
    * - __pause__: Fires when the animation is {{#crossLink
-   *   "Rekapi/pause:method"}}{{/crossLink}}d.
+   *   &quot;Rekapi/pause:method&quot;}}{{/crossLink}}d.
    * - __stop__: Fires when the animation is {{#crossLink
-   *   "Rekapi/stop:method"}}{{/crossLink}}ped.
+   *   &quot;Rekapi/stop:method&quot;}}{{/crossLink}}ped.
    * - __beforeUpdate__: Fires each frame before all actors are rendered.
    * - __afterUpdate__: Fires each frame after all actors are rendered.
-   * - __addActor__: Fires when an actor is added.  `opt_data` is the
-   *   {{#crossLink "Rekapi.Actor"}}{{/crossLink}} that was added.
-   * - __removeActor__: Fires when an actor is removed.  `opt_data` is the
-   *   {{#crossLink "Rekapi.Actor"}}{{/crossLink}} that was removed.
+   * - __addActor__: Fires when an actor is added.  &#x60;opt_data&#x60; is the
+   *   {{#crossLink &quot;Rekapi.Actor&quot;}}{{/crossLink}} that was added.
+   * - __removeActor__: Fires when an actor is removed.  &#x60;opt_data&#x60; is the
+   *   {{#crossLink &quot;Rekapi.Actor&quot;}}{{/crossLink}} that was removed.
    * - __addKeyframeProperty__: Fires when a keyframe property is added.
-   *   `opt_data` is the {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}
+   *   &#x60;opt_data&#x60; is the {{#crossLink &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}}
    *   that was added.
    * - __removeKeyframeProperty__: Fires when a {{#crossLink
-   *   "Rekapi.KeyframeProperty"}}{{/crossLink}} is removed.  `opt_data` is the
-   *   {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}} that was removed.
+   *   &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}} is removed.  &#x60;opt_data&#x60; is the
+   *   {{#crossLink &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}} that was removed.
    * - __addKeyframePropertyTrack__: Fires when the a keyframe is added to an
-   *   actor that creates a new keyframe property track.  `opt_data` is the
-   *   {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}
+   *   actor that creates a new keyframe property track.  &#x60;opt_data&#x60; is the
+   *   {{#crossLink &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}}
    *   that was added to create the property track.  A reference to the actor
    *   that the keyframe property is associated with can be accessed via
-   *   `opt_data.actor` and the track name that was added can be determined via
-   *   `opt_data.name`.
+   *   &#x60;opt_data.actor&#x60; and the track name that was added can be determined via
+   *   &#x60;opt_data.name&#x60;.
    * - __timelineModified__: Fires when a keyframe is added, modified or
    *   removed.
    * - __animationLooped__: Fires when an animation loop ends and a new one
    *   begins.
    * @param {Function(Rekapi,Object=)} handler Receives the Rekapi instance as
-   * the first parameter and event-specific data as the second (`opt_data`).
+   * the first parameter and event-specific data as the second (&#x60;opt_data&#x60;).
    * @chainable
    */
   Rekapi.prototype.on = function (eventName, handler) {
@@ -661,9 +757,9 @@ var rekapiCore = function (root, _, Tweenable) {
    * __[Example](../../../../docs/examples/unbind.html)__
    * @method off
    * @param {string} eventName Valid values correspond to the list under
-   * {{#crossLink "Rekapi/on:method"}}{{/crossLink}}.
+   * {{#crossLink &quot;Rekapi/on:method&quot;}}{{/crossLink}}.
    * @param {Function=} opt_handler If omitted, all handler functions bound to
-   * `eventName` are unbound.
+   * &#x60;eventName&#x60; are unbound.
    * @chainable
    */
   Rekapi.prototype.off = function (eventName, opt_handler) {
@@ -684,17 +780,17 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Export the timeline to a JSON-serializable `Object`.
+   * Export the timeline to a JSON-serializable &#x60;Object&#x60;.
    *
    * __[Example](../../../docs/examples/export_timeline.html)__
    * @method exportTimeline
    * @return {Object} This data can later be consumed by {{#crossLink
-   * "Rekapi/importTimeline:method"}}{{/crossLink}}.
+   * &quot;Rekapi/importTimeline:method&quot;}}{{/crossLink}}.
    */
   Rekapi.prototype.exportTimeline = function () {
     var exportData = {
-      'duration': this._animationLength
-      ,'actors': []
+      &#x27;duration&#x27;: this._animationLength
+      ,&#x27;actors&#x27;: []
     };
 
     _.each(this._actors, function (actor) {
@@ -706,8 +802,8 @@ var rekapiCore = function (root, _, Tweenable) {
 
   /**
    * Import data that was created by {{#crossLink
-   * "Rekapi/exportTimeline:method"}}{{/crossLink}}.  This sets up all actors
-   * and keyframes specified in the `rekapiData` parameter.  These two methods
+   * &quot;Rekapi/exportTimeline:method&quot;}}{{/crossLink}}.  This sets up all actors
+   * and keyframes specified in the &#x60;rekapiData&#x60; parameter.  These two methods
    * collectively allow you serialize an animation (for sending to a server for
    * persistence, for example) and later recreating an identical animation.
    *
@@ -728,16 +824,36 @@ var rekapiCore = function (root, _, Tweenable) {
   // Some hooks for testing.  Gets compiled away at build time.
   if (REKAPI_DEBUG) {
     Rekapi._private = {
-      'calculateLoopPosition': calculateLoopPosition
-      ,'updateToCurrentMillisecond': updateToCurrentMillisecond
-      ,'tick': tick
-      ,'determineCurrentLoopIteration': determineCurrentLoopIteration
-      ,'calculateTimeSinceStart': calculateTimeSinceStart
-      ,'isAnimationComplete': isAnimationComplete
-      ,'updatePlayState': updatePlayState
+      &#x27;calculateLoopPosition&#x27;: calculateLoopPosition
+      ,&#x27;updateToCurrentMillisecond&#x27;: updateToCurrentMillisecond
+      ,&#x27;tick&#x27;: tick
+      ,&#x27;determineCurrentLoopIteration&#x27;: determineCurrentLoopIteration
+      ,&#x27;calculateTimeSinceStart&#x27;: calculateTimeSinceStart
+      ,&#x27;isAnimationComplete&#x27;: isAnimationComplete
+      ,&#x27;updatePlayState&#x27;: updatePlayState
     };
   }
 
   root.Rekapi = Rekapi;
 
 };
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

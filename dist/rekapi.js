@@ -1,4 +1,4 @@
-/*! rekapi - v1.4.0 - 2014-11-01 - http://rekapi.com */
+/*! rekapi - v1.4.1 - 2014-11-03 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -262,13 +262,22 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * The Rekapi constructor.  The type of object provided as `opt_context` will determine how to render the animation.  If a plain object (`{}`) or nothing is given for `opt_context`, this animation will not render anything.  You can work with the animation the same as any other, but there is no visual representation.  Providing a reference to a `CanvasRenderingContext2D` will create a canvas animation, and providing a reference to a DOM element will create an animation that can be rendered as either a DOM or CSS `@keyframe` animation.
-   *
-   * If this is a rendered animation, the appropriate renderer is accessible as `renderer`.
-   *
-   * A reference to `opt_context` is accessible as `context`.
-   * @param {Object|CanvasRenderingContext2D|HTMLElement=} opt_context
+   * If this is a rendered animation, the appropriate renderer is accessible as
+   * `this.renderer`.  If provided, a reference to `opt_context` is accessible
+   * as `this.context`.
+   * @class Rekapi
+   * @param {Object|CanvasRenderingContext2D|HTMLElement=} opt_context This
+   * determines how to render the animation.  If this is not provided or is a
+   * plain object (`{}`), the animation will not render anything and
+   * `this.renderer` will be `undefined`.  If this is a reference to a
+   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D),
+   * `{{#crossLink "Rekapi.CanvasRenderer"}}{{/crossLink}}` will be initialized
+   * as `this.renderer` for HTML5 canvas-based rendering.  This this is a
+   * reference to a DOM element, `{{#crossLink
+   * "Rekapi.DOMRenderer"}}{{/crossLink}}` will be initialized as
+   * `this.renderer` for either a DOM or CSS `@keyframe`-based rendering.
    * @constructor
+   * @chainable
    */
   function Rekapi (opt_context) {
     this.context = opt_context || {};
@@ -344,12 +353,13 @@ var rekapiCore = function (root, _, Tweenable) {
   Rekapi._rendererInitHook = {};
 
   /**
-   * Add an actor to the animation.  Decorates the actor with a reference to this `Rekapi` instance as `rekapi`.  If `actor` is just an Object, that Object is used to as the constructor parameters for a new `Rekapi.Actor` instance that is created by this method.
+   * Add an actor to the animation.  Decorates the added `actor` with a
+   * reference to this `Rekapi` instance as `this.rekapi`.
    *
-   *     var rekapi = new Rekapi();
-   *     var actor = rekapi.addActor(actor);
-   * ` `
-   * @param {Rekapi.Actor|Object} actor
+   * @method addActor
+   * @param {Rekapi.Actor|Object} actor If this is an `Object`, it is used to
+   * as the constructor parameters for a new `{{#crossLink
+   * "Rekapi.Actor"}}{{/crossLink}}` instance that is created by this method.
    * @return {Rekapi.Actor} The actor that was added.
    */
   Rekapi.prototype.addActor = function (actor) {
@@ -382,7 +392,10 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Get a reference to an actor from the animation by its `id`.  You can use [`getActorIds`](#getActorIds) to get a list of IDs of all actors in the animation.
+   * Get a reference to an actor from the animation by its `id`.  You can use
+   * `{{#crossLink "Rekapi/getActorIds:method"}}{{/crossLink}}` to get a list
+   * of IDs for all actors in the animation.
+   * @method getActor
    * @param {number} actorId
    * @return {Rekapi.Actor}
    */
@@ -393,15 +406,17 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Retrieve the `id`'s of all actors in an animation.
    *
-   * @return {Array.<number>}
+   * @method getActorIds
+   * @return {Array(number)}
    */
   Rekapi.prototype.getActorIds = function () {
     return _.pluck(this._actors, 'id');
   };
 
   /**
-   * Retrieve all actors in the animation as an Object.  Actors' `id`'s correspond to the keys of the returned Object.
-   * @return {Object}
+   * Retrieve all actors in the animation as an Object.
+   * @method getAllActors
+   * @return {Object} The keys of this Object correspond to the Actors' `id`s.
    */
   Rekapi.prototype.getAllActors = function () {
     return _.clone(this._actors);
@@ -409,6 +424,7 @@ var rekapiCore = function (root, _, Tweenable) {
 
   /**
    * Return the number of actors in the animation.
+   * @method getActorCount
    * @return {number}
    */
   Rekapi.prototype.getActorCount = function () {
@@ -416,7 +432,10 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Remove an actor from the animation.  This does not destroy the actor, it only removes the link between it and the `Rekapi` instance.  This method calls the actor's `teardown` method, if it is defined.
+   * Remove an actor from the animation.  This does not destroy the actor, it
+   * only removes the link between it and the `Rekapi` instance.  This method
+   * calls the actor's `teardown` method, if it is defined.
+   * @method removeActor
    * @param {Rekapi.Actor} actor
    * @return {Rekapi.Actor}
    */
@@ -434,11 +453,13 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Play the animation several times.  If `opt_howManyTimes` is omitted, the animation will loop endlessly.
+   * Play the animation.
    *
    * __[Example](../../../../docs/examples/play.html)__
-   * @param {number=} opt_howManyTimes
-   * @return {Rekapi}
+   * @method play
+   * @param {number=} opt_howManyTimes If omitted, the animation will loop
+   * endlessly.
+   * @chainable
    */
   Rekapi.prototype.play = function (opt_howManyTimes) {
     cancelLoop(this);
@@ -464,12 +485,14 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Move to a specific millisecond on the timeline and play from there. `opt_howManyTimes` works as it does in [`play()`](#play).
+   * Move to a specific millisecond on the timeline and play from there.
    *
    * __[Example](../../../../docs/examples/play_from.html)__
+   * @method playFrom
    * @param {number} millisecond
-   * @param {number=} opt_howManyTimes
-   * @return {Rekapi}
+   * @param {number=} opt_howManyTimes Works as it does in {{#crossLink
+   * "Rekapi/play:method"}}{{/crossLink}}.
+   * @chainable
    */
   Rekapi.prototype.playFrom = function (millisecond, opt_howManyTimes) {
     this.play(opt_howManyTimes);
@@ -479,21 +502,27 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Play from the last frame that was rendered with [`update()`](#update). `opt_howManyTimes` works as it does in [`play()`](#play).
+   * Play from the last frame that was rendered with {{#crossLink
+   * "Rekapi/update:method"}}{{/crossLink}}.
    *
    * __[Example](../../../../docs/examples/play_from_current.html)__
-   * @param {number=} opt_howManyTimes
-   * @return {Rekapi}
+   * @method playFromCurrent
+   * @param {number=} opt_howManyTimes Works as it does in {{#crossLink
+   * "Rekapi/play:method"}}{{/crossLink}}.
+   * @chainable
    */
   Rekapi.prototype.playFromCurrent = function (opt_howManyTimes) {
     return this.playFrom(this._lastUpdatedMillisecond, opt_howManyTimes);
   };
 
   /**
-   * Pause the animation.  A "paused" animation can be resumed from where it left off with [`play()`](#play).
+   * Pause the animation.  A "paused" animation can be resumed from where it
+   * left off with {{#crossLink "Rekapi/play:method"}}{{/crossLink}}.
    *
    * __[Example](../../../../docs/examples/pause.html)__
-   * @return {Rekapi}
+   * @method pause
+   * @param pause
+   * @chainable
    */
   Rekapi.prototype.pause = function () {
     if (this._playState === playState.PAUSED) {
@@ -511,10 +540,12 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Stop the animation.  A "stopped" animation will start from the beginning if [`play()`](#play) is called.
+   * Stop the animation.  A "stopped" animation will start from the beginning
+   * if {{#crossLink "Rekapi/play:method"}}{{/crossLink}} is called.
    *
    * __[Example](../../../../docs/examples/stop.html)__
-   * @return {Rekapi}
+   * @method stop
+   * @chainable
    */
   Rekapi.prototype.stop = function () {
     this._playState = playState.STOPPED;
@@ -532,19 +563,23 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Return whether or not the animation is playing (meaning not paused or stopped).
-   * @return {boolean}
+   * @method isPlaying
+   * @return {boolean} Whether or not the animation is playing (meaning not paused or
+   * stopped).
    */
   Rekapi.prototype.isPlaying = function () {
     return this._playState === playState.PLAYING;
   };
 
   /**
-   * Render an animation frame at a specific point in the timeline.  If `opt_millisecond` is omitted, this renders the last millisecond that was rendered (it's a re-render).
+   * Render an animation frame at a specific point in the timeline.
    *
    * __[Example](../../../../docs/examples/update.html)__
-   * @param {number=} opt_millisecond The point in the timeline at which to render.
-   * @return {Rekapi}
+   * @method update
+   * @param {number=} opt_millisecond The point in the timeline at which to
+   * render.  If omitted, this renders the last millisecond that was rendered
+   * (it's a re-render).
+   * @chainable
    */
   Rekapi.prototype.update = function (opt_millisecond) {
     if (opt_millisecond === undefined) {
@@ -568,45 +603,65 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Return the normalized timeline position (between 0 and 1) that was last rendered.
-   *
    * __[Example](../../../../docs/examples/get_last_position_updated.html)__
-   * @return {number}
+   * @method getLastPositionUpdated
+   * @return {number} The normalized timeline position (between 0 and 1) that
+   * was last rendered.
    */
   Rekapi.prototype.getLastPositionUpdated = function () {
     return (this._lastUpdatedMillisecond / this._animationLength);
   };
 
   /**
-   * Return the length of the animation timeline, in milliseconds.
-   * @return {number}
+   * @method getAnimationLength
+   * @return {number} The length of the animation timeline, in milliseconds.
    */
   Rekapi.prototype.getAnimationLength = function () {
     return this._animationLength;
   };
 
   /**
-   * Bind a handler function to a Rekapi event.  Valid events are:
-   *
-   * - __animationComplete__: Fires when all animation loops have completed.
-   * - __playStateChange__: Fires when the animation is played, paused, or stopped.
-   * - __play__: Fires when the animation is [`play()`](#play)ed.
-   * - __pause__: Fires when the animation is [`pause()`](#pause)d.
-   * - __stop__: Fires when the animation is [`stop()`](#stop)ped.
-   * - __beforeUpdate__: Fires each frame before all actors are rendered.
-   * - __afterUpdate__: Fires each frame after all actors are rendered.
-   * - __addActor__: Fires when an actor is added.  `opt_data` is the [`Actor`](rekapi.actor.js.html#Actor) that was added.
-   * - __removeActor__: Fires when an actor is removed.  `opt_data` is the [`Actor`](rekapi.actor.js.html#Actor) that was removed.
-   * - __addKeyframeProperty__: Fires when a keyframe property is added.  `opt_data` is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was added.
-   * - __removeKeyframeProperty__: Fires when a keyframe property is removed.  `opt_data` is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was removed.
-   * - __addKeyframePropertyTrack__: Fires when the a keyframe is added to an actor that creates a new keyframe property track.  `opt_data` is the [`KeyframeProperty`](rekapi.keyframe-property.js.html#KeyframeProperty) that was added to create the property track.  A reference to the actor that the keyframe property is associated with can be accessed via `.actor` and the track name that was added can be determined via `.name`.
-   * - __timelineModified__: Fires when a keyframe is added, modified or removed.
-   * - __animationLooped__: Fires when an animation loop ends and a new one begins.
+   * Bind a handler function to a Rekapi event.
    *
    * __[Example](../../../../docs/examples/bind.html)__
-   * @param {string} eventName
-   * @param {Function(Rekapi,Object=)} handler Receives the Rekapi instance as the first parameter and event-specific data as the second (opt_data).
-   * @return {Rekapi}
+   * @method on
+   * @param {string} eventName Valid values are:
+   *
+   * - __animationComplete__: Fires when all animation loops have completed.
+   * - __playStateChange__: Fires when the animation is played, paused, or
+   *   stopped.
+   * - __play__: Fires when the animation is {{#crossLink
+   *   "Rekapi/play:method"}}{{/crossLink}}ed.
+   * - __pause__: Fires when the animation is {{#crossLink
+   *   "Rekapi/pause:method"}}{{/crossLink}}d.
+   * - __stop__: Fires when the animation is {{#crossLink
+   *   "Rekapi/stop:method"}}{{/crossLink}}ped.
+   * - __beforeUpdate__: Fires each frame before all actors are rendered.
+   * - __afterUpdate__: Fires each frame after all actors are rendered.
+   * - __addActor__: Fires when an actor is added.  `opt_data` is the
+   *   {{#crossLink "Rekapi.Actor"}}{{/crossLink}} that was added.
+   * - __removeActor__: Fires when an actor is removed.  `opt_data` is the
+   *   {{#crossLink "Rekapi.Actor"}}{{/crossLink}} that was removed.
+   * - __addKeyframeProperty__: Fires when a keyframe property is added.
+   *   `opt_data` is the {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}
+   *   that was added.
+   * - __removeKeyframeProperty__: Fires when a {{#crossLink
+   *   "Rekapi.KeyframeProperty"}}{{/crossLink}} is removed.  `opt_data` is the
+   *   {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}} that was removed.
+   * - __addKeyframePropertyTrack__: Fires when the a keyframe is added to an
+   *   actor that creates a new keyframe property track.  `opt_data` is the
+   *   {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}
+   *   that was added to create the property track.  A reference to the actor
+   *   that the keyframe property is associated with can be accessed via
+   *   `opt_data.actor` and the track name that was added can be determined via
+   *   `opt_data.name`.
+   * - __timelineModified__: Fires when a keyframe is added, modified or
+   *   removed.
+   * - __animationLooped__: Fires when an animation loop ends and a new one
+   *   begins.
+   * @param {Function(Rekapi,Object=)} handler Receives the Rekapi instance as
+   * the first parameter and event-specific data as the second (`opt_data`).
+   * @chainable
    */
   Rekapi.prototype.on = function (eventName, handler) {
     if (!this._events[eventName]) {
@@ -619,12 +674,15 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Unbind `opt_handler` from a Rekapi event.  If `opt_handler` is omitted, all handler functions bound to `eventName` are unbound.  Valid events correspond to the list under [`on()`](#on).
+   * Unbind one or more handlers from a Rekapi event.
    *
    * __[Example](../../../../docs/examples/unbind.html)__
-   * @param {string} eventName
-   * @param {Function=} opt_handler
-   * @return {Rekapi}
+   * @method off
+   * @param {string} eventName Valid values correspond to the list under
+   * {{#crossLink "Rekapi/on:method"}}{{/crossLink}}.
+   * @param {Function=} opt_handler If omitted, all handler functions bound to
+   * `eventName` are unbound.
+   * @chainable
    */
   Rekapi.prototype.off = function (eventName, opt_handler) {
     if (!this._events[eventName]) {
@@ -644,10 +702,12 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Export the timeline to a reference-less `Object`.
+   * Export the timeline to a JSON-serializable `Object`.
    *
    * __[Example](../../../docs/examples/export_timeline.html)__
-   * @return {Object}
+   * @method exportTimeline
+   * @return {Object} This data can later be consumed by {{#crossLink
+   * "Rekapi/importTimeline:method"}}{{/crossLink}}.
    */
   Rekapi.prototype.exportTimeline = function () {
     var exportData = {
@@ -663,9 +723,15 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * Import data that was created by [`exportTimeline`](#exportTimeline).  This sets up all necessary actors and keyframes.  These methods collectively allow you serialize an animation (for sending to a server for persistence, for example) and later recreating an identical animation.
+   * Import data that was created by {{#crossLink
+   * "Rekapi/exportTimeline:method"}}{{/crossLink}}.  This sets up all actors
+   * and keyframes specified in the `rekapiData` parameter.  These two methods
+   * collectively allow you serialize an animation (for sending to a server for
+   * persistence, for example) and later recreating an identical animation.
    *
-   * @param {Object} rekapiData Any object that has the same data format as the object generated from Rekapi#exportTimeline.
+   * @method importTimeline
+   * @param {Object} rekapiData Any object that has the same data format as the
+   * object generated from Rekapi#exportTimeline.
    */
   Rekapi.prototype.importTimeline = function (rekapiData) {
     _.each(rekapiData.actors, function (actorData) {
@@ -902,15 +968,27 @@ rekapiModules.push(function (context) {
   }
 
   /**
-   * An actor represents an individual component of an animation.  An animation may have one or many actors.
+   * An actor represents an individual component of an animation.  An animation
+   * may have one or many actors.
    *
-   * Valid properties of `opt_config` (you can omit the ones you don't need):
-   *
-   * - __context__ (_Object|CanvasRenderingContext2D|HTMLElement_): The rendering context for this actor. If omitted, this Actor gets the parent [`Rekapi`](rekapi.core.js.html#Rekapi) instance's `context` when it is added with [`Rekapi#addActor`](rekapi.core.js.html#addActor).
-   * - __setup__ (_Function_): A function that gets called when the actor is added to an animation with [`Rekapi#addActor`](rekapi.core.js.html#addActor).
-   * - __render__ (_Function(Object, Object)_): A function that gets called every time the actor's state is updated (once every frame). This function should do something meaningful with state of the actor (for example, visually rendering to the screen).  This function receives two parameters: The first is a reference to the actor's `context` and the second is an Object containing the current state properties.
-   * - __teardown__ (_Function_): A function that gets called when the actor is removed from an animation with [`Rekapi#removeActor`](rekapi.core.js.html#removeActor).
-   * @param {Object=} opt_config
+   * @class Rekapi.Actor
+   * @param {Object=} opt_config Valid properties:
+   *   - __context__ (_Object|CanvasRenderingContext2D|HTMLElement_): The
+   *   rendering context for this actor. If omitted, this Actor gets the parent
+   *   `{{#crossLink "Rekapi"}}{{/crossLink}}` instance's `context` when it is
+   *   added with `{{#crossLink "Rekapi/addActor:method"}}{{/crossLink}}`.
+   *   - __setup__ (_Function_): A function that gets called when the actor is
+   *     added to an animation with
+   *     `{{#crossLink "Rekapi/addActor:method"}}{{/crossLink}}`.
+   *   - __render__ (_Function(Object, Object)_): A function that gets called
+   *   every time the actor's state is updated (once every frame). This
+   *   function should do something meaningful with state of the actor (for
+   *   example, visually rendering to the screen).  This function receives two
+   *   parameters: The first is a reference to the actor's `context` and the
+   *   second is an Object containing the current state properties.
+   *   - __teardown__ (_Function_): A function that gets called when the actor
+   *   is removed from an animation with
+   *   `{{#crossLink "Rekapi/removeActor:method"}}{{/crossLink}}`.
    * @constructor
    */
   Rekapi.Actor = function (opt_config) {
@@ -947,23 +1025,67 @@ rekapiModules.push(function (context) {
   // `Tweenable` constructor.
 
   /**
-   * Create a keyframe for the actor.  `millisecond` defines where in the animation's timeline to place the keyframe.  The animation timeline begins at `0`.  The timeline's length will automatically "grow" to accommodate new keyframes as they are added.
+   * Create a keyframe for the actor.  The animation timeline begins at `0`.
+   * The timeline's length will automatically "grow" to accommodate new
+   * keyframes as they are added.
    *
-   * `properties` should contain all of the properties that define this keyframe's state.  These properties can be any value that can be tweened by [Shifty](https://github.com/jeremyckahn/shifty) (numbers, RGB/hexadecimal color strings, and CSS property strings).
+   * `state` should contain all of the properties that define this
+   * keyframe's state.  These properties can be any value that can be tweened
+   * by [Shifty](http://jeremyckahn.github.io/shifty/) (numbers,
+   * RGB/hexadecimal color strings, and CSS property strings).  `state` can
+   * also be a function, but this works differently (see "Function keyframes"
+   * below).
    *
-   * __Note:__ Internally, this creates [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s and places them on a "track."  These [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s are managed for you by the [`Rekapi.Actor`](#Actor) APIs.
+   * __Note:__ Internally, this creates `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s and places them on a "track."
+   * These `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s are
+   * managed for you by the `{{#crossLink "Rekapi.Actor"}}{{/crossLink}}` APIs.
+   *
+   * ## Keyframe inheritance
+   *
+   * Keyframes always inherit missing properties from the previous keyframe.
+   * For example:
+   *
+   *     actor.keyframe(0, {
+   *       'x': 100
+   *     }).keyframe(1000, {
+   *       // Implicitly specifies the `x: 100` from above
+   *       'y': 50
+   *     });
+   *
+   * Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x`
+   * was inherited from keyframe `0`.
+   *
+   * ## Function keyframes
+   *
+   * Instead of providing an Object to be used to interpolate state values, you
+   * can provide a function to be called at a specific point on the timeline.
+   * This function does not need to return a value, as it does not get used to
+   * render the actor state.  Function keyframes are called once per animation
+   * loop and do not have any tweening relationship with one another.  This is
+   * a primarily a mechanism for scheduling arbitrary code to be executed at
+   * specific points in an animation.
+   *
+   *     // drift is the number of milliseconds that this function was executed
+   *     // after the scheduled time.  There is typically some amount of delay
+   *     // due to the nature of JavaScript timers.
+   *     actor.keyframe(1000, function (drift) {
+   *       console.log(this); // Logs the actor instance
+   *     });
    *
    * ## Easing
    *
-   * `opt_easing`, if provided, can be a string or an Object.  If it's a string, all `properties` will have the same easing curve applied to them. For example:
+   * `opt_easing`, if provided, can be a string or an Object.  If `opt_easing`
+   * is a string, all animated properties will have the same easing curve
+   * applied to them.  For example:
    *
    *     actor.keyframe(1000, {
    *         'x': 100,
    *         'y': 100
    *       }, 'easeOutSine');
-   * ` `
    *
-   * Both `x` and `y` will have `easeOutSine` applied to them.  You can also specify multiple easing curves with an Object:
+   * Both `x` and `y` will have `easeOutSine` applied to them.  You can also
+   * specify multiple easing curves with an Object:
    *
    *     actor.keyframe(1000, {
    *         'x': 100,
@@ -972,39 +1094,21 @@ rekapiModules.push(function (context) {
    *         'x': 'easeinSine',
    *         'y': 'easeOutSine'
    *       });
-   * ` `
    *
-   * `x` will ease with `easeInSine`, and `y` will ease with `easeOutSine`.  Any unspecified properties will ease with `linear`.  If `opt_easing` is omitted, all properties will default to `linear`.
-   *
-   * ## Keyframe inheritance
-   *
-   * Keyframes always inherit missing properties from the previous keyframe.  For example:
-   *
-   *     actor.keyframe(0, {
-   *       'x': 100
-   *     }).keyframe(1000{
-   *       // Inherits the `x: 100` from above
-   *       'y': 50
-   *     });
-   * ` `
-   *
-   * Keyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x` was inherited from keyframe `0`.
-   *
-   * ## Function keyframes
-   *
-   * Instead of providing an object to be used to interpolate state values, you can provide a function to be called at a specific point on the timeline.  This function does not need to return a value, as it does not get used to renderthe actor state.  Function keyframes are called once per animation loop and do not have any tweening relationship with one another.  This is a primarily a mechanism for scheduling arbitrary code to be executed at specific points in an animation.
-   *
-   *     // drift is the number of milliseconds that this function was executed
-   *     // after the scheduled time.  There is typically some amount of delay due
-   *     // to the nature of JavaScript timers.
-   *     actor.keyframe(1000, function (drift) {
-   *       console.log(this); // Logs the actor instance
-   *     });
-   * ` `
+   * `x` will ease with `easeInSine`, and `y` will ease with `easeOutSine`.
+   * Any unspecified properties will ease with `linear`.  If `opt_easing` is
+   * omitted, all properties will default to `linear`.
+   * @method keyframe
    * @param {number} millisecond Where on the timeline to set the keyframe.
-   * @param {Object|Function(number)} state The state properties of the keyframe.  If this is an Object, the properties will be interpolated between this and those of the following keyframe for a given point between the two on the animation timeline.  If this is a function, it will be executed at the specified keyframe.  The function will receive a number that represents the delay between when the function is called and when it was scheduled.
-   * @param {string|Object=} opt_easing Optional easing string or Object.  If state is passed as a function, this is not used.
-   * @return {Rekapi.Actor}
+   * @param {Object|Function(number)} state The state properties of the
+   * keyframe.  If this is an Object, the properties will be interpolated
+   * between this and those of the following keyframe for a given point on the
+   * animation timeline.  If this is a function, it will be executed at the
+   * specified keyframe.  The function will receive a number that represents
+   * the delay between when the function is called and when it was scheduled.
+   * @param {string|Object=} opt_easing Optional easing string or Object.  If
+   * `state` is a function, this is ignored.
+   * @chainable
    */
   Actor.prototype.keyframe = function keyframe (
     millisecond, state, opt_easing) {
@@ -1036,11 +1140,12 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Determines if an actor has any properties of a keyframe set at a given millisecond.  You can scope this and determine if a property exists on a particular track with `opt_trackName`.
-   *
+   * @method hasKeyframeAt
    * @param {number} millisecond Point on the timeline to query.
-   * @param {string=} opt_trackName Optional name of a property track.
-   * @return {boolean}
+   * @param {string=} opt_trackName Optionally scope the lookup to a particular
+   * track.
+   * @return {boolean} Whether or not the actor has any `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set at `millisecond`.
    */
   Actor.prototype.hasKeyframeAt = function (millisecond, opt_trackName) {
     var tracks = this._propertyTracks;
@@ -1065,7 +1170,10 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Copies all of the [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s from one point on the actor's timeline to another. This is particularly useful for animating an actor back to its original position.
+   * Copies all of the `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s from one point on the actor's
+   * timeline to another. This is particularly useful for animating an actor
+   * back to its original position.
    *
    *     actor
    *       .keyframe(0, {
@@ -1077,13 +1185,15 @@ rekapiModules.push(function (context) {
    *       });
    *
    *     // Return the actor to its original position
-   *     actor.copyFrom(2000, 0);
-   * ` `
+   *     actor.copyKeyframe(2000, 0);
    *
    * __[Example](../../../../docs/examples/actor_copy_keyframe.html)__
-   * @param {number} copyTo The timeline millisecond to copy KeyframeProperties to.
-   * @param {number} copyFrom The timeline millisecond to copy KeyframeProperties from.
-   * @return {Rekapi.Actor}
+   * @method copyKeyframe
+   * @param {number} copyTo The timeline millisecond to copy KeyframeProperties
+   * to.
+   * @param {number} copyFrom The timeline millisecond to copy
+   * KeyframeProperties from.
+   * @chainable
    */
   Actor.prototype.copyKeyframe = function (copyTo, copyFrom) {
     // Build the configuation objects to be passed to Actor#keyframe
@@ -1105,11 +1215,19 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Moves all of the [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s from one point on the actor's timeline to another.  Although this method does error checking for you to make sure the operation can be safely performed, an effective pattern is to use [`hasKeyframeAt`](#hasKeyframeAt) to see if there is already a keyframe at the requested `to` destination.
+   * Moves all of the
+   * `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s from one
+   * point on the actor's timeline to another.  Although this method does error
+   * checking for you to make sure the operation can be safely performed, an
+   * effective pattern is to use `{{#crossLink
+   * "Rekapi.Actor/hasKeyframeAt:method"}}{{/crossLink}}` to see if there is
+   * already a keyframe at the requested `to` destination.
    *
    * __[Example](../../../../docs/examples/actor_move_keyframe.html)__
+   * @method moveKeyframe
    * @param {number} from The millisecond of the keyframe to be moved.
-   * @param {number} to The millisecond of where the keyframe should be moved to.
+   * @param {number} to The millisecond of where the keyframe should be moved
+   * to.
    * @return {boolean} Whether or not the keyframe was successfully moved.
    */
   Actor.prototype.moveKeyframe = function (from, to) {
@@ -1133,7 +1251,10 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Augment the `value` or `easing` of the [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s at a given millisecond.  Any [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s omitted in `stateModification` or `opt_easing` are not modified.  Here's how you might use it:
+   * Augment the `value` or `easing` of the `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s at a given millisecond.  Any
+   * `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s omitted in
+   * `stateModification` or `opt_easing` are not modified.
    *
    *     actor.keyframe(0, {
    *       'x': 10,
@@ -1153,13 +1274,13 @@ rekapiModules.push(function (context) {
    *     }, {
    *       'x': 'easeFrom'
    *     });
-   * ` `
    *
    * __[Example](../../../../docs/examples/actor_modify_keyframe.html)__
+   * @method modifyKeyframe
    * @param {number} millisecond
    * @param {Object} stateModification
    * @param {Object=} opt_easingModification
-   * @return {Rekapi.Actor}
+   * @chainable
    */
   Actor.prototype.modifyKeyframe = function (
     millisecond, stateModification, opt_easingModification) {
@@ -1183,20 +1304,25 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Remove all [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s at a given millisecond in the animation.
+   * Remove all `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set
+   * on the actor at a given millisecond in the animation.
    *
    * __[Example](../../../../docs/examples/actor_remove_keyframe.html)__
-   * @param {number} millisecond The location on the timeline of the keyframe to remove.
-   * @return {Rekapi.Actor}
+   * @method removeKeyframe
+   * @param {number} millisecond The location on the timeline of the keyframe
+   * to remove.
+   * @chainable
    */
   Actor.prototype.removeKeyframe = function (millisecond) {
     var propertyTracks = this._propertyTracks;
 
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
-      var keyframeProperty = _.findWhere(propertyTrack, {millisecond: millisecond});
+      var keyframeProperty = _.findWhere(
+        propertyTrack, { millisecond: millisecond });
 
       if (keyframeProperty) {
-        propertyTracks[propertyName] = _.without(propertyTrack, keyframeProperty);
+        propertyTracks[propertyName] = _.without(
+          propertyTrack, keyframeProperty);
         keyframeProperty.detach();
       }
     }, this);
@@ -1212,10 +1338,12 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Remove all [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s set on the actor.
+   * Remove all `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set
+   * on the actor.
    *
    * __[Example](../../../../docs/examples/actor_remove_all_keyframes.html)__
-   * @return {Rekapi.Actor}
+   * @method removeAllKeyframes
+   * @chainable
    */
   Actor.prototype.removeAllKeyframes = function () {
     _.each(this._propertyTracks, function (propertyTrack) {
@@ -1235,26 +1363,37 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Get the [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html) from an actor's property track. Returns `undefined` if no properties were found.
-   * @param {string} property The name of the property.
-   * @param {number} index The millisecond of the property in the timeline.
-   * @return {Rekapi.KeyframeProperty|undefined}
+   * @method getKeyframeProperty
+   * @param {string} property The name of the property track.
+   * @param {number} millisecond The millisecond of the property in the
+   * timeline.
+   * @return {Rekapi.KeyframeProperty|undefined} A `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` that is stored on the actor, as
+   * specified by the `property` and `millisecond` parameters. This is
+   * `undefined` if no properties were found.
    */
   Actor.prototype.getKeyframeProperty = function (property, millisecond) {
     var propertyTrack = this._propertyTracks[property];
     if (propertyTrack) {
-      return _.findWhere(propertyTrack, {millisecond: millisecond});
+      return _.findWhere(propertyTrack, { millisecond: millisecond });
     }
   };
 
   /**
-   * Modify a [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html) stored on an actor.  This calls [`KeyframeProperty#modifyWith`](rekapi.keyframe-property.js.html#modifyWith) (passing along `newProperties`) and then performs some cleanup.
+   * Modify a `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}` stored
+   * on an actor.  Internally, this calls `{{#crossLink
+   * "Rekapi.KeyframeProperty/modifyWith:method"}}{{/crossLink}}` and then
+   * performs some cleanup.
    *
    * __[Example](../../../../docs/examples/actor_modify_keyframe_property.html)__
-   * @param {string} property The name of the property to modify.
-   * @param {number} millisecond The timeline millisecond of the KeyframeProperty to modify.
-   * @param {Object} newProperties The properties to augment the KeyframeProperty with.
-   * @return {Rekapi.Actor}
+   * @method modifyKeyframeProperty
+   * @param {string} property The name of the `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` to modify.
+   * @param {number} millisecond The timeline millisecond of the `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` to modify.
+   * @param {Object} newProperties The properties to augment the `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` with.
+   * @chainable
    */
   Actor.prototype.modifyKeyframeProperty = function (
     property, millisecond, newProperties) {
@@ -1269,10 +1408,15 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Removes a [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html) from the actor.
-   * @param {string} property The name of the property to remove.
-   * @param {number} millisecond Where in the timeline the property to remove is.
-   * @return {Rekapi.KeyframeProperty|undefined} The removed KeyframeProperty, if one was found.
+   * Remove a single `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`
+   * from the actor.
+   * @method removeKeyframeProperty
+   * @param {string} property The name of the `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` to remove.
+   * @param {number} millisecond Where in the timeline the `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` to remove is.
+   * @return {Rekapi.KeyframeProperty|undefined} The removed KeyframeProperty,
+   * if one was found.
    */
   Actor.prototype.removeKeyframeProperty = function (property, millisecond) {
     var propertyTracks = this._propertyTracks;
@@ -1290,17 +1434,20 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Get a list of all the track names for an actor.
-   * @return {Array.<string>}
+   *
+   * @method getTrackNames
+   * @return {Array(string)} A list of all the track names for an actor.
    */
   Actor.prototype.getTrackNames = function () {
     return _.keys(this._propertyTracks);
   };
 
   /**
-   * Get all of the [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s for a track.
-   * @param {string} trackName
-   * @return {Array.<Rekapi.KeyframeProperty>|undefined}
+   * Get all of the `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s
+   * for a track.
+   * @method getPropertiesInTrack
+   * @param {string} trackName The track name to query.
+   * @return {Rekapi.KeyframeProperty[]|undefined}
    */
   Actor.prototype.getPropertiesInTrack = function (trackName) {
     var propertyTrack = this._propertyTracks[trackName];
@@ -1311,9 +1458,12 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Get the millisecond of the first animated state of an actor (for instance, if the actor's first keyframe is later than millisecond `0`).  You can scope this and get the start time of a specific track with `opt_trackName`.  If there are no keyframes, this returns `0`.
-   * @param {string=} opt_trackName
-   * @return {number}
+   * @method getStart
+   * @param {string=} opt_trackName Optionally scope the lookup to a particular
+   * track.
+   * @return {number} The millisecond of the first animating state of an actor
+   * (for instance, if the actor's first keyframe is later than millisecond
+   * `0`).  If there are no keyframes, this returns `0`.
    */
   Actor.prototype.getStart = function (opt_trackName) {
     var starts = [];
@@ -1351,9 +1501,12 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Get the millisecond in the timeline of the last state of an `Actor` (when it is done animating).  You can scope this and get the last state for a specific track with `opt_trackName`.  If there are no keyframes, this returns `0`.
-   * @param {string=} opt_trackName
-   * @return {number}
+   * @method getEnd
+   * @param {string=} opt_trackName Optionally scope the lookup to a particular
+   * keyframe track.
+   * @return {number} The millisecond of the last state of an actor (the point
+   * in the timeline in which it is done animating).  If there are no
+   * keyframes, this is `0`.
    */
   Actor.prototype.getEnd = function (opt_trackName) {
     var latest = 0;
@@ -1378,20 +1531,29 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Get the length of time in milliseconds that an actor animates for.  You can scope this and get the length of time that a specific track animates for with `opt_trackName`.
-   * @param {string=} opt_trackName
-   * @return {number}
+   * @method getLength
+   * @param {string=} opt_trackName Optionally scope the lookup to a particular
+   * track.
+   * @return {number} The length of time in milliseconds that the actor
+   * animates for.
    */
   Actor.prototype.getLength = function (opt_trackName) {
     return this.getEnd(opt_trackName) - this.getStart(opt_trackName);
   };
 
   /**
-   * Extend the last state on this actor's timeline to simulate a pause. The state does not change during this time.
+   * Extend the last state on this actor's timeline to simulate a pause.
+   * Internally, this method copies the final state of the actor in the
+   * timeline to the millisecond defined by `until`.
    *
    * __[Example](../../../../docs/examples/actor_wait.html)__
-   * @param {number} until At what point in the animation the Actor should wait until (relative to the start of the animation timeline).  If this number is less than the value returned from getLength, this method does nothing.
-   * @return {Rekapi.Actor}
+   * @method wait
+   * @param {number} until At what point in the animation the Actor should wait
+   * until (relative to the start of the animation timeline).  If this number
+   * is less than the value returned from `{{#crossLink
+   * "Rekapi.Actor/getLength:method"}}{{/crossLink}}`, this method does
+   * nothing.
+   * @chainable
    */
   Actor.prototype.wait = function (until) {
     var length = this.getEnd();
@@ -1418,9 +1580,11 @@ rekapiModules.push(function (context) {
   };
 
   /*!
-   * Associate a `Rekapi.KeyframeProperty` to this actor.  Augments the `Rekapi.KeyframeProperty` to maintain a link between the two objects.
+   * Associate a `Rekapi.KeyframeProperty` to this actor.  Augments the
+   * `Rekapi.KeyframeProperty` to maintain a link between the two objects.
+   * @method _addKeyframeProperty
    * @param {Rekapi.KeyframeProperty} keyframeProperty
-   * @return {Rekapi.Actor}
+   * @chainable
    */
   Actor.prototype._addKeyframeProperty = function (keyframeProperty) {
     keyframeProperty.actor = this;
@@ -1449,8 +1613,9 @@ rekapiModules.push(function (context) {
 
   /*!
    * Calculate and set the actor's position at `millisecond` in the animation.
+   * @method _updateState
    * @param {number} millisecond
-   * @return {Rekapi.Actor}
+   * @chainable
    */
   Actor.prototype._updateState = function (millisecond) {
     var startMs = this.getStart();
@@ -1504,12 +1669,14 @@ rekapiModules.push(function (context) {
   };
 
   /*!
+   * @method _beforeKeyframePropertyInterpolate
    * @param {Rekapi.KeyframeProperty} keyframeProperty
    * @abstract
    */
   Actor.prototype._beforeKeyframePropertyInterpolate = noop;
 
   /*!
+   * @method _afterKeyframePropertyInterpolate
    * @param {Rekapi.KeyframeProperty} keyframeProperty
    * @param {Object} interpolatedObject
    * @abstract
@@ -1517,10 +1684,10 @@ rekapiModules.push(function (context) {
   Actor.prototype._afterKeyframePropertyInterpolate = noop;
 
   /**
-   * Export a serializable Object of this actor's timeline property tracks and [`Rekapi.KeyframeProperty`](rekapi.keyframe-property.js.html)s.
-   *
    * __[Example](../../../../docs/examples/actor_export_timeline.html)__
-   * @return {Object}
+   * @method exportTimeline
+   * @return {Object} A serializable Object of this actor's timeline property
+   * tracks and `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s.
    */
   Actor.prototype.exportTimeline = function () {
     var exportData = {
@@ -1541,9 +1708,13 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Import an Object to augment this actor's state.  This does not remove keyframe properties before importing new ones, so this could be used to "merge" keyframes across multiple actors.
+   * Import an Object to augment this actor's state.  This does not remove
+   * keyframe properties before importing new ones.
    *
-   * @param {Object} actorData Any object that has the same data format as the object generated from Actor#exportTimeline.
+   * @method importTimeline
+   * @param {Object} actorData Any object that has the same data format as the
+   * object generated from `{{#crossLink
+   * "Rekapi.Actor/exportTimeline:method"}}{{/crossLink}}`.
    */
   Actor.prototype.importTimeline = function (actorData) {
     _.each(actorData.propertyTracks, function (propertyTrack) {
@@ -1568,11 +1739,18 @@ rekapiModules.push(function (context) {
   var interpolate = Tweenable.interpolate;
 
   /**
-   * Represents an individual component of an actor's keyframe state.  In most cases you won't need to deal with this object directly, as the [`Rekapi.Actor`](rekapi.actor.js.html#Actor) APIs abstract a lot of what this Object does away for you.
-   * @param {number} millisecond Where on the animation timeline this KeyframeProperty is.
-   * @param {string} name The property's name, such as "x" or "opacity."
-   * @param {number|string|Function} value The value that this KeyframeProperty represents.
-   * @param {string=} opt_easing The easing curve at which this KeyframeProperty should be animated to.  Defaults to "linear".
+   * Represents an individual component of an actor's keyframe state.  In most
+   * cases you won't need to deal with this object directly, as the
+   * `{{#crossLink "Rekapi.Actor"}}{{/crossLink}}` APIs abstract a lot of what
+   * this Object does away for you.
+   * @class Rekapi.KeyframeProperty
+   * @param {number} millisecond Where on the animation timeline this
+   * `Rekapi.KeyframeProperty` is.
+   * @param {string} name The property's name, such as `"x"` or `"opacity"`.
+   * @param {number|string|Function} value The value that this
+   * `Rekapi.KeyframeProperty` represents.
+   * @param {string=} opt_easing The easing curve at which this
+   * `Rekapi.KeyframeProperty` should be animated to.  Defaults to `"linear"`.
    * @constructor
    */
   Rekapi.KeyframeProperty = function (millisecond, name, value, opt_easing) {
@@ -1589,13 +1767,14 @@ rekapiModules.push(function (context) {
   var KeyframeProperty = Rekapi.KeyframeProperty;
 
   /**
-   * Modify a [`Rekapi.KeyframeProperty`](#KeyframeProperty).  Any of the following are valid properties of `newProperties` and correspond to the parameters of the [`Rekapi.KeyframeProperty`](#KeyframeProperty) constructor:
-   *
-   * - _millisecond_ (__number__)
-   * - _name_ (__string__)
-   * - _value_ (__number|string__)
-   * - _easing_ (__string__)
-   * @param {Object} newProperties
+   * Modify this `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`.
+   * @method modifyWith
+   * @param {Object} newProperties Valid values correspond to `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}`'s constructor parameters:
+   *   - __millisecond__ (_number_)
+   *   - __name__ (_string_)
+   *   - __value__ (_number|string_)
+   *   - __easing__ (_string_)
    */
   KeyframeProperty.prototype.modifyWith = function (newProperties) {
     var modifiedProperties = {};
@@ -1609,10 +1788,20 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Calculate the midpoint between this [`Rekapi.KeyframeProperty`](#KeyframeProperty) and the next [`Rekapi.KeyframeProperty`](#KeyframeProperty) in a actor's property track.
+   * Calculate the midpoint between this `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` and the next `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` in a `{{#crossLink
+   * "Rekapi.Actor"}}{{/crossLink}}`'s property track.
    *
-   * In just about all cases, `millisecond` should be between this [`Rekapi.KeyframeProperty`](#KeyframeProperty)'s `millisecond` and the `millisecond` of the [`Rekapi.KeyframeProperty`](#KeyframeProperty) that follows it in the animation timeline, but it is valid to specify a value outside of this range.
-   * @param {number} millisecond The millisecond in the animation timeline to compute the state value for.
+   * In just about all cases, `millisecond` should be between this
+   * `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`'s `millisecond`
+   * and the `millisecond` of the `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` that follows it in the
+   * animation timeline, but it is valid to specify a value outside of this
+   * range.
+   * @method getValueAt
+   * @param {number} millisecond The millisecond in the animation timeline to
+   * compute the state value for.
    * @return {number}
    */
   KeyframeProperty.prototype.getValueAt = function (millisecond) {
@@ -1643,16 +1832,29 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Create the reference to the [`Rekapi.KeyframeProperty`](#KeyframeProperty) that follows this one on an actor's property track.  Property tracks are just linked lists of [`Rekapi.KeyframeProperty`](#KeyframeProperty)s.
-   * @param {Rekapi.KeyframeProperty} nextProperty The KeyframeProperty that should immediately follow this one on the animation timeline.
+   * Create the reference to the `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` that follows this one on a
+   * `{{#crossLink "Rekapi.Actor"}}{{/crossLink}}`'s property track.  Property
+   * tracks are just linked lists of `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s.
+   * @method linkToNext
+   * @param {Rekapi.KeyframeProperty} nextProperty The `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` that should immediately follow
+   * this one on the animation timeline.
    */
   KeyframeProperty.prototype.linkToNext = function (nextProperty) {
     this.nextProperty = nextProperty || null;
   };
 
   /**
-   * Disassociates this [`Rekapi.KeyframeProperty`](#KeyframeProperty) from its [`Rekapi.Actor`](rekapi.actor.js.html#Actor), if it has one.  This is called automatically by various [`Rekapi.Actor`](rekapi.actor.js.html#Actor) methods and triggers the [`removeKeyframeProperty`](rekapi.core.js.html#on) event on the associated [`Rekapi`](rekapi.core.js.html#Rekapi) instance, if there is one.
-   * @return {Rekapi.KeyframeProperty}
+   * Disassociates this `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` from its `{{#crossLink
+   * "Rekapi.Actor"}}{{/crossLink}}`.  This is called by various `{{#crossLink
+   * "Rekapi.Actor"}}{{/crossLink}}` methods and triggers the `{{#crossLink
+   * "Rekapi/on:method"}}removeKeyframeProperty{{/crossLink}}` event on the
+   * associated `{{#crossLink "Rekapi"}}{{/crossLink}}` instance.
+   * @method detach
+   * @chainable
    */
   KeyframeProperty.prototype.detach = function () {
     var actor = this.actor;
@@ -1668,10 +1870,10 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Export a serializable Object of this [`Rekapi.KeyframeProperty`](#KeyframeProperty)'s state data.
-   *
    * __[Example](../../../../docs/examples/keyprop_export_property_data.html)__
-   * @return {Object}
+   * @method exportPropertyData
+   * @return {Object} A serializable Object representation of this
+   * `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`.
    */
   KeyframeProperty.prototype.exportPropertyData = function () {
     return {
@@ -1685,6 +1887,7 @@ rekapiModules.push(function (context) {
   /*!
    * Whether or not this is a function keyframe and should be invoked for the
    * current frame.  Helper method for Rekapi.Actor.
+   * @method shouldInvokeForMillisecond
    * @return {boolean}
    */
   KeyframeProperty.prototype.shouldInvokeForMillisecond =
@@ -1696,7 +1899,9 @@ rekapiModules.push(function (context) {
 
   /**
    * Assuming this is a function keyframe, call the function.
-   * @return {*} Whatever value is returned from the bound function.
+   * @method invoke
+   * @return {*} Whatever value is returned from the keyframe function that was
+   * set for this `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`.
    */
   KeyframeProperty.prototype.invoke = function () {
     var drift = this.actor.rekapi._loopPosition - this.millisecond;
@@ -1812,23 +2017,38 @@ rekapiModules.push(function (context) {
   //
 
   /**
-   * You can use Rekapi to render to an HTML5 `<canvas>`.  To do so, just provide a `CanvasRenderingContext2D` instance to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor to automatically set up the renderer:
+   * You can use Rekapi to render animations to an HTML5 `<canvas>`.  To do so,
+   * just provide a
+   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+   * instance to the `{{#crossLink "Rekapi"}}{{/crossLink}}` constructor to
+   * automatically set up the renderer:
    *
    *     var context = document.createElement('canvas').getContext('2d');
    *     var rekapi = new Rekapi(context);
    *     rekapi.renderer instanceof Rekapi.CanvasRenderer; // true
-   * ` `
    *
-   * `Rekapi.CanvasRenderer` adds some canvas-specific events you can bind to with [`Rekapi#on`](../../src/rekapi.core.js.html#on) (and unbind from with [`Rekapi#off`](../../src/rekapi.core.js.html#off)):
+   * `Rekapi.CanvasRenderer` adds some canvas-specific events you can bind to
+   * with `{{#crossLink "Rekapi/on:method"}}{{/crossLink}}` (and unbind from
+   * with `{{#crossLink "Rekapi/off:method"}}{{/crossLink}}`:
    *
-   *  - __beforeRender__: Fires just before an actor is rendered to the screen.
-   *  - __afterRender__: Fires just after an actor is rendered to the screen.
+   *  - __beforeRender__: Fires just before an actor is rendered to the canvas.
+   *  - __afterRender__: Fires just after an actor is rendered to the canvas.
    *
-   * __Note__: `Rekapi.CanvasRenderer` is instantiated for you automatically as `renderer`, there is no reason to call it yourself for most use cases.
+   * __Note__: `Rekapi.CanvasRenderer` is added to the `{{#crossLink
+   * "Rekapi"}}{{/crossLink}}` instance automatically as `this.renderer`, there
+   * is no reason to call the constructor yourself in most cases.
    *
-   * ## Advanced usage
+   * ## Multiple renderers
    *
-   * Rekapi supports multiple renderers per instance.  Do do this, you must not provide a `CanvasRenderingContext2D` to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor, you must instead initialize the renderer yourself.  The `CanvasRenderingContext2D` that would have been provided to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor instead is provided as the second parameter to `Rekapi.CanvasRenderer`:
+   * Rekapi supports multiple renderers per instance.  Do do this, you must not
+   * provide a
+   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+   * to the `{{#crossLink "Rekapi"}}{{/crossLink}}` constructor, you must
+   * instead initialize the renderer yourself.  The
+   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+   * that would have been provided to the `{{#crossLink
+   * "Rekapi"}}{{/crossLink}}` constructor instead is provided as the second
+   * parameter to `Rekapi.CanvasRenderer`:
    *
    *
    *     var canvasContext = document.querySelector('canvas').getContext('2d');
@@ -1839,7 +2059,9 @@ rekapiModules.push(function (context) {
    *     // Initialize Rekapi.CanvasRenderer manually and give it a
    *     // CanvasRenderingContext2D.  You can name it anything you want on the
    *     // Rekapi instance.
-   *     rekapi.canvasRenderer = new Rekapi.CanvasRenderer(rekapi, canvasContext);
+   *     rekapi.canvasRenderer =
+   *         new Rekapi.CanvasRenderer(rekapi, canvasContext);
+   * @class Rekapi.CanvasRenderer
    * @param {Rekapi} rekapi
    * @param {CanvasRenderingContext2D=} opt_context
    * @constructor
@@ -1880,8 +2102,8 @@ rekapiModules.push(function (context) {
 
   /**
    * Get and optionally set the height of the associated `<canvas>` element.
-   *
-   * @param {number=} opt_height
+   * @method height
+   * @param {number=} opt_height The height to optionally set.
    * @return {number}
    */
   CanvasRenderer.prototype.height = function (opt_height) {
@@ -1890,8 +2112,8 @@ rekapiModules.push(function (context) {
 
   /**
    * Get and optionally set the width of the associated `<canvas>` element.
-   *
-   * @param {number=} opt_width
+   * @method width
+   * @param {number=} opt_width The width to optionally set.
    * @return {number}
    */
   CanvasRenderer.prototype.width = function (opt_width) {
@@ -1900,7 +2122,7 @@ rekapiModules.push(function (context) {
 
   /**
    * Erase the `<canvas>`.
-   *
+   * @method clear
    * @return {Rekapi}
    */
   CanvasRenderer.prototype.clear = function () {
@@ -1910,15 +2132,22 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Move an actor around within the render order list.  Each actor is rendered in order of its layer (layers and actors have a 1:1 relationship).  The later an actor is added to an animation (with [`Rekapi.addActor`](../../src/rekapi.core.js.html#addActor)), the higher its layer.  Lower layers (starting with 0) are rendered earlier.
+   * Move an actor around within the render order list.  Each actor is rendered
+   * in order of its layer (layers and actors have a 1:1 relationship).  The
+   * later an actor is added to an animation (with `{{#crossLink
+   * "Rekapi/addActor:method"}}{{/crossLink}}`), the higher its layer.  Lower
+   * layers (starting with 0) are rendered earlier.
    *
-   * `layer` should be within `0` and the total number of actors in the animation.  The total number of layers in the animation can be found with [`Rekapi.getActorCount`](../../src/rekapi.core.js.html#getActorCount).
    *
-   * This method has no effect if an order function is set with [`setOrderFunction`](#setOrderFunction).
+   * This method has no effect if an order function is set with `{{#crossLink
+   * "Rekapi.CanvasRenderer/setOrderFunction:method"}}{{/crossLink}}`.
    *
    * __[Example](../../../../docs/examples/canvas_move_actor_to_layer.html)__
+   * @method moveActorToLayer
    * @param {Rekapi.Actor} actor
-   * @param {number} layer
+   * @param {number} layer This should be within `0` and the total number of
+   * actors in the animation.  That number can be found with `{{#crossLink
+   * "Rekapi/getActorCount:method"}}{{/crossLink}}`.
    * @return {Rekapi.Actor}
    */
   CanvasRenderer.prototype.moveActorToLayer = function (actor, layer) {
@@ -1931,16 +2160,25 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Set a function that defines the render order of the actors.  This is called each frame before the actors are rendered.
+   * Set a function that defines the render order of the actors.  This is
+   * called each frame before the actors are rendered.
    *
-   * The following example assumes that all actors are circles that have a `radius` [`Rekapi.KeyframeProperty`](../../src/rekapi.keyframe-property.js.html).  The circles will be rendered in order of the value of their `radius`, from smallest to largest.  This has the effect of layering larger circles on top of smaller circles, thus giving a sense of perspective.
+   * The following example assumes that all actors are circles that have a
+   * `radius` `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`.  The
+   * circles will be rendered in order of the value of their `radius`, from
+   * smallest to largest.  This has the effect of layering larger circles on
+   * top of smaller circles, thus giving a sense of perspective.
    *
-   * If a render order function is specified, layer changes made [`moveActorToLayer`](#moveActorToLayer) will be ignored.
+   * If a render order function is specified, `{{#crossLink
+   * "Rekapi.CanvasRenderer/moveActorToLayer:method"}}{{/crossLink}}` will have
+   * no effect.
    *
    *     rekapi.renderer.setOrderFunction(function (actor) {
    *       return actor.get().radius;
    *     });
-   * @param {function(Rekapi.Actor,number)} sortFunction
+   * __[Example](../../../../docs/examples/canvas_set_order_function.html)__
+   * @method setOrderFunction
+   * @param {function(Rekapi.Actor)} sortFunction
    * @return {Rekapi}
    */
   CanvasRenderer.prototype.setOrderFunction = function (sortFunction) {
@@ -1949,9 +2187,13 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Remove the order function set by [`setOrderFunction`](#setOrderFunction).  The render order defaults back to the order in which the actors were added.
+   * Remove the order function set by `{{#crossLink
+   * "Rekapi.CanvasRenderer/setOrderFunction:method"}}{{/crossLink}}`.  The
+   * render order defaults back to the order in which the actors were added to
+   * the animation.
    *
    * __[Example](../../../../docs/examples/canvas_unset_order_function.html)__
+   * @method unsetOrderFunction
    * @return {Rekapi}
    */
   CanvasRenderer.prototype.unsetOrderFunction = function () {
@@ -2254,60 +2496,89 @@ rekapiModules.push(function (context) {
   //
 
   /**
-   * `DOMRenderer` allows you to animate DOM elements.  This is achieved either by browser-accelerated [CSS `@keyframe` animations](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes), or by traditional inline style updates on every frame (like how [`jQuery.fn.animate`](http://api.jquery.com/animate/) works).  Animations are defined with the same API in either case, but you can gracefully fall back to the inline style approach if CSS `@keyframe` animations are not supported by the browser or not preferred.  To render animations with the DOM, just supply any DOM element to the [`Rekapi`](../../src/rekapi.core.js.html#Rekapi) constructor.  You may use `document.body`, since it is generally always available:
+   * `Rekapi.DOMRenderer` allows you to animate DOM elements.  This is achieved
+   * either by browser-accelerated [CSS `@keyframe`
+   * animations](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes),
+   * or by traditional inline style updates on every frame (like how
+   * [`jQuery.fn.animate`](http://api.jquery.com/animate/) works).  Animations
+   * are defined with the same API in either case, but you can gracefully fall
+   * back to the inline style approach if CSS `@keyframe` animations are not
+   * supported by the browser or not preferred.  To render animations with the
+   * DOM, just supply any DOM element to the `{{#crossLink
+   * "Rekapi"}}{{/crossLink}}` constructor.  You may use `document.body`, since
+   * it is generally always available:
    *
    *     var rekapi = new Rekapi(document.body);
    *     rekapi.renderer instanceof Rekapi.DOMRenderer; // true
-   * ` `
    *
-   * There are separate APIs for playing inline style animations and CSS `@keyframe` animations.  Advantages of playing an animation with CSS `@keyframes`:
+   * There are separate APIs for playing inline style animations and CSS
+   * `@keyframe` animations.  Advantages of playing an animation with CSS
+   * `@keyframes`:
    *
-   *   - Smoother animations in modern browsers (particularly noticeable in Webkit and iOS browsers).
-   *   - The JavaScript thread is freed from performing animation updates, making it available for other logic.
+   *   - Smoother animations in newer browsers.
+   *   - The JavaScript thread is freed from performing animation updates,
+   *   making it available for other logic.
    *
    * Disadvantages:
    *
-   *   - Not all browsers render CSS `@keyframe` animations smoothly.
-   *   - Limited playback control: You can only play and stop an animation, you cannot jump to or start from a specific point in the timeline.
-   *   - Generating the CSS for `@keyframe` animations can take a noticeable amount of time.  This blocks all other logic, including rendering, so you may have to be clever with how to spend the cycles to do it.
-   *   - No `Rekapi` [events](../../src/rekapi.core.js.html#on) can be bound to CSS `@keyframe` animations.
+   *   - Not all browsers support CSS `@keyframe` animations.
+   *   - Limited playback control: You can only play and stop an animation, you
+   *   cannot jump to or start from a specific point in the timeline.
+   *   - Generating the CSS for `@keyframe` animations can take a noticeable
+   *   amount of time.  This blocks all other logic, including rendering, so
+   *   you may have to be clever with how to spend the cycles to do it.
+   *   - No `{{#crossLink "Rekapi/on:method"}}events{{/crossLink}}` can be
+   *   bound to CSS `@keyframe` animations.
    *
-   * So, the results are a little more predictable and flexible with inline style animations, but CSS `@keyframe` may give you better performance.  Choose whichever approach makes the most sense for your needs.
+   * So, the results are a little more predictable and flexible with inline
+   * style animations, but CSS `@keyframe` may give you better performance.
+   * Choose whichever approach makes the most sense for your needs.
    *
-   * `DOMRenderer` can gracefully fall back to an inline style animation if CSS `@keyframe` animations are not supported by the browser:
+   * `Rekapi.DOMRenderer` can gracefully fall back to an inline style animation
+   * if CSS `@keyframe` animations are not supported by the browser:
    *
    *      var rekapi = new Rekapi(document.body);
    *
    *      // Each actor needs a reference to the DOM element it represents
-   *      var actor = rekapi.addActor({ context: document.getElementById('actor-1') });
+   *      var actor = rekapi.addActor({
+   *        context: document.getElementById('actor-1')
+   *      });
    *
-   *      actor.keyframe(0,    { left: '0px'   });
-   *      actor.keyframe(1000, { left: '250px' }, 'easeOutQuad');
+   *      actor
+   *        .keyframe(0,    { left: '0px'   })
+   *        .keyframe(1000, { left: '250px' }, 'easeOutQuad');
    *
    *      // Feature detect for CSS @keyframe support
    *      if (rekapi.renderer.canAnimateWithCSS()) {
    *        // Animate with CSS @keyframes
    *        rekapi.renderer.play();
    *      } else {
-   *        // Animate inline styles instead
+   *        // Animate with inline styles instead
    *        rekapi.play();
    *      }
-   * ` `
    *
-   * ## CSS `@keyframe` animations are controlled differently from inline style animations
+   * ## `@keyframe` animations work differently than inline style animations
    *
-   * Inline style animations are compatible with all of the playback and timeline control methods defined by [`Rekapi`](../../src/rekapi.core.js.html#Rekapi), such as [`play`](../../src/rekapi.core.js.html#play), [`playFrom`](../../src/rekapi.core.js.html#playFrom) and [`update`](../../src/rekapi.core.js.html#update).  CSS `@keyframe` playback cannot be controlled, so `DOMRenderer` defines its own analogous, renderer-specific CSS playback methods that you should use:
+   * Inline style animations are compatible with all of the playback and
+   * timeline control methods defined by `{{#crossLink
+   * "Rekapi"}}{{/crossLink}}`, such as `{{#crossLink
+   * "Rekapi/play:method"}}{{/crossLink}}`, `{{#crossLink
+   * "Rekapi/playFrom:method"}}{{/crossLink}}` and `{{#crossLink
+   * "Rekapi/update:method"}}{{/crossLink}}`.  CSS `@keyframe` playback cannot
+   * be controlled in all browsers, so `Rekapi.DOMRenderer` defines analogous,
+   * renderer-specific CSS playback methods that you should use:
    *
-   * - [`play`](#play)
-   * - [`isPlaying`](#isPlaying)
-   * - [`stop`](#stop)
+   *   - {{#crossLink "Rekapi.DOMRenderer/play:method"}}{{/crossLink}}
+   *   - {{#crossLink "Rekapi.DOMRenderer/isPlaying:method"}}{{/crossLink}}
+   *   - {{#crossLink "Rekapi.DOMRenderer/stop:method"}}{{/crossLink}}
    *
-   * This is due to the playback control limitations of the CSS `@keyframe` specification.
-   *
-   *  __Note__: `Rekapi.DOMRenderer` is instantiated for you automatically as `renderer`, there is no reason to call it yourself for most use cases.
+   * __Note__: `Rekapi.DOMRenderer` is added to the `{{#crossLink
+   * "Rekapi"}}{{/crossLink}}` instance automatically as `this.renderer`,
+   * there is no reason to call the constructor yourself in most cases.
    *
    * __[Example](/renderers/dom/sample/play-many-actors.html)__
    *
+   * @class Rekapi.DOMRenderer
    * @param {Rekapi} rekapi
    * @constructor
    */
@@ -2338,9 +2609,9 @@ rekapiModules.push(function (context) {
   var DOMRenderer = Rekapi.DOMRenderer;
 
   /**
-   * Whether or not the browser supports CSS `@keyframe` animations.
-   *
-   * @return {boolean}
+   * @method canAnimateWithCSS
+   * @return {boolean} Whether or not the browser supports CSS `@keyframe`
+   * animations.
    */
   DOMRenderer.prototype.canAnimateWithCSS = function () {
     return !!getVendorPrefix();
@@ -2349,9 +2620,17 @@ rekapiModules.push(function (context) {
   /**
    * Play the Rekapi animation as a CSS `@keyframe` animation.
    *
-   * Note that this is different from [`Rekapi#play`](../../src/rekapi.core.js.html#play).  This method only applies to CSS `@keyframe` animations.
-   * @param {number=} opt_iterations How many times the animation should loop.  This can be null or 0 if you want to loop the animation endlessly but also specify a value for opt_fps.
-   * @param {number=} opt_fps How many @keyframes to generate per second of the animation.  A higher value results in a more precise CSS animation, but it will take longer to generate.  The default value is 30.  You should not need to go higher than 60.
+   * Note that this is different from `{{#crossLink
+   * "Rekapi/play:method"}}{{/crossLink}}`.  This method only applies to CSS
+   * `@keyframe` animations.
+   * @method play
+   * @param {number=} opt_iterations How many times the animation should loop.
+   * This can be `null` or `0` if you want to loop the animation endlessly but
+   * also specify a value for `opt_fps`.
+   * @param {number=} opt_fps How many `@keyframes` to generate per second of
+   * the animation.  A higher value results in a more precise CSS animation,
+   * but it will take longer to generate.  The default value is `30`.  You
+   * should not need to go higher than `60`.
    */
   DOMRenderer.prototype.play = function (opt_iterations, opt_fps) {
     if (this.isPlaying()) {
@@ -2373,10 +2652,16 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Stop a CSS `@keyframe` animation.  This also removes any `<style>` elements that were dynamically injected into the DOM.  This method sets inline styles on actor elements to stay either in their target or current position.
+   * Stop a CSS `@keyframe` animation.  This also removes any `<style>`
+   * elements that were dynamically injected into the DOM.
    *
-   * Note that this is different from [`Rekapi#stop`](../../src/rekapi.core.js.html#stop).  This method only applies to CSS `@keyframe` animations.
-   * @param {boolean=} opt_goToEnd If true, skip to the end of the animation.  If false or omitted, set the actor elements to stay in their current position.
+   * Note that this is different from
+   * `{{#crossLink "Rekapi/stop:method"}}{{/crossLink}}`.  This method only
+   * applies to CSS `@keyframe` animations.
+   * @method stop
+   * @param {boolean=} opt_goToEnd If true, skip to the end of the animation.
+   * If false or omitted, set inline styles on the actor elements to keep them
+   * in their current position.
    */
   DOMRenderer.prototype.stop = function (opt_goToEnd) {
     if (this.isPlaying()) {
@@ -2402,20 +2687,34 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * Whether or not a CSS `@keyframe` animation is running.
-   *
-   * @return {boolean}
+   * @method isPlaying
+   * @return {boolean} Whether or not a CSS `@keyframe` animation is running.
    */
   DOMRenderer.prototype.isPlaying = function () {
     return !!this._styleElement;
   };
 
   /**
-   * Prerender and cache the CSS animation so that it is immediately ready to be used when it is needed in the future.  The function signature is identical to [`DOMRenderer#play`](#play).  This is necessary to play a CSS animation and will be automatically called for you if you don't call it manually, but calling it ahead of time (such as on page load) will prevent any perceived lag when a CSS `@keyframe` animation is started.  The prerendered animation is cached for reuse until the timeline or a keyframe is modified.
+   * Prerender and cache the CSS animation so that it is immediately ready to
+   * be used when it is needed in the future.  The function signature is
+   * identical to {{#crossLink
+   * "Rekapi.DOMRenderer/play:method"}}{{/crossLink}}.  This is necessary to
+   * play a CSS animation and will be automatically called for you if you don't
+   * call it manually, but calling it ahead of time (such as on page load) will
+   * prevent any perceived lag when a CSS `@keyframe` animation is started.
+   * The prerendered animation is cached for reuse until the timeline or a
+   * keyframe is modified.
    *
-   * @param {number=} opt_iterations How many times the animation should loop.  This can be null or 0 if you want to loop the animation endlessly but also specify a value for opt_fps.
-   * @param {number=} opt_fps How many @keyframes to prerender per second of the animation.  A higher value results in a more precise CSS animation, but it will take longer to prerender.  The default value is 30.  You should not need to go higher than 60.
-   * @return {string} The prerendered CSS string.  You likely won't need this, as it is also cached internally.
+   * @method prerender
+   * @param {number=} opt_iterations How many times the animation should loop.
+   * This can be `null` or `0` if you want to loop the animation endlessly but
+   * also specify a value for `opt_fps`.
+   * @param {number=} opt_fps How many `@keyframes` to generate per second of
+   * the animation.  A higher value results in a more precise CSS animation,
+   * but it will take longer to generate.  The default value is `30`.  You
+   * should not need to go higher than `60`.
+   * @return {string} The prerendered CSS string.  You likely won't need this,
+   * as it is also cached internally.
    */
   DOMRenderer.prototype.prerender = function (opt_iterations, opt_fps) {
     return this._cachedCSS = this.toString({
@@ -2426,26 +2725,32 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * You can decouple transform components in order to animate each property with its own easing curve:
+   * You can decouple transform components in order to animate each property
+   * with its own easing curve:
    *
    *     actor
    *       .keyframe(0, {
-   *         'translateX': '0px'
-   *         ,'translateY': '0px'
-   *         ,'rotate': '0deg'
+   *         translateX: '0px',
+   *         translateY: '0px',
+   *         rotate: '0deg'
    *       })
    *       .keyframe(1500, {
-   *         'translateX': '200px'
-   *         ,'translateY': '200px'
-   *         ,'rotate': '90deg'
+   *         translateX: '200px',
+   *         translateY: '200px',
+   *         rotate: '90deg'
    *       }, {
-   *         'translateX': 'easeOutExpo'
-   *         ,'translateY': 'easeInSine'
-   *         ,'rotate': 'elastic'
+   *         translateX: 'easeOutExpo',
+   *         translateY: 'easeInSine',
+   *         rotate: 'elastic'
    *       });
-   * ` `
    *
-   * CSS transform string components are order-dependent, but JavaScript object properties have an unpredictable order.  Rekapi must combine transform properties supplied to [`Rekapi.Actor.keyframe`](../../src/rekapi.actor.js.html#keyframe) (as shown above) into a single string when it renders each frame.  This method lets you change that order from the default.  The supported array values for `orderedTransforms` are:
+   * CSS transform string components are order-dependent, but JavaScript object
+   * properties have an unpredictable order.  Rekapi must combine transform
+   * properties supplied to `{{#crossLink
+   * "Rekapi.Actor/keyframe:method"}}{{/crossLink}}` (as shown above) into a
+   * single string when it renders each frame.  This method lets you change
+   * that order from the default.  The supported array values for
+   * `orderedTransforms` are:
    *
    * - `translateX`
    * - `translateY`
@@ -2457,28 +2762,34 @@ rekapiModules.push(function (context) {
    * - `skewX`
    * - `skewY`
    *
-   * If you prefer a more standards-oriented approach, Rekapi also supports combining the transform components yourself:
+   * If you prefer a more standards-oriented approach, Rekapi also supports
+   * combining the transform components yourself:
    *
    *     actor
    *       .keyframe(0, {
-   *         'transform': 'translateX(0px) translateY(0px) rotate(0deg)'
+   *         transform: 'translateX(0px) translateY(0px) rotate(0deg)'
    *       })
    *       .keyframe(1500, {
-   *         'transform': 'translateX(200px) translateY(200px) rotate(90deg)'
+   *         transform: 'translateX(200px) translateY(200px) rotate(90deg)'
    *       }, {
-   *         'transform': 'easeOutExpo easeInSine elastic'
+   *         transform: 'easeOutExpo easeInSine elastic'
    *       });
-   * ` `
    *
    * This example and the one above it are equivalent.
    *
-   * __Note__: The decoupled form of `transform` animations is not supported in CSS `@keyframe` animations, only inline style animations.  This is due to the tightly-coupled nature of the CSS `@keyframes` spec.  If you intend to play a CSS-based `@keyframe` animation, __do not__ use the non-standard decoupled API form for `transform` properties.
+   * __Note__: The decoupled form of `transform` animations is not supported in
+   * CSS `@keyframe` animations, only inline style animations.  This is due to
+   * the tightly-coupled nature of the CSS `@keyframes` spec.  If you intend to
+   * play a CSS-based `@keyframe` animation, __do not__ use the non-standard
+   * decoupled API form for `transform` properties.
    *
+   * @method setActorTransformOrder
    * @param {Rekapi.Actor} actor
-   * @param {Array.<string>} orderedTransforms The array of transform names.
+   * @param {Array(string)} orderedTransforms The array of transform names.
    * @return {Rekapi}
    */
-  DOMRenderer.prototype.setActorTransformOrder = function (actor, orderedTransforms) {
+  DOMRenderer.prototype.setActorTransformOrder =
+      function (actor, orderedTransforms) {
     // TODO: Document this better...
     var unknownFunctions = _.reject(orderedTransforms, isTransformFunction);
 
@@ -2493,9 +2804,12 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * This is the default CSS class that is targeted by [DOMRenderer#toString](../css-animate/rekapi.renderer.dom.js.html) if a custom class is not specified.  This may be useful for getting a standard and consistent CSS class name for an actor's DOM element.
+   * @method getActorClassName
    * @param {Rekapi.Actor} actor
-   * @return {string}
+   * @return {string} The default CSS class that is targeted by `{{#crossLink
+   * "Rekapi.DOMRenderer/toString:method"}}{{/crossLink}}` if a custom class is
+   * not specified.  This may be useful for getting a standard and consistent
+   * CSS class name for an actor's DOM element.
    */
   DOMRenderer.getActorClassName = function (actor) {
     return 'actor-' + actor.id;
@@ -2503,23 +2817,33 @@ rekapiModules.push(function (context) {
 
   /**
    * Converts Rekapi animations to CSS `@keyframes`.
-   *
-   * ## `opts`
-   *
-   * You can specify some parameters for your CSS animation.  They are all optional:
-   *
-   *  - __vendors__ _(Array)_: Defaults to `['w3']`.  The browser vendors you want to support. Valid values are:
-   *    - `'microsoft'`
-   *    - `'mozilla'`
-   *    - `'opera'`
-   *    - `'w3'`
-   *    - `'webkit'`
-   *  - __fps__ _(number)_: Defaults to 30.  Defines the number of CSS `@keyframe` frames rendered per second of an animation.  CSS `@keyframes` are comprised of a series of explicitly defined steps, and more steps will allow for a more complex animation.  More steps will also result in a larger CSS string, and more time needed to generate the string.
-   *  - __name__ _(string)_: Define a custom name for your animation.  This becomes the class name targeted by the generated CSS.  The default value is determined by a call to [`getActorClassName`](#getActorClassName).
-   *  - __isCentered__ _(boolean)_: If `true`, the generated CSS will contain `transform-origin: 0 0;`, which centers the DOM element along the path of motion.  If `false` or omitted, no `transform-origin` rule is specified and the element is aligned to the path of motion with its top-left corner.
-   *  - __iterations__ _(number)_: How many times the generated animation should repeat.  If omitted, the animation will loop indefinitely.
-   *
+   * @method toString
    * @param {Object=} opts
+   *   * __vendors__ _(Array(string))_: Defaults to `['w3']`.  The browser vendors you
+   *   want to support. Valid values are:
+   *     * `'microsoft'`
+   *     * `'mozilla'`
+   *     * `'opera'`
+   *     * `'w3'`
+   *     * `'webkit'`
+   *
+   *
+   *   * __fps__ _(number)_: Defaults to 30.  Defines the number of CSS
+   *   `@keyframe` frames rendered per second of an animation.  CSS `@keyframes`
+   *   are comprised of a series of explicitly defined steps, and more steps
+   *   will allow for a more complex animation.  More steps will also result in
+   *   a larger CSS string, and more time needed to generate the string.
+   *   * __name__ _(string)_: Define a custom name for your animation.  This
+   *   becomes the class name targeted by the generated CSS.  The default value
+   *   is determined by a call to {{#crossLink
+   *   "Rekapi.DOMRenderer/getActorClassName:method"}}{{/crossLink}}.
+   *   * __isCentered__ _(boolean)_: If `true`, the generated CSS will contain
+   *   `transform-origin: 0 0;`, which centers the DOM element along the path of
+   *   motion.  If `false` or omitted, no `transform-origin` rule is specified
+   *   and the element is aligned to the path of motion with its top-left
+   *   corner.
+   *   * __iterations__ _(number)_: How many times the generated animation
+   *   should repeat.  If omitted, the animation will loop indefinitely.
    * @return {string}
    */
   Rekapi.DOMRenderer.prototype.toString = function (opts) {
@@ -2747,7 +3071,8 @@ rekapiModules.push(function (context) {
    * @return {string}
    */
   function generateCSSAnimationProperties (
-      actor, animName, vendor, combineProperties, opt_iterations, opt_isCentered) {
+      actor, animName, vendor, combineProperties, opt_iterations,
+      opt_isCentered) {
     var generatedProperties = [];
     var prefix = VENDOR_PREFIXES[vendor];
 

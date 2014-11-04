@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Rekapi.KeyframeProperty - Rekapi</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../../../demo/img/rekapi-logo-200.png" title="Rekapi"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 1.4.1</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
+
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
+
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
+
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Rekapi.html">Rekapi</a></li>
+            
+                <li><a href="../classes/Rekapi.Actor.html">Rekapi.Actor</a></li>
+            
+                <li><a href="../classes/Rekapi.CanvasRenderer.html">Rekapi.CanvasRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.DOMRenderer.html">Rekapi.DOMRenderer</a></li>
+            
+                <li><a href="../classes/Rekapi.KeyframeProperty.html">Rekapi.KeyframeProperty</a></li>
+            
+            </ul>
+
+            <ul id="api-modules" class="apis modules">
+            
+            </ul>
+        </div>
+    </div>
+</div>
+
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
+
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
+
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
+
+    </div>
+
+
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1>Rekapi.KeyframeProperty Class</h1>
+<div class="box meta">
+    
+
+    
+
+    
+        <div class="foundat">
+            Defined in: <a href="../files/src_rekapi.keyframe-property.js.html#l11"><code>src&#x2F;rekapi.keyframe-property.js:11</code></a>
+        </div>
+    
+
+    
+
+    
+</div>
+
+
+
+<div class="box intro">
+    <p>Represents an individual component of an actor&#39;s keyframe state.  In most
+cases you won&#39;t need to deal with this object directly, as the
+<code><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></code> APIs abstract a lot of what
+this Object does away for you.</p>
+
+</div>
+
+
+    <div class="constructor">
+        <h2>Constructor</h2>
+        <div id="method_Rekapi.KeyframeProperty" class="method item">
+    <h3 class="name"><code>Rekapi.KeyframeProperty</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>millisecond</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>name</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>value</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>opt_easing</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.keyframe-property.js.html#l11"><code>src&#x2F;rekapi.keyframe-property.js:11</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">millisecond</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Where on the animation timeline this
+<code>Rekapi.KeyframeProperty</code> is.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">name</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The property&#39;s name, such as <code>&quot;x&quot;</code> or <code>&quot;opacity&quot;</code>.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">value</code>
+                        <span class="type">Number | String | Function</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The value that this
+<code>Rekapi.KeyframeProperty</code> represents.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_easing</code>
+                        <span class="type">String=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The easing curve at which this
+<code>Rekapi.KeyframeProperty</code> should be animated to.  Defaults to <code>&quot;linear&quot;</code>.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+    </div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method">
+                                <a href="#method_detach">detach</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_exportPropertyData">exportPropertyData</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_getValueAt">getValueAt</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_invoke">invoke</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_linkToNext">linkToNext</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_modifyWith">modifyWith</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_detach" class="method item">
+    <h3 class="name"><code>detach</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <span class="flag chainable">chainable</span>
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.keyframe-property.js.html#l119"><code>src&#x2F;rekapi.keyframe-property.js:119</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Disassociates this <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code> from its <code><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></code>.  This is called by various <code><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></code> methods and triggers the <code><a href="../classes/Rekapi.html#method_on" class="crosslink">removeKeyframeProperty</a></code> event on the
+associated <code><a href="../classes/Rekapi.html" class="crosslink">Rekapi</a></code> instance.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_exportPropertyData" class="method item">
+    <h3 class="name"><code>exportPropertyData</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Object</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.keyframe-property.js.html#l142"><code>src&#x2F;rekapi.keyframe-property.js:142</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p><strong><a href="../../../../docs/examples/keyprop_export_property_data.html">Example</a></strong></p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Object</span>:
+                    
+                    <p>A serializable Object representation of this
+<code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_getValueAt" class="method item">
+    <h3 class="name"><code>getValueAt</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>millisecond</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Number</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.keyframe-property.js.html#l60"><code>src&#x2F;rekapi.keyframe-property.js:60</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Calculate the midpoint between this <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code> and the next <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code> in a <code><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></code>&#39;s property track.</p>
+<p>In just about all cases, <code>millisecond</code> should be between this
+<code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>&#39;s <code>millisecond</code>
+and the <code>millisecond</code> of the <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code> that follows it in the
+animation timeline, but it is valid to specify a value outside of this
+range.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">millisecond</code>
+                        <span class="type">Number</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The millisecond in the animation timeline to
+compute the state value for.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Number</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_invoke" class="method item">
+    <h3 class="name"><code>invoke</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type"></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.keyframe-property.js.html#l170"><code>src&#x2F;rekapi.keyframe-property.js:170</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Assuming this is a function keyframe, call the function.</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type"></span>:
+                    
+                    <p>Whatever value is returned from the keyframe function that was
+set for this <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>.</p>
+
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+                    <div id="method_linkToNext" class="method item">
+    <h3 class="name"><code>linkToNext</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>nextProperty</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.keyframe-property.js.html#l104"><code>src&#x2F;rekapi.keyframe-property.js:104</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Create the reference to the <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code> that follows this one on a
+<code><a href="../classes/Rekapi.Actor.html" class="crosslink">Rekapi.Actor</a></code>&#39;s property track.  Property
+tracks are just linked lists of <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>s.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">nextProperty</code>
+                        <span class="type"><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>The <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code> that should immediately follow
+this one on the animation timeline.</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_modifyWith" class="method item">
+    <h3 class="name"><code>modifyWith</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>newProperties</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.keyframe-property.js.html#l39"><code>src&#x2F;rekapi.keyframe-property.js:39</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Modify this <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">newProperties</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>Valid values correspond to <code><a href="../classes/Rekapi.KeyframeProperty.html" class="crosslink">Rekapi.KeyframeProperty</a></code>&#39;s constructor parameters:</p>
+<ul>
+<li><strong>millisecond</strong> (<em>number</em>)</li>
+<li><strong>name</strong> (<em>string</em>)</li>
+<li><strong>value</strong> (<em>number|string</em>)</li>
+<li><strong>easing</strong> (<em>string</em>)</li>
+</ul>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
+        
+
+        
+
+        
+
+        
+    </div>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>
