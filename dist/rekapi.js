@@ -1,4 +1,4 @@
-/*! rekapi - v1.4.1 - 2014-11-03 - http://rekapi.com */
+/*! rekapi - v1.4.2 - 2014-11-04 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/

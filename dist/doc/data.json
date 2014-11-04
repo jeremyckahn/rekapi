@@ -2,7 +2,7 @@
     "project": {
         "name": "Rekapi",
         "description": "A keyframe animation library for JavaScript",
-        "version": "1.4.1",
+        "version": "1.4.2",
         "url": "http://rekapi.com",
         "logo": "../../demo/img/rekapi-logo-200.png"
     },
