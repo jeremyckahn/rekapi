@@ -1,6 +1,6 @@
 {
   "name": "rekapi",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "homepage": "http://rekapi.com",
   "author": "Jeremy Kahn <jeremyckahn@gmail.com>",
   "description": "A keyframe animation library for JavaScript",
@@ -23,6 +23,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "shifty": "1.2.2",
     "requirejs": "2.1.10"
   }
 }
