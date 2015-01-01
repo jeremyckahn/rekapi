@@ -873,6 +873,7 @@ rekapiModules.push(function (context) {
       _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
         if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
           keyframeProperty.invoke();
+          keyframeProperty.hasFired = false;
           return;
         }
 

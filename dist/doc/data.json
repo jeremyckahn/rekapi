@@ -2,7 +2,7 @@
     "project": {
         "name": "Rekapi",
         "description": "A keyframe animation library for JavaScript",
-        "version": "1.4.2",
+        "version": "1.4.4",
         "url": "http://rekapi.com",
         "logo": "../../demo/img/rekapi-logo-200.png"
     },
@@ -84,7 +84,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "src/rekapi.core.js",
-            "line": 246,
+            "line": 249,
             "description": "If this is a rendered animation, the appropriate renderer is accessible as\n`this.renderer`.  If provided, a reference to `opt_context` is accessible\nas `this.context`.",
             "params": [
                 {
@@ -498,7 +498,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 924,
+            "line": 925,
             "description": "__[Example](../../../../docs/examples/actor_export_timeline.html)__",
             "itemtype": "method",
             "name": "exportTimeline",
@@ -510,7 +510,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 948,
+            "line": 949,
             "description": "Import an Object to augment this actor's state.  This does not remove\nkeyframe properties before importing new ones.",
             "itemtype": "method",
             "name": "importTimeline",
@@ -525,7 +525,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 337,
+            "line": 340,
             "description": "Add an actor to the animation.  Decorates the added `actor` with a\nreference to this `Rekapi` instance as `this.rekapi`.",
             "itemtype": "method",
             "name": "addActor",
@@ -544,7 +544,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 376,
+            "line": 379,
             "description": "Get a reference to an actor from the animation by its `id`.  You can use\n`{{#crossLink \"Rekapi/getActorIds:method\"}}{{/crossLink}}` to get a list\nof IDs for all actors in the animation.",
             "itemtype": "method",
             "name": "getActor",
@@ -563,7 +563,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 388,
+            "line": 391,
             "description": "Retrieve the `id`'s of all actors in an animation.",
             "itemtype": "method",
             "name": "getActorIds",
@@ -575,7 +575,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 398,
+            "line": 401,
             "description": "Retrieve all actors in the animation as an Object.",
             "itemtype": "method",
             "name": "getAllActors",
@@ -587,7 +587,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 407,
+            "line": 410,
             "description": "Return the number of actors in the animation.",
             "itemtype": "method",
             "name": "getActorCount",
@@ -599,7 +599,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 416,
+            "line": 419,
             "description": "Remove an actor from the animation.  This does not destroy the actor, it\nonly removes the link between it and the `Rekapi` instance.  This method\ncalls the actor's `teardown` method, if it is defined.",
             "itemtype": "method",
             "name": "removeActor",
@@ -618,7 +618,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 437,
+            "line": 440,
             "description": "Play the animation.\n\n__[Example](../../../../docs/examples/play.html)__",
             "itemtype": "method",
             "name": "play",
@@ -634,7 +634,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 469,
+            "line": 472,
             "description": "Move to a specific millisecond on the timeline and play from there.\n\n__[Example](../../../../docs/examples/play_from.html)__",
             "itemtype": "method",
             "name": "playFrom",
@@ -655,7 +655,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 486,
+            "line": 489,
             "description": "Play from the last frame that was rendered with {{#crossLink\n\"Rekapi/update:method\"}}{{/crossLink}}.\n\n__[Example](../../../../docs/examples/play_from_current.html)__",
             "itemtype": "method",
             "name": "playFromCurrent",
@@ -671,7 +671,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 500,
+            "line": 503,
             "description": "Pause the animation.  A \"paused\" animation can be resumed from where it\nleft off with {{#crossLink \"Rekapi/play:method\"}}{{/crossLink}}.\n\n__[Example](../../../../docs/examples/pause.html)__",
             "itemtype": "method",
             "name": "pause",
@@ -686,7 +686,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 524,
+            "line": 527,
             "description": "Stop the animation.  A \"stopped\" animation will start from the beginning\nif {{#crossLink \"Rekapi/play:method\"}}{{/crossLink}} is called.\n\n__[Example](../../../../docs/examples/stop.html)__",
             "itemtype": "method",
             "name": "stop",
@@ -695,7 +695,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 547,
+            "line": 550,
             "itemtype": "method",
             "name": "isPlaying",
             "return": {
@@ -706,7 +706,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 556,
+            "line": 559,
             "description": "Render an animation frame at a specific point in the timeline.\n\n__[Example](../../../../docs/examples/update.html)__",
             "itemtype": "method",
             "name": "update",
@@ -722,7 +722,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 587,
+            "line": 590,
             "description": "__[Example](../../../../docs/examples/get_last_position_updated.html)__",
             "itemtype": "method",
             "name": "getLastPositionUpdated",
@@ -734,7 +734,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 597,
+            "line": 600,
             "itemtype": "method",
             "name": "getAnimationLength",
             "return": {
@@ -745,7 +745,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 605,
+            "line": 608,
             "description": "Bind a handler function to a Rekapi event.\n\n__[Example](../../../../docs/examples/bind.html)__",
             "itemtype": "method",
             "name": "on",
@@ -766,7 +766,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 658,
+            "line": 661,
             "description": "Unbind one or more handlers from a Rekapi event.\n\n__[Example](../../../../docs/examples/unbind.html)__",
             "itemtype": "method",
             "name": "off",
@@ -787,7 +787,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 686,
+            "line": 689,
             "description": "Export the timeline to a JSON-serializable `Object`.\n\n__[Example](../../../docs/examples/export_timeline.html)__",
             "itemtype": "method",
             "name": "exportTimeline",
@@ -799,7 +799,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 707,
+            "line": 710,
             "description": "Import data that was created by {{#crossLink\n\"Rekapi/exportTimeline:method\"}}{{/crossLink}}.  This sets up all actors\nand keyframes specified in the `rekapiData` parameter.  These two methods\ncollectively allow you serialize an animation (for sending to a server for\npersistence, for example) and later recreating an identical animation.",
             "itemtype": "method",
             "name": "importTimeline",

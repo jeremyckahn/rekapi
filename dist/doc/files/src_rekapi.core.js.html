@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.4.2</em>
+            <em>API Docs for: 1.4.4</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -236,6 +236,8 @@ var rekapiCore = function (root, _, Tweenable) {
       rekapi, forMillisecond, currentIteration);
     rekapi._loopPosition = loopPosition;
 
+    var keyframeResetList = [];
+
     if (currentIteration &gt; rekapi._latestIteration) {
       fireEvent(rekapi, &#x27;animationLooped&#x27;, _);
 
@@ -250,16 +252,17 @@ var rekapiCore = function (root, _, Tweenable) {
           lastFnKeyframe.invoke();
         }
 
-        _.each(fnKeyframes, function (fnKeyframe) {
-          fnKeyframe.hasFired = false;
-        });
+        keyframeResetList = keyframeResetList.concat(fnKeyframes);
       });
     }
 
     rekapi._latestIteration = currentIteration;
-
     rekapi.update(loopPosition);
     updatePlayState(rekapi, currentIteration);
+
+    _.each(keyframeResetList, function (fnKeyframe) {
+      fnKeyframe.hasFired = false;
+    });
   }
 
   /*!
@@ -826,6 +829,7 @@ var rekapiCore = function (root, _, Tweenable) {
     Rekapi._private = {
       &#x27;calculateLoopPosition&#x27;: calculateLoopPosition
       ,&#x27;updateToCurrentMillisecond&#x27;: updateToCurrentMillisecond
+      ,&#x27;updateToMillisecond&#x27;: updateToMillisecond
       ,&#x27;tick&#x27;: tick
       ,&#x27;determineCurrentLoopIteration&#x27;: determineCurrentLoopIteration
       ,&#x27;calculateTimeSinceStart&#x27;: calculateTimeSinceStart

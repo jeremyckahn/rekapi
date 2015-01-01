@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.4.2</em>
+            <em>API Docs for: 1.4.4</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -969,6 +969,7 @@ rekapiModules.push(function (context) {
       _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
         if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
           keyframeProperty.invoke();
+          keyframeProperty.hasFired = false;
           return;
         }
 

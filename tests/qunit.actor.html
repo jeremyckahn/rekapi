@@ -1471,6 +1471,23 @@
       equal(callCount, 2, 'The function was called for the second iteration');
     });
 
+    test('A function keyframe at the end of the loop only gets called once', function () {
+      var rekapi = new Rekapi();
+      var actor = rekapi.addActor();
+
+      var callCount = 0;
+      actor
+        .keyframe(10, {
+          'function': function () {
+            callCount++;
+          }
+        });
+
+      rekapi._timesToIterate = 1;
+      Rekapi._private.updateToMillisecond(rekapi, 10);
+      equal(callCount, 1, 'The function was only called once');
+    });
+
 
   } ());
   </script>

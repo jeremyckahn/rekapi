@@ -140,6 +140,8 @@ var rekapiCore = function (root, _, Tweenable) {
       rekapi, forMillisecond, currentIteration);
     rekapi._loopPosition = loopPosition;
 
+    var keyframeResetList = [];
+
     if (currentIteration > rekapi._latestIteration) {
       fireEvent(rekapi, 'animationLooped', _);
 
@@ -154,16 +156,17 @@ var rekapiCore = function (root, _, Tweenable) {
           lastFnKeyframe.invoke();
         }
 
-        _.each(fnKeyframes, function (fnKeyframe) {
-          fnKeyframe.hasFired = false;
-        });
+        keyframeResetList = keyframeResetList.concat(fnKeyframes);
       });
     }
 
     rekapi._latestIteration = currentIteration;
-
     rekapi.update(loopPosition);
     updatePlayState(rekapi, currentIteration);
+
+    _.each(keyframeResetList, function (fnKeyframe) {
+      fnKeyframe.hasFired = false;
+    });
   }
 
   /*!
@@ -730,6 +733,7 @@ var rekapiCore = function (root, _, Tweenable) {
     Rekapi._private = {
       'calculateLoopPosition': calculateLoopPosition
       ,'updateToCurrentMillisecond': updateToCurrentMillisecond
+      ,'updateToMillisecond': updateToMillisecond
       ,'tick': tick
       ,'determineCurrentLoopIteration': determineCurrentLoopIteration
       ,'calculateTimeSinceStart': calculateTimeSinceStart
