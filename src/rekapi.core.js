@@ -438,6 +438,15 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
+   * Remove all actors from the animation.
+   * @method removeAllActors
+   * @return {Array.<Rekapi.Actor>}
+   */
+  Rekapi.prototype.removeAllActors = function () {
+    return _.map(this.getAllActors(), this.removeActor, this);
+  };
+
+  /**
    * Play the animation.
    *
    * __[Example](../../../../docs/examples/play.html)__

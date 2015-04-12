@@ -101,6 +101,31 @@
     });
 
 
+    module('removeAllActors');
+
+
+    test('All actors are removed successfully', function () {
+      var testRekapi
+          ,testActor1
+          ,testActor2;
+
+      testRekapi = setupTestRekapi();
+      testActor1 = setupTestActor(testRekapi);
+      testActor2 = setupTestActor(testRekapi);
+      var removedActors = testRekapi.removeAllActors();
+
+      equal(_.size(testRekapi._actors), 0,
+          'Actors were removed from the internal _actors Object');
+
+      var filteredRemovedActors = _.filter(removedActors, function (actor) {
+        return actor instanceof Rekapi.Actor;
+      });
+
+      equal(filteredRemovedActors.length, 2,
+          'Removed actors were returned from the operation');
+    });
+
+
     module('getActorIds');
 
 
