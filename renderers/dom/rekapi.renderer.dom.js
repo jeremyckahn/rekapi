@@ -610,6 +610,8 @@ rekapiModules.push(function (context) {
     return 'actor-' + actor.id;
   };
 
+  // TODO: Don't redefine toString with a method that takes parameters.  Name
+  // this something else and deprecate DOMRenderer#toString.
   /**
    * Converts Rekapi animations to CSS `@keyframes`.
    * @method toString
