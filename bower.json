@@ -11,7 +11,7 @@
     }
   ],
   "dependencies": {
-    "shifty": "1.2.2",
+    "shifty": "1.4.1",
     "underscore": "1.5.2",
     "lodash": "~2.4.1"
   },

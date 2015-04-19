@@ -713,27 +713,61 @@ var rekapiCore = function (root, _, Tweenable) {
       exportData.actors.push(actor.exportTimeline());
     }, this);
 
+    var curves = {};
+    _.chain(Tweenable.prototype.formula)
+      .filter(function (formula) {
+        return typeof formula.x1 === 'number';
+      })
+      .each(function (curve) {
+        curves[curve.displayName] = _.pick(curve, 'x1', 'y1', 'x2', 'y2');
+      });
+
+    exportData.curves = curves;
+
     return exportData;
   };
 
   /**
    * Import data that was created by {{#crossLink
-   * "Rekapi/exportTimeline:method"}}{{/crossLink}}.  This sets up all actors
-   * and keyframes specified in the `rekapiData` parameter.  These two methods
-   * collectively allow you serialize an animation (for sending to a server for
-   * persistence, for example) and later recreating an identical animation.
+   * "Rekapi/exportTimeline:method"}}{{/crossLink}}.  This sets up all actors,
+   * keyframes, and custom easing curves specified in the `rekapiData`
+   * parameter.  These two methods collectively allow you serialize an
+   * animation (for sending to a server for persistence, for example) and later
+   * recreating an identical animation.
    *
    * @method importTimeline
    * @param {Object} rekapiData Any object that has the same data format as the
    * object generated from Rekapi#exportTimeline.
    */
   Rekapi.prototype.importTimeline = function (rekapiData) {
+    _.each(rekapiData.curves, function (curve, curveName) {
+      Tweenable.setBezierFunction(
+        curveName
+        ,curve.x1
+        ,curve.y1
+        ,curve.x2
+        ,curve.y2
+      );
+    });
+
     _.each(rekapiData.actors, function (actorData) {
       var actor = new Rekapi.Actor();
       actor.importTimeline(actorData);
       this.addActor(actor);
     }, this);
   };
+
+  /**
+   * A list of formulas attached to `Tweenable.prototype.formula` at startup.
+   * This is needed by {{#crossLink
+   * "Rekapi/importTimeline:method"}}{{/crossLink}} and {{#crossLink
+   * "Rekapi/exportTimeline:method"}}{{/crossLink}} to handle custom curves
+   * created by `Tweenable.setBezierFunction`.
+   * @property nonCustomFormulaNames
+   * @static
+   * @type {Array.<string>}
+   */
+  Rekapi.nonCustomFormulaNames = _.keys(Tweenable.prototype.formula);
 
   Rekapi.util = {};
 

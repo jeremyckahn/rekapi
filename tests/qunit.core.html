@@ -251,6 +251,20 @@
           'Actor was exported');
     });
 
+    test('Custom easing curves are exported', function () {
+      Tweenable.setBezierFunction('custom', 0, .25, .5, .75);
+      var testRekapi = setupTestRekapi();
+
+      var exportedTimeline = testRekapi.exportTimeline();
+      deepEqual(
+        exportedTimeline.curves,
+        { custom: { x1: 0, y1: .25, x2: .5, y2: .75 }},
+        'custom curve was exported with bezier points');
+
+      // Clean up Tweenable
+      Tweenable.unsetBezierFunction('custom');
+    });
+
 
     module('importTimeline');
 
@@ -273,6 +287,29 @@
 
       deepEqual(importRekapi.exportTimeline(), exportedTimeline,
           'Rekapi exports the same data that was imported');
+    });
+
+    test('Exported custom curves re-import correctly', function () {
+      Tweenable.setBezierFunction('custom', 0, .25, .5, .75);
+      var testRekapi = setupTestRekapi();
+
+      var exportedTimeline = testRekapi.exportTimeline();
+
+      // Reset for a clean test
+      Tweenable.unsetBezierFunction('custom');
+
+      var importRekapi = new Rekapi();
+      importRekapi.importTimeline(exportedTimeline);
+
+      ok(typeof Tweenable.prototype.formula.custom === 'function',
+        'Rekapi redefined custom formula');
+      equal(Tweenable.prototype.formula.custom.x1, 0, 'Imported x1');
+      equal(Tweenable.prototype.formula.custom.y1, .25, 'Imported y1');
+      equal(Tweenable.prototype.formula.custom.x2, .5, 'Imported x2');
+      equal(Tweenable.prototype.formula.custom.y2, .75, 'Imported y2');
+
+      // Clean up Tweenable
+      Tweenable.unsetBezierFunction('custom');
     });
 
 
