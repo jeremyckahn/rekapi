@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.4.4</em>
+            <em>API Docs for: 1.4.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -534,6 +534,15 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
+   * Remove all actors from the animation.
+   * @method removeAllActors
+   * @return {Array.&lt;Rekapi.Actor&gt;}
+   */
+  Rekapi.prototype.removeAllActors = function () {
+    return _.map(this.getAllActors(), this.removeActor, this);
+  };
+
+  /**
    * Play the animation.
    *
    * __[Example](../../../../docs/examples/play.html)__
@@ -800,27 +809,61 @@ var rekapiCore = function (root, _, Tweenable) {
       exportData.actors.push(actor.exportTimeline());
     }, this);
 
+    var curves = {};
+    _.chain(Tweenable.prototype.formula)
+      .filter(function (formula) {
+        return typeof formula.x1 === &#x27;number&#x27;;
+      })
+      .each(function (curve) {
+        curves[curve.displayName] = _.pick(curve, &#x27;x1&#x27;, &#x27;y1&#x27;, &#x27;x2&#x27;, &#x27;y2&#x27;);
+      });
+
+    exportData.curves = curves;
+
     return exportData;
   };
 
   /**
    * Import data that was created by {{#crossLink
-   * &quot;Rekapi/exportTimeline:method&quot;}}{{/crossLink}}.  This sets up all actors
-   * and keyframes specified in the &#x60;rekapiData&#x60; parameter.  These two methods
-   * collectively allow you serialize an animation (for sending to a server for
-   * persistence, for example) and later recreating an identical animation.
+   * &quot;Rekapi/exportTimeline:method&quot;}}{{/crossLink}}.  This sets up all actors,
+   * keyframes, and custom easing curves specified in the &#x60;rekapiData&#x60;
+   * parameter.  These two methods collectively allow you serialize an
+   * animation (for sending to a server for persistence, for example) and later
+   * recreating an identical animation.
    *
    * @method importTimeline
    * @param {Object} rekapiData Any object that has the same data format as the
    * object generated from Rekapi#exportTimeline.
    */
   Rekapi.prototype.importTimeline = function (rekapiData) {
+    _.each(rekapiData.curves, function (curve, curveName) {
+      Tweenable.setBezierFunction(
+        curveName
+        ,curve.x1
+        ,curve.y1
+        ,curve.x2
+        ,curve.y2
+      );
+    });
+
     _.each(rekapiData.actors, function (actorData) {
       var actor = new Rekapi.Actor();
       actor.importTimeline(actorData);
       this.addActor(actor);
     }, this);
   };
+
+  /**
+   * A list of formulas attached to &#x60;Tweenable.prototype.formula&#x60; at startup.
+   * This is needed by {{#crossLink
+   * &quot;Rekapi/importTimeline:method&quot;}}{{/crossLink}} and {{#crossLink
+   * &quot;Rekapi/exportTimeline:method&quot;}}{{/crossLink}} to handle custom curves
+   * created by &#x60;Tweenable.setBezierFunction&#x60;.
+   * @property nonCustomFormulaNames
+   * @static
+   * @type {Array.&lt;string&gt;}
+   */
+  Rekapi.nonCustomFormulaNames = _.keys(Tweenable.prototype.formula);
 
   Rekapi.util = {};
 

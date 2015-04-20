@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.4.4</em>
+            <em>API Docs for: 1.4.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -706,6 +706,8 @@ rekapiModules.push(function (context) {
     return &#x27;actor-&#x27; + actor.id;
   };
 
+  // TODO: Don&#x27;t redefine toString with a method that takes parameters.  Name
+  // this something else and deprecate DOMRenderer#toString.
   /**
    * Converts Rekapi animations to CSS &#x60;@keyframes&#x60;.
    * @method toString

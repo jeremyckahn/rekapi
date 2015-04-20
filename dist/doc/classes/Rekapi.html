@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.4.4</em>
+            <em>API Docs for: 1.4.5</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -227,6 +227,8 @@ reference to a DOM element, <code><a href="../classes/Rekapi.DOMRenderer.html" c
             <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
         
         
+            <li class="api-class-tab properties"><a href="#properties">Properties</a></li>
+        
         
         
     </ul>
@@ -361,6 +363,13 @@ reference to a DOM element, <code><a href="../classes/Rekapi.DOMRenderer.html" c
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_removeAllActors">removeAllActors</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
                                 <a href="#method_stop">stop</a>
 
                                 
@@ -378,6 +387,23 @@ reference to a DOM element, <code><a href="../classes/Rekapi.DOMRenderer.html" c
                 </div>
             
 
+            
+                <div class="index-section properties">
+                    <h3>Properties</h3>
+
+                    <ul class="index-list properties">
+                        
+                            <li class="index-item property">
+                                <a href="#property_nonCustomFormulaNames">nonCustomFormulaNames</a>
+
+                                
+                                    <span class="flag static">static</span>
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
             
 
             
@@ -535,7 +561,7 @@ as the constructor parameters for a new <code><a href="../classes/Rekapi.Actor.h
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l689"><code>src&#x2F;rekapi.core.js:689</code></a>
+        <a href="../files/src_rekapi.core.js.html#l698"><code>src&#x2F;rekapi.core.js:698</code></a>
         
         </p>
 
@@ -930,7 +956,7 @@ of IDs for all actors in the animation.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l600"><code>src&#x2F;rekapi.core.js:600</code></a>
+        <a href="../files/src_rekapi.core.js.html#l609"><code>src&#x2F;rekapi.core.js:609</code></a>
         
         </p>
 
@@ -1002,7 +1028,7 @@ of IDs for all actors in the animation.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l590"><code>src&#x2F;rekapi.core.js:590</code></a>
+        <a href="../files/src_rekapi.core.js.html#l599"><code>src&#x2F;rekapi.core.js:599</code></a>
         
         </p>
 
@@ -1082,7 +1108,7 @@ was last rendered.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l710"><code>src&#x2F;rekapi.core.js:710</code></a>
+        <a href="../files/src_rekapi.core.js.html#l730"><code>src&#x2F;rekapi.core.js:730</code></a>
         
         </p>
 
@@ -1093,10 +1119,11 @@ was last rendered.</p>
     </div>
 
     <div class="description">
-        <p>Import data that was created by <a href="../classes/Rekapi.html#method_exportTimeline" class="crosslink">exportTimeline</a>.  This sets up all actors
-and keyframes specified in the <code>rekapiData</code> parameter.  These two methods
-collectively allow you serialize an animation (for sending to a server for
-persistence, for example) and later recreating an identical animation.</p>
+        <p>Import data that was created by <a href="../classes/Rekapi.html#method_exportTimeline" class="crosslink">exportTimeline</a>.  This sets up all actors,
+keyframes, and custom easing curves specified in the <code>rekapiData</code>
+parameter.  These two methods collectively allow you serialize an
+animation (for sending to a server for persistence, for example) and later
+recreating an identical animation.</p>
 
     </div>
 
@@ -1169,7 +1196,7 @@ object generated from Rekapi#exportTimeline.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l550"><code>src&#x2F;rekapi.core.js:550</code></a>
+        <a href="../files/src_rekapi.core.js.html#l559"><code>src&#x2F;rekapi.core.js:559</code></a>
         
         </p>
 
@@ -1256,7 +1283,7 @@ stopped).</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l661"><code>src&#x2F;rekapi.core.js:661</code></a>
+        <a href="../files/src_rekapi.core.js.html#l670"><code>src&#x2F;rekapi.core.js:670</code></a>
         
         </p>
 
@@ -1372,7 +1399,7 @@ stopped).</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l608"><code>src&#x2F;rekapi.core.js:608</code></a>
+        <a href="../files/src_rekapi.core.js.html#l617"><code>src&#x2F;rekapi.core.js:617</code></a>
         
         </p>
 
@@ -1511,7 +1538,7 @@ the first parameter and event-specific data as the second (<code>opt_data</code>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l503"><code>src&#x2F;rekapi.core.js:503</code></a>
+        <a href="../files/src_rekapi.core.js.html#l512"><code>src&#x2F;rekapi.core.js:512</code></a>
         
         </p>
 
@@ -1603,7 +1630,7 @@ left off with <a href="../classes/Rekapi.html#method_play" class="crosslink">pla
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l440"><code>src&#x2F;rekapi.core.js:440</code></a>
+        <a href="../files/src_rekapi.core.js.html#l449"><code>src&#x2F;rekapi.core.js:449</code></a>
         
         </p>
 
@@ -1702,7 +1729,7 @@ endlessly.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l472"><code>src&#x2F;rekapi.core.js:472</code></a>
+        <a href="../files/src_rekapi.core.js.html#l481"><code>src&#x2F;rekapi.core.js:481</code></a>
         
         </p>
 
@@ -1809,7 +1836,7 @@ endlessly.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l489"><code>src&#x2F;rekapi.core.js:489</code></a>
+        <a href="../files/src_rekapi.core.js.html#l498"><code>src&#x2F;rekapi.core.js:498</code></a>
         
         </p>
 
@@ -1963,6 +1990,77 @@ calls the actor&#39;s <code>teardown</code> method, if it is defined.</p>
 </div>
 
                 
+                    <div id="method_removeAllActors" class="method item">
+    <h3 class="name"><code>removeAllActors</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">Array.<Rekapi.Actor></span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l440"><code>src&#x2F;rekapi.core.js:440</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Remove all actors from the animation.</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">Array.<Rekapi.Actor></span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
                     <div id="method_stop" class="method item">
     <h3 class="name"><code>stop</code></h3>
 
@@ -1997,7 +2095,7 @@ calls the actor&#39;s <code>teardown</code> method, if it is defined.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l527"><code>src&#x2F;rekapi.core.js:527</code></a>
+        <a href="../files/src_rekapi.core.js.html#l536"><code>src&#x2F;rekapi.core.js:536</code></a>
         
         </p>
 
@@ -2066,7 +2164,7 @@ if <a href="../classes/Rekapi.html#method_play" class="crosslink">play</a> is ca
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l559"><code>src&#x2F;rekapi.core.js:559</code></a>
+        <a href="../files/src_rekapi.core.js.html#l568"><code>src&#x2F;rekapi.core.js:568</code></a>
         
         </p>
 
@@ -2119,6 +2217,61 @@ render.  If omitted, this renders the last millisecond that was rendered
             </div>
         
 
+        
+            <div id="properties" class="api-class-tabpanel">
+                <h2 class="off-left">Properties</h2>
+
+                
+                    <div id="property_nonCustomFormulaNames" class="property item">
+    <h3 class="name"><code>nonCustomFormulaNames</code></h3>
+    <span class="type">Array.<string></span>
+
+    
+
+    
+
+    
+
+    
+        <span class="flag static">static</span>
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/src_rekapi.core.js.html#l760"><code>src&#x2F;rekapi.core.js:760</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>A list of formulas attached to <code>Tweenable.prototype.formula</code> at startup.
+This is needed by <a href="../classes/Rekapi.html#method_importTimeline" class="crosslink">importTimeline</a> and <a href="../classes/Rekapi.html#method_exportTimeline" class="crosslink">exportTimeline</a> to handle custom curves
+created by <code>Tweenable.setBezierFunction</code>.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
         
 
         
