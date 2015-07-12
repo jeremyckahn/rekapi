@@ -758,6 +758,15 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
+   * Get a list of event names that this Rekapi instance supports.
+   * @method getEventNames
+   * @return Array(string)
+   */
+  Rekapi.prototype.getEventNames = function () {
+    return _.keys(this._events);
+  };
+
+  /**
    * A list of formulas attached to `Tweenable.prototype.formula` at startup.
    * This is needed by {{#crossLink
    * "Rekapi/importTimeline:method"}}{{/crossLink}} and {{#crossLink

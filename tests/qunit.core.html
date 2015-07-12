@@ -593,6 +593,16 @@
     });
 
 
+    module('getEventNames');
+
+
+    test('Returns a list of event names', function () {
+      var testRekapi = setupTestRekapi();
+      deepEqual(testRekapi.getEventNames(), _.keys(testRekapi._events),
+        'An accurate list of event string names is returned.');
+    });
+
+
     module('Internals - Loops');
 
 

@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.4.5</em>
+            <em>API Docs for: 1.4.6</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -851,6 +851,15 @@ var rekapiCore = function (root, _, Tweenable) {
       actor.importTimeline(actorData);
       this.addActor(actor);
     }, this);
+  };
+
+  /**
+   * Get a list of event names that this Rekapi instance supports.
+   * @method getEventNames
+   * @return Array(string)
+   */
+  Rekapi.prototype.getEventNames = function () {
+    return _.keys(this._events);
   };
 
   /**

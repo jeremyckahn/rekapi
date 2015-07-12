@@ -1,4 +1,4 @@
-/*! rekapi - v1.4.5 - 2015-04-19 - http://rekapi.com */
+/*! rekapi - v1.4.6 - 2015-07-12 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -773,6 +773,15 @@ var rekapiCore = function (root, _, Tweenable) {
       actor.importTimeline(actorData);
       this.addActor(actor);
     }, this);
+  };
+
+  /**
+   * Get a list of event names that this Rekapi instance supports.
+   * @method getEventNames
+   * @return Array(string)
+   */
+  Rekapi.prototype.getEventNames = function () {
+    return _.keys(this._events);
   };
 
   /**
