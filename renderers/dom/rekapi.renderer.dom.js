@@ -1243,7 +1243,7 @@ rekapiModules.push(function (context) {
     for (i = 0; i < increments; i++) {
       adjustedPercent = fromPercent + (i * incrementSize);
       actor._updateState(
-          ((adjustedPercent / 100) * actorLength) + actorStart);
+          ((adjustedPercent / 100) * actorLength) + actorStart, true);
       stepPrefix = +adjustedPercent.toFixed(2) + '% ';
 
       if (opt_fromProp) {

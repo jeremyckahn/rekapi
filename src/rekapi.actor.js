@@ -853,9 +853,11 @@ rekapiModules.push(function (context) {
    * Calculate and set the actor's position at `millisecond` in the animation.
    * @method _updateState
    * @param {number} millisecond
+   * @param {boolean=} opt_doResetLaterFnKeyframes If true, allow all function
+   * keyframes later in the timeline to be run again.
    * @chainable
    */
-  Actor.prototype._updateState = function (millisecond) {
+  Actor.prototype._updateState = function (millisecond, opt_doResetLaterFnKeyframes) {
     var startMs = this.getStart();
     var endMs = this.getEnd();
     var interpolatedObject = {};
@@ -904,7 +906,25 @@ rekapiModules.push(function (context) {
 
     this.set(interpolatedObject);
 
+    if (!opt_doResetLaterFnKeyframes) {
+      this._resetFnKeyframesFromMillisecond(millisecond);
+    }
+
     return this;
+  };
+
+  /*!
+   * @method _resetFnKeyframesFromMillisecond
+   * @param {number} millisecond
+   */
+  Actor.prototype._resetFnKeyframesFromMillisecond = function (millisecond) {
+    _.chain(this._keyframeProperties)
+      .where({ name: 'function' })
+      .each(function (fnKeyframe) {
+        if (fnKeyframe.millisecond >= millisecond) {
+          fnKeyframe.hasFired = false;
+        }
+      });
   };
 
   /*!
