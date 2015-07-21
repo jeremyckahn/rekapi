@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.4.6</em>
+            <em>API Docs for: 1.4.7</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -949,9 +949,11 @@ rekapiModules.push(function (context) {
    * Calculate and set the actor&#x27;s position at &#x60;millisecond&#x60; in the animation.
    * @method _updateState
    * @param {number} millisecond
+   * @param {boolean=} opt_doResetLaterFnKeyframes If true, allow all function
+   * keyframes later in the timeline to be run again.
    * @chainable
    */
-  Actor.prototype._updateState = function (millisecond) {
+  Actor.prototype._updateState = function (millisecond, opt_doResetLaterFnKeyframes) {
     var startMs = this.getStart();
     var endMs = this.getEnd();
     var interpolatedObject = {};
@@ -1000,7 +1002,25 @@ rekapiModules.push(function (context) {
 
     this.set(interpolatedObject);
 
+    if (!opt_doResetLaterFnKeyframes) {
+      this._resetFnKeyframesFromMillisecond(millisecond);
+    }
+
     return this;
+  };
+
+  /*!
+   * @method _resetFnKeyframesFromMillisecond
+   * @param {number} millisecond
+   */
+  Actor.prototype._resetFnKeyframesFromMillisecond = function (millisecond) {
+    _.chain(this._keyframeProperties)
+      .where({ name: &#x27;function&#x27; })
+      .each(function (fnKeyframe) {
+        if (fnKeyframe.millisecond &gt;= millisecond) {
+          fnKeyframe.hasFired = false;
+        }
+      });
   };
 
   /*!

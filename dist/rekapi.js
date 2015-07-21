@@ -1,4 +1,4 @@
-/*! rekapi - v1.4.6 - 2015-07-12 - http://rekapi.com */
+/*! rekapi - v1.4.7 - 2015-07-21 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -179,7 +179,7 @@ var rekapiCore = function (root, _, Tweenable) {
     }
 
     rekapi._latestIteration = currentIteration;
-    rekapi.update(loopPosition);
+    rekapi.update(loopPosition, true);
     updatePlayState(rekapi, currentIteration);
 
     _.each(keyframeResetList, function (fnKeyframe) {
@@ -510,6 +510,8 @@ var rekapiCore = function (root, _, Tweenable) {
     this.play(opt_howManyTimes);
     this._loopTimestamp = now() - millisecond;
 
+    _.invoke(this._actors, '_resetFnKeyframesFromMillisecond', millisecond);
+
     return this;
   };
 
@@ -591,9 +593,12 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number=} opt_millisecond The point in the timeline at which to
    * render.  If omitted, this renders the last millisecond that was rendered
    * (it's a re-render).
+   * @param {boolean=} opt_doResetLaterFnKeyframes If true, allow all function
+   * keyframes later in the timeline to be run again.  This is a low-level
+   * feature, it should not be `true` (or even provided) for most use cases.
    * @chainable
    */
-  Rekapi.prototype.update = function (opt_millisecond) {
+  Rekapi.prototype.update = function (opt_millisecond,  opt_doResetLaterFnKeyframes) {
     if (opt_millisecond === undefined) {
       opt_millisecond = this._lastUpdatedMillisecond;
     }
@@ -602,7 +607,7 @@ var rekapiCore = function (root, _, Tweenable) {
 
     // Update and render each of the actors
     _.each(this._actors, function (actor) {
-      actor._updateState(opt_millisecond);
+      actor._updateState(opt_millisecond, opt_doResetLaterFnKeyframes);
       if (typeof actor.render === 'function') {
         actor.render(actor.context, actor.get());
       }
@@ -1671,9 +1676,11 @@ rekapiModules.push(function (context) {
    * Calculate and set the actor's position at `millisecond` in the animation.
    * @method _updateState
    * @param {number} millisecond
+   * @param {boolean=} opt_doResetLaterFnKeyframes If true, allow all function
+   * keyframes later in the timeline to be run again.
    * @chainable
    */
-  Actor.prototype._updateState = function (millisecond) {
+  Actor.prototype._updateState = function (millisecond, opt_doResetLaterFnKeyframes) {
     var startMs = this.getStart();
     var endMs = this.getEnd();
     var interpolatedObject = {};
@@ -1722,7 +1729,25 @@ rekapiModules.push(function (context) {
 
     this.set(interpolatedObject);
 
+    if (!opt_doResetLaterFnKeyframes) {
+      this._resetFnKeyframesFromMillisecond(millisecond);
+    }
+
     return this;
+  };
+
+  /*!
+   * @method _resetFnKeyframesFromMillisecond
+   * @param {number} millisecond
+   */
+  Actor.prototype._resetFnKeyframesFromMillisecond = function (millisecond) {
+    _.chain(this._keyframeProperties)
+      .where({ name: 'function' })
+      .each(function (fnKeyframe) {
+        if (fnKeyframe.millisecond >= millisecond) {
+          fnKeyframe.hasFired = false;
+        }
+      });
   };
 
   /*!
@@ -3505,7 +3530,7 @@ rekapiModules.push(function (context) {
     for (i = 0; i < increments; i++) {
       adjustedPercent = fromPercent + (i * incrementSize);
       actor._updateState(
-          ((adjustedPercent / 100) * actorLength) + actorStart);
+          ((adjustedPercent / 100) * actorLength) + actorStart, true);
       stepPrefix = +adjustedPercent.toFixed(2) + '% ';
 
       if (opt_fromProp) {

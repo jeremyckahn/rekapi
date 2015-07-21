@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.4.6</em>
+            <em>API Docs for: 1.4.7</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -568,7 +568,7 @@ as the constructor parameters for a new <code><a href="../classes/Rekapi.Actor.h
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l698"><code>src&#x2F;rekapi.core.js:698</code></a>
+        <a href="../files/src_rekapi.core.js.html#l703"><code>src&#x2F;rekapi.core.js:703</code></a>
         
         </p>
 
@@ -963,7 +963,7 @@ of IDs for all actors in the animation.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l609"><code>src&#x2F;rekapi.core.js:609</code></a>
+        <a href="../files/src_rekapi.core.js.html#l614"><code>src&#x2F;rekapi.core.js:614</code></a>
         
         </p>
 
@@ -1035,7 +1035,7 @@ of IDs for all actors in the animation.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l760"><code>src&#x2F;rekapi.core.js:760</code></a>
+        <a href="../files/src_rekapi.core.js.html#l765"><code>src&#x2F;rekapi.core.js:765</code></a>
         
         </p>
 
@@ -1106,7 +1106,7 @@ of IDs for all actors in the animation.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l599"><code>src&#x2F;rekapi.core.js:599</code></a>
+        <a href="../files/src_rekapi.core.js.html#l604"><code>src&#x2F;rekapi.core.js:604</code></a>
         
         </p>
 
@@ -1186,7 +1186,7 @@ was last rendered.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l730"><code>src&#x2F;rekapi.core.js:730</code></a>
+        <a href="../files/src_rekapi.core.js.html#l735"><code>src&#x2F;rekapi.core.js:735</code></a>
         
         </p>
 
@@ -1274,7 +1274,7 @@ object generated from Rekapi#exportTimeline.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l559"><code>src&#x2F;rekapi.core.js:559</code></a>
+        <a href="../files/src_rekapi.core.js.html#l561"><code>src&#x2F;rekapi.core.js:561</code></a>
         
         </p>
 
@@ -1361,7 +1361,7 @@ stopped).</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l670"><code>src&#x2F;rekapi.core.js:670</code></a>
+        <a href="../files/src_rekapi.core.js.html#l675"><code>src&#x2F;rekapi.core.js:675</code></a>
         
         </p>
 
@@ -1477,7 +1477,7 @@ stopped).</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l617"><code>src&#x2F;rekapi.core.js:617</code></a>
+        <a href="../files/src_rekapi.core.js.html#l622"><code>src&#x2F;rekapi.core.js:622</code></a>
         
         </p>
 
@@ -1616,7 +1616,7 @@ the first parameter and event-specific data as the second (<code>opt_data</code>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l512"><code>src&#x2F;rekapi.core.js:512</code></a>
+        <a href="../files/src_rekapi.core.js.html#l514"><code>src&#x2F;rekapi.core.js:514</code></a>
         
         </p>
 
@@ -1914,7 +1914,7 @@ endlessly.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l498"><code>src&#x2F;rekapi.core.js:498</code></a>
+        <a href="../files/src_rekapi.core.js.html#l500"><code>src&#x2F;rekapi.core.js:500</code></a>
         
         </p>
 
@@ -2173,7 +2173,7 @@ calls the actor&#39;s <code>teardown</code> method, if it is defined.</p>
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l536"><code>src&#x2F;rekapi.core.js:536</code></a>
+        <a href="../files/src_rekapi.core.js.html#l538"><code>src&#x2F;rekapi.core.js:538</code></a>
         
         </p>
 
@@ -2211,6 +2211,12 @@ if <a href="../classes/Rekapi.html#method_play" class="crosslink">play</a> is ca
                     
                 </li>
             
+                <li class="arg">
+                    
+                        <code>opt_doResetLaterFnKeyframes</code>
+                    
+                </li>
+            
             </ul><span class="paren">)</span>
         </div>
     
@@ -2242,7 +2248,7 @@ if <a href="../classes/Rekapi.html#method_play" class="crosslink">play</a> is ca
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l568"><code>src&#x2F;rekapi.core.js:568</code></a>
+        <a href="../files/src_rekapi.core.js.html#l570"><code>src&#x2F;rekapi.core.js:570</code></a>
         
         </p>
 
@@ -2276,6 +2282,24 @@ if <a href="../classes/Rekapi.html#method_play" class="crosslink">play</a> is ca
                         <p>The point in the timeline at which to
 render.  If omitted, this renders the last millisecond that was rendered
 (it&#39;s a re-render).</p>
+
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">opt_doResetLaterFnKeyframes</code>
+                        <span class="type">Boolean=</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>If true, allow all function
+keyframes later in the timeline to be run again.  This is a low-level
+feature, it should not be <code>true</code> (or even provided) for most use cases.</p>
 
                     </div>
 
@@ -2325,7 +2349,7 @@ render.  If omitted, this renders the last millisecond that was rendered
             
         
         
-        <a href="../files/src_rekapi.core.js.html#l769"><code>src&#x2F;rekapi.core.js:769</code></a>
+        <a href="../files/src_rekapi.core.js.html#l774"><code>src&#x2F;rekapi.core.js:774</code></a>
         
         </p>
 

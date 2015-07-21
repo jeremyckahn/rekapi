@@ -2,7 +2,7 @@
     "project": {
         "name": "Rekapi",
         "description": "A keyframe animation library for JavaScript",
-        "version": "1.4.6",
+        "version": "1.4.7",
         "url": "http://rekapi.com",
         "logo": "../../demo/img/rekapi-logo-200.png"
     },
@@ -498,7 +498,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 925,
+            "line": 945,
             "description": "__[Example](../../../../docs/examples/actor_export_timeline.html)__",
             "itemtype": "method",
             "name": "exportTimeline",
@@ -510,7 +510,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 949,
+            "line": 969,
             "description": "Import an Object to augment this actor's state.  This does not remove\nkeyframe properties before importing new ones.",
             "itemtype": "method",
             "name": "importTimeline",
@@ -667,7 +667,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 498,
+            "line": 500,
             "description": "Play from the last frame that was rendered with {{#crossLink\n\"Rekapi/update:method\"}}{{/crossLink}}.\n\n__[Example](../../../../docs/examples/play_from_current.html)__",
             "itemtype": "method",
             "name": "playFromCurrent",
@@ -683,7 +683,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 512,
+            "line": 514,
             "description": "Pause the animation.  A \"paused\" animation can be resumed from where it\nleft off with {{#crossLink \"Rekapi/play:method\"}}{{/crossLink}}.\n\n__[Example](../../../../docs/examples/pause.html)__",
             "itemtype": "method",
             "name": "pause",
@@ -698,7 +698,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 536,
+            "line": 538,
             "description": "Stop the animation.  A \"stopped\" animation will start from the beginning\nif {{#crossLink \"Rekapi/play:method\"}}{{/crossLink}} is called.\n\n__[Example](../../../../docs/examples/stop.html)__",
             "itemtype": "method",
             "name": "stop",
@@ -707,7 +707,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 559,
+            "line": 561,
             "itemtype": "method",
             "name": "isPlaying",
             "return": {
@@ -718,7 +718,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 568,
+            "line": 570,
             "description": "Render an animation frame at a specific point in the timeline.\n\n__[Example](../../../../docs/examples/update.html)__",
             "itemtype": "method",
             "name": "update",
@@ -727,6 +727,11 @@
                     "name": "opt_millisecond",
                     "description": "The point in the timeline at which to\nrender.  If omitted, this renders the last millisecond that was rendered\n(it's a re-render).",
                     "type": "Number="
+                },
+                {
+                    "name": "opt_doResetLaterFnKeyframes",
+                    "description": "If true, allow all function\nkeyframes later in the timeline to be run again.  This is a low-level\nfeature, it should not be `true` (or even provided) for most use cases.",
+                    "type": "Boolean="
                 }
             ],
             "chainable": 1,
@@ -734,7 +739,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 599,
+            "line": 604,
             "description": "__[Example](../../../../docs/examples/get_last_position_updated.html)__",
             "itemtype": "method",
             "name": "getLastPositionUpdated",
@@ -746,7 +751,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 609,
+            "line": 614,
             "itemtype": "method",
             "name": "getAnimationLength",
             "return": {
@@ -757,7 +762,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 617,
+            "line": 622,
             "description": "Bind a handler function to a Rekapi event.\n\n__[Example](../../../../docs/examples/bind.html)__",
             "itemtype": "method",
             "name": "on",
@@ -778,7 +783,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 670,
+            "line": 675,
             "description": "Unbind one or more handlers from a Rekapi event.\n\n__[Example](../../../../docs/examples/unbind.html)__",
             "itemtype": "method",
             "name": "off",
@@ -799,7 +804,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 698,
+            "line": 703,
             "description": "Export the timeline to a JSON-serializable `Object`.\n\n__[Example](../../../docs/examples/export_timeline.html)__",
             "itemtype": "method",
             "name": "exportTimeline",
@@ -811,7 +816,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 730,
+            "line": 735,
             "description": "Import data that was created by {{#crossLink\n\"Rekapi/exportTimeline:method\"}}{{/crossLink}}.  This sets up all actors,\nkeyframes, and custom easing curves specified in the `rekapiData`\nparameter.  These two methods collectively allow you serialize an\nanimation (for sending to a server for persistence, for example) and later\nrecreating an identical animation.",
             "itemtype": "method",
             "name": "importTimeline",
@@ -826,7 +831,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 760,
+            "line": 765,
             "description": "Get a list of event names that this Rekapi instance supports.",
             "itemtype": "method",
             "name": "getEventNames",
@@ -837,7 +842,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 769,
+            "line": 774,
             "description": "A list of formulas attached to `Tweenable.prototype.formula` at startup.\nThis is needed by {{#crossLink\n\"Rekapi/importTimeline:method\"}}{{/crossLink}} and {{#crossLink\n\"Rekapi/exportTimeline:method\"}}{{/crossLink}} to handle custom curves\ncreated by `Tweenable.setBezierFunction`.",
             "itemtype": "property",
             "name": "nonCustomFormulaNames",
