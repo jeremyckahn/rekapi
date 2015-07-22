@@ -379,6 +379,25 @@
     });
 
 
+    module('getLastMillisecondUpdated');
+
+
+    test('Last calculated state is recorded in milliseconds', function () {
+
+      var testRekapi = setupTestRekapi();
+      var testActor = setupTestActor(testRekapi);
+
+      testActor.keyframe(0, {
+        'x': 1
+      }).keyframe(1000, {
+        'x': 2
+      });
+
+      testRekapi.update(500);
+      equal(testRekapi.getLastMillisecondUpdated(), 500, 'Midpoint was recorded');
+    });
+
+
     module('getActorCount');
 
     test('Actors are accounted for', function () {

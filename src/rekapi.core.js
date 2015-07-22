@@ -612,6 +612,14 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
+   * @method getLastMillisecondUpdated
+   * @return {number} The millisecond that was last rendered.
+   */
+  Rekapi.prototype.getLastMillisecondUpdated = function () {
+    return this._lastUpdatedMillisecond;
+  };
+
+  /**
    * @method getAnimationLength
    * @return {number} The length of the animation timeline, in milliseconds.
    */
