@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.4.7</em>
+            <em>API Docs for: 1.4.8</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -675,6 +675,12 @@ rekapiModules.push(function (context) {
    * Remove all &#x60;{{#crossLink &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}}&#x60;s set
    * on the actor.
    *
+   * **NOTE**: This method does _not_ fire the &#x60;removeKeyframePropertyComplete&#x60;
+   * event.  This method is a bulk operation that is more efficient than
+   * calling &#x60;{{#crossLink
+   * &quot;Rekapi.Actor/removeKeyframeProperty:method&quot;}}{{/crossLink}}&#x60; many times
+   * individually, but foregoes firing that event.
+   *
    * __[Example](../../../../docs/examples/actor_remove_all_keyframes.html)__
    * @method removeAllKeyframes
    * @chainable
@@ -762,6 +768,7 @@ rekapiModules.push(function (context) {
       keyframeProperty.detach();
 
       cleanupAfterKeyframeModification(this);
+      fireEvent(this.rekapi, &#x27;removeKeyframePropertyComplete&#x27;, _, keyframeProperty);
 
       return keyframeProperty;
     }

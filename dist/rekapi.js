@@ -1,4 +1,4 @@
-/*! rekapi - v1.4.7 - 2015-07-21 - http://rekapi.com */
+/*! rekapi - v1.4.8 - 2015-07-24 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -299,6 +299,7 @@ var rekapiCore = function (root, _, Tweenable) {
       ,'removeActor': []
       ,'addKeyframeProperty': []
       ,'removeKeyframeProperty': []
+      ,'removeKeyframePropertyComplete': []
       ,'addKeyframePropertyTrack': []
       ,'timelineModified': []
       ,'animationLooped': []
@@ -630,6 +631,14 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
+   * @method getLastMillisecondUpdated
+   * @return {number} The millisecond that was last rendered.
+   */
+  Rekapi.prototype.getLastMillisecondUpdated = function () {
+    return this._lastUpdatedMillisecond;
+  };
+
+  /**
    * @method getAnimationLength
    * @return {number} The length of the animation timeline, in milliseconds.
    */
@@ -663,8 +672,17 @@ var rekapiCore = function (root, _, Tweenable) {
    *   `opt_data` is the {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}
    *   that was added.
    * - __removeKeyframeProperty__: Fires when a {{#crossLink
-   *   "Rekapi.KeyframeProperty"}}{{/crossLink}} is removed.  `opt_data` is the
-   *   {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}} that was removed.
+   *   "Rekapi.KeyframeProperty"}}{{/crossLink}} is removed.  This event is
+   *   fired _before_ the internal state of the timeline has been updated to
+   *   reflect the keyframe property removal (this is in contrast to
+   *   `removeKeyframePropertyComplete`).  `opt_data` is the {{#crossLink
+   *   "Rekapi.KeyframeProperty"}}{{/crossLink}} that was removed.
+   * - __removeKeyframePropertyComplete__: Fires when a {{#crossLink
+   *   "Rekapi.KeyframeProperty"}}{{/crossLink}} has finished being removed
+   *   from the timeline.  Unlike `removeKeyframeProperty`, this is fired
+   *   _after_ the internal state of Rekapi has been updated to reflect the
+   *   removal of the keyframe property. `opt_data` is the {{#crossLink
+   *   "Rekapi.KeyframeProperty"}}{{/crossLink}} that was removed.
    * - __addKeyframePropertyTrack__: Fires when the a keyframe is added to an
    *   actor that creates a new keyframe property track.  `opt_data` is the
    *   {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}
@@ -1402,6 +1420,12 @@ rekapiModules.push(function (context) {
    * Remove all `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set
    * on the actor.
    *
+   * **NOTE**: This method does _not_ fire the `removeKeyframePropertyComplete`
+   * event.  This method is a bulk operation that is more efficient than
+   * calling `{{#crossLink
+   * "Rekapi.Actor/removeKeyframeProperty:method"}}{{/crossLink}}` many times
+   * individually, but foregoes firing that event.
+   *
    * __[Example](../../../../docs/examples/actor_remove_all_keyframes.html)__
    * @method removeAllKeyframes
    * @chainable
@@ -1489,6 +1513,7 @@ rekapiModules.push(function (context) {
       keyframeProperty.detach();
 
       cleanupAfterKeyframeModification(this);
+      fireEvent(this.rekapi, 'removeKeyframePropertyComplete', _, keyframeProperty);
 
       return keyframeProperty;
     }

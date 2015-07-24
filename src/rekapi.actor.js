@@ -579,6 +579,12 @@ rekapiModules.push(function (context) {
    * Remove all `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set
    * on the actor.
    *
+   * **NOTE**: This method does _not_ fire the `removeKeyframePropertyComplete`
+   * event.  This method is a bulk operation that is more efficient than
+   * calling `{{#crossLink
+   * "Rekapi.Actor/removeKeyframeProperty:method"}}{{/crossLink}}` many times
+   * individually, but foregoes firing that event.
+   *
    * __[Example](../../../../docs/examples/actor_remove_all_keyframes.html)__
    * @method removeAllKeyframes
    * @chainable
@@ -666,6 +672,7 @@ rekapiModules.push(function (context) {
       keyframeProperty.detach();
 
       cleanupAfterKeyframeModification(this);
+      fireEvent(this.rekapi, 'removeKeyframePropertyComplete', _, keyframeProperty);
 
       return keyframeProperty;
     }
