@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.4.8</em>
+            <em>API Docs for: 1.4.9</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -379,6 +379,7 @@ var rekapiCore = function (root, _, Tweenable) {
       ,&#x27;removeKeyframeProperty&#x27;: []
       ,&#x27;removeKeyframePropertyComplete&#x27;: []
       ,&#x27;addKeyframePropertyTrack&#x27;: []
+      ,&#x27;removeKeyframePropertyTrack&#x27;: []
       ,&#x27;timelineModified&#x27;: []
       ,&#x27;animationLooped&#x27;: []
     };
@@ -768,6 +769,11 @@ var rekapiCore = function (root, _, Tweenable) {
    *   that the keyframe property is associated with can be accessed via
    *   &#x60;opt_data.actor&#x60; and the track name that was added can be determined via
    *   &#x60;opt_data.name&#x60;.
+   * - __removeKeyframePropertyTrack__: Fires when the last keyframe property
+   *   in an actor&#x27;s keyframe property track is removed.  Rekapi automatically
+   *   removes property tracks when they are emptied out, which causes this
+   *   event to be fired.  &#x60;opt_data&#x60; is the name of the track that was
+   *   removed.
    * - __timelineModified__: Fires when a keyframe is added, modified or
    *   removed.
    * - __animationLooped__: Fires when an animation loop ends and a new one

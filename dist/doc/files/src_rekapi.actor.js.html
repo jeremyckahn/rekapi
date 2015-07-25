@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.4.8</em>
+            <em>API Docs for: 1.4.9</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -117,10 +117,11 @@ rekapiModules.push(function (context) {
   /*!
    * @param {Rekapi.Actor} actor
    * @param {string} event
+   * @param {any=} opt_data
    */
-  function fireRekapiEventForActor (actor, event) {
+  function fireRekapiEventForActor (actor, event, opt_data) {
     if (actor.rekapi) {
-      fireEvent(actor.rekapi, event, _);
+      fireEvent(actor.rekapi, event, _, opt_data);
     }
   }
 
@@ -284,6 +285,27 @@ rekapiModules.push(function (context) {
 
     // Re-link the linked list of keyframeProperties
     linkTrackedProperties(actor);
+  }
+
+  /*!
+   * Remove any property tracks that are empty.
+   *
+   * @param {Rekapi.Actor} actor
+   */
+  function removeEmptyPropertyTracks (actor) {
+    var trackNameRemovalList = [];
+    var propertyTracks = actor._propertyTracks;
+
+    _.each(propertyTracks, function (propertyTrack, trackName) {
+      if (!propertyTrack.length) {
+        trackNameRemovalList.push(trackName);
+      }
+    });
+
+    _.each(trackNameRemovalList, function (trackName) {
+      delete propertyTracks[trackName];
+      fireRekapiEventForActor(actor, &#x27;removeKeyframePropertyTrack&#x27;, trackName);
+    });
   }
 
   /*!
@@ -658,6 +680,7 @@ rekapiModules.push(function (context) {
         propertyTracks[propertyName] = _.without(
           propertyTrack, keyframeProperty);
         keyframeProperty.detach();
+        removeEmptyPropertyTracks(this);
       }
     }, this);
 
@@ -692,6 +715,7 @@ rekapiModules.push(function (context) {
 
     _.each(this._keyframeProperties, function (keyframeProperty) {
       keyframeProperty.detach();
+      removeEmptyPropertyTracks(this);
     }, this);
 
     this._keyframeProperties = {};
@@ -764,9 +788,10 @@ rekapiModules.push(function (context) {
     if (typeof propertyTracks[property] !== &#x27;undefined&#x27;) {
       var keyframeProperty = this.getKeyframeProperty(property, millisecond);
       propertyTracks[property] =
-      _.without(propertyTracks[property], keyframeProperty);
+        _.without(propertyTracks[property], keyframeProperty);
       keyframeProperty.detach();
 
+      removeEmptyPropertyTracks(this);
       cleanupAfterKeyframeModification(this);
       fireEvent(this.rekapi, &#x27;removeKeyframePropertyComplete&#x27;, _, keyframeProperty);
 

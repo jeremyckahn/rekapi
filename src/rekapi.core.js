@@ -283,6 +283,7 @@ var rekapiCore = function (root, _, Tweenable) {
       ,'removeKeyframeProperty': []
       ,'removeKeyframePropertyComplete': []
       ,'addKeyframePropertyTrack': []
+      ,'removeKeyframePropertyTrack': []
       ,'timelineModified': []
       ,'animationLooped': []
     };
@@ -672,6 +673,11 @@ var rekapiCore = function (root, _, Tweenable) {
    *   that the keyframe property is associated with can be accessed via
    *   `opt_data.actor` and the track name that was added can be determined via
    *   `opt_data.name`.
+   * - __removeKeyframePropertyTrack__: Fires when the last keyframe property
+   *   in an actor's keyframe property track is removed.  Rekapi automatically
+   *   removes property tracks when they are emptied out, which causes this
+   *   event to be fired.  `opt_data` is the name of the track that was
+   *   removed.
    * - __timelineModified__: Fires when a keyframe is added, modified or
    *   removed.
    * - __animationLooped__: Fires when an animation loop ends and a new one

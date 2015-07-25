@@ -2,7 +2,7 @@
     "project": {
         "name": "Rekapi",
         "description": "A keyframe animation library for JavaScript",
-        "version": "1.4.8",
+        "version": "1.4.9",
         "url": "http://rekapi.com",
         "logo": "../../demo/img/rekapi-logo-200.png"
     },
@@ -64,7 +64,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "src/rekapi.actor.js",
-            "line": 208,
+            "line": 230,
             "description": "An actor represents an individual component of an animation.  An animation\nmay have one or many actors.",
             "params": [
                 {
@@ -180,7 +180,7 @@
     "classitems": [
         {
             "file": "src/rekapi.actor.js",
-            "line": 265,
+            "line": 287,
             "description": "Create a keyframe for the actor.  The animation timeline begins at `0`.\nThe timeline's length will automatically \"grow\" to accommodate new\nkeyframes as they are added.\n\n`state` should contain all of the properties that define this\nkeyframe's state.  These properties can be any value that can be tweened\nby [Shifty](http://jeremyckahn.github.io/shifty/) (numbers,\nRGB/hexadecimal color strings, and CSS property strings).  `state` can\nalso be a function, but this works differently (see \"Function keyframes\"\nbelow).\n\n__Note:__ Internally, this creates `{{#crossLink\n\"Rekapi.KeyframeProperty\"}}{{/crossLink}}`s and places them on a \"track.\"\nThese `{{#crossLink \"Rekapi.KeyframeProperty\"}}{{/crossLink}}`s are\nmanaged for you by the `{{#crossLink \"Rekapi.Actor\"}}{{/crossLink}}` APIs.\n\n## Keyframe inheritance\n\nKeyframes always inherit missing properties from the previous keyframe.\nFor example:\n\n    actor.keyframe(0, {\n      'x': 100\n    }).keyframe(1000, {\n      // Implicitly specifies the `x: 100` from above\n      'y': 50\n    });\n\nKeyframe `1000` will have a `y` of `50`, and an `x` of `100`, because `x`\nwas inherited from keyframe `0`.\n\n## Function keyframes\n\nInstead of providing an Object to be used to interpolate state values, you\ncan provide a function to be called at a specific point on the timeline.\nThis function does not need to return a value, as it does not get used to\nrender the actor state.  Function keyframes are called once per animation\nloop and do not have any tweening relationship with one another.  This is\na primarily a mechanism for scheduling arbitrary code to be executed at\nspecific points in an animation.\n\n    // drift is the number of milliseconds that this function was executed\n    // after the scheduled time.  There is typically some amount of delay\n    // due to the nature of JavaScript timers.\n    actor.keyframe(1000, function (drift) {\n      console.log(this); // Logs the actor instance\n    });\n\n## Easing\n\n`opt_easing`, if provided, can be a string or an Object.  If `opt_easing`\nis a string, all animated properties will have the same easing curve\napplied to them.  For example:\n\n    actor.keyframe(1000, {\n        'x': 100,\n        'y': 100\n      }, 'easeOutSine');\n\nBoth `x` and `y` will have `easeOutSine` applied to them.  You can also\nspecify multiple easing curves with an Object:\n\n    actor.keyframe(1000, {\n        'x': 100,\n        'y': 100\n      }, {\n        'x': 'easeinSine',\n        'y': 'easeOutSine'\n      });\n\n`x` will ease with `easeInSine`, and `y` will ease with `easeOutSine`.\nAny unspecified properties will ease with `linear`.  If `opt_easing` is\nomitted, all properties will default to `linear`.",
             "itemtype": "method",
             "name": "keyframe",
@@ -206,7 +206,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 380,
+            "line": 402,
             "itemtype": "method",
             "name": "hasKeyframeAt",
             "params": [
@@ -229,7 +229,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 410,
+            "line": 432,
             "description": "Copies all of the `{{#crossLink\n\"Rekapi.KeyframeProperty\"}}{{/crossLink}}`s from one point on the actor's\ntimeline to another. This is particularly useful for animating an actor\nback to its original position.\n\n    actor\n      .keyframe(0, {\n        x: 10,\n        y: 15\n      }).keyframe(1000, {\n        x: 50,\n        y: 75\n      });\n\n    // Return the actor to its original position\n    actor.copyKeyframe(2000, 0);\n\n__[Example](../../../../docs/examples/actor_copy_keyframe.html)__",
             "itemtype": "method",
             "name": "copyKeyframe",
@@ -250,7 +250,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 455,
+            "line": 477,
             "description": "Moves all of the\n`{{#crossLink \"Rekapi.KeyframeProperty\"}}{{/crossLink}}`s from one\npoint on the actor's timeline to another.  Although this method does error\nchecking for you to make sure the operation can be safely performed, an\neffective pattern is to use `{{#crossLink\n\"Rekapi.Actor/hasKeyframeAt:method\"}}{{/crossLink}}` to see if there is\nalready a keyframe at the requested `to` destination.\n\n__[Example](../../../../docs/examples/actor_move_keyframe.html)__",
             "itemtype": "method",
             "name": "moveKeyframe",
@@ -274,7 +274,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 491,
+            "line": 513,
             "description": "Augment the `value` or `easing` of the `{{#crossLink\n\"Rekapi.KeyframeProperty\"}}{{/crossLink}}`s at a given millisecond.  Any\n`{{#crossLink \"Rekapi.KeyframeProperty\"}}{{/crossLink}}`s omitted in\n`stateModification` or `opt_easing` are not modified.\n\n    actor.keyframe(0, {\n      'x': 10,\n      'y': 20\n    }).keyframe(1000, {\n      'x': 20,\n      'y': 40\n    }).keyframe(2000, {\n      'x': 30,\n      'y': 60\n    })\n\n    // Changes the state of the keyframe at millisecond 1000.\n    // Modifies the value of 'y' and the easing of 'x.'\n    actor.modifyKeyframe(1000, {\n      'y': 150\n    }, {\n      'x': 'easeFrom'\n    });\n\n__[Example](../../../../docs/examples/actor_modify_keyframe.html)__",
             "itemtype": "method",
             "name": "modifyKeyframe",
@@ -300,7 +300,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 544,
+            "line": 566,
             "description": "Remove all `{{#crossLink \"Rekapi.KeyframeProperty\"}}{{/crossLink}}`s set\non the actor at a given millisecond in the animation.\n\n__[Example](../../../../docs/examples/actor_remove_keyframe.html)__",
             "itemtype": "method",
             "name": "removeKeyframe",
@@ -316,7 +316,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 578,
+            "line": 601,
             "description": "Remove all `{{#crossLink \"Rekapi.KeyframeProperty\"}}{{/crossLink}}`s set\non the actor.\n\n**NOTE**: This method does _not_ fire the `removeKeyframePropertyComplete`\nevent.  This method is a bulk operation that is more efficient than\ncalling `{{#crossLink\n\"Rekapi.Actor/removeKeyframeProperty:method\"}}{{/crossLink}}` many times\nindividually, but foregoes firing that event.\n\n__[Example](../../../../docs/examples/actor_remove_all_keyframes.html)__",
             "itemtype": "method",
             "name": "removeAllKeyframes",
@@ -325,7 +325,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 609,
+            "line": 633,
             "itemtype": "method",
             "name": "getKeyframeProperty",
             "params": [
@@ -348,7 +348,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 626,
+            "line": 650,
             "description": "Modify a `{{#crossLink \"Rekapi.KeyframeProperty\"}}{{/crossLink}}` stored\non an actor.  Internally, this calls `{{#crossLink\n\"Rekapi.KeyframeProperty/modifyWith:method\"}}{{/crossLink}}` and then\nperforms some cleanup.\n\n__[Example](../../../../docs/examples/actor_modify_keyframe_property.html)__",
             "itemtype": "method",
             "name": "modifyKeyframeProperty",
@@ -374,7 +374,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 654,
+            "line": 678,
             "description": "Remove a single `{{#crossLink \"Rekapi.KeyframeProperty\"}}{{/crossLink}}`\nfrom the actor.",
             "itemtype": "method",
             "name": "removeKeyframeProperty",
@@ -398,7 +398,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 681,
+            "line": 706,
             "itemtype": "method",
             "name": "getTrackNames",
             "return": {
@@ -409,7 +409,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 690,
+            "line": 715,
             "description": "Get all of the `{{#crossLink \"Rekapi.KeyframeProperty\"}}{{/crossLink}}`s\nfor a track.",
             "itemtype": "method",
             "name": "getPropertiesInTrack",
@@ -428,7 +428,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 705,
+            "line": 730,
             "itemtype": "method",
             "name": "getStart",
             "params": [
@@ -446,7 +446,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 748,
+            "line": 773,
             "itemtype": "method",
             "name": "getEnd",
             "params": [
@@ -464,7 +464,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 778,
+            "line": 803,
             "itemtype": "method",
             "name": "getLength",
             "params": [
@@ -482,7 +482,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 789,
+            "line": 814,
             "description": "Extend the last state on this actor's timeline to simulate a pause.\nInternally, this method copies the final state of the actor in the\ntimeline to the millisecond defined by `until`.\n\n__[Example](../../../../docs/examples/actor_wait.html)__",
             "itemtype": "method",
             "name": "wait",
@@ -498,7 +498,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 952,
+            "line": 977,
             "description": "__[Example](../../../../docs/examples/actor_export_timeline.html)__",
             "itemtype": "method",
             "name": "exportTimeline",
@@ -510,7 +510,7 @@
         },
         {
             "file": "src/rekapi.actor.js",
-            "line": 976,
+            "line": 1001,
             "description": "Import an Object to augment this actor's state.  This does not remove\nkeyframe properties before importing new ones.",
             "itemtype": "method",
             "name": "importTimeline",
@@ -525,7 +525,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 341,
+            "line": 342,
             "description": "Add an actor to the animation.  Decorates the added `actor` with a\nreference to this `Rekapi` instance as `this.rekapi`.",
             "itemtype": "method",
             "name": "addActor",
@@ -544,7 +544,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 380,
+            "line": 381,
             "description": "Get a reference to an actor from the animation by its `id`.  You can use\n`{{#crossLink \"Rekapi/getActorIds:method\"}}{{/crossLink}}` to get a list\nof IDs for all actors in the animation.",
             "itemtype": "method",
             "name": "getActor",
@@ -563,7 +563,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 392,
+            "line": 393,
             "description": "Retrieve the `id`'s of all actors in an animation.",
             "itemtype": "method",
             "name": "getActorIds",
@@ -575,7 +575,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 402,
+            "line": 403,
             "description": "Retrieve all actors in the animation as an Object.",
             "itemtype": "method",
             "name": "getAllActors",
@@ -587,7 +587,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 411,
+            "line": 412,
             "description": "Return the number of actors in the animation.",
             "itemtype": "method",
             "name": "getActorCount",
@@ -599,7 +599,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 420,
+            "line": 421,
             "description": "Remove an actor from the animation.  This does not destroy the actor, it\nonly removes the link between it and the `Rekapi` instance.  This method\ncalls the actor's `teardown` method, if it is defined.",
             "itemtype": "method",
             "name": "removeActor",
@@ -618,7 +618,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 441,
+            "line": 442,
             "description": "Remove all actors from the animation.",
             "itemtype": "method",
             "name": "removeAllActors",
@@ -630,7 +630,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 450,
+            "line": 451,
             "description": "Play the animation.\n\n__[Example](../../../../docs/examples/play.html)__",
             "itemtype": "method",
             "name": "play",
@@ -646,7 +646,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 482,
+            "line": 483,
             "description": "Move to a specific millisecond on the timeline and play from there.\n\n__[Example](../../../../docs/examples/play_from.html)__",
             "itemtype": "method",
             "name": "playFrom",
@@ -667,7 +667,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 501,
+            "line": 502,
             "description": "Play from the last frame that was rendered with {{#crossLink\n\"Rekapi/update:method\"}}{{/crossLink}}.\n\n__[Example](../../../../docs/examples/play_from_current.html)__",
             "itemtype": "method",
             "name": "playFromCurrent",
@@ -683,7 +683,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 515,
+            "line": 516,
             "description": "Pause the animation.  A \"paused\" animation can be resumed from where it\nleft off with {{#crossLink \"Rekapi/play:method\"}}{{/crossLink}}.\n\n__[Example](../../../../docs/examples/pause.html)__",
             "itemtype": "method",
             "name": "pause",
@@ -698,7 +698,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 539,
+            "line": 540,
             "description": "Stop the animation.  A \"stopped\" animation will start from the beginning\nif {{#crossLink \"Rekapi/play:method\"}}{{/crossLink}} is called.\n\n__[Example](../../../../docs/examples/stop.html)__",
             "itemtype": "method",
             "name": "stop",
@@ -707,7 +707,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 562,
+            "line": 563,
             "itemtype": "method",
             "name": "isPlaying",
             "return": {
@@ -718,7 +718,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 571,
+            "line": 572,
             "description": "Render an animation frame at a specific point in the timeline.\n\n__[Example](../../../../docs/examples/update.html)__",
             "itemtype": "method",
             "name": "update",
@@ -739,7 +739,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 605,
+            "line": 606,
             "description": "__[Example](../../../../docs/examples/get_last_position_updated.html)__",
             "itemtype": "method",
             "name": "getLastPositionUpdated",
@@ -751,7 +751,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 615,
+            "line": 616,
             "itemtype": "method",
             "name": "getLastMillisecondUpdated",
             "return": {
@@ -762,7 +762,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 623,
+            "line": 624,
             "itemtype": "method",
             "name": "getAnimationLength",
             "return": {
@@ -773,14 +773,14 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 631,
+            "line": 632,
             "description": "Bind a handler function to a Rekapi event.\n\n__[Example](../../../../docs/examples/bind.html)__",
             "itemtype": "method",
             "name": "on",
             "params": [
                 {
                     "name": "eventName",
-                    "description": "Valid values are:\n\n- __animationComplete__: Fires when all animation loops have completed.\n- __playStateChange__: Fires when the animation is played, paused, or\n  stopped.\n- __play__: Fires when the animation is {{#crossLink\n  \"Rekapi/play:method\"}}{{/crossLink}}ed.\n- __pause__: Fires when the animation is {{#crossLink\n  \"Rekapi/pause:method\"}}{{/crossLink}}d.\n- __stop__: Fires when the animation is {{#crossLink\n  \"Rekapi/stop:method\"}}{{/crossLink}}ped.\n- __beforeUpdate__: Fires each frame before all actors are rendered.\n- __afterUpdate__: Fires each frame after all actors are rendered.\n- __addActor__: Fires when an actor is added.  `opt_data` is the\n  {{#crossLink \"Rekapi.Actor\"}}{{/crossLink}} that was added.\n- __removeActor__: Fires when an actor is removed.  `opt_data` is the\n  {{#crossLink \"Rekapi.Actor\"}}{{/crossLink}} that was removed.\n- __addKeyframeProperty__: Fires when a keyframe property is added.\n  `opt_data` is the {{#crossLink \"Rekapi.KeyframeProperty\"}}{{/crossLink}}\n  that was added.\n- __removeKeyframeProperty__: Fires when a {{#crossLink\n  \"Rekapi.KeyframeProperty\"}}{{/crossLink}} is removed.  This event is\n  fired _before_ the internal state of the timeline has been updated to\n  reflect the keyframe property removal (this is in contrast to\n  `removeKeyframePropertyComplete`).  `opt_data` is the {{#crossLink\n  \"Rekapi.KeyframeProperty\"}}{{/crossLink}} that was removed.\n- __removeKeyframePropertyComplete__: Fires when a {{#crossLink\n  \"Rekapi.KeyframeProperty\"}}{{/crossLink}} has finished being removed\n  from the timeline.  Unlike `removeKeyframeProperty`, this is fired\n  _after_ the internal state of Rekapi has been updated to reflect the\n  removal of the keyframe property. `opt_data` is the {{#crossLink\n  \"Rekapi.KeyframeProperty\"}}{{/crossLink}} that was removed.\n- __addKeyframePropertyTrack__: Fires when the a keyframe is added to an\n  actor that creates a new keyframe property track.  `opt_data` is the\n  {{#crossLink \"Rekapi.KeyframeProperty\"}}{{/crossLink}}\n  that was added to create the property track.  A reference to the actor\n  that the keyframe property is associated with can be accessed via\n  `opt_data.actor` and the track name that was added can be determined via\n  `opt_data.name`.\n- __timelineModified__: Fires when a keyframe is added, modified or\n  removed.\n- __animationLooped__: Fires when an animation loop ends and a new one\n  begins.",
+                    "description": "Valid values are:\n\n- __animationComplete__: Fires when all animation loops have completed.\n- __playStateChange__: Fires when the animation is played, paused, or\n  stopped.\n- __play__: Fires when the animation is {{#crossLink\n  \"Rekapi/play:method\"}}{{/crossLink}}ed.\n- __pause__: Fires when the animation is {{#crossLink\n  \"Rekapi/pause:method\"}}{{/crossLink}}d.\n- __stop__: Fires when the animation is {{#crossLink\n  \"Rekapi/stop:method\"}}{{/crossLink}}ped.\n- __beforeUpdate__: Fires each frame before all actors are rendered.\n- __afterUpdate__: Fires each frame after all actors are rendered.\n- __addActor__: Fires when an actor is added.  `opt_data` is the\n  {{#crossLink \"Rekapi.Actor\"}}{{/crossLink}} that was added.\n- __removeActor__: Fires when an actor is removed.  `opt_data` is the\n  {{#crossLink \"Rekapi.Actor\"}}{{/crossLink}} that was removed.\n- __addKeyframeProperty__: Fires when a keyframe property is added.\n  `opt_data` is the {{#crossLink \"Rekapi.KeyframeProperty\"}}{{/crossLink}}\n  that was added.\n- __removeKeyframeProperty__: Fires when a {{#crossLink\n  \"Rekapi.KeyframeProperty\"}}{{/crossLink}} is removed.  This event is\n  fired _before_ the internal state of the timeline has been updated to\n  reflect the keyframe property removal (this is in contrast to\n  `removeKeyframePropertyComplete`).  `opt_data` is the {{#crossLink\n  \"Rekapi.KeyframeProperty\"}}{{/crossLink}} that was removed.\n- __removeKeyframePropertyComplete__: Fires when a {{#crossLink\n  \"Rekapi.KeyframeProperty\"}}{{/crossLink}} has finished being removed\n  from the timeline.  Unlike `removeKeyframeProperty`, this is fired\n  _after_ the internal state of Rekapi has been updated to reflect the\n  removal of the keyframe property. `opt_data` is the {{#crossLink\n  \"Rekapi.KeyframeProperty\"}}{{/crossLink}} that was removed.\n- __addKeyframePropertyTrack__: Fires when the a keyframe is added to an\n  actor that creates a new keyframe property track.  `opt_data` is the\n  {{#crossLink \"Rekapi.KeyframeProperty\"}}{{/crossLink}}\n  that was added to create the property track.  A reference to the actor\n  that the keyframe property is associated with can be accessed via\n  `opt_data.actor` and the track name that was added can be determined via\n  `opt_data.name`.\n- __removeKeyframePropertyTrack__: Fires when the last keyframe property\n  in an actor's keyframe property track is removed.  Rekapi automatically\n  removes property tracks when they are emptied out, which causes this\n  event to be fired.  `opt_data` is the name of the track that was\n  removed.\n- __timelineModified__: Fires when a keyframe is added, modified or\n  removed.\n- __animationLooped__: Fires when an animation loop ends and a new one\n  begins.",
                     "type": "String"
                 },
                 {
@@ -794,7 +794,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 693,
+            "line": 699,
             "description": "Unbind one or more handlers from a Rekapi event.\n\n__[Example](../../../../docs/examples/unbind.html)__",
             "itemtype": "method",
             "name": "off",
@@ -815,7 +815,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 721,
+            "line": 727,
             "description": "Export the timeline to a JSON-serializable `Object`.\n\n__[Example](../../../docs/examples/export_timeline.html)__",
             "itemtype": "method",
             "name": "exportTimeline",
@@ -827,7 +827,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 753,
+            "line": 759,
             "description": "Import data that was created by {{#crossLink\n\"Rekapi/exportTimeline:method\"}}{{/crossLink}}.  This sets up all actors,\nkeyframes, and custom easing curves specified in the `rekapiData`\nparameter.  These two methods collectively allow you serialize an\nanimation (for sending to a server for persistence, for example) and later\nrecreating an identical animation.",
             "itemtype": "method",
             "name": "importTimeline",
@@ -842,7 +842,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 783,
+            "line": 789,
             "description": "Get a list of event names that this Rekapi instance supports.",
             "itemtype": "method",
             "name": "getEventNames",
@@ -853,7 +853,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 792,
+            "line": 798,
             "description": "A list of formulas attached to `Tweenable.prototype.formula` at startup.\nThis is needed by {{#crossLink\n\"Rekapi/importTimeline:method\"}}{{/crossLink}} and {{#crossLink\n\"Rekapi/exportTimeline:method\"}}{{/crossLink}} to handle custom curves\ncreated by `Tweenable.setBezierFunction`.",
             "itemtype": "property",
             "name": "nonCustomFormulaNames",

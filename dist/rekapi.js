@@ -1,4 +1,4 @@
-/*! rekapi - v1.4.8 - 2015-07-24 - http://rekapi.com */
+/*! rekapi - v1.4.9 - 2015-07-25 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -301,6 +301,7 @@ var rekapiCore = function (root, _, Tweenable) {
       ,'removeKeyframeProperty': []
       ,'removeKeyframePropertyComplete': []
       ,'addKeyframePropertyTrack': []
+      ,'removeKeyframePropertyTrack': []
       ,'timelineModified': []
       ,'animationLooped': []
     };
@@ -690,6 +691,11 @@ var rekapiCore = function (root, _, Tweenable) {
    *   that the keyframe property is associated with can be accessed via
    *   `opt_data.actor` and the track name that was added can be determined via
    *   `opt_data.name`.
+   * - __removeKeyframePropertyTrack__: Fires when the last keyframe property
+   *   in an actor's keyframe property track is removed.  Rekapi automatically
+   *   removes property tracks when they are emptied out, which causes this
+   *   event to be fired.  `opt_data` is the name of the track that was
+   *   removed.
    * - __timelineModified__: Fires when a keyframe is added, modified or
    *   removed.
    * - __animationLooped__: Fires when an animation loop ends and a new one
@@ -862,10 +868,11 @@ rekapiModules.push(function (context) {
   /*!
    * @param {Rekapi.Actor} actor
    * @param {string} event
+   * @param {any=} opt_data
    */
-  function fireRekapiEventForActor (actor, event) {
+  function fireRekapiEventForActor (actor, event, opt_data) {
     if (actor.rekapi) {
-      fireEvent(actor.rekapi, event, _);
+      fireEvent(actor.rekapi, event, _, opt_data);
     }
   }
 
@@ -1029,6 +1036,27 @@ rekapiModules.push(function (context) {
 
     // Re-link the linked list of keyframeProperties
     linkTrackedProperties(actor);
+  }
+
+  /*!
+   * Remove any property tracks that are empty.
+   *
+   * @param {Rekapi.Actor} actor
+   */
+  function removeEmptyPropertyTracks (actor) {
+    var trackNameRemovalList = [];
+    var propertyTracks = actor._propertyTracks;
+
+    _.each(propertyTracks, function (propertyTrack, trackName) {
+      if (!propertyTrack.length) {
+        trackNameRemovalList.push(trackName);
+      }
+    });
+
+    _.each(trackNameRemovalList, function (trackName) {
+      delete propertyTracks[trackName];
+      fireRekapiEventForActor(actor, 'removeKeyframePropertyTrack', trackName);
+    });
   }
 
   /*!
@@ -1403,6 +1431,7 @@ rekapiModules.push(function (context) {
         propertyTracks[propertyName] = _.without(
           propertyTrack, keyframeProperty);
         keyframeProperty.detach();
+        removeEmptyPropertyTracks(this);
       }
     }, this);
 
@@ -1437,6 +1466,7 @@ rekapiModules.push(function (context) {
 
     _.each(this._keyframeProperties, function (keyframeProperty) {
       keyframeProperty.detach();
+      removeEmptyPropertyTracks(this);
     }, this);
 
     this._keyframeProperties = {};
@@ -1509,9 +1539,10 @@ rekapiModules.push(function (context) {
     if (typeof propertyTracks[property] !== 'undefined') {
       var keyframeProperty = this.getKeyframeProperty(property, millisecond);
       propertyTracks[property] =
-      _.without(propertyTracks[property], keyframeProperty);
+        _.without(propertyTracks[property], keyframeProperty);
       keyframeProperty.detach();
 
+      removeEmptyPropertyTracks(this);
       cleanupAfterKeyframeModification(this);
       fireEvent(this.rekapi, 'removeKeyframePropertyComplete', _, keyframeProperty);
 

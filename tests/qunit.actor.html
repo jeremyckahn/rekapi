@@ -431,9 +431,7 @@
       testActor.removeAllKeyframes();
 
       equal(testRekapi._animationLength, 0, 'Animation length is 0');
-      equal(testActor._propertyTracks.x.length, 0,
-          'x property track exists, but is empty');
-
+      equal(testActor._propertyTracks.x, undefined, 'x property track no longer exists');
     });
 
 
@@ -842,8 +840,7 @@
       testActor.keyframe(0, { x: 10 });
       testActor.removeKeyframeProperty('x', 0);
 
-      equal(testActor.getPropertiesInTrack('x').length, 0,
-        'The KeyframeProperty was removed');
+      equal(testActor.getPropertiesInTrack('x'), undefined, 'The property track was removed');
     });
 
 
@@ -1305,6 +1302,30 @@
       equal(testActor._propertyTracks.y[0].nextProperty,
           testActor._propertyTracks.y[1],
           'The first tracked "y" KeyframeProperty instance\'s nextProperty did not change');
+    });
+
+
+    module('removeKeyframePropertyTrack event');
+
+
+    test('removeKeyframePropertyTrack event is fired when a track is removed', function () {
+
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
+
+      actor.keyframe(0, { x: 10 });
+
+      var eventWasCalled = false;
+      var removedTrackName = '';
+
+      rekapi.on('removeKeyframePropertyTrack', function (rekapi, trackName) {
+        eventWasCalled = true;
+        removedTrackName = trackName;
+      });
+
+      actor.removeKeyframe(0);
+      ok(eventWasCalled, 'removeKeyframePropertyTrack event was called');
+      equal(removedTrackName, 'x', 'The name of the removed track name was provided to the event handler.');
     });
 
 
