@@ -666,7 +666,7 @@
       var combinedProperty = Rekapi._private.cssRenderer.combineTranfromProperties({
         translateX: '10px'
         ,translateY: '20px'
-      });
+      }, Rekapi._private.cssRenderer.transformFunctions);
 
       var targetObject = {};
       targetObject[Rekapi._private.cssRenderer.TRANSFORM_TOKEN] = 'translateX(10px) translateY(20px)';
@@ -675,6 +675,23 @@
         combinedProperty,
         targetObject,
         'Transform properties were combined');
+    });
+
+
+    test('Can combine transform properties into a single property and leave non-tranform properties unchanged', function () {
+      var combinedProperty = Rekapi._private.cssRenderer.combineTranfromProperties({
+        translateX: '10px'
+        ,translateY: '20px'
+        ,foo: 'bar'
+      }, Rekapi._private.cssRenderer.transformFunctions);
+
+      var targetObject = { foo: 'bar' };
+      targetObject[Rekapi._private.cssRenderer.TRANSFORM_TOKEN] = 'translateX(10px) translateY(20px)';
+
+      deepEqual(
+        combinedProperty,
+        targetObject,
+        'Transform properties were combined, foo was unchanged');
     });
 
 

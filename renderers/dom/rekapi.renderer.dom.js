@@ -1275,9 +1275,10 @@ rekapiModules.push(function (context) {
 
   /**
    * @param {Object} propsToSerialize
+   * @param {Array.<string>} transformNames
    * @return {Object}
    */
-  function combineTranfromProperties (propsToSerialize) {
+  function combineTranfromProperties (propsToSerialize, transformNames) {
     var transformProps =
       _.pick.apply(_, [propsToSerialize].concat(transformFunctions));
 
@@ -1287,7 +1288,7 @@ rekapiModules.push(function (context) {
       var serializedProps = _.clone(propsToSerialize);
       serializedProps[TRANSFORM_TOKEN] = [];
 
-      _.each(transformFunctions, function (transformFunction) {
+      _.each(transformNames, function (transformFunction) {
         if (_.has(serializedProps, transformFunction)) {
           serializedProps[TRANSFORM_TOKEN].push(
             transformFunction + '(' + serializedProps[transformFunction] + ')');
@@ -1366,6 +1367,7 @@ rekapiModules.push(function (context) {
       ,'canOptimizeAnyKeyframeProperties': canOptimizeAnyKeyframeProperties
       ,'generateOptimizedKeyframeSegment': generateOptimizedKeyframeSegment
       ,'getActorCSS': getActorCSS
+      ,'transformFunctions': transformFunctions
     };
   }
 });
