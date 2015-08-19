@@ -1322,8 +1322,11 @@ rekapiModules.push(function (context) {
       propsToSerialize = actor.get();
     }
 
+    var combinedPropsToSerialize =
+      combineTranfromProperties(propsToSerialize, actor._transformOrder);
+
     var printVal;
-    _.each(propsToSerialize, function (val, key) {
+    _.each(combinedPropsToSerialize, function (val, key) {
       printVal = val;
       var printKey = key;
 

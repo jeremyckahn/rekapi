@@ -740,6 +740,32 @@
     });
 
 
+    test('Decoupled tranform properties are serialized and rewritten',
+        function () {
+
+      var rekapi = new Rekapi(document.body);
+      var actor1 = setupTestActor(rekapi);
+
+      actor1
+        .keyframe(0,    {
+          rotate: '0deg'
+        })
+        .keyframe(1000, {
+          rotate: '100deg'
+        });
+
+      actor1._updateState(500);
+
+      var serializedStep =
+          Rekapi._private.cssRenderer.serializeActorStep(actor1);
+
+      equal(
+          serializedStep
+          ,'{' + Rekapi._private.cssRenderer.TRANSFORM_TOKEN + ':rotate(50deg);}'
+          ,'Arbitrary keyframe step was serialized');
+    });
+
+
     test('Can target a single property to serialize',
         function () {
 
