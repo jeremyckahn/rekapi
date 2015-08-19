@@ -110,7 +110,7 @@
     test('Generates all W3 CSS properties for an animation',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1.keyframe(0, { 'x': 0 });
@@ -134,7 +134,7 @@
     test('Generates all vendor-prefixed CSS properties for an animation',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1.keyframe(0, { 'x': 0 });
@@ -158,7 +158,7 @@
     test('Generates all W3 CSS properties for an animation with centering offset',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1.keyframe(0, { 'x': 0 });
@@ -186,7 +186,7 @@
     test('Generates boilerplated class properties for prefix-less class',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1.keyframe(0, { 'x': 0 });
@@ -211,7 +211,7 @@
     test('Generates boilerplated class properties for a vendor-prefixed class',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1.keyframe(0, { 'x': 0 });
@@ -240,7 +240,7 @@
     test('Can generate boilerplated keyframes',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -275,7 +275,7 @@
     test('Can generate un-optimized keyframe data',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -307,7 +307,7 @@
     test('Can generate un-optimized keyframe data targeting one track',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -338,7 +338,7 @@
 
     test('Waits do not generate redundant @keyframes for unoptimized easing curves',
         function () {
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor = rekapi.addActor();
 
       actor
@@ -364,7 +364,7 @@
 
     test('Waits do not generate redundant @keyframes for optimized easing curves',
         function () {
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor = rekapi.addActor();
 
       actor
@@ -386,7 +386,7 @@
 
     test('Waits do not generate redundant @keyframes for unoptimized easing curves - transforms',
         function () {
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor = rekapi.addActor();
 
       actor
@@ -413,7 +413,7 @@
     test('Late-starting track generates duplicate keyframe at the beginning to simulate a wait',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -440,7 +440,7 @@
     test('Early-ending track generates duplicate keyframe at the end to simulate a wait',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -467,7 +467,7 @@
     test('Can control granularity of un-optimized keyframe data',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -485,7 +485,7 @@
     test('Can mix optimized and un-optimized segments, optimized first',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -512,7 +512,7 @@
     test('Can mix optimized and un-optimized segments, optimized last',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -537,7 +537,7 @@
 
 
     test('Does not generate redundant optimized keyframes when they are back-to-back', function () {
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -563,7 +563,7 @@
     test('Can fake the 0% keyframe',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -585,7 +585,7 @@
     test('Can fake the 100% keyframe',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -608,7 +608,7 @@
     test('Can get @keyframes for a three-step track segment',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -634,7 +634,7 @@
     test('Can get @keyframes for a five-step track segment',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -701,7 +701,7 @@
     test('Can serialize an individual Actor step',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -721,7 +721,7 @@
     test('Serialized tranform properties are rewritten',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -769,7 +769,7 @@
     test('Can target a single property to serialize',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -787,7 +787,7 @@
 
 
     test('Can serialize multiple keyframes into a single step', function () {
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -811,7 +811,7 @@
     test('Can generate the CSS name of an animation',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -830,7 +830,7 @@
     test('Can generate the CSS name of an animation with multiple properties',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -848,7 +848,7 @@
     test('Can generate single CSS name of an animation with combined keyframes',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -869,7 +869,7 @@
     test('Can generate the CSS duration of an animation',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -890,7 +890,7 @@
     test('Can generate the CSS delay of an animation',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -940,7 +940,7 @@
     test('Can generate an infinite CSS iteration count an animation',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       rekapi.play();
 
       var animDuration =
@@ -957,7 +957,7 @@
     test('Can generate a finite CSS iteration count an animation',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       rekapi.play(3);
 
       var animDuration =
@@ -974,7 +974,7 @@
     test('Can generate an overridden CSS iteration count an animation',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       rekapi.play(3);
 
       var animDuration =
@@ -1008,7 +1008,7 @@
     test('Detects a property that can be optimized',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -1026,7 +1026,7 @@
     test('Detects a property that cannot be optimized',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -1044,7 +1044,7 @@
     test('Detects a transform that can be optimized',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -1064,7 +1064,7 @@
     test('Detects a transform that cannot be optimized',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -1082,7 +1082,7 @@
 
 
     test('Detects that a wait can be optimized', function () {
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor = rekapi.addActor();
 
       actor
@@ -1101,7 +1101,7 @@
 
 
     test('Detects that all optimizable keyframes can be optimized', function () {
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -1117,7 +1117,7 @@
 
 
     test('Detects that a mixed set of keyframes has some keyframes that can be optimized', function () {
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -1133,7 +1133,7 @@
 
 
     test('Detects that all un-optimizable keyframes cannot be optimized', function () {
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -1154,7 +1154,7 @@
     test('Generates an optimized segment',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
@@ -1175,7 +1175,7 @@
     test('Generates an optimized transform segment',
         function () {
 
-      var rekapi = new Rekapi();
+      var rekapi = new Rekapi(document.body);
       var actor1 = setupTestActor(rekapi);
 
       actor1
