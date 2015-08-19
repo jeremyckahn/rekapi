@@ -659,6 +659,25 @@
     });
 
 
+    module('combineTranfromProperties');
+
+
+    test('Can combine transform properties into a single property', function () {
+      var combinedProperty = Rekapi._private.cssRenderer.combineTranfromProperties({
+        translateX: '10px'
+        ,translateY: '20px'
+      });
+
+      var targetObject = {};
+      targetObject[Rekapi._private.cssRenderer.TRANSFORM_TOKEN] = 'translateX(10px) translateY(20px)';
+
+      deepEqual(
+        combinedProperty,
+        targetObject,
+        'Transform properties were combined');
+    });
+
+
     module('serializeActorStep');
 
 

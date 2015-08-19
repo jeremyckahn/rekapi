@@ -1273,6 +1273,34 @@ rekapiModules.push(function (context) {
     return segment;
   }
 
+  /**
+   * @param {Object} propsToSerialize
+   * @return {Object}
+   */
+  function combineTranfromProperties (propsToSerialize) {
+    var transformProps =
+      _.pick.apply(_, [propsToSerialize].concat(transformFunctions));
+
+    if (_.isEmpty(transformProps)) {
+      return propsToSerialize;
+    } else {
+      var serializedProps = _.clone(propsToSerialize);
+      serializedProps[TRANSFORM_TOKEN] = [];
+
+      _.each(transformFunctions, function (transformFunction) {
+        if (_.has(serializedProps, transformFunction)) {
+          serializedProps[TRANSFORM_TOKEN].push(
+            transformFunction + '(' + serializedProps[transformFunction] + ')');
+          delete serializedProps[transformFunction];
+        }
+      });
+
+      serializedProps[TRANSFORM_TOKEN] = serializedProps[TRANSFORM_TOKEN].join(' ');
+
+      return serializedProps;
+    }
+  }
+
   /*!
    * @param {Rekapi.Actor} actor
    * @param {string=} opt_targetProp
@@ -1322,6 +1350,7 @@ rekapiModules.push(function (context) {
       ,'generateCSSAnimationProperties': generateCSSAnimationProperties
       ,'generateActorKeyframes': generateActorKeyframes
       ,'generateActorTrackSegment': generateActorTrackSegment
+      ,'combineTranfromProperties': combineTranfromProperties
       ,'serializeActorStep': serializeActorStep
       ,'generateAnimationNameProperty': generateAnimationNameProperty
       ,'generateAnimationDurationProperty': generateAnimationDurationProperty
