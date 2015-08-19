@@ -902,14 +902,25 @@ rekapiModules.push(function (context) {
 
     var animationName = printf('  %sanimation-name:', [prefix]);
 
-    var tracks = actor.getTrackNames();
-
     if (combineProperties) {
       animationName += printf(' %s-keyframes;', [animName]);
     } else {
-      _.each(tracks, function (trackName) {
+      var tracks = actor.getTrackNames();
+      var transformTracksToCombine = _.intersection(tracks, transformFunctions);
+      var nonTransformTracks = _.difference(tracks, transformFunctions);
+
+      var trackNamesToPrint;
+      if (transformTracksToCombine.length) {
+        trackNamesToPrint = nonTransformTracks;
+        trackNamesToPrint.push('transform');
+      } else {
+        trackNamesToPrint = tracks;
+      }
+
+      _.each(trackNamesToPrint, function (trackName) {
         animationName += printf(' %s-%s-keyframes,', [animName, trackName]);
       });
+
       animationName = animationName.slice(0, animationName.length - 1);
       animationName += ';';
     }
@@ -1038,7 +1049,11 @@ rekapiModules.push(function (context) {
    * @return {boolean}
    */
   function canOptimizeAnyKeyframeProperties (actor) {
-    return _.any(actor._keyframeProperties, canOptimizeKeyframeProperty);
+    var keyframeProperties = actor._keyframeProperties;
+    var propertyNames = _.keys(actor._propertyTracks);
+
+    return _.any(keyframeProperties, canOptimizeKeyframeProperty) &&
+      !_.intersection(propertyNames, transformFunctions).length;
   }
 
   /*!

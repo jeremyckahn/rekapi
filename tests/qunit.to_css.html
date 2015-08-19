@@ -208,6 +208,31 @@
     });
 
 
+    test('Generates boilerplated class properties for an animation with transform properties',
+        function () {
+
+      var rekapi = new Rekapi(document.body);
+      var actor1 = setupTestActor(rekapi);
+
+      actor1.keyframe(0, { rotate: '0deg' });
+
+      var classProperties =
+          Rekapi._private.cssRenderer.generateCSSClass(actor1, 'ANIM_NAME', false);
+
+      equal(
+          classProperties
+          ,['.ANIM_NAME {'
+          ,'  animation-name: ANIM_NAME-transform-keyframes;'
+          ,'  animation-duration: 0ms;'
+          ,'  animation-delay: 0ms;'
+          ,'  animation-fill-mode: forwards;'
+          ,'  animation-timing-function: linear;'
+          ,'  animation-iteration-count: infinite;'
+          ,'}'].join('\n')
+          ,'Class properties were generated');
+    });
+
+
     test('Generates boilerplated class properties for a vendor-prefixed class',
         function () {
 
