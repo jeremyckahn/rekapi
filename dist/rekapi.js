@@ -1,4 +1,4 @@
-/*! rekapi - v1.4.9 - 2015-07-25 - http://rekapi.com */
+/*! rekapi - v1.5.0 - 2015-08-19 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -2915,12 +2915,6 @@ rekapiModules.push(function (context) {
    *
    * This example and the one above it are equivalent.
    *
-   * __Note__: The decoupled form of `transform` animations is not supported in
-   * CSS `@keyframe` animations, only inline style animations.  This is due to
-   * the tightly-coupled nature of the CSS `@keyframes` spec.  If you intend to
-   * play a CSS-based `@keyframe` animation, __do not__ use the non-standard
-   * decoupled API form for `transform` properties.
-   *
    * @method setActorTransformOrder
    * @param {Rekapi.Actor} actor
    * @param {Array(string)} orderedTransforms The array of transform names.
@@ -3245,14 +3239,25 @@ rekapiModules.push(function (context) {
 
     var animationName = printf('  %sanimation-name:', [prefix]);
 
-    var tracks = actor.getTrackNames();
-
     if (combineProperties) {
       animationName += printf(' %s-keyframes;', [animName]);
     } else {
-      _.each(tracks, function (trackName) {
+      var tracks = actor.getTrackNames();
+      var transformTracksToCombine = _.intersection(tracks, transformFunctions);
+      var nonTransformTracks = _.difference(tracks, transformFunctions);
+
+      var trackNamesToPrint;
+      if (transformTracksToCombine.length) {
+        trackNamesToPrint = nonTransformTracks;
+        trackNamesToPrint.push('transform');
+      } else {
+        trackNamesToPrint = tracks;
+      }
+
+      _.each(trackNamesToPrint, function (trackName) {
         animationName += printf(' %s-%s-keyframes,', [animName, trackName]);
       });
+
       animationName = animationName.slice(0, animationName.length - 1);
       animationName += ';';
     }
@@ -3381,7 +3386,11 @@ rekapiModules.push(function (context) {
    * @return {boolean}
    */
   function canOptimizeAnyKeyframeProperties (actor) {
-    return _.any(actor._keyframeProperties, canOptimizeKeyframeProperty);
+    var keyframeProperties = actor._keyframeProperties;
+    var propertyNames = _.keys(actor._propertyTracks);
+
+    return _.any(keyframeProperties, canOptimizeKeyframeProperty) &&
+      !_.intersection(propertyNames, transformFunctions).length;
   }
 
   /*!
@@ -3616,6 +3625,35 @@ rekapiModules.push(function (context) {
     return segment;
   }
 
+  /**
+   * @param {Object} propsToSerialize
+   * @param {Array.<string>} transformNames
+   * @return {Object}
+   */
+  function combineTranfromProperties (propsToSerialize, transformNames) {
+    var transformProps =
+      _.pick.apply(_, [propsToSerialize].concat(transformFunctions));
+
+    if (_.isEmpty(transformProps)) {
+      return propsToSerialize;
+    } else {
+      var serializedProps = _.clone(propsToSerialize);
+      serializedProps[TRANSFORM_TOKEN] = [];
+
+      _.each(transformNames, function (transformFunction) {
+        if (_.has(serializedProps, transformFunction)) {
+          serializedProps[TRANSFORM_TOKEN].push(
+            transformFunction + '(' + serializedProps[transformFunction] + ')');
+          delete serializedProps[transformFunction];
+        }
+      });
+
+      serializedProps[TRANSFORM_TOKEN] = serializedProps[TRANSFORM_TOKEN].join(' ');
+
+      return serializedProps;
+    }
+  }
+
   /*!
    * @param {Rekapi.Actor} actor
    * @param {string=} opt_targetProp
@@ -3636,8 +3674,11 @@ rekapiModules.push(function (context) {
       propsToSerialize = actor.get();
     }
 
+    var combinedPropsToSerialize =
+      combineTranfromProperties(propsToSerialize, actor._transformOrder);
+
     var printVal;
-    _.each(propsToSerialize, function (val, key) {
+    _.each(combinedPropsToSerialize, function (val, key) {
       printVal = val;
       var printKey = key;
 
@@ -3665,6 +3706,7 @@ rekapiModules.push(function (context) {
       ,'generateCSSAnimationProperties': generateCSSAnimationProperties
       ,'generateActorKeyframes': generateActorKeyframes
       ,'generateActorTrackSegment': generateActorTrackSegment
+      ,'combineTranfromProperties': combineTranfromProperties
       ,'serializeActorStep': serializeActorStep
       ,'generateAnimationNameProperty': generateAnimationNameProperty
       ,'generateAnimationDurationProperty': generateAnimationDurationProperty
@@ -3680,6 +3722,7 @@ rekapiModules.push(function (context) {
       ,'canOptimizeAnyKeyframeProperties': canOptimizeAnyKeyframeProperties
       ,'generateOptimizedKeyframeSegment': generateOptimizedKeyframeSegment
       ,'getActorCSS': getActorCSS
+      ,'transformFunctions': transformFunctions
     };
   }
 });

@@ -2,7 +2,7 @@
     "project": {
         "name": "Rekapi",
         "description": "A keyframe animation library for JavaScript",
-        "version": "1.4.9",
+        "version": "1.5.0",
         "url": "http://rekapi.com",
         "logo": "../../demo/img/rekapi-logo-200.png"
     },
@@ -1132,7 +1132,7 @@
         {
             "file": "renderers/dom/rekapi.renderer.dom.js",
             "line": 522,
-            "description": "You can decouple transform components in order to animate each property\nwith its own easing curve:\n\n    actor\n      .keyframe(0, {\n        translateX: '0px',\n        translateY: '0px',\n        rotate: '0deg'\n      })\n      .keyframe(1500, {\n        translateX: '200px',\n        translateY: '200px',\n        rotate: '90deg'\n      }, {\n        translateX: 'easeOutExpo',\n        translateY: 'easeInSine',\n        rotate: 'elastic'\n      });\n\nCSS transform string components are order-dependent, but JavaScript object\nproperties have an unpredictable order.  Rekapi must combine transform\nproperties supplied to `{{#crossLink\n\"Rekapi.Actor/keyframe:method\"}}{{/crossLink}}` (as shown above) into a\nsingle string when it renders each frame.  This method lets you change\nthat order from the default.  The supported array values for\n`orderedTransforms` are:\n\n- `translateX`\n- `translateY`\n- `translateZ`\n- `scale`\n- `scaleX`\n- `scaleY`\n- `rotate`\n- `skewX`\n- `skewY`\n\nIf you prefer a more standards-oriented approach, Rekapi also supports\ncombining the transform components yourself:\n\n    actor\n      .keyframe(0, {\n        transform: 'translateX(0px) translateY(0px) rotate(0deg)'\n      })\n      .keyframe(1500, {\n        transform: 'translateX(200px) translateY(200px) rotate(90deg)'\n      }, {\n        transform: 'easeOutExpo easeInSine elastic'\n      });\n\nThis example and the one above it are equivalent.\n\n__Note__: The decoupled form of `transform` animations is not supported in\nCSS `@keyframe` animations, only inline style animations.  This is due to\nthe tightly-coupled nature of the CSS `@keyframes` spec.  If you intend to\nplay a CSS-based `@keyframe` animation, __do not__ use the non-standard\ndecoupled API form for `transform` properties.",
+            "description": "You can decouple transform components in order to animate each property\nwith its own easing curve:\n\n    actor\n      .keyframe(0, {\n        translateX: '0px',\n        translateY: '0px',\n        rotate: '0deg'\n      })\n      .keyframe(1500, {\n        translateX: '200px',\n        translateY: '200px',\n        rotate: '90deg'\n      }, {\n        translateX: 'easeOutExpo',\n        translateY: 'easeInSine',\n        rotate: 'elastic'\n      });\n\nCSS transform string components are order-dependent, but JavaScript object\nproperties have an unpredictable order.  Rekapi must combine transform\nproperties supplied to `{{#crossLink\n\"Rekapi.Actor/keyframe:method\"}}{{/crossLink}}` (as shown above) into a\nsingle string when it renders each frame.  This method lets you change\nthat order from the default.  The supported array values for\n`orderedTransforms` are:\n\n- `translateX`\n- `translateY`\n- `translateZ`\n- `scale`\n- `scaleX`\n- `scaleY`\n- `rotate`\n- `skewX`\n- `skewY`\n\nIf you prefer a more standards-oriented approach, Rekapi also supports\ncombining the transform components yourself:\n\n    actor\n      .keyframe(0, {\n        transform: 'translateX(0px) translateY(0px) rotate(0deg)'\n      })\n      .keyframe(1500, {\n        transform: 'translateX(200px) translateY(200px) rotate(90deg)'\n      }, {\n        transform: 'easeOutExpo easeInSine elastic'\n      });\n\nThis example and the one above it are equivalent.",
             "itemtype": "method",
             "name": "setActorTransformOrder",
             "params": [
@@ -1155,7 +1155,7 @@
         },
         {
             "file": "renderers/dom/rekapi.renderer.dom.js",
-            "line": 601,
+            "line": 595,
             "itemtype": "method",
             "name": "getActorClassName",
             "params": [
@@ -1173,7 +1173,7 @@
         },
         {
             "file": "renderers/dom/rekapi.renderer.dom.js",
-            "line": 615,
+            "line": 609,
             "description": "Converts Rekapi animations to CSS `@keyframes`.",
             "itemtype": "method",
             "name": "toString",
@@ -1189,7 +1189,33 @@
                 "type": "String"
             },
             "class": "Rekapi.DOMRenderer"
+        },
+        {
+            "file": "renderers/dom/rekapi.renderer.dom.js",
+            "line": 1285,
+            "params": [
+                {
+                    "name": "propsToSerialize",
+                    "description": "",
+                    "type": "Object"
+                },
+                {
+                    "name": "transformNames",
+                    "description": "",
+                    "type": "Array.<string>"
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "class": "Rekapi.DOMRenderer"
         }
     ],
-    "warnings": []
+    "warnings": [
+        {
+            "message": "Missing item type",
+            "line": " renderers/dom/rekapi.renderer.dom.js:1285"
+        }
+    ]
 }
