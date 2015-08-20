@@ -572,12 +572,6 @@ rekapiModules.push(function (context) {
    *
    * This example and the one above it are equivalent.
    *
-   * __Note__: The decoupled form of `transform` animations is not supported in
-   * CSS `@keyframe` animations, only inline style animations.  This is due to
-   * the tightly-coupled nature of the CSS `@keyframes` spec.  If you intend to
-   * play a CSS-based `@keyframe` animation, __do not__ use the non-standard
-   * decoupled API form for `transform` properties.
-   *
    * @method setActorTransformOrder
    * @param {Rekapi.Actor} actor
    * @param {Array(string)} orderedTransforms The array of transform names.
