@@ -18,7 +18,10 @@ rekapiModules.push(function (context) {
     'scale',
     'scaleX',
     'scaleY',
+    'perspective',
     'rotate',
+    'rotateX',
+    'rotateY',
     'skewX',
     'skewY'];
 
