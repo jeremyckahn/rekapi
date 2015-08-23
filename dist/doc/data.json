@@ -2,7 +2,7 @@
     "project": {
         "name": "Rekapi",
         "description": "A keyframe animation library for JavaScript",
-        "version": "1.5.0",
+        "version": "1.5.1",
         "url": "http://rekapi.com",
         "logo": "../../demo/img/rekapi-logo-200.png"
     },
@@ -165,7 +165,7 @@
             "plugin_for": [],
             "extension_for": [],
             "file": "renderers/dom/rekapi.renderer.dom.js",
-            "line": 293,
+            "line": 296,
             "description": "`Rekapi.DOMRenderer` allows you to animate DOM elements.  This is achieved\neither by browser-accelerated [CSS `@keyframe`\nanimations](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes),\nor by traditional inline style updates on every frame (like how\n[`jQuery.fn.animate`](http://api.jquery.com/animate/) works).  Animations\nare defined with the same API in either case, but you can gracefully fall\nback to the inline style approach if CSS `@keyframe` animations are not\nsupported by the browser or not preferred.  To render animations with the\nDOM, just supply any DOM element to the `{{#crossLink\n\"Rekapi\"}}{{/crossLink}}` constructor.  You may use `document.body`, since\nit is generally always available:\n\n    var rekapi = new Rekapi(document.body);\n    rekapi.renderer instanceof Rekapi.DOMRenderer; // true\n\nThere are separate APIs for playing inline style animations and CSS\n`@keyframe` animations.  Advantages of playing an animation with CSS\n`@keyframes`:\n\n  - Smoother animations in newer browsers.\n  - The JavaScript thread is freed from performing animation updates,\n  making it available for other logic.\n\nDisadvantages:\n\n  - Not all browsers support CSS `@keyframe` animations.\n  - Limited playback control: You can only play and stop an animation, you\n  cannot jump to or start from a specific point in the timeline.\n  - Generating the CSS for `@keyframe` animations can take a noticeable\n  amount of time.  This blocks all other logic, including rendering, so\n  you may have to be clever with how to spend the cycles to do it.\n  - No `{{#crossLink \"Rekapi/on:method\"}}events{{/crossLink}}` can be\n  bound to CSS `@keyframe` animations.\n\nSo, the results are a little more predictable and flexible with inline\nstyle animations, but CSS `@keyframe` may give you better performance.\nChoose whichever approach makes the most sense for your needs.\n\n`Rekapi.DOMRenderer` can gracefully fall back to an inline style animation\nif CSS `@keyframe` animations are not supported by the browser:\n\n     var rekapi = new Rekapi(document.body);\n\n     // Each actor needs a reference to the DOM element it represents\n     var actor = rekapi.addActor({\n       context: document.getElementById('actor-1')\n     });\n\n     actor\n       .keyframe(0,    { left: '0px'   })\n       .keyframe(1000, { left: '250px' }, 'easeOutQuad');\n\n     // Feature detect for CSS @keyframe support\n     if (rekapi.renderer.canAnimateWithCSS()) {\n       // Animate with CSS @keyframes\n       rekapi.renderer.play();\n     } else {\n       // Animate with inline styles instead\n       rekapi.play();\n     }\n\n## `@keyframe` animations work differently than inline style animations\n\nInline style animations are compatible with all of the playback and\ntimeline control methods defined by `{{#crossLink\n\"Rekapi\"}}{{/crossLink}}`, such as `{{#crossLink\n\"Rekapi/play:method\"}}{{/crossLink}}`, `{{#crossLink\n\"Rekapi/playFrom:method\"}}{{/crossLink}}` and `{{#crossLink\n\"Rekapi/update:method\"}}{{/crossLink}}`.  CSS `@keyframe` playback cannot\nbe controlled in all browsers, so `Rekapi.DOMRenderer` defines analogous,\nrenderer-specific CSS playback methods that you should use:\n\n  - {{#crossLink \"Rekapi.DOMRenderer/play:method\"}}{{/crossLink}}\n  - {{#crossLink \"Rekapi.DOMRenderer/isPlaying:method\"}}{{/crossLink}}\n  - {{#crossLink \"Rekapi.DOMRenderer/stop:method\"}}{{/crossLink}}\n\n__Note__: `Rekapi.DOMRenderer` is added to the `{{#crossLink\n\"Rekapi\"}}{{/crossLink}}` instance automatically as `this.renderer`,\nthere is no reason to call the constructor yourself in most cases.\n\n__[Example](/renderers/dom/sample/play-many-actors.html)__",
             "params": [
                 {
@@ -1050,7 +1050,7 @@
         },
         {
             "file": "renderers/dom/rekapi.renderer.dom.js",
-            "line": 406,
+            "line": 409,
             "itemtype": "method",
             "name": "canAnimateWithCSS",
             "return": {
@@ -1061,7 +1061,7 @@
         },
         {
             "file": "renderers/dom/rekapi.renderer.dom.js",
-            "line": 415,
+            "line": 418,
             "description": "Play the Rekapi animation as a CSS `@keyframe` animation.\n\nNote that this is different from `{{#crossLink\n\"Rekapi/play:method\"}}{{/crossLink}}`.  This method only applies to CSS\n`@keyframe` animations.",
             "itemtype": "method",
             "name": "play",
@@ -1081,7 +1081,7 @@
         },
         {
             "file": "renderers/dom/rekapi.renderer.dom.js",
-            "line": 449,
+            "line": 452,
             "description": "Stop a CSS `@keyframe` animation.  This also removes any `<style>`\nelements that were dynamically injected into the DOM.\n\nNote that this is different from\n`{{#crossLink \"Rekapi/stop:method\"}}{{/crossLink}}`.  This method only\napplies to CSS `@keyframe` animations.",
             "itemtype": "method",
             "name": "stop",
@@ -1096,7 +1096,7 @@
         },
         {
             "file": "renderers/dom/rekapi.renderer.dom.js",
-            "line": 484,
+            "line": 487,
             "itemtype": "method",
             "name": "isPlaying",
             "return": {
@@ -1107,7 +1107,7 @@
         },
         {
             "file": "renderers/dom/rekapi.renderer.dom.js",
-            "line": 492,
+            "line": 495,
             "description": "Prerender and cache the CSS animation so that it is immediately ready to\nbe used when it is needed in the future.  The function signature is\nidentical to {{#crossLink\n\"Rekapi.DOMRenderer/play:method\"}}{{/crossLink}}.  This is necessary to\nplay a CSS animation and will be automatically called for you if you don't\ncall it manually, but calling it ahead of time (such as on page load) will\nprevent any perceived lag when a CSS `@keyframe` animation is started.\nThe prerendered animation is cached for reuse until the timeline or a\nkeyframe is modified.",
             "itemtype": "method",
             "name": "prerender",
@@ -1131,7 +1131,7 @@
         },
         {
             "file": "renderers/dom/rekapi.renderer.dom.js",
-            "line": 522,
+            "line": 525,
             "description": "You can decouple transform components in order to animate each property\nwith its own easing curve:\n\n    actor\n      .keyframe(0, {\n        translateX: '0px',\n        translateY: '0px',\n        rotate: '0deg'\n      })\n      .keyframe(1500, {\n        translateX: '200px',\n        translateY: '200px',\n        rotate: '90deg'\n      }, {\n        translateX: 'easeOutExpo',\n        translateY: 'easeInSine',\n        rotate: 'elastic'\n      });\n\nCSS transform string components are order-dependent, but JavaScript object\nproperties have an unpredictable order.  Rekapi must combine transform\nproperties supplied to `{{#crossLink\n\"Rekapi.Actor/keyframe:method\"}}{{/crossLink}}` (as shown above) into a\nsingle string when it renders each frame.  This method lets you change\nthat order from the default.  The supported array values for\n`orderedTransforms` are:\n\n- `translateX`\n- `translateY`\n- `translateZ`\n- `scale`\n- `scaleX`\n- `scaleY`\n- `rotate`\n- `skewX`\n- `skewY`\n\nIf you prefer a more standards-oriented approach, Rekapi also supports\ncombining the transform components yourself:\n\n    actor\n      .keyframe(0, {\n        transform: 'translateX(0px) translateY(0px) rotate(0deg)'\n      })\n      .keyframe(1500, {\n        transform: 'translateX(200px) translateY(200px) rotate(90deg)'\n      }, {\n        transform: 'easeOutExpo easeInSine elastic'\n      });\n\nThis example and the one above it are equivalent.",
             "itemtype": "method",
             "name": "setActorTransformOrder",
@@ -1155,7 +1155,7 @@
         },
         {
             "file": "renderers/dom/rekapi.renderer.dom.js",
-            "line": 595,
+            "line": 598,
             "itemtype": "method",
             "name": "getActorClassName",
             "params": [
@@ -1173,7 +1173,7 @@
         },
         {
             "file": "renderers/dom/rekapi.renderer.dom.js",
-            "line": 609,
+            "line": 612,
             "description": "Converts Rekapi animations to CSS `@keyframes`.",
             "itemtype": "method",
             "name": "toString",
@@ -1192,7 +1192,7 @@
         },
         {
             "file": "renderers/dom/rekapi.renderer.dom.js",
-            "line": 1285,
+            "line": 1288,
             "params": [
                 {
                     "name": "propsToSerialize",
@@ -1215,7 +1215,7 @@
     "warnings": [
         {
             "message": "Missing item type",
-            "line": " renderers/dom/rekapi.renderer.dom.js:1285"
+            "line": " renderers/dom/rekapi.renderer.dom.js:1288"
         }
     ]
 }

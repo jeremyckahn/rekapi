@@ -1,4 +1,4 @@
-/*! rekapi - v1.5.0 - 2015-08-19 - http://rekapi.com */
+/*! rekapi - v1.5.1 - 2015-08-23 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -2361,7 +2361,10 @@ rekapiModules.push(function (context) {
     'scale',
     'scaleX',
     'scaleY',
+    'perspective',
     'rotate',
+    'rotateX',
+    'rotateY',
     'skewX',
     'skewY'];
 
