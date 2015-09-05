@@ -749,7 +749,8 @@ var rekapiCore = function (root, _, Tweenable) {
       })
       .each(function (curve) {
         curves[curve.displayName] = _.pick(curve, 'x1', 'y1', 'x2', 'y2');
-      });
+      })
+      .value();
 
     exportData.curves = curves;
 

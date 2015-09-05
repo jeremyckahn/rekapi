@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.5.1</em>
+            <em>API Docs for: 1.5.2</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -845,7 +845,8 @@ var rekapiCore = function (root, _, Tweenable) {
       })
       .each(function (curve) {
         curves[curve.displayName] = _.pick(curve, &#x27;x1&#x27;, &#x27;y1&#x27;, &#x27;x2&#x27;, &#x27;y2&#x27;);
-      });
+      })
+      .value();
 
     exportData.curves = curves;
 
