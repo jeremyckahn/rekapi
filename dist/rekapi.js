@@ -1,4 +1,4 @@
-/*! rekapi - v1.5.2 - 2015-09-05 - http://rekapi.com */
+/*! rekapi - v1.5.3 - 2015-09-15 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -2366,6 +2366,7 @@ rekapiModules.push(function (context) {
     'rotate',
     'rotateX',
     'rotateY',
+    'rotateZ',
     'skewX',
     'skewY'];
 
