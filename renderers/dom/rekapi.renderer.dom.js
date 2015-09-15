@@ -22,6 +22,7 @@ rekapiModules.push(function (context) {
     'rotate',
     'rotateX',
     'rotateY',
+    'rotateZ',
     'skewX',
     'skewY'];
 
