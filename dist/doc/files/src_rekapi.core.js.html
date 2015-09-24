@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.5.3</em>
+            <em>API Docs for: 1.5.4</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -844,7 +844,8 @@ var rekapiCore = function (root, _, Tweenable) {
         return typeof formula.x1 === &#x27;number&#x27;;
       })
       .each(function (curve) {
-        curves[curve.displayName] = _.pick(curve, &#x27;x1&#x27;, &#x27;y1&#x27;, &#x27;x2&#x27;, &#x27;y2&#x27;);
+        curves[curve.displayName] =
+          _.pick(curve, &#x27;displayName&#x27;, &#x27;x1&#x27;, &#x27;y1&#x27;, &#x27;x2&#x27;, &#x27;y2&#x27;);
       })
       .value();
 

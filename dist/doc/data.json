@@ -2,7 +2,7 @@
     "project": {
         "name": "Rekapi",
         "description": "A keyframe animation library for JavaScript",
-        "version": "1.5.3",
+        "version": "1.5.4",
         "url": "http://rekapi.com",
         "logo": "../../demo/img/rekapi-logo-200.png"
     },
@@ -827,7 +827,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 760,
+            "line": 761,
             "description": "Import data that was created by {{#crossLink\n\"Rekapi/exportTimeline:method\"}}{{/crossLink}}.  This sets up all actors,\nkeyframes, and custom easing curves specified in the `rekapiData`\nparameter.  These two methods collectively allow you serialize an\nanimation (for sending to a server for persistence, for example) and later\nrecreating an identical animation.",
             "itemtype": "method",
             "name": "importTimeline",
@@ -842,7 +842,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 790,
+            "line": 791,
             "description": "Get a list of event names that this Rekapi instance supports.",
             "itemtype": "method",
             "name": "getEventNames",
@@ -853,7 +853,7 @@
         },
         {
             "file": "src/rekapi.core.js",
-            "line": 799,
+            "line": 800,
             "description": "A list of formulas attached to `Tweenable.prototype.formula` at startup.\nThis is needed by {{#crossLink\n\"Rekapi/importTimeline:method\"}}{{/crossLink}} and {{#crossLink\n\"Rekapi/exportTimeline:method\"}}{{/crossLink}} to handle custom curves\ncreated by `Tweenable.setBezierFunction`.",
             "itemtype": "property",
             "name": "nonCustomFormulaNames",

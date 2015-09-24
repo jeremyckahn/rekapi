@@ -1,4 +1,4 @@
-/*! rekapi - v1.5.3 - 2015-09-15 - http://rekapi.com */
+/*! rekapi - v1.5.4 - 2015-09-24 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -766,7 +766,8 @@ var rekapiCore = function (root, _, Tweenable) {
         return typeof formula.x1 === 'number';
       })
       .each(function (curve) {
-        curves[curve.displayName] = _.pick(curve, 'x1', 'y1', 'x2', 'y2');
+        curves[curve.displayName] =
+          _.pick(curve, 'displayName', 'x1', 'y1', 'x2', 'y2');
       })
       .value();
 
