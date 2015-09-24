@@ -258,7 +258,7 @@
       var exportedTimeline = testRekapi.exportTimeline();
       deepEqual(
         exportedTimeline.curves,
-        { custom: { x1: 0, y1: .25, x2: .5, y2: .75 }},
+        { custom: { displayName: 'custom', x1: 0, y1: .25, x2: .5, y2: .75 }},
         'custom curve was exported with bezier points');
 
       // Clean up Tweenable
