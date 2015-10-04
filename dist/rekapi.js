@@ -1,4 +1,4 @@
-/*! rekapi - v1.5.4 - 2015-09-24 - http://rekapi.com */
+/*! rekapi - v1.5.5 - 2015-10-04 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -2507,7 +2507,7 @@ rekapiModules.push(function (context) {
     var transformComponents = [];
 
     _.each(orderedTransforms, function(functionName) {
-      if (transformProperties[functionName]) {
+      if (typeof transformProperties[functionName] !== 'undefined') {
         transformComponents.push(functionName + '(' +
           transformProperties[functionName] + ')');
       }
