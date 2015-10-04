@@ -181,6 +181,22 @@
           'Calculated midpoint of 3deg and 6deg.');
     });
 
+
+    test('Support decoupled transform values of 0', function () {
+      var testRekapi = setupTestRekapi();
+      var testActor = setupTestActor(testRekapi);
+
+      testActor
+        .keyframe(0,   { scale: 0 })
+        .keyframe(100, { scale: 1 });
+
+        testRekapi.update(0);
+
+        equal(testActor.context.getAttribute('style').match(/transform.*;/)[0],
+          'transform: scale(0);',
+          '0 value was inlined onto the actor element');
+    });
+
   } ());
   </script>
 </head>

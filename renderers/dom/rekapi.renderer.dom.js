@@ -162,7 +162,7 @@ rekapiModules.push(function (context) {
     var transformComponents = [];
 
     _.each(orderedTransforms, function(functionName) {
-      if (transformProperties[functionName]) {
+      if (typeof transformProperties[functionName] !== 'undefined') {
         transformComponents.push(functionName + '(' +
           transformProperties[functionName] + ')');
       }
