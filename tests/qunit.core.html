@@ -360,6 +360,26 @@
     });
 
 
+    module('trigger');
+
+
+    test('A bound event can be manually triggered', function () {
+
+      var testRekapi = setupTestRekapi();
+      var eventWasTriggered = false;
+      var providedData;
+
+      testRekapi.on('timelineModified', function (rekapi, data) {
+        eventWasTriggered = true;
+        providedData = data;
+      });
+
+      testRekapi.trigger('timelineModified', 5);
+      ok(eventWasTriggered, 'timelineModified was manually triggered');
+      equal(providedData, 5, 'Data was provided to the event');
+    });
+
+
     module('getLastPositionUpdated');
 
 

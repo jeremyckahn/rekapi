@@ -697,6 +697,19 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
+   * Manually fire a Rekapi event, thereby calling all bound event handlers.
+   * @param {string} eventName The name of the event to trigger.
+   * @param {any=} opt_data Optional data to provide to `eventName` handlers.
+   * @method trigger
+   * @chainable
+   */
+  Rekapi.prototype.trigger = function (eventName, opt_data) {
+    fireEvent(this, eventName, _, opt_data);
+
+    return this;
+  };
+
+  /**
    * Unbind one or more handlers from a Rekapi event.
    *
    * __[Example](../../../../docs/examples/unbind.html)__
