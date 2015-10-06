@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.5.5</em>
+            <em>API Docs for: 1.6.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -788,6 +788,19 @@ var rekapiCore = function (root, _, Tweenable) {
     }
 
     this._events[eventName].push(handler);
+
+    return this;
+  };
+
+  /**
+   * Manually fire a Rekapi event, thereby calling all bound event handlers.
+   * @param {string} eventName The name of the event to trigger.
+   * @param {any=} opt_data Optional data to provide to &#x60;eventName&#x60; handlers.
+   * @method trigger
+   * @chainable
+   */
+  Rekapi.prototype.trigger = function (eventName, opt_data) {
+    fireEvent(this, eventName, _, opt_data);
 
     return this;
   };

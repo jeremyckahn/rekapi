@@ -1,4 +1,4 @@
-/*! rekapi - v1.5.5 - 2015-10-04 - http://rekapi.com */
+/*! rekapi - v1.6.0 - 2015-10-05 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -710,6 +710,19 @@ var rekapiCore = function (root, _, Tweenable) {
     }
 
     this._events[eventName].push(handler);
+
+    return this;
+  };
+
+  /**
+   * Manually fire a Rekapi event, thereby calling all bound event handlers.
+   * @param {string} eventName The name of the event to trigger.
+   * @param {any=} opt_data Optional data to provide to `eventName` handlers.
+   * @method trigger
+   * @chainable
+   */
+  Rekapi.prototype.trigger = function (eventName, opt_data) {
+    fireEvent(this, eventName, _, opt_data);
 
     return this;
   };
