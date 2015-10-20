@@ -844,7 +844,25 @@
     });
 
 
-    module('removeKeyframePropertyComplete event');
+    module('beforeRemoveKeyframeProperty event');
+
+
+    test('beforeRemoveKeyframeProperty reflects the new state of the animation', function () {
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
+
+      actor.keyframe(0, { x: 0 }).keyframe(100, { x: 10 });
+      var keyframeProperty = actor.getKeyframeProperty('x', 0);
+
+      rekapi.on('beforeRemoveKeyframeProperty', function () {
+        equal(rekapi.getAnimationLength(), 100, 'The timeline reflects the state before the removal of the keyframe');
+      });
+
+      actor.removeKeyframeProperty('x', 100);
+    });
+
+
+    module('beforeRemoveKeyframeProperty event');
 
 
     test('removeKeyframePropertyComplete reflects the new state of the animation', function () {

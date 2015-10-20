@@ -603,8 +603,8 @@ rekapiModules.push(function (context) {
    * on the actor.
    *
    * **NOTE**: This method does _not_ fire the `removeKeyframePropertyComplete`
-   * event.  This method is a bulk operation that is more efficient than
-   * calling `{{#crossLink
+   * or `removeKeyframePropertyComplete` events.  This method is a bulk
+   * operation that is more efficient than calling `{{#crossLink
    * "Rekapi.Actor/removeKeyframeProperty:method"}}{{/crossLink}}` many times
    * individually, but foregoes firing that event.
    *
@@ -691,6 +691,7 @@ rekapiModules.push(function (context) {
 
     if (typeof propertyTracks[property] !== 'undefined') {
       var keyframeProperty = this.getKeyframeProperty(property, millisecond);
+      fireEvent(this.rekapi, 'beforeRemoveKeyframeProperty', _, keyframeProperty);
       propertyTracks[property] =
         _.without(propertyTracks[property], keyframeProperty);
       keyframeProperty.detach();

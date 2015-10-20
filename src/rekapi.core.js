@@ -282,6 +282,7 @@ var rekapiCore = function (root, _, Tweenable) {
       ,'addKeyframeProperty': []
       ,'removeKeyframeProperty': []
       ,'removeKeyframePropertyComplete': []
+      ,'beforeRemoveKeyframeProperty': []
       ,'addKeyframePropertyTrack': []
       ,'removeKeyframePropertyTrack': []
       ,'timelineModified': []
@@ -654,10 +655,14 @@ var rekapiCore = function (root, _, Tweenable) {
    * - __addKeyframeProperty__: Fires when a keyframe property is added.
    *   `opt_data` is the {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}
    *   that was added.
+   * - __beforeRemoveKeyframeProperty__: Fires just before the point where a
+   *   {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}} is removed.  This
+   *   event is called before any modifications to the timeline are done.
    * - __removeKeyframeProperty__: Fires when a {{#crossLink
    *   "Rekapi.KeyframeProperty"}}{{/crossLink}} is removed.  This event is
-   *   fired _before_ the internal state of the timeline has been updated to
-   *   reflect the keyframe property removal (this is in contrast to
+   *   fired _before_ the internal state of the keyframe (but not the timeline,
+   *   in contrast to the `beforeRemoveKeyframeProperty` event) has been
+   *   updated to reflect the keyframe property removal (this is in contrast to
    *   `removeKeyframePropertyComplete`).  `opt_data` is the {{#crossLink
    *   "Rekapi.KeyframeProperty"}}{{/crossLink}} that was removed.
    * - __removeKeyframePropertyComplete__: Fires when a {{#crossLink
