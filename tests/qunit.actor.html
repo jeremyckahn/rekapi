@@ -293,6 +293,23 @@
     });
 
 
+    module('beforeAddKeyframeProperty event');
+
+
+    test('beforeAddKeyframeProperty reflects the state of the animation before the keyframe property is added', function () {
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
+
+      actor.keyframe(50, { x: 0 });
+      var keyframeProperty = actor.getKeyframeProperty('x', 0);
+
+      rekapi.on('beforeAddKeyframeProperty', function () {
+        equal(rekapi.getAnimationLength(), 50, 'The timeline does not reflect the addition of the new keyframe');
+      });
+
+      actor.keyframe(100, { x: 10 });
+    });
+
 
     module('removeKeyframe');
 

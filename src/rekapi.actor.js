@@ -858,6 +858,10 @@ rekapiModules.push(function (context) {
    * @chainable
    */
   Actor.prototype._addKeyframeProperty = function (keyframeProperty) {
+    if (this.rekapi) {
+      fireEvent(this.rekapi, 'beforeAddKeyframeProperty', _, keyframeProperty);
+    }
+
     keyframeProperty.actor = this;
     this._keyframeProperties[keyframeProperty.id] = keyframeProperty;
 

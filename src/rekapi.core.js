@@ -279,6 +279,7 @@ var rekapiCore = function (root, _, Tweenable) {
       ,'afterUpdate': []
       ,'addActor': []
       ,'removeActor': []
+      ,'beforeAddKeyframeProperty': []
       ,'addKeyframeProperty': []
       ,'removeKeyframeProperty': []
       ,'removeKeyframePropertyComplete': []
@@ -652,6 +653,10 @@ var rekapiCore = function (root, _, Tweenable) {
    *   {{#crossLink "Rekapi.Actor"}}{{/crossLink}} that was added.
    * - __removeActor__: Fires when an actor is removed.  `opt_data` is the
    *   {{#crossLink "Rekapi.Actor"}}{{/crossLink}} that was removed.
+   * - __beforeAddKeyframeProperty__: Fires just before the point where a
+   *   {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}} is added to the
+   *   timeline.  This event is called before any modifications to the timeline
+   *   are done.
    * - __addKeyframeProperty__: Fires when a keyframe property is added.
    *   `opt_data` is the {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}
    *   that was added.
