@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.6.0</em>
+            <em>API Docs for: 1.6.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -698,11 +698,11 @@ rekapiModules.push(function (context) {
    * Remove all &#x60;{{#crossLink &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}}&#x60;s set
    * on the actor.
    *
-   * **NOTE**: This method does _not_ fire the &#x60;removeKeyframePropertyComplete&#x60;
-   * event.  This method is a bulk operation that is more efficient than
-   * calling &#x60;{{#crossLink
+   * **NOTE**: This method does _not_ fire the &#x60;beforeRemoveKeyframeProperty&#x60;
+   * or &#x60;removeKeyframePropertyComplete&#x60; events.  This method is a bulk
+   * operation that is more efficient than calling &#x60;{{#crossLink
    * &quot;Rekapi.Actor/removeKeyframeProperty:method&quot;}}{{/crossLink}}&#x60; many times
-   * individually, but foregoes firing that event.
+   * individually, but foregoes firing events.
    *
    * __[Example](../../../../docs/examples/actor_remove_all_keyframes.html)__
    * @method removeAllKeyframes
@@ -787,6 +787,7 @@ rekapiModules.push(function (context) {
 
     if (typeof propertyTracks[property] !== &#x27;undefined&#x27;) {
       var keyframeProperty = this.getKeyframeProperty(property, millisecond);
+      fireEvent(this.rekapi, &#x27;beforeRemoveKeyframeProperty&#x27;, _, keyframeProperty);
       propertyTracks[property] =
         _.without(propertyTracks[property], keyframeProperty);
       keyframeProperty.detach();
@@ -953,6 +954,10 @@ rekapiModules.push(function (context) {
    * @chainable
    */
   Actor.prototype._addKeyframeProperty = function (keyframeProperty) {
+    if (this.rekapi) {
+      fireEvent(this.rekapi, &#x27;beforeAddKeyframeProperty&#x27;, _, keyframeProperty);
+    }
+
     keyframeProperty.actor = this;
     this._keyframeProperties[keyframeProperty.id] = keyframeProperty;
 

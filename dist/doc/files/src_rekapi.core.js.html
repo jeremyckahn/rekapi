@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.6.0</em>
+            <em>API Docs for: 1.6.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -375,9 +375,11 @@ var rekapiCore = function (root, _, Tweenable) {
       ,&#x27;afterUpdate&#x27;: []
       ,&#x27;addActor&#x27;: []
       ,&#x27;removeActor&#x27;: []
+      ,&#x27;beforeAddKeyframeProperty&#x27;: []
       ,&#x27;addKeyframeProperty&#x27;: []
       ,&#x27;removeKeyframeProperty&#x27;: []
       ,&#x27;removeKeyframePropertyComplete&#x27;: []
+      ,&#x27;beforeRemoveKeyframeProperty&#x27;: []
       ,&#x27;addKeyframePropertyTrack&#x27;: []
       ,&#x27;removeKeyframePropertyTrack&#x27;: []
       ,&#x27;timelineModified&#x27;: []
@@ -747,13 +749,21 @@ var rekapiCore = function (root, _, Tweenable) {
    *   {{#crossLink &quot;Rekapi.Actor&quot;}}{{/crossLink}} that was added.
    * - __removeActor__: Fires when an actor is removed.  &#x60;opt_data&#x60; is the
    *   {{#crossLink &quot;Rekapi.Actor&quot;}}{{/crossLink}} that was removed.
+   * - __beforeAddKeyframeProperty__: Fires just before the point where a
+   *   {{#crossLink &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}} is added to the
+   *   timeline.  This event is called before any modifications to the timeline
+   *   are done.
    * - __addKeyframeProperty__: Fires when a keyframe property is added.
    *   &#x60;opt_data&#x60; is the {{#crossLink &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}}
    *   that was added.
+   * - __beforeRemoveKeyframeProperty__: Fires just before the point where a
+   *   {{#crossLink &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}} is removed.  This
+   *   event is called before any modifications to the timeline are done.
    * - __removeKeyframeProperty__: Fires when a {{#crossLink
    *   &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}} is removed.  This event is
-   *   fired _before_ the internal state of the timeline has been updated to
-   *   reflect the keyframe property removal (this is in contrast to
+   *   fired _before_ the internal state of the keyframe (but not the timeline,
+   *   in contrast to the &#x60;beforeRemoveKeyframeProperty&#x60; event) has been
+   *   updated to reflect the keyframe property removal (this is in contrast to
    *   &#x60;removeKeyframePropertyComplete&#x60;).  &#x60;opt_data&#x60; is the {{#crossLink
    *   &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}} that was removed.
    * - __removeKeyframePropertyComplete__: Fires when a {{#crossLink
