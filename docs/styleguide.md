@@ -16,11 +16,11 @@ var obj = {
   * Property names in Object literals must be in quotes, as above
   * Function declaration spacing uses a slightly different format:
 
-  ````javascript
-  function myFunction (param1, param2) {
-    // Code!
-  }
-  ````
+````javascript
+function myFunction (param1, param2) {
+  // Code!
+}
+````
 
 Things to keep in mind:
 
