@@ -26,12 +26,8 @@ kept in sync.
 
 ## Building
 
-Rekapi uses [Grunt](http://gruntjs.com/) (version 0.4.1 or later, globally
-installed) to generate the distributable binaries.  If you make any changes to
-the source code, please rebuild the binaries with:
-
 ````
-$: grunt build
+$: npm run build
 ````
 
 A note about the `dist/` directory:  You should not modify the files in this
@@ -48,7 +44,7 @@ Please make sure that all tests pass before submitting a Pull Request.  To run
 the tests on the command line (requires [PhantomJS](http://phantomjs.org/)):
 
 ````
-$: grunt qunit
+$: npm run test
 ````
 
 You can also run the tests in the browser.  They are in `tests/`.  If you are
@@ -60,5 +56,5 @@ Please adhere to the [style guide](docs/styleguide.md).  To automatically check
 for style issues or other potential problems, you can run:
 
 ````
-$: grunt jshint
+$: npm run lint
 ````
