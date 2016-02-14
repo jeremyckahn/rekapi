@@ -1,4 +1,4 @@
-/*! rekapi - v1.6.1 - 2015-10-29 - http://rekapi.com */
+/*! rekapi - v1.6.2 - 2016-02-14 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -3101,7 +3101,19 @@ rekapiModules.push(function (context) {
   function getActorCSS (actor, opts) {
     opts = opts || {};
     var actorCSS = [];
-    var animName = opts.name || DOMRenderer.getActorClassName(actor);
+    var animName;
+
+    if (opts.name) {
+      if (actor.rekapi.getActorCount() > 1) {
+        animName = opts.name + '-' + actor.id;
+      } else {
+        animName = opts.name;
+      }
+    } else {
+      animName = DOMRenderer.getActorClassName(actor);
+    }
+
+
     var fps = opts.fps || DEFAULT_FPS;
     var steps = Math.ceil((actor.rekapi.getAnimationLength() / 1000) * fps);
     var combineProperties = !canOptimizeAnyKeyframeProperties(actor);

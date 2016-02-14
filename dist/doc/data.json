@@ -2,7 +2,7 @@
     "project": {
         "name": "Rekapi",
         "description": "A keyframe animation library for JavaScript",
-        "version": "1.6.1",
+        "version": "1.6.2",
         "url": "http://rekapi.com",
         "logo": "../../demo/img/rekapi-logo-200.png"
     },
@@ -1213,7 +1213,7 @@
         },
         {
             "file": "renderers/dom/rekapi.renderer.dom.js",
-            "line": 1289,
+            "line": 1301,
             "params": [
                 {
                     "name": "propsToSerialize",
@@ -1236,7 +1236,7 @@
     "warnings": [
         {
             "message": "Missing item type",
-            "line": " renderers/dom/rekapi.renderer.dom.js:1289"
+            "line": " renderers/dom/rekapi.renderer.dom.js:1301"
         }
     ]
 }
