@@ -1,4 +1,4 @@
-/*! rekapi - v1.6.2 - 2016-02-14 - http://rekapi.com */
+/*! rekapi - v1.6.3 - 2016-04-09 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -1029,10 +1029,24 @@ rekapiModules.push(function (context) {
   }
 
   /*!
-   * Empty out and rebuild the cache of internal KeyframeProperty data.
+   * Mark the cache of internal KeyframeProperty data as invalid.  The cache
+   * will be rebuilt on the next call to ensurePropertyCacheValid.
    * @param {Rekapi.Actor}
    */
   function invalidatePropertyCache (actor) {
+    actor._timelinePropertyCacheValid = false;
+  }
+
+  /*!
+   * Empty out and rebuild the cache of internal KeyframeProperty data if it
+   * has been marked as invalid.
+   * @param {Rekapi.Actor}
+   */
+  function ensurePropertyCacheValid (actor) {
+    if (actor._timelinePropertyCacheValid) {
+      return;
+    }
+
     actor._timelinePropertyCache = {};
     var timelinePropertyCache = actor._timelinePropertyCache;
 
@@ -1061,6 +1075,8 @@ rekapiModules.push(function (context) {
 
     // Re-link the linked list of keyframeProperties
     linkTrackedProperties(actor);
+
+    actor._timelinePropertyCacheValid = true;
   }
 
   /*!
@@ -1134,6 +1150,7 @@ rekapiModules.push(function (context) {
       '_propertyTracks': {}
       ,'_timelinePropertyCache': {}
       ,'_timelinePropertyCacheKeys': []
+      ,'_timelinePropertyCacheValid': false
       ,'_keyframeProperties': {}
       ,'id': _.uniqueId()
       ,'context': opt_config.context // This may be undefined
@@ -1773,6 +1790,7 @@ rekapiModules.push(function (context) {
 
     millisecond = Math.min(endMs, millisecond);
 
+    ensurePropertyCacheValid(this);
     var latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
     var propertiesToInterpolate =
       this._timelinePropertyCache[this._timelinePropertyCacheKeys[
