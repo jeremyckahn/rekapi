@@ -918,8 +918,8 @@ rekapiModules.push(function (context) {
 
     millisecond = Math.min(endMs, millisecond);
 
-    var latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
     ensurePropertyCacheValid(this);
+    var latestCacheId = getPropertyCacheIdForMillisecond(this, millisecond);
     var propertiesToInterpolate =
       this._timelinePropertyCache[this._timelinePropertyCacheKeys[
           latestCacheId]];

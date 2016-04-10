@@ -1256,6 +1256,7 @@
           'x': 100
           ,'y': 100
         });
+      testActor._updateState(0);
 
       var keyPropCount = 0;
 
@@ -1297,6 +1298,8 @@
       testActor.modifyKeyframeProperty('x', 1000, {
         'millisecond': 1500
       });
+
+      testActor._updateState(0);
 
       var keyPropCount = 0;
 
