@@ -272,6 +272,8 @@
         .keyframe(0,    { 'x': 0   })
         .keyframe(1000, { 'x': 100 }, { 'x': 'fakeLinear' });
 
+      actor1._updateState(0);
+
       var keyframeData = Rekapi._private.cssRenderer.generateBoilerplatedKeyframes(
           actor1, 'ANIM_NAME', 10, false);
 
@@ -307,6 +309,8 @@
         .keyframe(0,    { 'x': 0   })
         .keyframe(1000, { 'x': 100 }, { 'x': 'fakeLinear' });
 
+      actor1._updateState(0);
+
       var keyframeData =
           Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 10, 'x');
 
@@ -338,6 +342,8 @@
       actor1
         .keyframe(0,    { 'x': 0, 'y': 5    })
         .keyframe(1000, { 'x': 100, 'y': 15 }, { 'x': 'fakeLinear' });
+
+      actor1._updateState(0);
 
       var keyframeData =
           Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 10, 'x');
@@ -371,6 +377,8 @@
         .keyframe(500, { y: 5 }, 'fakeLinear')
         .wait(1000);
 
+      actor._updateState(0);
+
       var keyframeData =
           Rekapi._private.cssRenderer.generateActorKeyframes(actor, 10, 'y');
 
@@ -397,6 +405,8 @@
         .keyframe(500, { y: 5 })
         .wait(1000);
 
+      actor._updateState(0);
+
       var keyframeData =
           Rekapi._private.cssRenderer.generateActorKeyframes(actor, 10, 'y');
 
@@ -418,6 +428,8 @@
         .keyframe(0, { transform: 'translateX(0px)' })
         .keyframe(500, { transform: 'translateX(5px)' }, 'fakeLinear')
         .wait(1000);
+
+      actor._updateState(0);
 
       var keyframeData =
           Rekapi._private.cssRenderer.generateActorKeyframes(actor, 10, 'transform');
@@ -473,6 +485,8 @@
         .keyframe(500,  { 'y': 10        }, { 'y': 'fakeLinear' })
         .keyframe(1000, { 'x': 10        }, { 'y': 'fakeLinear' });
 
+      actor1._updateState(0);
+
       var keyframeData =
           Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 10, 'y');
 
@@ -499,6 +513,8 @@
         .keyframe(0,    { 'x': 0   })
         .keyframe(1000, { 'x': 100 }, { 'x': 'fakeLinear' });
 
+      actor1._updateState(0);
+
       var keyframeData =
           Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 100, 'x');
 
@@ -517,6 +533,8 @@
         .keyframe(0,    { 'x': 0  })
         .keyframe(500,  { 'x': 10 })
         .keyframe(1000, { 'x': 20 }, { 'x': 'fakeLinear' });
+
+      actor1._updateState(0);
 
       var keyframeData =
           Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 10, 'x');
@@ -545,6 +563,8 @@
         .keyframe(500,  { 'x': 10 }, { 'x': 'fakeLinear' })
         .keyframe(1000, { 'x': 20 });
 
+      actor1._updateState(0);
+
       var keyframeData =
           Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 10, 'x');
 
@@ -569,6 +589,8 @@
         .keyframe(0,    { 'x': 0  })
         .keyframe(500,  { 'x': 5  })
         .keyframe(1000, { 'x': 10 });
+
+      actor1._updateState(0);
 
       var keyframeData =
           Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 99, 'x');
@@ -1040,6 +1062,8 @@
         .keyframe(0,    { 'x': 0  })
         .keyframe(1000, { 'x': 10 }, { 'x': 'easeInQuad' });
 
+      actor1._updateState(0);
+
       var canBeOptimized = Rekapi._private.cssRenderer.canOptimizeKeyframeProperty(
         actor1.getKeyframeProperty('x', 0));
 
@@ -1078,6 +1102,8 @@
         ,{ 'transform': 'translateX(10) translateY(10)' }
         ,{ 'transform': 'linear linear' });
 
+      actor1._updateState(0);
+
       var canBeOptimized = Rekapi._private.cssRenderer.canOptimizeKeyframeProperty(
         actor1.getKeyframeProperty('transform', 0));
 
@@ -1115,6 +1141,8 @@
         .keyframe(500, { y: 5 })
         .wait(1000);
 
+      actor._updateState(0);
+
       var canBeOptimized = Rekapi._private.cssRenderer.canOptimizeKeyframeProperty(
         actor.getKeyframeProperty('y', 500));
 
@@ -1133,6 +1161,8 @@
         .keyframe(0,    { 'x': 0,  'y': 0  })
         .keyframe(1000, { 'x': 10, 'y': 20 });
 
+      actor1._updateState(0);
+
       var canBeOptimized =
           Rekapi._private.cssRenderer.canOptimizeAnyKeyframeProperties(actor1);
 
@@ -1148,6 +1178,8 @@
       actor1
         .keyframe(0,    { 'x': 0,  'y': 0  })
         .keyframe(1000, { 'x': 10, 'y': 20 }, { 'x': 'fakeLinear' });
+
+      actor1._updateState(0);
 
       var canBeOptimized =
           Rekapi._private.cssRenderer.canOptimizeAnyKeyframeProperties(actor1);
@@ -1186,6 +1218,8 @@
         .keyframe(0,    { 'x': 0  })
         .keyframe(1000, { 'x': 10 }, { 'x': 'easeInQuad' });
 
+      actor1._updateState(0);
+
       var optimizedSegment =
           Rekapi._private.cssRenderer.generateOptimizedKeyframeSegment(
               actor1.getKeyframeProperty('x', 0), 0, 100);
@@ -1207,6 +1241,8 @@
         .keyframe(0,    { 'transform': 'translateX(0)'  })
         .keyframe(1000, { 'transform': 'translateX(10)' }
             ,{ 'transform': 'easeInQuad easeInQuad' });
+
+      actor1._updateState(0);
 
       var optimizedSegment =
           Rekapi._private.cssRenderer.generateOptimizedKeyframeSegment(
