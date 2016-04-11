@@ -15,6 +15,12 @@ dependencies with [Bower](http://bower.io/) (version 1.0 or later) and
 $: bower install; npm install
 ````
 
+## Branches
+
+Development takes place in the `develop` branch.  If you would like to make any
+changes, please create a new branch based off of `develop` and target any Pull
+Requests into that.
+
 ## Versioning
 
 Rekapi uses [SemVer](http://semver.org/) for versioning.  If you modify the
