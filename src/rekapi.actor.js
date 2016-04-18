@@ -57,18 +57,6 @@ rekapiModules.push(function (context) {
   }
 
   /*!
-   * Sort all of an Actor's property tracks so they can be cached.
-   * @param {Rekapi.Actor} actor
-   */
-  function sortPropertyTracks (actor) {
-    _.each(actor._propertyTracks, function (track) {
-      track.sort(function (current, next) {
-        return current.millisecond - next.millisecond;
-      });
-    });
-  }
-
-  /*!
    * Compute and fill all timeline caches.
    * @param {Rekapi.Actor} actor
    */
@@ -154,20 +142,6 @@ rekapiModules.push(function (context) {
   }
 
   /*!
-   * Links each KeyframeProperty to the next one in its respective track.
-   *
-   * They're linked lists!
-   * @param {Rekapi.Actor} actor
-   */
-  function linkTrackedProperties (actor) {
-    _.each(actor._propertyTracks, function (propertyTrack) {
-      _.each(propertyTrack, function (keyframeProperty, i) {
-        keyframeProperty.linkToNext(propertyTrack[i + 1]);
-      });
-    });
-  }
-
-  /*!
    * Mark the cache of internal KeyframeProperty data as invalid.  The cache
    * will be rebuilt on the next call to ensurePropertyCacheValid.
    * @param {Rekapi.Actor}
@@ -212,9 +186,6 @@ rekapiModules.push(function (context) {
     // Associate cache map elements to their respective points on the timeline
     cachePropertiesToSegments(actor);
 
-    // Re-link the linked list of keyframeProperties
-    linkTrackedProperties(actor);
-
     actor._timelinePropertyCacheValid = true;
   }
 
@@ -248,7 +219,6 @@ rekapiModules.push(function (context) {
    * @param {Rekapi.Actor} actor
    */
   function cleanupAfterKeyframeModification (actor) {
-    sortPropertyTracks(actor);
     invalidatePropertyCache(actor);
     recalculateAnimationLength(actor.rekapi, _);
     fireRekapiEventForActor(actor, 'timelineModified');
@@ -526,10 +496,13 @@ rekapiModules.push(function (context) {
     // Move each of the relevant KeyframeProperties to the new location in the
     // timeline
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var property = this.getKeyframeProperty(trackName, from);
-
-      if (property) {
+      var oldIndex = propertyIndexInTrack(propertyTrack, from);
+      if (typeof oldIndex !== 'undefined') {
+        var property = propertyTrack[oldIndex];
+        this._deleteKeyframePropertyAt(propertyTrack, oldIndex);
         property.millisecond = to;
+        var newIndex = insertionPointInTrack(propertyTrack, to);
+        this._insertKeyframePropertyAt(property, propertyTrack, newIndex);
       }
     }, this);
 
@@ -717,10 +690,11 @@ rekapiModules.push(function (context) {
     var propertyTracks = this._propertyTracks;
 
     if (typeof propertyTracks[property] !== 'undefined') {
-      var keyframeProperty = this.getKeyframeProperty(property, millisecond);
+      var propertyTrack = propertyTracks[property];
+      var index = propertyIndexInTrack(propertyTrack, millisecond);
+      var keyframeProperty = propertyTrack[index];
       fireEvent(this.rekapi, 'beforeRemoveKeyframeProperty', _, keyframeProperty);
-      propertyTracks[property] =
-        _.without(propertyTracks[property], keyframeProperty);
+      this._deleteKeyframePropertyAt(propertyTrack, index);
       keyframeProperty.detach();
 
       removeEmptyPropertyTracks(this);
@@ -878,6 +852,40 @@ rekapiModules.push(function (context) {
   };
 
   /*!
+   * Insert a `KeyframeProperty` into a property track at `index`.  The linked
+   * list structure of the property track is maintained.
+   * @method _insertKeyframePropertyAt
+   * @param {Rekapi.KeyframeProperty} keyframeProperty
+   * @param {Array(Rekapi.KeyframeProperty} propertyTrack
+   * @param {number} index
+   */
+  Actor.prototype._insertKeyframePropertyAt = function (keyframeProperty, propertyTrack, index) {
+    propertyTrack.splice(index, 0, keyframeProperty);
+    // Maintain property linked list
+    if (index >= 1) {
+      propertyTrack[index - 1].linkToNext(keyframeProperty);
+    }
+    if (propertyTrack.length > index + 1) {
+      keyframeProperty.linkToNext(propertyTrack[index + 1]);
+    }
+  };
+
+  /*!
+   * Remove the `KeyframeProperty` at `index` from a property track.  The linked
+   * list structure of the property track is maintained.  The removed property
+   * is not modified or unlinked internally.
+   * @method _deleteKeyframePropertyAt
+   * @param {Array(Rekapi.KeyframeProperty} propertyTrack
+   * @param {number} index
+   */
+  Actor.prototype._deleteKeyframePropertyAt = function (propertyTrack, index) {
+    if (index >= 1 && propertyTrack.length > index + 1) {
+      propertyTrack[index - 1].linkToNext(propertyTrack[index + 1]);
+    }
+    propertyTrack.splice(index, 1);
+  };
+
+  /*!
    * Associate a `Rekapi.KeyframeProperty` to this actor.  Augments the
    * `Rekapi.KeyframeProperty` to maintain a link between the two objects.
    * @method _addKeyframeProperty
@@ -901,10 +909,9 @@ rekapiModules.push(function (context) {
         fireEvent(this.rekapi, 'addKeyframePropertyTrack', _, keyframeProperty);
       }
     } else {
-      propertyTracks[name].push(keyframeProperty);
+      var index = insertionPointInTrack(propertyTracks[name], keyframeProperty.millisecond);
+      this._insertKeyframePropertyAt(keyframeProperty, propertyTracks[name], index);
     }
-
-    sortPropertyTracks(this);
 
     if (this.rekapi) {
       fireEvent(this.rekapi, 'addKeyframeProperty', _, keyframeProperty);
