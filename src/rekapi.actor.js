@@ -78,38 +78,18 @@ rekapiModules.push(function (context) {
     var latestProperties = {};
 
     _.each(actor._propertyTracks, function (propertyTrack, propertyName) {
-      var previousKeyframeProperty = propertyTrack[0] || null;
-      var i = 0, len = propertyTrack.length, keyframeProperty;
-
-      for (i; i < len; i++) {
-        keyframeProperty = propertyTrack[i];
-
-        if (keyframeProperty.millisecond > forMillisecond) {
-          // We went to far, use the previous keyframeProperty
-          latestProperties[propertyName] = previousKeyframeProperty;
-        } else if (keyframeProperty.millisecond === forMillisecond) {
-          // Found it!
-          latestProperties[propertyName] = keyframeProperty;
-        }
-
-        previousKeyframeProperty = keyframeProperty;
-
-        // Quit the loop if something was found.  We can't early-return above,
-        // because latestProperties[propertyName] might be null, which is not
-        // what we want.
-        if (latestProperties[propertyName]) {
-          break;
-        }
-      }
-
-      // If nothing was found, attempt to use the last keyframeProperty in the
-      // track.
-      if (!latestProperties[propertyName]) {
-        var lastProp = _.last(propertyTrack);
-
-        if (lastProp && lastProp.millisecond <= forMillisecond) {
-          latestProperties[propertyName] = lastProp;
-        }
+      var index = insertionPointInTrack(propertyTrack, forMillisecond);
+      if (propertyTrack[index] && propertyTrack[index].millisecond === forMillisecond) {
+        // Found forMillisecond exactly.
+        latestProperties[propertyName] = propertyTrack[index];
+      } else if (index >= 1) {
+        // forMillisecond doesn't exist in the track and index is
+        // where we'd need to insert it, therefore the previous
+        // keyframe is the most recent one before forMillisecond.
+        latestProperties[propertyName] = propertyTrack[index - 1];
+      } else {
+        // Return first property.  This is after forMillisecond.
+        latestProperties[propertyName] = propertyTrack[0];
       }
     });
 
