@@ -535,6 +535,13 @@ rekapiModules.push(function (context) {
           'value': stateModification[trackName]
           ,'easing': opt_easingModification[trackName]
         });
+      } else if (typeof stateModification[trackName] !== 'undefined') {
+        property = new Rekapi.KeyframeProperty(
+          millisecond, trackName,
+          stateModification[trackName],
+          opt_easingModification[trackName]);
+
+        this._addKeyframeProperty(property);
       }
     }, this);
 
