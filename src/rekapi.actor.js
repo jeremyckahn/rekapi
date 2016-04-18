@@ -118,6 +118,7 @@ rekapiModules.push(function (context) {
     }
 
     actor._timelinePropertyCache = [];
+    actor._timelineFunctionCache = [];
     var timelinePropertyCache = actor._timelinePropertyCache;
 
     // Build the cache map
@@ -134,6 +135,9 @@ rekapiModules.push(function (context) {
         timelinePropertyCache.push(curCacheEntry);
       }
       curCacheEntry[property.name] = property;
+      if (property.name === 'function') {
+        actor._timelineFunctionCache.push(property);
+      }
     });
 
     actor._timelinePropertyCacheValid = true;
@@ -208,6 +212,7 @@ rekapiModules.push(function (context) {
     _.extend(this, {
       '_propertyTracks': {}
       ,'_timelinePropertyCache': []
+      ,'_timelineFunctionCache': []
       ,'_timelinePropertyCacheValid': false
       ,'_keyframeProperties': {}
       ,'id': _.uniqueId()
