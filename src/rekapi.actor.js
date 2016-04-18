@@ -143,20 +143,6 @@ rekapiModules.push(function (context) {
   }
 
   /*!
-   * Returns a requested KeyframeProperty at a millisecond on a specified
-   * track.
-   * @param {Rekapi.Actor} actor
-   * @param {string} trackName
-   * @param {number} millisecond
-   * @return {Rekapi.KeyframeProperty|undefined}
-   */
-  function findPropertyAtMillisecondInTrack (actor, trackName, millisecond) {
-    return _.findWhere(actor._propertyTracks[trackName], {
-      millisecond: millisecond
-    });
-  }
-
-  /*!
    * Mark the cache of internal KeyframeProperty data as invalid.  The cache
    * will be rebuilt on the next call to ensurePropertyCacheValid.
    * @param {Rekapi.Actor}
@@ -438,7 +424,7 @@ rekapiModules.push(function (context) {
     var track;
     for (track in tracks) {
       if (tracks.hasOwnProperty(track)
-         && findPropertyAtMillisecondInTrack(this, track, millisecond)) {
+         && this.getKeyframeProperty(track, millisecond)) {
         return true;
       }
     }
@@ -479,7 +465,7 @@ rekapiModules.push(function (context) {
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
       var keyframeProperty =
-      findPropertyAtMillisecondInTrack(this, trackName, copyFrom);
+      this.getKeyframeProperty(trackName, copyFrom);
 
       if (keyframeProperty) {
         sourcePositions[trackName] = keyframeProperty.value;
@@ -515,7 +501,7 @@ rekapiModules.push(function (context) {
     // Move each of the relevant KeyframeProperties to the new location in the
     // timeline
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var property = findPropertyAtMillisecondInTrack(this, trackName, from);
+      var property = this.getKeyframeProperty(trackName, from);
 
       if (property) {
         property.millisecond = to;
@@ -564,8 +550,7 @@ rekapiModules.push(function (context) {
     opt_easingModification = opt_easingModification || {};
 
     _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var property = findPropertyAtMillisecondInTrack(
-        this, trackName, millisecond);
+      var property = this.getKeyframeProperty(trackName, millisecond);
 
       if (property) {
         property.modifyWith({
@@ -594,8 +579,7 @@ rekapiModules.push(function (context) {
     var propertyTracks = this._propertyTracks;
 
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
-      var keyframeProperty = _.findWhere(
-        propertyTrack, { millisecond: millisecond });
+      var keyframeProperty = this.getKeyframeProperty(propertyName, millisecond);
 
       if (keyframeProperty) {
         propertyTracks[propertyName] = _.without(
