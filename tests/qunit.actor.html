@@ -423,7 +423,7 @@
 
       testActor.removeKeyframe(2000);
 
-      equal(testRekapi._animationLength, 1000,
+      equal(testRekapi.getAnimationLength(), 1000,
           'The animation length is shortened when the final keyframe is removed');
     });
 
@@ -447,7 +447,7 @@
 
       testActor.removeAllKeyframes();
 
-      equal(testRekapi._animationLength, 0, 'Animation length is 0');
+      equal(testRekapi.getAnimationLength(), 0, 'Animation length is 0');
       equal(testActor._propertyTracks.x, undefined, 'x property track no longer exists');
     });
 

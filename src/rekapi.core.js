@@ -26,14 +26,8 @@ function fireEvent (rekapi, eventName, _, opt_data) {
  * @param {Rekapi} rekapi
  * @param {Underscore} _
  */
-function recalculateAnimationLength (rekapi, _) {
-  var actorLengths = [];
-
-  _.each(rekapi._actors, function (actor) {
-    actorLengths.push(actor.getEnd());
-  });
-
-  rekapi._animationLength = Math.max.apply(Math, actorLengths);
+function invalidateAnimationLength (rekapi) {
+  rekapi._animationLengthValid = false;
 }
 
 /*!
@@ -57,7 +51,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * @param {number} timeSinceStart
    */
   function determineCurrentLoopIteration (rekapi, timeSinceStart) {
-    var animationLength = rekapi._animationLength;
+    var animationLength = rekapi.getAnimationLength();
     if (animationLength === 0) {
       return timeSinceStart;
     }
@@ -108,7 +102,7 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   function calculateLoopPosition (rekapi, forMillisecond, currentLoopIteration) {
     var currentLoopPosition;
-    var animationLength = rekapi._animationLength;
+    var animationLength = rekapi.getAnimationLength();
 
     if (animationLength === 0) {
       return 0;
@@ -295,6 +289,7 @@ var rekapiCore = function (root, _, Tweenable) {
 
     // Millisecond duration of the animation
     this._animationLength = 0;
+    this._animationLengthValid = false;
 
     // The setTimeout ID of `tick`
     this._loopId = null;
@@ -371,7 +366,7 @@ var rekapiCore = function (root, _, Tweenable) {
       // Store a reference to the actor internally
       this._actors[rekapiActor.id] = rekapiActor;
 
-      recalculateAnimationLength(this, _);
+      invalidateAnimationLength(this);
       rekapiActor.setup();
 
       fireEvent(this, 'addActor', _, rekapiActor);
@@ -434,7 +429,7 @@ var rekapiCore = function (root, _, Tweenable) {
     delete actor.rekapi;
 
     actor.teardown();
-    recalculateAnimationLength(this, _);
+    invalidateAnimationLength(this);
 
     fireEvent(this, 'removeActor', _, actor);
 
@@ -612,7 +607,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * was last rendered.
    */
   Rekapi.prototype.getLastPositionUpdated = function () {
-    return (this._lastUpdatedMillisecond / this._animationLength);
+    return (this._lastUpdatedMillisecond / this.getAnimationLength());
   };
 
   /**
@@ -628,6 +623,17 @@ var rekapiCore = function (root, _, Tweenable) {
    * @return {number} The length of the animation timeline, in milliseconds.
    */
   Rekapi.prototype.getAnimationLength = function () {
+    if (!this._animationLengthValid) {
+      var actorLengths = [];
+
+      _.each(this._actors, function (actor) {
+        actorLengths.push(actor.getEnd());
+      });
+
+      this._animationLength = Math.max.apply(Math, actorLengths);
+      this._animationLengthValid = true;
+    }
+
     return this._animationLength;
   };
 
@@ -757,7 +763,7 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   Rekapi.prototype.exportTimeline = function () {
     var exportData = {
-      'duration': this._animationLength
+      'duration': this.getAnimationLength()
       ,'actors': []
     };
 

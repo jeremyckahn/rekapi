@@ -6,7 +6,7 @@
     "global": true,
     "CanvasRenderingContext2D": true,
     "fireEvent": true,
-    "recalculateAnimationLength": true,
+    "invalidateAnimationLength": true,
     "rekapiCore": true,
     "rekapiModules": true,
     "define": true,

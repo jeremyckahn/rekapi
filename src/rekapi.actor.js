@@ -200,7 +200,7 @@ rekapiModules.push(function (context) {
    */
   function cleanupAfterKeyframeModification (actor) {
     invalidatePropertyCache(actor);
-    recalculateAnimationLength(actor.rekapi, _);
+    invalidateAnimationLength(actor.rekapi);
     fireRekapiEventForActor(actor, 'timelineModified');
   }
 
@@ -368,7 +368,7 @@ rekapiModules.push(function (context) {
     }, this);
 
     if (this.rekapi) {
-      recalculateAnimationLength(this.rekapi, _);
+      invalidateAnimationLength(this.rekapi);
     }
 
     invalidatePropertyCache(this);
@@ -575,7 +575,7 @@ rekapiModules.push(function (context) {
     }, this);
 
     if (this.rekapi) {
-      recalculateAnimationLength(this.rekapi, _);
+      invalidateAnimationLength(this.rekapi);
     }
 
     invalidatePropertyCache(this);
