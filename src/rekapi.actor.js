@@ -831,8 +831,7 @@ rekapiModules.push(function (context) {
       serializedEasings[propName] = latestProp.easing;
     });
 
-    this.removeKeyframe(end);
-    this.keyframe(end, serializedProps, serializedEasings);
+    this.modifyKeyframe(end, serializedProps, serializedEasings);
     this.keyframe(until, serializedProps, serializedEasings);
 
     return this;
