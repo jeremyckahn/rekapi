@@ -952,13 +952,13 @@ rekapiModules.push(function (context) {
    * @param {number} millisecond
    */
   Actor.prototype._resetFnKeyframesFromMillisecond = function (millisecond) {
-    _.chain(this._keyframeProperties)
-      .where({ name: 'function' })
-      .each(function (fnKeyframe) {
-        if (fnKeyframe.millisecond >= millisecond) {
-          fnKeyframe.hasFired = false;
-        }
-      });
+    var cache = this._timelineFunctionCache;
+    var index = _.sortedIndex(cache, { millisecond: millisecond }, 'millisecond');
+    var len = cache.length;
+
+    while (index < len) {
+      cache[index++].hasFired = false;
+    }
   };
 
   /*!
