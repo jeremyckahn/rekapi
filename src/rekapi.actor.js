@@ -8,6 +8,22 @@ rekapiModules.push(function (context) {
   var _ = Rekapi._;
 
   /*!
+   * @param {Object} obj
+   * @return {number} millisecond
+   */
+  function getMillisecond(obj) {
+    return obj.millisecond;
+  }
+
+  /*!
+   * @param {Object} obj
+   * @return {number} millisecond
+   */
+  function get_Millisecond(obj) {
+    return obj._millisecond;
+  }
+
+  /*!
    * @param {Rekapi.Actor} actor
    * @param {string} event
    * @param {any=} opt_data
@@ -33,7 +49,7 @@ rekapiModules.push(function (context) {
       return cache[0];
     }
 
-    var index = _.sortedIndex(cache, { _millisecond: millisecond }, '_millisecond');
+    var index = _.sortedIndex(cache, { _millisecond: millisecond }, get_Millisecond);
 
     if (cache[index] && cache[index]._millisecond === millisecond) {
       return cache[index];
@@ -81,7 +97,7 @@ rekapiModules.push(function (context) {
    * @return {number} index
    */
   function insertionPointInTrack (track, millisecond) {
-    return _.sortedIndex(track, { millisecond: millisecond }, 'millisecond');
+    return _.sortedIndex(track, { millisecond: millisecond }, getMillisecond);
   }
 
   /*!
@@ -953,7 +969,7 @@ rekapiModules.push(function (context) {
    */
   Actor.prototype._resetFnKeyframesFromMillisecond = function (millisecond) {
     var cache = this._timelineFunctionCache;
-    var index = _.sortedIndex(cache, { millisecond: millisecond }, 'millisecond');
+    var index = _.sortedIndex(cache, { millisecond: millisecond }, getMillisecond);
     var len = cache.length;
 
     while (index < len) {
