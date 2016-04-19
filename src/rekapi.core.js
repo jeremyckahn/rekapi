@@ -580,6 +580,8 @@ var rekapiCore = function (root, _, Tweenable) {
    * @chainable
    */
   Rekapi.prototype.update = function (opt_millisecond,  opt_doResetLaterFnKeyframes) {
+    var skipRender = this.renderer && this.renderer._batchRendering;
+
     if (opt_millisecond === undefined) {
       opt_millisecond = this._lastUpdatedMillisecond;
     }
@@ -589,7 +591,7 @@ var rekapiCore = function (root, _, Tweenable) {
     // Update and render each of the actors
     _.each(this._actors, function (actor) {
       actor._updateState(opt_millisecond, opt_doResetLaterFnKeyframes);
-      if (typeof actor.render === 'function') {
+      if (!skipRender && typeof actor.render === 'function') {
         actor.render(actor.context, actor.get());
       }
     });

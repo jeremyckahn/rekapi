@@ -158,6 +158,7 @@ rekapiModules.push(function (context) {
     this._renderOrder = [];
     this._renderOrderSorter = null;
     this._canvasActors = {};
+    this._batchRendering = true;
 
     _.extend(rekapi._events, {
       'beforeRender': []
