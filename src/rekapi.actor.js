@@ -854,7 +854,7 @@ rekapiModules.push(function (context) {
    * @param {number} index
    */
   Actor.prototype._deleteKeyframePropertyAt = function (propertyTrack, index) {
-    if (index >= 1 && propertyTrack.length > index + 1) {
+    if (index >= 1) {
       propertyTrack[index - 1].linkToNext(propertyTrack[index + 1]);
     }
     propertyTrack.splice(index, 1);

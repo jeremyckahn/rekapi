@@ -429,6 +429,12 @@
 
       equal(testRekapi.getAnimationLength(), 1000,
           'The animation length is shortened when the final keyframe is removed');
+      equal(testActor._propertyTracks.x.length, 2,
+          'The property track is the correct length');
+      equal(testActor._propertyTracks.x[0].nextProperty, testActor._propertyTracks.x[1],
+          'First x property is linked to second');
+      equal(testActor._propertyTracks.x[1].nextProperty, null,
+          'Second x property is linked to null');
     });
 
     test('.removeAllKeyframes removes all keyframes', function () {
