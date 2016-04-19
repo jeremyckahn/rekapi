@@ -59,7 +59,9 @@ rekapiModules.push(function (context) {
     var i;
     for (i = 0; i < len; i++) {
       currentActor = canvasActors[renderOrder[i]];
-      currentActor.render(currentActor.context, currentActor.get());
+      if (currentActor.wasActive) {
+        currentActor.render(currentActor.context, currentActor.get());
+      }
     }
     fireEvent(rekapi, 'afterRender', _);
 
