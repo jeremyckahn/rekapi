@@ -129,6 +129,31 @@ rekapiModules.push(function (context) {
   }
 
   /*!
+   * Search property track `track` and find the correct index to insert a
+   * new element at `millisecond`.
+   * @param {Array(Rekapi.KeyframeProperty)} track
+   * @param {number} millisecond
+   * @return {number} index
+   */
+  function insertionPointInTrack (track, millisecond) {
+    return _.sortedIndex(track, { millisecond: millisecond }, 'millisecond');
+  }
+
+  /*!
+   * Search property track `track` and find the index to the element that is
+   * at `millisecond`.  Returns `undefined` if not found.
+   * @param {Array(Rekapi.KeyframeProperty)} track
+   * @param {number} millisecond
+   * @return {number|undefined} index or undefined if not present
+   */
+  function propertyIndexInTrack (track, millisecond) {
+    var index = insertionPointInTrack(track, millisecond);
+    if (track[index] && track[index].millisecond === millisecond) {
+      return index;
+    }
+  }
+
+  /*!
    * Links each KeyframeProperty to the next one in its respective track.
    *
    * They're linked lists!
@@ -643,8 +668,9 @@ rekapiModules.push(function (context) {
    */
   Actor.prototype.getKeyframeProperty = function (property, millisecond) {
     var propertyTrack = this._propertyTracks[property];
-    if (propertyTrack) {
-      return _.findWhere(propertyTrack, { millisecond: millisecond });
+    var index = propertyIndexInTrack(propertyTrack, millisecond);
+    if (typeof index !== 'undefined') {
+      return propertyTrack[index];
     }
   };
 
