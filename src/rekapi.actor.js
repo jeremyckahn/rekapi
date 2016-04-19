@@ -554,11 +554,10 @@ rekapiModules.push(function (context) {
     var propertyTracks = this._propertyTracks;
 
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
-      var keyframeProperty = this.getKeyframeProperty(propertyName, millisecond);
-
-      if (keyframeProperty) {
-        propertyTracks[propertyName] = _.without(
-          propertyTrack, keyframeProperty);
+      var index = propertyIndexInTrack(propertyTrack, millisecond);
+      if (typeof index !== 'undefined') {
+        var keyframeProperty = propertyTrack[index];
+        this._deleteKeyframePropertyAt(propertyTrack, index);
         keyframeProperty.detach();
         removeEmptyPropertyTracks(this);
       }

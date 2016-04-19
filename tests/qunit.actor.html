@@ -399,6 +399,10 @@
           ,'First y property was unchanged');
      equal(testActor._propertyTracks.y[1].value, 101
           ,'Last y property was unchanged');
+     equal(testActor._propertyTracks.x[0].nextProperty, testActor._propertyTracks.x[1]
+          ,'First x property is linked to second');
+     equal(testActor._propertyTracks.x[1].nextProperty, null
+          ,'Second x property is linked to null');
     });
 
     test('Keyframes can be removed from the end of the animation',
