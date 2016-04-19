@@ -840,9 +840,7 @@ rekapiModules.push(function (context) {
     if (index >= 1) {
       propertyTrack[index - 1].linkToNext(keyframeProperty);
     }
-    if (propertyTrack.length > index + 1) {
-      keyframeProperty.linkToNext(propertyTrack[index + 1]);
-    }
+    keyframeProperty.linkToNext(propertyTrack[index + 1]);
   };
 
   /*!
