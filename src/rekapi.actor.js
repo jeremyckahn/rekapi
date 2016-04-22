@@ -895,11 +895,11 @@ rekapiModules.push(function (context) {
   /*!
    * Set the actor to be active or inactive starting at `millisecond`.
    * @method setActive
-   * @param {boolean} isActive Whether the actor should be active or inactive
    * @param {number} millisecond The time at which to change the actor's active state
+   * @param {boolean} isActive Whether the actor should be active or inactive
    * @chainable
    */
-  Actor.prototype.setActive = function (isActive, millisecond) {
+  Actor.prototype.setActive = function (millisecond, isActive) {
     var activeProperty = this._propertyTracks._active
         && this.getKeyframeProperty('_active', millisecond);
 
