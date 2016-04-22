@@ -275,6 +275,42 @@
           'Keyframe 0 for Y was implicitly defined and tweened against');
     });
 
+    test('Only updates actors when active',
+      function () {
+
+      var testRekapi
+          ,testActor;
+
+      testRekapi = setupTestRekapi();
+      testActor = setupTestActor(testRekapi);
+
+      testActor.keyframe(0,{
+        'x': 0
+      })
+      .setActive(false, 250)
+      .setActive(true, 750)
+      .keyframe(1000, {
+        'x': 100
+      });
+
+      testActor._updateState(100);
+      var active100 = testActor.wasActive;
+      var x100 = testActor.get().x;
+      testActor._updateState(500);
+      var active500 = testActor.wasActive;
+      var x500 = testActor.get().x;
+      testActor._updateState(900);
+      var active900 = testActor.wasActive;
+      var x900 = testActor.get().x;
+
+      equal(active100, true, 'Actor was active at 100ms.');
+      equal(x100, 10, 'x was updated at 100ms.');
+      equal(active500, false, 'Actor was not active at 500ms.');
+      equal(x500, 10, 'x was not updated at 500ms.');
+      equal(active900, true, 'Actor was active at 900ms.');
+      equal(x900, 90, 'x was updated at 900ms.');
+    });
+
 
     module('_addKeyframeProperty');
 
