@@ -39,7 +39,7 @@ rekapiModules.push(function (context) {
    * @param {Rekapi.Actor} actor
    * @param {number} millisecond
    * @return {Object|undefined} undefined if there is no property cache for
-   * the millisecond (this should never happen).
+   * the millisecond, i.e. an empty cache.
    */
   function getPropertyCacheEntryForMillisecond (actor, millisecond) {
     var cache = actor._timelinePropertyCache;
@@ -56,8 +56,6 @@ rekapiModules.push(function (context) {
     } else if (index >= 1) {
       return cache[index - 1];
     }
-
-    return -1;
   }
 
   /*!
