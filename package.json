@@ -7,6 +7,9 @@
   "contributors": [
     {
       "name": "Franck Lecollinet"
+    },
+    {
+      "name": "Brian Downing"
     }
   ],
   "devDependencies": {

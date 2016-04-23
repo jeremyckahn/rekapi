@@ -142,6 +142,7 @@ requirejs(['rekapi'], function(Rekapi) {
 ## Core contributors
 
 * [Franck Lecollinet](https://github.com/sork)
+* [Brian Downing](https://github.com/bdowning)
 
 ## A note about project activity
 

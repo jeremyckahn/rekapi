@@ -8,6 +8,9 @@
   "contributors": [
     {
       "name": "Franck Lecollinet"
+    },
+    {
+      "name": "Brian Downing"
     }
   ],
   "dependencies": {
