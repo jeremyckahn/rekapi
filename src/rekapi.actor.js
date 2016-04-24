@@ -882,6 +882,15 @@ rekapiModules.push(function (context) {
       }
     } else {
       var index = insertionPointInTrack(propertyTracks[name], keyframeProperty.millisecond);
+      if (propertyTracks[name][index]) {
+        var ms = keyframeProperty.millisecond;
+        var otherMs = propertyTracks[name][index].millisecond;
+        if (otherMs === ms) {
+          throw new Error('Tried to add a duplicate keyframe property, '+name+' @ '+ms+' ms');
+        } else if (this.rekapi && this.rekapi._warnOnOutOfOrderKeyframes) {
+          console.warn(new Error('Added a keyframe property before end of track, '+name+' @ '+ms+' ms < '+otherMs+' ms'));
+        }
+      }
       this._insertKeyframePropertyAt(keyframeProperty, propertyTracks[name], index);
     }
 
