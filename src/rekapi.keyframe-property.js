@@ -81,7 +81,9 @@ rekapiModules.push(function (context) {
     var nextProperty = this.nextProperty;
     var correctedMillisecond = Math.max(millisecond, this.millisecond);
 
-    if (nextProperty) {
+    if (typeof this.value === 'boolean') {
+      value = this.value;
+    } else if (nextProperty) {
       correctedMillisecond =
       Math.min(correctedMillisecond, nextProperty.millisecond);
 

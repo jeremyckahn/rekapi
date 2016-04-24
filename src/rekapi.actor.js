@@ -39,7 +39,7 @@ rekapiModules.push(function (context) {
    * @param {Rekapi.Actor} actor
    * @param {number} millisecond
    * @return {Object|undefined} undefined if there is no property cache for
-   * the millisecond (this should never happen).
+   * the millisecond, i.e. an empty cache.
    */
   function getPropertyCacheEntryForMillisecond (actor, millisecond) {
     var cache = actor._timelinePropertyCache;
@@ -56,8 +56,6 @@ rekapiModules.push(function (context) {
     } else if (index >= 1) {
       return cache[index - 1];
     }
-
-    return -1;
   }
 
   /*!
@@ -237,6 +235,7 @@ rekapiModules.push(function (context) {
       ,'render': opt_config.render || noop
       ,'teardown': opt_config.teardown || noop
       ,'data': {}
+      ,'wasActive': true
     });
 
     return this;
@@ -894,6 +893,28 @@ rekapiModules.push(function (context) {
   };
 
   /*!
+   * Set the actor to be active or inactive starting at `millisecond`.
+   * @method setActive
+   * @param {number} millisecond The time at which to change the actor's active state
+   * @param {boolean} isActive Whether the actor should be active or inactive
+   * @chainable
+   */
+  Actor.prototype.setActive = function (millisecond, isActive) {
+    var activeProperty = this._propertyTracks._active
+        && this.getKeyframeProperty('_active', millisecond);
+
+    if (activeProperty) {
+      activeProperty.value = isActive;
+    } else {
+      activeProperty = new Rekapi.KeyframeProperty(
+        millisecond, '_active', isActive);
+      this._addKeyframeProperty(activeProperty);
+    }
+
+    return this;
+  }
+
+  /*!
    * Calculate and set the actor's position at `millisecond` in the animation.
    * @method _updateState
    * @param {number} millisecond
@@ -911,6 +932,18 @@ rekapiModules.push(function (context) {
     ensurePropertyCacheValid(this);
     var propertiesToInterpolate =
         getPropertyCacheEntryForMillisecond(this, millisecond);
+
+    // All actors are active at time 0 unless otherwise specified;
+    // make sure a future time deactivation doesn't deactive the actor
+    // by default.
+    if (propertiesToInterpolate._active
+        && millisecond >= propertiesToInterpolate._active.millisecond) {
+      this.wasActive = propertiesToInterpolate._active.getValueAt(millisecond);
+      if (!this.wasActive)
+        return this;
+    } else {
+      this.wasActive = true;
+    }
 
     if (startMs === endMs) {
 
