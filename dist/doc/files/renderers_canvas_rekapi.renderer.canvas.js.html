@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.6.3</em>
+            <em>API Docs for: 1.7.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -155,7 +155,9 @@ rekapiModules.push(function (context) {
     var i;
     for (i = 0; i &lt; len; i++) {
       currentActor = canvasActors[renderOrder[i]];
-      currentActor.render(currentActor.context, currentActor.get());
+      if (currentActor.wasActive) {
+        currentActor.render(currentActor.context, currentActor.get());
+      }
     }
     fireEvent(rekapi, &#x27;afterRender&#x27;, _);
 
@@ -254,6 +256,7 @@ rekapiModules.push(function (context) {
     this._renderOrder = [];
     this._renderOrderSorter = null;
     this._canvasActors = {};
+    this._batchRendering = true;
 
     _.extend(rekapi._events, {
       &#x27;beforeRender&#x27;: []

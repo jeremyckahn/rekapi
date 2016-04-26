@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.6.3</em>
+            <em>API Docs for: 1.7.0</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -177,7 +177,9 @@ rekapiModules.push(function (context) {
     var nextProperty = this.nextProperty;
     var correctedMillisecond = Math.max(millisecond, this.millisecond);
 
-    if (nextProperty) {
+    if (typeof this.value === &#x27;boolean&#x27;) {
+      value = this.value;
+    } else if (nextProperty) {
       correctedMillisecond =
       Math.min(correctedMillisecond, nextProperty.millisecond);
 
