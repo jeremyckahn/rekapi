@@ -44,17 +44,14 @@ rekapiModules.push(function (context) {
   function getPropertyCacheEntryForMillisecond (actor, millisecond) {
     var cache = actor._timelinePropertyCache;
 
-    // If there is only one keyframe, use that
-    if (cache.length === 1) {
-      return cache[0];
-    }
-
     var index = _.sortedIndex(cache, { _millisecond: millisecond }, get_Millisecond);
 
     if (cache[index] && cache[index]._millisecond === millisecond) {
       return cache[index];
     } else if (index >= 1) {
       return cache[index - 1];
+    } else {
+      return cache[0];
     }
   }
 
