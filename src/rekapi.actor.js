@@ -827,7 +827,7 @@ rekapiModules.push(function (context) {
    * list structure of the property track is maintained.
    * @method _insertKeyframePropertyAt
    * @param {Rekapi.KeyframeProperty} keyframeProperty
-   * @param {Array(Rekapi.KeyframeProperty} propertyTrack
+   * @param {Array(Rekapi.KeyframeProperty)} propertyTrack
    * @param {number} index
    */
   Actor.prototype._insertKeyframePropertyAt = function (keyframeProperty, propertyTrack, index) {
