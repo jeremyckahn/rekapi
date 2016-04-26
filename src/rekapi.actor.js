@@ -62,7 +62,7 @@ rekapiModules.push(function (context) {
    * @param {number} forMillisecond
    * @return {Object} An Object containing Rekapi.KeyframeProperties
    */
-  function getLatestPropeties (actor, forMillisecond) {
+  function getLatestProperties (actor, forMillisecond) {
     var latestProperties = {};
 
     _.each(actor._propertyTracks, function (propertyTrack, propertyName) {
@@ -136,7 +136,7 @@ rekapiModules.push(function (context) {
     var props = _.values(actor._keyframeProperties);
     props.sort(function (a, b) { return a.millisecond - b.millisecond });
 
-    var curCacheEntry = getLatestPropeties(actor, 0);
+    var curCacheEntry = getLatestProperties(actor, 0);
     curCacheEntry._millisecond = 0;
     timelinePropertyCache.push(curCacheEntry);
     _.each(props, function (property) {
@@ -807,7 +807,7 @@ rekapiModules.push(function (context) {
     }
 
     var end = this.getEnd();
-    var latestProps = getLatestPropeties(this, this.getEnd());
+    var latestProps = getLatestProperties(this, this.getEnd());
     var serializedProps = {};
     var serializedEasings = {};
 
