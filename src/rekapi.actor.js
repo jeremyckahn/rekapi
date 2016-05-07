@@ -640,6 +640,12 @@ rekapiModules.push(function (context) {
 
     var keyframeProperty = this.getKeyframeProperty(property, millisecond);
     if (keyframeProperty) {
+      if ('millisecond' in newProperties) {
+        if (this.hasKeyframeAt(newProperties.millisecond, property)) {
+          throw new Error('Tried to move ' + property + ' to ' + newProperties.millisecond + 'ms, but a keyframe property already exists there');
+        }
+      }
+
       keyframeProperty.modifyWith(newProperties);
       cleanupAfterKeyframeModification(this);
     }

@@ -890,6 +890,19 @@
         'The KeyframeProperty was modified');
     });
 
+    test('Moving a keyframe property over another one', function () {
+      var testRekapi = setupTestRekapi();
+      var testActor = setupTestActor(testRekapi);
+
+      testActor
+        .keyframe(0, { x: 1 })
+        .keyframe(10, { x: 2 });
+
+      throws(function () {
+        testActor.modifyKeyframeProperty('x', 10, { millisecond: 0 });
+      }, Error, 'Throws an error when moving a keyframe property over another');
+    });
+
 
     module('removeKeyframeProperty');
 
