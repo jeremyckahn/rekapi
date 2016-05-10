@@ -312,7 +312,7 @@
     });
 
 
-    module('_addKeyframeProperty');
+    module('addKeyframeProperty');
 
 
     test('Adding a KeyframeProperty creates a link between the property and the actor.',
@@ -320,7 +320,7 @@
       var actor = new Rekapi.Actor();
       var keyframeProperty = new Rekapi.KeyframeProperty(0, 'x', 50);
 
-      actor._addKeyframeProperty(keyframeProperty);
+      actor.addKeyframeProperty(keyframeProperty);
 
       equal(keyframeProperty.actor, actor
           ,'The KeyframeProperty has an internal reference to the Actor.');

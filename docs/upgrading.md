@@ -46,7 +46,7 @@ rekapi.renderer.width(300);
 
 ## The `Rekapi.KeyframeProperty` constructor signature has changed
 
-`Rekapi.KeyframeProperty` no longer accepts the owner actor via the constructor.  The link between the two objects is established by the new method, `Rekapi.Actor.prototype._addKeyframeProperty`.
+`Rekapi.KeyframeProperty` no longer accepts the owner actor via the constructor.  The link between the two objects is established by the new method, `Rekapi.Actor.prototype.addKeyframeProperty`.
 
 ## `Rekapi.prototype.addActor` can now instantiate a `Rekapi.Actor`
 

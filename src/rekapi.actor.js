@@ -350,7 +350,7 @@ rekapiModules.push(function (context) {
       newKeyframeProperty = new Rekapi.KeyframeProperty(
         millisecond, name, value, easing[name]);
 
-      this._addKeyframeProperty(newKeyframeProperty);
+      this.addKeyframeProperty(newKeyframeProperty);
     }, this);
 
     if (this.rekapi) {
@@ -527,7 +527,7 @@ rekapiModules.push(function (context) {
           stateModification[trackName],
           opt_easingModification[trackName]);
 
-        this._addKeyframeProperty(property);
+        this.addKeyframeProperty(property);
       }
     }, this);
 
@@ -850,7 +850,7 @@ rekapiModules.push(function (context) {
    * list structure of the property track is maintained.  The removed property
    * is not modified or unlinked internally.
    * @method _deleteKeyframePropertyAt
-   * @param {Array(Rekapi.KeyframeProperty} propertyTrack
+   * @param {Array(Rekapi.KeyframeProperty)} propertyTrack
    * @param {number} index
    */
   Actor.prototype._deleteKeyframePropertyAt = function (propertyTrack, index) {
@@ -860,14 +860,20 @@ rekapiModules.push(function (context) {
     propertyTrack.splice(index, 1);
   };
 
-  /*!
-   * Associate a `Rekapi.KeyframeProperty` to this actor.  Augments the
-   * `Rekapi.KeyframeProperty` to maintain a link between the two objects.
-   * @method _addKeyframeProperty
+  /**
+   * Associate a `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}` to
+   * this actor.  Augments the `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` to maintain a link between the
+   * two objects.  This is a lower-level method, and it is generally better to
+   * use `{{#crossLink "Rekapi.Actor/keyframe:method"}}{{/crossLink}}`.  This
+   * is mostly useful for adding a `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` back to an actor after it was
+   * `{{#crossLink "Rekapi.KeyframeProperty/detach"}}{{/crossLink}}`ed.
+   * @method addKeyframeProperty
    * @param {Rekapi.KeyframeProperty} keyframeProperty
    * @chainable
    */
-  Actor.prototype._addKeyframeProperty = function (keyframeProperty) {
+  Actor.prototype.addKeyframeProperty = function (keyframeProperty) {
     if (this.rekapi) {
       fireEvent(this.rekapi, 'beforeAddKeyframeProperty', _, keyframeProperty);
     }
@@ -920,11 +926,11 @@ rekapiModules.push(function (context) {
     } else {
       activeProperty = new Rekapi.KeyframeProperty(
         millisecond, '_active', isActive);
-      this._addKeyframeProperty(activeProperty);
+      this.addKeyframeProperty(activeProperty);
     }
 
     return this;
-  }
+  };
 
   /*!
    * Calculate and set the actor's position at `millisecond` in the animation.
