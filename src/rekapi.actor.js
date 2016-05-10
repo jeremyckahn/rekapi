@@ -769,7 +769,7 @@ rekapiModules.push(function (context) {
 
     _.each(tracksToInspect, function (propertyTrack) {
       if (propertyTrack.length) {
-        var trackLength = _.last(propertyTrack).millisecond;
+        var trackLength = Math.max.apply(Math, _.map(propertyTrack, 'millisecond'));
 
         if (trackLength > latest) {
           latest = trackLength;

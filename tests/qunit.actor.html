@@ -1088,6 +1088,21 @@
     });
 
 
+    test('Out of order property tracks', function () {
+      var testRekapi = setupTestRekapi();
+      var testActor = setupTestActor(testRekapi);
+
+      testActor
+        .keyframe(0,    { x: 1  })
+        .keyframe(2000, { x: 20 })
+        .keyframe(1000, { x: 10 });
+
+      testActor.modifyKeyframeProperty('x', 2000, { millisecond: 500 });
+
+      equal(testActor.getEnd('x'), 1000);
+    });
+
+
     module('getLength');
 
 
