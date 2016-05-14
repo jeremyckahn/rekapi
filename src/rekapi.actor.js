@@ -176,6 +176,16 @@ rekapiModules.push(function (context) {
   }
 
   /*!
+   * Stably sort all of the property tracks of an actor
+   * @param {Rekapi.Actor} actor
+   */
+  function sortPropertyTracks (actor) {
+    _.each(actor._propertyTracks, function (propertyTrack, trackName) {
+      actor._propertyTracks[trackName] = _.sortBy(propertyTrack, 'millisecond');
+    });
+  }
+
+  /*!
    * Updates internal Rekapi and Actor data after a KeyframeProperty
    * modification method is called.
    *
@@ -184,6 +194,7 @@ rekapiModules.push(function (context) {
    * @param {Rekapi.Actor} actor
    */
   function cleanupAfterKeyframeModification (actor) {
+    sortPropertyTracks(actor);
     invalidatePropertyCache(actor);
     invalidateAnimationLength(actor.rekapi);
     fireRekapiEventForActor(actor, 'timelineModified');

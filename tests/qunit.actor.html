@@ -639,6 +639,20 @@
           'Keyframe exists at 1000ms on the x track');
     });
 
+    test('Reordered property tracks', function () {
+      var testRekapi = setupTestRekapi();
+      var testActor = setupTestActor(testRekapi);
+
+      testActor
+        .keyframe(0,  { x: 0  })
+        .keyframe(10, { x: 10 })
+        .keyframe(20, { x: 20 });
+
+      testActor.modifyKeyframeProperty('x', 10, { millisecond: 30 });
+      equal(testActor.hasKeyframeAt(20, 'x'), true);
+      equal(testActor.hasKeyframeAt(30, 'x'), true);
+    });
+
 
     module('moveKeyframe');
 
