@@ -904,6 +904,7 @@
         'The KeyframeProperty was modified');
     });
 
+
     test('Moving a keyframe property over another one', function () {
       var testRekapi = setupTestRekapi();
       var testActor = setupTestActor(testRekapi);
@@ -915,6 +916,25 @@
       throws(function () {
         testActor.modifyKeyframeProperty('x', 10, { millisecond: 0 });
       }, Error, 'Throws an error when moving a keyframe property over another');
+    });
+
+
+    test('Reordering properties', function () {
+      var testRekapi = setupTestRekapi();
+      var testActor = setupTestActor(testRekapi);
+
+      testActor
+        .keyframe(0, {x: 1})
+        .keyframe(10, {x: 2});
+
+      testActor.modifyKeyframeProperty('x', 0, { millisecond: 20 });
+      var propertyAt10 = testActor.getKeyframeProperty('x', 10);
+      var propertyAt20 = testActor.getKeyframeProperty('x', 20);
+
+      equal(propertyAt10.nextProperty, propertyAt20,
+        'First property is linked to second property');
+      equal(propertyAt20.nextProperty, null,
+        'Second property is linked to null');
     });
 
 

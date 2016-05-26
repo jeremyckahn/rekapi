@@ -182,6 +182,11 @@ rekapiModules.push(function (context) {
   function sortPropertyTracks (actor) {
     _.each(actor._propertyTracks, function (propertyTrack, trackName) {
       actor._propertyTracks[trackName] = _.sortBy(propertyTrack, 'millisecond');
+      propertyTrack = actor._propertyTracks[trackName];
+
+      _.each(propertyTrack, function (keyframeProperty, i) {
+        keyframeProperty.linkToNext(propertyTrack[i + 1]);
+      });
     });
   }
 
@@ -196,7 +201,11 @@ rekapiModules.push(function (context) {
   function cleanupAfterKeyframeModification (actor) {
     sortPropertyTracks(actor);
     invalidatePropertyCache(actor);
-    invalidateAnimationLength(actor.rekapi);
+
+    if (actor.rekapi) {
+      invalidateAnimationLength(actor.rekapi);
+    }
+
     fireRekapiEventForActor(actor, 'timelineModified');
   }
 
@@ -476,10 +485,7 @@ rekapiModules.push(function (context) {
       var oldIndex = propertyIndexInTrack(propertyTrack, from);
       if (typeof oldIndex !== 'undefined') {
         var property = propertyTrack[oldIndex];
-        this._deleteKeyframePropertyAt(propertyTrack, oldIndex);
         property.millisecond = to;
-        var newIndex = insertionPointInTrack(propertyTrack, to);
-        this._insertKeyframePropertyAt(property, propertyTrack, newIndex);
       }
     }, this);
 
@@ -849,11 +855,6 @@ rekapiModules.push(function (context) {
    */
   Actor.prototype._insertKeyframePropertyAt = function (keyframeProperty, propertyTrack, index) {
     propertyTrack.splice(index, 0, keyframeProperty);
-    // Maintain property linked list
-    if (index >= 1) {
-      propertyTrack[index - 1].linkToNext(keyframeProperty);
-    }
-    keyframeProperty.linkToNext(propertyTrack[index + 1]);
   };
 
   /*!
@@ -912,6 +913,7 @@ rekapiModules.push(function (context) {
         }
       }
       this._insertKeyframePropertyAt(keyframeProperty, propertyTracks[name], index);
+      cleanupAfterKeyframeModification(this);
     }
 
     if (this.rekapi) {
