@@ -1,4 +1,4 @@
-/*! rekapi - v1.7.0 - 2016-04-25 - http://rekapi.com */
+/*! rekapi - v1.7.1 - 2016-05-28 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -1056,6 +1056,21 @@ rekapiModules.push(function (context) {
   }
 
   /*!
+   * Stably sort all of the property tracks of an actor
+   * @param {Rekapi.Actor} actor
+   */
+  function sortPropertyTracks (actor) {
+    _.each(actor._propertyTracks, function (propertyTrack, trackName) {
+      actor._propertyTracks[trackName] = _.sortBy(propertyTrack, 'millisecond');
+      propertyTrack = actor._propertyTracks[trackName];
+
+      _.each(propertyTrack, function (keyframeProperty, i) {
+        keyframeProperty.linkToNext(propertyTrack[i + 1]);
+      });
+    });
+  }
+
+  /*!
    * Updates internal Rekapi and Actor data after a KeyframeProperty
    * modification method is called.
    *
@@ -1064,8 +1079,13 @@ rekapiModules.push(function (context) {
    * @param {Rekapi.Actor} actor
    */
   function cleanupAfterKeyframeModification (actor) {
+    sortPropertyTracks(actor);
     invalidatePropertyCache(actor);
-    invalidateAnimationLength(actor.rekapi);
+
+    if (actor.rekapi) {
+      invalidateAnimationLength(actor.rekapi);
+    }
+
     fireRekapiEventForActor(actor, 'timelineModified');
   }
 
@@ -1230,7 +1250,7 @@ rekapiModules.push(function (context) {
       newKeyframeProperty = new Rekapi.KeyframeProperty(
         millisecond, name, value, easing[name]);
 
-      this._addKeyframeProperty(newKeyframeProperty);
+      this.addKeyframeProperty(newKeyframeProperty);
     }, this);
 
     if (this.rekapi) {
@@ -1345,10 +1365,7 @@ rekapiModules.push(function (context) {
       var oldIndex = propertyIndexInTrack(propertyTrack, from);
       if (typeof oldIndex !== 'undefined') {
         var property = propertyTrack[oldIndex];
-        this._deleteKeyframePropertyAt(propertyTrack, oldIndex);
         property.millisecond = to;
-        var newIndex = insertionPointInTrack(propertyTrack, to);
-        this._insertKeyframePropertyAt(property, propertyTrack, newIndex);
       }
     }, this);
 
@@ -1407,7 +1424,7 @@ rekapiModules.push(function (context) {
           stateModification[trackName],
           opt_easingModification[trackName]);
 
-        this._addKeyframeProperty(property);
+        this.addKeyframeProperty(property);
       }
     }, this);
 
@@ -1435,15 +1452,11 @@ rekapiModules.push(function (context) {
         var keyframeProperty = propertyTrack[index];
         this._deleteKeyframePropertyAt(propertyTrack, index);
         keyframeProperty.detach();
-        removeEmptyPropertyTracks(this);
       }
     }, this);
 
-    if (this.rekapi) {
-      invalidateAnimationLength(this.rekapi);
-    }
-
-    invalidatePropertyCache(this);
+    removeEmptyPropertyTracks(this);
+    cleanupAfterKeyframeModification(this);
     fireRekapiEventForActor(this, 'timelineModified');
 
     return this;
@@ -1470,9 +1483,9 @@ rekapiModules.push(function (context) {
 
     _.each(this._keyframeProperties, function (keyframeProperty) {
       keyframeProperty.detach();
-      removeEmptyPropertyTracks(this);
     }, this);
 
+    removeEmptyPropertyTracks(this);
     this._keyframeProperties = {};
 
     // Calling removeKeyframe performs some necessary post-removal cleanup, the
@@ -1520,6 +1533,12 @@ rekapiModules.push(function (context) {
 
     var keyframeProperty = this.getKeyframeProperty(property, millisecond);
     if (keyframeProperty) {
+      if ('millisecond' in newProperties) {
+        if (this.hasKeyframeAt(newProperties.millisecond, property)) {
+          throw new Error('Tried to move ' + property + ' to ' + newProperties.millisecond + 'ms, but a keyframe property already exists there');
+        }
+      }
+
       keyframeProperty.modifyWith(newProperties);
       cleanupAfterKeyframeModification(this);
     }
@@ -1643,7 +1662,7 @@ rekapiModules.push(function (context) {
 
     _.each(tracksToInspect, function (propertyTrack) {
       if (propertyTrack.length) {
-        var trackLength = _.last(propertyTrack).millisecond;
+        var trackLength = Math.max.apply(Math, _.map(propertyTrack, 'millisecond'));
 
         if (trackLength > latest) {
           latest = trackLength;
@@ -1712,11 +1731,6 @@ rekapiModules.push(function (context) {
    */
   Actor.prototype._insertKeyframePropertyAt = function (keyframeProperty, propertyTrack, index) {
     propertyTrack.splice(index, 0, keyframeProperty);
-    // Maintain property linked list
-    if (index >= 1) {
-      propertyTrack[index - 1].linkToNext(keyframeProperty);
-    }
-    keyframeProperty.linkToNext(propertyTrack[index + 1]);
   };
 
   /*!
@@ -1724,24 +1738,27 @@ rekapiModules.push(function (context) {
    * list structure of the property track is maintained.  The removed property
    * is not modified or unlinked internally.
    * @method _deleteKeyframePropertyAt
-   * @param {Array(Rekapi.KeyframeProperty} propertyTrack
+   * @param {Array(Rekapi.KeyframeProperty)} propertyTrack
    * @param {number} index
    */
   Actor.prototype._deleteKeyframePropertyAt = function (propertyTrack, index) {
-    if (index >= 1) {
-      propertyTrack[index - 1].linkToNext(propertyTrack[index + 1]);
-    }
     propertyTrack.splice(index, 1);
   };
 
-  /*!
-   * Associate a `Rekapi.KeyframeProperty` to this actor.  Augments the
-   * `Rekapi.KeyframeProperty` to maintain a link between the two objects.
-   * @method _addKeyframeProperty
+  /**
+   * Associate a `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}` to
+   * this actor.  Augments the `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` to maintain a link between the
+   * two objects.  This is a lower-level method, and it is generally better to
+   * use `{{#crossLink "Rekapi.Actor/keyframe:method"}}{{/crossLink}}`.  This
+   * is mostly useful for adding a `{{#crossLink
+   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` back to an actor after it was
+   * `{{#crossLink "Rekapi.KeyframeProperty/detach"}}{{/crossLink}}`ed.
+   * @method addKeyframeProperty
    * @param {Rekapi.KeyframeProperty} keyframeProperty
    * @chainable
    */
-  Actor.prototype._addKeyframeProperty = function (keyframeProperty) {
+  Actor.prototype.addKeyframeProperty = function (keyframeProperty) {
     if (this.rekapi) {
       fireEvent(this.rekapi, 'beforeAddKeyframeProperty', _, keyframeProperty);
     }
@@ -1763,12 +1780,13 @@ rekapiModules.push(function (context) {
         var ms = keyframeProperty.millisecond;
         var otherMs = propertyTracks[name][index].millisecond;
         if (otherMs === ms) {
-          throw new Error('Tried to add a duplicate keyframe property, '+name+' @ '+ms+' ms');
+          throw new Error('Tried to add a duplicate keyframe property, ' + name + ' @ ' + ms + ' ms');
         } else if (this.rekapi && this.rekapi._warnOnOutOfOrderKeyframes) {
-          console.warn(new Error('Added a keyframe property before end of track, '+name+' @ '+ms+' ms < '+otherMs+' ms'));
+          console.warn(new Error('Added a keyframe property before end of track, ' + name + ' @ ' + ms + ' ms < ' + otherMs + ' ms'));
         }
       }
       this._insertKeyframePropertyAt(keyframeProperty, propertyTracks[name], index);
+      cleanupAfterKeyframeModification(this);
     }
 
     if (this.rekapi) {
@@ -1794,11 +1812,11 @@ rekapiModules.push(function (context) {
     } else {
       activeProperty = new Rekapi.KeyframeProperty(
         millisecond, '_active', isActive);
-      this._addKeyframeProperty(activeProperty);
+      this.addKeyframeProperty(activeProperty);
     }
 
     return this;
-  }
+  };
 
   /*!
    * Calculate and set the actor's position at `millisecond` in the animation.

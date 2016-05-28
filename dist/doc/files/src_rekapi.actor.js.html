@@ -19,7 +19,7 @@
             
         </div>
         <div class="yui3-u-1-4 version">
-            <em>API Docs for: 1.7.0</em>
+            <em>API Docs for: 1.7.1</em>
         </div>
     </div>
     <div id="bd" class="yui3-g">
@@ -272,6 +272,21 @@ rekapiModules.push(function (context) {
   }
 
   /*!
+   * Stably sort all of the property tracks of an actor
+   * @param {Rekapi.Actor} actor
+   */
+  function sortPropertyTracks (actor) {
+    _.each(actor._propertyTracks, function (propertyTrack, trackName) {
+      actor._propertyTracks[trackName] = _.sortBy(propertyTrack, &#x27;millisecond&#x27;);
+      propertyTrack = actor._propertyTracks[trackName];
+
+      _.each(propertyTrack, function (keyframeProperty, i) {
+        keyframeProperty.linkToNext(propertyTrack[i + 1]);
+      });
+    });
+  }
+
+  /*!
    * Updates internal Rekapi and Actor data after a KeyframeProperty
    * modification method is called.
    *
@@ -280,8 +295,13 @@ rekapiModules.push(function (context) {
    * @param {Rekapi.Actor} actor
    */
   function cleanupAfterKeyframeModification (actor) {
+    sortPropertyTracks(actor);
     invalidatePropertyCache(actor);
-    invalidateAnimationLength(actor.rekapi);
+
+    if (actor.rekapi) {
+      invalidateAnimationLength(actor.rekapi);
+    }
+
     fireRekapiEventForActor(actor, &#x27;timelineModified&#x27;);
   }
 
@@ -446,7 +466,7 @@ rekapiModules.push(function (context) {
       newKeyframeProperty = new Rekapi.KeyframeProperty(
         millisecond, name, value, easing[name]);
 
-      this._addKeyframeProperty(newKeyframeProperty);
+      this.addKeyframeProperty(newKeyframeProperty);
     }, this);
 
     if (this.rekapi) {
@@ -561,10 +581,7 @@ rekapiModules.push(function (context) {
       var oldIndex = propertyIndexInTrack(propertyTrack, from);
       if (typeof oldIndex !== &#x27;undefined&#x27;) {
         var property = propertyTrack[oldIndex];
-        this._deleteKeyframePropertyAt(propertyTrack, oldIndex);
         property.millisecond = to;
-        var newIndex = insertionPointInTrack(propertyTrack, to);
-        this._insertKeyframePropertyAt(property, propertyTrack, newIndex);
       }
     }, this);
 
@@ -623,7 +640,7 @@ rekapiModules.push(function (context) {
           stateModification[trackName],
           opt_easingModification[trackName]);
 
-        this._addKeyframeProperty(property);
+        this.addKeyframeProperty(property);
       }
     }, this);
 
@@ -651,15 +668,11 @@ rekapiModules.push(function (context) {
         var keyframeProperty = propertyTrack[index];
         this._deleteKeyframePropertyAt(propertyTrack, index);
         keyframeProperty.detach();
-        removeEmptyPropertyTracks(this);
       }
     }, this);
 
-    if (this.rekapi) {
-      invalidateAnimationLength(this.rekapi);
-    }
-
-    invalidatePropertyCache(this);
+    removeEmptyPropertyTracks(this);
+    cleanupAfterKeyframeModification(this);
     fireRekapiEventForActor(this, &#x27;timelineModified&#x27;);
 
     return this;
@@ -686,9 +699,9 @@ rekapiModules.push(function (context) {
 
     _.each(this._keyframeProperties, function (keyframeProperty) {
       keyframeProperty.detach();
-      removeEmptyPropertyTracks(this);
     }, this);
 
+    removeEmptyPropertyTracks(this);
     this._keyframeProperties = {};
 
     // Calling removeKeyframe performs some necessary post-removal cleanup, the
@@ -736,6 +749,12 @@ rekapiModules.push(function (context) {
 
     var keyframeProperty = this.getKeyframeProperty(property, millisecond);
     if (keyframeProperty) {
+      if (&#x27;millisecond&#x27; in newProperties) {
+        if (this.hasKeyframeAt(newProperties.millisecond, property)) {
+          throw new Error(&#x27;Tried to move &#x27; + property + &#x27; to &#x27; + newProperties.millisecond + &#x27;ms, but a keyframe property already exists there&#x27;);
+        }
+      }
+
       keyframeProperty.modifyWith(newProperties);
       cleanupAfterKeyframeModification(this);
     }
@@ -859,7 +878,7 @@ rekapiModules.push(function (context) {
 
     _.each(tracksToInspect, function (propertyTrack) {
       if (propertyTrack.length) {
-        var trackLength = _.last(propertyTrack).millisecond;
+        var trackLength = Math.max.apply(Math, _.map(propertyTrack, &#x27;millisecond&#x27;));
 
         if (trackLength &gt; latest) {
           latest = trackLength;
@@ -928,11 +947,6 @@ rekapiModules.push(function (context) {
    */
   Actor.prototype._insertKeyframePropertyAt = function (keyframeProperty, propertyTrack, index) {
     propertyTrack.splice(index, 0, keyframeProperty);
-    // Maintain property linked list
-    if (index &gt;= 1) {
-      propertyTrack[index - 1].linkToNext(keyframeProperty);
-    }
-    keyframeProperty.linkToNext(propertyTrack[index + 1]);
   };
 
   /*!
@@ -940,24 +954,27 @@ rekapiModules.push(function (context) {
    * list structure of the property track is maintained.  The removed property
    * is not modified or unlinked internally.
    * @method _deleteKeyframePropertyAt
-   * @param {Array(Rekapi.KeyframeProperty} propertyTrack
+   * @param {Array(Rekapi.KeyframeProperty)} propertyTrack
    * @param {number} index
    */
   Actor.prototype._deleteKeyframePropertyAt = function (propertyTrack, index) {
-    if (index &gt;= 1) {
-      propertyTrack[index - 1].linkToNext(propertyTrack[index + 1]);
-    }
     propertyTrack.splice(index, 1);
   };
 
-  /*!
-   * Associate a &#x60;Rekapi.KeyframeProperty&#x60; to this actor.  Augments the
-   * &#x60;Rekapi.KeyframeProperty&#x60; to maintain a link between the two objects.
-   * @method _addKeyframeProperty
+  /**
+   * Associate a &#x60;{{#crossLink &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}}&#x60; to
+   * this actor.  Augments the &#x60;{{#crossLink
+   * &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}}&#x60; to maintain a link between the
+   * two objects.  This is a lower-level method, and it is generally better to
+   * use &#x60;{{#crossLink &quot;Rekapi.Actor/keyframe:method&quot;}}{{/crossLink}}&#x60;.  This
+   * is mostly useful for adding a &#x60;{{#crossLink
+   * &quot;Rekapi.KeyframeProperty&quot;}}{{/crossLink}}&#x60; back to an actor after it was
+   * &#x60;{{#crossLink &quot;Rekapi.KeyframeProperty/detach&quot;}}{{/crossLink}}&#x60;ed.
+   * @method addKeyframeProperty
    * @param {Rekapi.KeyframeProperty} keyframeProperty
    * @chainable
    */
-  Actor.prototype._addKeyframeProperty = function (keyframeProperty) {
+  Actor.prototype.addKeyframeProperty = function (keyframeProperty) {
     if (this.rekapi) {
       fireEvent(this.rekapi, &#x27;beforeAddKeyframeProperty&#x27;, _, keyframeProperty);
     }
@@ -979,12 +996,13 @@ rekapiModules.push(function (context) {
         var ms = keyframeProperty.millisecond;
         var otherMs = propertyTracks[name][index].millisecond;
         if (otherMs === ms) {
-          throw new Error(&#x27;Tried to add a duplicate keyframe property, &#x27;+name+&#x27; @ &#x27;+ms+&#x27; ms&#x27;);
+          throw new Error(&#x27;Tried to add a duplicate keyframe property, &#x27; + name + &#x27; @ &#x27; + ms + &#x27; ms&#x27;);
         } else if (this.rekapi &amp;&amp; this.rekapi._warnOnOutOfOrderKeyframes) {
-          console.warn(new Error(&#x27;Added a keyframe property before end of track, &#x27;+name+&#x27; @ &#x27;+ms+&#x27; ms &lt; &#x27;+otherMs+&#x27; ms&#x27;));
+          console.warn(new Error(&#x27;Added a keyframe property before end of track, &#x27; + name + &#x27; @ &#x27; + ms + &#x27; ms &lt; &#x27; + otherMs + &#x27; ms&#x27;));
         }
       }
       this._insertKeyframePropertyAt(keyframeProperty, propertyTracks[name], index);
+      cleanupAfterKeyframeModification(this);
     }
 
     if (this.rekapi) {
@@ -1010,11 +1028,11 @@ rekapiModules.push(function (context) {
     } else {
       activeProperty = new Rekapi.KeyframeProperty(
         millisecond, &#x27;_active&#x27;, isActive);
-      this._addKeyframeProperty(activeProperty);
+      this.addKeyframeProperty(activeProperty);
     }
 
     return this;
-  }
+  };
 
   /*!
    * Calculate and set the actor&#x27;s position at &#x60;millisecond&#x60; in the animation.
