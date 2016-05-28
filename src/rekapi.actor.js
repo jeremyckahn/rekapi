@@ -572,15 +572,11 @@ rekapiModules.push(function (context) {
         var keyframeProperty = propertyTrack[index];
         this._deleteKeyframePropertyAt(propertyTrack, index);
         keyframeProperty.detach();
-        removeEmptyPropertyTracks(this);
       }
     }, this);
 
-    if (this.rekapi) {
-      invalidateAnimationLength(this.rekapi);
-    }
-
-    invalidatePropertyCache(this);
+    removeEmptyPropertyTracks(this);
+    cleanupAfterKeyframeModification(this);
     fireRekapiEventForActor(this, 'timelineModified');
 
     return this;
@@ -607,9 +603,9 @@ rekapiModules.push(function (context) {
 
     _.each(this._keyframeProperties, function (keyframeProperty) {
       keyframeProperty.detach();
-      removeEmptyPropertyTracks(this);
     }, this);
 
+    removeEmptyPropertyTracks(this);
     this._keyframeProperties = {};
 
     // Calling removeKeyframe performs some necessary post-removal cleanup, the
@@ -866,9 +862,6 @@ rekapiModules.push(function (context) {
    * @param {number} index
    */
   Actor.prototype._deleteKeyframePropertyAt = function (propertyTrack, index) {
-    if (index >= 1) {
-      propertyTrack[index - 1].linkToNext(propertyTrack[index + 1]);
-    }
     propertyTrack.splice(index, 1);
   };
 
