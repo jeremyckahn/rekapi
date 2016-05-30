@@ -1,5 +1,7 @@
 # Rekapi - Keyframes for JavaScript
 
+[![Gitter](https://badges.gitter.im/jeremyckahn/rekapi.svg)](https://gitter.im/jeremyckahn/rekapi?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 Rekapi is a keyframe animation library for JavaScript.  It gives you an API
 for:
 
