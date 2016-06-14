@@ -107,7 +107,7 @@ rekapiModules.push(function (context) {
   /**
    * You can use Rekapi to render animations to an HTML5 `<canvas>`.  To do so,
    * just provide a
-   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/Web/API/CanvasRenderingContext2D)
+   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
    * instance to the `{{#crossLink "Rekapi"}}{{/crossLink}}` constructor to
    * automatically set up the renderer:
    *
@@ -130,10 +130,10 @@ rekapiModules.push(function (context) {
    *
    * Rekapi supports multiple renderers per instance.  Do do this, you must not
    * provide a
-   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/Web/API/CanvasRenderingContext2D)
+   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
    * to the `{{#crossLink "Rekapi"}}{{/crossLink}}` constructor, you must
    * instead initialize the renderer yourself.  The
-   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/Web/API/CanvasRenderingContext2D)
+   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
    * that would have been provided to the `{{#crossLink
    * "Rekapi"}}{{/crossLink}}` constructor instead is provided as the second
    * parameter to `Rekapi.CanvasRenderer`:

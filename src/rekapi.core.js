@@ -249,7 +249,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * determines how to render the animation.  If this is not provided or is a
    * plain object (`{}`), the animation will not render anything and
    * `this.renderer` will be `undefined`.  If this is a reference to a
-   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/Web/API/CanvasRenderingContext2D),
+   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D),
    * `{{#crossLink "Rekapi.CanvasRenderer"}}{{/crossLink}}` will be initialized
    * as `this.renderer` for HTML5 canvas-based rendering.  This this is a
    * reference to a DOM element, `{{#crossLink
