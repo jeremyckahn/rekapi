@@ -6,10 +6,8 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-copy');
-  grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-bump');
   grunt.loadNpmTasks('grunt-codepainter');
-  grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
   var banner = [
         '/*! <%= pkg.name %> - v<%= pkg.version %> - ',
@@ -92,30 +90,7 @@ module.exports = function(grunt) {
         files: [
           {src: ['bower_components/underscore/underscore-min.js'], dest: 'dist/underscore-min.js'},
           {src: ['bower_components/lodash/dist/lodash.min.js'], dest: 'dist/lodash.min.js'},
-          {src: ['bower_components/shifty/dist/shifty.min.js'], dest: 'dist/shifty.min.js'},
-          {src: ['bower_components/jquery/jquery.min.js'], dest: 'dist/asset/jquery.js'},
-          {src: ['bower_components/ace-builds/src-min/ace.js'], dest: 'dist/asset/ace.js'},
-          {src: ['bower_components/ace-builds/src-min/theme-textmate.js'], dest: 'dist/asset/theme-textmate.js'},
-          {src: ['bower_components/ace-builds/src-min/mode-javascript.js'], dest: 'dist/asset/mode-javascript.js'},
-          {src: ['bower_components/ace-builds/src-min/worker-javascript.js'], dest: 'dist/asset/worker-javascript.js'},
-          {src: ['bower_components/requirejs/require.js'], dest: 'dist/asset/require.js'},
-          {src: ['bower_components/rekapi-controls/dist/jquery.dragon-slider.css'], dest: 'dist/asset/jquery.dragon-slider.css'},
-          {src: ['bower_components/rekapi-controls/dist/rekapi-controls.css'], dest: 'dist/asset/rekapi-controls.css'},
-          {expand: true, flatten: true, src: ['bower_components/rekapi-controls/lib/font-awesome/font/*'], dest: 'dist/font/'},
-          {flattern: true, src: ['bower_components/bootstrap/dist/css/bootstrap.min.css'], dest: 'dist/bootstrap/css/bootstrap.min.css'},
-          {expand: true, flatten: true, src: ['bower_components/bootstrap/dist/fonts/*'], dest: 'dist/bootstrap/fonts/'},
-          {src: ['bower_components/rekapi-controls/lib/font-awesome/css/font-awesome.css'], dest: 'dist/asset/font-awesome.css'},
-          {src: ['bower_components/rekapi-controls/dist/dragon-bundle.js'], dest: 'dist/asset/dragon-bundle.js'},
-          {src: ['bower_components/rekapi-controls/dist/rekapi-controls.min.js'], dest: 'dist/asset/rekapi-controls.min.js'}
-        ]
-      },
-      redirects: {
-        files: [
-          {src: ['redirects/renderers/canvas/rekapi.renderer.canvas.js.html'], dest: 'dist/doc/renderers/canvas/rekapi.renderer.canvas.js.html'},
-          {src: ['redirects/renderers/dom/rekapi.renderer.dom.js.html'], dest: 'dist/doc/renderers/dom/rekapi.renderer.dom.js.html'},
-          {src: ['redirects/src/rekapi.actor.js.html'], dest: 'dist/doc/src/rekapi.actor.js.html'},
-          {src: ['redirects/src/rekapi.core.js.html'], dest: 'dist/doc/src/rekapi.core.js.html'},
-          {src: ['redirects/src/rekapi.keyframe-property.js.html'], dest: 'dist/doc/src/rekapi.keyframe-property.js.html'},
+          {src: ['bower_components/shifty/dist/shifty.min.js'], dest: 'dist/shifty.min.js'}
         ]
       }
     },
@@ -158,15 +133,6 @@ module.exports = function(grunt) {
         jshintrc: '.jshintrc'
       }
     },
-    watch: {
-      scripts: {
-        files: ['src/*.js', 'renderers/**/*.js'],
-        tasks: ['yuidoc'],
-        options: {
-          interrupt: true
-        }
-      }
-    },
     bump: {
       options: {
         files: ['package.json', 'bower.json'],
@@ -189,34 +155,18 @@ module.exports = function(grunt) {
           dest: 'src/'
         }]
       }
-    },
-    yuidoc: {
-      compile: {
-        name: 'Rekapi',
-        description: '<%= pkg.description %>',
-        version: '<%= pkg.version %>',
-        url: '<%= pkg.homepage %>',
-        logo: '../../demo/img/rekapi-logo-200.png',
-        options: {
-          paths: ['src', 'renderers'],
-          themedir: 'yuidoc_theme',
-          outdir: 'dist/doc'
-        }
-      }
     }
   });
 
   // Default task.
   grunt.registerTask('default', ['jshint', 'qunit']);
   grunt.registerTask('build', [
-      'copy:dist',
-      'concat:withExtensions',
-      'uglify:standardTarget',
-      'uglify:underscoreBundle',
-      'uglify:lodashBundle',
-      'concat:withExtensionsDebug',
-      'yuidoc',
-      'copy:redirects'
-      ]);
+    'copy:dist',
+    'concat:withExtensions',
+    'uglify:standardTarget',
+    'uglify:underscoreBundle',
+    'uglify:lodashBundle',
+    'concat:withExtensionsDebug'
+  ]);
 
 };
