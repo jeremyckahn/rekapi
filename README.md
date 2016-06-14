@@ -73,8 +73,7 @@ another, separate actor.  Actors are represented by the `Rekapi.Actor` Object.
 
 There are playback control methods built into the `Rekapi` Object.  These
 methods include `play()`, `pause()` and `stop()`.  See [the API
-documentation](http://rekapi.com/dist/doc/src/rekapi.core.js.html) for a full
-list of the available methods.
+documentation](http://rekapi.com/api) for a full list of the available methods.
 
 ## Rendering contexts
 

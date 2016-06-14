@@ -65,7 +65,7 @@ rekapiModules.push(function (context) {
    */
   Rekapi._rendererInitHook.cssAnimate = function (rekapi) {
     // Node.nodeType 1 is an ELEMENT_NODE.
-    // https://developer.mozilla.org/en-US/docs/Web/API/Node.nodeType
+    // https://developer.mozilla.org/en-US/Web/API/Node.nodeType
     if (rekapi.context.nodeType === 1) {
       rekapi.renderer = new DOMRenderer(rekapi);
     }
@@ -297,7 +297,7 @@ rekapiModules.push(function (context) {
   /**
    * `Rekapi.DOMRenderer` allows you to animate DOM elements.  This is achieved
    * either by browser-accelerated [CSS `@keyframe`
-   * animations](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes),
+   * animations](https://developer.mozilla.org/en-US/Web/CSS/@keyframes),
    * or by traditional inline style updates on every frame (like how
    * [`jQuery.fn.animate`](http://api.jquery.com/animate/) works).  Animations
    * are defined with the same API in either case, but you can gracefully fall

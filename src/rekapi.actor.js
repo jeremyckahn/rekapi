@@ -431,7 +431,7 @@ rekapiModules.push(function (context) {
    *     // Return the actor to its original position
    *     actor.copyKeyframe(2000, 0);
    *
-   * __[Example](../../../../docs/examples/actor_copy_keyframe.html)__
+   * __[Example](../../../../examples/actor_copy_keyframe.html)__
    * @method copyKeyframe
    * @param {number} copyTo The timeline millisecond to copy KeyframeProperties
    * to.
@@ -467,7 +467,7 @@ rekapiModules.push(function (context) {
    * "Rekapi.Actor/hasKeyframeAt:method"}}{{/crossLink}}` to see if there is
    * already a keyframe at the requested `to` destination.
    *
-   * __[Example](../../../../docs/examples/actor_move_keyframe.html)__
+   * __[Example](../../../../examples/actor_move_keyframe.html)__
    * @method moveKeyframe
    * @param {number} from The millisecond of the keyframe to be moved.
    * @param {number} to The millisecond of where the keyframe should be moved
@@ -519,7 +519,7 @@ rekapiModules.push(function (context) {
    *       'x': 'easeFrom'
    *     });
    *
-   * __[Example](../../../../docs/examples/actor_modify_keyframe.html)__
+   * __[Example](../../../../examples/actor_modify_keyframe.html)__
    * @method modifyKeyframe
    * @param {number} millisecond
    * @param {Object} stateModification
@@ -557,7 +557,7 @@ rekapiModules.push(function (context) {
    * Remove all `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set
    * on the actor at a given millisecond in the animation.
    *
-   * __[Example](../../../../docs/examples/actor_remove_keyframe.html)__
+   * __[Example](../../../../examples/actor_remove_keyframe.html)__
    * @method removeKeyframe
    * @param {number} millisecond The location on the timeline of the keyframe
    * to remove.
@@ -592,7 +592,7 @@ rekapiModules.push(function (context) {
    * "Rekapi.Actor/removeKeyframeProperty:method"}}{{/crossLink}}` many times
    * individually, but foregoes firing events.
    *
-   * __[Example](../../../../docs/examples/actor_remove_all_keyframes.html)__
+   * __[Example](../../../../examples/actor_remove_all_keyframes.html)__
    * @method removeAllKeyframes
    * @chainable
    */
@@ -638,7 +638,7 @@ rekapiModules.push(function (context) {
    * "Rekapi.KeyframeProperty/modifyWith:method"}}{{/crossLink}}` and then
    * performs some cleanup.
    *
-   * __[Example](../../../../docs/examples/actor_modify_keyframe_property.html)__
+   * __[Example](../../../../examples/actor_modify_keyframe_property.html)__
    * @method modifyKeyframeProperty
    * @param {string} property The name of the `{{#crossLink
    * "Rekapi.KeyframeProperty"}}{{/crossLink}}` to modify.
@@ -809,7 +809,7 @@ rekapiModules.push(function (context) {
    * Internally, this method copies the final state of the actor in the
    * timeline to the millisecond defined by `until`.
    *
-   * __[Example](../../../../docs/examples/actor_wait.html)__
+   * __[Example](../../../../examples/actor_wait.html)__
    * @method wait
    * @param {number} until At what point in the animation the Actor should wait
    * until (relative to the start of the animation timeline).  If this number
@@ -1047,7 +1047,7 @@ rekapiModules.push(function (context) {
   Actor.prototype._afterKeyframePropertyInterpolate = noop;
 
   /**
-   * __[Example](../../../../docs/examples/actor_export_timeline.html)__
+   * __[Example](../../../../examples/actor_export_timeline.html)__
    * @method exportTimeline
    * @return {Object} A serializable Object of this actor's timeline property
    * tracks and `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s.

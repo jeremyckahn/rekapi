@@ -249,7 +249,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * determines how to render the animation.  If this is not provided or is a
    * plain object (`{}`), the animation will not render anything and
    * `this.renderer` will be `undefined`.  If this is a reference to a
-   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D),
+   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/Web/API/CanvasRenderingContext2D),
    * `{{#crossLink "Rekapi.CanvasRenderer"}}{{/crossLink}}` will be initialized
    * as `this.renderer` for HTML5 canvas-based rendering.  This this is a
    * reference to a DOM element, `{{#crossLink
@@ -448,7 +448,7 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Play the animation.
    *
-   * __[Example](../../../../docs/examples/play.html)__
+   * __[Example](../../../../examples/play.html)__
    * @method play
    * @param {number=} opt_howManyTimes If omitted, the animation will loop
    * endlessly.
@@ -480,7 +480,7 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Move to a specific millisecond on the timeline and play from there.
    *
-   * __[Example](../../../../docs/examples/play_from.html)__
+   * __[Example](../../../../examples/play_from.html)__
    * @method playFrom
    * @param {number} millisecond
    * @param {number=} opt_howManyTimes Works as it does in {{#crossLink
@@ -500,7 +500,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * Play from the last frame that was rendered with {{#crossLink
    * "Rekapi/update:method"}}{{/crossLink}}.
    *
-   * __[Example](../../../../docs/examples/play_from_current.html)__
+   * __[Example](../../../../examples/play_from_current.html)__
    * @method playFromCurrent
    * @param {number=} opt_howManyTimes Works as it does in {{#crossLink
    * "Rekapi/play:method"}}{{/crossLink}}.
@@ -514,7 +514,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * Pause the animation.  A "paused" animation can be resumed from where it
    * left off with {{#crossLink "Rekapi/play:method"}}{{/crossLink}}.
    *
-   * __[Example](../../../../docs/examples/pause.html)__
+   * __[Example](../../../../examples/pause.html)__
    * @method pause
    * @param pause
    * @chainable
@@ -538,7 +538,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * Stop the animation.  A "stopped" animation will start from the beginning
    * if {{#crossLink "Rekapi/play:method"}}{{/crossLink}} is called.
    *
-   * __[Example](../../../../docs/examples/stop.html)__
+   * __[Example](../../../../examples/stop.html)__
    * @method stop
    * @chainable
    */
@@ -569,7 +569,7 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Render an animation frame at a specific point in the timeline.
    *
-   * __[Example](../../../../docs/examples/update.html)__
+   * __[Example](../../../../examples/update.html)__
    * @method update
    * @param {number=} opt_millisecond The point in the timeline at which to
    * render.  If omitted, this renders the last millisecond that was rendered
@@ -603,7 +603,7 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * __[Example](../../../../docs/examples/get_last_position_updated.html)__
+   * __[Example](../../../../examples/get_last_position_updated.html)__
    * @method getLastPositionUpdated
    * @return {number} The normalized timeline position (between 0 and 1) that
    * was last rendered.
@@ -642,7 +642,7 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Bind a handler function to a Rekapi event.
    *
-   * __[Example](../../../../docs/examples/bind.html)__
+   * __[Example](../../../../examples/bind.html)__
    * @method on
    * @param {string} eventName Valid values are:
    *
@@ -730,7 +730,7 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Unbind one or more handlers from a Rekapi event.
    *
-   * __[Example](../../../../docs/examples/unbind.html)__
+   * __[Example](../../../../examples/unbind.html)__
    * @method off
    * @param {string} eventName Valid values correspond to the list under
    * {{#crossLink "Rekapi/on:method"}}{{/crossLink}}.
@@ -758,7 +758,7 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Export the timeline to a JSON-serializable `Object`.
    *
-   * __[Example](../../../docs/examples/export_timeline.html)__
+   * __[Example](../../../examples/export_timeline.html)__
    * @method exportTimeline
    * @return {Object} This data can later be consumed by {{#crossLink
    * "Rekapi/importTimeline:method"}}{{/crossLink}}.

@@ -107,7 +107,7 @@ rekapiModules.push(function (context) {
   /**
    * You can use Rekapi to render animations to an HTML5 `<canvas>`.  To do so,
    * just provide a
-   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/Web/API/CanvasRenderingContext2D)
    * instance to the `{{#crossLink "Rekapi"}}{{/crossLink}}` constructor to
    * automatically set up the renderer:
    *
@@ -130,10 +130,10 @@ rekapiModules.push(function (context) {
    *
    * Rekapi supports multiple renderers per instance.  Do do this, you must not
    * provide a
-   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/Web/API/CanvasRenderingContext2D)
    * to the `{{#crossLink "Rekapi"}}{{/crossLink}}` constructor, you must
    * instead initialize the renderer yourself.  The
-   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
+   * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/Web/API/CanvasRenderingContext2D)
    * that would have been provided to the `{{#crossLink
    * "Rekapi"}}{{/crossLink}}` constructor instead is provided as the second
    * parameter to `Rekapi.CanvasRenderer`:
@@ -231,7 +231,7 @@ rekapiModules.push(function (context) {
    * This method has no effect if an order function is set with `{{#crossLink
    * "Rekapi.CanvasRenderer/setOrderFunction:method"}}{{/crossLink}}`.
    *
-   * __[Example](../../../../docs/examples/canvas_move_actor_to_layer.html)__
+   * __[Example](../../../../examples/canvas_move_actor_to_layer.html)__
    * @method moveActorToLayer
    * @param {Rekapi.Actor} actor
    * @param {number} layer This should be within `0` and the total number of
@@ -265,7 +265,7 @@ rekapiModules.push(function (context) {
    *     rekapi.renderer.setOrderFunction(function (actor) {
    *       return actor.get().radius;
    *     });
-   * __[Example](../../../../docs/examples/canvas_set_order_function.html)__
+   * __[Example](../../../../examples/canvas_set_order_function.html)__
    * @method setOrderFunction
    * @param {function(Rekapi.Actor)} sortFunction
    * @return {Rekapi}
@@ -281,7 +281,7 @@ rekapiModules.push(function (context) {
    * render order defaults back to the order in which the actors were added to
    * the animation.
    *
-   * __[Example](../../../../docs/examples/canvas_unset_order_function.html)__
+   * __[Example](../../../../examples/canvas_unset_order_function.html)__
    * @method unsetOrderFunction
    * @return {Rekapi}
    */

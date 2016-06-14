@@ -142,7 +142,7 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * __[Example](../../../../docs/examples/keyprop_export_property_data.html)__
+   * __[Example](../../../../examples/keyprop_export_property_data.html)__
    * @method exportPropertyData
    * @return {Object} A serializable Object representation of this
    * `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`.
