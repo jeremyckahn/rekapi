@@ -1,4 +1,4 @@
-/*! rekapi - v1.7.1 - 2016-05-28 - http://rekapi.com */
+/*! rekapi - v1.7.2 - 2016-06-13 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -466,7 +466,7 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Play the animation.
    *
-   * __[Example](../../../../docs/examples/play.html)__
+   * __[Example](../../../../examples/play.html)__
    * @method play
    * @param {number=} opt_howManyTimes If omitted, the animation will loop
    * endlessly.
@@ -498,7 +498,7 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Move to a specific millisecond on the timeline and play from there.
    *
-   * __[Example](../../../../docs/examples/play_from.html)__
+   * __[Example](../../../../examples/play_from.html)__
    * @method playFrom
    * @param {number} millisecond
    * @param {number=} opt_howManyTimes Works as it does in {{#crossLink
@@ -518,7 +518,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * Play from the last frame that was rendered with {{#crossLink
    * "Rekapi/update:method"}}{{/crossLink}}.
    *
-   * __[Example](../../../../docs/examples/play_from_current.html)__
+   * __[Example](../../../../examples/play_from_current.html)__
    * @method playFromCurrent
    * @param {number=} opt_howManyTimes Works as it does in {{#crossLink
    * "Rekapi/play:method"}}{{/crossLink}}.
@@ -532,7 +532,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * Pause the animation.  A "paused" animation can be resumed from where it
    * left off with {{#crossLink "Rekapi/play:method"}}{{/crossLink}}.
    *
-   * __[Example](../../../../docs/examples/pause.html)__
+   * __[Example](../../../../examples/pause.html)__
    * @method pause
    * @param pause
    * @chainable
@@ -556,7 +556,7 @@ var rekapiCore = function (root, _, Tweenable) {
    * Stop the animation.  A "stopped" animation will start from the beginning
    * if {{#crossLink "Rekapi/play:method"}}{{/crossLink}} is called.
    *
-   * __[Example](../../../../docs/examples/stop.html)__
+   * __[Example](../../../../examples/stop.html)__
    * @method stop
    * @chainable
    */
@@ -587,7 +587,7 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Render an animation frame at a specific point in the timeline.
    *
-   * __[Example](../../../../docs/examples/update.html)__
+   * __[Example](../../../../examples/update.html)__
    * @method update
    * @param {number=} opt_millisecond The point in the timeline at which to
    * render.  If omitted, this renders the last millisecond that was rendered
@@ -621,7 +621,7 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
-   * __[Example](../../../../docs/examples/get_last_position_updated.html)__
+   * __[Example](../../../../examples/get_last_position_updated.html)__
    * @method getLastPositionUpdated
    * @return {number} The normalized timeline position (between 0 and 1) that
    * was last rendered.
@@ -660,7 +660,7 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Bind a handler function to a Rekapi event.
    *
-   * __[Example](../../../../docs/examples/bind.html)__
+   * __[Example](../../../../examples/bind.html)__
    * @method on
    * @param {string} eventName Valid values are:
    *
@@ -748,7 +748,7 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Unbind one or more handlers from a Rekapi event.
    *
-   * __[Example](../../../../docs/examples/unbind.html)__
+   * __[Example](../../../../examples/unbind.html)__
    * @method off
    * @param {string} eventName Valid values correspond to the list under
    * {{#crossLink "Rekapi/on:method"}}{{/crossLink}}.
@@ -776,7 +776,7 @@ var rekapiCore = function (root, _, Tweenable) {
   /**
    * Export the timeline to a JSON-serializable `Object`.
    *
-   * __[Example](../../../docs/examples/export_timeline.html)__
+   * __[Example](../../../examples/export_timeline.html)__
    * @method exportTimeline
    * @return {Object} This data can later be consumed by {{#crossLink
    * "Rekapi/importTimeline:method"}}{{/crossLink}}.
@@ -1311,7 +1311,7 @@ rekapiModules.push(function (context) {
    *     // Return the actor to its original position
    *     actor.copyKeyframe(2000, 0);
    *
-   * __[Example](../../../../docs/examples/actor_copy_keyframe.html)__
+   * __[Example](../../../../examples/actor_copy_keyframe.html)__
    * @method copyKeyframe
    * @param {number} copyTo The timeline millisecond to copy KeyframeProperties
    * to.
@@ -1347,7 +1347,7 @@ rekapiModules.push(function (context) {
    * "Rekapi.Actor/hasKeyframeAt:method"}}{{/crossLink}}` to see if there is
    * already a keyframe at the requested `to` destination.
    *
-   * __[Example](../../../../docs/examples/actor_move_keyframe.html)__
+   * __[Example](../../../../examples/actor_move_keyframe.html)__
    * @method moveKeyframe
    * @param {number} from The millisecond of the keyframe to be moved.
    * @param {number} to The millisecond of where the keyframe should be moved
@@ -1399,7 +1399,7 @@ rekapiModules.push(function (context) {
    *       'x': 'easeFrom'
    *     });
    *
-   * __[Example](../../../../docs/examples/actor_modify_keyframe.html)__
+   * __[Example](../../../../examples/actor_modify_keyframe.html)__
    * @method modifyKeyframe
    * @param {number} millisecond
    * @param {Object} stateModification
@@ -1437,7 +1437,7 @@ rekapiModules.push(function (context) {
    * Remove all `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set
    * on the actor at a given millisecond in the animation.
    *
-   * __[Example](../../../../docs/examples/actor_remove_keyframe.html)__
+   * __[Example](../../../../examples/actor_remove_keyframe.html)__
    * @method removeKeyframe
    * @param {number} millisecond The location on the timeline of the keyframe
    * to remove.
@@ -1472,7 +1472,7 @@ rekapiModules.push(function (context) {
    * "Rekapi.Actor/removeKeyframeProperty:method"}}{{/crossLink}}` many times
    * individually, but foregoes firing events.
    *
-   * __[Example](../../../../docs/examples/actor_remove_all_keyframes.html)__
+   * __[Example](../../../../examples/actor_remove_all_keyframes.html)__
    * @method removeAllKeyframes
    * @chainable
    */
@@ -1518,7 +1518,7 @@ rekapiModules.push(function (context) {
    * "Rekapi.KeyframeProperty/modifyWith:method"}}{{/crossLink}}` and then
    * performs some cleanup.
    *
-   * __[Example](../../../../docs/examples/actor_modify_keyframe_property.html)__
+   * __[Example](../../../../examples/actor_modify_keyframe_property.html)__
    * @method modifyKeyframeProperty
    * @param {string} property The name of the `{{#crossLink
    * "Rekapi.KeyframeProperty"}}{{/crossLink}}` to modify.
@@ -1689,7 +1689,7 @@ rekapiModules.push(function (context) {
    * Internally, this method copies the final state of the actor in the
    * timeline to the millisecond defined by `until`.
    *
-   * __[Example](../../../../docs/examples/actor_wait.html)__
+   * __[Example](../../../../examples/actor_wait.html)__
    * @method wait
    * @param {number} until At what point in the animation the Actor should wait
    * until (relative to the start of the animation timeline).  If this number
@@ -1927,7 +1927,7 @@ rekapiModules.push(function (context) {
   Actor.prototype._afterKeyframePropertyInterpolate = noop;
 
   /**
-   * __[Example](../../../../docs/examples/actor_export_timeline.html)__
+   * __[Example](../../../../examples/actor_export_timeline.html)__
    * @method exportTimeline
    * @return {Object} A serializable Object of this actor's timeline property
    * tracks and `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s.
@@ -2115,7 +2115,7 @@ rekapiModules.push(function (context) {
   };
 
   /**
-   * __[Example](../../../../docs/examples/keyprop_export_property_data.html)__
+   * __[Example](../../../../examples/keyprop_export_property_data.html)__
    * @method exportPropertyData
    * @return {Object} A serializable Object representation of this
    * `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`.
@@ -2390,7 +2390,7 @@ rekapiModules.push(function (context) {
    * This method has no effect if an order function is set with `{{#crossLink
    * "Rekapi.CanvasRenderer/setOrderFunction:method"}}{{/crossLink}}`.
    *
-   * __[Example](../../../../docs/examples/canvas_move_actor_to_layer.html)__
+   * __[Example](../../../../examples/canvas_move_actor_to_layer.html)__
    * @method moveActorToLayer
    * @param {Rekapi.Actor} actor
    * @param {number} layer This should be within `0` and the total number of
@@ -2424,7 +2424,7 @@ rekapiModules.push(function (context) {
    *     rekapi.renderer.setOrderFunction(function (actor) {
    *       return actor.get().radius;
    *     });
-   * __[Example](../../../../docs/examples/canvas_set_order_function.html)__
+   * __[Example](../../../../examples/canvas_set_order_function.html)__
    * @method setOrderFunction
    * @param {function(Rekapi.Actor)} sortFunction
    * @return {Rekapi}
@@ -2440,7 +2440,7 @@ rekapiModules.push(function (context) {
    * render order defaults back to the order in which the actors were added to
    * the animation.
    *
-   * __[Example](../../../../docs/examples/canvas_unset_order_function.html)__
+   * __[Example](../../../../examples/canvas_unset_order_function.html)__
    * @method unsetOrderFunction
    * @return {Rekapi}
    */
