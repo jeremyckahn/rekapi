@@ -1676,7 +1676,7 @@
     module('_resetFnKeyframesFromMillisecond');
 
 
-    test('_resetFnKeyframesFromMillisecond reset function keyframes later but not before specified millisecond', function () {
+    test('_resetFnKeyframesFromMillisecond resets function keyframes later but not before specified millisecond', function () {
       var rekapi = new Rekapi();
       var actor = rekapi.addActor();
 
@@ -1706,7 +1706,7 @@
       equal(callCount, 2, 'The function was called twice');
 
       Rekapi._private.updateToMillisecond(rekapi, 15);
-      equal(callCount, 2, 'Further calls to updateToCurrentMillisecond do not fire functionkeyframes');
+      equal(callCount, 2, 'Further calls to updateToCurrentMillisecond do not fire function keyframes');
     });
 
   } ());
