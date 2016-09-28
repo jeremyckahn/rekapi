@@ -567,6 +567,24 @@ var rekapiCore = function (root, _, Tweenable) {
   };
 
   /**
+   * @method isPaused
+   * @return {boolean} Whether or not the animation is paused (meaning not playing or
+   * stopped).
+   */
+  Rekapi.prototype.isPaused = function () {
+    return this._playState === playState.PAUSED;
+  };
+
+  /**
+   * @method isStopped
+   * @return {boolean} Whether or not the animation is stopped (meaning not playing or
+   * paused).
+   */
+  Rekapi.prototype.isStopped = function () {
+    return this._playState === playState.STOPPED;
+  };
+
+  /**
    * Render an animation frame at a specific point in the timeline.
    *
    * __[Example](../../../../examples/update.html)__
