@@ -456,7 +456,6 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   Rekapi.prototype.play = function (opt_howManyTimes) {
     cancelLoop(this);
-    _.invoke(this._actors, '_resetFnKeyframesFromMillisecond', 0);
 
     if (this._playState === playState.PAUSED) {
       // Move the playhead to the correct position in the timeline if resuming
@@ -549,7 +548,9 @@ var rekapiCore = function (root, _, Tweenable) {
 
     // Also kill any shifty tweens that are running.
     _.each(this._actors, function (actor) {
-      actor.stop();
+      actor
+        .stop()
+        ._resetFnKeyframesFromMillisecond(0);
     });
 
     fireEvent(this, 'playStateChange', _);
