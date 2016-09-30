@@ -120,7 +120,7 @@ module.exports = function(grunt) {
       }
     },
     qunit: {
-      files: ['tests/qunit*.html']
+      files: ['tests/qunit.{actor,canvas,core,dom,keyframe_props,to_css}.html']
     },
     jshint: {
       all_files: [
