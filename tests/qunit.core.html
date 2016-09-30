@@ -577,6 +577,38 @@
     });
 
 
+    test('Resets function keyframes', function () {
+      var rekapi = new Rekapi();
+      var actor = rekapi.addActor();
+
+      var callCount = 0;
+      actor
+        .keyframe(10, {
+          'function': function () {
+            callCount++;
+          }
+        })
+        .keyframe(20, {
+          'function': function () {
+            callCount++;
+          }
+        });
+
+      rekapi.play();
+
+      Rekapi._private.updateToMillisecond(rekapi, 5);
+      equal(callCount, 0, 'The function was not called');
+
+      Rekapi._private.updateToMillisecond(rekapi, 15);
+      equal(callCount, 1, 'The function was called once');
+
+      rekapi.stop();
+
+      Rekapi._private.updateToMillisecond(rekapi, 15);
+      equal(callCount, 2, 'The function was called twice');
+    });
+
+
     module('playFrom');
 
 

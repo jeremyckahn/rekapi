@@ -548,7 +548,9 @@ var rekapiCore = function (root, _, Tweenable) {
 
     // Also kill any shifty tweens that are running.
     _.each(this._actors, function (actor) {
-      actor.stop();
+      actor
+        .stop()
+        ._resetFnKeyframesFromMillisecond(0);
     });
 
     fireEvent(this, 'playStateChange', _);
