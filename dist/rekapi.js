@@ -1,4 +1,4 @@
-/*! rekapi - v1.7.2 - 2016-06-13 - http://rekapi.com */
+/*! rekapi - v1.7.3 - 2016-10-03 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -566,7 +566,9 @@ var rekapiCore = function (root, _, Tweenable) {
 
     // Also kill any shifty tweens that are running.
     _.each(this._actors, function (actor) {
-      actor.stop();
+      actor
+        .stop()
+        ._resetFnKeyframesFromMillisecond(0);
     });
 
     fireEvent(this, 'playStateChange', _);
@@ -582,6 +584,24 @@ var rekapiCore = function (root, _, Tweenable) {
    */
   Rekapi.prototype.isPlaying = function () {
     return this._playState === playState.PLAYING;
+  };
+
+  /**
+   * @method isPaused
+   * @return {boolean} Whether or not the animation is paused (meaning not playing or
+   * stopped).
+   */
+  Rekapi.prototype.isPaused = function () {
+    return this._playState === playState.PAUSED;
+  };
+
+  /**
+   * @method isStopped
+   * @return {boolean} Whether or not the animation is stopped (meaning not playing or
+   * paused).
+   */
+  Rekapi.prototype.isStopped = function () {
+    return this._playState === playState.STOPPED;
   };
 
   /**
