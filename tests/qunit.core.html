@@ -475,7 +475,7 @@
     module('isPlaying');
 
 
-    test('Check the state of a playing animation', function () {
+    test('Check the playing state of an animation', function () {
 
       internalDebugNow = function () {
         return new Date();
@@ -533,6 +533,30 @@
 
       equal(testRekapi._loopTimestamp, 1000,
           '.pause() modifies the internal timestamp of the animation');
+    });
+
+
+    module('isPaused');
+
+
+    test('Check the paused state of an animation', function () {
+
+      internalDebugNow = function () {
+        return new Date();
+      };
+
+      var testRekapi = setupTestRekapi();
+      testRekapi.play();
+      equal(testRekapi.isPaused(), false,
+          '.play() causes .isPaused() to be false');
+
+      testRekapi.pause();
+      equal(testRekapi.isPaused(), true,
+          '.pause() causes .isPaused() to be true');
+
+      testRekapi.stop();
+      equal(testRekapi.isPaused(), false,
+          '.stop() causes .isPaused() to be false');
     });
 
 
@@ -606,6 +630,30 @@
 
       Rekapi._private.updateToMillisecond(rekapi, 15);
       equal(callCount, 2, 'The function was called twice');
+    });
+
+
+    module('isStopped');
+
+
+    test('Check the stopped state of an animation', function () {
+
+      internalDebugNow = function () {
+        return new Date();
+      };
+
+      var testRekapi = setupTestRekapi();
+      testRekapi.play();
+      equal(testRekapi.isStopped(), false,
+          '.play() causes .isStopped() to be false');
+
+      testRekapi.pause();
+      equal(testRekapi.isStopped(), false,
+          '.pause() causes .isStopped() to be false');
+
+      testRekapi.stop();
+      equal(testRekapi.isStopped(), true,
+          '.stop() causes .isStopped() to be true');
     });
 
 
