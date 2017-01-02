@@ -1,4 +1,4 @@
-/*! rekapi - v1.7.3 - 2016-10-03 - http://rekapi.com */
+/*! rekapi - v1.7.4 - 2017-01-02 - http://rekapi.com */
 /*!
  * Rekapi - Rewritten Kapi.
  * http://rekapi.com/
@@ -3931,4 +3931,11 @@ if (typeof define === 'function' && define.amd) {
   rekapi(this);
 }
 
-} (this));
+} (typeof window !== 'undefined' ?
+  window :
+    (typeof global === 'undefined' ?
+      this :
+      global
+    )
+  )
+);
