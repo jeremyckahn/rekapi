@@ -31,5 +31,7 @@
   "plusplus": false,
   "sub": true,
   "undef": true,
-  "white": false
+  "white": false,
+  "esversion": 6,
+  "node": true
 }
