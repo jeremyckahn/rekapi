@@ -1,6 +1,6 @@
-const _ = require('lodash');
-const Rekapi = require('../../src/rekapi.core');
-const Tweenable = require('shifty');
+import _ from 'lodash';
+import Tweenable from 'shifty';
+import Rekapi from '../../src/rekapi.core';
 
 const now = Rekapi.Tweenable.now;
 
@@ -377,7 +377,7 @@ function actorTeardown (actor) {
  * @param {Rekapi} rekapi
  * @constructor
  */
-function DOMRenderer (rekapi) {
+export default function DOMRenderer (rekapi) {
   this.rekapi = rekapi;
 
   // @private {number}
@@ -1393,5 +1393,3 @@ if (REKAPI_DEBUG) {
     ,'transformFunctions': transformFunctions
   };
 }
-
-module.exports = DOMRenderer;

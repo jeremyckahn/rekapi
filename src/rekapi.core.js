@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const Tweenable = require('shifty');
+import _ from 'lodash';
+import Tweenable, { now } from 'shifty';
 
 // REKAPI-GLOBALS
 // These are global in development, but get wrapped in a closure at build-time.
@@ -232,8 +232,6 @@ function cancelLoop (rekapi) {
 
 // CORE-SPECIFIC VARS AND FUNCTIONS
 
-var now = Tweenable.now;
-
 var playState = {
   'STOPPED': 'stopped'
   ,'PAUSED': 'paused'
@@ -258,7 +256,7 @@ var playState = {
  * @constructor
  * @chainable
  */
-function Rekapi (opt_context) {
+export default function Rekapi (opt_context) {
   this.context = opt_context || {};
   this._actors = {};
   this._playState = playState.STOPPED;
@@ -875,5 +873,3 @@ if (REKAPI_DEBUG) {
     ,'updatePlayState': updatePlayState
   };
 }
-
-module.exports = Rekapi;

@@ -1,6 +1,6 @@
-const _ = require('lodash');
-const Tweenable = require('shifty');
-const KeyframeProperty = require('./rekapi.keyframe-property');
+import _ from 'lodash';
+import Tweenable from 'shifty';
+import KeyframeProperty from './rekapi.keyframe-property';
 
 const DEFAULT_EASING = 'linear';
 
@@ -230,7 +230,7 @@ function cleanupAfterKeyframeModification (actor) {
  *   `{{#crossLink "Rekapi/removeActor:method"}}{{/crossLink}}`.
  * @constructor
  */
-function Actor (opt_config) {
+export default function Actor (opt_config) {
 
   opt_config = opt_config || {};
 
@@ -1084,5 +1084,3 @@ Actor.prototype.importTimeline = function (actorData) {
     }, this);
   }, this);
 };
-
-module.exports = Actor;

@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const Tweenable = require('shifty');
+import _ from 'lodash';
+import Tweenable from 'shifty';
 
 const DEFAULT_EASING = 'linear';
 const interpolate = Tweenable.interpolate;
@@ -19,7 +19,7 @@ const interpolate = Tweenable.interpolate;
  * `Rekapi.KeyframeProperty` should be animated to.  Defaults to `"linear"`.
  * @constructor
  */
-function KeyframeProperty (millisecond, name, value, opt_easing) {
+export default function KeyframeProperty (millisecond, name, value, opt_easing) {
   this.id = _.uniqueId('keyframeProperty_');
   this.millisecond = millisecond;
   this.name = name;
@@ -176,5 +176,3 @@ KeyframeProperty.prototype.invoke = function () {
   this.hasFired = true;
   return returnValue;
 };
-
-module.exports = KeyframeProperty;

@@ -1,9 +1,9 @@
-const Rekapi = require('./rekapi.core');
-const Actor = require('./rekapi.actor');
-const KeyframeProperty = require('./rekapi.keyframe-property');
+import Rekapi from './rekapi.core';
+import Actor from './rekapi.actor';
+import KeyframeProperty from './rekapi.keyframe-property';
 
-const CanvasRenderer = require('../renderers/canvas/rekapi.renderer.canvas');
-const DOMRenderer = require('../renderers/dom/rekapi.renderer.dom');
+import CanvasRenderer from '../renderers/canvas/rekapi.renderer.canvas';
+import DOMRenderer from '../renderers/dom/rekapi.renderer.dom';
 
 Rekapi.Actor = Actor;
 Rekapi.KeyframeProperty = KeyframeProperty;
@@ -11,4 +11,4 @@ Rekapi.KeyframeProperty = KeyframeProperty;
 Rekapi.CanvasRenderer = CanvasRenderer;
 Rekapi.DOMRenderer = DOMRenderer;
 
-module.exports = Rekapi;
+export default Rekapi;

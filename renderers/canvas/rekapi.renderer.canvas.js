@@ -1,6 +1,6 @@
-const _ = require('lodash');
-const Rekapi = require('../../src/rekapi.core');
-const Tweenable = require('shifty');
+import _ from 'lodash';
+import Tweenable from 'shifty';
+import Rekapi from '../../src/rekapi.core';
 
 // PRIVATE UTILITY FUNCTIONS
 //
@@ -151,7 +151,7 @@ Rekapi._rendererInitHook.canvas = function (rekapi) {
  * @param {CanvasRenderingContext2D=} opt_context
  * @constructor
  */
-function CanvasRenderer (rekapi, opt_context) {
+export default function CanvasRenderer (rekapi, opt_context) {
   this.rekapi = rekapi;
   this.canvasContext = opt_context || rekapi.context;
   this._renderOrder = [];
@@ -285,5 +285,3 @@ CanvasRenderer.prototype.unsetOrderFunction = function () {
   this._renderOrderSorter = null;
   return this.rekapi;
 };
-
-module.exports = CanvasRenderer;
