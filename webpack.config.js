@@ -20,6 +20,18 @@ module.exports = {
     // http://webpack.github.io/docs/troubleshooting.html#npm-linked-modules-doesn-t-find-their-dependencies
     fallback: modulePaths
   },
+  module: {
+    loaders: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
+        loader: 'babel-loader',
+        query: {
+          presets: ['es2015']
+        }
+      }
+    ]
+  },
   resolve: {
     modulesDirectories: modulePaths,
 
