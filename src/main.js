@@ -11,4 +11,4 @@ Rekapi.KeyframeProperty = KeyframeProperty;
 Rekapi.CanvasRenderer = CanvasRenderer;
 Rekapi.DOMRenderer = DOMRenderer;
 
-export default Rekapi;
+module.exports = Rekapi;
