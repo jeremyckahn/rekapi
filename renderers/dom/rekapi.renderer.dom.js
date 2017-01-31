@@ -636,7 +636,7 @@ DOMRenderer.getActorClassName = function (actor) {
  *   should repeat.  If omitted, the animation will loop indefinitely.
  * @return {string}
  */
-Rekapi.DOMRenderer.prototype.toString = function (opts) {
+DOMRenderer.prototype.toString = function (opts) {
   opts = opts || {};
   var animationCSS = [];
 

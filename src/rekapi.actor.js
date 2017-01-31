@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { noop } from 'lodash';
 import Tweenable from 'shifty';
 import KeyframeProperty from './rekapi.keyframe-property';
 

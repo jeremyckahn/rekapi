@@ -26,13 +26,15 @@
     "grunt-contrib-uglify": "0.3.0",
     "grunt-contrib-watch": "0.3.1",
     "grunt-contrib-yuidoc": "^0.5.2",
-    "webpack": "^1.14.0"
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "^1.16.2"
   },
   "scripts": {
     "build": "webpack",
     "bump": "./node_modules/grunt-cli/bin/grunt bump",
     "test": "./node_modules/grunt-cli/bin/grunt qunit",
-    "lint": "./node_modules/grunt-cli/bin/grunt jshint"
+    "lint": "./node_modules/grunt-cli/bin/grunt jshint",
+    "start": "webpack-dev-server"
   },
   "license": "MIT",
   "dependencies": {

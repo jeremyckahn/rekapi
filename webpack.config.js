@@ -13,7 +13,11 @@ module.exports = {
   entry: './src/main.js',
   output: {
     path: path.join(__dirname, 'dist'),
+    publicPath: '/assets/',
     filename: 'rekapi.js',
+    library: 'Rekapi',
+    libraryTarget: 'umd',
+    umdNamedDefine: true
   },
   devtool: 'source-map',
   resolveLoader: {
@@ -50,4 +54,12 @@ module.exports = {
     }),
     new Webpack.BannerPlugin(version)
   ]
+    new Webpack.BannerPlugin(version),
+    new Webpack.DefinePlugin({
+      REKAPI_DEBUG: true
+    })
+  ],
+  devServer: {
+    port: 9010
+  }
 };
