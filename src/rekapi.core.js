@@ -19,7 +19,7 @@ var rekapiModules = [];
  * dependency
  * @param {Object=} opt_data Optional event-specific data
  */
-function fireEvent (rekapi, eventName, _, opt_data) {
+export function fireEvent (rekapi, eventName, _, opt_data) {
   _.each(rekapi._events[eventName], function (handler) {
     handler(rekapi, opt_data);
   });
@@ -29,7 +29,7 @@ function fireEvent (rekapi, eventName, _, opt_data) {
  * @param {Rekapi} rekapi
  * @param {Underscore} _
  */
-function invalidateAnimationLength (rekapi) {
+export function invalidateAnimationLength (rekapi) {
   rekapi._animationLengthValid = false;
 }
 

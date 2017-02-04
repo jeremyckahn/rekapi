@@ -1,6 +1,10 @@
 import _, { noop } from 'lodash';
 import Tweenable from 'shifty';
 import KeyframeProperty from './rekapi.keyframe-property';
+import {
+  fireEvent,
+  invalidateAnimationLength
+} from './rekapi.core';
 
 const DEFAULT_EASING = 'linear';
 
