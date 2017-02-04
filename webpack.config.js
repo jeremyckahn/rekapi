@@ -31,7 +31,11 @@ module.exports = {
         exclude: /(node_modules|bower_components)/,
         loader: 'babel-loader',
         query: {
-          presets: ['es2015']
+          // The commented line below _should_ be all that's necessary, but the
+          // require.resolve below is needed as a workaround for a babel bug:
+          // https://github.com/babel/babel-loader/issues/149#issuecomment-170244381
+          //presets: ['es2015']
+          presets: [require.resolve('babel-preset-es2015')]
         }
       }
     ]
