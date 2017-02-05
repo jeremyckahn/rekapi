@@ -1,5 +1,8 @@
 import _ from 'lodash';
 import Tweenable from 'shifty';
+import {
+  fireEvent
+} from './rekapi.core';
 
 const DEFAULT_EASING = 'linear';
 const interpolate = Tweenable.interpolate;

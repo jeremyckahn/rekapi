@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import Tweenable from 'shifty';
-import Rekapi from '../../src/rekapi.core';
+import Rekapi, {
+  fireEvent
+} from '../../src/rekapi.core';
 
 // PRIVATE UTILITY FUNCTIONS
 //
