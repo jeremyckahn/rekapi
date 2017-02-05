@@ -13,7 +13,4 @@ Rekapi.KeyframeProperty = KeyframeProperty;
 Rekapi.CanvasRenderer = CanvasRenderer;
 Rekapi.DOMRenderer = DOMRenderer;
 
-// FIXME: This should be unnecessary, export Shifty with a proper UMD wrapper
-Rekapi.Tweenable = Tweenable;
-
 module.exports = Rekapi;
