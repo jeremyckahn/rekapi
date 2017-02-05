@@ -19,6 +19,10 @@ module.exports = {
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
+  externals: {
+    shifty: 'Tweenable',
+    lodash: '_'
+  },
   devtool: 'source-map',
   resolveLoader: {
     // http://webpack.github.io/docs/troubleshooting.html#npm-linked-modules-doesn-t-find-their-dependencies
