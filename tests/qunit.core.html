@@ -13,7 +13,6 @@
   <link href="../bower_components/qunit/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script src="../bower_components/qunit/qunit/qunit.js"></script>
   <script src="../bower_components/lodash/dist/lodash.js"></script>
-  <script src="../bower_components/shifty/dist/shifty.js"></script>
   <script src="/assets/rekapi.js"></script>
   <script>
   function setupTestRekapi () {
@@ -27,6 +26,14 @@
   }
 
   (function () {
+
+    var Tweenable = Rekapi.shifty.Tweenable;
+    var setBezierFunction = Rekapi.shifty.setBezierFunction;
+    var unsetBezierFunction = Rekapi.shifty.unsetBezierFunction;
+
+    Tweenable.now = function () {
+      return internalDebugNow();
+    };
 
     module('addActor');
 
@@ -249,8 +256,9 @@
     });
 
     test('Custom easing curves are exported', function () {
-      Tweenable.setBezierFunction('custom', 0, .25, .5, .75);
+      setBezierFunction('custom', 0, .25, .5, .75);
       var testRekapi = setupTestRekapi();
+      console.log(Tweenable.formulas)
 
       var exportedTimeline = testRekapi.exportTimeline();
       deepEqual(
@@ -259,7 +267,7 @@
         'custom curve was exported with bezier points');
 
       // Clean up Tweenable
-      Tweenable.unsetBezierFunction('custom');
+      unsetBezierFunction('custom');
     });
 
 
@@ -287,26 +295,26 @@
     });
 
     test('Exported custom curves re-import correctly', function () {
-      Tweenable.setBezierFunction('custom', 0, .25, .5, .75);
+      setBezierFunction('custom', 0, .25, .5, .75);
       var testRekapi = setupTestRekapi();
 
       var exportedTimeline = testRekapi.exportTimeline();
 
       // Reset for a clean test
-      Tweenable.unsetBezierFunction('custom');
+      unsetBezierFunction('custom');
 
       var importRekapi = new Rekapi();
       importRekapi.importTimeline(exportedTimeline);
 
-      ok(typeof Tweenable.prototype.formula.custom === 'function',
+      ok(typeof Tweenable.formulas.custom === 'function',
         'Rekapi redefined custom formula');
-      equal(Tweenable.prototype.formula.custom.x1, 0, 'Imported x1');
-      equal(Tweenable.prototype.formula.custom.y1, .25, 'Imported y1');
-      equal(Tweenable.prototype.formula.custom.x2, .5, 'Imported x2');
-      equal(Tweenable.prototype.formula.custom.y2, .75, 'Imported y2');
+      equal(Tweenable.formulas.custom.x1, 0, 'Imported x1');
+      equal(Tweenable.formulas.custom.y1, .25, 'Imported y1');
+      equal(Tweenable.formulas.custom.x2, .5, 'Imported x2');
+      equal(Tweenable.formulas.custom.y2, .75, 'Imported y2');
 
       // Clean up Tweenable
-      Tweenable.unsetBezierFunction('custom');
+      unsetBezierFunction('custom');
     });
 
 

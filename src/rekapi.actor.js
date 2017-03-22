@@ -1,5 +1,6 @@
 import _, { noop } from 'lodash';
-import Tweenable from 'shifty';
+import { Tweenable } from 'shifty';
+import { composeEasingObject } from '../node_modules/shifty/src/tweenable';
 import KeyframeProperty from './rekapi.keyframe-property';
 import {
   fireEvent,
@@ -234,6 +235,7 @@ function cleanupAfterKeyframeModification (actor) {
  *   `{{#crossLink "Rekapi/removeActor:method"}}{{/crossLink}}`.
  * @constructor
  */
+// FIXME: Make this a proper ES6 class
 export default function Actor (opt_config) {
 
   opt_config = opt_config || {};
@@ -362,7 +364,7 @@ Actor.prototype.keyframe = function keyframe (
   }
 
   opt_easing = opt_easing || DEFAULT_EASING;
-  var easing = Tweenable.composeEasingObject(state, opt_easing);
+  var easing = composeEasingObject(state, opt_easing);
   var newKeyframeProperty;
 
   // Create and add all of the KeyframeProperties

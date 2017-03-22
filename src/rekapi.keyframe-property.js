@@ -1,11 +1,10 @@
 import _ from 'lodash';
-import Tweenable from 'shifty';
+import { interpolate } from 'shifty';
 import {
   fireEvent
 } from './rekapi.core';
 
 const DEFAULT_EASING = 'linear';
-const interpolate = Tweenable.interpolate;
 
 /**
  * Represents an individual component of an actor's keyframe state.  In most

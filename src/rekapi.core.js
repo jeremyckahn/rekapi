@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import Tweenable, { now } from 'shifty';
+import { Tweenable, setBezierFunction } from 'shifty';
 
 // REKAPI-GLOBALS
 // These are global in development, but get wrapped in a closure at build-time.
@@ -66,7 +66,7 @@ function determineCurrentLoopIteration (rekapi, timeSinceStart) {
  * @return {number}
  */
 function calculateTimeSinceStart (rekapi) {
-  return now() - rekapi._loopTimestamp;
+  return Tweenable.now() - rekapi._loopTimestamp;
 }
 
 /*!
@@ -325,7 +325,6 @@ export default function Rekapi (opt_context) {
 
 // Decorate the Rekapi object with the dependencies so that other modules can
 // access them.
-Rekapi.Tweenable = Tweenable;
 Rekapi._ = _;
 
 /*!
@@ -458,9 +457,9 @@ Rekapi.prototype.play = function (opt_howManyTimes) {
   if (this._playState === playState.PAUSED) {
     // Move the playhead to the correct position in the timeline if resuming
     // from a pause
-    this._loopTimestamp += now() - this._pausedAtTime;
+    this._loopTimestamp += Tweenable.now() - this._pausedAtTime;
   } else {
-    this._loopTimestamp = now();
+    this._loopTimestamp = Tweenable.now();
   }
 
   this._timesToIterate = opt_howManyTimes || -1;
@@ -487,7 +486,7 @@ Rekapi.prototype.play = function (opt_howManyTimes) {
  */
 Rekapi.prototype.playFrom = function (millisecond, opt_howManyTimes) {
   this.play(opt_howManyTimes);
-  this._loopTimestamp = now() - millisecond;
+  this._loopTimestamp = Tweenable.now() - millisecond;
 
   _.invoke(this._actors, '_resetFnKeyframesFromMillisecond', millisecond);
 
@@ -524,7 +523,7 @@ Rekapi.prototype.pause = function () {
 
   this._playState = playState.PAUSED;
   cancelLoop(this);
-  this._pausedAtTime = now();
+  this._pausedAtTime = Tweenable.now();
 
   fireEvent(this, 'playStateChange', _);
   fireEvent(this, 'pause', _);
@@ -546,9 +545,7 @@ Rekapi.prototype.stop = function () {
 
   // Also kill any shifty tweens that are running.
   _.each(this._actors, function (actor) {
-    actor
-      .stop()
-      ._resetFnKeyframesFromMillisecond(0);
+    actor._resetFnKeyframesFromMillisecond(0);
   });
 
   fireEvent(this, 'playStateChange', _);
@@ -791,8 +788,9 @@ Rekapi.prototype.exportTimeline = function () {
     exportData.actors.push(actor.exportTimeline());
   }, this);
 
+
   var curves = {};
-  _.chain(Tweenable.prototype.formula)
+  _.chain(Tweenable.formulas)
     .filter(function (formula) {
       return typeof formula.x1 === 'number';
     })
@@ -821,7 +819,7 @@ Rekapi.prototype.exportTimeline = function () {
  */
 Rekapi.prototype.importTimeline = function (rekapiData) {
   _.each(rekapiData.curves, function (curve, curveName) {
-    Tweenable.setBezierFunction(
+    setBezierFunction(
       curveName
       ,curve.x1
       ,curve.y1
@@ -847,16 +845,16 @@ Rekapi.prototype.getEventNames = function () {
 };
 
 /**
- * A list of formulas attached to `Tweenable.prototype.formula` at startup.
+ * A list of formulas attached to `Tweenable.formulas` at startup.
  * This is needed by {{#crossLink
  * "Rekapi/importTimeline:method"}}{{/crossLink}} and {{#crossLink
  * "Rekapi/exportTimeline:method"}}{{/crossLink}} to handle custom curves
- * created by `Tweenable.setBezierFunction`.
+ * created by `setBezierFunction`.
  * @property nonCustomFormulaNames
  * @static
  * @type {Array.<string>}
  */
-Rekapi.nonCustomFormulaNames = _.keys(Tweenable.prototype.formula);
+Rekapi.nonCustomFormulaNames = _.keys(Tweenable.formulas);
 
 Rekapi.util = {};
 
