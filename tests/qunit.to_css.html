@@ -7,7 +7,6 @@
   <link href="../bower_components/qunit/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script src="../bower_components/qunit/qunit/qunit.js"></script>
   <script src="../bower_components/lodash/dist/lodash.js"></script>
-  <script src="../bower_components/shifty/dist/shifty.js"></script>
   <script src="/assets/rekapi.js"></script>
   <script>
 
@@ -17,17 +16,15 @@
     return actor;
   }
 
-
-  /**
-   * This is used to prevent optimization to make certain functions easier to
-   * test.
-   */
-  Tweenable.prototype.formula.fakeLinear = function (pos) {
-    return pos;
-  };
-
-
   (function () {
+    var Tweenable = Rekapi.shifty.Tweenable;
+    /**
+     * This is used to prevent optimization to make certain functions easier to
+     * test.
+     */
+    Tweenable.formulas.fakeLinear = function (pos) {
+      return pos;
+    };
 
     module('applyVendorBoilerplates');
 
