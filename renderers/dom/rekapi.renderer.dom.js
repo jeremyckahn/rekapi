@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import Tweenable from 'shifty';
+import { Tweenable } from 'shifty';
 import Rekapi, {
   fireEvent
 } from '../../src/rekapi.core';
 
-const now = Rekapi.Tweenable.now;
+const { now } = Tweenable;
 
 const vendorTransforms = [
   'transform'
