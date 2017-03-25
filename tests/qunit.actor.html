@@ -1,19 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href="../bower_components/qunit/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script>
   var mockTime = function () {
-        return +(new Date());
-      };
-  var SHIFTY_DEBUG_NOW = function () {
-        return mockTime();
-      };
+    return +(new Date());
+  };
   var global = window;
   </script>
+  <link href="../bower_components/qunit/qunit/qunit.css" rel="stylesheet" type="text/css" />
   <script src="../bower_components/qunit/qunit/qunit.js"></script>
   <script src="../bower_components/lodash/dist/lodash.js"></script>
-  <script src="../bower_components/shifty/dist/shifty.js"></script>
   <script src="/assets/rekapi.js"></script>
   <script>
   function setupTestRekapi () {
@@ -27,6 +23,12 @@
   }
 
   (function runTests () {
+    var Tweenable = Rekapi.shifty.Tweenable;
+    var interpolate = Rekapi.shifty.interpolate;
+
+    Tweenable.now = function () {
+      return mockTime();
+    };
 
     module('_updateState');
 
@@ -155,7 +157,7 @@
         'x': 200
       }, 'easeOutCirc');
 
-      tweenableComparator = shifty.interpolate({
+      tweenableComparator = interpolate({
         'x': 0
       }, {
         'x': 100
@@ -166,7 +168,7 @@
         'Value "x" was properly interpolated at position 0.5 with "easeInSine"');
 
 
-      tweenableComparator = shifty.interpolate({
+      tweenableComparator = interpolate({
         'x': 100
       }, {
         'x': 200
