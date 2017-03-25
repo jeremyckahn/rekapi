@@ -7,7 +7,6 @@
   </script>
   <script src="../bower_components/qunit/qunit/qunit.js"></script>
   <script src="../bower_components/lodash/dist/lodash.js"></script>
-  <script src="../bower_components/shifty/dist/shifty.js"></script>
   <script src="/assets/rekapi.js"></script>
   <script>
   function setupTestRekapi () {
@@ -23,6 +22,8 @@
   }
 
   (function () {
+    var Tweenable = Rekapi.shifty.Tweenable;
+    var interpolate = Rekapi.shifty.interpolate;
 
     module('DOM extension');
 
@@ -145,15 +146,15 @@
         var transformChunks = testActor.get().transform.match(/(\d|\.)+/g);
         equal(
         transformChunks[1],
-          Tweenable.interpolate({x:0}, {x:1}, 0.5, 'linear').x,
+          interpolate({x:0}, {x:1}, 0.5, 'linear').x,
           'First translate3d value was eased with linear');
         equal(
           transformChunks[2],
-          Tweenable.interpolate({x:0}, {x:1}, 0.5, 'easeInQuad').x,
+          interpolate({x:0}, {x:1}, 0.5, 'easeInQuad').x,
           'Second translate3d value was eased with easeInQuad');
         equal(
           transformChunks[3],
-          Tweenable.interpolate({x:0}, {x:1}, 0.5, 'easeOutQuad').x,
+          interpolate({x:0}, {x:1}, 0.5, 'easeOutQuad').x,
           'Third translate3d value was eased with easeOutQuad');
     });
 
@@ -173,7 +174,7 @@
         var transformMatch = testActor.get().transform.match(/(\d|\.)+/g);
         equal(
         transformMatch,
-          Tweenable.interpolate({x:3}, {x:6}, 0.5, 'linear').x,
+          interpolate({x:3}, {x:6}, 0.5, 'linear').x,
           'Calculated midpoint of 3deg and 6deg.');
     });
 
