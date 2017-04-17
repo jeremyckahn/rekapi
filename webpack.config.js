@@ -62,8 +62,5 @@ module.exports = {
     new Webpack.DefinePlugin({
       REKAPI_DEBUG: true
     })
-  ],
-  devServer: {
-    port: 9010
-  }
+  ]
 };
