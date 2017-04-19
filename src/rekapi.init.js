@@ -36,10 +36,6 @@ if (typeof define === 'function' && define.amd) {
       underscore: underscoreSupportsAMD ? Underscore : _};
     var Rekapi = rekapi({}, deps);
 
-    if (REKAPI_DEBUG) {
-      Rekapi.underscore_version = deps.underscore.VERSION;
-    }
-
     if (!underscoreAlreadyInUse && underscoreSupportsAMD) {
       // Prevent Underscore from polluting the global scope.
       // This global can be safely removed since Rekapi keeps its own reference

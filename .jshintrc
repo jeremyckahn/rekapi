@@ -2,7 +2,6 @@
 
   "globals": {
     "__note": "These variables aren't actually exposed as globals.  They are here to keep JSHint from showing spurious warnings - they are all either defined in rekapi.core.js or one of the dependencies.",
-    "REKAPI_DEBUG": true,
     "global": true,
     "CanvasRenderingContext2D": true,
     "fireEvent": true,

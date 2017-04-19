@@ -4,11 +4,6 @@ import { Tweenable, setBezierFunction } from 'shifty';
 // REKAPI-GLOBALS
 // These are global in development, but get wrapped in a closure at build-time.
 
-// A hack for UglifyJS defines.  Gets removes in the build process.
-if (typeof REKAPI_DEBUG === 'undefined') {
-  REKAPI_DEBUG = true;
-}
-
 var rekapiModules = [];
 
 /*!
@@ -858,16 +853,15 @@ Rekapi.nonCustomFormulaNames = _.keys(Tweenable.formulas);
 
 Rekapi.util = {};
 
-// Some hooks for testing.  Gets compiled away at build time.
-if (REKAPI_DEBUG) {
-  Rekapi._private = {
-    'calculateLoopPosition': calculateLoopPosition
-    ,'updateToCurrentMillisecond': updateToCurrentMillisecond
-    ,'updateToMillisecond': updateToMillisecond
-    ,'tick': tick
-    ,'determineCurrentLoopIteration': determineCurrentLoopIteration
-    ,'calculateTimeSinceStart': calculateTimeSinceStart
-    ,'isAnimationComplete': isAnimationComplete
-    ,'updatePlayState': updatePlayState
-  };
-}
+// Expose helper functions for unit testing.
+// FIXME: Don't include this in optimized builds.
+Rekapi._private = {
+  'calculateLoopPosition': calculateLoopPosition
+  ,'updateToCurrentMillisecond': updateToCurrentMillisecond
+  ,'updateToMillisecond': updateToMillisecond
+  ,'tick': tick
+  ,'determineCurrentLoopIteration': determineCurrentLoopIteration
+  ,'calculateTimeSinceStart': calculateTimeSinceStart
+  ,'isAnimationComplete': isAnimationComplete
+  ,'updatePlayState': updatePlayState
+};

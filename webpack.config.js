@@ -58,9 +58,4 @@ module.exports = {
     }),
     new Webpack.BannerPlugin(version)
   ]
-    new Webpack.BannerPlugin(version),
-    new Webpack.DefinePlugin({
-      REKAPI_DEBUG: true
-    })
-  ]
 };
