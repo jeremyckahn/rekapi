@@ -52,4 +52,15 @@ describe('Rekapi', () => {
       assert.equal(rekapi.getActor(actor.id), actor);
     });
   });
+
+  describe('#removeActor', () => {
+    it('removes an actor', () => {
+      rekapi.removeActor(actor);
+
+      assert.equal(rekapi._actors[actor.id], undefined);
+
+      // FIXME: This needs to be moved to canvas renderer tests
+      //assert.equal(rekapi._renderOrder.indexOf(actor.id), -1);
+    });
+  });
 });
