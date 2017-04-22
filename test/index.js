@@ -63,4 +63,17 @@ describe('Rekapi', () => {
       //assert.equal(rekapi._renderOrder.indexOf(actor.id), -1);
     });
   });
+
+  describe('removeAllActors', () => {
+    it('removes all actors', () => {
+      setupTestActor(rekapi);
+      const removedActors = rekapi.removeAllActors();
+
+      assert.equal(Object.keys(rekapi._actors).length, 0);
+      assert.equal(
+        removedActors.filter(actor => actor instanceof Rekapi.Actor).length,
+        2
+      );
+    });
+  });
 });
