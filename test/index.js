@@ -1,6 +1,7 @@
 /* global describe:true, it:true, before:true, beforeEach:true, afterEach:true */
 import assert from 'assert';
 import Rekapi from '../src/main';
+import { contains } from 'lodash';
 
 describe('Rekapi', () => {
   const setupTestRekapi = () => new Rekapi();
@@ -74,6 +75,17 @@ describe('Rekapi', () => {
         removedActors.filter(actor => actor instanceof Rekapi.Actor).length,
         2
       );
+    });
+  });
+
+  describe('#getActorIds', () => {
+    it('gets actor ids', () => {
+      const actor2 = setupTestActor(rekapi);
+      const ids = rekapi.getActorIds();
+
+      assert.equal(ids.length, 2);
+      assert(contains(ids, actor.id));
+      assert(contains(ids, actor2.id));
     });
   });
 });
