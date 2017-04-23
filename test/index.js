@@ -10,7 +10,7 @@ describe('Rekapi', () => {
     rekapi.addActor(new Rekapi.Actor(actorArgs)
   );
 
-  let rekapi, actor;
+  let rekapi, actor, actor2;
 
   beforeEach(() => {
     rekapi = setupTestRekapi();
@@ -80,12 +80,23 @@ describe('Rekapi', () => {
 
   describe('#getActorIds', () => {
     it('gets actor ids', () => {
-      const actor2 = setupTestActor(rekapi);
+      actor2 = setupTestActor(rekapi);
       const ids = rekapi.getActorIds();
 
       assert.equal(ids.length, 2);
       assert(contains(ids, actor.id));
       assert(contains(ids, actor2.id));
     });
+  });
+
+  describe('#getAllActors', () => {
+    it('gets all actors', () => {
+      actor2 = setupTestActor(rekapi);
+      const actors = rekapi.getAllActors();
+
+      assert.equal(actors[actor.id], actor);
+      assert.equal(actors[actor2.id], actor2);
+    });
+
   });
 });
