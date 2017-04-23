@@ -97,6 +97,11 @@ describe('Rekapi', () => {
       assert.equal(actors[actor.id], actor);
       assert.equal(actors[actor2.id], actor2);
     });
+  });
 
+  describe('#getActor', () => {
+    it('gets an actor', () => {
+      assert.equal(rekapi.getActor(actor.id), actor);
+    });
   });
 });
