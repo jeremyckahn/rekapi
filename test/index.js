@@ -104,4 +104,32 @@ describe('Rekapi', () => {
       assert.equal(rekapi.getActor(actor.id), actor);
     });
   });
+
+  describe('#getAnimationLength', () => {
+    describe('single actor', () => {
+      it('calculates correct animation length', () => {
+        actor
+          .keyframe(0, { x: 1 })
+          .keyframe(1000, { x: 2 })
+          .keyframe(2000, { x: 3 });
+
+        assert.equal(rekapi.getAnimationLength(), 2000);
+      });
+    });
+
+    describe('multiple actors', () => {
+      it('calculates correct animation length', () => {
+        actor
+          .keyframe(0, { x: 1 })
+          .keyframe(1000, { x: 2 })
+          .keyframe(2000, { x: 3 });
+
+        setupTestActor(rekapi)
+          .keyframe(0, { x: 1 })
+          .keyframe(5000, { x: 2 });
+
+        assert.equal(rekapi.getAnimationLength(), 5000);
+      });
+    });
+  });
 });
