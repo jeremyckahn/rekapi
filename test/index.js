@@ -3,6 +3,8 @@ import assert from 'assert';
 import Rekapi from '../src/main';
 import { contains } from 'lodash';
 
+import { setBezierFunction, unsetBezierFunction } from 'shifty';
+
 describe('Rekapi', () => {
   const setupTestRekapi = () => new Rekapi();
 
@@ -130,6 +132,46 @@ describe('Rekapi', () => {
 
         assert.equal(rekapi.getAnimationLength(), 5000);
       });
+    });
+  });
+
+  describe('exportTimeline', () => {
+    let exportedTimeline;
+
+    it('exports key data points', () => {
+      actor.keyframe(0, {
+        x: 1
+      }).keyframe(1000, {
+        x: 2
+      });
+
+      exportedTimeline = rekapi.exportTimeline();
+
+      assert.equal(exportedTimeline.duration, 1000);
+      assert.deepEqual(
+        exportedTimeline.actors[0],
+        actor.exportTimeline()
+      );
+    });
+
+    it('exports custom easing curves', () => {
+      setBezierFunction('custom', 0, 0.25, 0.5, 0.75);
+      rekapi = setupTestRekapi();
+
+      exportedTimeline = rekapi.exportTimeline();
+      assert.deepEqual(
+        exportedTimeline.curves, {
+          custom: {
+            displayName: 'custom',
+            x1: 0,
+            y1: 0.25,
+            x2: 0.5,
+            y2: 0.75
+          }
+        });
+
+      // Clean up Tweenable
+      unsetBezierFunction('custom');
     });
   });
 });
