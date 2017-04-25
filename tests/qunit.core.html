@@ -35,50 +35,50 @@
     module('addActor');
 
     test('Actors are added successfully', function () {
-      var testRekapi
-          ,testActor1;
+      var rekapi
+          ,actor;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      equal(testRekapi._actors[testActor1.id], testActor1,
+      equal(rekapi._actors[actor.id], actor,
           'Actor is in the internal _actors Object');
     });
 
 
     test('Actors can only be added once', function () {
-      var testRekapi
-          ,testActor1;
+      var rekapi
+          ,actor;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testRekapi.addActor(testActor1);
+      rekapi.addActor(actor);
 
-      equal(testRekapi.getActorCount(), 1,
+      equal(rekapi.getActorCount(), 1,
           'The actor was not added twice');
     });
 
 
     test('Actors can be retrieved from the Rekapi', function () {
-      var testRekapi
-          ,testActor1;
+      var rekapi
+          ,actor;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      equal(testRekapi.getActor(testActor1.id), testActor1,
+      equal(rekapi.getActor(actor.id), actor,
           'Can reference the Actor inside the Rekapi via the actor ID');
     });
 
     test('Supplying an object instantiates an actor', function () {
-      var testRekapi = setupTestRekapi();
+      var rekapi = setupTestRekapi();
       var actorContext = {};
-      var testActor = testRekapi.addActor({ context: actorContext });
+      var actor = rekapi.addActor({ context: actorContext });
 
-      ok(testActor instanceof Rekapi.Actor,
+      ok(actor instanceof Rekapi.Actor,
           'addActor made an instance of Rekapi.Actor');
-      ok(actorContext === testActor.context,
+      ok(actorContext === actor.context,
           'The instantiated actor has the correct context');
     });
 
@@ -87,17 +87,17 @@
 
 
     test('Actors are removed successfully', function () {
-      var testRekapi
-          ,testActor1;
+      var rekapi
+          ,actor;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
-      testRekapi.removeActor(testActor1)
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
+      rekapi.removeActor(actor)
 
-      equal(testRekapi._actors[testActor1.id], undefined,
+      equal(rekapi._actors[actor.id], undefined,
           'Actor is no longer in the internal _actors Object');
 
-      equal(_.indexOf(testRekapi._renderOrder, testActor1.id), -1,
+      equal(_.indexOf(rekapi._renderOrder, actor.id), -1,
           'Actor is not in the internal _renderOrder array');
     });
 
@@ -106,16 +106,16 @@
 
 
     test('All actors are removed successfully', function () {
-      var testRekapi
-          ,testActor1
-          ,testActor2;
+      var rekapi
+          ,actor
+          ,actor2;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
-      testActor2 = setupTestActor(testRekapi);
-      var removedActors = testRekapi.removeAllActors();
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
+      actor2 = setupTestActor(rekapi);
+      var removedActors = rekapi.removeAllActors();
 
-      equal(_.size(testRekapi._actors), 0,
+      equal(_.size(rekapi._actors), 0,
           'Actors were removed from the internal _actors Object');
 
       var filteredRemovedActors = _.filter(removedActors, function (actor) {
@@ -131,21 +131,21 @@
 
 
     test('Can get actor IDs', function () {
-      var testRekapi
-          ,testActor1
-          ,testActor2;
+      var rekapi
+          ,actor
+          ,actor2;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
-      testActor2 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
+      actor2 = setupTestActor(rekapi);
 
-      var ids = testRekapi.getActorIds();
+      var ids = rekapi.getActorIds();
 
       equal(ids.length, 2,
           'Number of IDs equal the number of Actors that were added');
-      equal(_.contains(ids, testActor1.id), true,
+      equal(_.contains(ids, actor.id), true,
           'First Actor\'s ID is present in the ID list');
-      equal(_.contains(ids, testActor2.id), true,
+      equal(_.contains(ids, actor2.id), true,
           'Second Actor\'s ID is present in the ID list');
     });
 
@@ -154,19 +154,19 @@
 
 
     test('Can get actors', function () {
-      var testRekapi
-          ,testActor1
-          ,testActor2;
+      var rekapi
+          ,actor
+          ,actor2;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
-      testActor2 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
+      actor2 = setupTestActor(rekapi);
 
-      var actors = testRekapi.getAllActors();
+      var actors = rekapi.getAllActors();
 
-      equal(actors[testActor1.id], testActor1,
+      equal(actors[actor.id], actor,
           'First Actor was extracted');
-      equal(actors[testActor2.id], testActor2,
+      equal(actors[actor2.id], actor2,
           'Second Actor was extracted');
     });
 
@@ -175,13 +175,13 @@
 
 
     test('Actors can be retrieved from the Rekapi', function () {
-      var testRekapi
-          ,testActor1;
+      var rekapi
+          ,actor;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      equal(testRekapi.getActor(testActor1.id), testActor1,
+      equal(rekapi.getActor(actor.id), actor,
           'Can reference the Actor inside the Rekapi via the actor ID.');
     });
 
@@ -190,41 +190,41 @@
 
 
     test('Calculate animation length with one Actor', function () {
-      var testRekapi
-          ,testActor1;
+      var rekapi
+          ,actor;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor1
+      actor
         .keyframe(0, { x: 1 })
         .keyframe(1000, { x: 2 })
         .keyframe(2000, { x: 3 });
 
-      equal(testRekapi.getAnimationLength(), 2000,
+      equal(rekapi.getAnimationLength(), 2000,
           'Length of the animation was calculated');
     });
 
 
     test('Calculate animation length with multiple Actors', function () {
-      var testRekapi
-          ,testActor1
-          ,testActor2;
+      var rekapi
+          ,actor
+          ,actor2;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
-      testActor2 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
+      actor2 = setupTestActor(rekapi);
 
-      testActor1
+      actor
         .keyframe(0, { x: 1})
         .keyframe(1000, { x: 2})
         .keyframe(2000, { x: 3});
 
-      testActor2
+      actor2
         .keyframe(0, { x: 1 })
         .keyframe(5000, { x: 2 });
 
-      equal(testRekapi.getAnimationLength(), 5000,
+      equal(rekapi.getAnimationLength(), 5000,
           'Length of the animation was calculated');
     });
 
@@ -233,31 +233,31 @@
 
 
     test('Exported Rekapi data has key data points', function () {
-      var testRekapi
-          ,testActor;
+      var rekapi
+          ,actor;
 
-      testRekapi = setupTestRekapi();
-      testActor = setupTestActor(testRekapi);
-      testActor.keyframe(0, {
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
+      actor.keyframe(0, {
         'x': 1
       }).keyframe(1000, {
         'x': 2
       });
 
-      var exportedTimeline = testRekapi.exportTimeline();
+      var exportedTimeline = rekapi.exportTimeline();
       equal(exportedTimeline.duration, 1000,
           'Duration was exported');
       deepEqual(exportedTimeline.actors[0],
-          testActor.exportTimeline(),
+          actor.exportTimeline(),
           'Actor was exported');
     });
 
     test('Custom easing curves are exported', function () {
       setBezierFunction('custom', 0, .25, .5, .75);
-      var testRekapi = setupTestRekapi();
+      var rekapi = setupTestRekapi();
       console.log(Tweenable.formulas)
 
-      var exportedTimeline = testRekapi.exportTimeline();
+      var exportedTimeline = rekapi.exportTimeline();
       deepEqual(
         exportedTimeline.curves,
         { custom: { displayName: 'custom', x1: 0, y1: .25, x2: .5, y2: .75 }},
@@ -293,9 +293,9 @@
 
     test('Exported custom curves re-import correctly', function () {
       setBezierFunction('custom', 0, .25, .5, .75);
-      var testRekapi = setupTestRekapi();
+      var rekapi = setupTestRekapi();
 
-      var exportedTimeline = testRekapi.exportTimeline();
+      var exportedTimeline = rekapi.exportTimeline();
 
       // Reset for a clean test
       unsetBezierFunction('custom');
@@ -320,27 +320,27 @@
 
     test('Event is fired when an actor is added', function () {
 
-      var testRekapi = setupTestRekapi();
-      var testActor = new Rekapi.Actor();
+      var rekapi = setupTestRekapi();
+      var actor = new Rekapi.Actor();
 
-      testRekapi.on('addActor', function(rekapi, actor) {
+      rekapi.on('addActor', function(rekapi, actor) {
         ok(actor !== undefined);
-        equal(actor, testActor, 'Event data is equal to added actor');
+        equal(actor, actor, 'Event data is equal to added actor');
       });
-      testRekapi.addActor(testActor);
+      rekapi.addActor(actor);
     });
 
 
     test('Event is fired when an actor is removed', function () {
 
-      var testRekapi = setupTestRekapi();
-      var testActor = setupTestActor(testRekapi);
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
 
-      testRekapi.on('removeActor', function(rekapi, actor) {
+      rekapi.on('removeActor', function(rekapi, actor) {
         ok(actor !== undefined);
-        equal(actor, testActor, 'Event data is equal to removed actor');
+        equal(actor, actor, 'Event data is equal to removed actor');
       });
-      testRekapi.removeActor(testActor);
+      rekapi.removeActor(actor);
     });
 
 
@@ -349,14 +349,14 @@
     test('Event handlers are  are not called after being unbound',
         function () {
 
-      var testRekapi = setupTestRekapi();
-      var testActor = setupTestActor(testRekapi);
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
       var handlerWasCalled = false;
 
-      testRekapi.on('addActor', function(rekapi, actor) {
+      rekapi.on('addActor', function(rekapi, actor) {
         handlerWasCalled = true;
       });
-      testRekapi.addActor(testActor);
+      rekapi.addActor(actor);
 
       ok(!handlerWasCalled, 'Handler was not called');
     });
@@ -367,16 +367,16 @@
 
     test('A bound event can be manually triggered', function () {
 
-      var testRekapi = setupTestRekapi();
+      var rekapi = setupTestRekapi();
       var eventWasTriggered = false;
       var providedData;
 
-      testRekapi.on('timelineModified', function (rekapi, data) {
+      rekapi.on('timelineModified', function (rekapi, data) {
         eventWasTriggered = true;
         providedData = data;
       });
 
-      testRekapi.trigger('timelineModified', 5);
+      rekapi.trigger('timelineModified', 5);
       ok(eventWasTriggered, 'timelineModified was manually triggered');
       equal(providedData, 5, 'Data was provided to the event');
     });
@@ -387,17 +387,17 @@
 
     test('Last calculated state is recorded', function () {
 
-      var testRekapi = setupTestRekapi();
-      var testActor = setupTestActor(testRekapi);
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
 
-      testActor.keyframe(0, {
+      actor.keyframe(0, {
         'x': 1
       }).keyframe(1000, {
         'x': 2
       });
 
-      testRekapi.update(500);
-      equal(testRekapi.getLastPositionUpdated(), .5, 'Midpoint was recorded');
+      rekapi.update(500);
+      equal(rekapi.getLastPositionUpdated(), .5, 'Midpoint was recorded');
     });
 
 
@@ -406,17 +406,17 @@
 
     test('Last calculated state is recorded in milliseconds', function () {
 
-      var testRekapi = setupTestRekapi();
-      var testActor = setupTestActor(testRekapi);
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
 
-      testActor.keyframe(0, {
+      actor.keyframe(0, {
         'x': 1
       }).keyframe(1000, {
         'x': 2
       });
 
-      testRekapi.update(500);
-      equal(testRekapi.getLastMillisecondUpdated(), 500, 'Midpoint was recorded');
+      rekapi.update(500);
+      equal(rekapi.getLastMillisecondUpdated(), 500, 'Midpoint was recorded');
     });
 
 
@@ -437,39 +437,39 @@
 
     test('update causes the actor states to be recalculated', function () {
 
-      var testRekapi = setupTestRekapi();
-      var testActor = setupTestActor(testRekapi);
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
 
-      testActor
+      actor
         .keyframe(0, { x: 0 })
         .keyframe(1000, { x: 10 });
 
-      testRekapi.update(500);
+      rekapi.update(500);
 
-      equal(testActor.get().x, 5, 'Midpoint of the actor was computed');
+      equal(actor.get().x, 5, 'Midpoint of the actor was computed');
     });
 
 
     test('Calling update with no parameters causes the animation to update to the last rendered millisecond',
         function () {
 
-      var testRekapi = setupTestRekapi();
-      var testActor = setupTestActor(testRekapi);
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
 
-      testActor
+      actor
         .keyframe(0, { x: 0 })
         .keyframe(1000, { x: 10 });
 
-      testRekapi.update(250);
-      equal(testActor.get().x, 2.5,
+      rekapi.update(250);
+      equal(actor.get().x, 2.5,
           'The explicitly defined millisecond was updated');
 
-      // Simulate the state of testRekapi if it was stopped at millisecond 500
-      testRekapi._lastUpdatedMillisecond = 500;
+      // Simulate the state of rekapi if it was stopped at millisecond 500
+      rekapi._lastUpdatedMillisecond = 500;
 
-      testRekapi.update();
+      rekapi.update();
 
-      equal(testActor.get().x, 5,
+      equal(actor.get().x, 5,
           'The last milliscond updated was recomputed');
     });
 
@@ -483,17 +483,17 @@
         return new Date();
       };
 
-      var testRekapi = setupTestRekapi();
-      testRekapi.play();
-      equal(testRekapi.isPlaying(), true,
+      var rekapi = setupTestRekapi();
+      rekapi.play();
+      equal(rekapi.isPlaying(), true,
           '.play() causes .isPlaying() to be true');
 
-      testRekapi.pause();
-      equal(testRekapi.isPlaying(), false,
+      rekapi.pause();
+      equal(rekapi.isPlaying(), false,
           '.pause() causes .isPlaying() to be false');
 
-      testRekapi.stop();
-      equal(testRekapi.isPlaying(), false,
+      rekapi.stop();
+      equal(rekapi.isPlaying(), false,
           '.stop() causes .isPlaying() to be false');
     });
 
@@ -502,14 +502,14 @@
 
 
     test('Resuming a paused animation starts where it left off', function () {
-      var testRekapi
-          ,testActor
+      var rekapi
+          ,actor
           ,calculatedMillisecond;
 
-      testRekapi = setupTestRekapi();
-      testActor = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor
+      actor
         .keyframe(0, {})
         .keyframe(1000, {})
         .keyframe(2000, {});
@@ -519,21 +519,21 @@
         return 0;
       };
 
-      testRekapi.play();
+      rekapi.play();
 
       mockTime = function () {
         return 500;
       };
 
-      testRekapi.pause();
+      rekapi.pause();
 
       mockTime = function () {
         return 1500;
       };
 
-      testRekapi.play();
+      rekapi.play();
 
-      equal(testRekapi._loopTimestamp, 1000,
+      equal(rekapi._loopTimestamp, 1000,
           '.pause() modifies the internal timestamp of the animation');
     });
 
@@ -547,17 +547,17 @@
         return new Date();
       };
 
-      var testRekapi = setupTestRekapi();
-      testRekapi.play();
-      equal(testRekapi.isPaused(), false,
+      var rekapi = setupTestRekapi();
+      rekapi.play();
+      equal(rekapi.isPaused(), false,
           '.play() causes .isPaused() to be false');
 
-      testRekapi.pause();
-      equal(testRekapi.isPaused(), true,
+      rekapi.pause();
+      equal(rekapi.isPaused(), true,
           '.pause() causes .isPaused() to be true');
 
-      testRekapi.stop();
-      equal(testRekapi.isPaused(), false,
+      rekapi.stop();
+      equal(rekapi.isPaused(), false,
           '.stop() causes .isPaused() to be false');
     });
 
@@ -567,14 +567,14 @@
 
     test('Re-starting a stopped animation starts where from the beginning',
       function () {
-      var testRekapi
-          ,testActor
+      var rekapi
+          ,actor
           ,calculatedMillisecond;
 
-      testRekapi = setupTestRekapi();
-      testActor = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor
+      actor
         .keyframe(0, {})
         .keyframe(1000, {})
         .keyframe(2000, {});
@@ -584,21 +584,21 @@
         return 0;
       };
 
-      testRekapi.play();
+      rekapi.play();
 
       mockTime = function () {
         return 500;
       };
 
-      testRekapi.stop();
+      rekapi.stop();
 
       mockTime = function () {
         return 1500;
       };
 
-      testRekapi.play();
+      rekapi.play();
 
-      equal(testRekapi._loopTimestamp, 1500,
+      equal(rekapi._loopTimestamp, 1500,
           '.stop() resets the timestamp of the animation');
     });
 
@@ -644,17 +644,17 @@
         return new Date();
       };
 
-      var testRekapi = setupTestRekapi();
-      testRekapi.play();
-      equal(testRekapi.isStopped(), false,
+      var rekapi = setupTestRekapi();
+      rekapi.play();
+      equal(rekapi.isStopped(), false,
           '.play() causes .isStopped() to be false');
 
-      testRekapi.pause();
-      equal(testRekapi.isStopped(), false,
+      rekapi.pause();
+      equal(rekapi.isStopped(), false,
           '.pause() causes .isStopped() to be false');
 
-      testRekapi.stop();
-      equal(testRekapi.isStopped(), true,
+      rekapi.stop();
+      equal(rekapi.isStopped(), true,
           '.stop() causes .isStopped() to be true');
     });
 
@@ -664,14 +664,14 @@
 
     test('Can start an animation from an arbitrary point on the timeline',
       function () {
-      var testRekapi
-          ,testActor
+      var rekapi
+          ,actor
           ,calculatedMillisecond;
 
-      testRekapi = setupTestRekapi();
-      testActor = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor
+      actor
         .keyframe(0, {})
         .keyframe(1000, {});
 
@@ -679,9 +679,9 @@
         return 3000;
       };
 
-      testRekapi.playFrom(500);
+      rekapi.playFrom(500);
 
-      equal(testRekapi._loopTimestamp, 2500,
+      equal(rekapi._loopTimestamp, 2500,
           '.playFrom resets the timestamp');
     });
 
@@ -721,14 +721,14 @@
 
     test('Can calculate any point on the timeline and playFromCurrent()',
       function () {
-      var testRekapi
-          ,testActor
+      var rekapi
+          ,actor
           ,calculatedMillisecond;
 
-      testRekapi = setupTestRekapi();
-      testActor = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor
+      actor
         .keyframe(0, {})
         .keyframe(1000, {});
 
@@ -736,10 +736,10 @@
         return 3000;
       };
 
-      testRekapi.update(500);
-      testRekapi.playFromCurrent();
+      rekapi.update(500);
+      rekapi.playFromCurrent();
 
-      equal(testRekapi._loopTimestamp, 2500,
+      equal(rekapi._loopTimestamp, 2500,
           '.playFromCurrent resets the timestamp from last updated position');
     });
 
@@ -748,8 +748,8 @@
 
 
     test('Returns a list of event names', function () {
-      var testRekapi = setupTestRekapi();
-      deepEqual(testRekapi.getEventNames(), _.keys(testRekapi._events),
+      var rekapi = setupTestRekapi();
+      deepEqual(rekapi.getEventNames(), _.keys(rekapi._events),
         'An accurate list of event string names is returned.');
     });
 
@@ -760,14 +760,14 @@
     test('Actor.tween correctly calculates position based on time in a finite loop',
         function () {
 
-      var testRekapi = setupTestRekapi();
-      var testActor = setupTestActor(testRekapi);
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
 
       mockTime = function () {
         return 0;
       };
 
-      testActor
+      actor
         .keyframe(0, {
           'x': 0
         })
@@ -779,30 +779,30 @@
         return 0;
       };
 
-      testRekapi.play(2);
+      rekapi.play(2);
 
       mockTime = function () {
         return 500;
       };
 
-      Rekapi._private.updateToCurrentMillisecond(testRekapi);
-      equal(testActor.get().x, 50,
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      equal(actor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
 
       mockTime = function () {
         return 1500;
       };
 
-      Rekapi._private.updateToCurrentMillisecond(testRekapi);
-      equal(testActor.get().x, 50,
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      equal(actor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
 
       mockTime = function () {
         return 2500;
       };
 
-      Rekapi._private.updateToCurrentMillisecond(testRekapi);
-      equal(testActor.get().x, 100,
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      equal(actor.get().x, 100,
           'Loop sequence has completed, actor is locked at final position');
     });
 
@@ -810,18 +810,18 @@
     test('Actor.tween correctly calculates position based on time in an infinite loop',
         function () {
 
-      var testRekapi
-          ,testActor
+      var rekapi
+          ,actor
           ,calculatedMillisecond;
 
-      testRekapi = setupTestRekapi();
-      testActor = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       mockTime = function () {
         return 0;
       };
 
-      testActor
+      actor
         .keyframe(0, {
           'x': 0
         })
@@ -833,30 +833,30 @@
         return 0;
       };
 
-      testRekapi.play();
+      rekapi.play();
 
       mockTime = function () {
         return 500;
       };
 
-      Rekapi._private.updateToCurrentMillisecond(testRekapi);
-      equal(testActor.get().x, 50,
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      equal(actor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
 
       mockTime = function () {
         return 1500;
       };
 
-      Rekapi._private.updateToCurrentMillisecond(testRekapi);
-      equal(testActor.get().x, 50,
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      equal(actor.get().x, 50,
           'Actor property has the proper value for halfway between a loop iteration');
 
       mockTime = function () {
         return 10000000500;
       };
 
-      Rekapi._private.updateToCurrentMillisecond(testRekapi);
-      equal(testActor.get().x, 50,
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      equal(actor.get().x, 50,
           'Loop sequence is still running at some distant point in the future');
     });
 
@@ -865,19 +865,19 @@
 
 
     test('Calculate accurate position in the tween', function () {
-      var testRekapi
-          ,testActor1
+      var rekapi
+          ,actor
           ,calculatedMillisecond;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor1
+      actor
         .keyframe(0, { x: 1 })
         .keyframe(2000, { x: 2 });
 
       calculatedMillisecond =  Rekapi._private
-        .calculateLoopPosition(testRekapi, 1000, 0);
+        .calculateLoopPosition(rekapi, 1000, 0);
 
       equal(calculatedMillisecond, 1000,
           'Calculated a midpoint of the animation');
@@ -885,19 +885,19 @@
 
 
     test('Calculate accurate overflow position in the tween', function () {
-      var testRekapi
-          ,testActor1
+      var rekapi
+          ,actor
           ,calculatedMillisecond;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor1
+      actor
         .keyframe(0, { x: 1 })
         .keyframe(2000, { x: 2 });
 
       calculatedMillisecond =
-          Rekapi._private.calculateLoopPosition(testRekapi, 2500, 1);
+          Rekapi._private.calculateLoopPosition(rekapi, 2500, 1);
 
       equal(calculatedMillisecond, 500,
           'Calculated an overflow position of the animation');
@@ -908,54 +908,54 @@
 
 
     test('Calculate a given iteration of a loop', function () {
-      var testRekapi
-          ,testActor1
+      var rekapi
+          ,actor
           ,calculatedIteration;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor1
+      actor
         .keyframe(0, { x: 1 })
         .keyframe(2000, { x: 2 });
 
       calculatedIteration =
-          Rekapi._private.determineCurrentLoopIteration(testRekapi, 0);
+          Rekapi._private.determineCurrentLoopIteration(rekapi, 0);
 
       equal(calculatedIteration, 0,
           'Calculated the beginning of the first iteration');
 
 
       calculatedIteration =
-          Rekapi._private.determineCurrentLoopIteration(testRekapi, 1000);
+          Rekapi._private.determineCurrentLoopIteration(rekapi, 1000);
 
       equal(calculatedIteration, 0,
           'Calculated the middle of the first iteration');
 
 
       calculatedIteration =
-          Rekapi._private.determineCurrentLoopIteration(testRekapi, 1999);
+          Rekapi._private.determineCurrentLoopIteration(rekapi, 1999);
 
       equal(calculatedIteration, 0,
           'Calculated the end of the first iteration');
 
 
       calculatedIteration =
-          Rekapi._private.determineCurrentLoopIteration(testRekapi, 4000);
+          Rekapi._private.determineCurrentLoopIteration(rekapi, 4000);
 
       equal(calculatedIteration, 2,
           'Calculated the beginning of an iteration greater than 1');
 
 
       calculatedIteration =
-          Rekapi._private.determineCurrentLoopIteration(testRekapi, 5000);
+          Rekapi._private.determineCurrentLoopIteration(rekapi, 5000);
 
       equal(calculatedIteration, 2,
           'Calculated the middle of an iteration greater than 1');
 
 
       calculatedIteration =
-          Rekapi._private.determineCurrentLoopIteration(testRekapi, 5999);
+          Rekapi._private.determineCurrentLoopIteration(rekapi, 5999);
 
       equal(calculatedIteration, 2,
           'Calculated the end of an iteration greater than 1');
@@ -967,14 +967,14 @@
 
     test('Calculate the delta of the current time and when the animation began'
       ,function () {
-      var testRekapi
-          ,testActor1
+      var rekapi
+          ,actor
           ,calculatedTime;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor1
+      actor
         .keyframe(0, {})
         .keyframe(2000, {});
 
@@ -982,13 +982,13 @@
         return 0;
       };
 
-      testRekapi.play();
+      rekapi.play();
 
       mockTime = function () {
         return 500;
       };
 
-      calculatedTime = Rekapi._private.calculateTimeSinceStart(testRekapi);
+      calculatedTime = Rekapi._private.calculateTimeSinceStart(rekapi);
       equal(calculatedTime, 500,
           'The expected amount of time since beginning the animation was calculated');
 
@@ -1000,28 +1000,28 @@
 
     test('Determine if the animation has completed in a finite loop'
       ,function () {
-      var testRekapi
-          ,testActor1
+      var rekapi
+          ,actor
           ,animationIsComplete;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor1
+      actor
         .keyframe(0, {})
         .keyframe(2000, {});
 
-      testRekapi.play(3);
+      rekapi.play(3);
 
-      animationIsComplete = Rekapi._private.isAnimationComplete(testRekapi, 1);
+      animationIsComplete = Rekapi._private.isAnimationComplete(rekapi, 1);
       equal(animationIsComplete, false,
           'The animation is not complete');
 
-      animationIsComplete = Rekapi._private.isAnimationComplete(testRekapi, 2);
+      animationIsComplete = Rekapi._private.isAnimationComplete(rekapi, 2);
       equal(animationIsComplete, false,
           'The last iteration of a loop is condsider to be not complete');
 
-      animationIsComplete = Rekapi._private.isAnimationComplete(testRekapi, 3);
+      animationIsComplete = Rekapi._private.isAnimationComplete(rekapi, 3);
       equal(animationIsComplete, true,
           'An iteration after the specified amount of iterations is considered to be complete');
     });
@@ -1029,28 +1029,28 @@
 
     test('Determine if the animation has completed in an infinite loop'
       ,function () {
-      var testRekapi
-          ,testActor1
+      var rekapi
+          ,actor
           ,animationIsComplete;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor1
+      actor
         .keyframe(0, {})
         .keyframe(2000, {});
 
-      testRekapi.play();
+      rekapi.play();
 
-      animationIsComplete = Rekapi._private.isAnimationComplete(testRekapi, 1);
+      animationIsComplete = Rekapi._private.isAnimationComplete(rekapi, 1);
       equal(animationIsComplete, false,
           'The animation is not complete');
 
-      animationIsComplete = Rekapi._private.isAnimationComplete(testRekapi, 3);
+      animationIsComplete = Rekapi._private.isAnimationComplete(rekapi, 3);
       equal(animationIsComplete, false,
           'The animation is not complete');
 
-      animationIsComplete = Rekapi._private.isAnimationComplete(testRekapi, 1000);
+      animationIsComplete = Rekapi._private.isAnimationComplete(rekapi, 1000);
       equal(animationIsComplete, false,
           'The animation is not complete');
     });
@@ -1061,26 +1061,26 @@
 
     test('Determine if the animation\'s internal state is "playing" after evaluating a given iteration'
       ,function () {
-      var testRekapi
-          ,testActor1;
+      var rekapi
+          ,actor;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor1
+      actor
         .keyframe(0, {})
         .keyframe(2000, {});
 
-      testRekapi.play(3);
+      rekapi.play(3);
 
-      Rekapi._private.updatePlayState(testRekapi, 0);
-      equal(testRekapi.isPlaying(), true, 'The animation is still running');
+      Rekapi._private.updatePlayState(rekapi, 0);
+      equal(rekapi.isPlaying(), true, 'The animation is still running');
 
-      Rekapi._private.updatePlayState(testRekapi, 2);
-      equal(testRekapi.isPlaying(), true, 'The animation is still running');
+      Rekapi._private.updatePlayState(rekapi, 2);
+      equal(rekapi.isPlaying(), true, 'The animation is still running');
 
-      Rekapi._private.updatePlayState(testRekapi, 3);
-      equal(testRekapi.isPlaying(), false, 'The animation is still complete');
+      Rekapi._private.updatePlayState(rekapi, 3);
+      equal(rekapi.isPlaying(), false, 'The animation is still complete');
     });
 
 
