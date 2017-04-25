@@ -3,7 +3,7 @@ import assert from 'assert';
 import Rekapi from '../src/main';
 import { contains } from 'lodash';
 
-import { setBezierFunction, unsetBezierFunction } from 'shifty';
+import { Tweenable, setBezierFunction, unsetBezierFunction } from 'shifty';
 
 describe('Rekapi', () => {
   const setupTestRekapi = () => new Rekapi();
@@ -169,6 +169,46 @@ describe('Rekapi', () => {
             y2: 0.75
           }
         });
+
+      // Clean up Tweenable
+      unsetBezierFunction('custom');
+    });
+  });
+
+  describe('importTimeline', () => {
+    let exportedTimeline, targetRekapi;
+
+    it('imports data correctly', () => {
+      actor.keyframe(0, {
+        x: 1
+      }).keyframe(1000, {
+        x: 2
+      });
+
+      exportedTimeline = rekapi.exportTimeline();
+      targetRekapi = new Rekapi();
+      targetRekapi.importTimeline(exportedTimeline);
+
+      assert.deepEqual(targetRekapi.exportTimeline(), exportedTimeline);
+    });
+
+    it('sets up custom curves correctly', () => {
+      setBezierFunction('custom', 0, 0.25, 0.5, 0.75);
+      rekapi = setupTestRekapi();
+
+      exportedTimeline = rekapi.exportTimeline();
+
+      // Reset for a clean test
+      unsetBezierFunction('custom');
+
+      targetRekapi = new Rekapi();
+      targetRekapi.importTimeline(exportedTimeline);
+
+      assert.equal(typeof Tweenable.formulas.custom, 'function');
+      assert.equal(Tweenable.formulas.custom.x1, 0);
+      assert.equal(Tweenable.formulas.custom.y1, 0.25);
+      assert.equal(Tweenable.formulas.custom.x2, 0.5);
+      assert.equal(Tweenable.formulas.custom.y2, 0.75);
 
       // Clean up Tweenable
       unsetBezierFunction('custom');
