@@ -259,4 +259,17 @@ describe('Rekapi', () => {
       assert.equal(providedData, 5);
     });
   });
+
+  describe('getLastPositionUpdated', () => {
+    it('gets last calculated timeline position', () => {
+      actor.keyframe(0, {
+        x: 1
+      }).keyframe(1000, {
+        x: 2
+      });
+
+      rekapi.update(500);
+      assert.equal(rekapi.getLastPositionUpdated(), 0.5);
+    });
+  });
 });
