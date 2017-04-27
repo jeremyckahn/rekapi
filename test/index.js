@@ -232,4 +232,15 @@ describe('Rekapi', () => {
       rekapi.removeActor(actor);
     });
   });
+
+  describe('off', () => {
+    it('unbinds event handlers', () => {
+      let handlerWasCalled;
+
+      rekapi.on('addActor', () => handlerWasCalled = true);
+      rekapi.addActor(actor);
+
+      assert(!handlerWasCalled);
+    });
+  });
 });
