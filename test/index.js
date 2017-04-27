@@ -295,14 +295,29 @@ describe('Rekapi', () => {
   });
 
   describe('update', () => {
-    it('causes the actor states to be recalculated', () => {
-      actor
-        .keyframe(0, { x: 0 })
-        .keyframe(1000, { x: 10 });
+    describe('with parameters', () => {
+      it('causes the actor states to be recalculated', () => {
+        actor
+          .keyframe(0, { x: 0 })
+          .keyframe(1000, { x: 10 });
 
-      rekapi.update(500);
+        rekapi.update(500);
+        assert.equal(actor.get().x, 5);
+      });
+    });
 
-      assert.equal(actor.get().x, 5);
+    describe('with no parameters', () => {
+      it('causes the animation to update to the last rendered millisecond', () => {
+        actor
+          .keyframe(0, { x: 0 })
+          .keyframe(1000, { x: 10 });
+
+        // Simulate the state of rekapi if it was stopped at millisecond 500
+        rekapi._lastUpdatedMillisecond = 500;
+
+        rekapi.update();
+        assert.equal(actor.get().x, 5);
+      });
     });
   });
 });
