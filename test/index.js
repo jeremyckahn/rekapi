@@ -214,4 +214,22 @@ describe('Rekapi', () => {
       unsetBezierFunction('custom');
     });
   });
+
+  describe('on', () => {
+    it('fires an event when an actor is added', () => {
+      rekapi.on('addActor', function(rekapi, addedActor) {
+        assert.equal(actor, addedActor);
+      });
+
+      rekapi.addActor(actor);
+    });
+
+    it('fires an event when an actor is removed', () => {
+      rekapi.on('removeActor', function(rekapi, removedActor) {
+        assert.equal(actor, removedActor);
+      });
+
+      rekapi.removeActor(actor);
+    });
+  });
 });
