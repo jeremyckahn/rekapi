@@ -243,4 +243,20 @@ describe('Rekapi', () => {
       assert(!handlerWasCalled);
     });
   });
+
+  describe('trigger', () => {
+    it('triggers an event', () => {
+      let eventWasTriggered = false;
+      let providedData;
+
+      rekapi.on('timelineModified', (_, data) => {
+        eventWasTriggered = true;
+        providedData = data;
+      });
+
+      rekapi.trigger('timelineModified', 5);
+      assert(eventWasTriggered);
+      assert.equal(providedData, 5);
+    });
+  });
 });
