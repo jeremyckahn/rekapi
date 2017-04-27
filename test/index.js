@@ -293,4 +293,16 @@ describe('Rekapi', () => {
       assert.equal(rekapi.getActorCount(), 3);
     });
   });
+
+  describe('update', () => {
+    it('causes the actor states to be recalculated', () => {
+      actor
+        .keyframe(0, { x: 0 })
+        .keyframe(1000, { x: 10 });
+
+      rekapi.update(500);
+
+      assert.equal(actor.get().x, 5);
+    });
+  });
 });
