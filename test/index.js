@@ -261,7 +261,7 @@ describe('Rekapi', () => {
   });
 
   describe('getLastPositionUpdated', () => {
-    it('gets last calculated timeline position', () => {
+    it('gets last calculated timeline position as a normalized value', () => {
       actor.keyframe(0, {
         x: 1
       }).keyframe(1000, {
@@ -270,6 +270,19 @@ describe('Rekapi', () => {
 
       rekapi.update(500);
       assert.equal(rekapi.getLastPositionUpdated(), 0.5);
+    });
+  });
+
+  describe('getLastMillisecondUpdated', () => {
+    it('gets last calculated timeline position in milliseconds', () => {
+      actor.keyframe(0, {
+        x: 1
+      }).keyframe(1000, {
+        x: 2
+      });
+
+      rekapi.update(500);
+      assert.equal(rekapi.getLastMillisecondUpdated(), 500);
     });
   });
 });
