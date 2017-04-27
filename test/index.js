@@ -285,4 +285,12 @@ describe('Rekapi', () => {
       assert.equal(rekapi.getLastMillisecondUpdated(), 500);
     });
   });
+
+  describe('getActorCount', () => {
+    it('gets number of actors in timeline', () => {
+      setupTestActor(rekapi);
+      setupTestActor(rekapi);
+      assert.equal(rekapi.getActorCount(), 3);
+    });
+  });
 });
