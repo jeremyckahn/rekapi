@@ -410,4 +410,17 @@ describe('Rekapi', () => {
       assert.equal(callCount, 2);
     });
   });
+
+  describe('#isStopped', () => {
+    it('returns the stopped state of the animation', function () {
+      rekapi.play();
+      assert.equal(rekapi.isStopped(), false);
+
+      rekapi.pause();
+      assert.equal(rekapi.isStopped(), false);
+
+      rekapi.stop();
+      assert(rekapi.isStopped());
+    });
+  });
 });
