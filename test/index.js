@@ -22,6 +22,7 @@ describe('Rekapi', () => {
   afterEach(() => {
     rekapi = undefined;
     actor = undefined;
+    Tweenable.now = () => +(new Date());
   });
 
   describe('constructor', () => {
@@ -318,6 +319,19 @@ describe('Rekapi', () => {
         rekapi.update();
         assert.equal(actor.get().x, 5);
       });
+    });
+  });
+
+  describe('#isPlaying', () => {
+    it('returns the play state of the animation', () => {
+      rekapi.play();
+      assert(rekapi.isPlaying());
+
+      rekapi.pause();
+      assert.equal(rekapi.isPlaying(), false);
+
+      rekapi.stop();
+      assert.equal(rekapi.isPlaying(), false);
     });
   });
 });
