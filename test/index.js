@@ -353,4 +353,17 @@ describe('Rekapi', () => {
       assert.equal(rekapi._loopTimestamp, 1000);
     });
   });
+
+  describe('#isPaused', () => {
+    it('returns the paused state of the animation', function () {
+      rekapi.play();
+      assert.equal(rekapi.isPaused(), false);
+
+      rekapi.pause();
+      assert(rekapi.isPaused());
+
+      rekapi.stop();
+      assert.equal(rekapi.isPaused(), false);
+    });
+  });
 });
