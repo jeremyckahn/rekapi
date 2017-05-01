@@ -366,4 +366,24 @@ describe('Rekapi', () => {
       assert.equal(rekapi.isPaused(), false);
     });
   });
+
+  describe('#stop', () => {
+    it('moves the playhead to the beginning of the timeline', () => {
+      actor
+        .keyframe(0, {})
+        .keyframe(1000, {})
+        .keyframe(2000, {});
+
+      Tweenable.now = () => 0;
+      rekapi.play();
+
+      Tweenable.now = () => 500;
+      rekapi.stop();
+
+      Tweenable.now = () => 1500;
+      rekapi.play();
+
+      assert.equal(rekapi._loopTimestamp, 1500);
+    });
+  });
 });
