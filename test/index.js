@@ -423,4 +423,40 @@ describe('Rekapi', () => {
       assert(rekapi.isStopped());
     });
   });
+
+  describe('#playFrom', () => {
+    it('starts an animation from an arbitrary point on the timeline', () => {
+      actor
+        .keyframe(0, {})
+        .keyframe(1000, {});
+
+      Tweenable.now = () => 3000;
+      rekapi.playFrom(500);
+
+      assert.equal(rekapi._loopTimestamp, 2500);
+    });
+
+    it('resets function keyframes after the specified millisecond', () => {
+      let callCount = 0;
+      actor
+        .keyframe(10, {
+          'function': () => callCount++
+        })
+        .keyframe(20, {
+          'function': () => callCount++
+        });
+
+      rekapi._timesToIterate = 1;
+
+      Rekapi._private.updateToMillisecond(rekapi, 5);
+      assert.equal(callCount, 0);
+
+      Rekapi._private.updateToMillisecond(rekapi, 15);
+      assert.equal(callCount, 1);
+
+      rekapi.playFrom(5);
+      Rekapi._private.updateToMillisecond(rekapi, 15);
+      assert.equal(callCount, 2);
+    });
+  });
 });
