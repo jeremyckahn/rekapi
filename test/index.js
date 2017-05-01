@@ -68,7 +68,7 @@ describe('Rekapi', () => {
     });
   });
 
-  describe('removeAllActors', () => {
+  describe('#removeAllActors', () => {
     it('removes all actors', () => {
       setupTestActor(rekapi);
       const removedActors = rekapi.removeAllActors();
@@ -136,7 +136,7 @@ describe('Rekapi', () => {
     });
   });
 
-  describe('exportTimeline', () => {
+  describe('#exportTimeline', () => {
     let exportedTimeline;
 
     it('exports key data points', () => {
@@ -176,7 +176,7 @@ describe('Rekapi', () => {
     });
   });
 
-  describe('importTimeline', () => {
+  describe('#importTimeline', () => {
     let exportedTimeline, targetRekapi;
 
     it('imports data correctly', () => {
@@ -216,7 +216,7 @@ describe('Rekapi', () => {
     });
   });
 
-  describe('on', () => {
+  describe('#on', () => {
     it('fires an event when an actor is added', () => {
       rekapi.on('addActor', function(rekapi, addedActor) {
         assert.equal(actor, addedActor);
@@ -234,7 +234,7 @@ describe('Rekapi', () => {
     });
   });
 
-  describe('off', () => {
+  describe('#off', () => {
     it('unbinds event handlers', () => {
       let handlerWasCalled;
 
@@ -245,7 +245,7 @@ describe('Rekapi', () => {
     });
   });
 
-  describe('trigger', () => {
+  describe('#trigger', () => {
     it('triggers an event', () => {
       let eventWasTriggered = false;
       let providedData;
@@ -261,7 +261,7 @@ describe('Rekapi', () => {
     });
   });
 
-  describe('getLastPositionUpdated', () => {
+  describe('#getLastPositionUpdated', () => {
     it('gets last calculated timeline position as a normalized value', () => {
       actor.keyframe(0, {
         x: 1
@@ -274,7 +274,7 @@ describe('Rekapi', () => {
     });
   });
 
-  describe('getLastMillisecondUpdated', () => {
+  describe('#getLastMillisecondUpdated', () => {
     it('gets last calculated timeline position in milliseconds', () => {
       actor.keyframe(0, {
         x: 1
@@ -287,7 +287,7 @@ describe('Rekapi', () => {
     });
   });
 
-  describe('getActorCount', () => {
+  describe('#getActorCount', () => {
     it('gets number of actors in timeline', () => {
       setupTestActor(rekapi);
       setupTestActor(rekapi);
@@ -295,7 +295,7 @@ describe('Rekapi', () => {
     });
   });
 
-  describe('update', () => {
+  describe('#update', () => {
     describe('with parameters', () => {
       it('causes the actor states to be recalculated', () => {
         actor
