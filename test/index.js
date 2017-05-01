@@ -385,5 +385,29 @@ describe('Rekapi', () => {
 
       assert.equal(rekapi._loopTimestamp, 1500);
     });
+
+    it('resets function keyframes', () => {
+      let callCount = 0;
+      actor
+        .keyframe(10, {
+          'function': () => callCount++
+        })
+        .keyframe(20, {
+          'function': () => callCount++
+        });
+
+      rekapi.play();
+
+      Rekapi._private.updateToMillisecond(rekapi, 5);
+      assert.equal(callCount, 0);
+
+      Rekapi._private.updateToMillisecond(rekapi, 15);
+      assert.equal(callCount, 1);
+
+      rekapi.stop();
+
+      Rekapi._private.updateToMillisecond(rekapi, 15);
+      assert.equal(callCount, 2);
+    });
   });
 });
