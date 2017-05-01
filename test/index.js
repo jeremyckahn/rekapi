@@ -334,4 +334,23 @@ describe('Rekapi', () => {
       assert.equal(rekapi.isPlaying(), false);
     });
   });
+
+  describe('#pause', () => {
+    it('resumes a paused animation', () => {
+      actor
+        .keyframe(0, {})
+        .keyframe(1000, {})
+        .keyframe(2000, {});
+
+
+      Tweenable.now = () => 0;
+      rekapi.play();
+      Tweenable.now = () => 500;
+      rekapi.pause();
+      Tweenable.now = () => 1500;
+      rekapi.play();
+
+      assert.equal(rekapi._loopTimestamp, 1000);
+    });
+  });
 });
