@@ -474,4 +474,10 @@ describe('Rekapi', () => {
       assert.equal(rekapi._loopTimestamp, 2500);
     });
   });
+
+  describe('#getEventNames', () => {
+    it('returns a list of event names', () => {
+      assert.deepEqual(rekapi.getEventNames().sort(), Object.keys(rekapi._events).sort());
+    });
+  });
 });
