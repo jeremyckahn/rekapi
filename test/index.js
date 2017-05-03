@@ -319,6 +319,32 @@ describe('Rekapi', () => {
         rekapi.update();
         assert.equal(actor.get().x, 5);
       });
+
+      it('resets function keyframes that come later in the timeline', () => {
+        let callCount = 0;
+        actor
+          .keyframe(10, {
+            'function': function () {
+              callCount++;
+            },
+            x: 0
+          })
+          .keyframe(20, {
+            x: 10
+          });
+
+        rekapi._timesToIterate = 1;
+
+        Rekapi._private.updateToMillisecond(rekapi, 5);
+        assert.equal(callCount, 0);
+
+        Rekapi._private.updateToMillisecond(rekapi, 15);
+        assert.equal(callCount, 1);
+
+        rekapi.update(5);
+        Rekapi._private.updateToMillisecond(rekapi, 15);
+        assert.equal(callCount, 2);
+      });
     });
   });
 
@@ -479,5 +505,179 @@ describe('Rekapi', () => {
     it('returns a list of event names', () => {
       assert.deepEqual(rekapi.getEventNames().sort(), Object.keys(rekapi._events).sort());
     });
+  });
+
+  describe('Rekapi._private methods', () => {
+    describe('updateToCurrentMillisecond', () => {
+      it('correctly calculates position based on time in a finite loop', () => {
+        Tweenable.now = () => 0;
+
+        actor
+          .keyframe(0, {
+            x: 0
+          })
+          .keyframe(1000, {
+            x: 100
+          });
+
+        rekapi.play(2);
+
+        Tweenable.now = () => 500;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert.equal(actor.get().x, 50);
+
+        Tweenable.now = () => 1500;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert.equal(actor.get().x, 50);
+
+        Tweenable.now = () => 2500;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert.equal(actor.get().x, 100);
+      });
+
+      it('correctly calculates position based on time in an infinite loop', () => {
+        actor
+          .keyframe(0, {
+            x: 0
+          })
+          .keyframe(1000, {
+            x: 100
+          });
+
+        Tweenable.now = () => 0;
+
+        rekapi.play();
+
+        Tweenable.now = () => 500;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert.equal(actor.get().x, 50);
+
+        Tweenable.now = () => 1500;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert.equal(actor.get().x, 50);
+
+        Tweenable.now = () => 10000000500;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert.equal(actor.get().x, 50);
+      });
+    });
+
+    describe('calculateLoopPosition', () => {
+      it('calculates accurate position in the tween', () => {
+        actor
+          .keyframe(0, { x: 1 })
+          .keyframe(2000, { x: 2 });
+
+        let calculatedMillisecond =
+          Rekapi._private.calculateLoopPosition(rekapi, 1000, 0);
+
+        assert.equal(calculatedMillisecond, 1000);
+      });
+
+      it('calculates accurate overflow position in the tween', () => {
+        actor
+          .keyframe(0, { x: 1 })
+          .keyframe(2000, { x: 2 });
+
+        let calculatedMillisecond =
+            Rekapi._private.calculateLoopPosition(rekapi, 2500, 1);
+
+        assert.equal(calculatedMillisecond, 500);
+      });
+    });
+
+    describe('determineCurrentLoopIteration', () => {
+      it('calculates the iteration of a given loop', () => {
+        actor
+          .keyframe(0, { x: 1 })
+          .keyframe(2000, { x: 2 });
+
+        let calculatedIteration =
+            Rekapi._private.determineCurrentLoopIteration(rekapi, 0);
+
+        assert.equal(calculatedIteration, 0);
+
+        calculatedIteration =
+            Rekapi._private.determineCurrentLoopIteration(rekapi, 1000);
+        assert.equal(calculatedIteration, 0);
+
+
+        calculatedIteration =
+            Rekapi._private.determineCurrentLoopIteration(rekapi, 1999);
+        assert.equal(calculatedIteration, 0);
+
+        calculatedIteration =
+            Rekapi._private.determineCurrentLoopIteration(rekapi, 4000);
+        assert.equal(calculatedIteration, 2);
+
+        calculatedIteration =
+            Rekapi._private.determineCurrentLoopIteration(rekapi, 5000);
+        assert.equal(calculatedIteration, 2);
+
+        calculatedIteration =
+            Rekapi._private.determineCurrentLoopIteration(rekapi, 5999);
+        assert.equal(calculatedIteration, 2);
+      });
+    });
+
+    describe('calculateTimeSinceStart', () => {
+      it('calculates the delta of the current time and when the animation began', () => {
+        actor
+          .keyframe(0, {})
+          .keyframe(2000, {});
+
+        Tweenable.now = () => 0;
+        rekapi.play();
+        Tweenable.now = () => 500;
+        const calculatedTime = Rekapi._private.calculateTimeSinceStart(rekapi);
+
+        assert.equal(calculatedTime, 500);
+      });
+    });
+
+    describe('isAnimationComplete', () => {
+      it('determines if the animation has completed in a finite loop', () => {
+        actor
+          .keyframe(0, {})
+          .keyframe(2000, {});
+
+        rekapi.play(3);
+
+        assert.equal(Rekapi._private.isAnimationComplete(rekapi, 1), false);
+        assert.equal(Rekapi._private.isAnimationComplete(rekapi, 2), false);
+        assert.equal(Rekapi._private.isAnimationComplete(rekapi, 3), true);
+      });
+
+      it('determines if the animation has completed in an infinite loop', () => {
+        actor
+          .keyframe(0, {})
+          .keyframe(2000, {});
+
+        rekapi.play();
+
+        assert.equal(Rekapi._private.isAnimationComplete(rekapi, 1), false);
+        assert.equal(Rekapi._private.isAnimationComplete(rekapi, 3), false);
+        assert.equal(Rekapi._private.isAnimationComplete(rekapi, 1000), false);
+      });
+    });
+
+    describe('updatePlayState', () => {
+     it('determine if the animation\'s internal state is "playing" after evaluating a given iteration', () => {
+       actor
+         .keyframe(0, {})
+         .keyframe(2000, {});
+
+       rekapi.play(3);
+
+       Rekapi._private.updatePlayState(rekapi, 0);
+       assert.equal(rekapi.isPlaying(), true);
+
+       Rekapi._private.updatePlayState(rekapi, 2);
+       assert.equal(rekapi.isPlaying(), true);
+
+       Rekapi._private.updatePlayState(rekapi, 3);
+       assert.equal(rekapi.isPlaying(), false);
+     });
+   });
   });
 });
