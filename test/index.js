@@ -459,4 +459,19 @@ describe('Rekapi', () => {
       assert.equal(callCount, 2);
     });
   });
+
+  describe('#playFromCurrent', () => {
+    it('can start playback from an arbitrary point on the timeline', () => {
+      actor
+        .keyframe(0, {})
+        .keyframe(1000, {});
+
+      Tweenable.now = () => 3000;
+
+      rekapi.update(500);
+      rekapi.playFromCurrent();
+
+      assert.equal(rekapi._loopTimestamp, 2500);
+    });
+  });
 });
