@@ -1,17 +1,12 @@
 /* global describe:true, it:true, before:true, beforeEach:true, afterEach:true */
 import assert from 'assert';
-import Rekapi from '../src/main';
 import { contains } from 'lodash';
+import { setupTestRekapi, setupTestActor } from './test-utils';
 
+import Rekapi from '../src/main';
 import { Tweenable, setBezierFunction, unsetBezierFunction } from 'shifty';
 
 describe('Rekapi', () => {
-  const setupTestRekapi = () => new Rekapi();
-
-  const setupTestActor = (rekapi, actorArgs) =>
-    rekapi.addActor(new Rekapi.Actor(actorArgs)
-  );
-
   let rekapi, actor, actor2;
 
   beforeEach(() => {
