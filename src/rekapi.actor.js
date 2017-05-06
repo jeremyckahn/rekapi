@@ -919,6 +919,7 @@ Actor.prototype.addKeyframeProperty = function (keyframeProperty) {
 };
 
 /*!
+ * TODO: Explain the use case for this method
  * Set the actor to be active or inactive starting at `millisecond`.
  * @method setActive
  * @param {number} millisecond The time at which to change the actor's active state
