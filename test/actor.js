@@ -175,6 +175,60 @@ describe('Actor', () => {
     });
   });
 
+  describe('removeKeyframe', () => {
+    it('removes arbitrary keyframes', () => {
+      actor
+        .keyframe(0, { x: 1 })
+        .keyframe(1000, { x: 2 })
+        .keyframe(2000, { x: 3 });
+
+      actor.removeKeyframe(1000);
+
+      assert.equal(Object.keys(actor._keyframeProperties).length, 2);
+      assert.equal(actor._propertyTracks.x.length, 2);
+      assert.equal(actor._propertyTracks.x[0].value, 1);
+      assert.equal(actor._propertyTracks.x[1].value, 3);
+    });
+
+    it('removes all keyframes at a given millisecond', () => {
+      actor.keyframe(0, {
+        x: 0,
+        y: 1
+      }).keyframe(1000, {
+        x: 50,
+        y: 51
+      }).keyframe(2000, {
+        x: 100,
+        y: 101
+      });
+
+     actor.removeKeyframe(1000);
+
+     assert.equal(actor._propertyTracks.x.length, 2);
+     assert.equal(actor._propertyTracks.y.length, 2);
+     assert.equal(actor._propertyTracks.x[0].value, 0);
+     assert.equal(actor._propertyTracks.x[1].value, 100);
+     assert.equal(actor._propertyTracks.y[0].value, 1);
+     assert.equal(actor._propertyTracks.y[1].value, 101);
+     assert.equal(actor._propertyTracks.x[0].nextProperty, actor._propertyTracks.x[1]);
+     assert.equal(actor._propertyTracks.x[1].nextProperty, null);
+    });
+
+    it('removes keyframes at the end of a timeline', () => {
+      actor
+        .keyframe(0, { x: 1 })
+        .keyframe(1000, { x: 2 })
+        .keyframe(2000, { x: 3 });
+
+      actor.removeKeyframe(2000);
+
+      assert.equal(rekapi.getAnimationLength(), 1000);
+      assert.equal(actor._propertyTracks.x.length, 2);
+      assert.equal(actor._propertyTracks.x[0].nextProperty, actor._propertyTracks.x[1]);
+      assert.equal(actor._propertyTracks.x[1].nextProperty, null);
+    });
+  });
+
   describe('events', () => {
     describe('beforeAddKeyframeProperty', () => {
       it('when fired, reflects the state of the animation prior to adding the keyframe property', () => {
