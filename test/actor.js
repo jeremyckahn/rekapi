@@ -243,6 +243,26 @@ describe('Actor', () => {
     });
   });
 
+  describe('#copyKeyframe', () => {
+    it('copies keyframe properties', () => {
+      actor = setupTestActor(rekapi);
+      actor.keyframe(0, {
+          x: 50
+        }, {
+          x: 'easeInQuad'
+        });
+
+      actor.copyKeyframe(1000, 0);
+
+      const { _propertyTracks } = actor;
+
+      assert.equal(_propertyTracks.x.length, 2);
+      assert(_propertyTracks.x[0] !== _propertyTracks.x[1]);
+      assert.equal(_propertyTracks.x[0].value, _propertyTracks.x[1].value);
+      assert.equal(_propertyTracks.x[0].easing, _propertyTracks.x[1].easing);
+    });
+  });
+
   describe('events', () => {
     describe('beforeAddKeyframeProperty', () => {
       it('when fired, reflects the state of the animation prior to adding the keyframe property', () => {
