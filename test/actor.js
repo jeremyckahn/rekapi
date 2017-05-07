@@ -284,6 +284,26 @@ describe('Actor', () => {
     });
   });
 
+  describe('#hasKeyframeAt', () => {
+    beforeEach(() => {
+      actor
+        .keyframe(0, { x: 0 }, { x: 'elastic' })
+        .keyframe(1000, { x: 100 }, { x: 'elastic' });
+    });
+
+    it('determines if there are any properties at a given millisecond', () => {
+      assert.equal(actor.hasKeyframeAt(500), false);
+      assert.equal(actor.hasKeyframeAt(2000), false);
+      assert.equal(actor.hasKeyframeAt(1000), true);
+    });
+
+    it('determines if there is a specific property at a given millisecond', () => {
+      assert.equal(actor.hasKeyframeAt(0, 'y'), false);
+      assert.equal(actor.hasKeyframeAt(1200, 'x'), false);
+      assert.equal(actor.hasKeyframeAt(1000, 'x'), true);
+    });
+  });
+
   describe('events', () => {
     describe('beforeAddKeyframeProperty', () => {
       it('when fired, reflects the state of the animation prior to adding the keyframe property', () => {
