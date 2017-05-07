@@ -338,6 +338,30 @@ describe('Actor', () => {
     });
   });
 
+  describe('#wait', () => {
+    it('extends final state of fully defined tracks', () => {
+      actor.keyframe(0, { x: 50 }).wait(1000);
+
+      assert.equal(actor._propertyTracks.x[1].value, 50);
+    });
+
+    // TODO: This is sort of weird behavior.  Could this be simplified/removed?
+    it('sets an explicit final state for implicit properties before extending them', () => {
+      actor
+        .keyframe(0, { x: 51, y: 50 })
+        .keyframe(500, { y: 100 })
+        .keyframe(1000, { x: 101 })
+        .wait(2000);
+
+      assert.equal(actor._propertyTracks.x[2].value, 101);
+      assert.equal(actor._propertyTracks.x[2].millisecond, 2000);
+      assert.equal(actor._propertyTracks.x.length, 3);
+
+      // The missing y property at millisecond 1000 was implicitly filled in and copied
+      assert.equal(actor._propertyTracks.y.length, 4);
+    });
+  });
+
   describe('events', () => {
     describe('beforeAddKeyframeProperty', () => {
       it('when fired, reflects the state of the animation prior to adding the keyframe property', () => {
