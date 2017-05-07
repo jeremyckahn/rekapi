@@ -263,6 +263,27 @@ describe('Actor', () => {
     });
   });
 
+  describe('#modifyKeyframe', () => {
+    it('modifies keyframe property value', () => {
+      actor
+        .keyframe(0, { x: 100 })
+        .keyframe(1000, { x: 200 });
+
+      actor.modifyKeyframe(0, { x: 0 });
+      assert.equal(actor._propertyTracks.x[0].value, 0);
+    });
+
+    it('modifies keyframe property easing', () => {
+      actor
+        .keyframe(0, { x: 0 }, { x: 'elastic' })
+        .keyframe(1000, { x: 100 }, { x: 'elastic' });
+
+      actor.modifyKeyframe(1000, {}, { x: 'linear' });
+
+      assert.equal(actor._propertyTracks.x[1].easing, 'linear');
+    });
+  });
+
   describe('events', () => {
     describe('beforeAddKeyframeProperty', () => {
       it('when fired, reflects the state of the animation prior to adding the keyframe property', () => {
