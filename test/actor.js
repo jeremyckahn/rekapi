@@ -164,4 +164,14 @@ describe('Actor', () => {
       });
     });
   });
+
+  describe('#addKeyframeProperty', () => {
+    it('creates a link between property and actor', () => {
+      const keyframeProperty = new Rekapi.KeyframeProperty(0, 'x', 50);
+      actor.addKeyframeProperty(keyframeProperty);
+
+      assert.equal(keyframeProperty.actor, actor);
+      assert.equal(actor._keyframeProperties[keyframeProperty.id], keyframeProperty);
+    });
+  });
 });
