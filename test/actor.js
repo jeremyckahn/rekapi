@@ -175,7 +175,7 @@ describe('Actor', () => {
     });
   });
 
-  describe('removeKeyframe', () => {
+  describe('#removeKeyframe', () => {
     it('removes arbitrary keyframes', () => {
       actor
         .keyframe(0, { x: 1 })
@@ -226,6 +226,20 @@ describe('Actor', () => {
       assert.equal(actor._propertyTracks.x.length, 2);
       assert.equal(actor._propertyTracks.x[0].nextProperty, actor._propertyTracks.x[1]);
       assert.equal(actor._propertyTracks.x[1].nextProperty, null);
+    });
+  });
+
+  describe('#removeAllKeyframes', () => {
+    it('removes all keyframes', () => {
+      actor
+        .keyframe(0, { x: 0 })
+        .keyframe(1000, { x: 1 })
+        .keyframe(2000, { x: 2 });
+
+      actor.removeAllKeyframes();
+
+      assert.equal(rekapi.getAnimationLength(), 0);
+      assert.equal(actor._propertyTracks.x, undefined);
     });
   });
 
