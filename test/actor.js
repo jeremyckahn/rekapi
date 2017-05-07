@@ -304,6 +304,40 @@ describe('Actor', () => {
     });
   });
 
+  describe('#moveKeyframe', () => {
+    it('does not move a keyframe to a point on the timeline if the target is not empty', () => {
+      actor
+        .keyframe(0, { x: 1 })
+        .keyframe(10, { x: 2 })
+        .keyframe(20, { x: 3 });
+
+      assert.equal(actor.moveKeyframe(20, 10), false);
+      assert.equal(actor.getKeyframeProperty('x', 10).value, 2);
+      assert.equal(actor.getKeyframeProperty('x', 20).value, 3);
+    });
+
+    it('does not move a keyframe is the source keyframe is not there', () => {
+      actor
+        .keyframe(0, { x: 1 })
+        .keyframe(10, { x: 2 });
+
+      assert.equal(actor.moveKeyframe(20, 30), false);
+    });
+
+    it('moves valid source keyframe to valid target', () => {
+      actor
+        .keyframe(0, { x: 1 })
+        .keyframe(10, { x: 2 });
+
+      const didMoveKeyframe = actor.moveKeyframe(10, 20);
+
+      assert(didMoveKeyframe);
+      assert.equal(actor.hasKeyframeAt(20), true);
+      assert.equal(actor.hasKeyframeAt(10), false);
+      assert.equal(rekapi.getAnimationLength(), 20);
+    });
+  });
+
   describe('events', () => {
     describe('beforeAddKeyframeProperty', () => {
       it('when fired, reflects the state of the animation prior to adding the keyframe property', () => {
