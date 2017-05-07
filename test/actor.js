@@ -174,4 +174,59 @@ describe('Actor', () => {
       assert.equal(actor._keyframeProperties[keyframeProperty.id], keyframeProperty);
     });
   });
+
+  describe('events', () => {
+    describe('beforeAddKeyframeProperty', () => {
+      it('when fired, reflects the state of the animation prior to adding the keyframe property', () => {
+        actor.keyframe(50, { x: 0 });
+
+        rekapi.on('beforeAddKeyframeProperty', () => {
+          assert.equal(rekapi.getAnimationLength(), 50);
+        });
+
+        actor.keyframe(100, { x: 10 });
+      });
+    });
+
+    describe('beforeRemoveKeyframeProperty', () => {
+      it('when fired, reflects the state of the animation prior to removing the keyframe property', () => {
+        actor.keyframe(0, { x: 0 }).keyframe(100, { x: 10 });
+
+        rekapi.on('beforeRemoveKeyframeProperty', () => {
+          assert.equal(rekapi.getAnimationLength(), 100);
+        });
+
+        actor.removeKeyframeProperty('x', 100);
+      });
+    });
+
+    describe('removeKeyframePropertyComplete', () => {
+      it('when fired, reflects the new state of the animation', () => {
+        actor.keyframe(0, { x: 0 }).keyframe(100, { x: 10 });
+
+        rekapi.on('removeKeyframePropertyComplete', () => {
+          assert.equal(rekapi.getAnimationLength(), 0);
+        });
+
+        actor.removeKeyframeProperty('x', 100);
+      });
+    });
+
+    describe('removeKeyframePropertyTrack', () => {
+      it('fires when a track is removed', () => {
+        let eventWasCalled, removedTrackName;
+
+        actor.keyframe(0, { x: 10 });
+
+        rekapi.on('removeKeyframePropertyTrack', (rekapi, trackName) => {
+          eventWasCalled = true;
+          removedTrackName = trackName;
+        });
+
+        actor.removeKeyframe(0);
+        assert(eventWasCalled);
+        assert.equal(removedTrackName, 'x');
+      });
+    });
+  });
 });
