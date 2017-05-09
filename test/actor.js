@@ -370,6 +370,38 @@ describe('Actor', () => {
     });
   });
 
+  describe('#modifyKeyframeProperty', () => {
+    it('modifies KeyframeProperty instances', () => {
+      actor.keyframe(0, { x: 10 });
+      actor.modifyKeyframeProperty('x', 0, { value: 20 });
+
+      assert.equal(actor.getKeyframeProperty('x', 0).value, 20);
+    });
+
+    it('can reorder properties', () => {
+      actor
+        .keyframe(0, {x: 1})
+        .keyframe(10, {x: 2});
+
+      actor.modifyKeyframeProperty('x', 0, { millisecond: 20 });
+      const propertyAt10 = actor.getKeyframeProperty('x', 10);
+      const propertyAt20 = actor.getKeyframeProperty('x', 20);
+
+      assert.equal(propertyAt10.nextProperty, propertyAt20);
+      assert.equal(propertyAt20.nextProperty, null);
+    });
+
+    it('cannot move a KeyframeProperty where there already is one', () => {
+      actor
+        .keyframe(0, { x: 1 })
+        .keyframe(10, { x: 2 });
+
+      assert.throws(() => {
+        actor.modifyKeyframeProperty('x', 10, { millisecond: 0 });
+      }, Error);
+    });
+  });
+
   describe('.context', () => {
     it('is inherited from parent Rekapi instance by default', () => {
       assert.equal(actor.context, rekapi.context);
