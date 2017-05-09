@@ -129,6 +129,21 @@ describe('Rekapi', () => {
         assert.equal(rekapi.getAnimationLength(), 5000);
       });
     });
+
+    describe('after adding actors that already have keyframes', () => {
+      it('returns updated animation length', () => {
+        actor = new Rekapi.Actor();
+
+        actor
+          .keyframe(0, { x: 0 })
+          .keyframe(1000, { x: 10 });
+
+        rekapi = new Rekapi();
+        rekapi.addActor(actor);
+
+        assert.equal(rekapi.getAnimationLength(), 1000);
+      });
+    });
   });
 
   describe('#exportTimeline', () => {
