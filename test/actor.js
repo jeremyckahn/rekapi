@@ -362,6 +362,14 @@ describe('Actor', () => {
     });
   });
 
+  describe('#getKeyframeProperty', () => {
+    it('retrieves KeyframeProperty instances', () => {
+      actor.keyframe(0, { x: 10 });
+
+      assert.equal(actor.getKeyframeProperty('x', 0).value, 10);
+    });
+  });
+
   describe('.context', () => {
     it('is inherited from parent Rekapi instance by default', () => {
       assert.equal(actor.context, rekapi.context);
