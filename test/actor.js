@@ -362,6 +362,12 @@ describe('Actor', () => {
     });
   });
 
+  describe('.context', () => {
+    it('is inherited from parent Rekapi instance by default', () => {
+      assert.equal(actor.context, rekapi.context);
+    });
+  });
+
   describe('events', () => {
     describe('beforeAddKeyframeProperty', () => {
       it('when fired, reflects the state of the animation prior to adding the keyframe property', () => {
