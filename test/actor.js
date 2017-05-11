@@ -411,6 +411,26 @@ describe('Actor', () => {
     });
   });
 
+  describe('#getPropertiesInTrack', () => {
+    it('returns an array KeyframeProperty instances in a track', () => {
+      actor
+        .keyframe(0, { x: 1 })
+        .keyframe(1000, { x: 2 })
+        .keyframe(2000, { x: 3 });
+
+      assert.equal(actor.getPropertiesInTrack('x').length, 3);
+    });
+
+    it('returns nothing if there are no properties in a given track', () => {
+      actor
+        .keyframe(0, {})
+        .keyframe(1000, {})
+        .keyframe(2000, {});
+
+      assert.equal(actor.getPropertiesInTrack('x'), undefined);
+    });
+  });
+
   describe('.context', () => {
     it('is inherited from parent Rekapi instance by default', () => {
       assert.equal(actor.context, rekapi.context);
