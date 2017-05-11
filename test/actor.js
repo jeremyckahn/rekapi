@@ -431,6 +431,35 @@ describe('Actor', () => {
     });
   });
 
+  describe('#getStart', () => {
+    it('gets the start of an actor\'s movement in the animation', () => {
+      actor
+        .keyframe(250, {
+          x: 1
+        }).keyframe(1000, {
+          x: 10
+        }).keyframe(2000, {
+          x: 20
+        });
+
+      assert.equal(actor.getStart(), 250);
+    });
+
+    it('gets the start of an actor\'s movement for a given track in the animation', () => {
+      actor
+        .keyframe(0, { y: 45 })
+        .keyframe(250, { x: 1 })
+        .keyframe(1000, { x: 10, y: 100 });
+
+      assert.equal(actor.getStart('y'), 0);
+      assert.equal(actor.getStart('x'), 250);
+    });
+
+    it('handles an actor with no keyframes', () => {
+      assert.equal(actor.getStart(), 0);
+    });
+  });
+
   describe('.context', () => {
     it('is inherited from parent Rekapi instance by default', () => {
       assert.equal(actor.context, rekapi.context);
