@@ -996,34 +996,34 @@
         function () {
 
       var rekapi
-          ,testActor1;
+          ,actor;
 
       rekapi = setupTestRekapi();
-      testActor1 = setupTestActor(rekapi);
+      actor = setupTestActor(rekapi);
 
-      testActor1
+      actor
         .keyframe(0, { x: 1 })
         .keyframe(1000, { x: 2 })
         .keyframe(2000, { x: 3 });
 
-      equal(testActor1.getPropertiesInTrack('x').length, 3,
+      equal(actor.getPropertiesInTrack('x').length, 3,
         'Returned the correct number of KeyframeProperties');
     });
 
 
     test('Actor track with no KeyframeProperties returns nothing', function () {
       var rekapi
-          ,testActor1;
+          ,actor;
 
       rekapi = setupTestRekapi();
-      testActor1 = setupTestActor(rekapi);
+      actor = setupTestActor(rekapi);
 
-      testActor1
+      actor
         .keyframe(0, {})
         .keyframe(1000, {})
         .keyframe(2000, {});
 
-      equal(testActor1.getPropertiesInTrack('x'), undefined,
+      equal(actor.getPropertiesInTrack('x'), undefined,
           'No properties for track were found');
     });
 
@@ -1182,12 +1182,12 @@
 
     test('Actor track names can be retrieved', function () {
       var rekapi
-          ,testActor1;
+          ,actor;
 
       rekapi = setupTestRekapi();
-      testActor1 = setupTestActor(rekapi);
+      actor = setupTestActor(rekapi);
 
-      testActor1
+      actor
         .keyframe(0, {
           a: 1
           ,b: 2
@@ -1195,7 +1195,7 @@
           ,d: 4
         });
 
-      var trackNames = testActor1.getTrackNames();
+      var trackNames = actor.getTrackNames();
 
       ok(_.contains(trackNames, 'a'), 'Track "a" exists');
       ok(_.contains(trackNames, 'b'), 'Track "b" exists');
@@ -1480,10 +1480,10 @@
     test('Early-ending Actors reach their final state', function () {
 
       var rekapi = setupTestRekapi();
-      var testActor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
       var testActor2 = setupTestActor(rekapi);
 
-      testActor1.keyframe(0, {
+      actor.keyframe(0, {
           'x': 0
         }).keyframe(1000, {
           'x': 100
@@ -1499,18 +1499,18 @@
       mockTime = function () { return 250; };
       Rekapi._private.updateToCurrentMillisecond(rekapi);
 
-      equal(testActor1.get().x, 25,
-          'testActor1 has correct midpoint while both Actors are animating');
+      equal(actor.get().x, 25,
+          'actor has correct midpoint while both Actors are animating');
       equal(testActor2.get().x, 50,
           'testActor2 has correct midpoint while both Actors are animating');
 
       mockTime = function () { return 750; };
       Rekapi._private.updateToCurrentMillisecond(rekapi);
 
-      equal(testActor1.get().x, 75,
-          'testActor1 has correct midpoint while still animating after testActor2 has finished');
+      equal(actor.get().x, 75,
+          'actor has correct midpoint while still animating after testActor2 has finished');
       equal(testActor2.get().x, 100,
-          'testActor2 has correct ending position after finishing before testActor1');
+          'testActor2 has correct ending position after finishing before actor');
 
     });
 
