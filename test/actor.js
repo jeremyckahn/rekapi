@@ -159,7 +159,7 @@ describe('Actor', () => {
         assert.equal(actor.get().x, 10);
 
         actor._updateState(900);
-        assert.ok(actor.wasActive);
+        assert(actor.wasActive);
         assert.equal(actor.get().x, 90);
       });
     });
@@ -638,6 +638,131 @@ describe('Actor', () => {
         actor.removeKeyframe(0);
         assert(eventWasCalled);
         assert.equal(removedTrackName, 'x');
+      });
+    });
+  });
+
+  describe('function keyframes', () => {
+    describe('without other properties', () => {
+      it('gets called', () => {
+        let functionWasCalled;
+        actor.keyframe(0, () => functionWasCalled = true);
+
+        rekapi._loopTimestamp = 0;
+        Tweenable.now = () => 0;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+
+        assert(functionWasCalled);
+      });
+
+      it('at millisecond 0, is called with each loop iteration', () => {
+        let callCount = 0;
+        actor.keyframe(0, () => callCount++);
+
+        rekapi._loopTimestamp = 0;
+        Tweenable.now = () => 0;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert.equal(callCount, 1);
+
+        Tweenable.now = () => 1;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert.equal(callCount, 2);
+      });
+    });
+
+    describe('with other properties', () => {
+      it('gets called', () => {
+        let functionWasCalled;
+        actor.keyframe(10, () => functionWasCalled = true);
+        actor.keyframe(20, { x: 1 });
+
+        rekapi._loopTimestamp = 0;
+        Tweenable.now = () => 5;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert(!functionWasCalled);
+
+        // Note: 20 causes the loop to start over and be evaluated as 0 in
+        // KeyframeProperty#shouldInvokeForMillisecond.
+        Tweenable.now = () => 19;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+
+        assert(functionWasCalled);
+      });
+    });
+
+    describe('callback', () => {
+      it('receives drift and context', () => {
+        let receivedDrift, context;
+
+        actor.keyframe(0, function (drift) {
+          context = this;
+          receivedDrift = drift;
+        });
+
+        actor.keyframe(20, { x: 1 });
+
+        rekapi._loopTimestamp = 0;
+        Tweenable.now = () => 5;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+
+        assert.equal(receivedDrift, 5);
+        assert.equal(context, actor);
+      });
+
+      it('gets called once per loop iteration', () => {
+        let functionCalls = 0;
+
+        actor.keyframe(10, () => functionCalls += 1);
+        actor.keyframe(20, { x: 1 });
+
+        rekapi._loopTimestamp = 0;
+        Tweenable.now = () => 12;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        Tweenable.now = () => 13;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert.equal(functionCalls, 1);
+
+        // Reset the loop
+        Tweenable.now = () => 21;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        Tweenable.now = () => 12;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert.equal(functionCalls, 2);
+      });
+
+      it('does not require non-function keyframes in the timeline to be invoked', () => {
+        let calledFn1, calledFn2;
+
+        actor.keyframe(10, () => calledFn1 = true);
+        actor.keyframe(20, () => calledFn2 = true);
+
+        rekapi._loopTimestamp = 0;
+        Tweenable.now = () => 5;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert(!calledFn1);
+        assert(!calledFn2);
+
+        Tweenable.now = () => 15;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert(calledFn1);
+        assert(!calledFn2);
+
+        Tweenable.now = () => 20;
+        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        assert(calledFn1);
+        assert(calledFn2);
+      });
+
+      it('when at the end of the loop, is called only once', () => {
+        let callCount = 0;
+        actor
+          .keyframe(10, {
+            'function': () => callCount++
+          });
+
+        rekapi._timesToIterate = 1;
+        Rekapi._private.updateToMillisecond(rekapi, 10);
+        assert.equal(callCount, 1);
       });
     });
   });
