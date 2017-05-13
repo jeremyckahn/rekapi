@@ -532,6 +532,24 @@ describe('Actor', () => {
     });
   });
 
+  describe('#exportTimeline', () => {
+    it('exports key data points', () => {
+      actor
+        .keyframe(0, { x: 1, y: 10 })
+        .keyframe(1000, { x: 2, y: 20 });
+
+      const exportedActorData = actor.exportTimeline();
+
+      assert.equal(exportedActorData.start, 0);
+      assert.equal(exportedActorData.end, 1000);
+      assert(exportedActorData.trackNames.indexOf('x') > -1);
+      assert(exportedActorData.trackNames.indexOf('y') > -1);
+      assert.equal(exportedActorData.trackNames.length, 2);
+      assert.equal(exportedActorData.propertyTracks.x.length, 2);
+      assert.equal(exportedActorData.propertyTracks.y.length, 2);
+    });
+  });
+
   describe('.context', () => {
     it('is inherited from parent Rekapi instance by default', () => {
       assert.equal(actor.context, rekapi.context);
