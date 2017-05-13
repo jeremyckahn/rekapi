@@ -1244,12 +1244,12 @@
 
 
     test('Imported data matches exported data', function () {
-      var exportRekapi
-          ,exportActor;
+      var rekapi
+          ,actor;
 
-      exportRekapi = setupTestRekapi();
-      exportActor = setupTestActor(exportRekapi);
-      exportActor.keyframe(0, {
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
+      actor.keyframe(0, {
         'x': 1
         ,'y': 10
       }).keyframe(1000, {
@@ -1257,12 +1257,12 @@
         ,'y': 20
       });
 
-      var exportedActorData = exportActor.exportTimeline();
+      var exportedActorData = actor.exportTimeline();
       var importActor = new Rekapi.Actor();
       importActor.importTimeline(exportedActorData);
 
       var firstImportXKeyProp = importActor.getKeyframeProperty('x', 0);
-      var firstExportXKeyProp = exportActor.getKeyframeProperty('x', 0);
+      var firstExportXKeyProp = actor.getKeyframeProperty('x', 0);
       equal(
           firstImportXKeyProp.value, firstExportXKeyProp.value,
           'First "X" keyframe value is the same in both actors');
@@ -1271,7 +1271,7 @@
           'First "X" keyframe millisecond is the same in both actors');
 
       var secondImportXKeyProp = importActor.getKeyframeProperty('x', 1000);
-      var secondExportXKeyProp = exportActor.getKeyframeProperty('x', 1000);
+      var secondExportXKeyProp = actor.getKeyframeProperty('x', 1000);
       equal(
           secondImportXKeyProp.value, secondExportXKeyProp.value,
           'First "X" keyframe value is the same in both actors');
@@ -1280,7 +1280,7 @@
           'First "X" keyframe millisecond is the same in both actors');
 
       var firstImportYKeyProp = importActor.getKeyframeProperty('y', 0);
-      var firstExportYKeyProp = exportActor.getKeyframeProperty('y', 0);
+      var firstExportYKeyProp = actor.getKeyframeProperty('y', 0);
       equal(
           firstImportYKeyProp.value, firstExportYKeyProp.value,
           'First "Y" keyframe value is the same in both actors');
@@ -1289,7 +1289,7 @@
           'First "Y" keyframe millisecond is the same in both actors');
 
       var secondImportYKeyProp = importActor.getKeyframeProperty('y', 1000);
-      var secondExportYKeyProp = exportActor.getKeyframeProperty('y', 1000);
+      var secondExportYKeyProp = actor.getKeyframeProperty('y', 1000);
       equal(
           secondImportYKeyProp.value, secondExportYKeyProp.value,
           'First "Y" keyframe value is the same in both actors');
