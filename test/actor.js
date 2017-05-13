@@ -765,5 +765,33 @@ describe('Actor', () => {
         assert.equal(callCount, 1);
       });
     });
+
+    describe('#_resetFnKeyframesFromMillisecond', () => {
+      it('resets function keyframes later but not before specified millisecond', () => {
+        var callCount = 0;
+        actor
+          .keyframe(10, {
+            'function': () => callCount++
+          })
+          .keyframe(20, {
+            'function': () => callCount++
+          });
+
+        rekapi._timesToIterate = 1;
+
+        Rekapi._private.updateToMillisecond(rekapi, 5);
+        assert.equal(callCount, 0);
+
+        Rekapi._private.updateToMillisecond(rekapi, 15);
+        assert.equal(callCount, 1);
+
+        actor._resetFnKeyframesFromMillisecond(2);
+        Rekapi._private.updateToMillisecond(rekapi, 15);
+        assert.equal(callCount, 2);
+
+        Rekapi._private.updateToMillisecond(rekapi, 15);
+        assert.equal(callCount, 2);
+      });
+    });
   });
 });
