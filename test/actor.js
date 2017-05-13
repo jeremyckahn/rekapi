@@ -550,6 +550,37 @@ describe('Actor', () => {
     });
   });
 
+  describe('#importTimeline', () => {
+    it('imports data correctly', () => {
+      actor
+        .keyframe(0, { x: 1, y: 10 })
+        .keyframe(1000, { x: 2, y: 20 });
+
+      var importActor = new Rekapi.Actor();
+      importActor.importTimeline(actor.exportTimeline());
+
+      const firstImportXKeyProp = importActor.getKeyframeProperty('x', 0);
+      const firstExportXKeyProp = actor.getKeyframeProperty('x', 0);
+      assert.equal(firstImportXKeyProp.value, firstExportXKeyProp.value);
+      assert.equal(firstImportXKeyProp.millisecond, firstExportXKeyProp.millisecond);
+
+      const secondImportXKeyProp = importActor.getKeyframeProperty('x', 1000);
+      const secondExportXKeyProp = actor.getKeyframeProperty('x', 1000);
+      assert.equal(secondImportXKeyProp.value, secondExportXKeyProp.value);
+      assert.equal(secondImportXKeyProp.millisecond, secondExportXKeyProp.millisecond);
+
+      const firstImportYKeyProp = importActor.getKeyframeProperty('y', 0);
+      const firstExportYKeyProp = actor.getKeyframeProperty('y', 0);
+      assert.equal(firstImportYKeyProp.value, firstExportYKeyProp.value);
+      assert.equal(firstImportYKeyProp.millisecond, firstExportYKeyProp.millisecond);
+
+      const secondImportYKeyProp = importActor.getKeyframeProperty('y', 1000);
+      const secondExportYKeyProp = actor.getKeyframeProperty('y', 1000);
+      assert.equal(secondImportYKeyProp.value, secondExportYKeyProp.value);
+      assert.equal(secondImportYKeyProp.millisecond, secondExportYKeyProp.millisecond);
+    });
+  });
+
   describe('.context', () => {
     it('is inherited from parent Rekapi instance by default', () => {
       assert.equal(actor.context, rekapi.context);
