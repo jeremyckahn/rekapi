@@ -460,6 +460,42 @@ describe('Actor', () => {
     });
   });
 
+  describe('#getEnd', () => {
+    it('gets the end of an actor\'s movement', () => {
+      actor
+        .keyframe(250, { x: 1 })
+        .keyframe(1000, { x: 10 })
+        .keyframe(2000, { x: 20 });
+
+      assert.equal(actor.getEnd(), 2000);
+    });
+
+    it('can scope to a track', () => {
+      actor
+        .keyframe(250,  { x: 1,  y: 10 })
+        .keyframe(1000, { x: 10, y: 20 })
+        .keyframe(2000, { x: 20 });
+
+      assert.equal(actor.getEnd('x'), 2000);
+      assert.equal(actor.getEnd('y'), 1000);
+    });
+
+    it('is unaffected by keyframes that were moved', () => {
+      actor
+        .keyframe(0,    { x: 1  })
+        .keyframe(1000, { x: 10 })
+        .keyframe(2000, { x: 20 });
+
+      assert.equal(actor.getEnd('x'), 2000);
+
+      actor.modifyKeyframeProperty('x', 2000, { millisecond: 500 });
+      assert.equal(actor.getEnd('x'), 1000);
+
+      actor.modifyKeyframeProperty('x', 500, { millisecond: 2000 });
+      assert.equal(actor.getEnd('x'), 2000);
+    });
+  });
+
   describe('.context', () => {
     it('is inherited from parent Rekapi instance by default', () => {
       assert.equal(actor.context, rekapi.context);
