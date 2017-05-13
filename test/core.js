@@ -690,4 +690,31 @@ describe('Rekapi', () => {
      });
    });
   });
+
+  describe('multiple actor support', () => {
+    it('animates multiple actors concurrently', () => {
+      const testActor2 = setupTestActor(rekapi);
+
+      actor
+        .keyframe(0, { x: 0 })
+        .keyframe(1000, { x: 100 });
+
+      testActor2
+        .keyframe(0, { x: 0 })
+        .keyframe(500, { x: 100 });
+
+      rekapi._loopTimestamp = 0;
+      Tweenable.now = () => 250;
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+
+      assert.equal(actor.get().x, 25);
+      assert.equal(testActor2.get().x, 50);
+
+      Tweenable.now = () => 750;
+      Rekapi._private.updateToCurrentMillisecond(rekapi);
+
+      assert.equal(actor.get().x, 75);
+      assert.equal(testActor2.get().x, 100);
+    });
+  });
 });
