@@ -496,6 +496,28 @@ describe('Actor', () => {
     });
   });
 
+  describe('#getLength', () => {
+    it('gets the total time that an actor animates for', () => {
+      actor
+        .keyframe(250, { x: 1 })
+        .keyframe(1000, { x: 10 })
+        .keyframe(2000, { x: 20 });
+
+      assert.equal(actor.getLength(), 1750);
+    });
+
+    it('can scope to a track', () => {
+      actor
+        .keyframe(0,    { y: 10 })
+        .keyframe(250,  { x: 1  })
+        .keyframe(1000, { x: 10 })
+        .keyframe(2000, { y: 20 });
+
+      assert.equal(actor.getLength('x'), 750);
+      assert.equal(actor.getLength('y'), 2000);
+    });
+  });
+
   describe('.context', () => {
     it('is inherited from parent Rekapi instance by default', () => {
       assert.equal(actor.context, rekapi.context);
