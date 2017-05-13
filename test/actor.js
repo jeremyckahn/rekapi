@@ -518,6 +518,20 @@ describe('Actor', () => {
     });
   });
 
+  describe('#getTrackNames', () => {
+    it('returns list of track names', () => {
+      actor.keyframe(0, { a: 1, b: 2, c: 3, d: 4 });
+
+      var trackNames = actor.getTrackNames().sort();
+
+      assert.equal(trackNames[0], 'a');
+      assert.equal(trackNames[1], 'b');
+      assert.equal(trackNames[2], 'c');
+      assert.equal(trackNames[3], 'd');
+      assert.equal(trackNames.length, 4);
+    });
+  });
+
   describe('.context', () => {
     it('is inherited from parent Rekapi instance by default', () => {
       assert.equal(actor.context, rekapi.context);
