@@ -35,12 +35,12 @@
     test('Can create a KeyframeProperty', function () {
 
       var actor = new Rekapi.Actor();
-      var keyprop = new Rekapi.KeyframeProperty(500, 'x', 10, 'easeInQuad');
+      var keyframeProperty = new Rekapi.KeyframeProperty(500, 'x', 10, 'easeInQuad');
 
-      equal(keyprop.millisecond, 500, 'millisecond was set');
-      equal(keyprop.name, 'x', 'name was set');
-      equal(keyprop.value, 10, 'value was set');
-      equal(keyprop.easing, 'easeInQuad', 'easing was set');
+      equal(keyframeProperty.millisecond, 500, 'millisecond was set');
+      equal(keyframeProperty.name, 'x', 'name was set');
+      equal(keyframeProperty.value, 10, 'value was set');
+      equal(keyframeProperty.easing, 'easeInQuad', 'easing was set');
     });
 
 
@@ -50,17 +50,17 @@
     test('Can modify a KeyframeProperty', function () {
 
       var actor = new Rekapi.Actor();
-      var keyprop = new Rekapi.KeyframeProperty(500, 'x', 10, 'easeInQuad');
+      var keyframeProperty = new Rekapi.KeyframeProperty(500, 'x', 10, 'easeInQuad');
 
-      keyprop.modifyWith({
+      keyframeProperty.modifyWith({
         'millisecond': 1500
         ,'easing': 'bounce'
         ,'value': 123456
       });
 
-      equal(keyprop.millisecond, 1500, 'millisecond was modified');
-      equal(keyprop.value, 123456, 'value was modified');
-      equal(keyprop.easing, 'bounce', 'easing was modified');
+      equal(keyframeProperty.millisecond, 1500, 'millisecond was modified');
+      equal(keyframeProperty.value, 123456, 'value was modified');
+      equal(keyframeProperty.easing, 'bounce', 'easing was modified');
     });
 
 
@@ -70,12 +70,12 @@
     test('Can link one KeyframeProperty to another', function () {
 
       var actor = new Rekapi.Actor();
-      var keyprop = new Rekapi.KeyframeProperty(500, 'x', 10, 'easeInQuad');
+      var keyframeProperty = new Rekapi.KeyframeProperty(500, 'x', 10, 'easeInQuad');
       var linkedKeyprop = new Rekapi.KeyframeProperty(1000, 'x', 20, 'swingTo');
 
-      keyprop.linkToNext(linkedKeyprop);
+      keyframeProperty.linkToNext(linkedKeyprop);
 
-      equal(keyprop.nextProperty, linkedKeyprop,
+      equal(keyframeProperty.nextProperty, linkedKeyprop,
           'KeyframeProperty was linked up');
     });
 
@@ -87,11 +87,11 @@
         function () {
 
       var actor = new Rekapi.Actor();
-      var keyprop = new Rekapi.KeyframeProperty(500, 'x', 10, 'linear');
+      var keyframeProperty = new Rekapi.KeyframeProperty(500, 'x', 10, 'linear');
       var linkedKeyprop = new Rekapi.KeyframeProperty(1000, 'x', 20, 'linear');
 
-      keyprop.linkToNext(linkedKeyprop);
-      var midpoint = keyprop.getValueAt(750);
+      keyframeProperty.linkToNext(linkedKeyprop);
+      var midpoint = keyframeProperty.getValueAt(750);
 
       equal(midpoint, 15, 'Midpoint was calculated');
     });
