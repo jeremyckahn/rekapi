@@ -27,69 +27,69 @@
     module('Canvas extension');
 
     test('Actors are added to the renderOrder array', function () {
-      var testRekapi
-          ,testActor1;
+      var rekapi
+          ,actor;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      equal(testRekapi.renderer._renderOrder[0], testActor1.id,
+      equal(rekapi.renderer._renderOrder[0], actor.id,
           'Actor is the first element in the internal _renderOrder array');
     });
 
 
     test('Actors are removed from the renderOrder array', function () {
-      var testRekapi
-          ,testActor1;
+      var rekapi
+          ,actor;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testRekapi.removeActor(testActor1);
+      rekapi.removeActor(actor);
 
-      equal(testRekapi.renderer._renderOrder.length, 0,
+      equal(rekapi.renderer._renderOrder.length, 0,
           'Actor is no longer present in the internal _renderOrder array');
     });
 
 
     test('Actors can be moved to the beginning of the render list', function () {
-      var testRekapi
-          ,testActor1
-          ,testActor2;
+      var rekapi
+          ,actor
+          ,actor2;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
-      testActor2 = setupTestActor(testRekapi);
-      testRekapi.renderer.moveActorToLayer(testActor2, 0);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
+      actor2 = setupTestActor(rekapi);
+      rekapi.renderer.moveActorToLayer(actor2, 0);
 
-      equal(testRekapi.renderer._renderOrder[0], testActor2.id,
+      equal(rekapi.renderer._renderOrder[0], actor2.id,
           'Second actor was moved to the first position.');
 
-      equal(testRekapi.renderer._renderOrder[1], testActor1.id,
+      equal(rekapi.renderer._renderOrder[1], actor.id,
           'First actor was moved to the second position.');
 
-      equal(testRekapi.getActorCount(), 2,
+      equal(rekapi.getActorCount(), 2,
           'Render list size did not change.');
     });
 
 
     test('Actors can be moved to the end of the render list', function () {
-      var testRekapi
-          ,testActor1
-          ,testActor2;
+      var rekapi
+          ,actor
+          ,actor2;
 
-      testRekapi = setupTestRekapi();
-      testActor1 = setupTestActor(testRekapi);
-      testActor2 = setupTestActor(testRekapi);
-      testRekapi.renderer.moveActorToLayer(testActor1, 1);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
+      actor2 = setupTestActor(rekapi);
+      rekapi.renderer.moveActorToLayer(actor, 1);
 
-      equal(testRekapi.renderer._renderOrder[0], testActor2.id,
+      equal(rekapi.renderer._renderOrder[0], actor2.id,
           'Second actor was moved to the first position.');
 
-      equal(testRekapi.renderer._renderOrder[1], testActor1.id,
+      equal(rekapi.renderer._renderOrder[1], actor.id,
           'First actor was moved to the second position.');
 
-      equal(testRekapi.getActorCount(), 2,
+      equal(rekapi.getActorCount(), 2,
           'Render list size did not change.');
     });
 
