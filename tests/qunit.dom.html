@@ -28,13 +28,13 @@
     module('DOM extension');
 
     test('Support the transform property', function() {
-      var testRekapi
-          ,testActor1;
+      var rekapi
+          ,actor;
 
-      testRekapi = setupTestRekapi();
-      testActor = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor
+      actor
         .keyframe(0, {
           'transform': 'translateX(100px) translateY(100px) rotate(45deg)'
           ,'background': '#f00'
@@ -44,22 +44,22 @@
           ,'background': '#00f'
         });
 
-      testRekapi.update(500);
+      rekapi.update(500);
 
       var expectedValue = 'translateX(200px) translateY(200px) rotate(90deg)';
-      equal(testActor.context.style.transform, expectedValue,
+      equal(actor.context.style.transform, expectedValue,
         "The actor's DOM element has the correct transform style");
     });
 
 
     test('Support independent transform properties', function() {
-      var testRekapi
-          ,testActor1;
+      var rekapi
+          ,actor;
 
-      testRekapi = setupTestRekapi();
-      testActor = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
-      testActor
+      actor
         .keyframe(0, {
           'translateX': '0px'
           ,'translateY': '0px'
@@ -73,42 +73,42 @@
           ,'height': '50px'
         });
 
-      testRekapi.update(1000);
+      rekapi.update(1000);
 
       var expectedValue = 'translateX(50px) translateY(50px) rotate(125deg)';
-      equal(testActor.context.style.transform, expectedValue,
+      equal(actor.context.style.transform, expectedValue,
         "The actor's DOM element has the correct transform style");
 
-      equal(testActor.context.style.height, '25px',
+      equal(actor.context.style.height, '25px',
         'Other non-transform properties are also updated');
     });
 
 
     test('Allow default transform order to be overriden', function () {
-      var testRekapi
-          ,testActor;
+      var rekapi
+          ,actor;
 
-      testRekapi = setupTestRekapi();
-      testActor = setupTestActor(testRekapi);
+      rekapi = setupTestRekapi();
+      actor = setupTestActor(rekapi);
 
       var setWrongFunctions = function () {
-        testRekapi.renderer.setActorTransformOrder(testActor, ['foo', 'bar', 'rotate']);
+        rekapi.renderer.setActorTransformOrder(actor, ['foo', 'bar', 'rotate']);
       }
 
       raises(setWrongFunctions,
         'Throws error if passed an unknown/unsupported transform function');
 
       var testOrder1 = ['rotate', 'translateY', 'translateX'];
-      testRekapi.renderer.setActorTransformOrder(testActor, testOrder1)
-      deepEqual(testActor._transformOrder, testOrder1,
+      rekapi.renderer.setActorTransformOrder(actor, testOrder1)
+      deepEqual(actor._transformOrder, testOrder1,
           'The internal _transformOrder array has the correct value');
 
       var testOrder2 = ['rotate', 'translateX', 'rotate'];
-      testRekapi.renderer.setActorTransformOrder(testActor, testOrder2)
-      deepEqual(testActor._transformOrder, ['rotate', 'translateX'],
+      rekapi.renderer.setActorTransformOrder(actor, testOrder2)
+      deepEqual(actor._transformOrder, ['rotate', 'translateX'],
           'Duplicate values passed to setTransformOrder are ignored');
 
-      testActor
+      actor
         .keyframe(0, {
           'translateX': '0px'
           ,'translateY': '0px'
@@ -120,30 +120,30 @@
           ,'rotate': '150deg'
         });
 
-      testRekapi.renderer.setActorTransformOrder(
-          testActor, ['rotate', 'translateY', 'translateX']);
-      testRekapi.update(1000);
+      rekapi.renderer.setActorTransformOrder(
+          actor, ['rotate', 'translateY', 'translateX']);
+      rekapi.update(1000);
 
       var expectedValue = 'rotate(125deg) translateY(50px) translateX(50px)';
-      equal(testActor.context.style.transform, expectedValue,
+      equal(actor.context.style.transform, expectedValue,
         'Independent transform parameters are re-ordered as expected');
     });
 
 
     test('translate3d does not break easing value cardinality', function () {
-      var testRekapi = setupTestRekapi();
-      var testActor = setupTestActor(testRekapi);
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
 
-      testActor
+      actor
         .keyframe(0, {
           transform: 'translate3d(0, 0, 0)'})
         .keyframe(100, {
           transform: 'translate3d(1, 1, 1)'
         }, 'linear easeInQuad easeOutQuad');
 
-        testRekapi.update(50);
+        rekapi.update(50);
 
-        var transformChunks = testActor.get().transform.match(/(\d|\.)+/g);
+        var transformChunks = actor.get().transform.match(/(\d|\.)+/g);
         equal(
         transformChunks[1],
           interpolate({x:0}, {x:1}, 0.5, 'linear').x,
@@ -160,18 +160,18 @@
 
 
     test('3d hack does not break "3deg" case', function () {
-      var testRekapi = setupTestRekapi();
-      var testActor = setupTestActor(testRekapi);
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
 
-      testActor
+      actor
         .keyframe(0, {
           transform: 'rotate(3deg)'})
         .keyframe(100, {
           transform: 'rotate(6deg)'});
 
-        testRekapi.update(50);
+        rekapi.update(50);
 
-        var transformMatch = testActor.get().transform.match(/(\d|\.)+/g);
+        var transformMatch = actor.get().transform.match(/(\d|\.)+/g);
         equal(
         transformMatch,
           interpolate({x:3}, {x:6}, 0.5, 'linear').x,
@@ -180,16 +180,16 @@
 
 
     test('Support decoupled transform values of 0', function () {
-      var testRekapi = setupTestRekapi();
-      var testActor = setupTestActor(testRekapi);
+      var rekapi = setupTestRekapi();
+      var actor = setupTestActor(rekapi);
 
-      testActor
+      actor
         .keyframe(0,   { scale: 0 })
         .keyframe(100, { scale: 1 });
 
-        testRekapi.update(0);
+        rekapi.update(0);
 
-        equal(testActor.context.getAttribute('style').match(/transform.*;/)[0],
+        equal(actor.context.getAttribute('style').match(/transform.*;/)[0],
           'transform: scale(0);',
           '0 value was inlined onto the actor element');
     });
