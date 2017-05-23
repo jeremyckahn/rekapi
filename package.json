@@ -26,6 +26,8 @@
     "grunt-contrib-uglify": "0.3.0",
     "grunt-contrib-watch": "0.3.1",
     "grunt-contrib-yuidoc": "^0.5.2",
+    "jsdom": "^11.0.0",
+    "jsdom-global": "^3.0.2",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
     "webpack": "^1.14.0",
@@ -34,7 +36,7 @@
   "scripts": {
     "build": "webpack",
     "bump": "./node_modules/grunt-cli/bin/grunt bump",
-    "test": "mocha ./node_modules/babel-core/register.js test/index.js",
+    "test": "mocha -r jsdom-global/register ./node_modules/babel-core/register.js test/index.js",
     "test:watch": "nodemon --exec \"npm test\" --watch src --watch test",
     "lint": "./node_modules/grunt-cli/bin/grunt jshint",
     "start": "webpack-dev-server --config webpack.test.config.js"
