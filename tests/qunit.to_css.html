@@ -37,9 +37,9 @@
 
       equal(
           vendorBoilerplates
-            ,['@keyframes NAME-keyframes {'
-            ,'KEYFRAMES'
-            ,'}'].join('\n')
+            ,['@keyframes NAME-keyframes {',
+            'KEYFRAMES',
+            '}'].join('\n')
           ,'Vendor-less W3 keyframe boilerplate was generated');
     });
 
@@ -53,12 +53,12 @@
 
       equal(
           vendorBoilerplates
-            ,['@keyframes NAME-keyframes {'
-            ,'KEYFRAMES'
-            ,'}'
-            ,'@-webkit-keyframes NAME-keyframes {'
-            ,'KEYFRAMES'
-            ,'}'].join('\n')
+            ,['@keyframes NAME-keyframes {',
+            'KEYFRAMES',
+            '}',
+            '@-webkit-keyframes NAME-keyframes {',
+            'KEYFRAMES',
+            '}'].join('\n')
           ,'Webkit and W3 keyframe boilerplate was generated');
     });
 
@@ -113,12 +113,12 @@
 
       equal(
           classProperties
-          ,['  animation-name: ANIM_NAME-x-keyframes;'
-          ,'  animation-duration: 0ms;'
-          ,'  animation-delay: 0ms;'
-          ,'  animation-fill-mode: forwards;'
-          ,'  animation-timing-function: linear;'
-          ,'  animation-iteration-count: infinite;'].join('\n')
+          ,['  animation-name: ANIM_NAME-x-keyframes;',
+          '  animation-duration: 0ms;',
+          '  animation-delay: 0ms;',
+          '  animation-fill-mode: forwards;',
+          '  animation-timing-function: linear;',
+          '  animation-iteration-count: infinite;'].join('\n')
           ,'Un-prefixed class properties for were generated');
     });
 
@@ -137,12 +137,12 @@
 
       equal(
           classProperties
-          ,['  -webkit-animation-name: ANIM_NAME-x-keyframes;'
-          ,'  -webkit-animation-duration: 0ms;'
-          ,'  -webkit-animation-delay: 0ms;'
-          ,'  -webkit-animation-fill-mode: forwards;'
-          ,'  -webkit-animation-timing-function: linear;'
-          ,'  -webkit-animation-iteration-count: infinite;'].join('\n')
+          ,['  -webkit-animation-name: ANIM_NAME-x-keyframes;',
+          '  -webkit-animation-duration: 0ms;',
+          '  -webkit-animation-delay: 0ms;',
+          '  -webkit-animation-fill-mode: forwards;',
+          '  -webkit-animation-timing-function: linear;',
+          '  -webkit-animation-iteration-count: infinite;'].join('\n')
           ,'Class properties for Webkit were generated');
     });
 
@@ -161,13 +161,13 @@
 
       equal(
           classProperties
-          ,['  animation-name: ANIM_NAME-x-keyframes;'
-          ,'  animation-duration: 0ms;'
-          ,'  animation-delay: 0ms;'
-          ,'  animation-fill-mode: forwards;'
-          ,'  animation-timing-function: linear;'
-          ,'  animation-iteration-count: infinite;'
-          ,'  transform-origin: 0 0;'].join('\n')
+          ,['  animation-name: ANIM_NAME-x-keyframes;',
+          '  animation-duration: 0ms;',
+          '  animation-delay: 0ms;',
+          '  animation-fill-mode: forwards;',
+          '  animation-timing-function: linear;',
+          '  animation-iteration-count: infinite;',
+          '  transform-origin: 0 0;'].join('\n')
           ,'Class properties including centering offset');
     });
 
@@ -188,14 +188,14 @@
 
       equal(
           classProperties
-          ,['.ANIM_NAME {'
-          ,'  animation-name: ANIM_NAME-x-keyframes;'
-          ,'  animation-duration: 0ms;'
-          ,'  animation-delay: 0ms;'
-          ,'  animation-fill-mode: forwards;'
-          ,'  animation-timing-function: linear;'
-          ,'  animation-iteration-count: infinite;'
-          ,'}'].join('\n')
+          ,['.ANIM_NAME {',
+          '  animation-name: ANIM_NAME-x-keyframes;',
+          '  animation-duration: 0ms;',
+          '  animation-delay: 0ms;',
+          '  animation-fill-mode: forwards;',
+          '  animation-timing-function: linear;',
+          '  animation-iteration-count: infinite;',
+          '}'].join('\n')
           ,'Class properties were generated');
     });
 
@@ -213,14 +213,14 @@
 
       equal(
           classProperties
-          ,['.ANIM_NAME {'
-          ,'  animation-name: ANIM_NAME-transform-keyframes;'
-          ,'  animation-duration: 0ms;'
-          ,'  animation-delay: 0ms;'
-          ,'  animation-fill-mode: forwards;'
-          ,'  animation-timing-function: linear;'
-          ,'  animation-iteration-count: infinite;'
-          ,'}'].join('\n')
+          ,['.ANIM_NAME {',
+          '  animation-name: ANIM_NAME-transform-keyframes;',
+          '  animation-duration: 0ms;',
+          '  animation-delay: 0ms;',
+          '  animation-fill-mode: forwards;',
+          '  animation-timing-function: linear;',
+          '  animation-iteration-count: infinite;',
+          '}'].join('\n')
           ,'Class properties were generated');
     });
 
@@ -239,14 +239,14 @@
 
       equal(
           classProperties
-          ,['.ANIM_NAME {'
-          ,'  -webkit-animation-name: ANIM_NAME-x-keyframes;'
-          ,'  -webkit-animation-duration: 0ms;'
-          ,'  -webkit-animation-delay: 0ms;'
-          ,'  -webkit-animation-fill-mode: forwards;'
-          ,'  -webkit-animation-timing-function: linear;'
-          ,'  -webkit-animation-iteration-count: infinite;'
-          ,'}'].join('\n')
+          ,['.ANIM_NAME {',
+          '  -webkit-animation-name: ANIM_NAME-x-keyframes;',
+          '  -webkit-animation-duration: 0ms;',
+          '  -webkit-animation-delay: 0ms;',
+          '  -webkit-animation-fill-mode: forwards;',
+          '  -webkit-animation-timing-function: linear;',
+          '  -webkit-animation-iteration-count: infinite;',
+          '}'].join('\n')
           ,'Class properties for Webkit were generated');
     });
 
@@ -271,19 +271,19 @@
 
       equal(
           keyframeData
-          ,['@keyframes ANIM_NAME-x-keyframes {'
-            ,'  0% {x:0;}'
-            ,'  10% {x:10;}'
-            ,'  20% {x:20;}'
-            ,'  30% {x:30;}'
-            ,'  40% {x:40;}'
-            ,'  50% {x:50;}'
-            ,'  60% {x:60;}'
-            ,'  70% {x:70;}'
-            ,'  80% {x:80;}'
-            ,'  90% {x:90;}'
-            ,'  100% {x:100;}'
-            ,'}'].join('\n')
+          ,['@keyframes ANIM_NAME-x-keyframes {',
+            '  0% {x:0;}',
+            '  10% {x:10;}',
+            '  20% {x:20;}',
+            '  30% {x:30;}',
+            '  40% {x:40;}',
+            '  50% {x:50;}',
+            '  60% {x:60;}',
+            '  70% {x:70;}',
+            '  80% {x:80;}',
+            '  90% {x:90;}',
+            '  100% {x:100;}',
+            '}'].join('\n')
           ,'Keyframes with W3 boilerplate was generated');
     });
 
@@ -308,17 +308,17 @@
 
       equal(
           keyframeData
-          ,['  0% {x:0;}'
-            ,'  10% {x:10;}'
-            ,'  20% {x:20;}'
-            ,'  30% {x:30;}'
-            ,'  40% {x:40;}'
-            ,'  50% {x:50;}'
-            ,'  60% {x:60;}'
-            ,'  70% {x:70;}'
-            ,'  80% {x:80;}'
-            ,'  90% {x:90;}'
-            ,'  100% {x:100;}'].join('\n')
+          ,['  0% {x:0;}',
+            '  10% {x:10;}',
+            '  20% {x:20;}',
+            '  30% {x:30;}',
+            '  40% {x:40;}',
+            '  50% {x:50;}',
+            '  60% {x:60;}',
+            '  70% {x:70;}',
+            '  80% {x:80;}',
+            '  90% {x:90;}',
+            '  100% {x:100;}'].join('\n')
           ,'Each stage of the animation was interpolated');
       equal(keyframeData.split('\n').length, 11
           ,'Correct number of steps were interpolated');
@@ -342,17 +342,17 @@
 
       equal(
           keyframeData
-          ,['  0% {x:0;}'
-            ,'  10% {x:10;}'
-            ,'  20% {x:20;}'
-            ,'  30% {x:30;}'
-            ,'  40% {x:40;}'
-            ,'  50% {x:50;}'
-            ,'  60% {x:60;}'
-            ,'  70% {x:70;}'
-            ,'  80% {x:80;}'
-            ,'  90% {x:90;}'
-            ,'  100% {x:100;}'].join('\n')
+          ,['  0% {x:0;}',
+            '  10% {x:10;}',
+            '  20% {x:20;}',
+            '  30% {x:30;}',
+            '  40% {x:40;}',
+            '  50% {x:50;}',
+            '  60% {x:60;}',
+            '  70% {x:70;}',
+            '  80% {x:80;}',
+            '  90% {x:90;}',
+            '  100% {x:100;}'].join('\n')
           ,'Each stage of the animation was interpolated');
       equal(keyframeData.split('\n').length, 11
           ,'Correct number of steps were interpolated');
@@ -376,13 +376,13 @@
 
       equal(
           keyframeData
-           ,['  0% {y:0;}'
-            ,'  10% {y:1;}'
-            ,'  20% {y:2;}'
-            ,'  30% {y:3;}'
-            ,'  40% {y:4;}'
-            ,'  50% {y:5;}'
-            ,'  100% {y:5;}'].join('\n')
+           ,['  0% {y:0;}',
+            '  10% {y:1;}',
+            '  20% {y:2;}',
+            '  30% {y:3;}',
+            '  40% {y:4;}',
+            '  50% {y:5;}',
+            '  100% {y:5;}'].join('\n')
           ,'Redundant wait keyframes were not generated');
     });
 
@@ -404,9 +404,9 @@
 
       equal(
           keyframeData
-           ,['  0% {y:0;VENDORanimation-timing-function: cubic-bezier(.25,.25,.75,.75);}'
-            ,'  50% {y:5;}'
-            ,'  100% {y:5;}'].join('\n')
+           ,['  0% {y:0;VENDORanimation-timing-function: cubic-bezier(.25,.25,.75,.75);}',
+            '  50% {y:5;}',
+            '  100% {y:5;}'].join('\n')
           ,'Redundant wait keyframes were not generated');
     });
 
@@ -428,13 +428,13 @@
 
       equal(
           keyframeData
-           ,['  0% {TRANSFORM:translateX(0px);}'
-            ,'  10% {TRANSFORM:translateX(1px);}'
-            ,'  20% {TRANSFORM:translateX(2px);}'
-            ,'  30% {TRANSFORM:translateX(3px);}'
-            ,'  40% {TRANSFORM:translateX(4px);}'
-            ,'  50% {TRANSFORM:translateX(5px);}'
-            ,'  100% {TRANSFORM:translateX(5px);}'].join('\n')
+           ,['  0% {TRANSFORM:translateX(0px);}',
+            '  10% {TRANSFORM:translateX(1px);}',
+            '  20% {TRANSFORM:translateX(2px);}',
+            '  30% {TRANSFORM:translateX(3px);}',
+            '  40% {TRANSFORM:translateX(4px);}',
+            '  50% {TRANSFORM:translateX(5px);}',
+            '  100% {TRANSFORM:translateX(5px);}'].join('\n')
           ,'Redundant wait keyframes were not generated');
     });
 
@@ -455,13 +455,13 @@
 
       equal(
           keyframeData
-          ,['  0% {y:0;}'
-            ,'  50% {y:0;}'
-            ,'  60% {y:2;}'
-            ,'  70% {y:4;}'
-            ,'  80% {y:6;}'
-            ,'  90% {y:8;}'
-            ,'  100% {y:10;}'].join('\n')
+          ,['  0% {y:0;}',
+            '  50% {y:0;}',
+            '  60% {y:2;}',
+            '  70% {y:4;}',
+            '  80% {y:6;}',
+            '  90% {y:8;}',
+            '  100% {y:10;}'].join('\n')
           ,'The leading wait was simulated');
     });
 
@@ -484,13 +484,13 @@
 
       equal(
           keyframeData
-          ,['  0% {y:0;}'
-          ,'  10% {y:2;}'
-          ,'  20% {y:4;}'
-          ,'  30% {y:6;}'
-          ,'  40% {y:8;}'
-          ,'  50% {y:10;}'
-          ,'  100% {y:10;}'].join('\n')
+          ,['  0% {y:0;}',
+          '  10% {y:2;}',
+          '  20% {y:4;}',
+          '  30% {y:6;}',
+          '  40% {y:8;}',
+          '  50% {y:10;}',
+          '  100% {y:10;}'].join('\n')
           ,'The trailing wait was simulated');
     });
 
@@ -533,13 +533,13 @@
 
       equal(
           keyframeData
-          ,['  0% {x:0;VENDORanimation-timing-function: cubic-bezier(.25,.25,.75,.75);}'
-          ,'  50% {x:10;}'
-          ,'  60% {x:12;}'
-          ,'  70% {x:14;}'
-          ,'  80% {x:16;}'
-          ,'  90% {x:18;}'
-          ,'  100% {x:20;}'].join('\n')
+          ,['  0% {x:0;VENDORanimation-timing-function: cubic-bezier(.25,.25,.75,.75);}',
+          '  50% {x:10;}',
+          '  60% {x:12;}',
+          '  70% {x:14;}',
+          '  80% {x:16;}',
+          '  90% {x:18;}',
+          '  100% {x:20;}'].join('\n')
           ,'Keyframe types were mixed');
     });
 
@@ -562,13 +562,13 @@
 
       equal(
           keyframeData
-          ,['  0% {x:0;}'
-          ,'  10% {x:2;}'
-          ,'  20% {x:4;}'
-          ,'  30% {x:6;}'
-          ,'  40% {x:8;}'
-          ,'  50% {x:10;VENDORanimation-timing-function: cubic-bezier(.25,.25,.75,.75);}'
-          ,'  100% {x:20;}'].join('\n')
+          ,['  0% {x:0;}',
+          '  10% {x:2;}',
+          '  20% {x:4;}',
+          '  30% {x:6;}',
+          '  40% {x:8;}',
+          '  50% {x:10;VENDORanimation-timing-function: cubic-bezier(.25,.25,.75,.75);}',
+          '  100% {x:20;}'].join('\n')
           ,'Keyframe types were mixed');
     });
 
@@ -589,9 +589,9 @@
 
       equal(
           keyframeData
-          ,['  0% {x:0;VENDORanimation-timing-function: cubic-bezier(.25,.25,.75,.75);}'
-          ,'  50% {x:5;VENDORanimation-timing-function: cubic-bezier(.25,.25,.75,.75);}'
-          ,'  100% {x:10;}'].join('\n')
+          ,['  0% {x:0;VENDORanimation-timing-function: cubic-bezier(.25,.25,.75,.75);}',
+          '  50% {x:5;VENDORanimation-timing-function: cubic-bezier(.25,.25,.75,.75);}',
+          '  100% {x:10;}'].join('\n')
           ,'Redundant optimized keyframes were not generated');
     });
 
@@ -661,11 +661,11 @@
 
       deepEqual(
           serializedSegment
-          ,['  50% {x:100;}'
-          ,'  60% {x:120;}'
-          ,'  70% {x:140;}'
-          ,'  80% {x:160;}'
-          ,'  90% {x:180;}']
+          ,['  50% {x:100;}',
+          '  60% {x:120;}',
+          '  70% {x:140;}',
+          '  80% {x:160;}',
+          '  90% {x:180;}']
           ,'Arbitrary keyframe step was serialized');
     });
 
@@ -689,11 +689,11 @@
 
       deepEqual(
           serializedSegment
-          ,['  25% {x:100;}'
-          ,'  30% {x:120;}'
-          ,'  35% {x:140;}'
-          ,'  40% {x:160;}'
-          ,'  45% {x:180;}']
+          ,['  25% {x:100;}',
+          '  30% {x:120;}',
+          '  35% {x:140;}',
+          '  40% {x:160;}',
+          '  45% {x:180;}']
           ,'Arbitrary keyframe step was serialized');
     });
 
@@ -703,8 +703,8 @@
 
     test('Can combine transform properties into a single property', function () {
       var combinedProperty = Rekapi._private.cssRenderer.combineTranfromProperties({
-        translateX: '10px'
-        ,translateY: '20px'
+        translateX: '10px',
+        translateY: '20px'
       }, Rekapi._private.cssRenderer.transformFunctions);
 
       var targetObject = {};
@@ -719,9 +719,9 @@
 
     test('Can combine transform properties into a single property and leave non-tranform properties unchanged', function () {
       var combinedProperty = Rekapi._private.cssRenderer.combineTranfromProperties({
-        translateX: '10px'
-        ,translateY: '20px'
-        ,foo: 'bar'
+        translateX: '10px',
+        translateY: '20px',
+        foo: 'bar'
       }, Rekapi._private.cssRenderer.transformFunctions);
 
       var targetObject = { foo: 'bar' };
@@ -1217,8 +1217,8 @@
               actor.getKeyframeProperty('x', 0), 0, 100);
 
       equal(optimizedSegment
-        ,['  0% {x:0;VENDORanimation-timing-function: cubic-bezier(.55,.085,.68,.53);}'
-        ,'  100% {x:10;}'].join('\n')
+        ,['  0% {x:0;VENDORanimation-timing-function: cubic-bezier(.55,.085,.68,.53);}',
+        '  100% {x:10;}'].join('\n')
         ,'Generated optimized segement');
     });
 
@@ -1241,8 +1241,8 @@
               actor.getKeyframeProperty('transform', 0), 0, 100);
 
       equal(optimizedSegment
-        ,['  0% {TRANSFORM:translateX(0);VENDORanimation-timing-function: cubic-bezier(.55,.085,.68,.53);}'
-        ,'  100% {TRANSFORM:translateX(10);}'].join('\n')
+        ,['  0% {TRANSFORM:translateX(0);VENDORanimation-timing-function: cubic-bezier(.55,.085,.68,.53);}',
+        '  100% {TRANSFORM:translateX(10);}'].join('\n')
         ,'Generated optimized segement');
     });
 
