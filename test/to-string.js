@@ -39,23 +39,23 @@ describe('DOMRenderer#toString', () => {
           '}'].join('\n')
         );
       });
-    });
 
-    it('applies boilerplate for other vendors', () => {
-      vendorBoilerplates = cssRenderer.applyVendorBoilerplates(
-        'KEYFRAMES', 'NAME',
-        ['w3', 'webkit']
-      );
+      it('applies boilerplate for other vendors', () => {
+        vendorBoilerplates = cssRenderer.applyVendorBoilerplates(
+          'KEYFRAMES', 'NAME',
+          ['w3', 'webkit']
+        );
 
-      assert.equal(
-        vendorBoilerplates,
-        ['@keyframes NAME-keyframes {',
-        'KEYFRAMES',
-        '}',
-        '@-webkit-keyframes NAME-keyframes {',
-        'KEYFRAMES',
-        '}'].join('\n')
-      );
+        assert.equal(
+          vendorBoilerplates,
+          ['@keyframes NAME-keyframes {',
+          'KEYFRAMES',
+          '}',
+          '@-webkit-keyframes NAME-keyframes {',
+          'KEYFRAMES',
+          '}'].join('\n')
+        );
+      });
     });
   });
 });
