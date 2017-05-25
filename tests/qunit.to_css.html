@@ -103,13 +103,13 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1.keyframe(0, { 'x': 0 });
+      actor.keyframe(0, { 'x': 0 });
 
       var classProperties =
           Rekapi._private.cssRenderer.generateCSSAnimationProperties(
-              actor1, 'ANIM_NAME', 'w3', false);
+              actor, 'ANIM_NAME', 'w3', false);
 
       equal(
           classProperties
@@ -127,13 +127,13 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1.keyframe(0, { 'x': 0 });
+      actor.keyframe(0, { 'x': 0 });
 
       var classProperties =
           Rekapi._private.cssRenderer.generateCSSAnimationProperties(
-              actor1, 'ANIM_NAME', 'webkit', false);
+              actor, 'ANIM_NAME', 'webkit', false);
 
       equal(
           classProperties
@@ -151,13 +151,13 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1.keyframe(0, { 'x': 0 });
+      actor.keyframe(0, { 'x': 0 });
 
       var classProperties =
           Rekapi._private.cssRenderer.generateCSSAnimationProperties(
-              actor1, 'ANIM_NAME', 'w3', false, null, true);
+              actor, 'ANIM_NAME', 'w3', false, null, true);
 
       equal(
           classProperties
@@ -179,12 +179,12 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1.keyframe(0, { 'x': 0 });
+      actor.keyframe(0, { 'x': 0 });
 
       var classProperties =
-          Rekapi._private.cssRenderer.generateCSSClass(actor1, 'ANIM_NAME', false);
+          Rekapi._private.cssRenderer.generateCSSClass(actor, 'ANIM_NAME', false);
 
       equal(
           classProperties
@@ -204,12 +204,12 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1.keyframe(0, { rotate: '0deg' });
+      actor.keyframe(0, { rotate: '0deg' });
 
       var classProperties =
-          Rekapi._private.cssRenderer.generateCSSClass(actor1, 'ANIM_NAME', false);
+          Rekapi._private.cssRenderer.generateCSSClass(actor, 'ANIM_NAME', false);
 
       equal(
           classProperties
@@ -229,13 +229,13 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1.keyframe(0, { 'x': 0 });
+      actor.keyframe(0, { 'x': 0 });
 
       var classProperties =
           Rekapi._private.cssRenderer.generateCSSClass(
-              actor1, 'ANIM_NAME', false, ['webkit']);
+              actor, 'ANIM_NAME', false, ['webkit']);
 
       equal(
           classProperties
@@ -258,16 +258,16 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0   })
         .keyframe(1000, { 'x': 100 }, { 'x': 'fakeLinear' });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var keyframeData = Rekapi._private.cssRenderer.generateBoilerplatedKeyframes(
-          actor1, 'ANIM_NAME', 10, false);
+          actor, 'ANIM_NAME', 10, false);
 
       equal(
           keyframeData
@@ -295,16 +295,16 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0   })
         .keyframe(1000, { 'x': 100 }, { 'x': 'fakeLinear' });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var keyframeData =
-          Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 10, 'x');
+          Rekapi._private.cssRenderer.generateActorKeyframes(actor, 10, 'x');
 
       equal(
           keyframeData
@@ -329,16 +329,16 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0, 'y': 5    })
         .keyframe(1000, { 'x': 100, 'y': 15 }, { 'x': 'fakeLinear' });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var keyframeData =
-          Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 10, 'x');
+          Rekapi._private.cssRenderer.generateActorKeyframes(actor, 10, 'x');
 
       equal(
           keyframeData
@@ -443,15 +443,15 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0           })
         .keyframe(500,  { 'y': 0           }, { 'y': 'fakeLinear' })
         .keyframe(1000, { 'x': 10, 'y': 10 }, { 'y': 'fakeLinear' });
 
       var keyframeData =
-          Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 10, 'y');
+          Rekapi._private.cssRenderer.generateActorKeyframes(actor, 10, 'y');
 
       equal(
           keyframeData
@@ -470,17 +470,17 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0, 'y': 0 })
         .keyframe(500,  { 'y': 10        }, { 'y': 'fakeLinear' })
         .keyframe(1000, { 'x': 10        }, { 'y': 'fakeLinear' });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var keyframeData =
-          Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 10, 'y');
+          Rekapi._private.cssRenderer.generateActorKeyframes(actor, 10, 'y');
 
       equal(
           keyframeData
@@ -499,16 +499,16 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0   })
         .keyframe(1000, { 'x': 100 }, { 'x': 'fakeLinear' });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var keyframeData =
-          Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 100, 'x');
+          Rekapi._private.cssRenderer.generateActorKeyframes(actor, 100, 'x');
 
       equal(keyframeData.split('\n').length, 101
           ,'Correct number of steps were interpolated');
@@ -519,17 +519,17 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0  })
         .keyframe(500,  { 'x': 10 })
         .keyframe(1000, { 'x': 20 }, { 'x': 'fakeLinear' });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var keyframeData =
-          Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 10, 'x');
+          Rekapi._private.cssRenderer.generateActorKeyframes(actor, 10, 'x');
 
       equal(
           keyframeData
@@ -548,17 +548,17 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0  })
         .keyframe(500,  { 'x': 10 }, { 'x': 'fakeLinear' })
         .keyframe(1000, { 'x': 20 });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var keyframeData =
-          Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 10, 'x');
+          Rekapi._private.cssRenderer.generateActorKeyframes(actor, 10, 'x');
 
       equal(
           keyframeData
@@ -575,17 +575,17 @@
 
     test('Does not generate redundant optimized keyframes when they are back-to-back', function () {
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0  })
         .keyframe(500,  { 'x': 5  })
         .keyframe(1000, { 'x': 10 });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var keyframeData =
-          Rekapi._private.cssRenderer.generateActorKeyframes(actor1, 99, 'x');
+          Rekapi._private.cssRenderer.generateActorKeyframes(actor, 99, 'x');
 
       equal(
           keyframeData
@@ -603,15 +603,15 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0           })
         .keyframe(500,  { 'y': 0           })
         .keyframe(1000, { 'x': 10, 'y': 10 });
 
       var keyframeStep =
-          Rekapi._private.cssRenderer.simulateLeadingWait(actor1, 'y', 0);
+          Rekapi._private.cssRenderer.simulateLeadingWait(actor, 'y', 0);
 
       equal(keyframeStep, '  0% {y:0;}'
           ,'0% step was generated for the first keyframe');
@@ -625,16 +625,16 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0, 'y': 0 })
         .keyframe(500,  { 'y': 10        })
         .keyframe(1000, { 'x': 10        });
 
       var keyframeStep =
           Rekapi._private.cssRenderer.simulateTrailingWait(
-              actor1, 'y', actor1.getStart(), actor1.getEnd());
+              actor, 'y', actor.getStart(), actor.getEnd());
 
       equal(keyframeStep, '  100% {y:10;}'
           ,'100% step was generated for the last keyframe');
@@ -648,16 +648,16 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0   })
         .keyframe(1000, { 'x': 100 })
         .keyframe(2000, { 'x': 200 });
 
       var serializedSegment =
           Rekapi._private.cssRenderer.generateActorTrackSegment(
-              actor1, 5, 10, 0, 50, actor1._propertyTracks['x'][1]);
+              actor, 5, 10, 0, 50, actor._propertyTracks['x'][1]);
 
       deepEqual(
           serializedSegment
@@ -674,9 +674,9 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0   })
         .keyframe(1000, { 'x': 100 })
         .keyframe(2000, { 'x': 200 })
@@ -685,7 +685,7 @@
 
       var serializedSegment =
           Rekapi._private.cssRenderer.generateActorTrackSegment(
-              actor1, 5, 5, 0, 25, actor1._propertyTracks['x'][1]);
+              actor, 5, 5, 0, 25, actor._propertyTracks['x'][1]);
 
       deepEqual(
           serializedSegment
@@ -741,16 +741,16 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0   })
         .keyframe(1000, { 'x': 100 });
 
-      actor1._updateState(500);
+      actor._updateState(500);
 
       var serializedStep =
-          Rekapi._private.cssRenderer.serializeActorStep(actor1);
+          Rekapi._private.cssRenderer.serializeActorStep(actor);
 
       equal(serializedStep, '{x:50;}'
           ,'Arbitrary keyframe step was serialized');
@@ -761,16 +761,16 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'transform': 'rotate(0deg)'   })
         .keyframe(1000, { 'transform': 'rotate(100deg)' });
 
-      actor1._updateState(500);
+      actor._updateState(500);
 
       var serializedStep =
-          Rekapi._private.cssRenderer.serializeActorStep(actor1);
+          Rekapi._private.cssRenderer.serializeActorStep(actor);
 
       equal(
           serializedStep
@@ -783,9 +783,9 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    {
           rotate: '0deg'
         })
@@ -793,10 +793,10 @@
           rotate: '100deg'
         });
 
-      actor1._updateState(500);
+      actor._updateState(500);
 
       var serializedStep =
-          Rekapi._private.cssRenderer.serializeActorStep(actor1);
+          Rekapi._private.cssRenderer.serializeActorStep(actor);
 
       equal(
           serializedStep
@@ -809,16 +809,16 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0,  'y': 50  })
         .keyframe(1000, { 'x': 10, 'y': 100 });
 
-      actor1._updateState(500);
+      actor._updateState(500);
 
       var serializedStep =
-          Rekapi._private.cssRenderer.serializeActorStep(actor1, 'x');
+          Rekapi._private.cssRenderer.serializeActorStep(actor, 'x');
 
       equal(serializedStep, '{x:5;}'
           ,'Batched keyframe step was serialized');
@@ -827,17 +827,17 @@
 
     test('Can serialize multiple keyframes into a single step', function () {
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0,  'y': 0  })
         .keyframe(1000, { 'x': 10, 'y': 20 }, 'fakeLinear');
 
 
-      actor1._updateState(500);
+      actor._updateState(500);
 
       var serializedStep =
-          Rekapi._private.cssRenderer.serializeActorStep(actor1);
+          Rekapi._private.cssRenderer.serializeActorStep(actor);
 
       equal(serializedStep, '{x:5;y:10;}'
           ,'Keyframes were combined');
@@ -851,14 +851,14 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0,  'y': 50  })
         .keyframe(1000, { 'x': 10, 'y': 100 });
 
       var animName = Rekapi._private.cssRenderer.generateAnimationNameProperty(
-          actor1, 'ANIM_NAME', 'PREFIX', false);
+          actor, 'ANIM_NAME', 'PREFIX', false);
 
       equal(animName
           ,'  PREFIXanimation-name: ANIM_NAME-x-keyframes, ANIM_NAME-y-keyframes;'
@@ -870,14 +870,14 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0,  'y': 50  })
         .keyframe(1000, { 'x': 10, 'y': 100 });
 
       var animName = Rekapi._private.cssRenderer.generateAnimationNameProperty(
-          actor1, 'ANIM_NAME', 'PREFIX', false);
+          actor, 'ANIM_NAME', 'PREFIX', false);
 
       equal(animName, '  PREFIXanimation-name: ANIM_NAME-x-keyframes, ANIM_NAME-y-keyframes;'
           ,'Generated CSS animation-name');
@@ -888,14 +888,14 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0,  'y': 50  }, 'fakeLinear')
         .keyframe(1000, { 'x': 10, 'y': 100 });
 
       var animName = Rekapi._private.cssRenderer.generateAnimationNameProperty(
-          actor1, 'ANIM_NAME', 'PREFIX', true);
+          actor, 'ANIM_NAME', 'PREFIX', true);
 
       equal(animName, '  PREFIXanimation-name: ANIM_NAME-keyframes;'
           ,'Generated CSS animation-name');
@@ -909,14 +909,14 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0  })
         .keyframe(1000, { 'x': 10 });
 
       var animDuration = Rekapi._private.cssRenderer.generateAnimationDurationProperty(
-          actor1, 'PREFIX');
+          actor, 'PREFIX');
 
       equal(animDuration, '  PREFIXanimation-duration: 1000ms;'
           ,'Generated CSS animation-duration');
@@ -930,14 +930,14 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(500,  { 'x': 0  })
         .keyframe(1000, { 'x': 10 });
 
       var animDuration = Rekapi._private.cssRenderer.generateAnimationDelayProperty(
-          actor1, 'PREFIX');
+          actor, 'PREFIX');
 
       equal(animDuration, '  PREFIXanimation-delay: 500ms;'
           ,'Generated CSS animation-delay');
@@ -1048,16 +1048,16 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0  })
         .keyframe(1000, { 'x': 10 }, { 'x': 'easeInQuad' });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var canBeOptimized = Rekapi._private.cssRenderer.canOptimizeKeyframeProperty(
-        actor1.getKeyframeProperty('x', 0));
+        actor.getKeyframeProperty('x', 0));
 
       equal(canBeOptimized, true
           ,'Detected property that can be optimized');
@@ -1068,14 +1068,14 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0  })
         .keyframe(1000, { 'x': 10 }, { 'x': 'bounce' });
 
       var canBeOptimized = Rekapi._private.cssRenderer.canOptimizeKeyframeProperty(
-        actor1.getKeyframeProperty('x', 0));
+        actor.getKeyframeProperty('x', 0));
 
       equal(canBeOptimized, false
           ,'Detected property that cannot be optimized');
@@ -1086,18 +1086,18 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'transform': 'translateX(0) translateY(0)'   })
         .keyframe(1000
         ,{ 'transform': 'translateX(10) translateY(10)' }
         ,{ 'transform': 'linear linear' });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var canBeOptimized = Rekapi._private.cssRenderer.canOptimizeKeyframeProperty(
-        actor1.getKeyframeProperty('transform', 0));
+        actor.getKeyframeProperty('transform', 0));
 
       equal(canBeOptimized, true
           ,'Detected transform that can be optimized');
@@ -1108,16 +1108,16 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'transform': 'translateX(0) translateY(0)'   })
         .keyframe(1000
         ,{ 'transform': 'translateX(10) translateY(10)' }
         ,{ 'transform': 'linear easeInQuad' });
 
       var canBeOptimized = Rekapi._private.cssRenderer.canOptimizeKeyframeProperty(
-        actor1.getKeyframeProperty('transform', 0));
+        actor.getKeyframeProperty('transform', 0));
 
       equal(canBeOptimized, false
           ,'Detected transform that cannot be optimized');
@@ -1147,16 +1147,16 @@
 
     test('Detects that all optimizable keyframes can be optimized', function () {
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0,  'y': 0  })
         .keyframe(1000, { 'x': 10, 'y': 20 });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var canBeOptimized =
-          Rekapi._private.cssRenderer.canOptimizeAnyKeyframeProperties(actor1);
+          Rekapi._private.cssRenderer.canOptimizeAnyKeyframeProperties(actor);
 
       equal(canBeOptimized, true
           ,'Detected that all properties can be optimized');
@@ -1165,16 +1165,16 @@
 
     test('Detects that a mixed set of keyframes has some keyframes that can be optimized', function () {
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0,  'y': 0  })
         .keyframe(1000, { 'x': 10, 'y': 20 }, { 'x': 'fakeLinear' });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var canBeOptimized =
-          Rekapi._private.cssRenderer.canOptimizeAnyKeyframeProperties(actor1);
+          Rekapi._private.cssRenderer.canOptimizeAnyKeyframeProperties(actor);
 
       equal(canBeOptimized, true
           ,'Detected that some properties can be optimized');
@@ -1183,14 +1183,14 @@
 
     test('Detects that all un-optimizable keyframes cannot be optimized', function () {
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0,  'y': 0  })
         .keyframe(1000, { 'x': 10, 'y': 20 }, 'fakeLinear');
 
       var canBeOptimized =
-          Rekapi._private.cssRenderer.canOptimizeAnyKeyframeProperties(actor1);
+          Rekapi._private.cssRenderer.canOptimizeAnyKeyframeProperties(actor);
 
       equal(canBeOptimized, false
           ,'Detected that all properties cannot be optimized');
@@ -1204,17 +1204,17 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'x': 0  })
         .keyframe(1000, { 'x': 10 }, { 'x': 'easeInQuad' });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var optimizedSegment =
           Rekapi._private.cssRenderer.generateOptimizedKeyframeSegment(
-              actor1.getKeyframeProperty('x', 0), 0, 100);
+              actor.getKeyframeProperty('x', 0), 0, 100);
 
       equal(optimizedSegment
         ,['  0% {x:0;VENDORanimation-timing-function: cubic-bezier(.55,.085,.68,.53);}'
@@ -1227,18 +1227,18 @@
         function () {
 
       var rekapi = new Rekapi(document.body);
-      var actor1 = setupTestActor(rekapi);
+      var actor = setupTestActor(rekapi);
 
-      actor1
+      actor
         .keyframe(0,    { 'transform': 'translateX(0)'  })
         .keyframe(1000, { 'transform': 'translateX(10)' }
             ,{ 'transform': 'easeInQuad easeInQuad' });
 
-      actor1._updateState(0);
+      actor._updateState(0);
 
       var optimizedSegment =
           Rekapi._private.cssRenderer.generateOptimizedKeyframeSegment(
-              actor1.getKeyframeProperty('transform', 0), 0, 100);
+              actor.getKeyframeProperty('transform', 0), 0, 100);
 
       equal(optimizedSegment
         ,['  0% {TRANSFORM:translateX(0);VENDORanimation-timing-function: cubic-bezier(.55,.085,.68,.53);}'
