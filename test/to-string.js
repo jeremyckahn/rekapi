@@ -20,6 +20,20 @@ describe('DOMRenderer#toString', () => {
     actor = setupTestActor(rekapi);
   });
 
+  before(() => {
+    /**
+     * This is used to prevent optimization to make certain functions easier to
+     * test.
+     */
+    Tweenable.formulas.fakeLinear = function (pos) {
+      return pos;
+    };
+  });
+
+  after(() => {
+    delete Tweenable.formulas.fakeLinear;
+  });
+
   describe('private helper methods', () => {
     let vendorBoilerplates;
 
