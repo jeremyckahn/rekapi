@@ -57,5 +57,27 @@ describe('DOMRenderer#toString', () => {
         );
       });
     });
+
+    describe('generateCSSAnimationProperties', () => {
+      it('converts transform token into valid unprefixed property', () => {
+        const keyframe =
+          'from: { ' + cssRenderer.TRANSFORM_TOKEN + ': foo; }';
+        const vendorBoilerplates =
+          cssRenderer.applyVendorPropertyPrefixes(keyframe, 'w3');
+
+        assert.equal(
+          vendorBoilerplates,
+          'from: { transform: foo; }'
+        );
+      });
+
+      it('converts transform token into valid prefixed property', () => {
+        const keyframe = 'from: { ' + cssRenderer.TRANSFORM_TOKEN + ': foo; }';
+        const vendorBoilerplates =
+          cssRenderer.applyVendorPropertyPrefixes(keyframe, 'webkit');
+
+        assert.equal(vendorBoilerplates, 'from: { -webkit-transform: foo; }');
+      });
+    });
   });
 });
