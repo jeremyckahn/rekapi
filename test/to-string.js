@@ -79,5 +79,68 @@ describe('DOMRenderer#toString', () => {
         assert.equal(vendorBoilerplates, 'from: { -webkit-transform: foo; }');
       });
     });
+
+    describe('generateCSSClass', () => {
+      it('generates boilerplated class properties for prefix-less class', () => {
+        actor.keyframe(0, { 'x': 0 });
+
+        const classProperties =
+          cssRenderer.generateCSSClass(actor, 'ANIM_NAME', false);
+
+        assert.equal(
+          classProperties,
+          ['.ANIM_NAME {',
+          '  animation-name: ANIM_NAME-x-keyframes;',
+          '  animation-duration: 0ms;',
+          '  animation-delay: 0ms;',
+          '  animation-fill-mode: forwards;',
+          '  animation-timing-function: linear;',
+          '  animation-iteration-count: infinite;',
+          '}'].join('\n')
+        );
+      });
+
+      it('generates boilerplated class properties for an animation with transform properties', () => {
+        actor.keyframe(0, { rotate: '0deg' });
+
+        const classProperties =
+            cssRenderer.generateCSSClass(actor, 'ANIM_NAME', false);
+
+        assert.equal(
+          classProperties,
+          ['.ANIM_NAME {',
+          '  animation-name: ANIM_NAME-transform-keyframes;',
+          '  animation-duration: 0ms;',
+          '  animation-delay: 0ms;',
+          '  animation-fill-mode: forwards;',
+          '  animation-timing-function: linear;',
+          '  animation-iteration-count: infinite;',
+          '}'].join('\n')
+        );
+      });
+
+      it('generates boilerplated class properties for a vendor-prefixed class', () => {
+        actor.keyframe(0, { 'x': 0 });
+
+        const classProperties = cssRenderer.generateCSSClass(
+          actor,
+          'ANIM_NAME',
+          false,
+          ['webkit']
+        );
+
+        assert.equal(
+          classProperties
+          ,['.ANIM_NAME {',
+          '  -webkit-animation-name: ANIM_NAME-x-keyframes;',
+          '  -webkit-animation-duration: 0ms;',
+          '  -webkit-animation-delay: 0ms;',
+          '  -webkit-animation-fill-mode: forwards;',
+          '  -webkit-animation-timing-function: linear;',
+          '  -webkit-animation-iteration-count: infinite;',
+          '}'].join('\n')
+        );
+      });
+    });
   });
 });
