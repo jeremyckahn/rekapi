@@ -130,14 +130,48 @@ describe('DOMRenderer#toString', () => {
         );
 
         assert.equal(
-          classProperties
-          ,['.ANIM_NAME {',
+          classProperties,
+          ['.ANIM_NAME {',
           '  -webkit-animation-name: ANIM_NAME-x-keyframes;',
           '  -webkit-animation-duration: 0ms;',
           '  -webkit-animation-delay: 0ms;',
           '  -webkit-animation-fill-mode: forwards;',
           '  -webkit-animation-timing-function: linear;',
           '  -webkit-animation-iteration-count: infinite;',
+          '}'].join('\n')
+        );
+      });
+    });
+
+    describe('generateBoilerplatedKeyframes', () => {
+      it('generates boilerplated keyframes', () => {
+        actor
+          .keyframe(0,    { 'x': 0   })
+          .keyframe(1000, { 'x': 100 }, { 'x': 'fakeLinear' });
+
+        actor._updateState(0);
+
+        const keyframeData = cssRenderer.generateBoilerplatedKeyframes(
+          actor,
+          'ANIM_NAME',
+          10,
+          false
+        );
+
+        assert.equal(
+          keyframeData,
+          ['@keyframes ANIM_NAME-x-keyframes {',
+          '  0% {x:0;}',
+          '  10% {x:10;}',
+          '  20% {x:20;}',
+          '  30% {x:30;}',
+          '  40% {x:40;}',
+          '  50% {x:50;}',
+          '  60% {x:60;}',
+          '  70% {x:70;}',
+          '  80% {x:80;}',
+          '  90% {x:90;}',
+          '  100% {x:100;}',
           '}'].join('\n')
         );
       });
