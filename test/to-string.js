@@ -509,5 +509,41 @@ describe('DOMRenderer#toString', () => {
         );
       });
     });
+
+    describe('combineTranfromProperties', () => {
+      it('can combine transform properties into a single property', () => {
+        const combinedProperty = cssRenderer.combineTranfromProperties({
+          translateX: '10px',
+          translateY: '20px'
+        }, cssRenderer.transformFunctions);
+
+        const targetObject = {
+          [cssRenderer.TRANSFORM_TOKEN]: 'translateX(10px) translateY(20px)'
+        };
+
+        assert.deepEqual(
+          combinedProperty,
+          targetObject
+        );
+      });
+
+      it('can combine transform properties into a single property and leave non-tranform properties unchanged', () => {
+        const combinedProperty = cssRenderer.combineTranfromProperties({
+          translateX: '10px',
+          translateY: '20px',
+          foo: 'bar'
+        }, cssRenderer.transformFunctions);
+
+        const targetObject = {
+          foo: 'bar',
+          [cssRenderer.TRANSFORM_TOKEN]: 'translateX(10px) translateY(20px)'
+        };
+
+        assert.deepEqual(
+          combinedProperty,
+          targetObject
+        );
+      });
+    });
   });
 });
