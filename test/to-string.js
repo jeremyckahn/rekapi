@@ -545,5 +545,66 @@ describe('DOMRenderer#toString', () => {
         );
       });
     });
+
+    describe('serializeActorStep', () => {
+      it('can serialize an individual Actor step', () => {
+        actor
+          .keyframe(0,    { x: 0   })
+          .keyframe(1000, { x: 100 });
+
+        actor._updateState(500);
+
+        assert.equal(cssRenderer.serializeActorStep(actor), '{x:50;}');
+      });
+
+      it('rewrites transform properties', () => {
+        actor
+          .keyframe(0,    { transform: 'rotate(0deg)'   })
+          .keyframe(1000, { transform: 'rotate(100deg)' });
+
+        actor._updateState(500);
+
+        assert.equal(
+          cssRenderer.serializeActorStep(actor),
+          '{' + cssRenderer.TRANSFORM_TOKEN + ':rotate(50deg);}'
+        );
+      });
+
+      it('rewrites decoupled tranform properties', () => {
+        actor
+          .keyframe(0,    { rotate: '0deg'   })
+          .keyframe(1000, { rotate: '100deg' });
+
+        actor._updateState(500);
+
+        assert.equal(
+          cssRenderer.serializeActorStep(actor),
+          '{' + Rekapi._private.cssRenderer.TRANSFORM_TOKEN + ':rotate(50deg);}'
+        );
+      });
+
+      it('can target a single property to serialize', () => {
+        actor
+          .keyframe(0,    { x: 0,  y: 50  })
+          .keyframe(1000, { x: 10, y: 100 });
+
+        actor._updateState(500);
+
+        assert.equal(
+          cssRenderer.serializeActorStep(actor, 'x'),
+          '{x:5;}'
+        );
+      });
+
+      it('can serialize multiple keyframes into a single step', () => {
+        actor
+          .keyframe(0,    { 'x': 0,  'y': 0  })
+          .keyframe(1000, { 'x': 10, 'y': 20 }, 'fakeLinear');
+
+        actor._updateState(500);
+
+        assert.equal(cssRenderer.serializeActorStep(actor), '{x:5;y:10;}');
+      });
+    });
   });
 });
