@@ -422,7 +422,7 @@ describe('DOMRenderer#toString', () => {
           actor._updateState(0);
 
           const keyframeData =
-              cssRenderer.generateActorKeyframes(actor, 10, 'transform');
+            cssRenderer.generateActorKeyframes(actor, 10, 'transform');
 
           assert.equal(
             keyframeData,
@@ -435,6 +435,34 @@ describe('DOMRenderer#toString', () => {
             '  100% {TRANSFORM:translateX(5px);}'].join('\n')
           );
         });
+      });
+    });
+
+    describe('simulateLeadingWait', () => {
+      it('can fake the 0% keyframe', () => {
+        actor
+          .keyframe(0,    { 'x': 0           })
+          .keyframe(500,  { 'y': 0           })
+          .keyframe(1000, { 'x': 10, 'y': 10 });
+
+        const keyframeStep = cssRenderer.simulateLeadingWait(actor, 'y', 0);
+
+        assert.equal(keyframeStep, '  0% {y:0;}');
+      });
+    });
+
+    describe('simulateTrailingWait', () => {
+      it('can fake the 100% keyframe', () => {
+        actor
+          .keyframe(0,    { 'x': 0, 'y': 0 })
+          .keyframe(500,  { 'y': 10        })
+          .keyframe(1000, { 'x': 10        });
+
+        const keyframeStep = cssRenderer.simulateTrailingWait(
+          actor, 'y', actor.getStart(), actor.getEnd()
+        );
+
+        assert.equal(keyframeStep, '  100% {y:10;}');
       });
     });
   });
