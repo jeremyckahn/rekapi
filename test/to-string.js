@@ -465,5 +465,49 @@ describe('DOMRenderer#toString', () => {
         assert.equal(keyframeStep, '  100% {y:10;}');
       });
     });
+
+    describe('generateActorTrackSegment', () => {
+      it('can get @keyframes for a three-step track segment', () => {
+        actor
+          .keyframe(0,    { 'x': 0   })
+          .keyframe(1000, { 'x': 100 })
+          .keyframe(2000, { 'x': 200 });
+
+        const serializedSegment = cssRenderer.generateActorTrackSegment(
+          actor, 5, 10, 0, 50, actor._propertyTracks['x'][1]
+        );
+
+        assert.deepEqual(
+          serializedSegment,
+          ['  50% {x:100;}',
+          '  60% {x:120;}',
+          '  70% {x:140;}',
+          '  80% {x:160;}',
+          '  90% {x:180;}']
+        );
+      });
+
+      it('can get @keyframes for a five-step track segment', () => {
+        actor
+          .keyframe(0,    { 'x': 0   })
+          .keyframe(1000, { 'x': 100 })
+          .keyframe(2000, { 'x': 200 })
+          .keyframe(3000, { 'x': 400 })
+          .keyframe(4000, { 'x': 600 });
+
+        const serializedSegment = cssRenderer.generateActorTrackSegment(
+          actor, 5, 5, 0, 25, actor._propertyTracks['x'][1]
+        );
+
+        assert.deepEqual(
+          serializedSegment,
+          ['  25% {x:100;}',
+          '  30% {x:120;}',
+          '  35% {x:140;}',
+          '  40% {x:160;}',
+          '  45% {x:180;}']
+        );
+      });
+    });
   });
 });
