@@ -606,5 +606,52 @@ describe('DOMRenderer#toString', () => {
         assert.equal(cssRenderer.serializeActorStep(actor), '{x:5;y:10;}');
       });
     });
+
+    describe('generateAnimationNameProperty', () => {
+      it('can generate the CSS name of an animation', () => {
+        actor
+          .keyframe(0,    { 'x': 0,  'y': 50  })
+          .keyframe(1000, { 'x': 10, 'y': 100 });
+
+        const animName = cssRenderer.generateAnimationNameProperty(
+          actor, 'ANIM_NAME', 'PREFIX', false
+        );
+
+        assert.equal(
+          animName,
+          '  PREFIXanimation-name: ANIM_NAME-x-keyframes, ANIM_NAME-y-keyframes;'
+        );
+      });
+
+      it('can generate the CSS name of an animation with multiple properties', () => {
+        actor
+          .keyframe(0,    { 'x': 0,  'y': 50  })
+          .keyframe(1000, { 'x': 10, 'y': 100 });
+
+        const animName = cssRenderer.generateAnimationNameProperty(
+          actor, 'ANIM_NAME', 'PREFIX', false
+        );
+
+        assert.equal(
+          animName,
+          '  PREFIXanimation-name: ANIM_NAME-x-keyframes, ANIM_NAME-y-keyframes;'
+        );
+      });
+
+      it('can generate single CSS name of an animation with combined keyframes', () => {
+        actor
+          .keyframe(0,    { 'x': 0,  'y': 50  }, 'fakeLinear')
+          .keyframe(1000, { 'x': 10, 'y': 100 });
+
+        const animName = cssRenderer.generateAnimationNameProperty(
+          actor, 'ANIM_NAME', 'PREFIX', true
+        );
+
+        assert.equal(
+          animName,
+          '  PREFIXanimation-name: ANIM_NAME-keyframes;'
+        );
+      });
+    });
   });
 });
