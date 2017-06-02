@@ -697,5 +697,48 @@ describe('DOMRenderer#toString', () => {
         );
       });
     });
+
+    describe('generateAnimationIterationProperty', () => {
+      afterEach(() => {
+        rekapi.stop();
+      });
+
+      it('can generate an infinite CSS iteration count an animation', () => {
+        const animDuration = cssRenderer.generateAnimationIterationProperty(
+          rekapi, 'PREFIX'
+        );
+
+        assert.equal(
+          animDuration,
+          '  PREFIXanimation-iteration-count: infinite;'
+        );
+      });
+
+      it('can generate a finite CSS iteration count an animation', () => {
+        rekapi.play(3);
+
+        const animDuration = cssRenderer.generateAnimationIterationProperty(
+          rekapi, 'PREFIX'
+        );
+
+        assert.equal(
+          animDuration,
+          '  PREFIXanimation-iteration-count: 3;'
+        );
+      });
+
+      it('can generate an overridden CSS iteration count an animation', () => {
+        rekapi.play(3);
+
+        const animDuration = cssRenderer.generateAnimationIterationProperty(
+          rekapi, 'PREFIX', 5
+        );
+
+        assert.equal(
+          animDuration,
+          '  PREFIXanimation-iteration-count: 5;'
+        );
+      });
+    });
   });
 });
