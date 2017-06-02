@@ -902,5 +902,22 @@ describe('DOMRenderer#toString', () => {
         );
       });
     });
+
+    describe('Rekapi.DOMRenderer#toString', () => {
+      it('only generates CSS for DOM actors', () => {
+        rekapi = new Rekapi(document.body);
+        const testActorEl = document.createElement('div');
+        const domActor = new Rekapi.Actor({ context: testActorEl });
+        const nonDOMActor = new Rekapi.Actor({ context: {} });
+        rekapi.addActor(domActor);
+        rekapi.addActor(nonDOMActor);
+
+        const css = rekapi.renderer.toString();
+        const singleLineCss = css.split('\n').join('');
+
+        assert(!!singleLineCss.match('actor-' + domActor.id));
+        assert(!singleLineCss.match('actor-' + nonDOMActor.id));
+      });
+    });
   });
 });
