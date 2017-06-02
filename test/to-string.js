@@ -749,5 +749,78 @@ describe('DOMRenderer#toString', () => {
         );
       });
     });
+
+    describe('canOptimizeKeyframeProperty', () => {
+      it('detects a property that can be optimized', () => {
+        actor
+          .keyframe(0,    { x: 0  })
+          .keyframe(1000, { x: 10 }, { x: 'easeInQuad' });
+
+        actor._updateState(0);
+
+        assert(
+          cssRenderer.canOptimizeKeyframeProperty(actor.getKeyframeProperty('x', 0))
+        );
+      });
+
+      it('detects a property that cannot be optimized', () => {
+        actor
+          .keyframe(0,    { x: 0  })
+          .keyframe(1000, { x: 10 }, { x: 'bounce' });
+
+        const canBeOptimized = cssRenderer.canOptimizeKeyframeProperty(
+          actor.getKeyframeProperty('x', 0)
+        );
+
+        assert.equal(canBeOptimized, false);
+      });
+
+      it('detects a transform that can be optimized', () => {
+        actor
+          .keyframe(0,    { transform: 'translateX(0) translateY(0)'   })
+          .keyframe(1000,
+            { transform: 'translateX(10) translateY(10)' },
+            { transform: 'linear linear' }
+          );
+
+        actor._updateState(0);
+
+        const canBeOptimized = cssRenderer.canOptimizeKeyframeProperty(
+          actor.getKeyframeProperty('transform', 0)
+        );
+
+        assert(canBeOptimized);
+      });
+
+      it('detects a transform that cannot be optimized', () => {
+        actor
+          .keyframe(0,    { transform: 'translateX(0) translateY(0)'   })
+          .keyframe(1000,
+            { transform: 'translateX(10) translateY(10)' },
+            { transform: 'linear easeInQuad' }
+          );
+
+        const canBeOptimized = cssRenderer.canOptimizeKeyframeProperty(
+          actor.getKeyframeProperty('transform', 0)
+        );
+
+        assert.equal(canBeOptimized, false);
+      });
+
+      it('detects that a wait can be optimized', () => {
+        actor
+          .keyframe(0, { y: 0 })
+          .keyframe(500, { y: 5 })
+          .wait(1000);
+
+        actor._updateState(0);
+
+        const canBeOptimized = cssRenderer.canOptimizeKeyframeProperty(
+          actor.getKeyframeProperty('y', 500)
+        );
+
+        assert(canBeOptimized);
+      });
+    });
   });
 });
