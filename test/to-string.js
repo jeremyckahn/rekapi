@@ -822,5 +822,44 @@ describe('DOMRenderer#toString', () => {
         assert(canBeOptimized);
       });
     });
+
+    describe('canOptimizeAnyKeyframeProperties', () => {
+      it('detects that all optimizable keyframes can be optimized', () => {
+        actor
+          .keyframe(0,    { x: 0,  y: 0  })
+          .keyframe(1000, { x: 10, y: 20 });
+
+        actor._updateState(0);
+
+        const canBeOptimized =
+          cssRenderer.canOptimizeAnyKeyframeProperties(actor);
+
+        assert(canBeOptimized);
+      });
+
+      it('detects that a mixed set of keyframes has some keyframes that can be optimized', () => {
+        actor
+          .keyframe(0,    { x: 0,  y: 0  })
+          .keyframe(1000, { x: 10, y: 20 }, { x: 'fakeLinear' });
+
+        actor._updateState(0);
+
+        const canBeOptimized =
+            cssRenderer.canOptimizeAnyKeyframeProperties(actor);
+
+        assert(canBeOptimized);
+      });
+
+      it('detects that all un-optimizable keyframes cannot be optimized', () => {
+        actor
+          .keyframe(0,    { x: 0,  y: 0  })
+          .keyframe(1000, { x: 10, y: 20 }, 'fakeLinear');
+
+        const canBeOptimized =
+            cssRenderer.canOptimizeAnyKeyframeProperties(actor);
+
+        assert.equal(canBeOptimized, false);
+      });
+    });
   });
 });
