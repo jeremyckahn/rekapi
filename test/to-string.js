@@ -740,5 +740,14 @@ describe('DOMRenderer#toString', () => {
         );
       });
     });
+
+    describe('generateAnimationCenteringRule', () => {
+      it('can generate an offset rule for centering an element', () => {
+        assert.equal(
+          cssRenderer.generateAnimationCenteringRule('PREFIX'),
+          '  PREFIXtransform-origin: 0 0;'
+        );
+      });
+    });
   });
 });
