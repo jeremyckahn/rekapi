@@ -861,5 +861,46 @@ describe('DOMRenderer#toString', () => {
         assert.equal(canBeOptimized, false);
       });
     });
+
+    describe('generateOptimizedKeyframeSegment', () => {
+      it('generates an optimized segment', () => {
+        actor
+          .keyframe(0,    { x: 0  })
+          .keyframe(1000, { x: 10 }, { x: 'easeInQuad' });
+
+        actor._updateState(0);
+
+        const optimizedSegment = cssRenderer.generateOptimizedKeyframeSegment(
+          actor.getKeyframeProperty('x', 0), 0, 100
+        );
+
+        assert.equal(
+          optimizedSegment,
+          ['  0% {x:0;VENDORanimation-timing-function: cubic-bezier(.55,.085,.68,.53);}',
+          '  100% {x:10;}'].join('\n')
+        );
+      });
+
+      it('generates an optimized transform segment', () => {
+        actor
+          .keyframe(0,    { transform: 'translateX(0)'  })
+          .keyframe(1000,
+            { transform: 'translateX(10)' },
+            { transform: 'easeInQuad easeInQuad' }
+          );
+
+        actor._updateState(0);
+
+        const optimizedSegment = cssRenderer.generateOptimizedKeyframeSegment(
+          actor.getKeyframeProperty('transform', 0), 0, 100
+        );
+
+        assert.equal(
+          optimizedSegment,
+          ['  0% {TRANSFORM:translateX(0);VENDORanimation-timing-function: cubic-bezier(.55,.085,.68,.53);}',
+          '  100% {TRANSFORM:translateX(10);}'].join('\n')
+        );
+      });
+    });
   });
 });
