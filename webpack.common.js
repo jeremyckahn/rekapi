@@ -1,7 +1,6 @@
 const path = require('path');
 
 const modulePaths = [
-  'scripts',
   path.join(__dirname, 'node_modules')
 ];
 
