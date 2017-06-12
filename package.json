@@ -19,6 +19,7 @@
     "jquery": "^3.2.1",
     "jsdom": "^11.0.0",
     "jsdom-global": "^3.0.2",
+    "jshint": "^2.9.4",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
     "webpack": "2.5.1",
@@ -26,10 +27,9 @@
   },
   "scripts": {
     "build": "webpack",
-    "bump": "./node_modules/grunt-cli/bin/grunt bump",
     "test": "mocha -r jsdom-global/register ./node_modules/babel-core/register.js test/index.js",
     "test:watch": "nodemon --exec \"npm test\" --watch src --watch test",
-    "lint": "./node_modules/grunt-cli/bin/grunt jshint",
+    "lint": "jshint src",
     "start": "webpack-dev-server --config webpack.test.config.js"
   },
   "license": "MIT",
