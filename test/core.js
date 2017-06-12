@@ -6,6 +6,12 @@ import { setupTestRekapi, setupTestActor } from './test-utils';
 import Rekapi from '../src/main';
 import { Tweenable, setBezierFunction, unsetBezierFunction } from 'shifty';
 
+import {
+  determineCurrentLoopIteration,
+  calculateTimeSinceStart,
+  isAnimationComplete
+} from '../src/rekapi.core';
+
 describe('Rekapi', () => {
   let rekapi, actor, actor2;
 
@@ -602,30 +608,24 @@ describe('Rekapi', () => {
           .keyframe(0, { x: 1 })
           .keyframe(2000, { x: 2 });
 
-        let calculatedIteration =
-            Rekapi._private.determineCurrentLoopIteration(rekapi, 0);
+        let calculatedIteration = determineCurrentLoopIteration(rekapi, 0);
 
         assert.equal(calculatedIteration, 0);
 
-        calculatedIteration =
-            Rekapi._private.determineCurrentLoopIteration(rekapi, 1000);
+        calculatedIteration = determineCurrentLoopIteration(rekapi, 1000);
         assert.equal(calculatedIteration, 0);
 
 
-        calculatedIteration =
-            Rekapi._private.determineCurrentLoopIteration(rekapi, 1999);
+        calculatedIteration = determineCurrentLoopIteration(rekapi, 1999);
         assert.equal(calculatedIteration, 0);
 
-        calculatedIteration =
-            Rekapi._private.determineCurrentLoopIteration(rekapi, 4000);
+        calculatedIteration = determineCurrentLoopIteration(rekapi, 4000);
         assert.equal(calculatedIteration, 2);
 
-        calculatedIteration =
-            Rekapi._private.determineCurrentLoopIteration(rekapi, 5000);
+        calculatedIteration = determineCurrentLoopIteration(rekapi, 5000);
         assert.equal(calculatedIteration, 2);
 
-        calculatedIteration =
-            Rekapi._private.determineCurrentLoopIteration(rekapi, 5999);
+        calculatedIteration = determineCurrentLoopIteration(rekapi, 5999);
         assert.equal(calculatedIteration, 2);
       });
     });
@@ -639,7 +639,7 @@ describe('Rekapi', () => {
         Tweenable.now = () => 0;
         rekapi.play();
         Tweenable.now = () => 500;
-        const calculatedTime = Rekapi._private.calculateTimeSinceStart(rekapi);
+        const calculatedTime = calculateTimeSinceStart(rekapi);
 
         assert.equal(calculatedTime, 500);
       });
@@ -653,9 +653,9 @@ describe('Rekapi', () => {
 
         rekapi.play(3);
 
-        assert.equal(Rekapi._private.isAnimationComplete(rekapi, 1), false);
-        assert.equal(Rekapi._private.isAnimationComplete(rekapi, 2), false);
-        assert.equal(Rekapi._private.isAnimationComplete(rekapi, 3), true);
+        assert.equal(isAnimationComplete(rekapi, 1), false);
+        assert.equal(isAnimationComplete(rekapi, 2), false);
+        assert.equal(isAnimationComplete(rekapi, 3), true);
       });
 
       it('determines if the animation has completed in an infinite loop', () => {
@@ -665,9 +665,9 @@ describe('Rekapi', () => {
 
         rekapi.play();
 
-        assert.equal(Rekapi._private.isAnimationComplete(rekapi, 1), false);
-        assert.equal(Rekapi._private.isAnimationComplete(rekapi, 3), false);
-        assert.equal(Rekapi._private.isAnimationComplete(rekapi, 1000), false);
+        assert.equal(isAnimationComplete(rekapi, 1), false);
+        assert.equal(isAnimationComplete(rekapi, 3), false);
+        assert.equal(isAnimationComplete(rekapi, 1000), false);
       });
     });
 

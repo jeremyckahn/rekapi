@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import { Tweenable, setBezierFunction } from 'shifty';
 
+const UPDATE_TIME = 1000 / 60;
+
 /*!
  * Fire an event bound to a Rekapi.
  * @param {Rekapi} rekapi
@@ -14,45 +16,31 @@ export const fireEvent = (rekapi, eventName, opt_data) =>
  * @param {Rekapi} rekapi
  * @param {Underscore} _
  */
-export function invalidateAnimationLength (rekapi) {
+export const invalidateAnimationLength = rekapi =>
   rekapi._animationLengthValid = false;
-}
-
-/*!
- * Does nothing.  Absolutely nothing at all.
- */
-function noop () {
-  // NOOP!
-}
-
-
-// CONSTANTS
-//
-const UPDATE_TIME = 1000 / 60;
 
 /*!
  * Determines which iteration of the loop the animation is currently in.
  * @param {Rekapi} rekapi
  * @param {number} timeSinceStart
  */
-function determineCurrentLoopIteration (rekapi, timeSinceStart) {
-  var animationLength = rekapi.getAnimationLength();
+export const determineCurrentLoopIteration = (rekapi, timeSinceStart) => {
+  const animationLength = rekapi.getAnimationLength();
+
   if (animationLength === 0) {
     return timeSinceStart;
   }
 
-  var currentIteration = Math.floor(timeSinceStart / animationLength);
-  return currentIteration;
-}
+  return Math.floor(timeSinceStart / animationLength);
+};
 
 /*!
  * Calculate how many milliseconds since the animation began.
  * @param {Rekapi} rekapi
  * @return {number}
  */
-function calculateTimeSinceStart (rekapi) {
-  return Tweenable.now() - rekapi._loopTimestamp;
-}
+export const calculateTimeSinceStart = rekapi =>
+  Tweenable.now() - rekapi._loopTimestamp;
 
 /*!
  * Determines if the animation is complete or not.
@@ -60,10 +48,9 @@ function calculateTimeSinceStart (rekapi) {
  * @param {number} currentLoopIteration
  * @return {boolean}
  */
-function isAnimationComplete (rekapi, currentLoopIteration) {
-  return currentLoopIteration >= rekapi._timesToIterate
-     && rekapi._timesToIterate !== -1;
-}
+export const isAnimationComplete = (rekapi, currentLoopIteration) =>
+  currentLoopIteration >= rekapi._timesToIterate
+    && rekapi._timesToIterate !== -1;
 
 /*!
  * Stops the animation if it is complete.
@@ -850,8 +837,5 @@ Rekapi._private = {
   ,'updateToCurrentMillisecond': updateToCurrentMillisecond
   ,'updateToMillisecond': updateToMillisecond
   ,'tick': tick
-  ,'determineCurrentLoopIteration': determineCurrentLoopIteration
-  ,'calculateTimeSinceStart': calculateTimeSinceStart
-  ,'isAnimationComplete': isAnimationComplete
   ,'updatePlayState': updatePlayState
 };
