@@ -1,11 +1,6 @@
 import _ from 'lodash';
 import { Tweenable, setBezierFunction } from 'shifty';
 
-// REKAPI-GLOBALS
-// These are global in development, but get wrapped in a closure at build-time.
-
-var rekapiModules = [];
-
 /*!
  * Fire an event bound to a Rekapi.
  * @param {Rekapi} rekapi
