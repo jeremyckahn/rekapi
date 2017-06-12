@@ -32,7 +32,7 @@ function get_Millisecond(obj) {
  */
 function fireRekapiEventForActor (actor, event, opt_data) {
   if (actor.rekapi) {
-    fireEvent(actor.rekapi, event, _, opt_data);
+    fireEvent(actor.rekapi, event, opt_data);
   }
 }
 
@@ -686,13 +686,13 @@ Actor.prototype.removeKeyframeProperty = function (property, millisecond) {
     var propertyTrack = propertyTracks[property];
     var index = propertyIndexInTrack(propertyTrack, millisecond);
     var keyframeProperty = propertyTrack[index];
-    fireEvent(this.rekapi, 'beforeRemoveKeyframeProperty', _, keyframeProperty);
+    fireEvent(this.rekapi, 'beforeRemoveKeyframeProperty', keyframeProperty);
     this._deleteKeyframePropertyAt(propertyTrack, index);
     keyframeProperty.detach();
 
     removeEmptyPropertyTracks(this);
     cleanupAfterKeyframeModification(this);
-    fireEvent(this.rekapi, 'removeKeyframePropertyComplete', _, keyframeProperty);
+    fireEvent(this.rekapi, 'removeKeyframePropertyComplete', keyframeProperty);
 
     return keyframeProperty;
   }
@@ -882,7 +882,7 @@ Actor.prototype._deleteKeyframePropertyAt = function (propertyTrack, index) {
  */
 Actor.prototype.addKeyframeProperty = function (keyframeProperty) {
   if (this.rekapi) {
-    fireEvent(this.rekapi, 'beforeAddKeyframeProperty', _, keyframeProperty);
+    fireEvent(this.rekapi, 'beforeAddKeyframeProperty', keyframeProperty);
   }
 
   keyframeProperty.actor = this;
@@ -894,7 +894,7 @@ Actor.prototype.addKeyframeProperty = function (keyframeProperty) {
   if (typeof this._propertyTracks[name] === 'undefined') {
     propertyTracks[name] = [keyframeProperty];
     if (this.rekapi) {
-      fireEvent(this.rekapi, 'addKeyframePropertyTrack', _, keyframeProperty);
+      fireEvent(this.rekapi, 'addKeyframePropertyTrack', keyframeProperty);
     }
   } else {
     var index = insertionPointInTrack(propertyTracks[name], keyframeProperty.millisecond);
@@ -912,7 +912,7 @@ Actor.prototype.addKeyframeProperty = function (keyframeProperty) {
   }
 
   if (this.rekapi) {
-    fireEvent(this.rekapi, 'addKeyframeProperty', _, keyframeProperty);
+    fireEvent(this.rekapi, 'addKeyframeProperty', keyframeProperty);
   }
 
   return this;

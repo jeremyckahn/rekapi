@@ -38,7 +38,7 @@ function beforeRender (canvasRenderer) {
  * @return {Rekapi}
  */
 function render (rekapi, canvasRenderer) {
-  fireEvent(rekapi, 'beforeRender', _);
+  fireEvent(rekapi, 'beforeRender');
   var renderOrderSorter = canvasRenderer._renderOrderSorter;
   var len = canvasRenderer._renderOrder.length;
   var renderOrder;
@@ -61,7 +61,7 @@ function render (rekapi, canvasRenderer) {
       currentActor.render(currentActor.context, currentActor.get());
     }
   }
-  fireEvent(rekapi, 'afterRender', _);
+  fireEvent(rekapi, 'afterRender');
 
   return rekapi;
 }

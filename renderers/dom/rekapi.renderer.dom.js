@@ -444,7 +444,7 @@ DOMRenderer.prototype.play = function (opt_iterations, opt_fps) {
         animationLength + INJECTED_STYLE_REMOVAL_BUFFER_MS);
   }
 
-  fireEvent(this.rekapi, 'play', _);
+  fireEvent(this.rekapi, 'play');
 };
 
 /**
@@ -478,7 +478,7 @@ DOMRenderer.prototype.stop = function (opt_goToEnd) {
     }
 
     this.rekapi.update(updateTime);
-    fireEvent(this.rekapi, 'stop', _);
+    fireEvent(this.rekapi, 'stop');
   }
 };
 

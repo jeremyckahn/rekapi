@@ -5,15 +5,10 @@ import { Tweenable, setBezierFunction } from 'shifty';
  * Fire an event bound to a Rekapi.
  * @param {Rekapi} rekapi
  * @param {string} eventName
- * @param {Underscore} _ A reference to the scoped Underscore/Lo-Dash
- * dependency
  * @param {Object=} opt_data Optional event-specific data
  */
-export function fireEvent (rekapi, eventName, _, opt_data) {
-  _.each(rekapi._events[eventName], function (handler) {
-    handler(rekapi, opt_data);
-  });
-}
+export const fireEvent = (rekapi, eventName, opt_data) =>
+  rekapi._events[eventName].forEach(handler => handler(rekapi, opt_data));
 
 /*!
  * @param {Rekapi} rekapi
@@ -78,7 +73,7 @@ function isAnimationComplete (rekapi, currentLoopIteration) {
 function updatePlayState (rekapi, currentLoopIteration) {
   if (isAnimationComplete(rekapi, currentLoopIteration)) {
     rekapi.stop();
-    fireEvent(rekapi, 'animationComplete', _);
+    fireEvent(rekapi, 'animationComplete');
   }
 }
 
@@ -127,7 +122,7 @@ function updateToMillisecond (rekapi, forMillisecond) {
   var keyframeResetList = [];
 
   if (currentIteration > rekapi._latestIteration) {
-    fireEvent(rekapi, 'animationLooped', _);
+    fireEvent(rekapi, 'animationLooped');
 
     // Reset function keyframes
     var lookupObject = { name: 'function' };
@@ -356,7 +351,7 @@ Rekapi.prototype.addActor = function (actor) {
     invalidateAnimationLength(this);
     rekapiActor.setup();
 
-    fireEvent(this, 'addActor', _, rekapiActor);
+    fireEvent(this, 'addActor', rekapiActor);
   }
 
   return rekapiActor;
@@ -418,7 +413,7 @@ Rekapi.prototype.removeActor = function (actor) {
   actor.teardown();
   invalidateAnimationLength(this);
 
-  fireEvent(this, 'removeActor', _, actor);
+  fireEvent(this, 'removeActor', actor);
 
   return actor;
 };
@@ -458,8 +453,8 @@ Rekapi.prototype.play = function (opt_howManyTimes) {
   // Start the update loop
   tick(this);
 
-  fireEvent(this, 'playStateChange', _);
-  fireEvent(this, 'play', _);
+  fireEvent(this, 'playStateChange');
+  fireEvent(this, 'play');
 
   return this;
 };
@@ -515,8 +510,8 @@ Rekapi.prototype.pause = function () {
   cancelLoop(this);
   this._pausedAtTime = Tweenable.now();
 
-  fireEvent(this, 'playStateChange', _);
-  fireEvent(this, 'pause', _);
+  fireEvent(this, 'playStateChange');
+  fireEvent(this, 'pause');
 
   return this;
 };
@@ -538,8 +533,8 @@ Rekapi.prototype.stop = function () {
     actor._resetFnKeyframesFromMillisecond(0);
   });
 
-  fireEvent(this, 'playStateChange', _);
-  fireEvent(this, 'stop', _);
+  fireEvent(this, 'playStateChange');
+  fireEvent(this, 'stop');
 
   return this;
 };
@@ -591,7 +586,7 @@ Rekapi.prototype.update = function (opt_millisecond,  opt_doResetLaterFnKeyframe
     opt_millisecond = this._lastUpdatedMillisecond;
   }
 
-  fireEvent(this, 'beforeUpdate', _);
+  fireEvent(this, 'beforeUpdate');
 
   // Update and render each of the actors
   _.each(this._actors, function (actor) {
@@ -602,7 +597,7 @@ Rekapi.prototype.update = function (opt_millisecond,  opt_doResetLaterFnKeyframe
   });
 
   this._lastUpdatedMillisecond = opt_millisecond;
-  fireEvent(this, 'afterUpdate', _);
+  fireEvent(this, 'afterUpdate');
 
   return this;
 };
@@ -727,7 +722,7 @@ Rekapi.prototype.on = function (eventName, handler) {
  * @chainable
  */
 Rekapi.prototype.trigger = function (eventName, opt_data) {
-  fireEvent(this, eventName, _, opt_data);
+  fireEvent(this, eventName, opt_data);
 
   return this;
 };

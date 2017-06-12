@@ -129,7 +129,7 @@ KeyframeProperty.prototype.detach = function () {
   var actor = this.actor;
   if (actor) {
     if (actor.rekapi) {
-      fireEvent(actor.rekapi, 'removeKeyframeProperty', _, this);
+      fireEvent(actor.rekapi, 'removeKeyframeProperty', this);
       delete actor._keyframeProperties[this.id];
       this.actor = null;
     }
