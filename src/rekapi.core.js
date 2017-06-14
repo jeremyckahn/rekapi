@@ -57,12 +57,12 @@ export const isAnimationComplete = (rekapi, currentLoopIteration) =>
  * @param {Rekapi} rekapi
  * @param {number} currentLoopIteration
  */
-function updatePlayState (rekapi, currentLoopIteration) {
+export const updatePlayState = (rekapi, currentLoopIteration) => {
   if (isAnimationComplete(rekapi, currentLoopIteration)) {
     rekapi.stop();
     fireEvent(rekapi, 'animationComplete');
   }
-}
+};
 
 /*!
  * Calculate how far in the animation loop `rekapi` is, in milliseconds,
@@ -72,23 +72,15 @@ function updatePlayState (rekapi, currentLoopIteration) {
  * @param {number} currentLoopIteration
  * @return {number}
  */
-function calculateLoopPosition (rekapi, forMillisecond, currentLoopIteration) {
-  var currentLoopPosition;
-  var animationLength = rekapi.getAnimationLength();
+export const calculateLoopPosition = (rekapi, forMillisecond, currentLoopIteration) => {
+  const animationLength = rekapi.getAnimationLength();
 
-  if (animationLength === 0) {
-    return 0;
-  }
-
-  if (isAnimationComplete(rekapi, currentLoopIteration)) {
-    // Rewind to the end if the playhead has gone past it
-    currentLoopPosition = animationLength;
-  } else {
-    currentLoopPosition = forMillisecond % animationLength;
-  }
-
-  return currentLoopPosition;
-}
+  return animationLength === 0 ?
+    0 :
+    isAnimationComplete(rekapi, currentLoopIteration) ?
+      animationLength :
+      forMillisecond % animationLength;
+};
 
 /*!
  * Calculate the timeline position and state for a given millisecond.
@@ -97,26 +89,25 @@ function calculateLoopPosition (rekapi, forMillisecond, currentLoopIteration) {
  * @param {Rekapi} rekapi
  * @param {number} forMillisecond
  */
-function updateToMillisecond (rekapi, forMillisecond) {
-  var loopPosition = 0;
-  var currentIteration = 0;
+export const updateToMillisecond = (rekapi, forMillisecond) => {
+  const currentIteration = determineCurrentLoopIteration(rekapi, forMillisecond);
+  const loopPosition = calculateLoopPosition(
+    rekapi, forMillisecond, currentIteration
+  );
 
-  currentIteration = determineCurrentLoopIteration(rekapi, forMillisecond);
-  loopPosition = calculateLoopPosition(
-    rekapi, forMillisecond, currentIteration);
   rekapi._loopPosition = loopPosition;
 
-  var keyframeResetList = [];
+  let keyframeResetList = [];
 
   if (currentIteration > rekapi._latestIteration) {
     fireEvent(rekapi, 'animationLooped');
 
     // Reset function keyframes
-    var lookupObject = { name: 'function' };
-    _.each(rekapi._actors, function (actor) {
-      var fnKeyframes = _.where(actor._keyframeProperties, lookupObject);
+    const lookupObject = { name: 'function' };
 
-      var lastFnKeyframe = _.last(fnKeyframes);
+    _.each(rekapi._actors, actor => {
+      const fnKeyframes = _.where(actor._keyframeProperties, lookupObject);
+      const lastFnKeyframe = _.last(fnKeyframes);
 
       if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
         lastFnKeyframe.invoke();
@@ -130,35 +121,30 @@ function updateToMillisecond (rekapi, forMillisecond) {
   rekapi.update(loopPosition, true);
   updatePlayState(rekapi, currentIteration);
 
-  _.each(keyframeResetList, function (fnKeyframe) {
+  _.each(keyframeResetList, fnKeyframe => {
     fnKeyframe.hasFired = false;
   });
-}
+};
 
 /*!
  * Calculate how far into the animation loop `rekapi` is, in milliseconds,
  * and update based on that time.
  * @param {Rekapi} rekapi
  */
-function updateToCurrentMillisecond (rekapi) {
+export const updateToCurrentMillisecond = rekapi =>
   updateToMillisecond(rekapi, calculateTimeSinceStart(rekapi));
-}
 
 /*!
  * This is the heartbeat of an animation.  This updates `rekapi`'s state and
  * then calls itself continuously.
  * @param {Rekapi} rekapi
  */
-function tick (rekapi) {
+const tick = rekapi =>
   // Need to check for .call presence to get around an IE limitation.  See
   // annotation for cancelLoop for more info.
-  if (rekapi._scheduleUpdate.call) {
-    rekapi._loopId = rekapi._scheduleUpdate.call(global,
-      rekapi._updateFn, UPDATE_TIME);
-  } else {
-    rekapi._loopId = setTimeout(rekapi._updateFn, UPDATE_TIME);
-  }
-}
+  rekapi._loopId = rekapi._scheduleUpdate.call ?
+    rekapi._scheduleUpdate.call(global, rekapi._updateFn, UPDATE_TIME) :
+    setTimeout(rekapi._updateFn, UPDATE_TIME);
 
 /*!
  * @return {Function}
@@ -831,11 +817,5 @@ Rekapi.nonCustomFormulaNames = _.keys(Tweenable.formulas);
 Rekapi.util = {};
 
 // Expose helper functions for unit testing.
-// FIXME: Don't include this in optimized builds.
-Rekapi._private = {
-  'calculateLoopPosition': calculateLoopPosition
-  ,'updateToCurrentMillisecond': updateToCurrentMillisecond
-  ,'updateToMillisecond': updateToMillisecond
-  ,'tick': tick
-  ,'updatePlayState': updatePlayState
-};
+// FIXME: Remove this before 2.0 release
+Rekapi._private = {};

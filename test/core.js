@@ -9,7 +9,11 @@ import { Tweenable, setBezierFunction, unsetBezierFunction } from 'shifty';
 import {
   determineCurrentLoopIteration,
   calculateTimeSinceStart,
-  isAnimationComplete
+  isAnimationComplete,
+  updatePlayState,
+  calculateLoopPosition,
+  updateToMillisecond,
+  updateToCurrentMillisecond
 } from '../src/rekapi.core';
 
 describe('Rekapi', () => {
@@ -351,14 +355,14 @@ describe('Rekapi', () => {
 
         rekapi._timesToIterate = 1;
 
-        Rekapi._private.updateToMillisecond(rekapi, 5);
+        updateToMillisecond(rekapi, 5);
         assert.equal(callCount, 0);
 
-        Rekapi._private.updateToMillisecond(rekapi, 15);
+        updateToMillisecond(rekapi, 15);
         assert.equal(callCount, 1);
 
         rekapi.update(5);
-        Rekapi._private.updateToMillisecond(rekapi, 15);
+        updateToMillisecond(rekapi, 15);
         assert.equal(callCount, 2);
       });
     });
@@ -440,15 +444,15 @@ describe('Rekapi', () => {
 
       rekapi.play();
 
-      Rekapi._private.updateToMillisecond(rekapi, 5);
+      updateToMillisecond(rekapi, 5);
       assert.equal(callCount, 0);
 
-      Rekapi._private.updateToMillisecond(rekapi, 15);
+      updateToMillisecond(rekapi, 15);
       assert.equal(callCount, 1);
 
       rekapi.stop();
 
-      Rekapi._private.updateToMillisecond(rekapi, 15);
+      updateToMillisecond(rekapi, 15);
       assert.equal(callCount, 2);
     });
   });
@@ -490,14 +494,14 @@ describe('Rekapi', () => {
 
       rekapi._timesToIterate = 1;
 
-      Rekapi._private.updateToMillisecond(rekapi, 5);
+      updateToMillisecond(rekapi, 5);
       assert.equal(callCount, 0);
 
-      Rekapi._private.updateToMillisecond(rekapi, 15);
+      updateToMillisecond(rekapi, 15);
       assert.equal(callCount, 1);
 
       rekapi.playFrom(5);
-      Rekapi._private.updateToMillisecond(rekapi, 15);
+      updateToMillisecond(rekapi, 15);
       assert.equal(callCount, 2);
     });
   });
@@ -539,15 +543,15 @@ describe('Rekapi', () => {
         rekapi.play(2);
 
         Tweenable.now = () => 500;
-        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        updateToCurrentMillisecond(rekapi);
         assert.equal(actor.get().x, 50);
 
         Tweenable.now = () => 1500;
-        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        updateToCurrentMillisecond(rekapi);
         assert.equal(actor.get().x, 50);
 
         Tweenable.now = () => 2500;
-        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        updateToCurrentMillisecond(rekapi);
         assert.equal(actor.get().x, 100);
       });
 
@@ -565,15 +569,15 @@ describe('Rekapi', () => {
         rekapi.play();
 
         Tweenable.now = () => 500;
-        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        updateToCurrentMillisecond(rekapi);
         assert.equal(actor.get().x, 50);
 
         Tweenable.now = () => 1500;
-        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        updateToCurrentMillisecond(rekapi);
         assert.equal(actor.get().x, 50);
 
         Tweenable.now = () => 10000000500;
-        Rekapi._private.updateToCurrentMillisecond(rekapi);
+        updateToCurrentMillisecond(rekapi);
         assert.equal(actor.get().x, 50);
       });
     });
@@ -584,8 +588,7 @@ describe('Rekapi', () => {
           .keyframe(0, { x: 1 })
           .keyframe(2000, { x: 2 });
 
-        let calculatedMillisecond =
-          Rekapi._private.calculateLoopPosition(rekapi, 1000, 0);
+        let calculatedMillisecond = calculateLoopPosition(rekapi, 1000, 0);
 
         assert.equal(calculatedMillisecond, 1000);
       });
@@ -595,8 +598,7 @@ describe('Rekapi', () => {
           .keyframe(0, { x: 1 })
           .keyframe(2000, { x: 2 });
 
-        let calculatedMillisecond =
-            Rekapi._private.calculateLoopPosition(rekapi, 2500, 1);
+        let calculatedMillisecond = calculateLoopPosition(rekapi, 2500, 1);
 
         assert.equal(calculatedMillisecond, 500);
       });
@@ -679,13 +681,13 @@ describe('Rekapi', () => {
 
        rekapi.play(3);
 
-       Rekapi._private.updatePlayState(rekapi, 0);
+       updatePlayState(rekapi, 0);
        assert.equal(rekapi.isPlaying(), true);
 
-       Rekapi._private.updatePlayState(rekapi, 2);
+       updatePlayState(rekapi, 2);
        assert.equal(rekapi.isPlaying(), true);
 
-       Rekapi._private.updatePlayState(rekapi, 3);
+       updatePlayState(rekapi, 3);
        assert.equal(rekapi.isPlaying(), false);
      });
    });
@@ -705,13 +707,13 @@ describe('Rekapi', () => {
 
       rekapi._loopTimestamp = 0;
       Tweenable.now = () => 250;
-      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      updateToCurrentMillisecond(rekapi);
 
       assert.equal(actor.get().x, 25);
       assert.equal(testActor2.get().x, 50);
 
       Tweenable.now = () => 750;
-      Rekapi._private.updateToCurrentMillisecond(rekapi);
+      updateToCurrentMillisecond(rekapi);
 
       assert.equal(actor.get().x, 75);
       assert.equal(testActor2.get().x, 100);
