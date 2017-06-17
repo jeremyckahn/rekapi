@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import Rekapi, {
+  rendererInitHooks,
   fireEvent
 } from '../../src/rekapi.core';
 
@@ -90,7 +91,7 @@ function removeActor (actor, canvasRenderer) {
  * functions.
  * @param {Rekapi} rekapi
  */
-Rekapi._rendererInitHook.canvas = function (rekapi) {
+rendererInitHooks.canvas = function (rekapi) {
   if (typeof CanvasRenderingContext2D === 'undefined' ||
       !(rekapi.context instanceof CanvasRenderingContext2D)) {
     return;

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { Tweenable } from 'shifty';
 import Rekapi, {
+  rendererInitHooks,
   fireEvent
 } from '../../src/rekapi.core';
 
@@ -61,7 +62,7 @@ function isInt (number) {
 /*!
  * @param {Rekapi} rekapi
  */
-Rekapi._rendererInitHook.cssAnimate = function (rekapi) {
+rendererInitHooks.cssAnimate = function (rekapi) {
   // Node.nodeType 1 is an ELEMENT_NODE.
   // https://developer.mozilla.org/en-US/docs/Web/API/Node.nodeType
   if (rekapi.context.nodeType === 1) {

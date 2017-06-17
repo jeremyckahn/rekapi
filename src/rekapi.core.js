@@ -188,6 +188,15 @@ const playState = {
   PLAYING: 'playing'
 };
 
+// FIXME: The rendererInitHooks + Rekapi#renderer pattern is kinda gross.  Maybe
+// just maintain an array of initialized renderer that are present at
+// initialization-time?
+/*!
+ * @type {Object.<function>} Contains the context init function to be called
+ * in the Rekapi constructor.
+ */
+export const rendererInitHooks = {};
+
 /**
  * If this is a rendered animation, the appropriate renderer is accessible as
  * `this.renderer`.  If provided, a reference to `context` is accessible
@@ -266,18 +275,8 @@ export default function Rekapi (context = {}) {
     updateToCurrentMillisecond(this);
   };
 
-  _.each(Rekapi._rendererInitHook, rendererInitHook => rendererInitHook(this));
+  _.each(rendererInitHooks, rendererInitHook => rendererInitHook(this));
 }
-
-// Decorate the Rekapi object with the dependencies so that other modules can
-// access them.
-Rekapi._ = _;
-
-/*!
- * @type {Object.<function>} Contains the context init function to be called
- * in the Rekapi constructor.
- */
-Rekapi._rendererInitHook = {};
 
 /**
  * Add an actor to the animation.  Decorates the added `actor` with a
