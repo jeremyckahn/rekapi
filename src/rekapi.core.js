@@ -149,29 +149,26 @@ const tick = rekapi =>
 /*!
  * @return {Function}
  */
-function getUpdateMethod () {
+const getUpdateMethod = () =>
   // requestAnimationFrame() shim by Paul Irish (modified for Rekapi)
   // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-  return global.requestAnimationFrame  ||
+  global.requestAnimationFrame       ||
   global.webkitRequestAnimationFrame ||
   global.oRequestAnimationFrame      ||
   global.msRequestAnimationFrame     ||
-    (global.mozCancelRequestAnimationFrame
-     && global.mozRequestAnimationFrame) ||
+  (global.mozCancelRequestAnimationFrame && global.mozRequestAnimationFrame) ||
   global.setTimeout;
-}
 
 /*!
  * @return {Function}
  */
-function getCancelMethod () {
-  return global.cancelAnimationFrame  ||
-  global.webkitCancelAnimationFrame ||
-  global.oCancelAnimationFrame      ||
-  global.msCancelAnimationFrame     ||
+const getCancelMethod = () =>
+  global.cancelAnimationFrame           ||
+  global.webkitCancelAnimationFrame     ||
+  global.oCancelAnimationFrame          ||
+  global.msCancelAnimationFrame         ||
   global.mozCancelRequestAnimationFrame ||
   global.clearTimeout;
-}
 
 /*!
  * Cancels an update loop.  This abstraction is needed to get around the fact
@@ -180,28 +177,23 @@ function getCancelMethod () {
  * Function.prototype.call cannot be used upon it.
  * @param {Rekapi} rekapi
  */
-function cancelLoop (rekapi) {
-  if (rekapi._cancelUpdate.call) {
-    rekapi._cancelUpdate.call(global, rekapi._loopId);
-  } else {
+const cancelLoop = rekapi =>
+  rekapi._cancelUpdate.call ?
+    rekapi._cancelUpdate.call(global, rekapi._loopId) :
     clearTimeout(rekapi._loopId);
-  }
-}
 
-// CORE-SPECIFIC VARS AND FUNCTIONS
-
-var playState = {
-  'STOPPED': 'stopped'
-  ,'PAUSED': 'paused'
-  ,'PLAYING': 'playing'
+const playState = {
+  STOPPED: 'stopped',
+  PAUSED:  'paused',
+  PLAYING: 'playing'
 };
 
 /**
  * If this is a rendered animation, the appropriate renderer is accessible as
- * `this.renderer`.  If provided, a reference to `opt_context` is accessible
+ * `this.renderer`.  If provided, a reference to `context` is accessible
  * as `this.context`.
  * @class Rekapi
- * @param {Object|CanvasRenderingContext2D|HTMLElement=} opt_context This
+ * @param {Object|CanvasRenderingContext2D|HTMLElement=} context This
  * determines how to render the animation.  If this is not provided or is a
  * plain object (`{}`), the animation will not render anything and
  * `this.renderer` will be `undefined`.  If this is a reference to a
@@ -214,30 +206,30 @@ var playState = {
  * @constructor
  * @chainable
  */
-export default function Rekapi (opt_context) {
-  this.context = opt_context || {};
+export default function Rekapi (context = {}) {
+  this.context = context;
   this._actors = {};
   this._playState = playState.STOPPED;
 
   this._events = {
-    'animationComplete': []
-    ,'playStateChange': []
-    ,'play': []
-    ,'pause': []
-    ,'stop': []
-    ,'beforeUpdate': []
-    ,'afterUpdate': []
-    ,'addActor': []
-    ,'removeActor': []
-    ,'beforeAddKeyframeProperty': []
-    ,'addKeyframeProperty': []
-    ,'removeKeyframeProperty': []
-    ,'removeKeyframePropertyComplete': []
-    ,'beforeRemoveKeyframeProperty': []
-    ,'addKeyframePropertyTrack': []
-    ,'removeKeyframePropertyTrack': []
-    ,'timelineModified': []
-    ,'animationLooped': []
+    animationComplete: [],
+    playStateChange: [],
+    play: [],
+    pause: [],
+    stop: [],
+    beforeUpdate: [],
+    afterUpdate: [],
+    addActor: [],
+    removeActor: [],
+    beforeAddKeyframeProperty: [],
+    addKeyframeProperty: [],
+    removeKeyframeProperty: [],
+    removeKeyframePropertyComplete: [],
+    beforeRemoveKeyframeProperty: [],
+    addKeyframePropertyTrack: [],
+    removeKeyframePropertyTrack: [],
+    timelineModified: [],
+    animationLooped: []
   };
 
   // How many times to loop the animation before stopping
@@ -269,16 +261,12 @@ export default function Rekapi (opt_context) {
   this._scheduleUpdate = getUpdateMethod();
   this._cancelUpdate = getCancelMethod();
 
-  this._updateFn = _.bind(function () {
+  this._updateFn = () => {
     tick(this);
     updateToCurrentMillisecond(this);
-  }, this);
+  };
 
-  _.each(Rekapi._rendererInitHook, function (rendererInitHook) {
-    rendererInitHook(this);
-  }, this);
-
-  return this;
+  _.each(Rekapi._rendererInitHook, rendererInitHook => rendererInitHook(this));
 }
 
 // Decorate the Rekapi object with the dependencies so that other modules can
