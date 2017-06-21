@@ -3,6 +3,8 @@ import { Tweenable, setBezierFunction } from 'shifty';
 
 const UPDATE_TIME = 1000 / 60;
 
+export const DEFAULT_EASING = 'linear';
+
 /*!
  * Fire an event bound to a Rekapi.
  * @param {Rekapi} rekapi

@@ -4,37 +4,24 @@ import { composeEasingObject } from '../node_modules/shifty/src/tweenable';
 import KeyframeProperty from './rekapi.keyframe-property';
 import {
   fireEvent,
-  invalidateAnimationLength
+  invalidateAnimationLength,
+  DEFAULT_EASING
 } from './rekapi.core';
 
-const DEFAULT_EASING = 'linear';
-
 /*!
  * @param {Object} obj
  * @return {number} millisecond
  */
-function getMillisecond(obj) {
-  return obj.millisecond;
-}
+const getMillisecond = obj => obj.millisecond;
 
-/*!
- * @param {Object} obj
- * @return {number} millisecond
- */
-function get_Millisecond(obj) {
-  return obj._millisecond;
-}
-
+// TODO: Make this a prototype method
 /*!
  * @param {Rekapi.Actor} actor
  * @param {string} event
- * @param {any=} opt_data
+ * @param {any=} data
  */
-function fireRekapiEventForActor (actor, event, opt_data) {
-  if (actor.rekapi) {
-    fireEvent(actor.rekapi, event, opt_data);
-  }
-}
+const fire = (actor, event, data) =>
+  actor.rekapi && fireEvent(actor.rekapi, event, data);
 
 /*!
  * Retrieves the most recent property cache entry for a given millisecond.
@@ -43,19 +30,16 @@ function fireRekapiEventForActor (actor, event, opt_data) {
  * @return {Object|undefined} undefined if there is no property cache for
  * the millisecond, i.e. an empty cache.
  */
-function getPropertyCacheEntryForMillisecond (actor, millisecond) {
-  var cache = actor._timelinePropertyCache;
+const getPropertyCacheEntryForMillisecond = (actor, millisecond) => {
+  const cache = actor._timelinePropertyCache;
+  const index = _.sortedIndex(cache, { _millisecond: millisecond }, obj => obj._millisecond);
 
-  var index = _.sortedIndex(cache, { _millisecond: millisecond }, get_Millisecond);
-
-  if (cache[index] && cache[index]._millisecond === millisecond) {
-    return cache[index];
-  } else if (index >= 1) {
-    return cache[index - 1];
-  } else {
-    return cache[0];
-  }
-}
+  return cache[index] && cache[index]._millisecond === millisecond ?
+    cache[index] :
+      index >= 1 ?
+        cache[index - 1] :
+        cache[0];
+};
 
 /*!
  * Gets all of the current and most recent Rekapi.KeyframeProperties for a
@@ -64,27 +48,26 @@ function getPropertyCacheEntryForMillisecond (actor, millisecond) {
  * @param {number} forMillisecond
  * @return {Object} An Object containing Rekapi.KeyframeProperties
  */
-function getLatestProperties (actor, forMillisecond) {
-  var latestProperties = {};
+const getLatestProperties = (actor, forMillisecond) => {
+  const latestProperties = {};
 
-  _.each(actor._propertyTracks, function (propertyTrack, propertyName) {
-    var index = insertionPointInTrack(propertyTrack, forMillisecond);
-    if (propertyTrack[index] && propertyTrack[index].millisecond === forMillisecond) {
+  _.each(actor._propertyTracks, (propertyTrack, propertyName) => {
+    const index = insertionPointInTrack(propertyTrack, forMillisecond);
+
+    latestProperties[propertyName] = propertyTrack[index] && propertyTrack[index].millisecond === forMillisecond ?
       // Found forMillisecond exactly.
-      latestProperties[propertyName] = propertyTrack[index];
-    } else if (index >= 1) {
-      // forMillisecond doesn't exist in the track and index is
-      // where we'd need to insert it, therefore the previous
-      // keyframe is the most recent one before forMillisecond.
-      latestProperties[propertyName] = propertyTrack[index - 1];
-    } else {
-      // Return first property.  This is after forMillisecond.
-      latestProperties[propertyName] = propertyTrack[0];
-    }
+      propertyTrack[index] :
+        index >= 1 ?
+          // forMillisecond doesn't exist in the track and index is
+          // where we'd need to insert it, therefore the previous
+          // keyframe is the most recent one before forMillisecond.
+          propertyTrack[index - 1] :
+          // Return first property.  This is after forMillisecond.
+          propertyTrack[0];
   });
 
   return latestProperties;
-}
+};
 
 /*!
  * Search property track `track` and find the correct index to insert a
@@ -173,7 +156,7 @@ function removeEmptyPropertyTracks (actor) {
 
   _.each(trackNameRemovalList, function (trackName) {
     delete propertyTracks[trackName];
-    fireRekapiEventForActor(actor, 'removeKeyframePropertyTrack', trackName);
+    fire(actor, 'removeKeyframePropertyTrack', trackName);
   });
 }
 
@@ -208,7 +191,7 @@ function cleanupAfterKeyframeModification (actor) {
     invalidateAnimationLength(actor.rekapi);
   }
 
-  fireRekapiEventForActor(actor, 'timelineModified');
+  fire(actor, 'timelineModified');
 }
 
 /**
@@ -380,7 +363,7 @@ Actor.prototype.keyframe = function keyframe (
   }
 
   invalidatePropertyCache(this);
-  fireRekapiEventForActor(this, 'timelineModified');
+  fire(this, 'timelineModified');
 
   return this;
 };
@@ -579,7 +562,7 @@ Actor.prototype.removeKeyframe = function (millisecond) {
 
   removeEmptyPropertyTracks(this);
   cleanupAfterKeyframeModification(this);
-  fireRekapiEventForActor(this, 'timelineModified');
+  fire(this, 'timelineModified');
 
   return this;
 };
