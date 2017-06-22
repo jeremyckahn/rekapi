@@ -99,45 +99,48 @@ const propertyIndexInTrack = (track, millisecond) => {
  * will be rebuilt on the next call to ensurePropertyCacheValid.
  * @param {Rekapi.Actor}
  */
-function invalidatePropertyCache (actor) {
-  actor._timelinePropertyCacheValid = false;
-}
+const invalidateCache = actor => actor._timelinePropertyCacheValid = false;
 
 /*!
  * Empty out and rebuild the cache of internal KeyframeProperty data if it
  * has been marked as invalid.
  * @param {Rekapi.Actor}
  */
-function ensurePropertyCacheValid (actor) {
+const ensurePropertyCacheValid = actor => {
   if (actor._timelinePropertyCacheValid) {
     return;
   }
 
   actor._timelinePropertyCache = [];
   actor._timelineFunctionCache = [];
-  var timelinePropertyCache = actor._timelinePropertyCache;
+
+  const { _timelinePropertyCache, _timelineFunctionCache } = actor;
 
   // Build the cache map
-  var props = _.values(actor._keyframeProperties);
-  props.sort(function (a, b) { return a.millisecond - b.millisecond });
+  const props = _.values(actor._keyframeProperties)
+    .sort((a, b) => a.millisecond - b.millisecond);
 
-  var curCacheEntry = getLatestProperties(actor, 0);
+  let curCacheEntry = getLatestProperties(actor, 0);
+
   curCacheEntry._millisecond = 0;
-  timelinePropertyCache.push(curCacheEntry);
-  _.each(props, function (property) {
+  _timelinePropertyCache.push(curCacheEntry);
+
+  props.forEach(property => {
     if (property.millisecond !== curCacheEntry._millisecond) {
       curCacheEntry = _.clone(curCacheEntry);
       curCacheEntry._millisecond = property.millisecond;
-      timelinePropertyCache.push(curCacheEntry);
+      _timelinePropertyCache.push(curCacheEntry);
     }
+
     curCacheEntry[property.name] = property;
+
     if (property.name === 'function') {
-      actor._timelineFunctionCache.push(property);
+      _timelineFunctionCache.push(property);
     }
   });
 
   actor._timelinePropertyCacheValid = true;
-}
+};
 
 /*!
  * Remove any property tracks that are empty.
@@ -185,7 +188,7 @@ function sortPropertyTracks (actor) {
  */
 function cleanupAfterKeyframeModification (actor) {
   sortPropertyTracks(actor);
-  invalidatePropertyCache(actor);
+  invalidateCache(actor);
 
   if (actor.rekapi) {
     invalidateAnimationLength(actor.rekapi);
@@ -362,7 +365,7 @@ Actor.prototype.keyframe = function keyframe (
     invalidateAnimationLength(this.rekapi);
   }
 
-  invalidatePropertyCache(this);
+  invalidateCache(this);
   fire(this, 'timelineModified');
 
   return this;
