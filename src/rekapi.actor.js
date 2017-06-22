@@ -147,21 +147,16 @@ const ensurePropertyCacheValid = actor => {
  *
  * @param {Rekapi.Actor} actor
  */
-function removeEmptyPropertyTracks (actor) {
-  var trackNameRemovalList = [];
-  var propertyTracks = actor._propertyTracks;
+const removeEmptyPropertyTracks = actor => {
+  const { _propertyTracks } = actor;
 
-  _.each(propertyTracks, function (propertyTrack, trackName) {
-    if (!propertyTrack.length) {
-      trackNameRemovalList.push(trackName);
+  Object.keys(_propertyTracks).forEach(trackName => {
+    if (!_propertyTracks[trackName].length) {
+      delete _propertyTracks[trackName];
+      fire(actor, 'removeKeyframePropertyTrack', trackName);
     }
   });
-
-  _.each(trackNameRemovalList, function (trackName) {
-    delete propertyTracks[trackName];
-    fire(actor, 'removeKeyframePropertyTrack', trackName);
-  });
-}
+};
 
 /*!
  * Stably sort all of the property tracks of an actor
