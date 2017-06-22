@@ -42,6 +42,16 @@ const getPropertyCacheEntryForMillisecond = (actor, millisecond) => {
 };
 
 /*!
+ * Search property track `track` and find the correct index to insert a
+ * new element at `millisecond`.
+ * @param {Array(Rekapi.KeyframeProperty)} track
+ * @param {number} millisecond
+ * @return {number} index
+ */
+const insertionPointInTrack = (track, millisecond) =>
+  _.sortedIndex(track, { millisecond }, getMillisecond);
+
+/*!
  * Gets all of the current and most recent Rekapi.KeyframeProperties for a
  * given millisecond.
  * @param {Rekapi.Actor} actor
@@ -54,45 +64,35 @@ const getLatestProperties = (actor, forMillisecond) => {
   _.each(actor._propertyTracks, (propertyTrack, propertyName) => {
     const index = insertionPointInTrack(propertyTrack, forMillisecond);
 
-    latestProperties[propertyName] = propertyTrack[index] && propertyTrack[index].millisecond === forMillisecond ?
-      // Found forMillisecond exactly.
-      propertyTrack[index] :
-        index >= 1 ?
-          // forMillisecond doesn't exist in the track and index is
-          // where we'd need to insert it, therefore the previous
-          // keyframe is the most recent one before forMillisecond.
-          propertyTrack[index - 1] :
-          // Return first property.  This is after forMillisecond.
-          propertyTrack[0];
+    latestProperties[propertyName] =
+      propertyTrack[index] && propertyTrack[index].millisecond === forMillisecond ?
+        // Found forMillisecond exactly.
+        propertyTrack[index] :
+          index >= 1 ?
+            // forMillisecond doesn't exist in the track and index is
+            // where we'd need to insert it, therefore the previous
+            // keyframe is the most recent one before forMillisecond.
+            propertyTrack[index - 1] :
+            // Return first property.  This is after forMillisecond.
+            propertyTrack[0];
   });
 
   return latestProperties;
 };
 
 /*!
- * Search property track `track` and find the correct index to insert a
- * new element at `millisecond`.
- * @param {Array(Rekapi.KeyframeProperty)} track
- * @param {number} millisecond
- * @return {number} index
- */
-function insertionPointInTrack (track, millisecond) {
-  return _.sortedIndex(track, { millisecond: millisecond }, getMillisecond);
-}
-
-/*!
  * Search property track `track` and find the index to the element that is
  * at `millisecond`.  Returns `undefined` if not found.
  * @param {Array(Rekapi.KeyframeProperty)} track
  * @param {number} millisecond
- * @return {number|undefined} index or undefined if not present
+ * @return {number} index or -1 if not present
  */
-function propertyIndexInTrack (track, millisecond) {
-  var index = insertionPointInTrack(track, millisecond);
-  if (track[index] && track[index].millisecond === millisecond) {
-    return index;
-  }
-}
+const propertyIndexInTrack = (track, millisecond) => {
+  const index = insertionPointInTrack(track, millisecond);
+
+  return track[index] && track[index].millisecond === millisecond ?
+    index : -1;
+};
 
 /*!
  * Mark the cache of internal KeyframeProperty data as invalid.  The cache
@@ -468,7 +468,7 @@ Actor.prototype.moveKeyframe = function (from, to) {
   // timeline
   _.each(this._propertyTracks, function (propertyTrack, trackName) {
     var oldIndex = propertyIndexInTrack(propertyTrack, from);
-    if (typeof oldIndex !== 'undefined') {
+    if (typeof oldIndex !== -1) {
       var property = propertyTrack[oldIndex];
       property.millisecond = to;
     }
@@ -553,7 +553,7 @@ Actor.prototype.removeKeyframe = function (millisecond) {
 
   _.each(this._propertyTracks, function (propertyTrack, propertyName) {
     var index = propertyIndexInTrack(propertyTrack, millisecond);
-    if (typeof index !== 'undefined') {
+    if (typeof index !== -1) {
       var keyframeProperty = propertyTrack[index];
       this._deleteKeyframePropertyAt(propertyTrack, index);
       keyframeProperty.detach();
@@ -612,7 +612,7 @@ Actor.prototype.removeAllKeyframes = function () {
 Actor.prototype.getKeyframeProperty = function (property, millisecond) {
   var propertyTrack = this._propertyTracks[property];
   var index = propertyIndexInTrack(propertyTrack, millisecond);
-  if (typeof index !== 'undefined') {
+  if (typeof index !== -1) {
     return propertyTrack[index];
   }
 };
