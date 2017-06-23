@@ -215,7 +215,6 @@ const cleanupAfterKeyframeModification = actor => {
  *   `{{#crossLink "Rekapi/removeActor:method"}}{{/crossLink}}`.
  * @constructor
  */
-// FIXME: Make this a proper ES6 class
 export default class Actor extends Tweenable {
 
   constructor (config = {}) {
@@ -309,7 +308,7 @@ export default class Actor extends Tweenable {
    *       });
    *
    * `x` will ease with `easeInSine`, and `y` will ease with `easeOutSine`.
-   * Any unspecified properties will ease with `linear`.  If `opt_easing` is
+   * Any unspecified properties will ease with `linear`.  If `easing` is
    * omitted, all properties will default to `linear`.
    * @method keyframe
    * @param {number} millisecond Where on the timeline to set the keyframe.
@@ -319,26 +318,22 @@ export default class Actor extends Tweenable {
    * animation timeline.  If this is a function, it will be executed at the
    * specified keyframe.  The function will receive a number that represents
    * the delay between when the function is called and when it was scheduled.
-   * @param {string|Object=} opt_easing Optional easing string or Object.  If
+   * @param {string|Object=} easing Optional easing string or Object.  If
    * `state` is a function, this is ignored.
    * @chainable
    */
-  keyframe (millisecond, state, opt_easing) {
+  keyframe (millisecond, state, easing = DEFAULT_EASING) {
     if (state instanceof Function) {
       state = { 'function': state };
     }
 
-    opt_easing = opt_easing || DEFAULT_EASING;
-    var easing = composeEasingObject(state, opt_easing);
-    var newKeyframeProperty;
+    const easingObject = composeEasingObject(state, easing);
 
-    // Create and add all of the KeyframeProperties
-    _.each(state, function (value, name) {
-      newKeyframeProperty = new KeyframeProperty(
-        millisecond, name, value, easing[name]);
-
-      this.addKeyframeProperty(newKeyframeProperty);
-    }, this);
+    _.each(state, (value, name) =>
+      this.addKeyframeProperty(
+        new KeyframeProperty(millisecond, name, value, easingObject[name])
+      )
+    );
 
     if (this.rekapi) {
       invalidateAnimationLength(this.rekapi);
