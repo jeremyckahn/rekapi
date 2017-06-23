@@ -162,26 +162,25 @@ const removeEmptyPropertyTracks = actor => {
  * Stably sort all of the property tracks of an actor
  * @param {Rekapi.Actor} actor
  */
-function sortPropertyTracks (actor) {
-  _.each(actor._propertyTracks, function (propertyTrack, trackName) {
-    actor._propertyTracks[trackName] = _.sortBy(propertyTrack, 'millisecond');
-    propertyTrack = actor._propertyTracks[trackName];
+const sortPropertyTracks = actor => {
+  _.each(actor._propertyTracks, (propertyTrack, trackName) => {
+    propertyTrack = _.sortBy(propertyTrack, 'millisecond');
 
-    _.each(propertyTrack, function (keyframeProperty, i) {
-      keyframeProperty.linkToNext(propertyTrack[i + 1]);
-    });
+    propertyTrack.forEach((keyframeProperty, i) =>
+      keyframeProperty.linkToNext(propertyTrack[i + 1])
+    );
+
+    actor._propertyTracks[trackName] = propertyTrack;
   });
-}
+};
 
 /*!
  * Updates internal Rekapi and Actor data after a KeyframeProperty
  * modification method is called.
  *
- * TODO: This should be moved to core.
- *
  * @param {Rekapi.Actor} actor
  */
-function cleanupAfterKeyframeModification (actor) {
+const cleanupAfterKeyframeModification = actor => {
   sortPropertyTracks(actor);
   invalidateCache(actor);
 
@@ -190,7 +189,7 @@ function cleanupAfterKeyframeModification (actor) {
   }
 
   fire(actor, 'timelineModified');
-}
+};
 
 /**
  * An actor represents an individual component of an animation.  An animation
@@ -224,22 +223,20 @@ export default function Actor (opt_config) {
   // Steal the `Tweenable` constructor.
   Tweenable.call(this);
 
-  _.extend(this, {
-    '_propertyTracks': {}
-    ,'_timelinePropertyCache': []
-    ,'_timelineFunctionCache': []
-    ,'_timelinePropertyCacheValid': false
-    ,'_keyframeProperties': {}
-    ,'id': _.uniqueId()
-    ,'context': opt_config.context // This may be undefined
-    ,'setup': opt_config.setup || noop
-    ,'render': opt_config.render || noop
-    ,'teardown': opt_config.teardown || noop
-    ,'data': {}
-    ,'wasActive': true
+  Object.assign(this, {
+    _propertyTracks: {},
+    _timelinePropertyCache: [],
+    _timelineFunctionCache: [],
+    _timelinePropertyCacheValid: false,
+    _keyframeProperties: {},
+    id: _.uniqueId(),
+    context: opt_config.context, // This may be undefined
+    setup: opt_config.setup || noop,
+    render: opt_config.render || noop,
+    teardown: opt_config.teardown || noop,
+    data: {},
+    wasActive: true
   });
-
-  return this;
 }
 
 // Kind of a fun way to set up an inheritance chain.  `ActorMethods` prevents
