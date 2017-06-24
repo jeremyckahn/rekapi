@@ -456,7 +456,7 @@ export default class Actor extends Tweenable {
    * Augment the `value` or `easing` of the `{{#crossLink
    * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s at a given millisecond.  Any
    * `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s omitted in
-   * `stateModification` or `opt_easing` are not modified.
+   * `state` or `opt_easing` are not modified.
    *
    *     actor.keyframe(0, {
    *       'x': 10,
@@ -480,31 +480,30 @@ export default class Actor extends Tweenable {
    * __[Example](../../../../examples/actor_modify_keyframe.html)__
    * @method modifyKeyframe
    * @param {number} millisecond
-   * @param {Object} stateModification
-   * @param {Object=} opt_easingModification
+   * @param {Object} state
+   * @param {Object=} easing
    * @chainable
    */
-  modifyKeyframe (
-    millisecond, stateModification, opt_easingModification) {
-    opt_easingModification = opt_easingModification || {};
-
-    _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var property = this.getKeyframeProperty(trackName, millisecond);
+  modifyKeyframe (millisecond, state, easing = {}) {
+    _.each(this._propertyTracks, (propertyTrack, trackName) => {
+      const property = this.getKeyframeProperty(trackName, millisecond);
 
       if (property) {
         property.modifyWith({
-          'value': stateModification[trackName]
-          ,'easing': opt_easingModification[trackName]
+          value: state[trackName],
+          easing: easing[trackName]
         });
-      } else if (typeof stateModification[trackName] !== 'undefined') {
-        property = new KeyframeProperty(
-          millisecond, trackName,
-          stateModification[trackName],
-          opt_easingModification[trackName]);
-
-        this.addKeyframeProperty(property);
+      } else if (state[trackName]) {
+        this.addKeyframeProperty(
+          new KeyframeProperty(
+            millisecond,
+            trackName,
+            state[trackName],
+            easing[trackName]
+          )
+        );
       }
-    }, this);
+    });
 
     cleanupAfterKeyframeModification(this);
 
@@ -522,16 +521,15 @@ export default class Actor extends Tweenable {
    * @chainable
    */
   removeKeyframe (millisecond) {
-    var propertyTracks = this._propertyTracks;
+    _.each(this._propertyTracks, (propertyTrack, propertyName) => {
+      const index = propertyIndexInTrack(propertyTrack, millisecond);
 
-    _.each(this._propertyTracks, function (propertyTrack, propertyName) {
-      var index = propertyIndexInTrack(propertyTrack, millisecond);
       if (index !== -1) {
-        var keyframeProperty = propertyTrack[index];
+        const keyframeProperty = propertyTrack[index];
         this._deleteKeyframePropertyAt(propertyTrack, index);
         keyframeProperty.detach();
       }
-    }, this);
+    });
 
     removeEmptyPropertyTracks(this);
     cleanupAfterKeyframeModification(this);
@@ -555,13 +553,13 @@ export default class Actor extends Tweenable {
    * @chainable
    */
   removeAllKeyframes () {
-    _.each(this._propertyTracks, function (propertyTrack) {
-      propertyTrack.length = 0;
-    });
+    _.each(this._propertyTracks, propertyTrack =>
+      propertyTrack.length = 0
+    );
 
-    _.each(this._keyframeProperties, function (keyframeProperty) {
-      keyframeProperty.detach();
-    }, this);
+    _.each(this._keyframeProperties, keyframeProperty =>
+      keyframeProperty.detach()
+    );
 
     removeEmptyPropertyTracks(this);
     this._keyframeProperties = {};
@@ -583,11 +581,9 @@ export default class Actor extends Tweenable {
    * `undefined` if no properties were found.
    */
   getKeyframeProperty (property, millisecond) {
-    var propertyTrack = this._propertyTracks[property];
-    var index = propertyIndexInTrack(propertyTrack, millisecond);
-    if (index !== -1) {
-      return propertyTrack[index];
-    }
+    const propertyTrack = this._propertyTracks[property];
+
+    return propertyTrack[propertyIndexInTrack(propertyTrack, millisecond)];
   }
 
   /**
@@ -606,15 +602,16 @@ export default class Actor extends Tweenable {
    * "Rekapi.KeyframeProperty"}}{{/crossLink}}` with.
    * @chainable
    */
-  modifyKeyframeProperty (
-    property, millisecond, newProperties) {
+  modifyKeyframeProperty (property, millisecond, newProperties) {
+    const keyframeProperty = this.getKeyframeProperty(property, millisecond);
 
-    var keyframeProperty = this.getKeyframeProperty(property, millisecond);
     if (keyframeProperty) {
-      if ('millisecond' in newProperties) {
-        if (this.hasKeyframeAt(newProperties.millisecond, property)) {
-          throw new Error('Tried to move ' + property + ' to ' + newProperties.millisecond + 'ms, but a keyframe property already exists there');
-        }
+      if ('millisecond' in newProperties &&
+          this.hasKeyframeAt(newProperties.millisecond, property)
+        ) {
+        throw new Error(
+          `Tried to move ${property} to ${newProperties.millisecond}ms, but a keyframe property already exists there`
+        );
       }
 
       keyframeProperty.modifyWith(newProperties);
@@ -636,12 +633,13 @@ export default class Actor extends Tweenable {
    * if one was found.
    */
   removeKeyframeProperty (property, millisecond) {
-    var propertyTracks = this._propertyTracks;
+    const { _propertyTracks } = this;
 
-    if (typeof propertyTracks[property] !== 'undefined') {
-      var propertyTrack = propertyTracks[property];
-      var index = propertyIndexInTrack(propertyTrack, millisecond);
-      var keyframeProperty = propertyTrack[index];
+    if (_propertyTracks[property]) {
+      const propertyTrack = _propertyTracks[property];
+      const index = propertyIndexInTrack(propertyTrack, millisecond);
+      const keyframeProperty = propertyTrack[index];
+
       fireEvent(this.rekapi, 'beforeRemoveKeyframeProperty', keyframeProperty);
       this._deleteKeyframePropertyAt(propertyTrack, index);
       keyframeProperty.detach();
@@ -660,7 +658,7 @@ export default class Actor extends Tweenable {
    * @return {Array(string)} A list of all the track names for an actor.
    */
   getTrackNames () {
-    return _.keys(this._propertyTracks);
+    return Object.keys(this._propertyTracks);
   }
 
   /**
@@ -671,7 +669,7 @@ export default class Actor extends Tweenable {
    * @return {Rekapi.KeyframeProperty[]|undefined}
    */
   getPropertiesInTrack (trackName) {
-    var propertyTrack = this._propertyTracks[trackName];
+    const propertyTrack = this._propertyTracks[trackName];
 
     if (propertyTrack) {
       return propertyTrack.slice(0);
@@ -686,13 +684,13 @@ export default class Actor extends Tweenable {
    * (for instance, if the actor's first keyframe is later than millisecond
    * `0`).  If there are no keyframes, this returns `0`.
    */
-  getStart (opt_trackName) {
-    var starts = [];
-    var propertyTracks = this._propertyTracks;
+  getStart (trackName = undefined) {
+    const { _propertyTracks } = this;
+    const starts = [];
 
-    // Null check to see if opt_trackName was provided and is valid
-    if (propertyTracks.hasOwnProperty(opt_trackName)) {
-      var firstKeyframeProperty = propertyTracks[opt_trackName][0];
+    // Null check to see if trackName was provided and is valid
+    if (_propertyTracks.hasOwnProperty(trackName)) {
+      const firstKeyframeProperty = _propertyTracks[trackName][0];
 
       if (firstKeyframeProperty) {
         starts.push(firstKeyframeProperty.millisecond);
@@ -700,25 +698,16 @@ export default class Actor extends Tweenable {
     } else {
       // Loop over all property tracks and accumulate the first
       // keyframeProperties from non-empty tracks
-      _.each(propertyTracks, function (propertyTrack) {
+      _.each(_propertyTracks, propertyTrack => {
         if (propertyTrack.length) {
           starts.push(propertyTrack[0].millisecond);
         }
       });
     }
 
-    if (starts.length === 0) {
-      starts = [0];
-    }
-
-    var start;
-    if (starts.length > 0) {
-      start = Math.min.apply(Math, starts);
-    } else {
-      start = 0;
-    }
-
-    return start;
+    return starts.length > 0 ?
+      Math.min.apply(Math, starts) :
+      0;
   }
 
   /**
