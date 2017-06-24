@@ -348,31 +348,26 @@ export default class Actor extends Tweenable {
   /**
    * @method hasKeyframeAt
    * @param {number} millisecond Point on the timeline to query.
-   * @param {string=} opt_trackName Optionally scope the lookup to a particular
+   * @param {string=} trackName Optionally scope the lookup to a particular
    * track.
    * @return {boolean} Whether or not the actor has any `{{#crossLink
    * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set at `millisecond`.
    */
-  hasKeyframeAt (millisecond, opt_trackName) {
-    var tracks = this._propertyTracks;
+  hasKeyframeAt (millisecond, trackName = undefined) {
+    const { _propertyTracks } = this;
 
-    if (opt_trackName) {
-      if (!_.has(tracks, opt_trackName)) {
-        return false;
-      }
-      tracks = _.pick(tracks, opt_trackName);
+    if (trackName && !_propertyTracks[trackName]) {
+      return false;
     }
 
-    // Search through the tracks and determine if a property can be found.
-    var track;
-    for (track in tracks) {
-      if (tracks.hasOwnProperty(track)
-         && this.getKeyframeProperty(track, millisecond)) {
-        return true;
-      }
-    }
+    const propertyTracks = trackName ?
+      _.pick(_propertyTracks, trackName) :
+      _propertyTracks;
 
-    return false;
+    return Object.keys(propertyTracks).some(track =>
+      propertyTracks.hasOwnProperty(track) &&
+      !!this.getKeyframeProperty(track, millisecond)
+    );
   }
 
   /**
@@ -403,20 +398,21 @@ export default class Actor extends Tweenable {
    */
   copyKeyframe (copyTo, copyFrom) {
     // Build the configuation objects to be passed to Actor#keyframe
-    var sourcePositions = {};
-    var sourceEasings = {};
+    const sourcePositions = {};
+    const sourceEasings = {};
 
-    _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var keyframeProperty =
-      this.getKeyframeProperty(trackName, copyFrom);
+    _.each(this._propertyTracks, (propertyTrack, trackName) => {
+      const keyframeProperty =
+        this.getKeyframeProperty(trackName, copyFrom);
 
       if (keyframeProperty) {
         sourcePositions[trackName] = keyframeProperty.value;
         sourceEasings[trackName] = keyframeProperty.easing;
       }
-    }, this);
+    });
 
     this.keyframe(copyTo, sourcePositions, sourceEasings);
+
     return this;
   }
 
@@ -443,13 +439,13 @@ export default class Actor extends Tweenable {
 
     // Move each of the relevant KeyframeProperties to the new location in the
     // timeline
-    _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var oldIndex = propertyIndexInTrack(propertyTrack, from);
-      if (typeof oldIndex !== -1) {
-        var property = propertyTrack[oldIndex];
-        property.millisecond = to;
+    _.each(this._propertyTracks, (propertyTrack, trackName) => {
+      const oldIndex = propertyIndexInTrack(propertyTrack, from);
+
+      if (oldIndex !== -1) {
+        propertyTrack[oldIndex].millisecond = to;
       }
-    }, this);
+    });
 
     cleanupAfterKeyframeModification(this);
 
@@ -530,7 +526,7 @@ export default class Actor extends Tweenable {
 
     _.each(this._propertyTracks, function (propertyTrack, propertyName) {
       var index = propertyIndexInTrack(propertyTrack, millisecond);
-      if (typeof index !== -1) {
+      if (index !== -1) {
         var keyframeProperty = propertyTrack[index];
         this._deleteKeyframePropertyAt(propertyTrack, index);
         keyframeProperty.detach();
@@ -589,7 +585,7 @@ export default class Actor extends Tweenable {
   getKeyframeProperty (property, millisecond) {
     var propertyTrack = this._propertyTracks[property];
     var index = propertyIndexInTrack(propertyTrack, millisecond);
-    if (typeof index !== -1) {
+    if (index !== -1) {
       return propertyTrack[index];
     }
   }
