@@ -826,31 +826,41 @@ export default class Actor extends Tweenable {
     keyframeProperty.actor = this;
     this._keyframeProperties[keyframeProperty.id] = keyframeProperty;
 
-    var name = keyframeProperty.name;
-    var propertyTracks = this._propertyTracks;
+    const { name } = keyframeProperty;
+    const { _propertyTracks, rekapi } = this;
 
-    if (typeof this._propertyTracks[name] === 'undefined') {
-      propertyTracks[name] = [keyframeProperty];
-      if (this.rekapi) {
-        fireEvent(this.rekapi, 'addKeyframePropertyTrack', keyframeProperty);
+    if (!this._propertyTracks[name]) {
+      _propertyTracks[name] = [keyframeProperty];
+
+      if (rekapi) {
+        fireEvent(rekapi, 'addKeyframePropertyTrack', keyframeProperty);
       }
     } else {
-      var index = insertionPointInTrack(propertyTracks[name], keyframeProperty.millisecond);
-      if (propertyTracks[name][index]) {
-        var ms = keyframeProperty.millisecond;
-        var otherMs = propertyTracks[name][index].millisecond;
-        if (otherMs === ms) {
-          throw new Error('Tried to add a duplicate keyframe property, ' + name + ' @ ' + ms + ' ms');
-        } else if (this.rekapi && this.rekapi._warnOnOutOfOrderKeyframes) {
-          console.warn(new Error('Added a keyframe property before end of track, ' + name + ' @ ' + ms + ' ms < ' + otherMs + ' ms'));
+      const index = insertionPointInTrack(_propertyTracks[name], keyframeProperty.millisecond);
+
+      if (_propertyTracks[name][index]) {
+        const newMillisecond = keyframeProperty.millisecond;
+        const targetMillisecond = _propertyTracks[name][index].millisecond;
+
+        if (targetMillisecond === newMillisecond) {
+          throw new Error(
+            `Cannot add duplicate ${name} keyframe property @ ${newMillisecond}ms`
+          );
+        } else if (rekapi && rekapi._warnOnOutOfOrderKeyframes) {
+          console.warn(
+            new Error(
+              `Added a keyframe property before end of ${name} track @ ${newMillisecond}ms (< ${targetMillisecond}ms)`
+            )
+          );
         }
       }
-      this._insertKeyframePropertyAt(keyframeProperty, propertyTracks[name], index);
+
+      this._insertKeyframePropertyAt(keyframeProperty, _propertyTracks[name], index);
       cleanupAfterKeyframeModification(this);
     }
 
-    if (this.rekapi) {
-      fireEvent(this.rekapi, 'addKeyframeProperty', keyframeProperty);
+    if (rekapi) {
+      fireEvent(rekapi, 'addKeyframeProperty', keyframeProperty);
     }
 
     return this;
