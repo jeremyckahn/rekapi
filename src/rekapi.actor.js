@@ -875,15 +875,16 @@ export default class Actor extends Tweenable {
    * @chainable
    */
   setActive (millisecond, isActive) {
-    var activeProperty = this._propertyTracks._active
+    const hasActiveTrack = !!this._propertyTracks._active;
+    const activeProperty = hasActiveTrack
         && this.getKeyframeProperty('_active', millisecond);
 
     if (activeProperty) {
       activeProperty.value = isActive;
     } else {
-      activeProperty = new KeyframeProperty(
-        millisecond, '_active', isActive);
-      this.addKeyframeProperty(activeProperty);
+      this.addKeyframeProperty(
+        new KeyframeProperty(millisecond, '_active', isActive)
+      );
     }
 
     return this;
