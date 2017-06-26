@@ -712,43 +712,37 @@ export default class Actor extends Tweenable {
 
   /**
    * @method getEnd
-   * @param {string=} opt_trackName Optionally scope the lookup to a particular
+   * @param {string=} trackName Optionally scope the lookup to a particular
    * keyframe track.
    * @return {number} The millisecond of the last state of an actor (the point
    * in the timeline in which it is done animating).  If there are no
    * keyframes, this is `0`.
    */
-  getEnd (opt_trackName) {
-    var latest = 0;
-    var tracksToInspect = this._propertyTracks;
+  getEnd (trackName = undefined) {
+    const endingTracks = [0];
 
-    if (opt_trackName) {
-      tracksToInspect = {};
-      tracksToInspect[opt_trackName] = this._propertyTracks[opt_trackName];
-    }
+    const tracksToInspect = trackName ?
+      { [trackName]: this._propertyTracks[trackName] } :
+      this._propertyTracks;
 
-    _.each(tracksToInspect, function (propertyTrack) {
+    _.each(tracksToInspect, propertyTrack => {
       if (propertyTrack.length) {
-        var trackLength = Math.max.apply(Math, _.map(propertyTrack, 'millisecond'));
-
-        if (trackLength > latest) {
-          latest = trackLength;
-        }
+        endingTracks.push(propertyTrack[propertyTrack.length - 1].millisecond);
       }
-    }, this);
+    });
 
-    return latest;
+    return Math.max.apply(Math, endingTracks);
   }
 
   /**
    * @method getLength
-   * @param {string=} opt_trackName Optionally scope the lookup to a particular
+   * @param {string=} trackName Optionally scope the lookup to a particular
    * track.
    * @return {number} The length of time in milliseconds that the actor
    * animates for.
    */
-  getLength (opt_trackName) {
-    return this.getEnd(opt_trackName) - this.getStart(opt_trackName);
+  getLength (trackName = undefined) {
+    return this.getEnd(trackName) - this.getStart(trackName);
   }
 
   /**
@@ -766,18 +760,17 @@ export default class Actor extends Tweenable {
    * @chainable
    */
   wait (until) {
-    var length = this.getEnd();
+    const end = this.getEnd();
 
-    if (until <= length) {
+    if (until <= end) {
       return this;
     }
 
-    var end = this.getEnd();
-    var latestProps = getLatestProperties(this, this.getEnd());
-    var serializedProps = {};
-    var serializedEasings = {};
+    const latestProps = getLatestProperties(this, this.getEnd());
+    const serializedProps = {};
+    const serializedEasings = {};
 
-    _.each(latestProps, function (latestProp, propName) {
+    _.each(latestProps, (latestProp, propName) => {
       serializedProps[propName] = latestProp.value;
       serializedEasings[propName] = latestProp.easing;
     });
