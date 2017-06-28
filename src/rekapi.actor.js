@@ -983,11 +983,11 @@ export default class Actor extends Tweenable {
    * @param {number} millisecond
    */
   _resetFnKeyframesFromMillisecond (millisecond) {
-    var cache = this._timelineFunctionCache;
-    var index = _.sortedIndex(cache, { millisecond: millisecond }, getMillisecond);
-    var len = cache.length;
+    const cache = this._timelineFunctionCache;
+    const { length } = cache;
+    let index = _.sortedIndex(cache, { millisecond: millisecond }, getMillisecond);
 
-    while (index < len) {
+    while (index < length) {
       cache[index++].hasFired = false;
     }
   }
@@ -1000,17 +1000,20 @@ export default class Actor extends Tweenable {
    */
   exportTimeline () {
     var exportData = {
-      'start': this.getStart()
-      ,'end': this.getEnd()
-      ,'trackNames': this.getTrackNames()
-      ,'propertyTracks': {}
+      start: this.getStart(),
+      end: this.getEnd(),
+      trackNames: this.getTrackNames(),
+      propertyTracks: {}
     };
 
-    _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var trackAlias = exportData.propertyTracks[trackName] = [];
-      _.each(propertyTrack, function (keyframeProperty) {
-        trackAlias.push(keyframeProperty.exportPropertyData());
+    _.each(this._propertyTracks, (propertyTrack, trackName) => {
+      const track = [];
+
+      _.each(propertyTrack, keyframeProperty => {
+        track.push(keyframeProperty.exportPropertyData());
       });
+
+      exportData.propertyTracks[trackName] = track;
     });
 
     return exportData;
@@ -1026,13 +1029,15 @@ export default class Actor extends Tweenable {
    * "Rekapi.Actor/exportTimeline:method"}}{{/crossLink}}`.
    */
   importTimeline (actorData) {
-    _.each(actorData.propertyTracks, function (propertyTrack) {
-      _.each(propertyTrack, function (property) {
-        var obj = {};
-        obj[property.name] = property.value;
-        this.keyframe(property.millisecond, obj, property.easing);
-      }, this);
-    }, this);
+    _.each(actorData.propertyTracks, propertyTrack => {
+      _.each(propertyTrack, property => {
+        this.keyframe(
+          property.millisecond,
+          { [property.name]: property.value },
+          property.easing
+        );
+      });
+    });
   }
 }
 
