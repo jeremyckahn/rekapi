@@ -31,14 +31,22 @@ const fire = (actor, event, data) =>
  * the millisecond, i.e. an empty cache.
  */
 const getPropertyCacheEntryForMillisecond = (actor, millisecond) => {
-  const cache = actor._timelinePropertyCache;
-  const index = _.sortedIndex(cache, { _millisecond: millisecond }, obj => obj._millisecond);
+  const { _timelinePropertyCache } = actor;
+  const index = _.sortedIndex(
+    _timelinePropertyCache,
+    { _millisecond: millisecond },
+    obj => obj._millisecond
+  );
 
-  return cache[index] && cache[index]._millisecond === millisecond ?
-    cache[index] :
+  if (!_timelinePropertyCache[index]) {
+    return;
+  }
+
+  return _timelinePropertyCache[index]._millisecond === millisecond ?
+    _timelinePropertyCache[index] :
       index >= 1 ?
-        cache[index - 1] :
-        cache[0];
+        _timelinePropertyCache[index - 1] :
+        _timelinePropertyCache[0];
 };
 
 /*!
@@ -894,27 +902,33 @@ export default class Actor extends Tweenable {
    * Calculate and set the actor's position at `millisecond` in the animation.
    * @method _updateState
    * @param {number} millisecond
-   * @param {boolean=} opt_doResetLaterFnKeyframes If true, allow all function
+   * @param {boolean=} resetLaterFnKeyframes If true, allow all function
    * keyframes later in the timeline to be run again.
    * @chainable
    */
-  _updateState (millisecond, opt_doResetLaterFnKeyframes) {
-    var startMs = this.getStart();
-    var endMs = this.getEnd();
-    var interpolatedObject = {};
+  _updateState (millisecond, resetLaterFnKeyframes = false) {
+    const start = this.getStart();
+    const end = this.getEnd();
+    const interpolatedObject = {};
 
-    millisecond = Math.min(endMs, millisecond);
+    millisecond = Math.min(end, millisecond);
 
     ensurePropertyCacheValid(this);
-    var propertiesToInterpolate =
-        getPropertyCacheEntryForMillisecond(this, millisecond);
+
+    const propertyCacheEntry =
+      _.omit(
+        getPropertyCacheEntryForMillisecond(this, millisecond),
+        '_millisecond'
+      );
 
     // All actors are active at time 0 unless otherwise specified;
     // make sure a future time deactivation doesn't deactive the actor
     // by default.
-    if (propertiesToInterpolate._active
-        && millisecond >= propertiesToInterpolate._active.millisecond) {
-      this.wasActive = propertiesToInterpolate._active.getValueAt(millisecond);
+    if (propertyCacheEntry._active
+        && millisecond >= propertyCacheEntry._active.millisecond) {
+
+      this.wasActive = propertyCacheEntry._active.getValueAt(millisecond);
+
       if (!this.wasActive) {
         return this;
       }
@@ -922,48 +936,42 @@ export default class Actor extends Tweenable {
       this.wasActive = true;
     }
 
-    if (startMs === endMs) {
-
+    if (start === end) {
       // If there is only one keyframe, use that for the state of the actor
-      _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
-        if (propName !== '_millisecond') {
-          if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
-            keyframeProperty.invoke();
-            keyframeProperty.hasFired = false;
-            return;
-          }
-
-          interpolatedObject[propName] = keyframeProperty.value;
+      _.each(propertyCacheEntry, (keyframeProperty, propName) => {
+        if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
+          keyframeProperty.invoke();
+          keyframeProperty.hasFired = false;
+          return;
         }
-      }, this);
+
+        interpolatedObject[propName] = keyframeProperty.value;
+      });
 
     } else {
+      _.each(propertyCacheEntry, (keyframeProperty, propName) => {
+        if (this._beforeKeyframePropertyInterpolate !== noop) {
+          this._beforeKeyframePropertyInterpolate(keyframeProperty);
+        }
 
-      _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
-        if (propName !== '_millisecond') {
-          if (this._beforeKeyframePropertyInterpolate !== noop) {
-            this._beforeKeyframePropertyInterpolate(keyframeProperty);
-          }
+        if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
+          keyframeProperty.invoke();
+          return;
+        }
 
-          if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
-            keyframeProperty.invoke();
-            return;
-          }
-
-          interpolatedObject[propName] =
+        interpolatedObject[propName] =
           keyframeProperty.getValueAt(millisecond);
 
-          if (this._afterKeyframePropertyInterpolate !== noop) {
-            this._afterKeyframePropertyInterpolate(
-              keyframeProperty, interpolatedObject);
-          }
+        if (this._afterKeyframePropertyInterpolate !== noop) {
+          this._afterKeyframePropertyInterpolate(
+            keyframeProperty, interpolatedObject);
         }
-      }, this);
+      });
     }
 
     this.set(interpolatedObject);
 
-    if (!opt_doResetLaterFnKeyframes) {
+    if (!resetLaterFnKeyframes) {
       this._resetFnKeyframesFromMillisecond(millisecond);
     }
 
@@ -983,21 +991,6 @@ export default class Actor extends Tweenable {
       cache[index++].hasFired = false;
     }
   }
-
-  /*!
-   * @method _beforeKeyframePropertyInterpolate
-   * @param {Rekapi.KeyframeProperty} keyframeProperty
-   * @abstract
-   */
-  _beforeKeyframePropertyInterpolate () {}
-
-  /*!
-   * @method _afterKeyframePropertyInterpolate
-   * @param {Rekapi.KeyframeProperty} keyframeProperty
-   * @param {Object} interpolatedObject
-   * @abstract
-   */
-  _afterKeyframePropertyInterpolate () {}
 
   /**
    * __[Example](../../../../examples/actor_export_timeline.html)__
@@ -1042,3 +1035,20 @@ export default class Actor extends Tweenable {
     }, this);
   }
 }
+
+Object.assign(Actor.prototype, {
+  /*!
+   * @method _beforeKeyframePropertyInterpolate
+   * @param {Rekapi.KeyframeProperty} keyframeProperty
+   * @abstract
+   */
+  _beforeKeyframePropertyInterpolate: noop,
+
+  /*!
+   * @method _afterKeyframePropertyInterpolate
+   * @param {Rekapi.KeyframeProperty} keyframeProperty
+   * @param {Object} interpolatedObject
+   * @abstract
+   */
+  _afterKeyframePropertyInterpolate: noop
+});
