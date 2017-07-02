@@ -6,33 +6,33 @@ import {
 
 const DEFAULT_EASING = 'linear';
 
-/**
- * Represents an individual component of an actor's keyframe state.  In most
- * cases you won't need to deal with this object directly, as the
- * `{{#crossLink "Rekapi.Actor"}}{{/crossLink}}` APIs abstract a lot of what
- * this Object does away for you.
- * @class Rekapi.KeyframeProperty
- * @param {number} millisecond Where on the animation timeline this
- * `Rekapi.KeyframeProperty` is.
- * @param {string} name The property's name, such as `"x"` or `"opacity"`.
- * @param {number|string|Function} value The value that this
- * `Rekapi.KeyframeProperty` represents.
- * @param {string=} opt_easing The easing curve at which this
- * `Rekapi.KeyframeProperty` should be animated to.  Defaults to `"linear"`.
- * @constructor
- */
 export default class KeyframeProperty {
-
-  constructor (millisecond, name, value, opt_easing) {
+  /**
+   * Represents an individual component of an actor's keyframe state.  In most
+   * cases you won't need to deal with this object directly, as the
+   * `{{#crossLink "Rekapi.Actor"}}{{/crossLink}}` APIs abstract a lot of what
+   * this Object does away for you.
+   * @class Rekapi.KeyframeProperty
+   * @param {number} millisecond Where on the animation timeline this
+   * `Rekapi.KeyframeProperty` is.
+   * @param {string} name The property's name, such as `"x"` or `"opacity"`.
+   * @param {number|string|Function} value The value that this
+   * `Rekapi.KeyframeProperty` represents.
+   * @param {string=} easing The easing curve at which this
+   * `Rekapi.KeyframeProperty` should be animated to.  Defaults to `"linear"`.
+   * @constructor
+   */
+  constructor (millisecond, name, value, easing = DEFAULT_EASING) {
     this.id = _.uniqueId('keyframeProperty_');
-    this.millisecond = millisecond;
-    this.name = name;
-    this.value = value;
     this.hasFired = null;
-    this.easing = opt_easing || DEFAULT_EASING;
     this.nextProperty = null;
 
-    return this;
+    Object.assign(this, {
+      millisecond,
+      name,
+      value,
+      easing
+    });
   }
 
   /**
@@ -46,14 +46,7 @@ export default class KeyframeProperty {
    *   - __easing__ (_string_)
    */
   modifyWith (newProperties) {
-    var modifiedProperties = {};
-
-    _.each(['millisecond', 'easing', 'value'], function (str) {
-      modifiedProperties[str] = typeof(newProperties[str]) === 'undefined' ?
-          this[str] : newProperties[str];
-    }, this);
-
-    _.extend(this, modifiedProperties);
+    Object.assign(this, newProperties);
   }
 
   /**
@@ -74,32 +67,30 @@ export default class KeyframeProperty {
    * @return {number}
    */
   getValueAt (millisecond) {
-    var fromObj = {};
-    var toObj = {};
-    var value;
-    var nextProperty = this.nextProperty;
-    var correctedMillisecond = Math.max(millisecond, this.millisecond);
+    const nextProperty = this.nextProperty;
 
     if (typeof this.value === 'boolean') {
-      value = this.value;
+      return this.value;
     } else if (nextProperty) {
-      correctedMillisecond =
-      Math.min(correctedMillisecond, nextProperty.millisecond);
+      const boundedMillisecond = Math.min(
+        Math.max(millisecond, this.millisecond),
+        nextProperty.millisecond
+      );
 
-      fromObj[this.name] = this.value;
-      toObj[this.name] = nextProperty.value;
+      const { name } = this;
+      const delta = nextProperty.millisecond - this.millisecond;
+      const interpolatePosition =
+        (boundedMillisecond - this.millisecond) / delta;
 
-      var delta = nextProperty.millisecond - this.millisecond;
-      var interpolatedPosition =
-      (correctedMillisecond - this.millisecond) / delta;
-
-      value = interpolate(fromObj, toObj, interpolatedPosition,
-          nextProperty.easing)[this.name];
+      return interpolate(
+        { [name]: this.value },
+        { [name]: nextProperty.value },
+        interpolatePosition,
+        nextProperty.easing
+      )[name];
     } else {
-      value = this.value;
+      return this.value;
     }
-
-    return value;
   }
 
   /**
@@ -109,12 +100,12 @@ export default class KeyframeProperty {
    * tracks are just linked lists of `{{#crossLink
    * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s.
    * @method linkToNext
-   * @param {Rekapi.KeyframeProperty} nextProperty The `{{#crossLink
+   * @param {Rekapi.KeyframeProperty=} nextProperty The `{{#crossLink
    * "Rekapi.KeyframeProperty"}}{{/crossLink}}` that should immediately follow
    * this one on the animation timeline.
    */
-  linkToNext (nextProperty) {
-    this.nextProperty = nextProperty || null;
+  linkToNext (nextProperty = null) {
+    this.nextProperty = nextProperty;
   }
 
   /**
@@ -128,13 +119,12 @@ export default class KeyframeProperty {
    * @chainable
    */
   detach () {
-    var actor = this.actor;
-    if (actor) {
-      if (actor.rekapi) {
-        fireEvent(actor.rekapi, 'removeKeyframeProperty', this);
-        delete actor._keyframeProperties[this.id];
-        this.actor = null;
-      }
+    const { actor } = this;
+
+    if (actor && actor.rekapi) {
+      fireEvent(actor.rekapi, 'removeKeyframeProperty', this);
+      delete actor._keyframeProperties[this.id];
+      this.actor = null;
     }
 
     return this;
@@ -147,12 +137,7 @@ export default class KeyframeProperty {
    * `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`.
    */
   exportPropertyData () {
-    return {
-      'millisecond': this.millisecond
-      ,'name': this.name
-      ,'value': this.value
-      ,'easing': this.easing
-    };
+    return _.pick(this, ['millisecond', 'name', 'value', 'easing']);
   }
 
   /*!
@@ -164,7 +149,8 @@ export default class KeyframeProperty {
   shouldInvokeForMillisecond (millisecond) {
     return (millisecond >= this.millisecond &&
       this.name === 'function' &&
-      !this.hasFired);
+      !this.hasFired
+    );
   }
 
   /**
@@ -174,9 +160,10 @@ export default class KeyframeProperty {
    * set for this `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`.
    */
   invoke () {
-    var drift = this.actor.rekapi._loopPosition - this.millisecond;
-    var returnValue = this.value.call(this.actor, drift);
+    const drift = this.actor.rekapi._loopPosition - this.millisecond;
+    const returnValue = this.value.call(this.actor, drift);
     this.hasFired = true;
+
     return returnValue;
   }
 }
