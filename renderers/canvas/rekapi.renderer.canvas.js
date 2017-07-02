@@ -12,25 +12,23 @@ import Rekapi, {
  * @param {HTMLCanvas} canvas
  * @param {string} heightOrWidth The dimension (either "height" or "width")
  * to get or set.
- * @param {number=} opt_newSize The new value to set for `dimension`.
+ * @param {number=} newSize The new value to set for `dimension`.
  * @return {number}
  */
-function dimension (canvas, heightOrWidth, opt_newSize) {
-  if (typeof opt_newSize !== 'undefined') {
-    canvas[heightOrWidth] = opt_newSize;
-    canvas.style[heightOrWidth] = opt_newSize + 'px';
+const dimension = (canvas, heightOrWidth, newSize = undefined) => {
+  if (newSize !== undefined) {
+    canvas[heightOrWidth] = newSize;
+    canvas.style[heightOrWidth] = `${newSize}px`;
   }
 
   return canvas[heightOrWidth];
-}
+};
 
 /*!
  * Takes care of some pre-rendering tasks for canvas animations.
  * @param {Rekapi.CanvasRenderer} canvasRenderer
  */
-function beforeRender (canvasRenderer) {
-  canvasRenderer.clear();
-}
+const beforeRender = canvasRenderer => canvasRenderer.clear();
 
 /*!
  * Render all the `Actor`s at whatever position they are currently in.
@@ -38,52 +36,50 @@ function beforeRender (canvasRenderer) {
  * @param {Rekapi.CanvasRenderer} canvasRenderer
  * @return {Rekapi}
  */
-function render (rekapi, canvasRenderer) {
+const render = (rekapi, canvasRenderer) => {
   fireEvent(rekapi, 'beforeRender');
-  var renderOrderSorter = canvasRenderer._renderOrderSorter;
-  var len = canvasRenderer._renderOrder.length;
-  var renderOrder;
+  const { _renderOrderSorter } = canvasRenderer;
 
-  if (renderOrderSorter) {
-    var orderedActors =
-        _.sortBy(canvasRenderer._canvasActors, renderOrderSorter);
-    renderOrder = _.pluck(orderedActors, 'id');
-  } else {
-    renderOrder = canvasRenderer._renderOrder;
-  }
+  const renderOrder = _renderOrderSorter ?
+    _.pluck(
+      _.sortBy(canvasRenderer._canvasActors, _renderOrderSorter),
+      'id'
+    ) :
+    canvasRenderer._renderOrder;
 
-  var currentActor;
-  var canvasActors = canvasRenderer._canvasActors;
+  const { _canvasActors } = canvasRenderer;
 
-  var i;
-  for (i = 0; i < len; i++) {
-    currentActor = canvasActors[renderOrder[i]];
-    if (currentActor.wasActive) {
-      currentActor.render(currentActor.context, currentActor.get());
+  renderOrder.forEach(id => {
+    const actor = _canvasActors[id];
+
+    if (actor.wasActive) {
+      actor.render(actor.context, actor.get());
     }
-  }
+  });
+
   fireEvent(rekapi, 'afterRender');
 
   return rekapi;
-}
+};
 
 /*!
  * @param {Rekapi.Actor} actor
  * @param {Rekapi.CanvasRenderer} canvasRenderer
  */
-function addActor (actor, canvasRenderer) {
-  canvasRenderer._renderOrder.push(actor.id);
-  canvasRenderer._canvasActors[actor.id] = actor;
-}
+const addActor = (actor, canvasRenderer) => {
+  const { id } = actor;
+  canvasRenderer._renderOrder.push(id);
+  canvasRenderer._canvasActors[id] = actor;
+};
 
 /*!
  * @param {Rekapi.Actor} actor
  * @param {Rekapi.CanvasRenderer} canvasRenderer
  */
-function removeActor (actor, canvasRenderer) {
+const removeActor = (actor, canvasRenderer) => {
   canvasRenderer._renderOrder = _.without(canvasRenderer._renderOrder, actor.id);
   delete canvasRenderer._canvasActors[actor.id];
-}
+};
 
 /*!
  * Sets up an instance of CanvasRenderer and attaches it to a `Rekapi`
@@ -91,9 +87,10 @@ function removeActor (actor, canvasRenderer) {
  * functions.
  * @param {Rekapi} rekapi
  */
-rendererInitHooks.canvas = function (rekapi) {
+rendererInitHooks.canvas = rekapi => {
   if (typeof CanvasRenderingContext2D === 'undefined' ||
-      !(rekapi.context instanceof CanvasRenderingContext2D)) {
+    !(rekapi.context instanceof CanvasRenderingContext2D)) {
+
     return;
   }
 
