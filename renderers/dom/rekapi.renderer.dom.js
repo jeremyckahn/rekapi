@@ -12,7 +12,9 @@ const vendorTransforms = [
   ,'webkitTransform'
   ,'MozTransform'
   ,'oTransform'
-  ,'msTransform'];
+  ,'msTransform'
+];
+
 const transformFunctions = [
   'translateX',
   'translateY',
@@ -26,7 +28,8 @@ const transformFunctions = [
   'rotateY',
   'rotateZ',
   'skewX',
-  'skewY'];
+  'skewY'
+];
 
 // The timer to remove an injected style isn't likely to match the actual
 // length of the CSS animation, so give it some extra time to complete so it
@@ -35,20 +38,6 @@ const INJECTED_STYLE_REMOVAL_BUFFER_MS = 250;
 
 // PRIVATE UTILITY FUNCTIONS
 //
-
-/*!
- * @param {string} formatter
- * @param {[string]} args
- * @return {string}
- */
-var printf = function (formatter, args) {
-  var composedStr = formatter;
-  _.each(args, function (arg) {
-    composedStr = composedStr.replace('%s', arg);
-  });
-
-  return composedStr;
-};
 
 /*!
  * http://stackoverflow.com/a/3886106
@@ -697,27 +686,6 @@ var BEZIERS = {
 //
 
 /*!
- * [0]: vendor
- * [1]: animation name
- * [2]: keyframes
- */
-var KEYFRAME_TEMPLATE = [
-  '@%skeyframes %s-keyframes {'
-  ,'%s'
-  ,'}'
-].join('\n');
-
-/*!
- * [0] class name
- * [1] class attributes
- */
-var CLASS_BOILERPLATE = [
-  '.%s {'
-  ,'%s'
-  ,'}'
-].join('\n');
-
-/*!
  * Creates the CSS `@keyframes` for an individual actor.
  * @param {Rekapi.Actor} actor
  * @param {Object=} opts Same as opts for Rekapi.prototype.toCSS.
@@ -809,8 +777,11 @@ function applyVendorBoilerplates (toKeyframes, animName, opt_vendors) {
   var renderedKeyframes = [];
 
   _.each(opt_vendors, function (vendor) {
-    var renderedChunk = printf(KEYFRAME_TEMPLATE,
-        [VENDOR_PREFIXES[vendor], animName, toKeyframes]);
+    const renderedChunk =
+`@${VENDOR_PREFIXES[vendor]}keyframes ${animName}-keyframes {
+${toKeyframes}
+}`;
+
     var prefixedKeyframes =
         applyVendorPropertyPrefixes(renderedChunk, vendor);
     renderedKeyframes.push(prefixedKeyframes);
@@ -860,10 +831,11 @@ function generateCSSClass (
     classAttrs.push(vendorAttrs);
   });
 
-  var boilerplatedClass = printf(CLASS_BOILERPLATE
-      ,[animName, classAttrs.join('\n')]);
-
-  return boilerplatedClass;
+  return (
+`.${animName} {
+${classAttrs.join('\n')}
+}`
+  );
 }
 
 /*!
@@ -908,10 +880,10 @@ function generateCSSAnimationProperties (
 function generateAnimationNameProperty (
     actor, animName, prefix, combineProperties) {
 
-  var animationName = printf('  %sanimation-name:', [prefix]);
+  let animationName = `  ${prefix}animation-name:`;
 
   if (combineProperties) {
-    animationName += printf(' %s-keyframes;', [animName]);
+    animationName += ` ${animName}-keyframes;`;
   } else {
     var tracks = actor.getTrackNames();
     var transformTracksToCombine = _.intersection(tracks, transformFunctions);
@@ -926,7 +898,7 @@ function generateAnimationNameProperty (
     }
 
     _.each(trackNamesToPrint, function (trackName) {
-      animationName += printf(' %s-%s-keyframes,', [animName, trackName]);
+      animationName += ` ${animName}-${trackName}-keyframes,`;
     });
 
     animationName = animationName.slice(0, animationName.length - 1);
@@ -942,8 +914,7 @@ function generateAnimationNameProperty (
  * @return {string}
  */
 function generateAnimationDurationProperty (actor, prefix) {
-  return printf('  %sanimation-duration: %sms;'
-      ,[prefix, actor.getEnd() - actor.getStart()]);
+  return `  ${prefix}animation-duration: ${actor.getEnd() - actor.getStart()}ms;`;
 }
 
 /*!
@@ -952,7 +923,7 @@ function generateAnimationDurationProperty (actor, prefix) {
  * @return {string}
  */
 function generateAnimationDelayProperty (actor, prefix) {
-  return printf('  %sanimation-delay: %sms;', [prefix, actor.getStart()]);
+  return `  ${prefix}animation-delay: ${actor.getStart()}ms;`;
 }
 
 /*!
@@ -960,7 +931,7 @@ function generateAnimationDelayProperty (actor, prefix) {
  * @return {string}
  */
 function generateAnimationFillModeProperty (prefix) {
-  return printf('  %sanimation-fill-mode: forwards;', [prefix]);
+  return `  ${prefix}animation-fill-mode: forwards;`;
 }
 
 /*!
@@ -968,7 +939,7 @@ function generateAnimationFillModeProperty (prefix) {
  * @return {string}
  */
 function generateAnimationTimingFunctionProperty (prefix) {
-  return printf('  %sanimation-timing-function: linear;', [prefix]);
+  return `  ${prefix}animation-timing-function: linear;`;
 }
 
 /*!
@@ -987,9 +958,7 @@ function generateAnimationIterationProperty (rekapi, prefix, opt_iterations) {
       : rekapi._timesToIterate;
   }
 
-  var ruleTemplate = '  %sanimation-iteration-count: %s;';
-
-  return printf(ruleTemplate, [prefix, iterationCount]);
+  return `  ${prefix}animation-iteration-count: ${iterationCount};`;
 }
 
 /*!
@@ -997,7 +966,7 @@ function generateAnimationIterationProperty (rekapi, prefix, opt_iterations) {
  * @return {string}
  */
 function generateAnimationCenteringRule (prefix) {
-  return printf('  %stransform-origin: 0 0;', [prefix]);
+  return `  ${prefix}transform-origin: 0 0;`;
 }
 
 // OPTIMIZED OUTPUT GENERATOR FUNCTIONS
@@ -1073,7 +1042,6 @@ function canOptimizeAnyKeyframeProperties (actor) {
 function generateOptimizedKeyframeSegment (
     property, fromPercent, toPercent) {
 
-  var accumulator = [];
   var generalName = property.name;
 
   if (property.name === 'transform') {
@@ -1081,20 +1049,17 @@ function generateOptimizedKeyframeSegment (
   }
 
   var easingFormula = BEZIERS[property.nextProperty.easing.split(' ')[0]];
-  var timingFnChunk = printf('cubic-bezier(%s)', [easingFormula]);
+  var timingFnChunk = `cubic-bezier(${easingFormula})`;
 
   var adjustedFromPercent = isInt(fromPercent) ?
       fromPercent : fromPercent.toFixed(2);
   var adjustedToPercent = isInt(toPercent) ?
       toPercent : toPercent.toFixed(2);
 
-  accumulator.push(printf('  %s% {%s:%s;%sanimation-timing-function: %s;}',
-        [adjustedFromPercent, generalName, property.value, VENDOR_TOKEN
-        ,timingFnChunk]));
-  accumulator.push(printf('  %s% {%s:%s;}',
-        [adjustedToPercent, generalName, property.nextProperty.value]));
-
-  return accumulator.join('\n');
+  return (
+`  ${adjustedFromPercent}% {${generalName}:${property.value};${VENDOR_TOKEN}animation-timing-function: ${timingFnChunk};}
+  ${adjustedToPercent}% {${generalName}:${property.nextProperty.value};}`
+  );
 }
 
 // UN-OPTIMIZED OUTPUT GENERATOR FUNCTIONS
