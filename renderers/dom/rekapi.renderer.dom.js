@@ -44,14 +44,12 @@ const INJECTED_STYLE_REMOVAL_BUFFER_MS = 250;
  *
  * @param {number} number
  */
-function isInt (number) {
-  return number % 1 === 0;
-}
+const isInt = number => number % 1 === 0;
 
 /*!
  * @param {Rekapi} rekapi
  */
-rendererInitHooks.cssAnimate = function (rekapi) {
+rendererInitHooks.cssAnimate = rekapi => {
   // Node.nodeType 1 is an ELEMENT_NODE.
   // https://developer.mozilla.org/en-US/docs/Web/API/Node.nodeType
   if (rekapi.context.nodeType === 1) {
@@ -62,23 +60,18 @@ rendererInitHooks.cssAnimate = function (rekapi) {
 /*!
  * @return {string}
  */
-function getVendorPrefix () {
-  var style = document.body.style;
+const getVendorPrefix = () => {
+  const { style } = document.body;
 
-  if ('-webkit-animation' in style) {
-    return 'webkit';
-  } else if ('-moz-animation' in style) {
-    return 'mozilla';
-  } else if ('-ms-animation' in style) {
-    return 'microsoft';
-  } else if ('-o-animation' in style) {
-    return 'opera';
-  } else if ('animation' in style) {
-    return 'w3';
-  }
-
-  return '';
-}
+  return (
+    '-webkit-animation' in style ? 'webkit'    :
+    '-moz-animation'    in style ? 'mozilla'   :
+    '-ms-animation'     in style ? 'microsoft' :
+    '-o-animation'      in style ? 'opera'     :
+    'animation'         in style ? 'w3'        :
+    ''
+  );
+};
 
 var styleID = 0;
 /*!
