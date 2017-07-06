@@ -60,7 +60,7 @@ rendererInitHooks.cssAnimate = rekapi => {
 /*!
  * @return {string}
  */
-const getVendorPrefix = () => {
+const vendorPrefix = (() => {
   const { style } = document.body;
 
   return (
@@ -71,24 +71,7 @@ const getVendorPrefix = () => {
     'animation'         in style ? 'w3'        :
     ''
   );
-};
-
-var styleID = 0;
-/*!
- * @param {Rekapi} rekapi
- * @param {string} css The css content that the <style> element should have.
- * @return {HTMLStyleElement} The unique ID of the injected <style> element.
- */
-function injectStyle (rekapi, css) {
-  var style = document.createElement('style');
-  var id = 'rekapi-' + styleID++;
-  style.id = id;
-  style.innerHTML = css;
-  document.head.appendChild(style);
-  forceStyleReset(rekapi);
-
-  return style;
-}
+})();
 
 /*!
  * Fixes a really bizarre issue that only seems to affect Presto and Blink.
@@ -98,38 +81,50 @@ function injectStyle (rekapi, css) {
  *
  * @param {Rekapi} rekapi
  */
-function forceStyleReset (rekapi) {
-  var dummyDiv = document.createElement('div');
+const forceStyleReset = (rekapi) => {
+  const dummyDiv = document.createElement('div');
 
-  _.each(rekapi.getAllActors(), function (actor) {
+  _.each(rekapi.getAllActors(), actor => {
     if (actor.context.nodeType === 1) {
-      var actorEl = actor.context;
-      var actorElParent = actorEl.parentElement;
+      const { context } = actor;
+      const { parentElement } = context;
 
-      actorElParent.replaceChild(dummyDiv, actorEl);
-      actorElParent.replaceChild(actorEl, dummyDiv);
+      parentElement.replaceChild(dummyDiv, context);
+      parentElement.replaceChild(context, dummyDiv);
     }
   });
+};
 
-  dummyDiv = null;
-}
+let styleID = 0;
+/*!
+ * @param {Rekapi} rekapi
+ * @param {string} css The css content that the <style> element should have.
+ * @return {HTMLStyleElement} The unique ID of the injected <style> element.
+ */
+const injectStyle = (rekapi, css) => {
+  const style = document.createElement('style');
+  const id = `rekapi-${styleID++}`;
+  style.id = id;
+  style.innerHTML = css;
+  document.head.appendChild(style);
+  forceStyleReset(rekapi);
+
+  return style;
+};
 
 /*!
  * @param {HTMLElement} element
  * @param {string} styleName
  * @param {string|number} styleValue
  */
-function setStyle (element, styleName, styleValue) {
+const setStyle = (element, styleName, styleValue) =>
   element.style[styleName] = styleValue;
-}
 
 /*!
  * @param {string} name A transform function name
  * @return {boolean}
  */
-function isTransformFunction (name) {
-  return _.contains(transformFunctions, name);
-}
+const isTransformFunction = name => _.contains(transformFunctions, name);
 
 /*!
  * Builds a concatenated string of given transform property values in order.
@@ -139,18 +134,19 @@ function isTransformFunction (name) {
  * @param {Object} transformProperties Transform properties to build together
  * @return {string}
  */
-function buildTransformValue (orderedTransforms, transformProperties) {
-  var transformComponents = [];
+const buildTransformValue = (orderedTransforms, transformProperties) => {
+  const transformComponents = [];
 
-  _.each(orderedTransforms, function(functionName) {
-    if (typeof transformProperties[functionName] !== 'undefined') {
-      transformComponents.push(functionName + '(' +
-        transformProperties[functionName] + ')');
+  _.each(orderedTransforms, functionName => {
+    if (transformProperties[functionName] !== undefined) {
+      transformComponents.push(
+        `${functionName}(${transformProperties[functionName]})`
+      );
     }
   });
 
   return transformComponents.join(' ');
-}
+};
 
 /*!
  * Sets value for all vendor prefixed transform properties on an element
@@ -158,38 +154,39 @@ function buildTransformValue (orderedTransforms, transformProperties) {
  * @param {HTMLElement} element The actor's DOM element
  * @param {string} transformValue The transform style value
  */
-function setTransformStyles (element, transformValue) {
-  _.each(vendorTransforms, function(prefixedTransform) {
-    setStyle(element, prefixedTransform, transformValue);
-  });
-}
+const setTransformStyles = (element, transformValue) =>
+  vendorTransforms.forEach(prefixedTransform =>
+    setStyle(element, prefixedTransform, transformValue)
+  );
 
 
 /*!
  * @param {Rekapi} rekapi
  * @param {Rekapi.Actor} actor
  */
-function onAddActor (rekapi, actor) {
-  var actorElement = actor.context;
+const onAddActor = (rekapi, actor) => {
+  const { context } = actor;
 
-  if (actorElement.nodeType !== 1) {
+  if (context.nodeType !== 1) {
     return;
   }
 
-  var className = DOMRenderer.getActorClassName(actor);
+  const className = DOMRenderer.getActorClassName(actor);
 
   // Add the class if it's not already there.
   // Using className instead of classList to make IE happy.
-  if (!actorElement.className.match(className)) {
-    actorElement.className += ' ' + className;
+  if (!context.className.match(className)) {
+    context.className += ` ${className}`;
   }
 
-  actor._transformOrder = transformFunctions.slice(0);
-  actor._beforeKeyframePropertyInterpolate = actorBeforeInterpolate;
-  actor._afterKeyframePropertyInterpolate = actorAfterInterpolate;
-  actor.render = _.bind(actorRender, actor, actor);
-  actor.teardown = _.bind(actorTeardown, actor, actor);
-}
+  Object.assign(actor, {
+    _transformOrder: transformFunctions.slice(0),
+    _beforeKeyframePropertyInterpolate: actorBeforeInterpolate,
+    _afterKeyframePropertyInterpolate: actorAfterInterpolate,
+    render: actorRender.bind(actor, actor),
+    teardown: actorTeardown.bind(actor, actor)
+  });
+};
 
 /*!
  * transform properties like translate3d and rotate3d break the cardinality
@@ -393,7 +390,7 @@ export default function DOMRenderer (rekapi) {
  * animations.
  */
 DOMRenderer.prototype.canAnimateWithCSS = function () {
-  return !!getVendorPrefix();
+  return !!vendorPrefix;
 };
 
 /**
@@ -497,7 +494,7 @@ DOMRenderer.prototype.isPlaying = function () {
  */
 DOMRenderer.prototype.prerender = function (opt_iterations, opt_fps) {
   return this._cachedCSS = this.toString({
-    'vendors': [getVendorPrefix()]
+    'vendors': [vendorPrefix]
     ,'fps': opt_fps
     ,'iterations': opt_iterations
   });
