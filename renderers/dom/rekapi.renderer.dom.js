@@ -36,6 +36,11 @@ const transformFunctions = [
 // doesn't cut off the end.
 const INJECTED_STYLE_REMOVAL_BUFFER_MS = 250;
 
+const R_3D_RULE = /3d\(/g;
+const R_3D_TOKEN = /__THREED__/g;
+const _3D_RULE = '3d(';
+const _3D_TOKEN = '__THREED__';
+
 // PRIVATE UTILITY FUNCTIONS
 //
 
@@ -159,6 +164,87 @@ const setTransformStyles = (element, transformValue) =>
     setStyle(element, prefixedTransform, transformValue)
   );
 
+/*!
+ * @param {Rekapi.Actor} actor
+ * @param {HTMLElement} element
+ * @param {Object} state
+ */
+const actorRender = (actor, element, state) => {
+  const propertyNames = Object.keys(state);
+  // TODO:  Optimize the following code so that propertyNames is not looped
+  // over twice.
+  const transformFunctionNames = propertyNames.filter(isTransformFunction);
+  const otherProperties = _.pick(
+    state,
+    _.reject(propertyNames, isTransformFunction)
+  );
+
+  if (transformFunctionNames.length) {
+    setTransformStyles(element,
+      buildTransformValue(
+        actor._transformOrder,
+        _.pick(state, transformFunctionNames)
+      )
+    );
+  } else if (state.transform) {
+    setTransformStyles(element, state.transform);
+  }
+
+  _.each(otherProperties, (styleValue, styleName) =>
+    setStyle(element, styleName, styleValue)
+  );
+};
+
+/*!
+ * @param {Rekapi.Actor} actor
+ */
+const actorTeardown = actor => {
+  const { context } = actor;
+  const classList = context.className.match(/\S+/g);
+  const sanitizedClassList =
+    _.without(classList, DOMRenderer.getActorClassName(actor));
+  context.className = sanitizedClassList.join(' ');
+};
+
+/*!
+ * transform properties like translate3d and rotate3d break the cardinality
+ * of multi-ease easing strings, because the "3" gets treated like a
+ * tweenable value.  Transform "3d(" to "__THREED__" to prevent this, and
+ * transform it back in _afterKeyframePropertyInterpolate.
+ *
+ * @param {Rekapi.KeyframeProperty} keyframeProperty
+ */
+const _beforeKeyframePropertyInterpolate = keyframeProperty => {
+  if (keyframeProperty.name !== 'transform') {
+    return;
+  }
+
+  const { value, nextProperty } = keyframeProperty;
+
+  if (nextProperty && value.match(R_3D_RULE)) {
+    keyframeProperty.value = value.replace(R_3D_RULE, _3D_TOKEN);
+    nextProperty.value = nextProperty.value.replace(R_3D_RULE, _3D_TOKEN);
+  }
+};
+
+/*!
+ * @param {Rekapi.KeyframeProperty} keyframeProperty
+ * @param {Object} interpolatedObject
+ */
+const _afterKeyframePropertyInterpolate = (keyframeProperty, interpolatedObject) => {
+  if (keyframeProperty.name !== 'transform') {
+    return;
+  }
+
+  const { value, nextProperty, name } = keyframeProperty;
+
+  if (nextProperty && value.match(_3D_TOKEN)) {
+    keyframeProperty.value = value.replace(_3D_TOKEN, _3D_RULE);
+    nextProperty.value = nextProperty.value.replace(_3D_TOKEN, _3D_RULE);
+    interpolatedObject[name] =
+      interpolatedObject[name].replace(_3D_TOKEN, _3D_RULE);
+  }
+};
 
 /*!
  * @param {Rekapi} rekapi
@@ -180,94 +266,13 @@ const onAddActor = (rekapi, actor) => {
   }
 
   Object.assign(actor, {
-    _transformOrder: transformFunctions.slice(0),
-    _beforeKeyframePropertyInterpolate: actorBeforeInterpolate,
-    _afterKeyframePropertyInterpolate: actorAfterInterpolate,
     render: actorRender.bind(actor, actor),
-    teardown: actorTeardown.bind(actor, actor)
+    teardown: actorTeardown.bind(actor, actor),
+    _transformOrder: transformFunctions.slice(0),
+    _beforeKeyframePropertyInterpolate,
+    _afterKeyframePropertyInterpolate
   });
 };
-
-/*!
- * transform properties like translate3d and rotate3d break the cardinality
- * of multi-ease easing strings, because the "3" gets treated like a
- * tweenable value.  Transform "3d(" to "__THREED__" to prevent this, and
- * transform it back in _afterKeyframePropertyInterpolate.
- *
- * @param {Rekapi.KeyframeProperty} keyframeProperty
- */
-function actorBeforeInterpolate (keyframeProperty) {
-  if (keyframeProperty.name !== 'transform') {
-    return;
-  }
-
-  var value = keyframeProperty.value;
-  var nextProp = keyframeProperty.nextProperty;
-
-  if (nextProp && value.match(/3d\(/g)) {
-    keyframeProperty.value = value.replace(/3d\(/g, '__THREED__');
-    nextProp.value = nextProp.value.replace(/3d\(/g, '__THREED__');
-  }
-}
-
-/*!
- * @param {Rekapi.KeyframeProperty} keyframeProperty
- * @param {Object} interpolatedObject
- */
-function actorAfterInterpolate (keyframeProperty, interpolatedObject) {
-  if (keyframeProperty.name !== 'transform') {
-    return;
-  }
-
-  var value = keyframeProperty.value;
-  var nextProp = keyframeProperty.nextProperty;
-
-  if (nextProp && value.match(/__THREED__/g)) {
-    keyframeProperty.value = value.replace(/__THREED__/g, '3d(');
-    nextProp.value = nextProp.value.replace(/__THREED__/g, '3d(');
-    var keyPropName = keyframeProperty.name;
-    interpolatedObject[keyPropName] =
-        interpolatedObject[keyPropName].replace(/__THREED__/g, '3d(');
-  }
-}
-
-/*!
- * @param {Rekapi.Actor} actor
- * @param {HTMLElement} element
- * @param {Object} state
- */
-function actorRender (actor, element, state) {
-  var propertyNames = _.keys(state);
-  // TODO:  Optimize the following code so that propertyNames is not looped
-  // over twice.
-  var transformFunctionNames = _.filter(propertyNames, isTransformFunction);
-  var otherPropertyNames = _.reject(propertyNames, isTransformFunction);
-  var otherProperties = _.pick(state, otherPropertyNames);
-
-  if (transformFunctionNames.length) {
-    var transformProperties = _.pick(state, transformFunctionNames);
-    var builtStyle = buildTransformValue(actor._transformOrder,
-        transformProperties);
-    setTransformStyles(element, builtStyle);
-  } else if (state.transform) {
-    setTransformStyles(element, state.transform);
-  }
-
-  _.each(otherProperties, function (styleValue, styleName) {
-    setStyle(element, styleName, styleValue);
-  });
-}
-
-/*!
- * @param {Rekapi.Actor} actor
- */
-function actorTeardown (actor) {
-  var element = actor.context;
-  var classList = element.className.match(/\S+/g);
-  var sanitizedClassList =
-      _.without(classList, DOMRenderer.getActorClassName(actor));
-  element.className = sanitizedClassList.join(' ');
-}
 
 // CSS RENDERER OBJECT
 //
@@ -1075,11 +1080,11 @@ function generateActorKeyframes (actor, steps, track) {
   var previousSegmentWasOptimized = false;
   _.each(actor._propertyTracks[track], function (prop, propName) {
     var fromPercent = calculateStepPercent(prop, actorStart, actorLength);
-    var nextProp = prop.nextProperty;
+    var nextProperty = prop.nextProperty;
 
     var toPercent, increments, incrementSize;
-    if (nextProp) {
-      toPercent = calculateStepPercent(nextProp, actorStart, actorLength);
+    if (nextProperty) {
+      toPercent = calculateStepPercent(nextProperty, actorStart, actorLength);
       var delta = toPercent - fromPercent;
       increments = Math.floor((delta / 100) * steps) || 1;
       incrementSize = delta / increments;
@@ -1090,9 +1095,9 @@ function generateActorKeyframes (actor, steps, track) {
     }
 
     var trackSegment;
-    if (nextProp && isSegmentAWait(prop, nextProp)) {
+    if (nextProperty && isSegmentAWait(prop, nextProperty)) {
       trackSegment = generateActorTrackWaitSegment(
-          actor, actorStart, prop, nextProp, fromPercent, toPercent);
+          actor, actorStart, prop, nextProperty, fromPercent, toPercent);
 
       if (previousSegmentWasOptimized) {
         trackSegment.shift();
