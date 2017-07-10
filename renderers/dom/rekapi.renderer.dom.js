@@ -363,28 +363,29 @@ export default class DOMRenderer {
    * @constructor
    */
   constructor (rekapi) {
-    this.rekapi = rekapi;
 
-    // @private {number}
-    this._playTimestamp = null;
+    Object.assign(this, {
+      rekapi,
 
-    // @private {string}
-    this._cachedCSS = null;
+      // @private {number}
+      _playTimestamp: null,
 
-    // The HTMLStyleElement that gets injected into the DOM.
-    // @private {HTMLStyleElement)
-    this._styleElement = null;
+      // @private {string}
+      _cachedCSS: null,
 
-    // @private {number}
-    this._stopSetTimeoutHandle = null;
+      // The HTMLStyleElement that gets injected into the DOM.
+      // @private {HTMLStyleElement)
+      _styleElement: null,
+
+      // @private {number}
+      _stopSetTimeoutHandle: null
+    });
 
     rekapi.on('timelineModified', _.bind(function () {
       this._cachedCSS = null;
     }, this));
 
     rekapi.on('addActor', onAddActor);
-
-    return this;
   }
 
   /**
@@ -403,28 +404,32 @@ export default class DOMRenderer {
    * "Rekapi/play:method"}}{{/crossLink}}`.  This method only applies to CSS
    * `@keyframe` animations.
    * @method play
-   * @param {number=} opt_iterations How many times the animation should loop.
+   * @param {number=} iterations How many times the animation should loop.
    * This can be `null` or `0` if you want to loop the animation endlessly but
-   * also specify a value for `opt_fps`.
-   * @param {number=} opt_fps How many `@keyframes` to generate per second of
+   * also specify a value for `fps`.
+   * @param {number=} fps How many `@keyframes` to generate per second of
    * the animation.  A higher value results in a more precise CSS animation,
    * but it will take longer to generate.  The default value is `30`.  You
    * should not need to go higher than `60`.
    */
-  play (opt_iterations, opt_fps) {
+  play (iterations = undefined, fps = undefined) {
     if (this.isPlaying()) {
       this.stop();
     }
 
-    var css = this._cachedCSS || this.prerender.apply(this, arguments);
-    this._styleElement = injectStyle(this.rekapi, css);
+    this._styleElement = injectStyle(
+      this.rekapi,
+      this._cachedCSS || this.prerender.apply(this, arguments)
+    );
+
     this._playTimestamp = now();
 
-    if (opt_iterations) {
-      var animationLength = (opt_iterations * this.rekapi.getAnimationLength());
+    if (iterations) {
+      const animationLength = (iterations * this.rekapi.getAnimationLength());
       this._stopSetTimeoutHandle = setTimeout(
-          _.bind(this.stop, this, true),
-          animationLength + INJECTED_STYLE_REMOVAL_BUFFER_MS);
+        this.stop.bind(this, true),
+        animationLength + INJECTED_STYLE_REMOVAL_BUFFER_MS
+      );
     }
 
     fireEvent(this.rekapi, 'play');
