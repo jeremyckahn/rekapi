@@ -86,7 +86,7 @@ const vendorPrefix = (() => {
  *
  * @param {Rekapi} rekapi
  */
-const forceStyleReset = (rekapi) => {
+const forceStyleReset = rekapi => {
   const dummyDiv = document.createElement('div');
 
   _.each(rekapi.getAllActors(), actor => {
@@ -274,309 +274,353 @@ const onAddActor = (rekapi, actor) => {
   });
 };
 
-// CSS RENDERER OBJECT
-//
+export default class DOMRenderer {
+  /**
+   * `Rekapi.DOMRenderer` allows you to animate DOM elements.  This is achieved
+   * either by browser-accelerated [CSS `@keyframe`
+   * animations](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes),
+   * or by traditional inline style updates on every frame (like how
+   * [`jQuery.fn.animate`](http://api.jquery.com/animate/) works).  Animations
+   * are defined with the same API in either case, but you can gracefully fall
+   * back to the inline style approach if CSS `@keyframe` animations are not
+   * supported by the browser or not preferred.  To render animations with the
+   * DOM, just supply any DOM element to the `{{#crossLink
+   * "Rekapi"}}{{/crossLink}}` constructor.  You may use `document.body`, since
+   * it is generally always available:
+   *
+   *     var rekapi = new Rekapi(document.body);
+   *     rekapi.renderer instanceof Rekapi.DOMRenderer; // true
+   *
+   * There are separate APIs for playing inline style animations and CSS
+   * `@keyframe` animations.  Advantages of playing an animation with CSS
+   * `@keyframes`:
+   *
+   *   - Smoother animations in newer browsers.
+   *   - The JavaScript thread is freed from performing animation updates,
+   *   making it available for other logic.
+   *
+   * Disadvantages:
+   *
+   *   - Not all browsers support CSS `@keyframe` animations.
+   *   - Limited playback control: You can only play and stop an animation, you
+   *   cannot jump to or start from a specific point in the timeline.
+   *   - Generating the CSS for `@keyframe` animations can take a noticeable
+   *   amount of time.  This blocks all other logic, including rendering, so
+   *   you may have to be clever with how to spend the cycles to do it.
+   *   - No `{{#crossLink "Rekapi/on:method"}}events{{/crossLink}}` can be
+   *   bound to CSS `@keyframe` animations.
+   *
+   * So, the results are a little more predictable and flexible with inline
+   * style animations, but CSS `@keyframe` may give you better performance.
+   * Choose whichever approach makes the most sense for your needs.
+   *
+   * `Rekapi.DOMRenderer` can gracefully fall back to an inline style animation
+   * if CSS `@keyframe` animations are not supported by the browser:
+   *
+   *      var rekapi = new Rekapi(document.body);
+   *
+   *      // Each actor needs a reference to the DOM element it represents
+   *      var actor = rekapi.addActor({
+   *        context: document.getElementById('actor-1')
+   *      });
+   *
+   *      actor
+   *        .keyframe(0,    { left: '0px'   })
+   *        .keyframe(1000, { left: '250px' }, 'easeOutQuad');
+   *
+   *      // Feature detect for CSS @keyframe support
+   *      if (rekapi.renderer.canAnimateWithCSS()) {
+   *        // Animate with CSS @keyframes
+   *        rekapi.renderer.play();
+   *      } else {
+   *        // Animate with inline styles instead
+   *        rekapi.play();
+   *      }
+   *
+   * ## `@keyframe` animations work differently than inline style animations
+   *
+   * Inline style animations are compatible with all of the playback and
+   * timeline control methods defined by `{{#crossLink
+   * "Rekapi"}}{{/crossLink}}`, such as `{{#crossLink
+   * "Rekapi/play:method"}}{{/crossLink}}`, `{{#crossLink
+   * "Rekapi/playFrom:method"}}{{/crossLink}}` and `{{#crossLink
+   * "Rekapi/update:method"}}{{/crossLink}}`.  CSS `@keyframe` playback cannot
+   * be controlled in all browsers, so `Rekapi.DOMRenderer` defines analogous,
+   * renderer-specific CSS playback methods that you should use:
+   *
+   *   - {{#crossLink "Rekapi.DOMRenderer/play:method"}}{{/crossLink}}
+   *   - {{#crossLink "Rekapi.DOMRenderer/isPlaying:method"}}{{/crossLink}}
+   *   - {{#crossLink "Rekapi.DOMRenderer/stop:method"}}{{/crossLink}}
+   *
+   * __Note__: `Rekapi.DOMRenderer` is added to the `{{#crossLink
+   * "Rekapi"}}{{/crossLink}}` instance automatically as `this.renderer`,
+   * there is no reason to call the constructor yourself in most cases.
+   *
+   * __[Example](/renderers/dom/sample/play-many-actors.html)__
+   *
+   * @class Rekapi.DOMRenderer
+   * @param {Rekapi} rekapi
+   * @constructor
+   */
+  constructor (rekapi) {
+    this.rekapi = rekapi;
 
-/**
- * `Rekapi.DOMRenderer` allows you to animate DOM elements.  This is achieved
- * either by browser-accelerated [CSS `@keyframe`
- * animations](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes),
- * or by traditional inline style updates on every frame (like how
- * [`jQuery.fn.animate`](http://api.jquery.com/animate/) works).  Animations
- * are defined with the same API in either case, but you can gracefully fall
- * back to the inline style approach if CSS `@keyframe` animations are not
- * supported by the browser or not preferred.  To render animations with the
- * DOM, just supply any DOM element to the `{{#crossLink
- * "Rekapi"}}{{/crossLink}}` constructor.  You may use `document.body`, since
- * it is generally always available:
- *
- *     var rekapi = new Rekapi(document.body);
- *     rekapi.renderer instanceof Rekapi.DOMRenderer; // true
- *
- * There are separate APIs for playing inline style animations and CSS
- * `@keyframe` animations.  Advantages of playing an animation with CSS
- * `@keyframes`:
- *
- *   - Smoother animations in newer browsers.
- *   - The JavaScript thread is freed from performing animation updates,
- *   making it available for other logic.
- *
- * Disadvantages:
- *
- *   - Not all browsers support CSS `@keyframe` animations.
- *   - Limited playback control: You can only play and stop an animation, you
- *   cannot jump to or start from a specific point in the timeline.
- *   - Generating the CSS for `@keyframe` animations can take a noticeable
- *   amount of time.  This blocks all other logic, including rendering, so
- *   you may have to be clever with how to spend the cycles to do it.
- *   - No `{{#crossLink "Rekapi/on:method"}}events{{/crossLink}}` can be
- *   bound to CSS `@keyframe` animations.
- *
- * So, the results are a little more predictable and flexible with inline
- * style animations, but CSS `@keyframe` may give you better performance.
- * Choose whichever approach makes the most sense for your needs.
- *
- * `Rekapi.DOMRenderer` can gracefully fall back to an inline style animation
- * if CSS `@keyframe` animations are not supported by the browser:
- *
- *      var rekapi = new Rekapi(document.body);
- *
- *      // Each actor needs a reference to the DOM element it represents
- *      var actor = rekapi.addActor({
- *        context: document.getElementById('actor-1')
- *      });
- *
- *      actor
- *        .keyframe(0,    { left: '0px'   })
- *        .keyframe(1000, { left: '250px' }, 'easeOutQuad');
- *
- *      // Feature detect for CSS @keyframe support
- *      if (rekapi.renderer.canAnimateWithCSS()) {
- *        // Animate with CSS @keyframes
- *        rekapi.renderer.play();
- *      } else {
- *        // Animate with inline styles instead
- *        rekapi.play();
- *      }
- *
- * ## `@keyframe` animations work differently than inline style animations
- *
- * Inline style animations are compatible with all of the playback and
- * timeline control methods defined by `{{#crossLink
- * "Rekapi"}}{{/crossLink}}`, such as `{{#crossLink
- * "Rekapi/play:method"}}{{/crossLink}}`, `{{#crossLink
- * "Rekapi/playFrom:method"}}{{/crossLink}}` and `{{#crossLink
- * "Rekapi/update:method"}}{{/crossLink}}`.  CSS `@keyframe` playback cannot
- * be controlled in all browsers, so `Rekapi.DOMRenderer` defines analogous,
- * renderer-specific CSS playback methods that you should use:
- *
- *   - {{#crossLink "Rekapi.DOMRenderer/play:method"}}{{/crossLink}}
- *   - {{#crossLink "Rekapi.DOMRenderer/isPlaying:method"}}{{/crossLink}}
- *   - {{#crossLink "Rekapi.DOMRenderer/stop:method"}}{{/crossLink}}
- *
- * __Note__: `Rekapi.DOMRenderer` is added to the `{{#crossLink
- * "Rekapi"}}{{/crossLink}}` instance automatically as `this.renderer`,
- * there is no reason to call the constructor yourself in most cases.
- *
- * __[Example](/renderers/dom/sample/play-many-actors.html)__
- *
- * @class Rekapi.DOMRenderer
- * @param {Rekapi} rekapi
- * @constructor
- */
-export default function DOMRenderer (rekapi) {
-  this.rekapi = rekapi;
+    // @private {number}
+    this._playTimestamp = null;
 
-  // @private {number}
-  this._playTimestamp = null;
-
-  // @private {string}
-  this._cachedCSS = null;
-
-  // The HTMLStyleElement that gets injected into the DOM.
-  // @private {HTMLStyleElement)
-  this._styleElement = null;
-
-  // @private {number}
-  this._stopSetTimeoutHandle = null;
-
-  rekapi.on('timelineModified', _.bind(function () {
+    // @private {string}
     this._cachedCSS = null;
-  }, this));
 
-  rekapi.on('addActor', onAddActor);
-
-  return this;
-}
-
-/**
- * @method canAnimateWithCSS
- * @return {boolean} Whether or not the browser supports CSS `@keyframe`
- * animations.
- */
-DOMRenderer.prototype.canAnimateWithCSS = function () {
-  return !!vendorPrefix;
-};
-
-/**
- * Play the Rekapi animation as a CSS `@keyframe` animation.
- *
- * Note that this is different from `{{#crossLink
- * "Rekapi/play:method"}}{{/crossLink}}`.  This method only applies to CSS
- * `@keyframe` animations.
- * @method play
- * @param {number=} opt_iterations How many times the animation should loop.
- * This can be `null` or `0` if you want to loop the animation endlessly but
- * also specify a value for `opt_fps`.
- * @param {number=} opt_fps How many `@keyframes` to generate per second of
- * the animation.  A higher value results in a more precise CSS animation,
- * but it will take longer to generate.  The default value is `30`.  You
- * should not need to go higher than `60`.
- */
-DOMRenderer.prototype.play = function (opt_iterations, opt_fps) {
-  if (this.isPlaying()) {
-    this.stop();
-  }
-
-  var css = this._cachedCSS || this.prerender.apply(this, arguments);
-  this._styleElement = injectStyle(this.rekapi, css);
-  this._playTimestamp = now();
-
-  if (opt_iterations) {
-    var animationLength = (opt_iterations * this.rekapi.getAnimationLength());
-    this._stopSetTimeoutHandle = setTimeout(
-        _.bind(this.stop, this, true),
-        animationLength + INJECTED_STYLE_REMOVAL_BUFFER_MS);
-  }
-
-  fireEvent(this.rekapi, 'play');
-};
-
-/**
- * Stop a CSS `@keyframe` animation.  This also removes any `<style>`
- * elements that were dynamically injected into the DOM.
- *
- * Note that this is different from
- * `{{#crossLink "Rekapi/stop:method"}}{{/crossLink}}`.  This method only
- * applies to CSS `@keyframe` animations.
- * @method stop
- * @param {boolean=} opt_goToEnd If true, skip to the end of the animation.
- * If false or omitted, set inline styles on the actor elements to keep them
- * in their current position.
- */
-DOMRenderer.prototype.stop = function (opt_goToEnd) {
-  if (this.isPlaying()) {
-    clearTimeout(this._stopSetTimeoutHandle);
-
-    // Forces a style update in WebKit/Presto
-    this._styleElement.innerHTML = '';
-
-    document.head.removeChild(this._styleElement);
+    // The HTMLStyleElement that gets injected into the DOM.
+    // @private {HTMLStyleElement)
     this._styleElement = null;
 
-    var updateTime;
-    if (opt_goToEnd) {
-      updateTime = this.rekapi.getAnimationLength();
-    } else {
-      updateTime = (now() - this._playTimestamp)
-          % this.rekapi.getAnimationLength();
+    // @private {number}
+    this._stopSetTimeoutHandle = null;
+
+    rekapi.on('timelineModified', _.bind(function () {
+      this._cachedCSS = null;
+    }, this));
+
+    rekapi.on('addActor', onAddActor);
+
+    return this;
+  }
+
+  /**
+   * @method canAnimateWithCSS
+   * @return {boolean} Whether or not the browser supports CSS `@keyframe`
+   * animations.
+   */
+  canAnimateWithCSS () {
+    return !!vendorPrefix;
+  }
+
+  /**
+   * Play the Rekapi animation as a CSS `@keyframe` animation.
+   *
+   * Note that this is different from `{{#crossLink
+   * "Rekapi/play:method"}}{{/crossLink}}`.  This method only applies to CSS
+   * `@keyframe` animations.
+   * @method play
+   * @param {number=} opt_iterations How many times the animation should loop.
+   * This can be `null` or `0` if you want to loop the animation endlessly but
+   * also specify a value for `opt_fps`.
+   * @param {number=} opt_fps How many `@keyframes` to generate per second of
+   * the animation.  A higher value results in a more precise CSS animation,
+   * but it will take longer to generate.  The default value is `30`.  You
+   * should not need to go higher than `60`.
+   */
+  play (opt_iterations, opt_fps) {
+    if (this.isPlaying()) {
+      this.stop();
     }
 
-    this.rekapi.update(updateTime);
-    fireEvent(this.rekapi, 'stop');
+    var css = this._cachedCSS || this.prerender.apply(this, arguments);
+    this._styleElement = injectStyle(this.rekapi, css);
+    this._playTimestamp = now();
+
+    if (opt_iterations) {
+      var animationLength = (opt_iterations * this.rekapi.getAnimationLength());
+      this._stopSetTimeoutHandle = setTimeout(
+          _.bind(this.stop, this, true),
+          animationLength + INJECTED_STYLE_REMOVAL_BUFFER_MS);
+    }
+
+    fireEvent(this.rekapi, 'play');
   }
-};
 
-/**
- * @method isPlaying
- * @return {boolean} Whether or not a CSS `@keyframe` animation is running.
- */
-DOMRenderer.prototype.isPlaying = function () {
-  return !!this._styleElement;
-};
+  /**
+   * Stop a CSS `@keyframe` animation.  This also removes any `<style>`
+   * elements that were dynamically injected into the DOM.
+   *
+   * Note that this is different from
+   * `{{#crossLink "Rekapi/stop:method"}}{{/crossLink}}`.  This method only
+   * applies to CSS `@keyframe` animations.
+   * @method stop
+   * @param {boolean=} opt_goToEnd If true, skip to the end of the animation.
+   * If false or omitted, set inline styles on the actor elements to keep them
+   * in their current position.
+   */
+  stop (opt_goToEnd) {
+    if (this.isPlaying()) {
+      clearTimeout(this._stopSetTimeoutHandle);
 
-/**
- * Prerender and cache the CSS animation so that it is immediately ready to
- * be used when it is needed in the future.  The function signature is
- * identical to {{#crossLink
- * "Rekapi.DOMRenderer/play:method"}}{{/crossLink}}.  This is necessary to
- * play a CSS animation and will be automatically called for you if you don't
- * call it manually, but calling it ahead of time (such as on page load) will
- * prevent any perceived lag when a CSS `@keyframe` animation is started.
- * The prerendered animation is cached for reuse until the timeline or a
- * keyframe is modified.
- *
- * @method prerender
- * @param {number=} opt_iterations How many times the animation should loop.
- * This can be `null` or `0` if you want to loop the animation endlessly but
- * also specify a value for `opt_fps`.
- * @param {number=} opt_fps How many `@keyframes` to generate per second of
- * the animation.  A higher value results in a more precise CSS animation,
- * but it will take longer to generate.  The default value is `30`.  You
- * should not need to go higher than `60`.
- * @return {string} The prerendered CSS string.  You likely won't need this,
- * as it is also cached internally.
- */
-DOMRenderer.prototype.prerender = function (opt_iterations, opt_fps) {
-  return this._cachedCSS = this.toString({
-    'vendors': [vendorPrefix]
-    ,'fps': opt_fps
-    ,'iterations': opt_iterations
-  });
-};
+      // Forces a style update in WebKit/Presto
+      this._styleElement.innerHTML = '';
 
-/**
- * You can decouple transform components in order to animate each property
- * with its own easing curve:
- *
- *     actor
- *       .keyframe(0, {
- *         translateX: '0px',
- *         translateY: '0px',
- *         rotate: '0deg'
- *       })
- *       .keyframe(1500, {
- *         translateX: '200px',
- *         translateY: '200px',
- *         rotate: '90deg'
- *       }, {
- *         translateX: 'easeOutExpo',
- *         translateY: 'easeInSine',
- *         rotate: 'elastic'
- *       });
- *
- * CSS transform string components are order-dependent, but JavaScript object
- * properties have an unpredictable order.  Rekapi must combine transform
- * properties supplied to `{{#crossLink
- * "Rekapi.Actor/keyframe:method"}}{{/crossLink}}` (as shown above) into a
- * single string when it renders each frame.  This method lets you change
- * that order from the default.  The supported array values for
- * `orderedTransforms` are:
- *
- * - `translateX`
- * - `translateY`
- * - `translateZ`
- * - `scale`
- * - `scaleX`
- * - `scaleY`
- * - `rotate`
- * - `skewX`
- * - `skewY`
- *
- * If you prefer a more standards-oriented approach, Rekapi also supports
- * combining the transform components yourself:
- *
- *     actor
- *       .keyframe(0, {
- *         transform: 'translateX(0px) translateY(0px) rotate(0deg)'
- *       })
- *       .keyframe(1500, {
- *         transform: 'translateX(200px) translateY(200px) rotate(90deg)'
- *       }, {
- *         transform: 'easeOutExpo easeInSine elastic'
- *       });
- *
- * This example and the one above it are equivalent.
- *
- * @method setActorTransformOrder
- * @param {Rekapi.Actor} actor
- * @param {Array(string)} orderedTransforms The array of transform names.
- * @return {Rekapi}
- */
-DOMRenderer.prototype.setActorTransformOrder =
-    function (actor, orderedTransforms) {
-  // TODO: Document this better...
-  var unknownFunctions = _.reject(orderedTransforms, isTransformFunction);
+      document.head.removeChild(this._styleElement);
+      this._styleElement = null;
 
-  if (unknownFunctions.length) {
-    throw 'Unknown or unsupported transform functions: ' +
-      unknownFunctions.join(', ');
+      var updateTime;
+      if (opt_goToEnd) {
+        updateTime = this.rekapi.getAnimationLength();
+      } else {
+        updateTime = (now() - this._playTimestamp)
+            % this.rekapi.getAnimationLength();
+      }
+
+      this.rekapi.update(updateTime);
+      fireEvent(this.rekapi, 'stop');
+    }
   }
-  // Ignore duplicate transform function names in the array
-  actor._transformOrder = _.uniq(orderedTransforms);
 
-  return this.rekapi;
-};
+  /**
+   * @method isPlaying
+   * @return {boolean} Whether or not a CSS `@keyframe` animation is running.
+   */
+  isPlaying () {
+    return !!this._styleElement;
+  }
+
+  /**
+   * Prerender and cache the CSS animation so that it is immediately ready to
+   * be used when it is needed in the future.  The function signature is
+   * identical to {{#crossLink
+   * "Rekapi.DOMRenderer/play:method"}}{{/crossLink}}.  This is necessary to
+   * play a CSS animation and will be automatically called for you if you don't
+   * call it manually, but calling it ahead of time (such as on page load) will
+   * prevent any perceived lag when a CSS `@keyframe` animation is started.
+   * The prerendered animation is cached for reuse until the timeline or a
+   * keyframe is modified.
+   *
+   * @method prerender
+   * @param {number=} opt_iterations How many times the animation should loop.
+   * This can be `null` or `0` if you want to loop the animation endlessly but
+   * also specify a value for `opt_fps`.
+   * @param {number=} opt_fps How many `@keyframes` to generate per second of
+   * the animation.  A higher value results in a more precise CSS animation,
+   * but it will take longer to generate.  The default value is `30`.  You
+   * should not need to go higher than `60`.
+   * @return {string} The prerendered CSS string.  You likely won't need this,
+   * as it is also cached internally.
+   */
+  prerender (opt_iterations, opt_fps) {
+    return this._cachedCSS = this.toString({
+      'vendors': [vendorPrefix]
+      ,'fps': opt_fps
+      ,'iterations': opt_iterations
+    });
+  }
+
+  /**
+   * You can decouple transform components in order to animate each property
+   * with its own easing curve:
+   *
+   *     actor
+   *       .keyframe(0, {
+   *         translateX: '0px',
+   *         translateY: '0px',
+   *         rotate: '0deg'
+   *       })
+   *       .keyframe(1500, {
+   *         translateX: '200px',
+   *         translateY: '200px',
+   *         rotate: '90deg'
+   *       }, {
+   *         translateX: 'easeOutExpo',
+   *         translateY: 'easeInSine',
+   *         rotate: 'elastic'
+   *       });
+   *
+   * CSS transform string components are order-dependent, but JavaScript object
+   * properties have an unpredictable order.  Rekapi must combine transform
+   * properties supplied to `{{#crossLink
+   * "Rekapi.Actor/keyframe:method"}}{{/crossLink}}` (as shown above) into a
+   * single string when it renders each frame.  This method lets you change
+   * that order from the default.  The supported array values for
+   * `orderedTransforms` are:
+   *
+   * - `translateX`
+   * - `translateY`
+   * - `translateZ`
+   * - `scale`
+   * - `scaleX`
+   * - `scaleY`
+   * - `rotate`
+   * - `skewX`
+   * - `skewY`
+   *
+   * If you prefer a more standards-oriented approach, Rekapi also supports
+   * combining the transform components yourself:
+   *
+   *     actor
+   *       .keyframe(0, {
+   *         transform: 'translateX(0px) translateY(0px) rotate(0deg)'
+   *       })
+   *       .keyframe(1500, {
+   *         transform: 'translateX(200px) translateY(200px) rotate(90deg)'
+   *       }, {
+   *         transform: 'easeOutExpo easeInSine elastic'
+   *       });
+   *
+   * This example and the one above it are equivalent.
+   *
+   * @method setActorTransformOrder
+   * @param {Rekapi.Actor} actor
+   * @param {Array(string)} orderedTransforms The array of transform names.
+   * @return {Rekapi}
+   */
+  setActorTransformOrder (actor, orderedTransforms) {
+    // TODO: Document this better...
+    var unknownFunctions = _.reject(orderedTransforms, isTransformFunction);
+
+    if (unknownFunctions.length) {
+      throw 'Unknown or unsupported transform functions: ' +
+        unknownFunctions.join(', ');
+    }
+    // Ignore duplicate transform function names in the array
+    actor._transformOrder = _.uniq(orderedTransforms);
+
+    return this.rekapi;
+  }
+
+  // TODO: Don't redefine toString with a method that takes parameters.  Name
+  // this something else and deprecate DOMRenderer#toString.
+  /**
+   * Converts Rekapi animations to CSS `@keyframes`.
+   * @method toString
+   * @param {Object=} opts
+   *   * __vendors__ _(Array(string))_: Defaults to `['w3']`.  The browser vendors you
+   *   want to support. Valid values are:
+   *     * `'microsoft'`
+   *     * `'mozilla'`
+   *     * `'opera'`
+   *     * `'w3'`
+   *     * `'webkit'`
+   *
+   *
+   *   * __fps__ _(number)_: Defaults to 30.  Defines the number of CSS
+   *   `@keyframe` frames rendered per second of an animation.  CSS `@keyframes`
+   *   are comprised of a series of explicitly defined steps, and more steps
+   *   will allow for a more complex animation.  More steps will also result in
+   *   a larger CSS string, and more time needed to generate the string.
+   *   * __name__ _(string)_: Define a custom name for your animation.  This
+   *   becomes the class name targeted by the generated CSS.  The default value
+   *   is determined by a call to {{#crossLink
+   *   "Rekapi.DOMRenderer/getActorClassName:method"}}{{/crossLink}}.
+   *   * __isCentered__ _(boolean)_: If `true`, the generated CSS will contain
+   *   `transform-origin: 0 0;`, which centers the DOM element along the path of
+   *   motion.  If `false` or omitted, no `transform-origin` rule is specified
+   *   and the element is aligned to the path of motion with its top-left
+   *   corner.
+   *   * __iterations__ _(number)_: How many times the generated animation
+   *   should repeat.  If omitted, the animation will loop indefinitely.
+   * @return {string}
+   */
+  toString (opts) {
+    opts = opts || {};
+    var animationCSS = [];
+
+    _.each(this.rekapi.getAllActors(), function (actor) {
+      if (actor.context.nodeType === 1) {
+        animationCSS.push(getActorCSS(actor, opts));
+      }
+    });
+
+    return animationCSS.join('\n');
+  }
+}
 
 /**
  * @method getActorClassName
@@ -586,55 +630,7 @@ DOMRenderer.prototype.setActorTransformOrder =
  * not specified.  This may be useful for getting a standard and consistent
  * CSS class name for an actor's DOM element.
  */
-DOMRenderer.getActorClassName = function (actor) {
-  return 'actor-' + actor.id;
-};
-
-// TODO: Don't redefine toString with a method that takes parameters.  Name
-// this something else and deprecate DOMRenderer#toString.
-/**
- * Converts Rekapi animations to CSS `@keyframes`.
- * @method toString
- * @param {Object=} opts
- *   * __vendors__ _(Array(string))_: Defaults to `['w3']`.  The browser vendors you
- *   want to support. Valid values are:
- *     * `'microsoft'`
- *     * `'mozilla'`
- *     * `'opera'`
- *     * `'w3'`
- *     * `'webkit'`
- *
- *
- *   * __fps__ _(number)_: Defaults to 30.  Defines the number of CSS
- *   `@keyframe` frames rendered per second of an animation.  CSS `@keyframes`
- *   are comprised of a series of explicitly defined steps, and more steps
- *   will allow for a more complex animation.  More steps will also result in
- *   a larger CSS string, and more time needed to generate the string.
- *   * __name__ _(string)_: Define a custom name for your animation.  This
- *   becomes the class name targeted by the generated CSS.  The default value
- *   is determined by a call to {{#crossLink
- *   "Rekapi.DOMRenderer/getActorClassName:method"}}{{/crossLink}}.
- *   * __isCentered__ _(boolean)_: If `true`, the generated CSS will contain
- *   `transform-origin: 0 0;`, which centers the DOM element along the path of
- *   motion.  If `false` or omitted, no `transform-origin` rule is specified
- *   and the element is aligned to the path of motion with its top-left
- *   corner.
- *   * __iterations__ _(number)_: How many times the generated animation
- *   should repeat.  If omitted, the animation will loop indefinitely.
- * @return {string}
- */
-DOMRenderer.prototype.toString = function (opts) {
-  opts = opts || {};
-  var animationCSS = [];
-
-  _.each(this.rekapi.getAllActors(), function (actor) {
-    if (actor.context.nodeType === 1) {
-      animationCSS.push(getActorCSS(actor, opts));
-    }
-  });
-
-  return animationCSS.join('\n');
-};
+DOMRenderer.getActorClassName = actor => `actor-${actor.id}`;
 
 // DOMRenderer.prototype.toString-SPECIFIC CODE
 //
