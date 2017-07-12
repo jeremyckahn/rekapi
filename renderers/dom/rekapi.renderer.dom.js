@@ -8,11 +8,11 @@ import Rekapi, {
 const { now } = Tweenable;
 
 const vendorTransforms = [
-  'transform'
-  ,'webkitTransform'
-  ,'MozTransform'
-  ,'oTransform'
-  ,'msTransform'
+  'transform',
+  'webkitTransform',
+  'MozTransform',
+  'oTransform',
+  'msTransform'
 ];
 
 const transformFunctions = [
@@ -443,11 +443,11 @@ export default class DOMRenderer {
    * `{{#crossLink "Rekapi/stop:method"}}{{/crossLink}}`.  This method only
    * applies to CSS `@keyframe` animations.
    * @method stop
-   * @param {boolean=} opt_goToEnd If true, skip to the end of the animation.
+   * @param {boolean=} goToEnd If true, skip to the end of the animation.
    * If false or omitted, set inline styles on the actor elements to keep them
    * in their current position.
    */
-  stop (opt_goToEnd) {
+  stop (goToEnd = undefined) {
     if (this.isPlaying()) {
       clearTimeout(this._stopSetTimeoutHandle);
 
@@ -456,16 +456,14 @@ export default class DOMRenderer {
 
       document.head.removeChild(this._styleElement);
       this._styleElement = null;
+      const animationLength = this.rekapi.getAnimationLength();
 
-      var updateTime;
-      if (opt_goToEnd) {
-        updateTime = this.rekapi.getAnimationLength();
-      } else {
-        updateTime = (now() - this._playTimestamp)
-            % this.rekapi.getAnimationLength();
-      }
+      this.rekapi.update(
+        goToEnd ?
+          animationLength :
+          (now() - this._playTimestamp) % animationLength
+      );
 
-      this.rekapi.update(updateTime);
       fireEvent(this.rekapi, 'stop');
     }
   }
@@ -490,21 +488,21 @@ export default class DOMRenderer {
    * keyframe is modified.
    *
    * @method prerender
-   * @param {number=} opt_iterations How many times the animation should loop.
+   * @param {number=} iterations How many times the animation should loop.
    * This can be `null` or `0` if you want to loop the animation endlessly but
-   * also specify a value for `opt_fps`.
-   * @param {number=} opt_fps How many `@keyframes` to generate per second of
+   * also specify a value for `fps`.
+   * @param {number=} fps How many `@keyframes` to generate per second of
    * the animation.  A higher value results in a more precise CSS animation,
    * but it will take longer to generate.  The default value is `30`.  You
    * should not need to go higher than `60`.
    * @return {string} The prerendered CSS string.  You likely won't need this,
    * as it is also cached internally.
    */
-  prerender (opt_iterations, opt_fps) {
+  prerender (iterations = undefined, fps = undefined) {
     return this._cachedCSS = this.toString({
-      'vendors': [vendorPrefix]
-      ,'fps': opt_fps
-      ,'iterations': opt_iterations
+      vendors: [vendorPrefix],
+      fps,
+      iterations
     });
   }
 
@@ -567,25 +565,24 @@ export default class DOMRenderer {
    * @return {Rekapi}
    */
   setActorTransformOrder (actor, orderedTransforms) {
-    // TODO: Document this better...
-    var unknownFunctions = _.reject(orderedTransforms, isTransformFunction);
+    const unrecognizedTransforms = _.reject(orderedTransforms, isTransformFunction);
 
-    if (unknownFunctions.length) {
-      throw 'Unknown or unsupported transform functions: ' +
-        unknownFunctions.join(', ');
+    if (unrecognizedTransforms.length) {
+      throw `Unknown or unsupported transform functions: ${unrecognizedTransforms.join(', ')}`;
     }
+
     // Ignore duplicate transform function names in the array
     actor._transformOrder = _.uniq(orderedTransforms);
 
     return this.rekapi;
   }
 
-  // TODO: Don't redefine toString with a method that takes parameters.  Name
+  // FIXME: Don't redefine toString with a method that takes parameters.  Name
   // this something else and deprecate DOMRenderer#toString.
   /**
    * Converts Rekapi animations to CSS `@keyframes`.
    * @method toString
-   * @param {Object=} opts
+   * @param {Object=} options
    *   * __vendors__ _(Array(string))_: Defaults to `['w3']`.  The browser vendors you
    *   want to support. Valid values are:
    *     * `'microsoft'`
@@ -613,13 +610,12 @@ export default class DOMRenderer {
    *   should repeat.  If omitted, the animation will loop indefinitely.
    * @return {string}
    */
-  toString (opts) {
-    opts = opts || {};
-    var animationCSS = [];
+  toString (options = {}) {
+    const animationCSS = [];
 
-    _.each(this.rekapi.getAllActors(), function (actor) {
+    _.each(this.rekapi.getAllActors(), actor => {
       if (actor.context.nodeType === 1) {
-        animationCSS.push(getActorCSS(actor, opts));
+        animationCSS.push(getActorCSS(actor, options));
       }
     });
 
