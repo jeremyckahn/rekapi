@@ -671,39 +671,43 @@ DOMRenderer.getActorClassName = actor => `actor-${actor.id}`;
 /*!
  * Creates the CSS `@keyframes` for an individual actor.
  * @param {Rekapi.Actor} actor
- * @param {Object=} opts Same as opts for Rekapi.prototype.toCSS.
+ * @param {Object=} options Same as options for Rekapi.prototype.toCSS.
  * @return {string}
  */
-function getActorCSS (actor, opts) {
-  opts = opts || {};
-  var actorCSS = [];
-  var animName;
+const getActorCSS = (actor, options = {}) => {
+  const { name, vendors, iterations, isCentered } = options;
 
-  if (opts.name) {
-    if (actor.rekapi.getActorCount() > 1) {
-      animName = opts.name + '-' + actor.id;
-    } else {
-      animName = opts.name;
-    }
-  } else {
-    animName = DOMRenderer.getActorClassName(actor);
-  }
+  const animName = name ?
+    (actor.rekapi.getActorCount() > 1 ?
+      `${name}-${actor.id}` :
+      name
+    ) :
+    DOMRenderer.getActorClassName(actor);
 
+  const steps = Math.ceil(
+    (actor.rekapi.getAnimationLength() / 1000) * (options.fps || DEFAULT_FPS)
+  );
 
-  var fps = opts.fps || DEFAULT_FPS;
-  var steps = Math.ceil((actor.rekapi.getAnimationLength() / 1000) * fps);
-  var combineProperties = !canOptimizeAnyKeyframeProperties(actor);
-  var actorClass = generateCSSClass(
-      actor, animName, combineProperties, opts.vendors, opts.iterations,
-      opts.isCentered);
-  var boilerplatedKeyframes = generateBoilerplatedKeyframes(
-      actor, animName, steps, combineProperties, opts.vendors);
+  const doCombineProperties = !canOptimizeAnyKeyframeProperties(actor);
 
-  actorCSS.push(actorClass);
-  actorCSS.push(boilerplatedKeyframes);
-
-  return actorCSS.join('\n');
-}
+  return [
+    generateCSSClass(
+      actor,
+      animName,
+      doCombineProperties,
+      vendors,
+      iterations,
+      isCentered
+    ),
+    generateBoilerplatedKeyframes(
+      actor,
+      animName,
+      steps,
+      doCombineProperties,
+      vendors
+    )
+  ].join('\n');
+};
 
 // toString-SPECIFIC PRIVATE UTILITY FUNCTIONS
 //
@@ -712,17 +716,17 @@ function getActorCSS (actor, opts) {
  * @param {Rekapi.Actor} actor
  * @param {string} animName
  * @param {number} steps
- * @param {boolean} combineProperties
+ * @param {boolean} doCombineProperties
  * @param {Array.<string>=} opt_vendors
  * @return {string}
  */
 function generateBoilerplatedKeyframes (
-    actor, animName, steps, combineProperties, opt_vendors) {
+    actor, animName, steps, doCombineProperties, opt_vendors) {
 
   var trackNames = actor.getTrackNames();
   var cssTracks = [];
 
-  if (combineProperties) {
+  if (doCombineProperties) {
     cssTracks.push(generateCombinedActorKeyframes(actor, steps));
   } else {
     _.each(trackNames, function (trackName) {
@@ -733,7 +737,7 @@ function generateBoilerplatedKeyframes (
 
   var boilerplatedKeyframes = [];
 
-  if (combineProperties) {
+  if (doCombineProperties) {
     boilerplatedKeyframes.push(applyVendorBoilerplates(
       cssTracks[0], (animName), opt_vendors));
   } else {
@@ -793,14 +797,14 @@ function applyVendorPropertyPrefixes (keyframes, vendor) {
 /*!
  * @param {Rekapi.Actor} actor
  * @param {string} animName
- * @param {boolean} combineProperties
+ * @param {boolean} doCombineProperties
  * @param {Array.<string>=} opt_vendors
  * @param {number|string=} opt_iterations
  * @param {boolean=} opt_isCentered
  * @return {string}
  */
 function generateCSSClass (
-    actor, animName, combineProperties, opt_vendors, opt_iterations,
+    actor, animName, doCombineProperties, opt_vendors, opt_iterations,
     opt_isCentered) {
 
   opt_vendors = opt_vendors || ['w3'];
@@ -809,7 +813,7 @@ function generateCSSClass (
 
   _.each(opt_vendors, function (vendor) {
     vendorAttrs = generateCSSAnimationProperties(
-        actor, animName, vendor, combineProperties, opt_iterations,
+        actor, animName, vendor, doCombineProperties, opt_iterations,
         opt_isCentered);
     classAttrs.push(vendorAttrs);
   });
@@ -825,19 +829,19 @@ ${classAttrs.join('\n')}
  * @param {Rekapi.Actor} actor
  * @param {string} animName
  * @param {string} vendor
- * @param {boolean} combineProperties
+ * @param {boolean} doCombineProperties
  * @param {number|string=} opt_iterations
  * @param {boolean=} opt_isCentered
  * @return {string}
  */
 function generateCSSAnimationProperties (
-    actor, animName, vendor, combineProperties, opt_iterations,
+    actor, animName, vendor, doCombineProperties, opt_iterations,
     opt_isCentered) {
   var generatedProperties = [];
   var prefix = VENDOR_PREFIXES[vendor];
 
   generatedProperties.push(generateAnimationNameProperty(
-        actor, animName, prefix, combineProperties));
+        actor, animName, prefix, doCombineProperties));
   generatedProperties.push(
       generateAnimationDurationProperty(actor, prefix));
   generatedProperties.push(generateAnimationDelayProperty(actor, prefix));
@@ -857,15 +861,15 @@ function generateCSSAnimationProperties (
  * @param {Rekapi.Actor} actor
  * @param {string} animName
  * @param {string} prefix
- * @param {boolean} combineProperties
+ * @param {boolean} doCombineProperties
  * @return {string}
  */
 function generateAnimationNameProperty (
-    actor, animName, prefix, combineProperties) {
+    actor, animName, prefix, doCombineProperties) {
 
   let animationName = `  ${prefix}animation-name:`;
 
-  if (combineProperties) {
+  if (doCombineProperties) {
     animationName += ` ${animName}-keyframes;`;
   } else {
     var tracks = actor.getTrackNames();
