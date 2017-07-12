@@ -31,6 +31,41 @@ const transformFunctions = [
   'skewY'
 ];
 
+const DEFAULT_FPS = 30;
+const TRANSFORM_TOKEN = 'TRANSFORM';
+const VENDOR_TOKEN = 'VENDOR';
+const VENDOR_PREFIXES = {
+  microsoft: '-ms-',
+  mozilla: '-moz-',
+  opera: '-o-',
+  w3: '',
+  webkit: '-webkit-'
+};
+const BEZIERS = {
+  linear: '.25,.25,.75,.75',
+  easeInQuad: '.55,.085,.68,.53',
+  easeInCubic: '.55,.055,.675,.19',
+  easeInQuart: '.895,.03,.685,.22',
+  easeInQuint: '.755,.05,.855,.06',
+  easeInSine: '.47,0,.745,.715',
+  easeInExpo: '.95,.05,.795,.035',
+  easeInCirc: '.6,.04,.98, .335',
+  easeOutQuad: '.25,.46,.45,.94',
+  easeOutCubic: '.215,.61,.355,1',
+  easeOutQuart: '.165,.84,.44,1',
+  easeOutQuint: '.23,1,.32,1',
+  easeOutSine: '.39,.575,.565,1',
+  easeOutExpo: '.19,1,.22,1',
+  easeOutCirc: '.075,.82,.165,1',
+  easeInOutQuad: '.455,.03,.515,.955',
+  easeInOutCubic: '.645,.045,.355,1',
+  easeInOutQuart: '.77,0,.175,1',
+  easeInOutQuint: '.86,0.07,1',
+  easeInOutSine: '.445,.05,.55,.95',
+  easeInOutExpo: '1,0,0,1',
+  easeInOutCirc: '.785,.135,.15,.86'
+};
+
 // The timer to remove an injected style isn't likely to match the actual
 // length of the CSS animation, so give it some extra time to complete so it
 // doesn't cut off the end.
@@ -632,50 +667,6 @@ export default class DOMRenderer {
  * CSS class name for an actor's DOM element.
  */
 DOMRenderer.getActorClassName = actor => `actor-${actor.id}`;
-
-// DOMRenderer.prototype.toString-SPECIFIC CODE
-//
-
-// CONSTANTS
-//
-
-var DEFAULT_FPS = 30;
-var TRANSFORM_TOKEN = 'TRANSFORM';
-var VENDOR_TOKEN = 'VENDOR';
-var VENDOR_PREFIXES = {
-  'microsoft': '-ms-'
-  ,'mozilla': '-moz-'
-  ,'opera': '-o-'
-  ,'w3': ''
-  ,'webkit': '-webkit-'
-};
-var BEZIERS = {
-  linear: '.25,.25,.75,.75'
-  ,easeInQuad: '.55,.085,.68,.53'
-  ,easeInCubic: '.55,.055,.675,.19'
-  ,easeInQuart: '.895,.03,.685,.22'
-  ,easeInQuint: '.755,.05,.855,.06'
-  ,easeInSine: '.47,0,.745,.715'
-  ,easeInExpo: '.95,.05,.795,.035'
-  ,easeInCirc: '.6,.04,.98, .335'
-  ,easeOutQuad: '.25,.46,.45,.94'
-  ,easeOutCubic: '.215,.61,.355,1'
-  ,easeOutQuart: '.165,.84,.44,1'
-  ,easeOutQuint: '.23,1,.32,1'
-  ,easeOutSine: '.39,.575,.565,1'
-  ,easeOutExpo: '.19,1,.22,1'
-  ,easeOutCirc: '.075,.82,.165,1'
-  ,easeInOutQuad: '.455,.03,.515,.955'
-  ,easeInOutCubic: '.645,.045,.355,1'
-  ,easeInOutQuart: '.77,0,.175,1'
-  ,easeInOutQuint: '.86,0.07,1'
-  ,easeInOutSine: '.445,.05,.55,.95'
-  ,easeInOutExpo: '1,0,0,1'
-  ,easeInOutCirc: '.785,.135,.15,.86'
-};
-
-// TEMPLATES
-//
 
 /*!
  * Creates the CSS `@keyframes` for an individual actor.
