@@ -775,32 +775,32 @@ const applyVendorPropertyPrefixes = (keyframes, vendor) =>
  * @param {Rekapi.Actor} actor
  * @param {string} animName
  * @param {boolean} doCombineProperties
- * @param {Array.<string>=} opt_vendors
- * @param {number|string=} opt_iterations
- * @param {boolean=} opt_isCentered
+ * @param {Array.<string>=} vendors
+ * @param {number|string=} iterations
+ * @param {boolean=} isCentered
  * @return {string}
  */
-function generateCSSClass (
-    actor, animName, doCombineProperties, opt_vendors, opt_iterations,
-    opt_isCentered) {
+const generateCSSClass = (
+    actor,
+    animName,
+    doCombineProperties,
+    vendors = ['w3'],
+    iterations = undefined,
+    isCentered = undefined
+  ) =>
 
-  opt_vendors = opt_vendors || ['w3'];
-  var classAttrs = [];
-  var vendorAttrs;
-
-  _.each(opt_vendors, function (vendor) {
-    vendorAttrs = generateCSSAnimationProperties(
-        actor, animName, vendor, doCombineProperties, opt_iterations,
-        opt_isCentered);
-    classAttrs.push(vendorAttrs);
-  });
-
-  return (
-`.${animName} {
-${classAttrs.join('\n')}
-}`
-  );
-}
+  `.${animName} {
+${  vendors.map(vendor =>
+      generateCSSAnimationProperties(
+        actor,
+        animName,
+        vendor,
+        doCombineProperties,
+        iterations,
+        isCentered
+      )
+    ).join('\n')}
+}`;
 
 /*!
  * @param {Rekapi.Actor} actor
