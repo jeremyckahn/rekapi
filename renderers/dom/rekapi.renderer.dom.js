@@ -33,7 +33,9 @@ const transformFunctions = [
 
 const DEFAULT_FPS = 30;
 const TRANSFORM_TOKEN = 'TRANSFORM';
+const R_TRANSFORM_TOKEN = new RegExp(TRANSFORM_TOKEN, 'g');
 const VENDOR_TOKEN = 'VENDOR';
+const R_VENDOR_TOKEN = new RegExp(VENDOR_TOKEN, 'g');
 const VENDOR_PREFIXES = {
   microsoft: '-ms-',
   mozilla: '-moz-',
@@ -717,82 +719,57 @@ const getActorCSS = (actor, options = {}) => {
  * @param {string} animName
  * @param {number} steps
  * @param {boolean} doCombineProperties
- * @param {Array.<string>=} opt_vendors
+ * @param {Array.<string>=} vendors
  * @return {string}
  */
-function generateBoilerplatedKeyframes (
-    actor, animName, steps, doCombineProperties, opt_vendors) {
+const generateBoilerplatedKeyframes = (
+  actor, animName, steps, doCombineProperties, vendors = undefined) =>
 
-  var trackNames = actor.getTrackNames();
-  var cssTracks = [];
-
-  if (doCombineProperties) {
-    cssTracks.push(generateCombinedActorKeyframes(actor, steps));
-  } else {
-    _.each(trackNames, function (trackName) {
-      cssTracks.push(
-        generateActorKeyframes(actor, steps, trackName));
-    });
-  }
-
-  var boilerplatedKeyframes = [];
-
-  if (doCombineProperties) {
-    boilerplatedKeyframes.push(applyVendorBoilerplates(
-      cssTracks[0], (animName), opt_vendors));
-  } else {
-    _.each(trackNames, function (trackName, i) {
-      boilerplatedKeyframes.push(applyVendorBoilerplates(
-        cssTracks[i], (animName + '-' + trackName), opt_vendors));
-    });
-  }
-
-  boilerplatedKeyframes = boilerplatedKeyframes.join('\n');
-
-  return boilerplatedKeyframes;
-}
+  doCombineProperties ?
+    applyVendorBoilerplates(
+      generateCombinedActorKeyframes(actor, steps),
+      animName,
+      vendors
+    ) :
+    actor.getTrackNames().map(trackName =>
+      applyVendorBoilerplates(
+        generateActorKeyframes(actor, steps, trackName),
+        `${animName}-${trackName}`,
+        vendors
+      )
+    ).join('\n');
 
 /*!
  * @param {string} toKeyframes Generated keyframes to wrap in boilerplates
  * @param {string} animName
- * @param {Array.<string>=} opt_vendors Vendor boilerplates to be applied.
+ * @param {Array.<string>=} vendors Vendor boilerplates to be applied.
  *     Should be any of the values in Rekapi.util.VENDOR_PREFIXES.
  * @return {string}
  */
-function applyVendorBoilerplates (toKeyframes, animName, opt_vendors) {
-  opt_vendors = opt_vendors || ['w3'];
-  var renderedKeyframes = [];
-
-  _.each(opt_vendors, function (vendor) {
-    const renderedChunk =
+const applyVendorBoilerplates = (toKeyframes, animName, vendors = ['w3']) =>
+  vendors.map(vendor =>
+    applyVendorPropertyPrefixes(
 `@${VENDOR_PREFIXES[vendor]}keyframes ${animName}-keyframes {
 ${toKeyframes}
-}`;
-
-    var prefixedKeyframes =
-        applyVendorPropertyPrefixes(renderedChunk, vendor);
-    renderedKeyframes.push(prefixedKeyframes);
-  });
-
-  return renderedKeyframes.join('\n');
-}
+}`,
+      vendor)
+  ).join('\n');
 
 /*!
  * @param {string} keyframes
  * @param {vendor} vendor
  * @return {string}
  */
-function applyVendorPropertyPrefixes (keyframes, vendor) {
-  var transformRegExp = new RegExp(TRANSFORM_TOKEN, 'g');
-  var prefixedTransformKey = VENDOR_PREFIXES[vendor] + 'transform';
-  var generalPrefixRegExp = new RegExp(VENDOR_TOKEN, 'g');
-  var generalPrefixedKey = VENDOR_PREFIXES[vendor];
-  var prefixedKeyframes = keyframes
-      .replace(generalPrefixRegExp, generalPrefixedKey)
-      .replace(transformRegExp, prefixedTransformKey);
-
-  return prefixedKeyframes;
-}
+const applyVendorPropertyPrefixes = (keyframes, vendor) =>
+  keyframes
+    .replace(
+      R_VENDOR_TOKEN,
+      VENDOR_PREFIXES[vendor]
+    )
+    .replace(
+      R_TRANSFORM_TOKEN,
+      `${VENDOR_PREFIXES[vendor]}transform`
+    );
 
 /*!
  * @param {Rekapi.Actor} actor
