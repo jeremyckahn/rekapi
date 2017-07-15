@@ -749,9 +749,9 @@ const generateBoilerplatedKeyframes = (
 const applyVendorBoilerplates = (toKeyframes, animName, vendors = ['w3']) =>
   vendors.map(vendor =>
     applyVendorPropertyPrefixes(
-`@${VENDOR_PREFIXES[vendor]}keyframes ${animName}-keyframes {
-${toKeyframes}
-}`,
+      `@${VENDOR_PREFIXES[vendor]}keyframes ${animName}-keyframes {
+${''  }${toKeyframes}
+${''  }}`,
       vendor)
   ).join('\n');
 
