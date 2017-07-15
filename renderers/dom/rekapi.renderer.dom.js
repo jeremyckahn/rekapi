@@ -877,66 +877,62 @@ const generateAnimationNameProperty = (
   return renderedName;
 };
 
+// TODO: The tests for these functions can probably be removed, and they can
+// subsequently be inlined into generateCSSAnimationProperties
 /*!
  * @param {Rekapi.Actor} actor
  * @param {string} animName
  * @return {string}
  */
-function generateAnimationDurationProperty (actor, prefix) {
-  return `  ${prefix}animation-duration: ${actor.getEnd() - actor.getStart()}ms;`;
-}
+const generateAnimationDurationProperty = (actor, prefix) =>
+  `  ${prefix}animation-duration: ${actor.getEnd() - actor.getStart()}ms;`;
 
 /*!
  * @param {Rekapi.Actor} actor
  * @param {number|string} delay
  * @return {string}
  */
-function generateAnimationDelayProperty (actor, prefix) {
-  return `  ${prefix}animation-delay: ${actor.getStart()}ms;`;
-}
+const generateAnimationDelayProperty = (actor, prefix) =>
+  `  ${prefix}animation-delay: ${actor.getStart()}ms;`;
 
 /*!
  * @param {string} prefix
  * @return {string}
  */
-function generateAnimationFillModeProperty (prefix) {
-  return `  ${prefix}animation-fill-mode: forwards;`;
-}
+const generateAnimationFillModeProperty = prefix =>
+  `  ${prefix}animation-fill-mode: forwards;`;
 
 /*!
  * @param {string} prefix
  * @return {string}
  */
-function generateAnimationTimingFunctionProperty (prefix) {
-  return `  ${prefix}animation-timing-function: linear;`;
-}
+const generateAnimationTimingFunctionProperty = prefix =>
+  `  ${prefix}animation-timing-function: linear;`;
+
+/*!
+ * @param {string} prefix
+ * @return {string}
+ */
+const generateAnimationCenteringRule = prefix =>
+  `  ${prefix}transform-origin: 0 0;`;
 
 /*!
  * @param {Rekapi} rekapi
  * @param {string} prefix
- * @param {number|string=} opt_iterations
+ * @param {number|string=} iterations
  * @return {string}
  */
-function generateAnimationIterationProperty (rekapi, prefix, opt_iterations) {
-  var iterationCount;
-  if (opt_iterations) {
-    iterationCount = opt_iterations;
-  } else {
-    iterationCount = rekapi._timesToIterate === -1
-      ? 'infinite'
-      : rekapi._timesToIterate;
-  }
-
-  return `  ${prefix}animation-iteration-count: ${iterationCount};`;
-}
-
-/*!
- * @param {string} prefix
- * @return {string}
- */
-function generateAnimationCenteringRule (prefix) {
-  return `  ${prefix}transform-origin: 0 0;`;
-}
+const generateAnimationIterationProperty = (
+  rekapi,
+  prefix,
+  iterations = undefined
+) =>
+  `  ${prefix}animation-iteration-count: ${iterations !== undefined ?
+    iterations :
+    rekapi._timesToIterate === -1 ?
+      'infinite' :
+      rekapi._timesToIterate
+   };`;
 
 // OPTIMIZED OUTPUT GENERATOR FUNCTIONS
 //
