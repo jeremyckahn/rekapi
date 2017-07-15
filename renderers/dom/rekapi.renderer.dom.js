@@ -723,7 +723,12 @@ const getActorCSS = (actor, options = {}) => {
  * @return {string}
  */
 const generateBoilerplatedKeyframes = (
-  actor, animName, steps, doCombineProperties, vendors = undefined) =>
+  actor,
+  animName,
+  steps,
+  doCombineProperties,
+  vendors = undefined
+) =>
 
   doCombineProperties ?
     applyVendorBoilerplates(
@@ -807,32 +812,35 @@ ${  vendors.map(vendor =>
  * @param {string} animName
  * @param {string} vendor
  * @param {boolean} doCombineProperties
- * @param {number|string=} opt_iterations
- * @param {boolean=} opt_isCentered
+ * @param {number|string=} iterations
+ * @param {boolean=} isCentered
  * @return {string}
  */
-function generateCSSAnimationProperties (
-    actor, animName, vendor, doCombineProperties, opt_iterations,
-    opt_isCentered) {
-  var generatedProperties = [];
-  var prefix = VENDOR_PREFIXES[vendor];
+const generateCSSAnimationProperties = (
+  actor,
+  animName,
+  vendor,
+  doCombineProperties,
+  iterations = undefined,
+  isCentered = false
+) => {
+  const prefix = VENDOR_PREFIXES[vendor];
 
-  generatedProperties.push(generateAnimationNameProperty(
-        actor, animName, prefix, doCombineProperties));
-  generatedProperties.push(
-      generateAnimationDurationProperty(actor, prefix));
-  generatedProperties.push(generateAnimationDelayProperty(actor, prefix));
-  generatedProperties.push(generateAnimationFillModeProperty(prefix));
-  generatedProperties.push(generateAnimationTimingFunctionProperty(prefix));
-  generatedProperties.push(generateAnimationIterationProperty(
-      actor.rekapi, prefix, opt_iterations));
+  const generatedProperties = [
+    generateAnimationNameProperty(actor, animName, prefix, doCombineProperties),
+    generateAnimationDurationProperty(actor, prefix),
+    generateAnimationDelayProperty(actor, prefix),
+    generateAnimationFillModeProperty(prefix),
+    generateAnimationTimingFunctionProperty(prefix),
+    generateAnimationIterationProperty(actor.rekapi, prefix, iterations),
+  ];
 
-  if (opt_isCentered) {
+  if (isCentered) {
     generatedProperties.push(generateAnimationCenteringRule(prefix));
   }
 
   return generatedProperties.join('\n');
-}
+};
 
 /*!
  * @param {Rekapi.Actor} actor
@@ -841,36 +849,33 @@ function generateCSSAnimationProperties (
  * @param {boolean} doCombineProperties
  * @return {string}
  */
-function generateAnimationNameProperty (
-    actor, animName, prefix, doCombineProperties) {
+const generateAnimationNameProperty = (
+  actor,
+  animationName,
+  prefix,
+  doCombineProperties
+) => {
 
-  let animationName = `  ${prefix}animation-name:`;
+  let renderedName = `  ${prefix}animation-name:`;
 
   if (doCombineProperties) {
-    animationName += ` ${animName}-keyframes;`;
+    renderedName += ` ${animationName}-keyframes;`;
   } else {
-    var tracks = actor.getTrackNames();
-    var transformTracksToCombine = _.intersection(tracks, transformFunctions);
-    var nonTransformTracks = _.difference(tracks, transformFunctions);
+    const trackNames = actor.getTrackNames();
 
-    var trackNamesToPrint;
-    if (transformTracksToCombine.length) {
-      trackNamesToPrint = nonTransformTracks;
-      trackNamesToPrint.push('transform');
-    } else {
-      trackNamesToPrint = tracks;
-    }
+    const trackNamesToPrint = _.intersection(trackNames, transformFunctions).length ?
+      _.difference(trackNames, transformFunctions).concat('transform') :
+      trackNames;
 
-    _.each(trackNamesToPrint, function (trackName) {
-      animationName += ` ${animName}-${trackName}-keyframes,`;
-    });
-
-    animationName = animationName.slice(0, animationName.length - 1);
-    animationName += ';';
+    renderedName = trackNamesToPrint.reduce(
+      (renderedName, trackName) =>
+        `${renderedName} ${animationName}-${trackName}-keyframes,`,
+      renderedName
+    ).replace(/.$/, ';');
   }
 
-  return animationName;
-}
+  return renderedName;
+};
 
 /*!
  * @param {Rekapi.Actor} actor
