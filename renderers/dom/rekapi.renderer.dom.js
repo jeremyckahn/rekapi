@@ -1137,29 +1137,32 @@ const calculateStepPercent = (property, actorStart, actorLength) =>
  * @param {number} incrementSize
  * @param {number} actorStart
  * @param {number} fromPercent
- * @param {Rekapi.KeyframeProperty=} opt_fromProp
+ * @param {Rekapi.KeyframeProperty=} fromProp
  * @return {Array.<string>}
  */
 function generateActorTrackSegment (
-    actor, increments, incrementSize, actorStart, fromPercent,
-    opt_fromProp) {
+  actor,
+  increments,
+  incrementSize,
+  actorStart,
+  fromPercent,
+  fromProp = undefined
+) {
 
-  var accumulator = [];
-  var actorLength = actor.getLength();
-  var i, adjustedPercent, stepPrefix;
+  const accumulator = [];
+  const length = actor.getLength();
 
-  for (i = 0; i < increments; i++) {
-    adjustedPercent = fromPercent + (i * incrementSize);
+  for (let i = 0; i < increments; i++) {
+    const percent = fromPercent + (i * incrementSize);
+
     actor._updateState(
-        ((adjustedPercent / 100) * actorLength) + actorStart, true);
-    stepPrefix = +adjustedPercent.toFixed(2) + '% ';
+      ((percent / 100) * length) + actorStart,
+      true
+    );
 
-    if (opt_fromProp) {
-      accumulator.push(
-          '  ' + stepPrefix + serializeActorStep(actor, opt_fromProp.name));
-    } else {
-      accumulator.push('  ' + stepPrefix + serializeActorStep(actor));
-    }
+    const step = serializeActorStep(actor, fromProp && fromProp.name);
+
+    accumulator.push(`  ${+percent.toFixed(2)}% ${step}`);
   }
 
   return accumulator;
