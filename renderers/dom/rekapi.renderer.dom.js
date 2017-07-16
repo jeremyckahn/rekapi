@@ -1076,10 +1076,8 @@ const generateActorKeyframes = (actor, steps, track) => {
  * @param {number} steps
  * @return {string}
  */
-function generateCombinedActorKeyframes (actor, steps) {
-  return generateActorTrackSegment(
-      actor, steps + 1, 100 / steps, 0, 0).join('\n');
-}
+const generateCombinedActorKeyframes = (actor, steps) =>
+  generateActorTrackSegment(actor, steps + 1, 100 / steps, 0, 0).join('\n');
 
 /*!
  * @param {Rekapi.Actor} actor
@@ -1087,16 +1085,20 @@ function generateCombinedActorKeyframes (actor, steps) {
  * @param {number} actorStart
  * @return {string|undefined}
  */
-function simulateLeadingWait (actor, track, actorStart) {
-  var firstProp = actor._propertyTracks[track][0];
+const simulateLeadingWait = (actor, track, actorStart) => {
+  const firstProp = actor._propertyTracks[track][0];
 
-  if (typeof firstProp !== 'undefined'
-      && firstProp.millisecond !== actorStart) {
-    var fakeFirstProp = generateActorTrackSegment(
-        actor, 1, 1, firstProp.millisecond, 0, firstProp);
-    return fakeFirstProp.join('\n');
+  if (firstProp !== undefined && firstProp.millisecond !== actorStart) {
+    return generateActorTrackSegment(
+      actor,
+      1,
+      1,
+      firstProp.millisecond,
+      0,
+      firstProp
+    ).join('\n');
   }
-}
+};
 
 /*!
  * @param {Rekapi.Actor} actor
@@ -1105,16 +1107,20 @@ function simulateLeadingWait (actor, track, actorStart) {
  * @param {number} actorEnd
  * @return {string|undefined}
  */
-function simulateTrailingWait (actor, track, actorStart, actorEnd) {
-  var lastProp = _.last(actor._propertyTracks[track]);
+const simulateTrailingWait = (actor, track, actorStart, actorEnd) => {
+  const lastProp = _.last(actor._propertyTracks[track]);
 
-  if (typeof lastProp !== 'undefined'
-      && lastProp.millisecond !== actorEnd) {
-    var fakeLastProp = generateActorTrackSegment(
-        actor, 1, 1, actorStart, 100, lastProp);
-    return fakeLastProp.join('\n');
+  if (lastProp !== undefined && lastProp.millisecond !== actorEnd) {
+    return generateActorTrackSegment(
+      actor,
+      1,
+      1,
+      actorStart,
+      100,
+      lastProp
+    ).join('\n');
   }
-}
+};
 
 /*!
  * @param {Rekapi.KeyframeProperty} property
@@ -1122,9 +1128,8 @@ function simulateTrailingWait (actor, track, actorStart, actorEnd) {
  * @param {number} actorLength
  * @return {number}
  */
-function calculateStepPercent (property, actorStart, actorLength) {
-  return ((property.millisecond - actorStart) / actorLength) * 100;
-}
+const calculateStepPercent = (property, actorStart, actorLength) =>
+  ((property.millisecond - actorStart) / actorLength) * 100;
 
 /*!
  * @param {Rekapi.Actor} actor
