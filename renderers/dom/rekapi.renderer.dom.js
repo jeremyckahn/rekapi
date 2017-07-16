@@ -918,26 +918,23 @@ const canOptimizeKeyframeProperty = property =>
  * @param {Rekapi.KeyframeProperty} nextProperty
  * @return {boolean}
  */
-function isSegmentAWait (property, nextProperty) {
-  if (property.name === nextProperty.name &&
-      property.value === nextProperty.value) {
-    return true;
-  }
-
-  return false;
-}
+const isSegmentAWait = (property, nextProperty) =>
+  property.name === nextProperty.name &&
+    property.value === nextProperty.value;
 
 /*!
  * @param {Rekapi.Actor} actor
  * @return {boolean}
  */
-function canOptimizeAnyKeyframeProperties (actor) {
-  var keyframeProperties = actor._keyframeProperties;
-  var propertyNames = _.keys(actor._propertyTracks);
-
-  return _.any(keyframeProperties, canOptimizeKeyframeProperty) &&
-    !_.intersection(propertyNames, transformFunctions).length;
-}
+const canOptimizeAnyKeyframeProperties = (actor) =>
+  _.any(
+    actor._keyframeProperties,
+    canOptimizeKeyframeProperty
+  ) &&
+  !_.intersection(
+    Object.keys(actor._propertyTracks),
+    transformFunctions
+  ).length;
 
 /*!
  * @param {Rekapi.KeyframeProperty} property
@@ -945,28 +942,27 @@ function canOptimizeAnyKeyframeProperties (actor) {
  * @param {number} toPercent
  * @return {string}
  */
-function generateOptimizedKeyframeSegment (
-    property, fromPercent, toPercent) {
+const generateOptimizedKeyframeSegment = (
+  property,
+  fromPercent,
+  toPercent
+) => {
+  const name = property.name === 'transform' ?
+    TRANSFORM_TOKEN :
+    property.name;
 
-  var generalName = property.name;
-
-  if (property.name === 'transform') {
-    generalName = TRANSFORM_TOKEN;
-  }
-
-  var easingFormula = BEZIERS[property.nextProperty.easing.split(' ')[0]];
-  var timingFnChunk = `cubic-bezier(${easingFormula})`;
-
-  var adjustedFromPercent = isInt(fromPercent) ?
-      fromPercent : fromPercent.toFixed(2);
-  var adjustedToPercent = isInt(toPercent) ?
-      toPercent : toPercent.toFixed(2);
+  const { nextProperty, value } = property;
+  const from = isInt(fromPercent) ? fromPercent : fromPercent.toFixed(2);
+  const to = isInt(toPercent) ? toPercent : toPercent.toFixed(2);
+  const bezier = BEZIERS[nextProperty.easing.split(' ')[0]];
 
   return (
-`  ${adjustedFromPercent}% {${generalName}:${property.value};${VENDOR_TOKEN}animation-timing-function: ${timingFnChunk};}
-  ${adjustedToPercent}% {${generalName}:${property.nextProperty.value};}`
+ `  ${from}% {${name}:${value};${''
+  }${VENDOR_TOKEN}animation-timing-function: cubic-bezier(${bezier});${''
+  }}
+  ${to}% {${name}:${nextProperty.value};}`
   );
-}
+};
 
 // UN-OPTIMIZED OUTPUT GENERATOR FUNCTIONS
 //
