@@ -654,50 +654,6 @@ describe('DOMRenderer#toString', () => {
       });
     });
 
-    describe('generateAnimationDurationProperty', () => {
-      it('can generate the CSS duration of an animation', () => {
-        actor
-          .keyframe(0,    { 'x': 0  })
-          .keyframe(1000, { 'x': 10 });
-
-        assert.equal(
-          cssRenderer.generateAnimationDurationProperty(actor, 'PREFIX'),
-          '  PREFIXanimation-duration: 1000ms;'
-        );
-      });
-    });
-
-    describe('generateAnimationDelayProperty', () => {
-      it('can generate the CSS delay of an animation', () => {
-        actor
-          .keyframe(500,  { 'x': 0  })
-          .keyframe(1000, { 'x': 10 });
-
-        assert.equal(
-          cssRenderer.generateAnimationDelayProperty(actor, 'PREFIX'),
-          '  PREFIXanimation-delay: 500ms;'
-        );
-      });
-    });
-
-    describe('generateAnimationFillModeProperty', () => {
-      it('can generate the CSS fill mode of an animation', () => {
-        assert.equal(
-          cssRenderer.generateAnimationFillModeProperty('PREFIX'),
-          '  PREFIXanimation-fill-mode: forwards;'
-        );
-      });
-    });
-
-    describe('generateAnimationTimingFunctionProperty', () => {
-      it('can generate the CSS timing function of an animation', () => {
-        assert.equal(
-          cssRenderer.generateAnimationTimingFunctionProperty('PREFIX'),
-          '  PREFIXanimation-timing-function: linear;'
-        );
-      });
-    });
-
     describe('generateAnimationIterationProperty', () => {
       afterEach(() => {
         rekapi.stop();
@@ -737,15 +693,6 @@ describe('DOMRenderer#toString', () => {
         assert.equal(
           animDuration,
           '  PREFIXanimation-iteration-count: 5;'
-        );
-      });
-    });
-
-    describe('generateAnimationCenteringRule', () => {
-      it('can generate an offset rule for centering an element', () => {
-        assert.equal(
-          cssRenderer.generateAnimationCenteringRule('PREFIX'),
-          '  PREFIXtransform-origin: 0 0;'
         );
       });
     });

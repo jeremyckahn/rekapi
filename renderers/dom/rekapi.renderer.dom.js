@@ -825,18 +825,20 @@ const generateCSSAnimationProperties = (
   isCentered = false
 ) => {
   const prefix = VENDOR_PREFIXES[vendor];
+  const start = actor.getStart();
+  const end = actor.getEnd();
 
   const generatedProperties = [
     generateAnimationNameProperty(actor, animName, prefix, doCombineProperties),
-    generateAnimationDurationProperty(actor, prefix),
-    generateAnimationDelayProperty(actor, prefix),
-    generateAnimationFillModeProperty(prefix),
-    generateAnimationTimingFunctionProperty(prefix),
+    `  ${prefix}animation-duration: ${end - start}ms;`,
+    `  ${prefix}animation-delay: ${start}ms;`,
+    `  ${prefix}animation-fill-mode: forwards;`,
+    `  ${prefix}animation-timing-function: linear;`,
     generateAnimationIterationProperty(actor.rekapi, prefix, iterations),
   ];
 
   if (isCentered) {
-    generatedProperties.push(generateAnimationCenteringRule(prefix));
+    generatedProperties.push(`  ${prefix}transform-origin: 0 0;`);
   }
 
   return generatedProperties.join('\n');
@@ -876,45 +878,6 @@ const generateAnimationNameProperty = (
 
   return renderedName;
 };
-
-// TODO: The tests for these functions can probably be removed, and they can
-// subsequently be inlined into generateCSSAnimationProperties
-/*!
- * @param {Rekapi.Actor} actor
- * @param {string} animName
- * @return {string}
- */
-const generateAnimationDurationProperty = (actor, prefix) =>
-  `  ${prefix}animation-duration: ${actor.getEnd() - actor.getStart()}ms;`;
-
-/*!
- * @param {Rekapi.Actor} actor
- * @param {number|string} delay
- * @return {string}
- */
-const generateAnimationDelayProperty = (actor, prefix) =>
-  `  ${prefix}animation-delay: ${actor.getStart()}ms;`;
-
-/*!
- * @param {string} prefix
- * @return {string}
- */
-const generateAnimationFillModeProperty = prefix =>
-  `  ${prefix}animation-fill-mode: forwards;`;
-
-/*!
- * @param {string} prefix
- * @return {string}
- */
-const generateAnimationTimingFunctionProperty = prefix =>
-  `  ${prefix}animation-timing-function: linear;`;
-
-/*!
- * @param {string} prefix
- * @return {string}
- */
-const generateAnimationCenteringRule = prefix =>
-  `  ${prefix}transform-origin: 0 0;`;
 
 /*!
  * @param {Rekapi} rekapi
@@ -1309,13 +1272,7 @@ Rekapi._private.cssRenderer = {
   ,'combineTranfromProperties': combineTranfromProperties
   ,'serializeActorStep': serializeActorStep
   ,'generateAnimationNameProperty': generateAnimationNameProperty
-  ,'generateAnimationDurationProperty': generateAnimationDurationProperty
-  ,'generateAnimationDelayProperty': generateAnimationDelayProperty
-  ,'generateAnimationFillModeProperty': generateAnimationFillModeProperty
-  ,'generateAnimationTimingFunctionProperty':
-      generateAnimationTimingFunctionProperty
   ,'generateAnimationIterationProperty': generateAnimationIterationProperty
-  ,'generateAnimationCenteringRule': generateAnimationCenteringRule
   ,'simulateLeadingWait': simulateLeadingWait
   ,'simulateTrailingWait': simulateTrailingWait
   ,'canOptimizeKeyframeProperty': canOptimizeKeyframeProperty
