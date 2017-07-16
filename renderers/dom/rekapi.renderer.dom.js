@@ -904,36 +904,14 @@ const generateAnimationIterationProperty = (
  * @param {Rekapi.KeyframeProperty} property
  * @return {boolean}
  */
-function canOptimizeKeyframeProperty (property) {
-  var canOptimize = false;
-  var nextProperty = property.nextProperty;
-
-  if (nextProperty) {
-    if (isSegmentAWait(property, nextProperty)) {
-      return true;
-    }
-
-    var easingChunks = nextProperty.easing.split(' ');
-
-    var i = 0, len = easingChunks.length;
-    var previousChunk = easingChunks[0];
-    var currentChunk;
-    for (i; i < len; i++) {
-      currentChunk = easingChunks[i];
-      if (!(BEZIERS[currentChunk])
-          || previousChunk !== currentChunk) {
-        canOptimize = false;
-        break;
-      } else {
-        canOptimize = true;
-      }
-
-      previousChunk = currentChunk;
-    }
-  }
-
-  return canOptimize;
-}
+const canOptimizeKeyframeProperty = property =>
+  !property.nextProperty ?
+    false :
+    isSegmentAWait(property, property.nextProperty) ?
+      true :
+      property.nextProperty.easing.split(' ').every((easing, i, easings) =>
+        !(!BEZIERS[easing] || (i > 0 && easings[i - 1] !== easing))
+      );
 
 /*!
  * @param {Rekapi.KeyframeProperty} property
