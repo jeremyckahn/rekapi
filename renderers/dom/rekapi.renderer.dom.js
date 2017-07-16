@@ -973,26 +973,28 @@ const generateOptimizedKeyframeSegment = (
  * @param {string} track
  * @return {string}
  */
-function generateActorKeyframes (actor, steps, track) {
-  var accumulator = [];
-  var actorEnd = actor.getEnd();
-  var actorStart = actor.getStart();
-  var actorLength = actor.getLength();
-  var leadingWait = simulateLeadingWait(actor, track, actorStart);
+const generateActorKeyframes = (actor, steps, track) => {
+  // This function is completely crazy.  Simplify it?
+  const accumulator = [];
+  const end = actor.getEnd();
+  const start = actor.getStart();
+  const length = actor.getLength();
+  const leadingWait = simulateLeadingWait(actor, track, start);
 
   if (leadingWait) {
     accumulator.push(leadingWait);
   }
 
-  var previousSegmentWasOptimized = false;
-  _.each(actor._propertyTracks[track], function (prop, propName) {
-    var fromPercent = calculateStepPercent(prop, actorStart, actorLength);
-    var nextProperty = prop.nextProperty;
+  let previousSegmentWasOptimized = false;
+  actor._propertyTracks[track].forEach(prop => {
+    const fromPercent = calculateStepPercent(prop, start, length);
+    const { nextProperty } = prop;
 
-    var toPercent, increments, incrementSize;
+    let toPercent, increments, incrementSize;
+
     if (nextProperty) {
-      toPercent = calculateStepPercent(nextProperty, actorStart, actorLength);
-      var delta = toPercent - fromPercent;
+      toPercent = calculateStepPercent(nextProperty, start, length);
+      const delta = toPercent - fromPercent;
       increments = Math.floor((delta / 100) * steps) || 1;
       incrementSize = delta / increments;
     } else {
@@ -1001,10 +1003,16 @@ function generateActorKeyframes (actor, steps, track) {
       incrementSize = 1;
     }
 
-    var trackSegment;
+    let trackSegment;
     if (nextProperty && isSegmentAWait(prop, nextProperty)) {
       trackSegment = generateActorTrackWaitSegment(
-          actor, actorStart, prop, nextProperty, fromPercent, toPercent);
+        actor,
+        start,
+        prop,
+        nextProperty,
+        fromPercent,
+        toPercent
+      );
 
       if (previousSegmentWasOptimized) {
         trackSegment.shift();
@@ -1014,23 +1022,29 @@ function generateActorKeyframes (actor, steps, track) {
 
     } else if (canOptimizeKeyframeProperty(prop)) {
       trackSegment = generateOptimizedKeyframeSegment(
-          prop, fromPercent, toPercent);
+        prop,
+        fromPercent,
+        toPercent
+      );
 
       // If this and the previous segment are optimized, remove the
       // destination keyframe of the previous step.  The starting keyframe of
       // the newest segment makes it redundant.
       if (previousSegmentWasOptimized) {
-        var accumulatorLength = accumulator.length;
-        var previousTrackSegment = accumulator[accumulatorLength - 1];
-        var optimizedPreviousTrackSegment =
-            previousTrackSegment.split('\n')[0];
-        accumulator[accumulatorLength - 1] = optimizedPreviousTrackSegment;
+        accumulator[accumulator.length - 1] =
+          accumulator[accumulator.length - 1].split('\n')[0];
       }
 
       previousSegmentWasOptimized = true;
     } else {
       trackSegment = generateActorTrackSegment(
-          actor, increments, incrementSize, actorStart, fromPercent, prop);
+        actor,
+        increments,
+        incrementSize,
+        start,
+        fromPercent,
+        prop
+      );
 
       if (previousSegmentWasOptimized) {
         trackSegment.shift();
@@ -1048,15 +1062,14 @@ function generateActorKeyframes (actor, steps, track) {
     }
   });
 
-  var trailingWait =
-      simulateTrailingWait(actor, track, actorStart, actorEnd);
+  const trailingWait = simulateTrailingWait(actor, track, start, end);
 
   if (trailingWait) {
     accumulator.push(trailingWait);
   }
 
   return accumulator.join('\n');
-}
+};
 
 /*!
  * @param {Rekapi.Actor} actor
