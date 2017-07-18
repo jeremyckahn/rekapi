@@ -1,272 +1,248 @@
-rekapiModules.push(function (context) {
+import _, { noop } from 'lodash';
+import { Tweenable } from 'shifty';
+import { composeEasingObject } from '../node_modules/shifty/src/tweenable';
+import KeyframeProperty from './rekapi.keyframe-property';
+import {
+  fireEvent,
+  invalidateAnimationLength,
+  DEFAULT_EASING
+} from './rekapi.core';
 
-  'use strict';
+/*!
+ * @param {Object} obj
+ * @return {number} millisecond
+ */
+const getMillisecond = obj => obj.millisecond;
 
-  var DEFAULT_EASING = 'linear';
-  var Rekapi = context.Rekapi;
-  var Tweenable = Rekapi.Tweenable;
-  var _ = Rekapi._;
+// TODO: Make this a prototype method
+/*!
+ * @param {Rekapi.Actor} actor
+ * @param {string} event
+ * @param {any=} data
+ */
+const fire = (actor, event, data) =>
+  actor.rekapi && fireEvent(actor.rekapi, event, data);
 
-  /*!
-   * @param {Object} obj
-   * @return {number} millisecond
-   */
-  function getMillisecond(obj) {
-    return obj.millisecond;
+/*!
+ * Retrieves the most recent property cache entry for a given millisecond.
+ * @param {Rekapi.Actor} actor
+ * @param {number} millisecond
+ * @return {Object|undefined} undefined if there is no property cache for
+ * the millisecond, i.e. an empty cache.
+ */
+const getPropertyCacheEntryForMillisecond = (actor, millisecond) => {
+  const { _timelinePropertyCache } = actor;
+  const index = _.sortedIndex(
+    _timelinePropertyCache,
+    { _millisecond: millisecond },
+    obj => obj._millisecond
+  );
+
+  if (!_timelinePropertyCache[index]) {
+    return;
   }
 
-  /*!
-   * @param {Object} obj
-   * @return {number} millisecond
-   */
-  function get_Millisecond(obj) {
-    return obj._millisecond;
-  }
+  return _timelinePropertyCache[index]._millisecond === millisecond ?
+    _timelinePropertyCache[index] :
+      index >= 1 ?
+        _timelinePropertyCache[index - 1] :
+        _timelinePropertyCache[0];
+};
 
-  /*!
-   * @param {Rekapi.Actor} actor
-   * @param {string} event
-   * @param {any=} opt_data
-   */
-  function fireRekapiEventForActor (actor, event, opt_data) {
-    if (actor.rekapi) {
-      fireEvent(actor.rekapi, event, _, opt_data);
-    }
-  }
+/*!
+ * Search property track `track` and find the correct index to insert a
+ * new element at `millisecond`.
+ * @param {Array(Rekapi.KeyframeProperty)} track
+ * @param {number} millisecond
+ * @return {number} index
+ */
+const insertionPointInTrack = (track, millisecond) =>
+  _.sortedIndex(track, { millisecond }, getMillisecond);
 
-  /*!
-   * Retrieves the most recent property cache entry for a given millisecond.
-   * @param {Rekapi.Actor} actor
-   * @param {number} millisecond
-   * @return {Object|undefined} undefined if there is no property cache for
-   * the millisecond, i.e. an empty cache.
-   */
-  function getPropertyCacheEntryForMillisecond (actor, millisecond) {
-    var cache = actor._timelinePropertyCache;
+/*!
+ * Gets all of the current and most recent Rekapi.KeyframeProperties for a
+ * given millisecond.
+ * @param {Rekapi.Actor} actor
+ * @param {number} forMillisecond
+ * @return {Object} An Object containing Rekapi.KeyframeProperties
+ */
+const getLatestProperties = (actor, forMillisecond) => {
+  const latestProperties = {};
 
-    var index = _.sortedIndex(cache, { _millisecond: millisecond }, get_Millisecond);
+  _.each(actor._propertyTracks, (propertyTrack, propertyName) => {
+    const index = insertionPointInTrack(propertyTrack, forMillisecond);
 
-    if (cache[index] && cache[index]._millisecond === millisecond) {
-      return cache[index];
-    } else if (index >= 1) {
-      return cache[index - 1];
-    } else {
-      return cache[0];
-    }
-  }
-
-  /*!
-   * Gets all of the current and most recent Rekapi.KeyframeProperties for a
-   * given millisecond.
-   * @param {Rekapi.Actor} actor
-   * @param {number} forMillisecond
-   * @return {Object} An Object containing Rekapi.KeyframeProperties
-   */
-  function getLatestProperties (actor, forMillisecond) {
-    var latestProperties = {};
-
-    _.each(actor._propertyTracks, function (propertyTrack, propertyName) {
-      var index = insertionPointInTrack(propertyTrack, forMillisecond);
-      if (propertyTrack[index] && propertyTrack[index].millisecond === forMillisecond) {
+    latestProperties[propertyName] =
+      propertyTrack[index] && propertyTrack[index].millisecond === forMillisecond ?
         // Found forMillisecond exactly.
-        latestProperties[propertyName] = propertyTrack[index];
-      } else if (index >= 1) {
-        // forMillisecond doesn't exist in the track and index is
-        // where we'd need to insert it, therefore the previous
-        // keyframe is the most recent one before forMillisecond.
-        latestProperties[propertyName] = propertyTrack[index - 1];
-      } else {
-        // Return first property.  This is after forMillisecond.
-        latestProperties[propertyName] = propertyTrack[0];
-      }
-    });
+        propertyTrack[index] :
+          index >= 1 ?
+            // forMillisecond doesn't exist in the track and index is
+            // where we'd need to insert it, therefore the previous
+            // keyframe is the most recent one before forMillisecond.
+            propertyTrack[index - 1] :
+            // Return first property.  This is after forMillisecond.
+            propertyTrack[0];
+  });
 
-    return latestProperties;
+  return latestProperties;
+};
+
+/*!
+ * Search property track `track` and find the index to the element that is
+ * at `millisecond`.  Returns `undefined` if not found.
+ * @param {Array(Rekapi.KeyframeProperty)} track
+ * @param {number} millisecond
+ * @return {number} index or -1 if not present
+ */
+const propertyIndexInTrack = (track, millisecond) => {
+  const index = insertionPointInTrack(track, millisecond);
+
+  return track[index] && track[index].millisecond === millisecond ?
+    index : -1;
+};
+
+/*!
+ * Mark the cache of internal KeyframeProperty data as invalid.  The cache
+ * will be rebuilt on the next call to ensurePropertyCacheValid.
+ * @param {Rekapi.Actor}
+ */
+const invalidateCache = actor => actor._timelinePropertyCacheValid = false;
+
+/*!
+ * Empty out and rebuild the cache of internal KeyframeProperty data if it
+ * has been marked as invalid.
+ * @param {Rekapi.Actor}
+ */
+const ensurePropertyCacheValid = actor => {
+  if (actor._timelinePropertyCacheValid) {
+    return;
   }
 
-  /*!
-   * Search property track `track` and find the correct index to insert a
-   * new element at `millisecond`.
-   * @param {Array(Rekapi.KeyframeProperty)} track
-   * @param {number} millisecond
-   * @return {number} index
-   */
-  function insertionPointInTrack (track, millisecond) {
-    return _.sortedIndex(track, { millisecond: millisecond }, getMillisecond);
-  }
+  actor._timelinePropertyCache = [];
+  actor._timelineFunctionCache = [];
 
-  /*!
-   * Search property track `track` and find the index to the element that is
-   * at `millisecond`.  Returns `undefined` if not found.
-   * @param {Array(Rekapi.KeyframeProperty)} track
-   * @param {number} millisecond
-   * @return {number|undefined} index or undefined if not present
-   */
-  function propertyIndexInTrack (track, millisecond) {
-    var index = insertionPointInTrack(track, millisecond);
-    if (track[index] && track[index].millisecond === millisecond) {
-      return index;
-    }
-  }
+  const { _timelinePropertyCache, _timelineFunctionCache } = actor;
 
-  /*!
-   * Mark the cache of internal KeyframeProperty data as invalid.  The cache
-   * will be rebuilt on the next call to ensurePropertyCacheValid.
-   * @param {Rekapi.Actor}
-   */
-  function invalidatePropertyCache (actor) {
-    actor._timelinePropertyCacheValid = false;
-  }
+  // Build the cache map
+  const props = _.values(actor._keyframeProperties)
+    .sort((a, b) => a.millisecond - b.millisecond);
 
-  /*!
-   * Empty out and rebuild the cache of internal KeyframeProperty data if it
-   * has been marked as invalid.
-   * @param {Rekapi.Actor}
-   */
-  function ensurePropertyCacheValid (actor) {
-    if (actor._timelinePropertyCacheValid) {
-      return;
-    }
+  let curCacheEntry = getLatestProperties(actor, 0);
 
-    actor._timelinePropertyCache = [];
-    actor._timelineFunctionCache = [];
-    var timelinePropertyCache = actor._timelinePropertyCache;
+  curCacheEntry._millisecond = 0;
+  _timelinePropertyCache.push(curCacheEntry);
 
-    // Build the cache map
-    var props = _.values(actor._keyframeProperties);
-    props.sort(function (a, b) { return a.millisecond - b.millisecond });
-
-    var curCacheEntry = getLatestProperties(actor, 0);
-    curCacheEntry._millisecond = 0;
-    timelinePropertyCache.push(curCacheEntry);
-    _.each(props, function (property) {
-      if (property.millisecond !== curCacheEntry._millisecond) {
-        curCacheEntry = _.clone(curCacheEntry);
-        curCacheEntry._millisecond = property.millisecond;
-        timelinePropertyCache.push(curCacheEntry);
-      }
-      curCacheEntry[property.name] = property;
-      if (property.name === 'function') {
-        actor._timelineFunctionCache.push(property);
-      }
-    });
-
-    actor._timelinePropertyCacheValid = true;
-  }
-
-  /*!
-   * Remove any property tracks that are empty.
-   *
-   * @param {Rekapi.Actor} actor
-   */
-  function removeEmptyPropertyTracks (actor) {
-    var trackNameRemovalList = [];
-    var propertyTracks = actor._propertyTracks;
-
-    _.each(propertyTracks, function (propertyTrack, trackName) {
-      if (!propertyTrack.length) {
-        trackNameRemovalList.push(trackName);
-      }
-    });
-
-    _.each(trackNameRemovalList, function (trackName) {
-      delete propertyTracks[trackName];
-      fireRekapiEventForActor(actor, 'removeKeyframePropertyTrack', trackName);
-    });
-  }
-
-  /*!
-   * Stably sort all of the property tracks of an actor
-   * @param {Rekapi.Actor} actor
-   */
-  function sortPropertyTracks (actor) {
-    _.each(actor._propertyTracks, function (propertyTrack, trackName) {
-      actor._propertyTracks[trackName] = _.sortBy(propertyTrack, 'millisecond');
-      propertyTrack = actor._propertyTracks[trackName];
-
-      _.each(propertyTrack, function (keyframeProperty, i) {
-        keyframeProperty.linkToNext(propertyTrack[i + 1]);
-      });
-    });
-  }
-
-  /*!
-   * Updates internal Rekapi and Actor data after a KeyframeProperty
-   * modification method is called.
-   *
-   * TODO: This should be moved to core.
-   *
-   * @param {Rekapi.Actor} actor
-   */
-  function cleanupAfterKeyframeModification (actor) {
-    sortPropertyTracks(actor);
-    invalidatePropertyCache(actor);
-
-    if (actor.rekapi) {
-      invalidateAnimationLength(actor.rekapi);
+  props.forEach(property => {
+    if (property.millisecond !== curCacheEntry._millisecond) {
+      curCacheEntry = _.clone(curCacheEntry);
+      curCacheEntry._millisecond = property.millisecond;
+      _timelinePropertyCache.push(curCacheEntry);
     }
 
-    fireRekapiEventForActor(actor, 'timelineModified');
+    curCacheEntry[property.name] = property;
+
+    if (property.name === 'function') {
+      _timelineFunctionCache.push(property);
+    }
+  });
+
+  actor._timelinePropertyCacheValid = true;
+};
+
+/*!
+ * Remove any property tracks that are empty.
+ *
+ * @param {Rekapi.Actor} actor
+ */
+const removeEmptyPropertyTracks = actor => {
+  const { _propertyTracks } = actor;
+
+  Object.keys(_propertyTracks).forEach(trackName => {
+    if (!_propertyTracks[trackName].length) {
+      delete _propertyTracks[trackName];
+      fire(actor, 'removeKeyframePropertyTrack', trackName);
+    }
+  });
+};
+
+/*!
+ * Stably sort all of the property tracks of an actor
+ * @param {Rekapi.Actor} actor
+ */
+const sortPropertyTracks = actor => {
+  _.each(actor._propertyTracks, (propertyTrack, trackName) => {
+    propertyTrack = _.sortBy(propertyTrack, 'millisecond');
+
+    propertyTrack.forEach((keyframeProperty, i) =>
+      keyframeProperty.linkToNext(propertyTrack[i + 1])
+    );
+
+    actor._propertyTracks[trackName] = propertyTrack;
+  });
+};
+
+/*!
+ * Updates internal Rekapi and Actor data after a KeyframeProperty
+ * modification method is called.
+ *
+ * @param {Rekapi.Actor} actor
+ */
+const cleanupAfterKeyframeModification = actor => {
+  sortPropertyTracks(actor);
+  invalidateCache(actor);
+
+  if (actor.rekapi) {
+    invalidateAnimationLength(actor.rekapi);
   }
 
-  /**
-   * An actor represents an individual component of an animation.  An animation
-   * may have one or many actors.
-   *
-   * @class Rekapi.Actor
-   * @param {Object=} opt_config Valid properties:
-   *   - __context__ (_Object|CanvasRenderingContext2D|HTMLElement_): The
-   *   rendering context for this actor. If omitted, this Actor gets the parent
-   *   `{{#crossLink "Rekapi"}}{{/crossLink}}` instance's `context` when it is
-   *   added with `{{#crossLink "Rekapi/addActor:method"}}{{/crossLink}}`.
-   *   - __setup__ (_Function_): A function that gets called when the actor is
-   *     added to an animation with
-   *     `{{#crossLink "Rekapi/addActor:method"}}{{/crossLink}}`.
-   *   - __render__ (_Function(Object, Object)_): A function that gets called
-   *   every time the actor's state is updated (once every frame). This
-   *   function should do something meaningful with state of the actor (for
-   *   example, visually rendering to the screen).  This function receives two
-   *   parameters: The first is a reference to the actor's `context` and the
-   *   second is an Object containing the current state properties.
-   *   - __teardown__ (_Function_): A function that gets called when the actor
-   *   is removed from an animation with
-   *   `{{#crossLink "Rekapi/removeActor:method"}}{{/crossLink}}`.
-   * @constructor
-   */
-  Rekapi.Actor = function (opt_config) {
+  fire(actor, 'timelineModified');
+};
 
-    opt_config = opt_config || {};
+/**
+ * An actor represents an individual component of an animation.  An animation
+ * may have one or many actors.
+ *
+ * @class Rekapi.Actor
+ * @param {Object=} config Valid properties:
+ *   - __context__ (_Object|CanvasRenderingContext2D|HTMLElement_): The
+ *   rendering context for this actor. If omitted, this Actor gets the parent
+ *   `{{#crossLink "Rekapi"}}{{/crossLink}}` instance's `context` when it is
+ *   added with `{{#crossLink "Rekapi/addActor:method"}}{{/crossLink}}`.
+ *   - __setup__ (_Function_): A function that gets called when the actor is
+ *     added to an animation with
+ *     `{{#crossLink "Rekapi/addActor:method"}}{{/crossLink}}`.
+ *   - __render__ (_Function(Object, Object)_): A function that gets called
+ *   every time the actor's state is updated (once every frame). This
+ *   function should do something meaningful with state of the actor (for
+ *   example, visually rendering to the screen).  This function receives two
+ *   parameters: The first is a reference to the actor's `context` and the
+ *   second is an Object containing the current state properties.
+ *   - __teardown__ (_Function_): A function that gets called when the actor
+ *   is removed from an animation with
+ *   `{{#crossLink "Rekapi/removeActor:method"}}{{/crossLink}}`.
+ * @constructor
+ */
+export default class Actor extends Tweenable {
 
-    // Steal the `Tweenable` constructor.
-    Tweenable.call(this);
+  constructor (config = {}) {
+    super();
 
-    _.extend(this, {
-      '_propertyTracks': {}
-      ,'_timelinePropertyCache': []
-      ,'_timelineFunctionCache': []
-      ,'_timelinePropertyCacheValid': false
-      ,'_keyframeProperties': {}
-      ,'id': _.uniqueId()
-      ,'context': opt_config.context // This may be undefined
-      ,'setup': opt_config.setup || noop
-      ,'render': opt_config.render || noop
-      ,'teardown': opt_config.teardown || noop
-      ,'data': {}
-      ,'wasActive': true
+    Object.assign(this, {
+      _propertyTracks: {},
+      _timelinePropertyCache: [],
+      _timelineFunctionCache: [],
+      _timelinePropertyCacheValid: false,
+      _keyframeProperties: {},
+      id: _.uniqueId(),
+      context: config.context, // This may be undefined
+      setup: config.setup || noop,
+      render: config.render || noop,
+      teardown: config.teardown || noop,
+      data: {},
+      wasActive: true
     });
-
-    return this;
-  };
-  var Actor = Rekapi.Actor;
-
-  // Kind of a fun way to set up an inheritance chain.  `ActorMethods` prevents
-  // methods on `Actor.prototype` from polluting `Tweenable`'s prototype with
-  // `Actor` specific methods.
-  var ActorMethods = function () {};
-  ActorMethods.prototype = Tweenable.prototype;
-  Actor.prototype = new ActorMethods();
-  // But the magic doesn't stop here!  `Actor`'s constructor steals the
-  // `Tweenable` constructor.
+  }
 
   /**
    * Create a keyframe for the actor.  The animation timeline begins at `0`.
@@ -340,7 +316,7 @@ rekapiModules.push(function (context) {
    *       });
    *
    * `x` will ease with `easeInSine`, and `y` will ease with `easeOutSine`.
-   * Any unspecified properties will ease with `linear`.  If `opt_easing` is
+   * Any unspecified properties will ease with `linear`.  If `easing` is
    * omitted, all properties will default to `linear`.
    * @method keyframe
    * @param {number} millisecond Where on the timeline to set the keyframe.
@@ -350,68 +326,57 @@ rekapiModules.push(function (context) {
    * animation timeline.  If this is a function, it will be executed at the
    * specified keyframe.  The function will receive a number that represents
    * the delay between when the function is called and when it was scheduled.
-   * @param {string|Object=} opt_easing Optional easing string or Object.  If
+   * @param {string|Object=} easing Optional easing string or Object.  If
    * `state` is a function, this is ignored.
    * @chainable
    */
-  Actor.prototype.keyframe = function keyframe (
-    millisecond, state, opt_easing) {
-
+  keyframe (millisecond, state, easing = DEFAULT_EASING) {
     if (state instanceof Function) {
       state = { 'function': state };
     }
 
-    opt_easing = opt_easing || DEFAULT_EASING;
-    var easing = Tweenable.composeEasingObject(state, opt_easing);
-    var newKeyframeProperty;
+    const easingObject = composeEasingObject(state, easing);
 
-    // Create and add all of the KeyframeProperties
-    _.each(state, function (value, name) {
-      newKeyframeProperty = new Rekapi.KeyframeProperty(
-        millisecond, name, value, easing[name]);
-
-      this.addKeyframeProperty(newKeyframeProperty);
-    }, this);
+    _.each(state, (value, name) =>
+      this.addKeyframeProperty(
+        new KeyframeProperty(millisecond, name, value, easingObject[name])
+      )
+    );
 
     if (this.rekapi) {
       invalidateAnimationLength(this.rekapi);
     }
 
-    invalidatePropertyCache(this);
-    fireRekapiEventForActor(this, 'timelineModified');
+    invalidateCache(this);
+    fire(this, 'timelineModified');
 
     return this;
-  };
+  }
 
   /**
    * @method hasKeyframeAt
    * @param {number} millisecond Point on the timeline to query.
-   * @param {string=} opt_trackName Optionally scope the lookup to a particular
+   * @param {string=} trackName Optionally scope the lookup to a particular
    * track.
    * @return {boolean} Whether or not the actor has any `{{#crossLink
    * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set at `millisecond`.
    */
-  Actor.prototype.hasKeyframeAt = function (millisecond, opt_trackName) {
-    var tracks = this._propertyTracks;
+  hasKeyframeAt (millisecond, trackName = undefined) {
+    const { _propertyTracks } = this;
 
-    if (opt_trackName) {
-      if (!_.has(tracks, opt_trackName)) {
-        return false;
-      }
-      tracks = _.pick(tracks, opt_trackName);
+    if (trackName && !_propertyTracks[trackName]) {
+      return false;
     }
 
-    // Search through the tracks and determine if a property can be found.
-    var track;
-    for (track in tracks) {
-      if (tracks.hasOwnProperty(track)
-         && this.getKeyframeProperty(track, millisecond)) {
-        return true;
-      }
-    }
+    const propertyTracks = trackName ?
+      _.pick(_propertyTracks, trackName) :
+      _propertyTracks;
 
-    return false;
-  };
+    return Object.keys(propertyTracks).some(track =>
+      propertyTracks.hasOwnProperty(track) &&
+      !!this.getKeyframeProperty(track, millisecond)
+    );
+  }
 
   /**
    * Copies all of the `{{#crossLink
@@ -439,24 +404,25 @@ rekapiModules.push(function (context) {
    * KeyframeProperties from.
    * @chainable
    */
-  Actor.prototype.copyKeyframe = function (copyTo, copyFrom) {
+  copyKeyframe (copyTo, copyFrom) {
     // Build the configuation objects to be passed to Actor#keyframe
-    var sourcePositions = {};
-    var sourceEasings = {};
+    const sourcePositions = {};
+    const sourceEasings = {};
 
-    _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var keyframeProperty =
-      this.getKeyframeProperty(trackName, copyFrom);
+    _.each(this._propertyTracks, (propertyTrack, trackName) => {
+      const keyframeProperty =
+        this.getKeyframeProperty(trackName, copyFrom);
 
       if (keyframeProperty) {
         sourcePositions[trackName] = keyframeProperty.value;
         sourceEasings[trackName] = keyframeProperty.easing;
       }
-    }, this);
+    });
 
     this.keyframe(copyTo, sourcePositions, sourceEasings);
+
     return this;
-  };
+  }
 
   /**
    * Moves all of the
@@ -474,31 +440,31 @@ rekapiModules.push(function (context) {
    * to.
    * @return {boolean} Whether or not the keyframe was successfully moved.
    */
-  Actor.prototype.moveKeyframe = function (from, to) {
+  moveKeyframe (from, to) {
     if (!this.hasKeyframeAt(from) || this.hasKeyframeAt(to)) {
       return false;
     }
 
     // Move each of the relevant KeyframeProperties to the new location in the
     // timeline
-    _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var oldIndex = propertyIndexInTrack(propertyTrack, from);
-      if (typeof oldIndex !== 'undefined') {
-        var property = propertyTrack[oldIndex];
-        property.millisecond = to;
+    _.each(this._propertyTracks, (propertyTrack, trackName) => {
+      const oldIndex = propertyIndexInTrack(propertyTrack, from);
+
+      if (oldIndex !== -1) {
+        propertyTrack[oldIndex].millisecond = to;
       }
-    }, this);
+    });
 
     cleanupAfterKeyframeModification(this);
 
     return true;
-  };
+  }
 
   /**
    * Augment the `value` or `easing` of the `{{#crossLink
    * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s at a given millisecond.  Any
    * `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s omitted in
-   * `stateModification` or `opt_easing` are not modified.
+   * `state` or `opt_easing` are not modified.
    *
    *     actor.keyframe(0, {
    *       'x': 10,
@@ -522,36 +488,35 @@ rekapiModules.push(function (context) {
    * __[Example](../../../../examples/actor_modify_keyframe.html)__
    * @method modifyKeyframe
    * @param {number} millisecond
-   * @param {Object} stateModification
-   * @param {Object=} opt_easingModification
+   * @param {Object} state
+   * @param {Object=} easing
    * @chainable
    */
-  Actor.prototype.modifyKeyframe = function (
-    millisecond, stateModification, opt_easingModification) {
-    opt_easingModification = opt_easingModification || {};
-
-    _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var property = this.getKeyframeProperty(trackName, millisecond);
+  modifyKeyframe (millisecond, state, easing = {}) {
+    _.each(this._propertyTracks, (propertyTrack, trackName) => {
+      const property = this.getKeyframeProperty(trackName, millisecond);
 
       if (property) {
         property.modifyWith({
-          'value': stateModification[trackName]
-          ,'easing': opt_easingModification[trackName]
+          value: state[trackName],
+          easing: easing[trackName]
         });
-      } else if (typeof stateModification[trackName] !== 'undefined') {
-        property = new Rekapi.KeyframeProperty(
-          millisecond, trackName,
-          stateModification[trackName],
-          opt_easingModification[trackName]);
-
-        this.addKeyframeProperty(property);
+      } else if (state[trackName]) {
+        this.addKeyframeProperty(
+          new KeyframeProperty(
+            millisecond,
+            trackName,
+            state[trackName],
+            easing[trackName]
+          )
+        );
       }
-    }, this);
+    });
 
     cleanupAfterKeyframeModification(this);
 
     return this;
-  };
+  }
 
   /**
    * Remove all `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set
@@ -563,24 +528,23 @@ rekapiModules.push(function (context) {
    * to remove.
    * @chainable
    */
-  Actor.prototype.removeKeyframe = function (millisecond) {
-    var propertyTracks = this._propertyTracks;
+  removeKeyframe (millisecond) {
+    _.each(this._propertyTracks, (propertyTrack, propertyName) => {
+      const index = propertyIndexInTrack(propertyTrack, millisecond);
 
-    _.each(this._propertyTracks, function (propertyTrack, propertyName) {
-      var index = propertyIndexInTrack(propertyTrack, millisecond);
-      if (typeof index !== 'undefined') {
-        var keyframeProperty = propertyTrack[index];
+      if (index !== -1) {
+        const keyframeProperty = propertyTrack[index];
         this._deleteKeyframePropertyAt(propertyTrack, index);
         keyframeProperty.detach();
       }
-    }, this);
+    });
 
     removeEmptyPropertyTracks(this);
     cleanupAfterKeyframeModification(this);
-    fireRekapiEventForActor(this, 'timelineModified');
+    fire(this, 'timelineModified');
 
     return this;
-  };
+  }
 
   /**
    * Remove all `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set
@@ -596,14 +560,14 @@ rekapiModules.push(function (context) {
    * @method removeAllKeyframes
    * @chainable
    */
-  Actor.prototype.removeAllKeyframes = function () {
-    _.each(this._propertyTracks, function (propertyTrack) {
-      propertyTrack.length = 0;
-    });
+  removeAllKeyframes () {
+    _.each(this._propertyTracks, propertyTrack =>
+      propertyTrack.length = 0
+    );
 
-    _.each(this._keyframeProperties, function (keyframeProperty) {
-      keyframeProperty.detach();
-    }, this);
+    _.each(this._keyframeProperties, keyframeProperty =>
+      keyframeProperty.detach()
+    );
 
     removeEmptyPropertyTracks(this);
     this._keyframeProperties = {};
@@ -612,7 +576,7 @@ rekapiModules.push(function (context) {
     // earlier part of this method skipped all of that for the sake of
     // efficiency.
     return this.removeKeyframe(0);
-  };
+  }
 
   /**
    * @method getKeyframeProperty
@@ -624,13 +588,11 @@ rekapiModules.push(function (context) {
    * specified by the `property` and `millisecond` parameters. This is
    * `undefined` if no properties were found.
    */
-  Actor.prototype.getKeyframeProperty = function (property, millisecond) {
-    var propertyTrack = this._propertyTracks[property];
-    var index = propertyIndexInTrack(propertyTrack, millisecond);
-    if (typeof index !== 'undefined') {
-      return propertyTrack[index];
-    }
-  };
+  getKeyframeProperty (property, millisecond) {
+    const propertyTrack = this._propertyTracks[property];
+
+    return propertyTrack[propertyIndexInTrack(propertyTrack, millisecond)];
+  }
 
   /**
    * Modify a `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}` stored
@@ -648,15 +610,16 @@ rekapiModules.push(function (context) {
    * "Rekapi.KeyframeProperty"}}{{/crossLink}}` with.
    * @chainable
    */
-  Actor.prototype.modifyKeyframeProperty = function (
-    property, millisecond, newProperties) {
+  modifyKeyframeProperty (property, millisecond, newProperties) {
+    const keyframeProperty = this.getKeyframeProperty(property, millisecond);
 
-    var keyframeProperty = this.getKeyframeProperty(property, millisecond);
     if (keyframeProperty) {
-      if ('millisecond' in newProperties) {
-        if (this.hasKeyframeAt(newProperties.millisecond, property)) {
-          throw new Error('Tried to move ' + property + ' to ' + newProperties.millisecond + 'ms, but a keyframe property already exists there');
-        }
+      if ('millisecond' in newProperties &&
+          this.hasKeyframeAt(newProperties.millisecond, property)
+        ) {
+        throw new Error(
+          `Tried to move ${property} to ${newProperties.millisecond}ms, but a keyframe property already exists there`
+        );
       }
 
       keyframeProperty.modifyWith(newProperties);
@@ -664,7 +627,7 @@ rekapiModules.push(function (context) {
     }
 
     return this;
-  };
+  }
 
   /**
    * Remove a single `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`
@@ -677,33 +640,34 @@ rekapiModules.push(function (context) {
    * @return {Rekapi.KeyframeProperty|undefined} The removed KeyframeProperty,
    * if one was found.
    */
-  Actor.prototype.removeKeyframeProperty = function (property, millisecond) {
-    var propertyTracks = this._propertyTracks;
+  removeKeyframeProperty (property, millisecond) {
+    const { _propertyTracks } = this;
 
-    if (typeof propertyTracks[property] !== 'undefined') {
-      var propertyTrack = propertyTracks[property];
-      var index = propertyIndexInTrack(propertyTrack, millisecond);
-      var keyframeProperty = propertyTrack[index];
-      fireEvent(this.rekapi, 'beforeRemoveKeyframeProperty', _, keyframeProperty);
+    if (_propertyTracks[property]) {
+      const propertyTrack = _propertyTracks[property];
+      const index = propertyIndexInTrack(propertyTrack, millisecond);
+      const keyframeProperty = propertyTrack[index];
+
+      fireEvent(this.rekapi, 'beforeRemoveKeyframeProperty', keyframeProperty);
       this._deleteKeyframePropertyAt(propertyTrack, index);
       keyframeProperty.detach();
 
       removeEmptyPropertyTracks(this);
       cleanupAfterKeyframeModification(this);
-      fireEvent(this.rekapi, 'removeKeyframePropertyComplete', _, keyframeProperty);
+      fireEvent(this.rekapi, 'removeKeyframePropertyComplete', keyframeProperty);
 
       return keyframeProperty;
     }
-  };
+  }
 
   /**
    *
    * @method getTrackNames
    * @return {Array(string)} A list of all the track names for an actor.
    */
-  Actor.prototype.getTrackNames = function () {
-    return _.keys(this._propertyTracks);
-  };
+  getTrackNames () {
+    return Object.keys(this._propertyTracks);
+  }
 
   /**
    * Get all of the `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s
@@ -712,13 +676,13 @@ rekapiModules.push(function (context) {
    * @param {string} trackName The track name to query.
    * @return {Rekapi.KeyframeProperty[]|undefined}
    */
-  Actor.prototype.getPropertiesInTrack = function (trackName) {
-    var propertyTrack = this._propertyTracks[trackName];
+  getPropertiesInTrack (trackName) {
+    const propertyTrack = this._propertyTracks[trackName];
 
     if (propertyTrack) {
       return propertyTrack.slice(0);
     }
-  };
+  }
 
   /**
    * @method getStart
@@ -728,13 +692,13 @@ rekapiModules.push(function (context) {
    * (for instance, if the actor's first keyframe is later than millisecond
    * `0`).  If there are no keyframes, this returns `0`.
    */
-  Actor.prototype.getStart = function (opt_trackName) {
-    var starts = [];
-    var propertyTracks = this._propertyTracks;
+  getStart (trackName = undefined) {
+    const { _propertyTracks } = this;
+    const starts = [];
 
-    // Null check to see if opt_trackName was provided and is valid
-    if (propertyTracks.hasOwnProperty(opt_trackName)) {
-      var firstKeyframeProperty = propertyTracks[opt_trackName][0];
+    // Null check to see if trackName was provided and is valid
+    if (_propertyTracks.hasOwnProperty(trackName)) {
+      const firstKeyframeProperty = _propertyTracks[trackName][0];
 
       if (firstKeyframeProperty) {
         starts.push(firstKeyframeProperty.millisecond);
@@ -742,67 +706,52 @@ rekapiModules.push(function (context) {
     } else {
       // Loop over all property tracks and accumulate the first
       // keyframeProperties from non-empty tracks
-      _.each(propertyTracks, function (propertyTrack) {
+      _.each(_propertyTracks, propertyTrack => {
         if (propertyTrack.length) {
           starts.push(propertyTrack[0].millisecond);
         }
       });
     }
 
-    if (starts.length === 0) {
-      starts = [0];
-    }
-
-    var start;
-    if (starts.length > 0) {
-      start = Math.min.apply(Math, starts);
-    } else {
-      start = 0;
-    }
-
-    return start;
-  };
+    return starts.length > 0 ?
+      Math.min.apply(Math, starts) :
+      0;
+  }
 
   /**
    * @method getEnd
-   * @param {string=} opt_trackName Optionally scope the lookup to a particular
+   * @param {string=} trackName Optionally scope the lookup to a particular
    * keyframe track.
    * @return {number} The millisecond of the last state of an actor (the point
    * in the timeline in which it is done animating).  If there are no
    * keyframes, this is `0`.
    */
-  Actor.prototype.getEnd = function (opt_trackName) {
-    var latest = 0;
-    var tracksToInspect = this._propertyTracks;
+  getEnd (trackName = undefined) {
+    const endingTracks = [0];
 
-    if (opt_trackName) {
-      tracksToInspect = {};
-      tracksToInspect[opt_trackName] = this._propertyTracks[opt_trackName];
-    }
+    const tracksToInspect = trackName ?
+      { [trackName]: this._propertyTracks[trackName] } :
+      this._propertyTracks;
 
-    _.each(tracksToInspect, function (propertyTrack) {
+    _.each(tracksToInspect, propertyTrack => {
       if (propertyTrack.length) {
-        var trackLength = Math.max.apply(Math, _.map(propertyTrack, 'millisecond'));
-
-        if (trackLength > latest) {
-          latest = trackLength;
-        }
+        endingTracks.push(propertyTrack[propertyTrack.length - 1].millisecond);
       }
-    }, this);
+    });
 
-    return latest;
-  };
+    return Math.max.apply(Math, endingTracks);
+  }
 
   /**
    * @method getLength
-   * @param {string=} opt_trackName Optionally scope the lookup to a particular
+   * @param {string=} trackName Optionally scope the lookup to a particular
    * track.
    * @return {number} The length of time in milliseconds that the actor
    * animates for.
    */
-  Actor.prototype.getLength = function (opt_trackName) {
-    return this.getEnd(opt_trackName) - this.getStart(opt_trackName);
-  };
+  getLength (trackName = undefined) {
+    return this.getEnd(trackName) - this.getStart(trackName);
+  }
 
   /**
    * Extend the last state on this actor's timeline to simulate a pause.
@@ -818,19 +767,18 @@ rekapiModules.push(function (context) {
    * nothing.
    * @chainable
    */
-  Actor.prototype.wait = function (until) {
-    var length = this.getEnd();
+  wait (until) {
+    const end = this.getEnd();
 
-    if (until <= length) {
+    if (until <= end) {
       return this;
     }
 
-    var end = this.getEnd();
-    var latestProps = getLatestProperties(this, this.getEnd());
-    var serializedProps = {};
-    var serializedEasings = {};
+    const latestProps = getLatestProperties(this, this.getEnd());
+    const serializedProps = {};
+    const serializedEasings = {};
 
-    _.each(latestProps, function (latestProp, propName) {
+    _.each(latestProps, (latestProp, propName) => {
       serializedProps[propName] = latestProp.value;
       serializedEasings[propName] = latestProp.easing;
     });
@@ -839,7 +787,7 @@ rekapiModules.push(function (context) {
     this.keyframe(until, serializedProps, serializedEasings);
 
     return this;
-  };
+  }
 
   /*!
    * Insert a `KeyframeProperty` into a property track at `index`.  The linked
@@ -849,9 +797,9 @@ rekapiModules.push(function (context) {
    * @param {Array(Rekapi.KeyframeProperty)} propertyTrack
    * @param {number} index
    */
-  Actor.prototype._insertKeyframePropertyAt = function (keyframeProperty, propertyTrack, index) {
+  _insertKeyframePropertyAt (keyframeProperty, propertyTrack, index) {
     propertyTrack.splice(index, 0, keyframeProperty);
-  };
+  }
 
   /*!
    * Remove the `KeyframeProperty` at `index` from a property track.  The linked
@@ -861,9 +809,9 @@ rekapiModules.push(function (context) {
    * @param {Array(Rekapi.KeyframeProperty)} propertyTrack
    * @param {number} index
    */
-  Actor.prototype._deleteKeyframePropertyAt = function (propertyTrack, index) {
+  _deleteKeyframePropertyAt (propertyTrack, index) {
     propertyTrack.splice(index, 1);
-  };
+  }
 
   /**
    * Associate a `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}` to
@@ -878,173 +826,171 @@ rekapiModules.push(function (context) {
    * @param {Rekapi.KeyframeProperty} keyframeProperty
    * @chainable
    */
-  Actor.prototype.addKeyframeProperty = function (keyframeProperty) {
+  addKeyframeProperty (keyframeProperty) {
     if (this.rekapi) {
-      fireEvent(this.rekapi, 'beforeAddKeyframeProperty', _, keyframeProperty);
+      fireEvent(this.rekapi, 'beforeAddKeyframeProperty', keyframeProperty);
     }
 
     keyframeProperty.actor = this;
     this._keyframeProperties[keyframeProperty.id] = keyframeProperty;
 
-    var name = keyframeProperty.name;
-    var propertyTracks = this._propertyTracks;
+    const { name } = keyframeProperty;
+    const { _propertyTracks, rekapi } = this;
 
-    if (typeof this._propertyTracks[name] === 'undefined') {
-      propertyTracks[name] = [keyframeProperty];
-      if (this.rekapi) {
-        fireEvent(this.rekapi, 'addKeyframePropertyTrack', _, keyframeProperty);
+    if (!this._propertyTracks[name]) {
+      _propertyTracks[name] = [keyframeProperty];
+
+      if (rekapi) {
+        fireEvent(rekapi, 'addKeyframePropertyTrack', keyframeProperty);
       }
     } else {
-      var index = insertionPointInTrack(propertyTracks[name], keyframeProperty.millisecond);
-      if (propertyTracks[name][index]) {
-        var ms = keyframeProperty.millisecond;
-        var otherMs = propertyTracks[name][index].millisecond;
-        if (otherMs === ms) {
-          throw new Error('Tried to add a duplicate keyframe property, ' + name + ' @ ' + ms + ' ms');
-        } else if (this.rekapi && this.rekapi._warnOnOutOfOrderKeyframes) {
-          console.warn(new Error('Added a keyframe property before end of track, ' + name + ' @ ' + ms + ' ms < ' + otherMs + ' ms'));
+      const index = insertionPointInTrack(_propertyTracks[name], keyframeProperty.millisecond);
+
+      if (_propertyTracks[name][index]) {
+        const newMillisecond = keyframeProperty.millisecond;
+        const targetMillisecond = _propertyTracks[name][index].millisecond;
+
+        if (targetMillisecond === newMillisecond) {
+          throw new Error(
+            `Cannot add duplicate ${name} keyframe property @ ${newMillisecond}ms`
+          );
+        } else if (rekapi && rekapi._warnOnOutOfOrderKeyframes) {
+          console.warn(
+            new Error(
+              `Added a keyframe property before end of ${name} track @ ${newMillisecond}ms (< ${targetMillisecond}ms)`
+            )
+          );
         }
       }
-      this._insertKeyframePropertyAt(keyframeProperty, propertyTracks[name], index);
+
+      this._insertKeyframePropertyAt(keyframeProperty, _propertyTracks[name], index);
       cleanupAfterKeyframeModification(this);
     }
 
-    if (this.rekapi) {
-      fireEvent(this.rekapi, 'addKeyframeProperty', _, keyframeProperty);
+    if (rekapi) {
+      fireEvent(rekapi, 'addKeyframeProperty', keyframeProperty);
     }
 
     return this;
-  };
+  }
 
   /*!
+   * TODO: Explain the use case for this method
    * Set the actor to be active or inactive starting at `millisecond`.
    * @method setActive
    * @param {number} millisecond The time at which to change the actor's active state
    * @param {boolean} isActive Whether the actor should be active or inactive
    * @chainable
    */
-  Actor.prototype.setActive = function (millisecond, isActive) {
-    var activeProperty = this._propertyTracks._active
+  setActive (millisecond, isActive) {
+    const hasActiveTrack = !!this._propertyTracks._active;
+    const activeProperty = hasActiveTrack
         && this.getKeyframeProperty('_active', millisecond);
 
     if (activeProperty) {
       activeProperty.value = isActive;
     } else {
-      activeProperty = new Rekapi.KeyframeProperty(
-        millisecond, '_active', isActive);
-      this.addKeyframeProperty(activeProperty);
+      this.addKeyframeProperty(
+        new KeyframeProperty(millisecond, '_active', isActive)
+      );
     }
 
     return this;
-  };
+  }
 
   /*!
    * Calculate and set the actor's position at `millisecond` in the animation.
    * @method _updateState
    * @param {number} millisecond
-   * @param {boolean=} opt_doResetLaterFnKeyframes If true, allow all function
+   * @param {boolean=} resetLaterFnKeyframes If true, allow all function
    * keyframes later in the timeline to be run again.
    * @chainable
    */
-  Actor.prototype._updateState = function (millisecond, opt_doResetLaterFnKeyframes) {
-    var startMs = this.getStart();
-    var endMs = this.getEnd();
-    var interpolatedObject = {};
+  _updateState (millisecond, resetLaterFnKeyframes = false) {
+    const start = this.getStart();
+    const end = this.getEnd();
+    const interpolatedObject = {};
 
-    millisecond = Math.min(endMs, millisecond);
+    millisecond = Math.min(end, millisecond);
 
     ensurePropertyCacheValid(this);
-    var propertiesToInterpolate =
-        getPropertyCacheEntryForMillisecond(this, millisecond);
+
+    const propertyCacheEntry =
+      _.omit(
+        getPropertyCacheEntryForMillisecond(this, millisecond),
+        '_millisecond'
+      );
 
     // All actors are active at time 0 unless otherwise specified;
     // make sure a future time deactivation doesn't deactive the actor
     // by default.
-    if (propertiesToInterpolate._active
-        && millisecond >= propertiesToInterpolate._active.millisecond) {
-      this.wasActive = propertiesToInterpolate._active.getValueAt(millisecond);
-      if (!this.wasActive)
+    if (propertyCacheEntry._active
+        && millisecond >= propertyCacheEntry._active.millisecond) {
+
+      this.wasActive = propertyCacheEntry._active.getValueAt(millisecond);
+
+      if (!this.wasActive) {
         return this;
+      }
     } else {
       this.wasActive = true;
     }
 
-    if (startMs === endMs) {
-
+    if (start === end) {
       // If there is only one keyframe, use that for the state of the actor
-      _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
-        if (propName !== '_millisecond') {
-          if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
-            keyframeProperty.invoke();
-            keyframeProperty.hasFired = false;
-            return;
-          }
-
-          interpolatedObject[propName] = keyframeProperty.value;
+      _.each(propertyCacheEntry, (keyframeProperty, propName) => {
+        if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
+          keyframeProperty.invoke();
+          keyframeProperty.hasFired = false;
+          return;
         }
-      }, this);
+
+        interpolatedObject[propName] = keyframeProperty.value;
+      });
 
     } else {
+      _.each(propertyCacheEntry, (keyframeProperty, propName) => {
+        if (this._beforeKeyframePropertyInterpolate !== noop) {
+          this._beforeKeyframePropertyInterpolate(keyframeProperty);
+        }
 
-      _.each(propertiesToInterpolate, function (keyframeProperty, propName) {
-        if (propName !== '_millisecond') {
-          if (this._beforeKeyframePropertyInterpolate !== noop) {
-            this._beforeKeyframePropertyInterpolate(keyframeProperty);
-          }
+        if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
+          keyframeProperty.invoke();
+          return;
+        }
 
-          if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
-            keyframeProperty.invoke();
-            return;
-          }
-
-          interpolatedObject[propName] =
+        interpolatedObject[propName] =
           keyframeProperty.getValueAt(millisecond);
 
-          if (this._afterKeyframePropertyInterpolate !== noop) {
-            this._afterKeyframePropertyInterpolate(
-              keyframeProperty, interpolatedObject);
-          }
+        if (this._afterKeyframePropertyInterpolate !== noop) {
+          this._afterKeyframePropertyInterpolate(
+            keyframeProperty, interpolatedObject);
         }
-      }, this);
+      });
     }
 
     this.set(interpolatedObject);
 
-    if (!opt_doResetLaterFnKeyframes) {
+    if (!resetLaterFnKeyframes) {
       this._resetFnKeyframesFromMillisecond(millisecond);
     }
 
     return this;
-  };
+  }
 
   /*!
    * @method _resetFnKeyframesFromMillisecond
    * @param {number} millisecond
    */
-  Actor.prototype._resetFnKeyframesFromMillisecond = function (millisecond) {
-    var cache = this._timelineFunctionCache;
-    var index = _.sortedIndex(cache, { millisecond: millisecond }, getMillisecond);
-    var len = cache.length;
+  _resetFnKeyframesFromMillisecond (millisecond) {
+    const cache = this._timelineFunctionCache;
+    const { length } = cache;
+    let index = _.sortedIndex(cache, { millisecond: millisecond }, getMillisecond);
 
-    while (index < len) {
+    while (index < length) {
       cache[index++].hasFired = false;
     }
-  };
-
-  /*!
-   * @method _beforeKeyframePropertyInterpolate
-   * @param {Rekapi.KeyframeProperty} keyframeProperty
-   * @abstract
-   */
-  Actor.prototype._beforeKeyframePropertyInterpolate = noop;
-
-  /*!
-   * @method _afterKeyframePropertyInterpolate
-   * @param {Rekapi.KeyframeProperty} keyframeProperty
-   * @param {Object} interpolatedObject
-   * @abstract
-   */
-  Actor.prototype._afterKeyframePropertyInterpolate = noop;
+  }
 
   /**
    * __[Example](../../../../examples/actor_export_timeline.html)__
@@ -1052,23 +998,26 @@ rekapiModules.push(function (context) {
    * @return {Object} A serializable Object of this actor's timeline property
    * tracks and `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s.
    */
-  Actor.prototype.exportTimeline = function () {
+  exportTimeline () {
     var exportData = {
-      'start': this.getStart()
-      ,'end': this.getEnd()
-      ,'trackNames': this.getTrackNames()
-      ,'propertyTracks': {}
+      start: this.getStart(),
+      end: this.getEnd(),
+      trackNames: this.getTrackNames(),
+      propertyTracks: {}
     };
 
-    _.each(this._propertyTracks, function (propertyTrack, trackName) {
-      var trackAlias = exportData.propertyTracks[trackName] = [];
-      _.each(propertyTrack, function (keyframeProperty) {
-        trackAlias.push(keyframeProperty.exportPropertyData());
+    _.each(this._propertyTracks, (propertyTrack, trackName) => {
+      const track = [];
+
+      _.each(propertyTrack, keyframeProperty => {
+        track.push(keyframeProperty.exportPropertyData());
       });
+
+      exportData.propertyTracks[trackName] = track;
     });
 
     return exportData;
-  };
+  }
 
   /**
    * Import an Object to augment this actor's state.  This does not remove
@@ -1079,14 +1028,32 @@ rekapiModules.push(function (context) {
    * object generated from `{{#crossLink
    * "Rekapi.Actor/exportTimeline:method"}}{{/crossLink}}`.
    */
-  Actor.prototype.importTimeline = function (actorData) {
-    _.each(actorData.propertyTracks, function (propertyTrack) {
-      _.each(propertyTrack, function (property) {
-        var obj = {};
-        obj[property.name] = property.value;
-        this.keyframe(property.millisecond, obj, property.easing);
-      }, this);
-    }, this);
-  };
+  importTimeline (actorData) {
+    _.each(actorData.propertyTracks, propertyTrack => {
+      _.each(propertyTrack, property => {
+        this.keyframe(
+          property.millisecond,
+          { [property.name]: property.value },
+          property.easing
+        );
+      });
+    });
+  }
+}
 
+Object.assign(Actor.prototype, {
+  /*!
+   * @method _beforeKeyframePropertyInterpolate
+   * @param {Rekapi.KeyframeProperty} keyframeProperty
+   * @abstract
+   */
+  _beforeKeyframePropertyInterpolate: noop,
+
+  /*!
+   * @method _afterKeyframePropertyInterpolate
+   * @param {Rekapi.KeyframeProperty} keyframeProperty
+   * @param {Object} interpolatedObject
+   * @abstract
+   */
+  _afterKeyframePropertyInterpolate: noop
 });

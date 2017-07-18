@@ -1,13 +1,12 @@
-rekapiModules.push(function (context) {
+import _ from 'lodash';
+import { interpolate } from 'shifty';
+import {
+  fireEvent
+} from './rekapi.core';
 
-  'use strict';
+const DEFAULT_EASING = 'linear';
 
-  var DEFAULT_EASING = 'linear';
-  var Rekapi = context.Rekapi;
-  var Tweenable = Rekapi.Tweenable;
-  var _ = Rekapi._;
-  var interpolate = Tweenable.interpolate;
-
+export default class KeyframeProperty {
   /**
    * Represents an individual component of an actor's keyframe state.  In most
    * cases you won't need to deal with this object directly, as the
@@ -19,22 +18,22 @@ rekapiModules.push(function (context) {
    * @param {string} name The property's name, such as `"x"` or `"opacity"`.
    * @param {number|string|Function} value The value that this
    * `Rekapi.KeyframeProperty` represents.
-   * @param {string=} opt_easing The easing curve at which this
+   * @param {string=} easing The easing curve at which this
    * `Rekapi.KeyframeProperty` should be animated to.  Defaults to `"linear"`.
    * @constructor
    */
-  Rekapi.KeyframeProperty = function (millisecond, name, value, opt_easing) {
+  constructor (millisecond, name, value, easing = DEFAULT_EASING) {
     this.id = _.uniqueId('keyframeProperty_');
-    this.millisecond = millisecond;
-    this.name = name;
-    this.value = value;
     this.hasFired = null;
-    this.easing = opt_easing || DEFAULT_EASING;
     this.nextProperty = null;
 
-    return this;
-  };
-  var KeyframeProperty = Rekapi.KeyframeProperty;
+    Object.assign(this, {
+      millisecond,
+      name,
+      value,
+      easing
+    });
+  }
 
   /**
    * Modify this `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`.
@@ -46,16 +45,9 @@ rekapiModules.push(function (context) {
    *   - __value__ (_number|string_)
    *   - __easing__ (_string_)
    */
-  KeyframeProperty.prototype.modifyWith = function (newProperties) {
-    var modifiedProperties = {};
-
-    _.each(['millisecond', 'easing', 'value'], function (str) {
-      modifiedProperties[str] = typeof(newProperties[str]) === 'undefined' ?
-          this[str] : newProperties[str];
-    }, this);
-
-    _.extend(this, modifiedProperties);
-  };
+  modifyWith (newProperties) {
+    Object.assign(this, newProperties);
+  }
 
   /**
    * Calculate the midpoint between this `{{#crossLink
@@ -74,34 +66,32 @@ rekapiModules.push(function (context) {
    * compute the state value for.
    * @return {number}
    */
-  KeyframeProperty.prototype.getValueAt = function (millisecond) {
-    var fromObj = {};
-    var toObj = {};
-    var value;
-    var nextProperty = this.nextProperty;
-    var correctedMillisecond = Math.max(millisecond, this.millisecond);
+  getValueAt (millisecond) {
+    const nextProperty = this.nextProperty;
 
     if (typeof this.value === 'boolean') {
-      value = this.value;
+      return this.value;
     } else if (nextProperty) {
-      correctedMillisecond =
-      Math.min(correctedMillisecond, nextProperty.millisecond);
+      const boundedMillisecond = Math.min(
+        Math.max(millisecond, this.millisecond),
+        nextProperty.millisecond
+      );
 
-      fromObj[this.name] = this.value;
-      toObj[this.name] = nextProperty.value;
+      const { name } = this;
+      const delta = nextProperty.millisecond - this.millisecond;
+      const interpolatePosition =
+        (boundedMillisecond - this.millisecond) / delta;
 
-      var delta = nextProperty.millisecond - this.millisecond;
-      var interpolatedPosition =
-      (correctedMillisecond - this.millisecond) / delta;
-
-      value = interpolate(fromObj, toObj, interpolatedPosition,
-          nextProperty.easing)[this.name];
+      return interpolate(
+        { [name]: this.value },
+        { [name]: nextProperty.value },
+        interpolatePosition,
+        nextProperty.easing
+      )[name];
     } else {
-      value = this.value;
+      return this.value;
     }
-
-    return value;
-  };
+  }
 
   /**
    * Create the reference to the `{{#crossLink
@@ -110,13 +100,13 @@ rekapiModules.push(function (context) {
    * tracks are just linked lists of `{{#crossLink
    * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s.
    * @method linkToNext
-   * @param {Rekapi.KeyframeProperty} nextProperty The `{{#crossLink
+   * @param {Rekapi.KeyframeProperty=} nextProperty The `{{#crossLink
    * "Rekapi.KeyframeProperty"}}{{/crossLink}}` that should immediately follow
    * this one on the animation timeline.
    */
-  KeyframeProperty.prototype.linkToNext = function (nextProperty) {
-    this.nextProperty = nextProperty || null;
-  };
+  linkToNext (nextProperty = null) {
+    this.nextProperty = nextProperty;
+  }
 
   /**
    * Disassociates this `{{#crossLink
@@ -128,18 +118,17 @@ rekapiModules.push(function (context) {
    * @method detach
    * @chainable
    */
-  KeyframeProperty.prototype.detach = function () {
-    var actor = this.actor;
-    if (actor) {
-      if (actor.rekapi) {
-        fireEvent(actor.rekapi, 'removeKeyframeProperty', _, this);
-        delete actor._keyframeProperties[this.id];
-        this.actor = null;
-      }
+  detach () {
+    const { actor } = this;
+
+    if (actor && actor.rekapi) {
+      fireEvent(actor.rekapi, 'removeKeyframeProperty', this);
+      delete actor._keyframeProperties[this.id];
+      this.actor = null;
     }
 
     return this;
-  };
+  }
 
   /**
    * __[Example](../../../../examples/keyprop_export_property_data.html)__
@@ -147,14 +136,9 @@ rekapiModules.push(function (context) {
    * @return {Object} A serializable Object representation of this
    * `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`.
    */
-  KeyframeProperty.prototype.exportPropertyData = function () {
-    return {
-      'millisecond': this.millisecond
-      ,'name': this.name
-      ,'value': this.value
-      ,'easing': this.easing
-    };
-  };
+  exportPropertyData () {
+    return _.pick(this, ['millisecond', 'name', 'value', 'easing']);
+  }
 
   /*!
    * Whether or not this is a function keyframe and should be invoked for the
@@ -162,12 +146,12 @@ rekapiModules.push(function (context) {
    * @method shouldInvokeForMillisecond
    * @return {boolean}
    */
-  KeyframeProperty.prototype.shouldInvokeForMillisecond =
-      function (millisecond) {
+  shouldInvokeForMillisecond (millisecond) {
     return (millisecond >= this.millisecond &&
       this.name === 'function' &&
-      !this.hasFired);
-  };
+      !this.hasFired
+    );
+  }
 
   /**
    * Assuming this is a function keyframe, call the function.
@@ -175,11 +159,11 @@ rekapiModules.push(function (context) {
    * @return {*} Whatever value is returned from the keyframe function that was
    * set for this `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`.
    */
-  KeyframeProperty.prototype.invoke = function () {
-    var drift = this.actor.rekapi._loopPosition - this.millisecond;
-    var returnValue = this.value.call(this.actor, drift);
+  invoke () {
+    const drift = this.actor.rekapi._loopPosition - this.millisecond;
+    const returnValue = this.value.call(this.actor, drift);
     this.hasFired = true;
-    return returnValue;
-  };
 
-});
+    return returnValue;
+  }
+}

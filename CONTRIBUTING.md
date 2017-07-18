@@ -8,11 +8,10 @@ would like to make changes to the code yourself, read on!
 ## Getting started
 
 To get started with hacking on Rekapi, you'll need to get all of the
-dependencies with [Bower](http://bower.io/) (version 1.0 or later) and
-[npm](https://npmjs.org/) (and, by extension, [Node](http://nodejs.org/)):
+dependencies:
 
 ````
-$: bower install; npm install
+$: npm install
 ````
 
 ## Branches
@@ -26,9 +25,8 @@ Requests into that.
 Rekapi uses [SemVer](http://semver.org/) for versioning.  If you modify the
 source code, please adhere to this convention (in all likelihood you will only
 need to modify the rightmost digit by one).  To change the version, you'll need
-to update the version in two places: `bower.json` and `package.json` (look for
-the lines that say `version`).  The version numbers in these two files must be
-kept in sync.
+to update the version in `package.json` (look for the line that says
+`version`).
 
 ## Building
 
