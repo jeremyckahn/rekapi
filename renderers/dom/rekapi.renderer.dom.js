@@ -1230,14 +1230,16 @@ const combineTranfromProperties = (propsToSerialize, transformNames) => {
  * @return {string}
  */
 const serializeActorStep = (actor, targetProp = undefined) =>
-  _.reduce(
+  JSON.stringify(_.reduce(
     combineTranfromProperties(
       targetProp ? { [targetProp]: actor.get()[targetProp] } : actor.get(),
       actor._transformOrder
     ),
-    (serializedProps, val, key) =>
-      `${serializedProps}${key === 'transform' ? TRANSFORM_TOKEN : key}:${val};`,
-    '{') + '}';
+    (serializedProps, val, key) => {
+      serializedProps[key === 'transform' ? TRANSFORM_TOKEN : key] = val;
+      return serializedProps;
+    },
+    {}));
 
 // Expose helper functions for unit testing.
 // FIXME: Don't include this in optimized builds.
