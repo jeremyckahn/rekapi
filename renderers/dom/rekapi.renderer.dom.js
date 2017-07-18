@@ -1226,42 +1226,18 @@ const combineTranfromProperties = (propsToSerialize, transformNames) => {
 
 /*!
  * @param {Rekapi.Actor} actor
- * @param {string=} opt_targetProp
+ * @param {string=} targetProp
  * @return {string}
  */
-function serializeActorStep (actor, opt_targetProp) {
-  var serializedProps = ['{'];
-
-  var propsToSerialize;
-  if (opt_targetProp) {
-    propsToSerialize = {};
-
-    var currentPropState = actor.get()[opt_targetProp];
-    if (typeof currentPropState !== 'undefined') {
-      propsToSerialize[opt_targetProp] = currentPropState;
-    }
-  } else {
-    propsToSerialize = actor.get();
-  }
-
-  var combinedPropsToSerialize =
-    combineTranfromProperties(propsToSerialize, actor._transformOrder);
-
-  var printVal;
-  _.each(combinedPropsToSerialize, function (val, key) {
-    printVal = val;
-    var printKey = key;
-
-    if (key === 'transform') {
-      printKey = TRANSFORM_TOKEN;
-    }
-
-    serializedProps.push(printKey + ':' + printVal + ';');
-  });
-
-  serializedProps.push('}');
-  return serializedProps.join('');
-}
+const serializeActorStep = (actor, targetProp = undefined) =>
+  _.reduce(
+    combineTranfromProperties(
+      targetProp ? { [targetProp]: actor.get()[targetProp] } : actor.get(),
+      actor._transformOrder
+    ),
+    (serializedProps, val, key) =>
+      `${serializedProps}${key === 'transform' ? TRANSFORM_TOKEN : key}:${val};`,
+    '{') + '}';
 
 // Expose helper functions for unit testing.
 // FIXME: Don't include this in optimized builds.
