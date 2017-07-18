@@ -1140,14 +1140,14 @@ const calculateStepPercent = (property, actorStart, actorLength) =>
  * @param {Rekapi.KeyframeProperty=} fromProp
  * @return {Array.<string>}
  */
-function generateActorTrackSegment (
+const generateActorTrackSegment = (
   actor,
   increments,
   incrementSize,
   actorStart,
   fromPercent,
   fromProp = undefined
-) {
+) => {
 
   const accumulator = [];
   const length = actor.getLength();
@@ -1166,7 +1166,7 @@ function generateActorTrackSegment (
   }
 
   return accumulator;
-}
+};
 
 /*!
  * @param {Rekapi.Actor} actor
@@ -1177,41 +1177,52 @@ function generateActorTrackSegment (
  * @param {number} toPercent
  * @return {Array.<string>}
  */
-function generateActorTrackWaitSegment (
-    actor, actorStart, fromProp, toProp, fromPercent, toPercent) {
-  var segment = generateActorTrackSegment(
-      actor, 1, toPercent - fromPercent, actorStart, fromPercent, fromProp);
-  return segment;
-}
+const generateActorTrackWaitSegment = (
+  actor,
+  actorStart,
+  fromProp,
+  toProp,
+  fromPercent,
+  toPercent
+) =>
+  generateActorTrackSegment(
+    actor,
+    1,
+    toPercent - fromPercent,
+    actorStart,
+    fromPercent,
+    fromProp
+  );
 
 /**
  * @param {Object} propsToSerialize
  * @param {Array.<string>} transformNames
  * @return {Object}
  */
-function combineTranfromProperties (propsToSerialize, transformNames) {
-  var transformProps =
-    _.pick.apply(_, [propsToSerialize].concat(transformFunctions));
-
-  if (_.isEmpty(transformProps)) {
+const combineTranfromProperties = (propsToSerialize, transformNames) => {
+  if (_.isEmpty(
+    _.pick.apply(_, [propsToSerialize].concat(transformFunctions))
+    )
+  ) {
     return propsToSerialize;
   } else {
-    var serializedProps = _.clone(propsToSerialize);
-    serializedProps[TRANSFORM_TOKEN] = [];
+    const serializedProps = _.clone(propsToSerialize);
 
-    _.each(transformNames, function (transformFunction) {
+    serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(
+      (combinedProperties, transformFunction) => {
       if (_.has(serializedProps, transformFunction)) {
-        serializedProps[TRANSFORM_TOKEN].push(
-          transformFunction + '(' + serializedProps[transformFunction] + ')');
+        combinedProperties +=
+          ` ${transformFunction}(${serializedProps[transformFunction]})`;
+
         delete serializedProps[transformFunction];
       }
-    });
 
-    serializedProps[TRANSFORM_TOKEN] = serializedProps[TRANSFORM_TOKEN].join(' ');
+      return combinedProperties;
+    }, '').slice(1);
 
     return serializedProps;
   }
-}
+};
 
 /*!
  * @param {Rekapi.Actor} actor
