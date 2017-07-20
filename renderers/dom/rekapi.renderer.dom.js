@@ -33,8 +33,8 @@ export const transformFunctions = [
 
 const DEFAULT_FPS = 30;
 export const TRANSFORM_TOKEN = 'TRANSFORM';
-const R_TRANSFORM_TOKEN = new RegExp(TRANSFORM_TOKEN, 'g');
 export const VENDOR_TOKEN = 'VENDOR';
+const R_TRANSFORM_TOKEN = new RegExp(TRANSFORM_TOKEN, 'g');
 const R_VENDOR_TOKEN = new RegExp(VENDOR_TOKEN, 'g');
 const VENDOR_PREFIXES = {
   microsoft: '-ms-',
@@ -89,17 +89,6 @@ const _3D_TOKEN = '__THREED__';
 const isInt = number => number % 1 === 0;
 
 /*!
- * @param {Rekapi} rekapi
- */
-rendererInitHooks.cssAnimate = rekapi => {
-  // Node.nodeType 1 is an ELEMENT_NODE.
-  // https://developer.mozilla.org/en-US/docs/Web/API/Node.nodeType
-  if (rekapi.context.nodeType === 1) {
-    rekapi.renderer = new DOMRenderer(rekapi);
-  }
-};
-
-/*!
  * @return {string}
  */
 const vendorPrefix = (() => {
@@ -114,6 +103,15 @@ const vendorPrefix = (() => {
     ''
   );
 })();
+
+/**
+ * @param {Rekapi.Actor} actor
+ * @return {string} The default CSS class that is targeted by `{{#crossLink
+ * "Rekapi.DOMRenderer/toString:method"}}{{/crossLink}}` if a custom class is
+ * not specified.  This may be useful for getting a standard and consistent
+ * CSS class name for an actor's DOM element.
+ */
+const getActorClassName = actor => `actor-${actor.id}`;
 
 /*!
  * Fixes a really bizarre issue that only seems to affect Presto and Blink.
@@ -309,6 +307,566 @@ const onAddActor = (rekapi, actor) => {
     _beforeKeyframePropertyInterpolate,
     _afterKeyframePropertyInterpolate
   });
+};
+
+/*!
+ * @param {string} keyframes
+ * @param {vendor} vendor
+ * @return {string}
+ */
+export const applyVendorPropertyPrefixes = (keyframes, vendor) =>
+  keyframes
+    .replace(
+      R_VENDOR_TOKEN,
+      VENDOR_PREFIXES[vendor]
+    )
+    .replace(
+      R_TRANSFORM_TOKEN,
+      `${VENDOR_PREFIXES[vendor]}transform`
+    );
+
+/*!
+ * @param {string} toKeyframes Generated keyframes to wrap in boilerplates
+ * @param {string} animName
+ * @param {Array.<string>=} vendors Vendor boilerplates to be applied.
+ *     Should be any of the values in Rekapi.util.VENDOR_PREFIXES.
+ * @return {string}
+ */
+export const applyVendorBoilerplates = (toKeyframes, animName, vendors = ['w3']) =>
+  vendors.map(vendor =>
+    applyVendorPropertyPrefixes(
+      `@${VENDOR_PREFIXES[vendor]}keyframes ${animName}-keyframes {
+${''  }${toKeyframes}
+${''  }}`,
+      vendor)
+  ).join('\n');
+
+/*!
+ * @param {Rekapi.KeyframeProperty} property
+ * @param {number} fromPercent
+ * @param {number} toPercent
+ * @return {string}
+ */
+export const generateOptimizedKeyframeSegment = (
+  property,
+  fromPercent,
+  toPercent
+) => {
+  const name = property.name === 'transform' ?
+    TRANSFORM_TOKEN :
+    property.name;
+
+  const { nextProperty, value } = property;
+  const from = isInt(fromPercent) ? fromPercent : fromPercent.toFixed(2);
+  const to = isInt(toPercent) ? toPercent : toPercent.toFixed(2);
+  const bezier = BEZIERS[nextProperty.easing.split(' ')[0]];
+
+  return (
+ `  ${from}% {${name}:${value};${''
+  }${VENDOR_TOKEN}animation-timing-function: cubic-bezier(${bezier});${''
+  }}
+  ${to}% {${name}:${nextProperty.value};}`
+  );
+};
+
+/**
+ * @param {Object} propsToSerialize
+ * @param {Array.<string>} transformNames
+ * @return {Object}
+ */
+export const combineTranfromProperties = (propsToSerialize, transformNames) => {
+  if (_.isEmpty(
+    _.pick.apply(_, [propsToSerialize].concat(transformFunctions))
+    )
+  ) {
+    return propsToSerialize;
+  } else {
+    const serializedProps = _.clone(propsToSerialize);
+
+    serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(
+      (combinedProperties, transformFunction) => {
+      if (_.has(serializedProps, transformFunction)) {
+        combinedProperties +=
+          ` ${transformFunction}(${serializedProps[transformFunction]})`;
+
+        delete serializedProps[transformFunction];
+      }
+
+      return combinedProperties;
+    }, '').slice(1);
+
+    return serializedProps;
+  }
+};
+
+/*!
+ * @param {Rekapi.Actor} actor
+ * @param {string=} targetProp
+ * @return {string}
+ */
+export const serializeActorStep = (actor, targetProp = undefined) =>
+  _.reduce(
+    combineTranfromProperties(
+      targetProp ? { [targetProp]: actor.get()[targetProp] } : actor.get(),
+      actor._transformOrder
+    ),
+    (serializedProps, val, key) =>
+      `${serializedProps}${key === 'transform' ? TRANSFORM_TOKEN : key}:${val};`,
+    '{') + '}';
+
+/*!
+ * @param {Rekapi.Actor} actor
+ * @param {number} increments
+ * @param {number} incrementSize
+ * @param {number} actorStart
+ * @param {number} fromPercent
+ * @param {Rekapi.KeyframeProperty=} fromProp
+ * @return {Array.<string>}
+ */
+export const generateActorTrackSegment = (
+  actor,
+  increments,
+  incrementSize,
+  actorStart,
+  fromPercent,
+  fromProp = undefined
+) => {
+
+  const accumulator = [];
+  const length = actor.getLength();
+
+  for (let i = 0; i < increments; i++) {
+    const percent = fromPercent + (i * incrementSize);
+
+    actor._updateState(
+      ((percent / 100) * length) + actorStart,
+      true
+    );
+
+    const step = serializeActorStep(actor, fromProp && fromProp.name);
+
+    accumulator.push(`  ${+percent.toFixed(2)}% ${step}`);
+  }
+
+  return accumulator;
+};
+
+/*!
+ * @param {Rekapi.Actor} actor
+ * @param {number} steps
+ * @return {string}
+ */
+const generateCombinedActorKeyframes = (actor, steps) =>
+  generateActorTrackSegment(actor, steps + 1, 100 / steps, 0, 0).join('\n');
+
+/*!
+ * @param {Rekapi.Actor} actor
+ * @param {string} track
+ * @param {number} actorStart
+ * @return {string|undefined}
+ */
+export const simulateLeadingWait = (actor, track, actorStart) => {
+  const firstProp = actor._propertyTracks[track][0];
+
+  if (firstProp !== undefined && firstProp.millisecond !== actorStart) {
+    return generateActorTrackSegment(
+      actor,
+      1,
+      1,
+      firstProp.millisecond,
+      0,
+      firstProp
+    ).join('\n');
+  }
+};
+
+/*!
+ * @param {Rekapi.Actor} actor
+ * @param {string} track
+ * @param {number} actorStart
+ * @param {number} actorEnd
+ * @return {string|undefined}
+ */
+export const simulateTrailingWait = (actor, track, actorStart, actorEnd) => {
+  const lastProp = _.last(actor._propertyTracks[track]);
+
+  if (lastProp !== undefined && lastProp.millisecond !== actorEnd) {
+    return generateActorTrackSegment(
+      actor,
+      1,
+      1,
+      actorStart,
+      100,
+      lastProp
+    ).join('\n');
+  }
+};
+
+/*!
+ * @param {Rekapi.KeyframeProperty} property
+ * @param {number} actorStart
+ * @param {number} actorLength
+ * @return {number}
+ */
+const calculateStepPercent = (property, actorStart, actorLength) =>
+  ((property.millisecond - actorStart) / actorLength) * 100;
+
+/*!
+ * @param {Rekapi.Actor} actor
+ * @param {number} actorStart
+ * @param {Rekapi.KeyframeProperty} fromProp
+ * @param {Rekapi.KeyframeProperty} toProp
+ * @param {number} fromPercent
+ * @param {number} toPercent
+ * @return {Array.<string>}
+ */
+const generateActorTrackWaitSegment = (
+  actor,
+  actorStart,
+  fromProp,
+  toProp,
+  fromPercent,
+  toPercent
+) =>
+  generateActorTrackSegment(
+    actor,
+    1,
+    toPercent - fromPercent,
+    actorStart,
+    fromPercent,
+    fromProp
+  );
+
+/*!
+ * @param {Rekapi.KeyframeProperty} property
+ * @param {Rekapi.KeyframeProperty} nextProperty
+ * @return {boolean}
+ */
+const isSegmentAWait = (property, nextProperty) =>
+  property.name === nextProperty.name &&
+    property.value === nextProperty.value;
+
+/*!
+ * @param {Rekapi.KeyframeProperty} property
+ * @return {boolean}
+ */
+export const canOptimizeKeyframeProperty = property =>
+  !property.nextProperty ?
+    false :
+    isSegmentAWait(property, property.nextProperty) ?
+      true :
+      property.nextProperty.easing.split(' ').every((easing, i, easings) =>
+        !(!BEZIERS[easing] || (i > 0 && easings[i - 1] !== easing))
+      );
+
+/*!
+ * @param {Rekapi.Actor} actor
+ * @param {number} steps
+ * @param {string} track
+ * @return {string}
+ */
+export const generateActorKeyframes = (actor, steps, track) => {
+  // This function is completely crazy.  Simplify it?
+  const accumulator = [];
+  const end = actor.getEnd();
+  const start = actor.getStart();
+  const length = actor.getLength();
+  const leadingWait = simulateLeadingWait(actor, track, start);
+
+  if (leadingWait) {
+    accumulator.push(leadingWait);
+  }
+
+  let previousSegmentWasOptimized = false;
+  actor._propertyTracks[track].forEach(prop => {
+    const fromPercent = calculateStepPercent(prop, start, length);
+    const { nextProperty } = prop;
+
+    let toPercent, increments, incrementSize;
+
+    if (nextProperty) {
+      toPercent = calculateStepPercent(nextProperty, start, length);
+      const delta = toPercent - fromPercent;
+      increments = Math.floor((delta / 100) * steps) || 1;
+      incrementSize = delta / increments;
+    } else {
+      toPercent = 100;
+      increments = 1;
+      incrementSize = 1;
+    }
+
+    let trackSegment;
+    if (nextProperty && isSegmentAWait(prop, nextProperty)) {
+      trackSegment = generateActorTrackWaitSegment(
+        actor,
+        start,
+        prop,
+        nextProperty,
+        fromPercent,
+        toPercent
+      );
+
+      if (previousSegmentWasOptimized) {
+        trackSegment.shift();
+      }
+
+      previousSegmentWasOptimized = false;
+
+    } else if (canOptimizeKeyframeProperty(prop)) {
+      trackSegment = generateOptimizedKeyframeSegment(
+        prop,
+        fromPercent,
+        toPercent
+      );
+
+      // If this and the previous segment are optimized, remove the
+      // destination keyframe of the previous step.  The starting keyframe of
+      // the newest segment makes it redundant.
+      if (previousSegmentWasOptimized) {
+        accumulator[accumulator.length - 1] =
+          accumulator[accumulator.length - 1].split('\n')[0];
+      }
+
+      previousSegmentWasOptimized = true;
+    } else {
+      trackSegment = generateActorTrackSegment(
+        actor,
+        increments,
+        incrementSize,
+        start,
+        fromPercent,
+        prop
+      );
+
+      if (previousSegmentWasOptimized) {
+        trackSegment.shift();
+      }
+
+      if (trackSegment.length) {
+        trackSegment = trackSegment.join('\n');
+      }
+
+      previousSegmentWasOptimized = false;
+    }
+
+    if (trackSegment.length) {
+      accumulator.push(trackSegment);
+    }
+  });
+
+  const trailingWait = simulateTrailingWait(actor, track, start, end);
+
+  if (trailingWait) {
+    accumulator.push(trailingWait);
+  }
+
+  return accumulator.join('\n');
+};
+
+/*!
+ * @param {Rekapi.Actor} actor
+ * @param {string} animName
+ * @param {number} steps
+ * @param {boolean} doCombineProperties
+ * @param {Array.<string>=} vendors
+ * @return {string}
+ */
+export const generateBoilerplatedKeyframes = (
+  actor,
+  animName,
+  steps,
+  doCombineProperties,
+  vendors = undefined
+) =>
+
+  doCombineProperties ?
+    applyVendorBoilerplates(
+      generateCombinedActorKeyframes(actor, steps),
+      animName,
+      vendors
+    ) :
+    actor.getTrackNames().map(trackName =>
+      applyVendorBoilerplates(
+        generateActorKeyframes(actor, steps, trackName),
+        `${animName}-${trackName}`,
+        vendors
+      )
+    ).join('\n');
+
+/*!
+ * @param {Rekapi.Actor} actor
+ * @param {string} animName
+ * @param {string} prefix
+ * @param {boolean} doCombineProperties
+ * @return {string}
+ */
+export const generateAnimationNameProperty = (
+  actor,
+  animationName,
+  prefix,
+  doCombineProperties
+) => {
+
+  let renderedName = `  ${prefix}animation-name:`;
+
+  if (doCombineProperties) {
+    renderedName += ` ${animationName}-keyframes;`;
+  } else {
+    const trackNames = actor.getTrackNames();
+
+    const trackNamesToPrint = _.intersection(trackNames, transformFunctions).length ?
+      _.difference(trackNames, transformFunctions).concat('transform') :
+      trackNames;
+
+    renderedName = trackNamesToPrint.reduce(
+      (renderedName, trackName) =>
+        `${renderedName} ${animationName}-${trackName}-keyframes,`,
+      renderedName
+    ).replace(/.$/, ';');
+  }
+
+  return renderedName;
+};
+
+/*!
+ * @param {Rekapi} rekapi
+ * @param {string} prefix
+ * @param {number|string=} iterations
+ * @return {string}
+ */
+export const generateAnimationIterationProperty = (
+  rekapi,
+  prefix,
+  iterations = undefined
+) =>
+  `  ${prefix}animation-iteration-count: ${iterations !== undefined ?
+    iterations :
+    rekapi._timesToIterate === -1 ?
+      'infinite' :
+      rekapi._timesToIterate
+   };`;
+
+/*!
+ * @param {Rekapi.Actor} actor
+ * @param {string} animName
+ * @param {string} vendor
+ * @param {boolean} doCombineProperties
+ * @param {number|string=} iterations
+ * @param {boolean=} isCentered
+ * @return {string}
+ */
+export const generateCSSAnimationProperties = (
+  actor,
+  animName,
+  vendor,
+  doCombineProperties,
+  iterations = undefined,
+  isCentered = false
+) => {
+  const prefix = VENDOR_PREFIXES[vendor];
+  const start = actor.getStart();
+  const end = actor.getEnd();
+
+  const generatedProperties = [
+    generateAnimationNameProperty(actor, animName, prefix, doCombineProperties),
+    `  ${prefix}animation-duration: ${end - start}ms;`,
+    `  ${prefix}animation-delay: ${start}ms;`,
+    `  ${prefix}animation-fill-mode: forwards;`,
+    `  ${prefix}animation-timing-function: linear;`,
+    generateAnimationIterationProperty(actor.rekapi, prefix, iterations),
+  ];
+
+  if (isCentered) {
+    generatedProperties.push(`  ${prefix}transform-origin: 0 0;`);
+  }
+
+  return generatedProperties.join('\n');
+};
+
+/*!
+ * @param {Rekapi.Actor} actor
+ * @param {string} animName
+ * @param {boolean} doCombineProperties
+ * @param {Array.<string>=} vendors
+ * @param {number|string=} iterations
+ * @param {boolean=} isCentered
+ * @return {string}
+ */
+export const generateCSSClass = (
+    actor,
+    animName,
+    doCombineProperties,
+    vendors = ['w3'],
+    iterations = undefined,
+    isCentered = undefined
+  ) =>
+
+  `.${animName} {
+${  vendors.map(vendor =>
+      generateCSSAnimationProperties(
+        actor,
+        animName,
+        vendor,
+        doCombineProperties,
+        iterations,
+        isCentered
+      )
+    ).join('\n')}
+}`;
+
+/*!
+ * @param {Rekapi.Actor} actor
+ * @return {boolean}
+ */
+export const canOptimizeAnyKeyframeProperties = (actor) =>
+  _.any(
+    actor._keyframeProperties,
+    canOptimizeKeyframeProperty
+  ) &&
+  !_.intersection(
+    Object.keys(actor._propertyTracks),
+    transformFunctions
+  ).length;
+
+/*!
+ * Creates the CSS `@keyframes` for an individual actor.
+ * @param {Rekapi.Actor} actor
+ * @param {Object=} options Same as options for Rekapi.prototype.toCSS.
+ * @return {string}
+ */
+export const getActorCSS = (actor, options = {}) => {
+  const { name, vendors, iterations, isCentered } = options;
+
+  const animName = name ?
+    (actor.rekapi.getActorCount() > 1 ?
+      `${name}-${actor.id}` :
+      name
+    ) :
+    getActorClassName(actor);
+
+  const steps = Math.ceil(
+    (actor.rekapi.getAnimationLength() / 1000) * (options.fps || DEFAULT_FPS)
+  );
+
+  const doCombineProperties = !canOptimizeAnyKeyframeProperties(actor);
+
+  return [
+    generateCSSClass(
+      actor,
+      animName,
+      doCombineProperties,
+      vendors,
+      iterations,
+      isCentered
+    ),
+    generateBoilerplatedKeyframes(
+      actor,
+      animName,
+      steps,
+      doCombineProperties,
+      vendors
+    )
+  ].join('\n');
 };
 
 export default class DOMRenderer {
@@ -658,580 +1216,13 @@ export default class DOMRenderer {
   }
 }
 
-/**
- * @param {Rekapi.Actor} actor
- * @return {string} The default CSS class that is targeted by `{{#crossLink
- * "Rekapi.DOMRenderer/toString:method"}}{{/crossLink}}` if a custom class is
- * not specified.  This may be useful for getting a standard and consistent
- * CSS class name for an actor's DOM element.
- */
-const getActorClassName = actor => `actor-${actor.id}`;
-
-/*!
- * Creates the CSS `@keyframes` for an individual actor.
- * @param {Rekapi.Actor} actor
- * @param {Object=} options Same as options for Rekapi.prototype.toCSS.
- * @return {string}
- */
-export const getActorCSS = (actor, options = {}) => {
-  const { name, vendors, iterations, isCentered } = options;
-
-  const animName = name ?
-    (actor.rekapi.getActorCount() > 1 ?
-      `${name}-${actor.id}` :
-      name
-    ) :
-    getActorClassName(actor);
-
-  const steps = Math.ceil(
-    (actor.rekapi.getAnimationLength() / 1000) * (options.fps || DEFAULT_FPS)
-  );
-
-  const doCombineProperties = !canOptimizeAnyKeyframeProperties(actor);
-
-  return [
-    generateCSSClass(
-      actor,
-      animName,
-      doCombineProperties,
-      vendors,
-      iterations,
-      isCentered
-    ),
-    generateBoilerplatedKeyframes(
-      actor,
-      animName,
-      steps,
-      doCombineProperties,
-      vendors
-    )
-  ].join('\n');
-};
-
-// toString-SPECIFIC PRIVATE UTILITY FUNCTIONS
-//
-
-/*!
- * @param {Rekapi.Actor} actor
- * @param {string} animName
- * @param {number} steps
- * @param {boolean} doCombineProperties
- * @param {Array.<string>=} vendors
- * @return {string}
- */
-export const generateBoilerplatedKeyframes = (
-  actor,
-  animName,
-  steps,
-  doCombineProperties,
-  vendors = undefined
-) =>
-
-  doCombineProperties ?
-    applyVendorBoilerplates(
-      generateCombinedActorKeyframes(actor, steps),
-      animName,
-      vendors
-    ) :
-    actor.getTrackNames().map(trackName =>
-      applyVendorBoilerplates(
-        generateActorKeyframes(actor, steps, trackName),
-        `${animName}-${trackName}`,
-        vendors
-      )
-    ).join('\n');
-
-/*!
- * @param {string} toKeyframes Generated keyframes to wrap in boilerplates
- * @param {string} animName
- * @param {Array.<string>=} vendors Vendor boilerplates to be applied.
- *     Should be any of the values in Rekapi.util.VENDOR_PREFIXES.
- * @return {string}
- */
-export const applyVendorBoilerplates = (toKeyframes, animName, vendors = ['w3']) =>
-  vendors.map(vendor =>
-    applyVendorPropertyPrefixes(
-      `@${VENDOR_PREFIXES[vendor]}keyframes ${animName}-keyframes {
-${''  }${toKeyframes}
-${''  }}`,
-      vendor)
-  ).join('\n');
-
-/*!
- * @param {string} keyframes
- * @param {vendor} vendor
- * @return {string}
- */
-export const applyVendorPropertyPrefixes = (keyframes, vendor) =>
-  keyframes
-    .replace(
-      R_VENDOR_TOKEN,
-      VENDOR_PREFIXES[vendor]
-    )
-    .replace(
-      R_TRANSFORM_TOKEN,
-      `${VENDOR_PREFIXES[vendor]}transform`
-    );
-
-/*!
- * @param {Rekapi.Actor} actor
- * @param {string} animName
- * @param {boolean} doCombineProperties
- * @param {Array.<string>=} vendors
- * @param {number|string=} iterations
- * @param {boolean=} isCentered
- * @return {string}
- */
-export const generateCSSClass = (
-    actor,
-    animName,
-    doCombineProperties,
-    vendors = ['w3'],
-    iterations = undefined,
-    isCentered = undefined
-  ) =>
-
-  `.${animName} {
-${  vendors.map(vendor =>
-      generateCSSAnimationProperties(
-        actor,
-        animName,
-        vendor,
-        doCombineProperties,
-        iterations,
-        isCentered
-      )
-    ).join('\n')}
-}`;
-
-/*!
- * @param {Rekapi.Actor} actor
- * @param {string} animName
- * @param {string} vendor
- * @param {boolean} doCombineProperties
- * @param {number|string=} iterations
- * @param {boolean=} isCentered
- * @return {string}
- */
-export const generateCSSAnimationProperties = (
-  actor,
-  animName,
-  vendor,
-  doCombineProperties,
-  iterations = undefined,
-  isCentered = false
-) => {
-  const prefix = VENDOR_PREFIXES[vendor];
-  const start = actor.getStart();
-  const end = actor.getEnd();
-
-  const generatedProperties = [
-    generateAnimationNameProperty(actor, animName, prefix, doCombineProperties),
-    `  ${prefix}animation-duration: ${end - start}ms;`,
-    `  ${prefix}animation-delay: ${start}ms;`,
-    `  ${prefix}animation-fill-mode: forwards;`,
-    `  ${prefix}animation-timing-function: linear;`,
-    generateAnimationIterationProperty(actor.rekapi, prefix, iterations),
-  ];
-
-  if (isCentered) {
-    generatedProperties.push(`  ${prefix}transform-origin: 0 0;`);
-  }
-
-  return generatedProperties.join('\n');
-};
-
-/*!
- * @param {Rekapi.Actor} actor
- * @param {string} animName
- * @param {string} prefix
- * @param {boolean} doCombineProperties
- * @return {string}
- */
-export const generateAnimationNameProperty = (
-  actor,
-  animationName,
-  prefix,
-  doCombineProperties
-) => {
-
-  let renderedName = `  ${prefix}animation-name:`;
-
-  if (doCombineProperties) {
-    renderedName += ` ${animationName}-keyframes;`;
-  } else {
-    const trackNames = actor.getTrackNames();
-
-    const trackNamesToPrint = _.intersection(trackNames, transformFunctions).length ?
-      _.difference(trackNames, transformFunctions).concat('transform') :
-      trackNames;
-
-    renderedName = trackNamesToPrint.reduce(
-      (renderedName, trackName) =>
-        `${renderedName} ${animationName}-${trackName}-keyframes,`,
-      renderedName
-    ).replace(/.$/, ';');
-  }
-
-  return renderedName;
-};
-
 /*!
  * @param {Rekapi} rekapi
- * @param {string} prefix
- * @param {number|string=} iterations
- * @return {string}
  */
-export const generateAnimationIterationProperty = (
-  rekapi,
-  prefix,
-  iterations = undefined
-) =>
-  `  ${prefix}animation-iteration-count: ${iterations !== undefined ?
-    iterations :
-    rekapi._timesToIterate === -1 ?
-      'infinite' :
-      rekapi._timesToIterate
-   };`;
-
-// OPTIMIZED OUTPUT GENERATOR FUNCTIONS
-//
-
-/*!
- * @param {Rekapi.KeyframeProperty} property
- * @return {boolean}
- */
-export const canOptimizeKeyframeProperty = property =>
-  !property.nextProperty ?
-    false :
-    isSegmentAWait(property, property.nextProperty) ?
-      true :
-      property.nextProperty.easing.split(' ').every((easing, i, easings) =>
-        !(!BEZIERS[easing] || (i > 0 && easings[i - 1] !== easing))
-      );
-
-/*!
- * @param {Rekapi.KeyframeProperty} property
- * @param {Rekapi.KeyframeProperty} nextProperty
- * @return {boolean}
- */
-const isSegmentAWait = (property, nextProperty) =>
-  property.name === nextProperty.name &&
-    property.value === nextProperty.value;
-
-/*!
- * @param {Rekapi.Actor} actor
- * @return {boolean}
- */
-export const canOptimizeAnyKeyframeProperties = (actor) =>
-  _.any(
-    actor._keyframeProperties,
-    canOptimizeKeyframeProperty
-  ) &&
-  !_.intersection(
-    Object.keys(actor._propertyTracks),
-    transformFunctions
-  ).length;
-
-/*!
- * @param {Rekapi.KeyframeProperty} property
- * @param {number} fromPercent
- * @param {number} toPercent
- * @return {string}
- */
-export const generateOptimizedKeyframeSegment = (
-  property,
-  fromPercent,
-  toPercent
-) => {
-  const name = property.name === 'transform' ?
-    TRANSFORM_TOKEN :
-    property.name;
-
-  const { nextProperty, value } = property;
-  const from = isInt(fromPercent) ? fromPercent : fromPercent.toFixed(2);
-  const to = isInt(toPercent) ? toPercent : toPercent.toFixed(2);
-  const bezier = BEZIERS[nextProperty.easing.split(' ')[0]];
-
-  return (
- `  ${from}% {${name}:${value};${''
-  }${VENDOR_TOKEN}animation-timing-function: cubic-bezier(${bezier});${''
-  }}
-  ${to}% {${name}:${nextProperty.value};}`
-  );
-};
-
-// UN-OPTIMIZED OUTPUT GENERATOR FUNCTIONS
-//
-
-/*!
- * @param {Rekapi.Actor} actor
- * @param {number} steps
- * @param {string} track
- * @return {string}
- */
-export const generateActorKeyframes = (actor, steps, track) => {
-  // This function is completely crazy.  Simplify it?
-  const accumulator = [];
-  const end = actor.getEnd();
-  const start = actor.getStart();
-  const length = actor.getLength();
-  const leadingWait = simulateLeadingWait(actor, track, start);
-
-  if (leadingWait) {
-    accumulator.push(leadingWait);
-  }
-
-  let previousSegmentWasOptimized = false;
-  actor._propertyTracks[track].forEach(prop => {
-    const fromPercent = calculateStepPercent(prop, start, length);
-    const { nextProperty } = prop;
-
-    let toPercent, increments, incrementSize;
-
-    if (nextProperty) {
-      toPercent = calculateStepPercent(nextProperty, start, length);
-      const delta = toPercent - fromPercent;
-      increments = Math.floor((delta / 100) * steps) || 1;
-      incrementSize = delta / increments;
-    } else {
-      toPercent = 100;
-      increments = 1;
-      incrementSize = 1;
-    }
-
-    let trackSegment;
-    if (nextProperty && isSegmentAWait(prop, nextProperty)) {
-      trackSegment = generateActorTrackWaitSegment(
-        actor,
-        start,
-        prop,
-        nextProperty,
-        fromPercent,
-        toPercent
-      );
-
-      if (previousSegmentWasOptimized) {
-        trackSegment.shift();
-      }
-
-      previousSegmentWasOptimized = false;
-
-    } else if (canOptimizeKeyframeProperty(prop)) {
-      trackSegment = generateOptimizedKeyframeSegment(
-        prop,
-        fromPercent,
-        toPercent
-      );
-
-      // If this and the previous segment are optimized, remove the
-      // destination keyframe of the previous step.  The starting keyframe of
-      // the newest segment makes it redundant.
-      if (previousSegmentWasOptimized) {
-        accumulator[accumulator.length - 1] =
-          accumulator[accumulator.length - 1].split('\n')[0];
-      }
-
-      previousSegmentWasOptimized = true;
-    } else {
-      trackSegment = generateActorTrackSegment(
-        actor,
-        increments,
-        incrementSize,
-        start,
-        fromPercent,
-        prop
-      );
-
-      if (previousSegmentWasOptimized) {
-        trackSegment.shift();
-      }
-
-      if (trackSegment.length) {
-        trackSegment = trackSegment.join('\n');
-      }
-
-      previousSegmentWasOptimized = false;
-    }
-
-    if (trackSegment.length) {
-      accumulator.push(trackSegment);
-    }
-  });
-
-  const trailingWait = simulateTrailingWait(actor, track, start, end);
-
-  if (trailingWait) {
-    accumulator.push(trailingWait);
-  }
-
-  return accumulator.join('\n');
-};
-
-/*!
- * @param {Rekapi.Actor} actor
- * @param {number} steps
- * @return {string}
- */
-const generateCombinedActorKeyframes = (actor, steps) =>
-  generateActorTrackSegment(actor, steps + 1, 100 / steps, 0, 0).join('\n');
-
-/*!
- * @param {Rekapi.Actor} actor
- * @param {string} track
- * @param {number} actorStart
- * @return {string|undefined}
- */
-export const simulateLeadingWait = (actor, track, actorStart) => {
-  const firstProp = actor._propertyTracks[track][0];
-
-  if (firstProp !== undefined && firstProp.millisecond !== actorStart) {
-    return generateActorTrackSegment(
-      actor,
-      1,
-      1,
-      firstProp.millisecond,
-      0,
-      firstProp
-    ).join('\n');
+rendererInitHooks.cssAnimate = rekapi => {
+  // Node.nodeType 1 is an ELEMENT_NODE.
+  // https://developer.mozilla.org/en-US/docs/Web/API/Node.nodeType
+  if (rekapi.context.nodeType === 1) {
+    rekapi.renderer = new DOMRenderer(rekapi);
   }
 };
-
-/*!
- * @param {Rekapi.Actor} actor
- * @param {string} track
- * @param {number} actorStart
- * @param {number} actorEnd
- * @return {string|undefined}
- */
-export const simulateTrailingWait = (actor, track, actorStart, actorEnd) => {
-  const lastProp = _.last(actor._propertyTracks[track]);
-
-  if (lastProp !== undefined && lastProp.millisecond !== actorEnd) {
-    return generateActorTrackSegment(
-      actor,
-      1,
-      1,
-      actorStart,
-      100,
-      lastProp
-    ).join('\n');
-  }
-};
-
-/*!
- * @param {Rekapi.KeyframeProperty} property
- * @param {number} actorStart
- * @param {number} actorLength
- * @return {number}
- */
-const calculateStepPercent = (property, actorStart, actorLength) =>
-  ((property.millisecond - actorStart) / actorLength) * 100;
-
-/*!
- * @param {Rekapi.Actor} actor
- * @param {number} increments
- * @param {number} incrementSize
- * @param {number} actorStart
- * @param {number} fromPercent
- * @param {Rekapi.KeyframeProperty=} fromProp
- * @return {Array.<string>}
- */
-export const generateActorTrackSegment = (
-  actor,
-  increments,
-  incrementSize,
-  actorStart,
-  fromPercent,
-  fromProp = undefined
-) => {
-
-  const accumulator = [];
-  const length = actor.getLength();
-
-  for (let i = 0; i < increments; i++) {
-    const percent = fromPercent + (i * incrementSize);
-
-    actor._updateState(
-      ((percent / 100) * length) + actorStart,
-      true
-    );
-
-    const step = serializeActorStep(actor, fromProp && fromProp.name);
-
-    accumulator.push(`  ${+percent.toFixed(2)}% ${step}`);
-  }
-
-  return accumulator;
-};
-
-/*!
- * @param {Rekapi.Actor} actor
- * @param {number} actorStart
- * @param {Rekapi.KeyframeProperty} fromProp
- * @param {Rekapi.KeyframeProperty} toProp
- * @param {number} fromPercent
- * @param {number} toPercent
- * @return {Array.<string>}
- */
-const generateActorTrackWaitSegment = (
-  actor,
-  actorStart,
-  fromProp,
-  toProp,
-  fromPercent,
-  toPercent
-) =>
-  generateActorTrackSegment(
-    actor,
-    1,
-    toPercent - fromPercent,
-    actorStart,
-    fromPercent,
-    fromProp
-  );
-
-/**
- * @param {Object} propsToSerialize
- * @param {Array.<string>} transformNames
- * @return {Object}
- */
-export const combineTranfromProperties = (propsToSerialize, transformNames) => {
-  if (_.isEmpty(
-    _.pick.apply(_, [propsToSerialize].concat(transformFunctions))
-    )
-  ) {
-    return propsToSerialize;
-  } else {
-    const serializedProps = _.clone(propsToSerialize);
-
-    serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(
-      (combinedProperties, transformFunction) => {
-      if (_.has(serializedProps, transformFunction)) {
-        combinedProperties +=
-          ` ${transformFunction}(${serializedProps[transformFunction]})`;
-
-        delete serializedProps[transformFunction];
-      }
-
-      return combinedProperties;
-    }, '').slice(1);
-
-    return serializedProps;
-  }
-};
-
-/*!
- * @param {Rekapi.Actor} actor
- * @param {string=} targetProp
- * @return {string}
- */
-export const serializeActorStep = (actor, targetProp = undefined) =>
-  _.reduce(
-    combineTranfromProperties(
-      targetProp ? { [targetProp]: actor.get()[targetProp] } : actor.get(),
-      actor._transformOrder
-    ),
-    (serializedProps, val, key) =>
-      `${serializedProps}${key === 'transform' ? TRANSFORM_TOKEN : key}:${val};`,
-    '{') + '}';
