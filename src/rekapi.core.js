@@ -188,14 +188,12 @@ const STOPPED = 'stopped';
 const PAUSED = 'paused';
 const PLAYING = 'playing';
 
-// FIXME: The rendererInitHooks + Rekapi#renderer pattern is kinda gross.  Maybe
-// just maintain an array of initialized renderer that are present at
-// initialization-time?
 /*!
- * @type {Object.<function>} Contains the context init function to be called
- * in the Rekapi constructor.
+ * @type {Object.<function>} Contains the context init function to be called in
+ * the Rekapi constructor.  This array is populated by modules in the
+ * renderers/ directory.
  */
-export const rendererInitHooks = {};
+export const renderers = [];
 
 /**
  * If this is a rendered animation, the appropriate renderer is accessible as
@@ -276,7 +274,7 @@ export default class Rekapi {
       updateToCurrentMillisecond(this);
     };
 
-    _.each(rendererInitHooks, rendererInitHook => rendererInitHook(this));
+    renderers.forEach(renderer => renderer(this));
   }
 
   /**
