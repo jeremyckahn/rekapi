@@ -239,7 +239,7 @@ const actorTeardown = actor => {
   const { context } = actor;
   const classList = context.className.match(/\S+/g);
   const sanitizedClassList =
-    _.without(classList, DOMRenderer.getActorClassName(actor));
+    _.without(classList, getActorClassName(actor));
   context.className = sanitizedClassList.join(' ');
 };
 
@@ -294,7 +294,7 @@ const onAddActor = (rekapi, actor) => {
     return;
   }
 
-  const className = DOMRenderer.getActorClassName(actor);
+  const className = getActorClassName(actor);
 
   // Add the class if it's not already there.
   // Using className instead of classList to make IE happy.
@@ -635,9 +635,7 @@ export default class DOMRenderer {
    *   will allow for a more complex animation.  More steps will also result in
    *   a larger CSS string, and more time needed to generate the string.
    *   * __name__ _(string)_: Define a custom name for your animation.  This
-   *   becomes the class name targeted by the generated CSS.  The default value
-   *   is determined by a call to {{#crossLink
-   *   "Rekapi.DOMRenderer/getActorClassName:method"}}{{/crossLink}}.
+   *   becomes the class name targeted by the generated CSS.
    *   * __isCentered__ _(boolean)_: If `true`, the generated CSS will contain
    *   `transform-origin: 0 0;`, which centers the DOM element along the path of
    *   motion.  If `false` or omitted, no `transform-origin` rule is specified
@@ -661,14 +659,13 @@ export default class DOMRenderer {
 }
 
 /**
- * @method getActorClassName
  * @param {Rekapi.Actor} actor
  * @return {string} The default CSS class that is targeted by `{{#crossLink
  * "Rekapi.DOMRenderer/toString:method"}}{{/crossLink}}` if a custom class is
  * not specified.  This may be useful for getting a standard and consistent
  * CSS class name for an actor's DOM element.
  */
-DOMRenderer.getActorClassName = actor => `actor-${actor.id}`;
+const getActorClassName = actor => `actor-${actor.id}`;
 
 /*!
  * Creates the CSS `@keyframes` for an individual actor.
@@ -684,7 +681,7 @@ export const getActorCSS = (actor, options = {}) => {
       `${name}-${actor.id}` :
       name
     ) :
-    DOMRenderer.getActorClassName(actor);
+    getActorClassName(actor);
 
   const steps = Math.ceil(
     (actor.rekapi.getAnimationLength() / 1000) * (options.fps || DEFAULT_FPS)
