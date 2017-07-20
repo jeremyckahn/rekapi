@@ -15,7 +15,7 @@ const vendorTransforms = [
   'msTransform'
 ];
 
-const transformFunctions = [
+export const transformFunctions = [
   'translateX',
   'translateY',
   'translateZ',
@@ -32,9 +32,9 @@ const transformFunctions = [
 ];
 
 const DEFAULT_FPS = 30;
-const TRANSFORM_TOKEN = 'TRANSFORM';
+export const TRANSFORM_TOKEN = 'TRANSFORM';
 const R_TRANSFORM_TOKEN = new RegExp(TRANSFORM_TOKEN, 'g');
-const VENDOR_TOKEN = 'VENDOR';
+export const VENDOR_TOKEN = 'VENDOR';
 const R_VENDOR_TOKEN = new RegExp(VENDOR_TOKEN, 'g');
 const VENDOR_PREFIXES = {
   microsoft: '-ms-',
@@ -676,7 +676,7 @@ DOMRenderer.getActorClassName = actor => `actor-${actor.id}`;
  * @param {Object=} options Same as options for Rekapi.prototype.toCSS.
  * @return {string}
  */
-const getActorCSS = (actor, options = {}) => {
+export const getActorCSS = (actor, options = {}) => {
   const { name, vendors, iterations, isCentered } = options;
 
   const animName = name ?
@@ -722,7 +722,7 @@ const getActorCSS = (actor, options = {}) => {
  * @param {Array.<string>=} vendors
  * @return {string}
  */
-const generateBoilerplatedKeyframes = (
+export const generateBoilerplatedKeyframes = (
   actor,
   animName,
   steps,
@@ -751,7 +751,7 @@ const generateBoilerplatedKeyframes = (
  *     Should be any of the values in Rekapi.util.VENDOR_PREFIXES.
  * @return {string}
  */
-const applyVendorBoilerplates = (toKeyframes, animName, vendors = ['w3']) =>
+export const applyVendorBoilerplates = (toKeyframes, animName, vendors = ['w3']) =>
   vendors.map(vendor =>
     applyVendorPropertyPrefixes(
       `@${VENDOR_PREFIXES[vendor]}keyframes ${animName}-keyframes {
@@ -765,7 +765,7 @@ ${''  }}`,
  * @param {vendor} vendor
  * @return {string}
  */
-const applyVendorPropertyPrefixes = (keyframes, vendor) =>
+export const applyVendorPropertyPrefixes = (keyframes, vendor) =>
   keyframes
     .replace(
       R_VENDOR_TOKEN,
@@ -785,7 +785,7 @@ const applyVendorPropertyPrefixes = (keyframes, vendor) =>
  * @param {boolean=} isCentered
  * @return {string}
  */
-const generateCSSClass = (
+export const generateCSSClass = (
     actor,
     animName,
     doCombineProperties,
@@ -816,7 +816,7 @@ ${  vendors.map(vendor =>
  * @param {boolean=} isCentered
  * @return {string}
  */
-const generateCSSAnimationProperties = (
+export const generateCSSAnimationProperties = (
   actor,
   animName,
   vendor,
@@ -851,7 +851,7 @@ const generateCSSAnimationProperties = (
  * @param {boolean} doCombineProperties
  * @return {string}
  */
-const generateAnimationNameProperty = (
+export const generateAnimationNameProperty = (
   actor,
   animationName,
   prefix,
@@ -885,7 +885,7 @@ const generateAnimationNameProperty = (
  * @param {number|string=} iterations
  * @return {string}
  */
-const generateAnimationIterationProperty = (
+export const generateAnimationIterationProperty = (
   rekapi,
   prefix,
   iterations = undefined
@@ -904,7 +904,7 @@ const generateAnimationIterationProperty = (
  * @param {Rekapi.KeyframeProperty} property
  * @return {boolean}
  */
-const canOptimizeKeyframeProperty = property =>
+export const canOptimizeKeyframeProperty = property =>
   !property.nextProperty ?
     false :
     isSegmentAWait(property, property.nextProperty) ?
@@ -926,7 +926,7 @@ const isSegmentAWait = (property, nextProperty) =>
  * @param {Rekapi.Actor} actor
  * @return {boolean}
  */
-const canOptimizeAnyKeyframeProperties = (actor) =>
+export const canOptimizeAnyKeyframeProperties = (actor) =>
   _.any(
     actor._keyframeProperties,
     canOptimizeKeyframeProperty
@@ -942,7 +942,7 @@ const canOptimizeAnyKeyframeProperties = (actor) =>
  * @param {number} toPercent
  * @return {string}
  */
-const generateOptimizedKeyframeSegment = (
+export const generateOptimizedKeyframeSegment = (
   property,
   fromPercent,
   toPercent
@@ -973,7 +973,7 @@ const generateOptimizedKeyframeSegment = (
  * @param {string} track
  * @return {string}
  */
-const generateActorKeyframes = (actor, steps, track) => {
+export const generateActorKeyframes = (actor, steps, track) => {
   // This function is completely crazy.  Simplify it?
   const accumulator = [];
   const end = actor.getEnd();
@@ -1085,7 +1085,7 @@ const generateCombinedActorKeyframes = (actor, steps) =>
  * @param {number} actorStart
  * @return {string|undefined}
  */
-const simulateLeadingWait = (actor, track, actorStart) => {
+export const simulateLeadingWait = (actor, track, actorStart) => {
   const firstProp = actor._propertyTracks[track][0];
 
   if (firstProp !== undefined && firstProp.millisecond !== actorStart) {
@@ -1107,7 +1107,7 @@ const simulateLeadingWait = (actor, track, actorStart) => {
  * @param {number} actorEnd
  * @return {string|undefined}
  */
-const simulateTrailingWait = (actor, track, actorStart, actorEnd) => {
+export const simulateTrailingWait = (actor, track, actorStart, actorEnd) => {
   const lastProp = _.last(actor._propertyTracks[track]);
 
   if (lastProp !== undefined && lastProp.millisecond !== actorEnd) {
@@ -1140,7 +1140,7 @@ const calculateStepPercent = (property, actorStart, actorLength) =>
  * @param {Rekapi.KeyframeProperty=} fromProp
  * @return {Array.<string>}
  */
-const generateActorTrackSegment = (
+export const generateActorTrackSegment = (
   actor,
   increments,
   incrementSize,
@@ -1199,7 +1199,7 @@ const generateActorTrackWaitSegment = (
  * @param {Array.<string>} transformNames
  * @return {Object}
  */
-const combineTranfromProperties = (propsToSerialize, transformNames) => {
+export const combineTranfromProperties = (propsToSerialize, transformNames) => {
   if (_.isEmpty(
     _.pick.apply(_, [propsToSerialize].concat(transformFunctions))
     )
@@ -1229,7 +1229,7 @@ const combineTranfromProperties = (propsToSerialize, transformNames) => {
  * @param {string=} targetProp
  * @return {string}
  */
-const serializeActorStep = (actor, targetProp = undefined) =>
+export const serializeActorStep = (actor, targetProp = undefined) =>
   _.reduce(
     combineTranfromProperties(
       targetProp ? { [targetProp]: actor.get()[targetProp] } : actor.get(),
@@ -1238,28 +1238,3 @@ const serializeActorStep = (actor, targetProp = undefined) =>
     (serializedProps, val, key) =>
       `${serializedProps}${key === 'transform' ? TRANSFORM_TOKEN : key}:${val};`,
     '{') + '}';
-
-// Expose helper functions for unit testing.
-// FIXME: Don't include this in optimized builds.
-Rekapi._private.cssRenderer = {
-  'TRANSFORM_TOKEN': TRANSFORM_TOKEN
-  ,'VENDOR_TOKEN': VENDOR_TOKEN
-  ,'applyVendorBoilerplates': applyVendorBoilerplates
-  ,'applyVendorPropertyPrefixes': applyVendorPropertyPrefixes
-  ,'generateBoilerplatedKeyframes': generateBoilerplatedKeyframes
-  ,'generateCSSClass': generateCSSClass
-  ,'generateCSSAnimationProperties': generateCSSAnimationProperties
-  ,'generateActorKeyframes': generateActorKeyframes
-  ,'generateActorTrackSegment': generateActorTrackSegment
-  ,'combineTranfromProperties': combineTranfromProperties
-  ,'serializeActorStep': serializeActorStep
-  ,'generateAnimationNameProperty': generateAnimationNameProperty
-  ,'generateAnimationIterationProperty': generateAnimationIterationProperty
-  ,'simulateLeadingWait': simulateLeadingWait
-  ,'simulateTrailingWait': simulateTrailingWait
-  ,'canOptimizeKeyframeProperty': canOptimizeKeyframeProperty
-  ,'canOptimizeAnyKeyframeProperties': canOptimizeAnyKeyframeProperties
-  ,'generateOptimizedKeyframeSegment': generateOptimizedKeyframeSegment
-  ,'getActorCSS': getActorCSS
-  ,'transformFunctions': transformFunctions
-};

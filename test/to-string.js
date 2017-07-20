@@ -3,6 +3,29 @@ import assert from 'assert';
 import { contains } from 'lodash';
 import { setupTestRekapi, setupTestActor } from './test-utils';
 
+import {
+  TRANSFORM_TOKEN,
+  VENDOR_TOKEN,
+  applyVendorBoilerplates,
+  applyVendorPropertyPrefixes,
+  generateBoilerplatedKeyframes,
+  generateCSSClass,
+  generateCSSAnimationProperties,
+  generateActorKeyframes,
+  generateActorTrackSegment,
+  combineTranfromProperties,
+  serializeActorStep,
+  generateAnimationNameProperty,
+  generateAnimationIterationProperty,
+  simulateLeadingWait,
+  simulateTrailingWait,
+  canOptimizeKeyframeProperty,
+  canOptimizeAnyKeyframeProperties,
+  generateOptimizedKeyframeSegment,
+  getActorCSS,
+  transformFunctions
+} from '../renderers/dom/rekapi.renderer.dom';
+
 import Rekapi, { DOMRenderer } from '../src/main';
 import {
   Tweenable,
@@ -12,7 +35,6 @@ import {
 } from 'shifty';
 
 describe('DOMRenderer#toString', () => {
-  const { cssRenderer } = Rekapi._private;
   let rekapi, actor, actor2;
 
   beforeEach(() => {
@@ -44,7 +66,7 @@ describe('DOMRenderer#toString', () => {
     describe('applyVendorBoilerplates', () => {
       it('applies boilerplate for W3 by default', () => {
         vendorBoilerplates =
-          cssRenderer.applyVendorBoilerplates('KEYFRAMES', 'NAME');
+          applyVendorBoilerplates('KEYFRAMES', 'NAME');
 
         assert.equal(
           vendorBoilerplates,
@@ -55,7 +77,7 @@ describe('DOMRenderer#toString', () => {
       });
 
       it('applies boilerplate for other vendors', () => {
-        vendorBoilerplates = cssRenderer.applyVendorBoilerplates(
+        vendorBoilerplates = applyVendorBoilerplates(
           'KEYFRAMES', 'NAME',
           ['w3', 'webkit']
         );
@@ -75,9 +97,9 @@ describe('DOMRenderer#toString', () => {
     describe('generateCSSAnimationProperties', () => {
       it('converts transform token into valid unprefixed property', () => {
         const keyframe =
-          'from: { ' + cssRenderer.TRANSFORM_TOKEN + ': foo; }';
+          'from: { ' + TRANSFORM_TOKEN + ': foo; }';
         const vendorBoilerplates =
-          cssRenderer.applyVendorPropertyPrefixes(keyframe, 'w3');
+          applyVendorPropertyPrefixes(keyframe, 'w3');
 
         assert.equal(
           vendorBoilerplates,
@@ -86,9 +108,9 @@ describe('DOMRenderer#toString', () => {
       });
 
       it('converts transform token into valid prefixed property', () => {
-        const keyframe = 'from: { ' + cssRenderer.TRANSFORM_TOKEN + ': foo; }';
+        const keyframe = 'from: { ' + TRANSFORM_TOKEN + ': foo; }';
         const vendorBoilerplates =
-          cssRenderer.applyVendorPropertyPrefixes(keyframe, 'webkit');
+          applyVendorPropertyPrefixes(keyframe, 'webkit');
 
         assert.equal(vendorBoilerplates, 'from: { -webkit-transform: foo; }');
       });
@@ -99,7 +121,7 @@ describe('DOMRenderer#toString', () => {
         actor.keyframe(0, { 'x': 0 });
 
         const classProperties =
-          cssRenderer.generateCSSClass(actor, 'ANIM_NAME', false);
+          generateCSSClass(actor, 'ANIM_NAME', false);
 
         assert.equal(
           classProperties,
@@ -118,7 +140,7 @@ describe('DOMRenderer#toString', () => {
         actor.keyframe(0, { rotate: '0deg' });
 
         const classProperties =
-            cssRenderer.generateCSSClass(actor, 'ANIM_NAME', false);
+            generateCSSClass(actor, 'ANIM_NAME', false);
 
         assert.equal(
           classProperties,
@@ -136,7 +158,7 @@ describe('DOMRenderer#toString', () => {
       it('generates boilerplated class properties for a vendor-prefixed class', () => {
         actor.keyframe(0, { 'x': 0 });
 
-        const classProperties = cssRenderer.generateCSSClass(
+        const classProperties = generateCSSClass(
           actor,
           'ANIM_NAME',
           false,
@@ -165,7 +187,7 @@ describe('DOMRenderer#toString', () => {
 
         actor._updateState(0);
 
-        const keyframeData = cssRenderer.generateBoilerplatedKeyframes(
+        const keyframeData = generateBoilerplatedKeyframes(
           actor,
           'ANIM_NAME',
           10,
@@ -200,7 +222,7 @@ describe('DOMRenderer#toString', () => {
         actor._updateState(0);
 
         const keyframeData =
-            cssRenderer.generateActorKeyframes(actor, 10, 'x');
+            generateActorKeyframes(actor, 10, 'x');
 
         assert.equal(
           keyframeData,
@@ -228,7 +250,7 @@ describe('DOMRenderer#toString', () => {
         actor._updateState(0);
 
         const keyframeData =
-          cssRenderer.generateActorKeyframes(actor, 10, 'x');
+          generateActorKeyframes(actor, 10, 'x');
 
         assert.equal(
           keyframeData,
@@ -256,7 +278,7 @@ describe('DOMRenderer#toString', () => {
         actor._updateState(0);
 
         const keyframeData =
-          cssRenderer.generateActorKeyframes(actor, 100, 'x');
+          generateActorKeyframes(actor, 100, 'x');
 
         assert.equal(keyframeData.split('\n').length, 101);
       });
@@ -270,7 +292,7 @@ describe('DOMRenderer#toString', () => {
         actor._updateState(0);
 
         const keyframeData =
-          cssRenderer.generateActorKeyframes(actor, 10, 'x');
+          generateActorKeyframes(actor, 10, 'x');
 
         assert.equal(
           keyframeData,
@@ -293,7 +315,7 @@ describe('DOMRenderer#toString', () => {
         actor._updateState(0);
 
         const keyframeData =
-          cssRenderer.generateActorKeyframes(actor, 10, 'x');
+          generateActorKeyframes(actor, 10, 'x');
 
         assert.equal(
           keyframeData,
@@ -316,7 +338,7 @@ describe('DOMRenderer#toString', () => {
         actor._updateState(0);
 
         const keyframeData =
-          cssRenderer.generateActorKeyframes(actor, 99, 'x');
+          generateActorKeyframes(actor, 99, 'x');
 
         assert.equal(
           keyframeData,
@@ -333,7 +355,7 @@ describe('DOMRenderer#toString', () => {
           .keyframe(1000, { 'x': 10, 'y': 10 }, { 'y': 'fakeLinear' });
 
         const keyframeData =
-          cssRenderer.generateActorKeyframes(actor, 10, 'y');
+          generateActorKeyframes(actor, 10, 'y');
 
         assert.equal(
           keyframeData,
@@ -356,7 +378,7 @@ describe('DOMRenderer#toString', () => {
         actor._updateState(0);
 
         const keyframeData =
-            cssRenderer.generateActorKeyframes(actor, 10, 'y');
+            generateActorKeyframes(actor, 10, 'y');
 
         assert.equal(
           keyframeData,
@@ -380,7 +402,7 @@ describe('DOMRenderer#toString', () => {
           actor._updateState(0);
 
           const keyframeData =
-            cssRenderer.generateActorKeyframes(actor, 10, 'y');
+            generateActorKeyframes(actor, 10, 'y');
 
           assert.equal(
             keyframeData,
@@ -403,7 +425,7 @@ describe('DOMRenderer#toString', () => {
           actor._updateState(0);
 
           const keyframeData =
-            cssRenderer.generateActorKeyframes(actor, 10, 'y');
+            generateActorKeyframes(actor, 10, 'y');
 
           assert.equal(
             keyframeData,
@@ -422,7 +444,7 @@ describe('DOMRenderer#toString', () => {
           actor._updateState(0);
 
           const keyframeData =
-            cssRenderer.generateActorKeyframes(actor, 10, 'transform');
+            generateActorKeyframes(actor, 10, 'transform');
 
           assert.equal(
             keyframeData,
@@ -445,7 +467,7 @@ describe('DOMRenderer#toString', () => {
           .keyframe(500,  { 'y': 0           })
           .keyframe(1000, { 'x': 10, 'y': 10 });
 
-        const keyframeStep = cssRenderer.simulateLeadingWait(actor, 'y', 0);
+        const keyframeStep = simulateLeadingWait(actor, 'y', 0);
 
         assert.equal(keyframeStep, '  0% {y:0;}');
       });
@@ -458,7 +480,7 @@ describe('DOMRenderer#toString', () => {
           .keyframe(500,  { 'y': 10        })
           .keyframe(1000, { 'x': 10        });
 
-        const keyframeStep = cssRenderer.simulateTrailingWait(
+        const keyframeStep = simulateTrailingWait(
           actor, 'y', actor.getStart(), actor.getEnd()
         );
 
@@ -473,7 +495,7 @@ describe('DOMRenderer#toString', () => {
           .keyframe(1000, { 'x': 100 })
           .keyframe(2000, { 'x': 200 });
 
-        const serializedSegment = cssRenderer.generateActorTrackSegment(
+        const serializedSegment = generateActorTrackSegment(
           actor, 5, 10, 0, 50, actor._propertyTracks['x'][1]
         );
 
@@ -495,7 +517,7 @@ describe('DOMRenderer#toString', () => {
           .keyframe(3000, { 'x': 400 })
           .keyframe(4000, { 'x': 600 });
 
-        const serializedSegment = cssRenderer.generateActorTrackSegment(
+        const serializedSegment = generateActorTrackSegment(
           actor, 5, 5, 0, 25, actor._propertyTracks['x'][1]
         );
 
@@ -512,13 +534,13 @@ describe('DOMRenderer#toString', () => {
 
     describe('combineTranfromProperties', () => {
       it('can combine transform properties into a single property', () => {
-        const combinedProperty = cssRenderer.combineTranfromProperties({
+        const combinedProperty = combineTranfromProperties({
           translateX: '10px',
           translateY: '20px'
-        }, cssRenderer.transformFunctions);
+        }, transformFunctions);
 
         const targetObject = {
-          [cssRenderer.TRANSFORM_TOKEN]: 'translateX(10px) translateY(20px)'
+          [TRANSFORM_TOKEN]: 'translateX(10px) translateY(20px)'
         };
 
         assert.deepEqual(
@@ -528,15 +550,15 @@ describe('DOMRenderer#toString', () => {
       });
 
       it('can combine transform properties into a single property and leave non-tranform properties unchanged', () => {
-        const combinedProperty = cssRenderer.combineTranfromProperties({
+        const combinedProperty = combineTranfromProperties({
           translateX: '10px',
           translateY: '20px',
           foo: 'bar'
-        }, cssRenderer.transformFunctions);
+        }, transformFunctions);
 
         const targetObject = {
           foo: 'bar',
-          [cssRenderer.TRANSFORM_TOKEN]: 'translateX(10px) translateY(20px)'
+          [TRANSFORM_TOKEN]: 'translateX(10px) translateY(20px)'
         };
 
         assert.deepEqual(
@@ -554,7 +576,7 @@ describe('DOMRenderer#toString', () => {
 
         actor._updateState(500);
 
-        assert.equal(cssRenderer.serializeActorStep(actor), '{x:50;}');
+        assert.equal(serializeActorStep(actor), '{x:50;}');
       });
 
       it('rewrites transform properties', () => {
@@ -565,8 +587,8 @@ describe('DOMRenderer#toString', () => {
         actor._updateState(500);
 
         assert.equal(
-          cssRenderer.serializeActorStep(actor),
-          '{' + cssRenderer.TRANSFORM_TOKEN + ':rotate(50deg);}'
+          serializeActorStep(actor),
+          '{' + TRANSFORM_TOKEN + ':rotate(50deg);}'
         );
       });
 
@@ -578,8 +600,8 @@ describe('DOMRenderer#toString', () => {
         actor._updateState(500);
 
         assert.equal(
-          cssRenderer.serializeActorStep(actor),
-          '{' + Rekapi._private.cssRenderer.TRANSFORM_TOKEN + ':rotate(50deg);}'
+          serializeActorStep(actor),
+          '{' + TRANSFORM_TOKEN + ':rotate(50deg);}'
         );
       });
 
@@ -591,7 +613,7 @@ describe('DOMRenderer#toString', () => {
         actor._updateState(500);
 
         assert.equal(
-          cssRenderer.serializeActorStep(actor, 'x'),
+          serializeActorStep(actor, 'x'),
           '{x:5;}'
         );
       });
@@ -603,7 +625,7 @@ describe('DOMRenderer#toString', () => {
 
         actor._updateState(500);
 
-        assert.equal(cssRenderer.serializeActorStep(actor), '{x:5;y:10;}');
+        assert.equal(serializeActorStep(actor), '{x:5;y:10;}');
       });
     });
 
@@ -613,7 +635,7 @@ describe('DOMRenderer#toString', () => {
           .keyframe(0,    { 'x': 0,  'y': 50  })
           .keyframe(1000, { 'x': 10, 'y': 100 });
 
-        const animName = cssRenderer.generateAnimationNameProperty(
+        const animName = generateAnimationNameProperty(
           actor, 'ANIM_NAME', 'PREFIX', false
         );
 
@@ -628,7 +650,7 @@ describe('DOMRenderer#toString', () => {
           .keyframe(0,    { 'x': 0,  'y': 50  })
           .keyframe(1000, { 'x': 10, 'y': 100 });
 
-        const animName = cssRenderer.generateAnimationNameProperty(
+        const animName = generateAnimationNameProperty(
           actor, 'ANIM_NAME', 'PREFIX', false
         );
 
@@ -643,7 +665,7 @@ describe('DOMRenderer#toString', () => {
           .keyframe(0,    { 'x': 0,  'y': 50  }, 'fakeLinear')
           .keyframe(1000, { 'x': 10, 'y': 100 });
 
-        const animName = cssRenderer.generateAnimationNameProperty(
+        const animName = generateAnimationNameProperty(
           actor, 'ANIM_NAME', 'PREFIX', true
         );
 
@@ -660,7 +682,7 @@ describe('DOMRenderer#toString', () => {
       });
 
       it('can generate an infinite CSS iteration count an animation', () => {
-        const animDuration = cssRenderer.generateAnimationIterationProperty(
+        const animDuration = generateAnimationIterationProperty(
           rekapi, 'PREFIX'
         );
 
@@ -673,7 +695,7 @@ describe('DOMRenderer#toString', () => {
       it('can generate a finite CSS iteration count an animation', () => {
         rekapi.play(3);
 
-        const animDuration = cssRenderer.generateAnimationIterationProperty(
+        const animDuration = generateAnimationIterationProperty(
           rekapi, 'PREFIX'
         );
 
@@ -686,7 +708,7 @@ describe('DOMRenderer#toString', () => {
       it('can generate an overridden CSS iteration count an animation', () => {
         rekapi.play(3);
 
-        const animDuration = cssRenderer.generateAnimationIterationProperty(
+        const animDuration = generateAnimationIterationProperty(
           rekapi, 'PREFIX', 5
         );
 
@@ -706,7 +728,7 @@ describe('DOMRenderer#toString', () => {
         actor._updateState(0);
 
         assert(
-          cssRenderer.canOptimizeKeyframeProperty(actor.getKeyframeProperty('x', 0))
+          canOptimizeKeyframeProperty(actor.getKeyframeProperty('x', 0))
         );
       });
 
@@ -715,7 +737,7 @@ describe('DOMRenderer#toString', () => {
           .keyframe(0,    { x: 0  })
           .keyframe(1000, { x: 10 }, { x: 'bounce' });
 
-        const canBeOptimized = cssRenderer.canOptimizeKeyframeProperty(
+        const canBeOptimized = canOptimizeKeyframeProperty(
           actor.getKeyframeProperty('x', 0)
         );
 
@@ -732,7 +754,7 @@ describe('DOMRenderer#toString', () => {
 
         actor._updateState(0);
 
-        const canBeOptimized = cssRenderer.canOptimizeKeyframeProperty(
+        const canBeOptimized = canOptimizeKeyframeProperty(
           actor.getKeyframeProperty('transform', 0)
         );
 
@@ -747,7 +769,7 @@ describe('DOMRenderer#toString', () => {
             { transform: 'linear easeInQuad' }
           );
 
-        const canBeOptimized = cssRenderer.canOptimizeKeyframeProperty(
+        const canBeOptimized = canOptimizeKeyframeProperty(
           actor.getKeyframeProperty('transform', 0)
         );
 
@@ -762,7 +784,7 @@ describe('DOMRenderer#toString', () => {
 
         actor._updateState(0);
 
-        const canBeOptimized = cssRenderer.canOptimizeKeyframeProperty(
+        const canBeOptimized = canOptimizeKeyframeProperty(
           actor.getKeyframeProperty('y', 500)
         );
 
@@ -779,7 +801,7 @@ describe('DOMRenderer#toString', () => {
         actor._updateState(0);
 
         const canBeOptimized =
-          cssRenderer.canOptimizeAnyKeyframeProperties(actor);
+          canOptimizeAnyKeyframeProperties(actor);
 
         assert(canBeOptimized);
       });
@@ -792,7 +814,7 @@ describe('DOMRenderer#toString', () => {
         actor._updateState(0);
 
         const canBeOptimized =
-            cssRenderer.canOptimizeAnyKeyframeProperties(actor);
+            canOptimizeAnyKeyframeProperties(actor);
 
         assert(canBeOptimized);
       });
@@ -803,7 +825,7 @@ describe('DOMRenderer#toString', () => {
           .keyframe(1000, { x: 10, y: 20 }, 'fakeLinear');
 
         const canBeOptimized =
-            cssRenderer.canOptimizeAnyKeyframeProperties(actor);
+            canOptimizeAnyKeyframeProperties(actor);
 
         assert.equal(canBeOptimized, false);
       });
@@ -817,7 +839,7 @@ describe('DOMRenderer#toString', () => {
 
         actor._updateState(0);
 
-        const optimizedSegment = cssRenderer.generateOptimizedKeyframeSegment(
+        const optimizedSegment = generateOptimizedKeyframeSegment(
           actor.getKeyframeProperty('x', 0), 0, 100
         );
 
@@ -838,7 +860,7 @@ describe('DOMRenderer#toString', () => {
 
         actor._updateState(0);
 
-        const optimizedSegment = cssRenderer.generateOptimizedKeyframeSegment(
+        const optimizedSegment = generateOptimizedKeyframeSegment(
           actor.getKeyframeProperty('transform', 0), 0, 100
         );
 
