@@ -527,7 +527,7 @@ describe('Rekapi', () => {
     });
   });
 
-  describe('Rekapi._private methods', () => {
+  describe('private helper methods', () => {
     describe('updateToCurrentMillisecond', () => {
       it('correctly calculates position based on time in a finite loop', () => {
         Tweenable.now = () => 0;

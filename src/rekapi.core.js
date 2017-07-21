@@ -771,7 +771,3 @@ export default class Rekapi {
     return Object.keys(this._events);
   }
 }
-
-// Expose helper functions for unit testing.
-// FIXME: Remove this before 2.0 release
-Rekapi._private = {};
