@@ -26,7 +26,7 @@ import {
   transformFunctions
 } from '../renderers/dom/rekapi.renderer.dom';
 
-import Rekapi, { DOMRenderer } from '../src/main';
+import { Rekapi, DOMRenderer } from '../src/main';
 import {
   Tweenable,
   interpolate,

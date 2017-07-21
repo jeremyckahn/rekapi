@@ -3,7 +3,7 @@ import assert from 'assert';
 import { contains } from 'lodash';
 import { setupTestRekapi, setupTestActor } from './test-utils';
 
-import Rekapi, { KeyframeProperty } from '../src/main';
+import { Rekapi, KeyframeProperty } from '../src/main';
 import {
   Tweenable,
   interpolate,

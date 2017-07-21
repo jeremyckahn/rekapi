@@ -1,4 +1,4 @@
-import Rekapi from '../src/main';
+import { Rekapi } from '../src/main';
 
 export const setupTestRekapi = opts => new Rekapi(opts);
 
