@@ -43,6 +43,14 @@ describe('Canvas renderer', () => {
       rekapi.removeActor(actor);
       assert.equal(rekapi.renderer._renderOrder.length, 0);
     });
+
+    describe('compatibility with Rekapi#removeActor', () => {
+      it('is updated when Rekapi#removeActor is called', () => {
+        rekapi.removeActor(actor);
+
+        assert.equal(rekapi.renderer._renderOrder.indexOf(actor.id), -1);
+      });
+    });
   });
 
   describe('#moveActorToLayer', () => {
