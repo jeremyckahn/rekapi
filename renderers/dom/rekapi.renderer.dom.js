@@ -107,7 +107,7 @@ const vendorPrefix = (() => {
 /**
  * @param {Rekapi.Actor} actor
  * @return {string} The default CSS class that is targeted by `{{#crossLink
- * "Rekapi.DOMRenderer/toString:method"}}{{/crossLink}}` if a custom class is
+ * "Rekapi.DOMRenderer/getCss:method"}}{{/crossLink}}` if a custom class is
  * not specified.  This may be useful for getting a standard and consistent
  * CSS class name for an actor's DOM element.
  */
@@ -1094,7 +1094,7 @@ export default class DOMRenderer {
    * as it is also cached internally.
    */
   prerender (iterations = undefined, fps = undefined) {
-    return this._cachedCSS = this.toString({
+    return this._cachedCSS = this.getCss({
       vendors: [vendorPrefix],
       fps,
       iterations
@@ -1172,11 +1172,9 @@ export default class DOMRenderer {
     return this.rekapi;
   }
 
-  // FIXME: Don't redefine toString with a method that takes parameters.  Name
-  // this something else and deprecate DOMRenderer#toString.
   /**
    * Converts Rekapi animations to CSS `@keyframes`.
-   * @method toString
+   * @method getCss
    * @param {Object=} options
    *   * __vendors__ _(Array(string))_: Defaults to `['w3']`.  The browser vendors you
    *   want to support. Valid values are:
@@ -1203,7 +1201,7 @@ export default class DOMRenderer {
    *   should repeat.  If omitted, the animation will loop indefinitely.
    * @return {string}
    */
-  toString (options = {}) {
+  getCss (options = {}) {
     const animationCSS = [];
 
     _.each(this.rekapi.getAllActors(), actor => {

@@ -34,7 +34,7 @@ import {
   unsetBezierFunction
 } from 'shifty';
 
-describe('DOMRenderer#toString', () => {
+describe('DOMRenderer#getCss', () => {
   let rekapi, actor, actor2;
 
   beforeEach(() => {
@@ -872,7 +872,7 @@ describe('DOMRenderer#toString', () => {
       });
     });
 
-    describe('Rekapi.DOMRenderer#toString', () => {
+    describe('Rekapi.DOMRenderer#getCss', () => {
       it('only generates CSS for DOM actors', () => {
         rekapi = new Rekapi(document.body);
         const testActorEl = document.createElement('div');
@@ -881,7 +881,7 @@ describe('DOMRenderer#toString', () => {
         rekapi.addActor(domActor);
         rekapi.addActor(nonDOMActor);
 
-        const css = rekapi.renderer.toString();
+        const css = rekapi.renderer.getCss();
         const singleLineCss = css.split('\n').join('');
 
         assert(!!singleLineCss.match('actor-' + domActor.id));

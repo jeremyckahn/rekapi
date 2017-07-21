@@ -37,7 +37,7 @@
         });
 
      console.log(rekapi);
-     var css = rekapi.renderer.toString({
+     var css = rekapi.renderer.getCss({
        'vendors': ['webkit', 'mozilla']
        ,'name': 'myAwesomeAnimation'
      });
@@ -46,7 +46,7 @@
      style.innerHTML = css;
      document.head.appendChild(style);
 
-     // Specifying a custom `name` property in `renderer.toString` creates a
+     // Specifying a custom `name` property in `renderer.getCss` creates a
      // class that doesn't implicitly match the class that was added by the
      // `Rekapi#addActor`, so add it here.
      actorDiv.classList.add('myAwesomeAnimation');

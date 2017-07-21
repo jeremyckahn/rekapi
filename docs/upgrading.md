@@ -148,7 +148,7 @@ These modules have been combined.  To generate the CSS string directly:
 
 ````javascript
 var rekapi = new Rekapi(document.body);
-rekapi.renderer.toString();
+rekapi.renderer.getCss();
 ````
 
 ## `Rekapi.CanvasActor` is gone
