@@ -81,22 +81,6 @@ const removeActor = (actor, canvasRenderer) => {
   delete canvasRenderer._canvasActors[actor.id];
 };
 
-/*!
- * Sets up an instance of CanvasRenderer and attaches it to a `Rekapi`
- * instance.  Also augments the Rekapi instance with canvas-specific
- * functions.
- * @param {Rekapi} rekapi
- */
-renderers.push(rekapi => {
-  if (typeof CanvasRenderingContext2D === 'undefined' ||
-    !(rekapi.context instanceof CanvasRenderingContext2D)) {
-
-    return;
-  }
-
-  rekapi.renderer = new CanvasRenderer(rekapi);
-});
-
 // CANVAS RENDERER OBJECT
 //
 
@@ -275,3 +259,19 @@ export default class CanvasRenderer {
     return this.rekapi;
   }
 }
+
+/*!
+ * Sets up an instance of CanvasRenderer and attaches it to a `Rekapi`
+ * instance.  Also augments the Rekapi instance with canvas-specific
+ * functions.
+ * @param {Rekapi} rekapi
+ */
+renderers.push(rekapi => {
+  if (typeof CanvasRenderingContext2D === 'undefined' ||
+    !(rekapi.context instanceof CanvasRenderingContext2D)) {
+
+    return;
+  }
+
+  rekapi.renderer = new CanvasRenderer(rekapi);
+});
