@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Rekapi from '../src/main';
+import { Rekapi, Actor } from '../src/main';
 import { Tweenable } from 'shifty';
 
 function setupTestRekapi () {
@@ -20,7 +20,7 @@ function  setupTestActor (forRekapi) {
   element = document.getElementById('actor');
   element.removeAttribute('style');
   element.style.position = 'absolute';
-  actor = new Rekapi.Actor({ context: element });
+  actor = new Actor({ context: element });
   forRekapi.addActor(actor);
   return actor;
 }

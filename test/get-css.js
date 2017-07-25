@@ -26,7 +26,7 @@ import {
   transformFunctions
 } from '../renderers/dom/rekapi.renderer.dom';
 
-import { Rekapi, DOMRenderer } from '../src/main';
+import { Rekapi, Actor, DOMRenderer } from '../src/main';
 import {
   Tweenable,
   interpolate,
@@ -872,12 +872,12 @@ describe('DOMRenderer#getCss', () => {
       });
     });
 
-    describe('Rekapi.DOMRenderer#getCss', () => {
+    describe('DOMRenderer#getCss', () => {
       it('only generates CSS for DOM actors', () => {
         rekapi = new Rekapi(document.body);
         const testActorEl = document.createElement('div');
-        const domActor = new Rekapi.Actor({ context: testActorEl });
-        const nonDOMActor = new Rekapi.Actor({ context: {} });
+        const domActor = new Actor({ context: testActorEl });
+        const nonDOMActor = new Actor({ context: {} });
         rekapi.addActor(domActor);
         rekapi.addActor(nonDOMActor);
 

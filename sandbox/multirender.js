@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Rekapi from '../src/main';
+import { Rekapi, Actor, CanvasRenderer, DOMRenderer } from '../src/main';
 import { Tweenable } from 'shifty';
 
 function circleActorDraw (canvas_context, state) {
@@ -23,8 +23,8 @@ function circleActorDraw (canvas_context, state) {
 function  setupTestActor (forRekapi) {
   var actor;
 
-  actor = new Rekapi.Actor({
-    'render': circleActorDraw
+  actor = new Actor({
+    render: circleActorDraw
   });
 
   forRekapi.addActor(actor);
@@ -58,10 +58,10 @@ $(function () {
     killTest();
     var canvasContext = document.querySelector('canvas').getContext('2d');
     rekapi = new Rekapi();
-    rekapi.canvasRenderer = new Rekapi.CanvasRenderer(rekapi, canvasContext);
+    rekapi.canvasRenderer = new CanvasRenderer(rekapi, canvasContext);
     rekapi.canvasRenderer.height(300);
     rekapi.canvasRenderer.width(100);
-    rekapi.domRenderer = new Rekapi.DOMRenderer(rekapi);
+    rekapi.domRenderer = new DOMRenderer(rekapi);
 
     var canvasActor = rekapi.addActor({
       'render': circleActorDraw

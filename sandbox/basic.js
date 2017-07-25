@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import Rekapi from '../src/main';
+import { Rekapi, Actor } from '../src/main';
 import { Tweenable } from 'shifty';
 
 function setupTestRekapi () {
@@ -13,7 +13,7 @@ function setupTestRekapi () {
 function  setupTestActor (forRekapi) {
   var actor;
 
-  actor = new Rekapi.Actor({
+  actor = new Actor({
     'render': function (canvas_context, state) {
       if (isNaN(state.x)) {
         return;

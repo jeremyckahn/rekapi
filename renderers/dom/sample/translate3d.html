@@ -17,9 +17,10 @@
   <body>
     <div class="actor"></div>
     <script>
-      var rekapi = new Rekapi(document.body);
+      const { Rekapi, Actor } = rekapi;
+      rekapi = new Rekapi(document.body);
       var actorEl = document.querySelector('.actor');
-      var actor = new Rekapi.Actor({ context: actorEl });
+      var actor = new Actor({ context: actorEl });
       rekapi.addActor(actor);
 
       actor

@@ -3,7 +3,7 @@ import assert from 'assert';
 import { contains } from 'lodash';
 import { setupTestRekapi, setupTestActor } from './test-utils';
 
-import { Rekapi, Actor } from '../src/main';
+import { Rekapi, Actor, KeyframeProperty } from '../src/main';
 import {
   Tweenable,
   interpolate,
@@ -172,7 +172,7 @@ describe('Actor', () => {
 
   describe('#addKeyframeProperty', () => {
     it('creates a link between property and actor', () => {
-      const keyframeProperty = new Rekapi.KeyframeProperty(0, 'x', 50);
+      const keyframeProperty = new KeyframeProperty(0, 'x', 50);
       actor.addKeyframeProperty(keyframeProperty);
 
       assert.equal(keyframeProperty.actor, actor);
@@ -561,7 +561,7 @@ describe('Actor', () => {
         .keyframe(0, { x: 1, y: 10 })
         .keyframe(1000, { x: 2, y: 20 });
 
-      var importActor = new Rekapi.Actor();
+      var importActor = new Actor();
       importActor.importTimeline(actor.exportTimeline());
 
       const firstImportXKeyProp = importActor.getKeyframeProperty('x', 0);

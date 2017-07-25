@@ -25,7 +25,7 @@ describe('KeyframeProperty', () => {
     });
 
     it('sets key object properties', () => {
-      const keyframeProperty = new Rekapi.KeyframeProperty(500, 'x', 10, 'easeInQuad');
+      const keyframeProperty = new KeyframeProperty(500, 'x', 10, 'easeInQuad');
 
       assert.equal(keyframeProperty.millisecond, 500);
       assert.equal(keyframeProperty.name, 'x');
@@ -36,7 +36,7 @@ describe('KeyframeProperty', () => {
 
   describe('#modifyWith', () => {
     it('modifies properties', function () {
-      const keyframeProperty = new Rekapi.KeyframeProperty(500, 'x', 10, 'easeInQuad');
+      const keyframeProperty = new KeyframeProperty(500, 'x', 10, 'easeInQuad');
 
       keyframeProperty.modifyWith({
         millisecond: 1500,
@@ -52,8 +52,8 @@ describe('KeyframeProperty', () => {
 
   describe('#linkToNext', () => {
     it('links to a given KeyframeProperty instance', () => {
-      const keyframeProperty = new Rekapi.KeyframeProperty(500, 'x', 10, 'easeInQuad');
-      const linkedKeyprop = new Rekapi.KeyframeProperty(1000, 'x', 20, 'swingTo');
+      const keyframeProperty = new KeyframeProperty(500, 'x', 10, 'easeInQuad');
+      const linkedKeyprop = new KeyframeProperty(1000, 'x', 20, 'swingTo');
 
       keyframeProperty.linkToNext(linkedKeyprop);
 
@@ -63,8 +63,8 @@ describe('KeyframeProperty', () => {
 
   describe('#getValueAt', () => {
     it('computes given midpoint between self and linked KeyframeProperty instance', () => {
-      const keyframeProperty = new Rekapi.KeyframeProperty(500, 'x', 10, 'linear');
-      const linkedKeyprop = new Rekapi.KeyframeProperty(1000, 'x', 20, 'linear');
+      const keyframeProperty = new KeyframeProperty(500, 'x', 10, 'linear');
+      const linkedKeyprop = new KeyframeProperty(1000, 'x', 20, 'linear');
 
       keyframeProperty.linkToNext(linkedKeyprop);
       const midpoint = keyframeProperty.getValueAt(750);

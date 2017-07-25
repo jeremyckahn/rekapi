@@ -3,7 +3,7 @@ import assert from 'assert';
 import { contains } from 'lodash';
 import { setupTestRekapi, setupTestActor } from './test-utils';
 
-import { Rekapi } from '../src/main';
+import { Rekapi, Actor } from '../src/main';
 import { Tweenable, setBezierFunction, unsetBezierFunction } from 'shifty';
 
 import {
@@ -51,7 +51,7 @@ describe('Rekapi', () => {
       rekapi = setupTestRekapi();
       actor = setupTestActor(rekapi, { context: actorContext });
 
-      assert(actor instanceof Rekapi.Actor);
+      assert(actor instanceof Actor);
       assert.equal(actorContext, actor.context);
     });
   });
@@ -77,7 +77,7 @@ describe('Rekapi', () => {
 
       assert.equal(Object.keys(rekapi._actors).length, 0);
       assert.equal(
-        removedActors.filter(actor => actor instanceof Rekapi.Actor).length,
+        removedActors.filter(actor => actor instanceof Actor).length,
         2
       );
     });
@@ -139,7 +139,7 @@ describe('Rekapi', () => {
 
     describe('after adding actors that already have keyframes', () => {
       it('returns updated animation length', () => {
-        actor = new Rekapi.Actor();
+        actor = new Actor();
 
         actor
           .keyframe(0, { x: 0 })

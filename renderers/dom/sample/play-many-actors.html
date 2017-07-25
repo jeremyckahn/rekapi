@@ -28,6 +28,7 @@
     <button id="btn-stop">Stop animation</button>
     <div id="container"></div>
     <script>
+      const { Rekapi, Actor } = rekapi;
       var container = document.getElementById('container');
       var rekapi = new Rekapi(document.body);
       var gridSize = 6;
@@ -37,7 +38,7 @@
           var el = document.createElement('div');
           el.className = 'actor';
           container.appendChild(el);
-          var actor = new Rekapi.Actor({ context: el });
+          var actor = new Actor({ context: el });
           rekapi.addActor(actor);
 
           actor

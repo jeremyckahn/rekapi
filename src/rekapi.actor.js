@@ -16,7 +16,7 @@ const getMillisecond = obj => obj.millisecond;
 
 // TODO: Make this a prototype method
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {string} event
  * @param {any=} data
  */
@@ -25,7 +25,7 @@ const fire = (actor, event, data) =>
 
 /*!
  * Retrieves the most recent property cache entry for a given millisecond.
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {number} millisecond
  * @return {Object|undefined} undefined if there is no property cache for
  * the millisecond, i.e. an empty cache.
@@ -52,7 +52,7 @@ const getPropertyCacheEntryForMillisecond = (actor, millisecond) => {
 /*!
  * Search property track `track` and find the correct index to insert a
  * new element at `millisecond`.
- * @param {Array(Rekapi.KeyframeProperty)} track
+ * @param {Array(KeyframeProperty)} track
  * @param {number} millisecond
  * @return {number} index
  */
@@ -62,7 +62,7 @@ const insertionPointInTrack = (track, millisecond) =>
 /*!
  * Gets all of the current and most recent Rekapi.KeyframeProperties for a
  * given millisecond.
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {number} forMillisecond
  * @return {Object} An Object containing Rekapi.KeyframeProperties
  */
@@ -91,7 +91,7 @@ const getLatestProperties = (actor, forMillisecond) => {
 /*!
  * Search property track `track` and find the index to the element that is
  * at `millisecond`.  Returns `undefined` if not found.
- * @param {Array(Rekapi.KeyframeProperty)} track
+ * @param {Array(KeyframeProperty)} track
  * @param {number} millisecond
  * @return {number} index or -1 if not present
  */
@@ -105,14 +105,14 @@ const propertyIndexInTrack = (track, millisecond) => {
 /*!
  * Mark the cache of internal KeyframeProperty data as invalid.  The cache
  * will be rebuilt on the next call to ensurePropertyCacheValid.
- * @param {Rekapi.Actor}
+ * @param {Actor}
  */
 const invalidateCache = actor => actor._timelinePropertyCacheValid = false;
 
 /*!
  * Empty out and rebuild the cache of internal KeyframeProperty data if it
  * has been marked as invalid.
- * @param {Rekapi.Actor}
+ * @param {Actor}
  */
 const ensurePropertyCacheValid = actor => {
   if (actor._timelinePropertyCacheValid) {
@@ -153,7 +153,7 @@ const ensurePropertyCacheValid = actor => {
 /*!
  * Remove any property tracks that are empty.
  *
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  */
 const removeEmptyPropertyTracks = actor => {
   const { _propertyTracks } = actor;
@@ -168,7 +168,7 @@ const removeEmptyPropertyTracks = actor => {
 
 /*!
  * Stably sort all of the property tracks of an actor
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  */
 const sortPropertyTracks = actor => {
   _.each(actor._propertyTracks, (propertyTrack, trackName) => {
@@ -186,7 +186,7 @@ const sortPropertyTracks = actor => {
  * Updates internal Rekapi and Actor data after a KeyframeProperty
  * modification method is called.
  *
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  */
 const cleanupAfterKeyframeModification = actor => {
   sortPropertyTracks(actor);
@@ -203,7 +203,7 @@ const cleanupAfterKeyframeModification = actor => {
  * An actor represents an individual component of an animation.  An animation
  * may have one or many actors.
  *
- * @class Rekapi.Actor
+ * @class Actor
  * @param {Object=} config Valid properties:
  *   - __context__ (_Object|CanvasRenderingContext2D|HTMLElement_): The
  *   rendering context for this actor. If omitted, this Actor gets the parent
@@ -257,9 +257,9 @@ export default class Actor extends Tweenable {
    * below).
    *
    * __Note:__ Internally, this creates `{{#crossLink
-   * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s and places them on a "track."
-   * These `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s are
-   * managed for you by the `{{#crossLink "Rekapi.Actor"}}{{/crossLink}}` APIs.
+   * "KeyframeProperty"}}{{/crossLink}}`s and places them on a "track."
+   * These `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`s are
+   * managed for you by the `{{#crossLink "Actor"}}{{/crossLink}}` APIs.
    *
    * ## Keyframe inheritance
    *
@@ -359,7 +359,7 @@ export default class Actor extends Tweenable {
    * @param {string=} trackName Optionally scope the lookup to a particular
    * track.
    * @return {boolean} Whether or not the actor has any `{{#crossLink
-   * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set at `millisecond`.
+   * "KeyframeProperty"}}{{/crossLink}}`s set at `millisecond`.
    */
   hasKeyframeAt (millisecond, trackName = undefined) {
     const { _propertyTracks } = this;
@@ -380,7 +380,7 @@ export default class Actor extends Tweenable {
 
   /**
    * Copies all of the `{{#crossLink
-   * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s from one point on the actor's
+   * "KeyframeProperty"}}{{/crossLink}}`s from one point on the actor's
    * timeline to another. This is particularly useful for animating an actor
    * back to its original position.
    *
@@ -426,11 +426,11 @@ export default class Actor extends Tweenable {
 
   /**
    * Moves all of the
-   * `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s from one
+   * `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`s from one
    * point on the actor's timeline to another.  Although this method does error
    * checking for you to make sure the operation can be safely performed, an
    * effective pattern is to use `{{#crossLink
-   * "Rekapi.Actor/hasKeyframeAt:method"}}{{/crossLink}}` to see if there is
+   * "Actor/hasKeyframeAt:method"}}{{/crossLink}}` to see if there is
    * already a keyframe at the requested `to` destination.
    *
    * __[Example](../../../../examples/actor_move_keyframe.html)__
@@ -462,8 +462,8 @@ export default class Actor extends Tweenable {
 
   /**
    * Augment the `value` or `easing` of the `{{#crossLink
-   * "Rekapi.KeyframeProperty"}}{{/crossLink}}`s at a given millisecond.  Any
-   * `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s omitted in
+   * "KeyframeProperty"}}{{/crossLink}}`s at a given millisecond.  Any
+   * `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`s omitted in
    * `state` or `opt_easing` are not modified.
    *
    *     actor.keyframe(0, {
@@ -519,7 +519,7 @@ export default class Actor extends Tweenable {
   }
 
   /**
-   * Remove all `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set
+   * Remove all `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`s set
    * on the actor at a given millisecond in the animation.
    *
    * __[Example](../../../../examples/actor_remove_keyframe.html)__
@@ -547,13 +547,13 @@ export default class Actor extends Tweenable {
   }
 
   /**
-   * Remove all `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s set
+   * Remove all `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`s set
    * on the actor.
    *
    * **NOTE**: This method does _not_ fire the `beforeRemoveKeyframeProperty`
    * or `removeKeyframePropertyComplete` events.  This method is a bulk
    * operation that is more efficient than calling `{{#crossLink
-   * "Rekapi.Actor/removeKeyframeProperty:method"}}{{/crossLink}}` many times
+   * "Actor/removeKeyframeProperty:method"}}{{/crossLink}}` many times
    * individually, but foregoes firing events.
    *
    * __[Example](../../../../examples/actor_remove_all_keyframes.html)__
@@ -583,8 +583,8 @@ export default class Actor extends Tweenable {
    * @param {string} property The name of the property track.
    * @param {number} millisecond The millisecond of the property in the
    * timeline.
-   * @return {Rekapi.KeyframeProperty|undefined} A `{{#crossLink
-   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` that is stored on the actor, as
+   * @return {KeyframeProperty|undefined} A `{{#crossLink
+   * "KeyframeProperty"}}{{/crossLink}}` that is stored on the actor, as
    * specified by the `property` and `millisecond` parameters. This is
    * `undefined` if no properties were found.
    */
@@ -595,19 +595,19 @@ export default class Actor extends Tweenable {
   }
 
   /**
-   * Modify a `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}` stored
+   * Modify a `{{#crossLink "KeyframeProperty"}}{{/crossLink}}` stored
    * on an actor.  Internally, this calls `{{#crossLink
-   * "Rekapi.KeyframeProperty/modifyWith:method"}}{{/crossLink}}` and then
+   * "KeyframeProperty/modifyWith:method"}}{{/crossLink}}` and then
    * performs some cleanup.
    *
    * __[Example](../../../../examples/actor_modify_keyframe_property.html)__
    * @method modifyKeyframeProperty
    * @param {string} property The name of the `{{#crossLink
-   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` to modify.
+   * "KeyframeProperty"}}{{/crossLink}}` to modify.
    * @param {number} millisecond The timeline millisecond of the `{{#crossLink
-   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` to modify.
+   * "KeyframeProperty"}}{{/crossLink}}` to modify.
    * @param {Object} newProperties The properties to augment the `{{#crossLink
-   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` with.
+   * "KeyframeProperty"}}{{/crossLink}}` with.
    * @chainable
    */
   modifyKeyframeProperty (property, millisecond, newProperties) {
@@ -630,14 +630,14 @@ export default class Actor extends Tweenable {
   }
 
   /**
-   * Remove a single `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`
+   * Remove a single `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`
    * from the actor.
    * @method removeKeyframeProperty
    * @param {string} property The name of the `{{#crossLink
-   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` to remove.
+   * "KeyframeProperty"}}{{/crossLink}}` to remove.
    * @param {number} millisecond Where in the timeline the `{{#crossLink
-   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` to remove is.
-   * @return {Rekapi.KeyframeProperty|undefined} The removed KeyframeProperty,
+   * "KeyframeProperty"}}{{/crossLink}}` to remove is.
+   * @return {KeyframeProperty|undefined} The removed KeyframeProperty,
    * if one was found.
    */
   removeKeyframeProperty (property, millisecond) {
@@ -670,11 +670,11 @@ export default class Actor extends Tweenable {
   }
 
   /**
-   * Get all of the `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s
+   * Get all of the `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`s
    * for a track.
    * @method getPropertiesInTrack
    * @param {string} trackName The track name to query.
-   * @return {Rekapi.KeyframeProperty[]|undefined}
+   * @return {KeyframeProperty[]|undefined}
    */
   getPropertiesInTrack (trackName) {
     const propertyTrack = this._propertyTracks[trackName];
@@ -763,7 +763,7 @@ export default class Actor extends Tweenable {
    * @param {number} until At what point in the animation the Actor should wait
    * until (relative to the start of the animation timeline).  If this number
    * is less than the value returned from `{{#crossLink
-   * "Rekapi.Actor/getLength:method"}}{{/crossLink}}`, this method does
+   * "Actor/getLength:method"}}{{/crossLink}}`, this method does
    * nothing.
    * @chainable
    */
@@ -793,8 +793,8 @@ export default class Actor extends Tweenable {
    * Insert a `KeyframeProperty` into a property track at `index`.  The linked
    * list structure of the property track is maintained.
    * @method _insertKeyframePropertyAt
-   * @param {Rekapi.KeyframeProperty} keyframeProperty
-   * @param {Array(Rekapi.KeyframeProperty)} propertyTrack
+   * @param {KeyframeProperty} keyframeProperty
+   * @param {Array(KeyframeProperty)} propertyTrack
    * @param {number} index
    */
   _insertKeyframePropertyAt (keyframeProperty, propertyTrack, index) {
@@ -806,7 +806,7 @@ export default class Actor extends Tweenable {
    * list structure of the property track is maintained.  The removed property
    * is not modified or unlinked internally.
    * @method _deleteKeyframePropertyAt
-   * @param {Array(Rekapi.KeyframeProperty)} propertyTrack
+   * @param {Array(KeyframeProperty)} propertyTrack
    * @param {number} index
    */
   _deleteKeyframePropertyAt (propertyTrack, index) {
@@ -814,16 +814,16 @@ export default class Actor extends Tweenable {
   }
 
   /**
-   * Associate a `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}` to
+   * Associate a `{{#crossLink "KeyframeProperty"}}{{/crossLink}}` to
    * this actor.  Augments the `{{#crossLink
-   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` to maintain a link between the
+   * "KeyframeProperty"}}{{/crossLink}}` to maintain a link between the
    * two objects.  This is a lower-level method, and it is generally better to
-   * use `{{#crossLink "Rekapi.Actor/keyframe:method"}}{{/crossLink}}`.  This
+   * use `{{#crossLink "Actor/keyframe:method"}}{{/crossLink}}`.  This
    * is mostly useful for adding a `{{#crossLink
-   * "Rekapi.KeyframeProperty"}}{{/crossLink}}` back to an actor after it was
-   * `{{#crossLink "Rekapi.KeyframeProperty/detach"}}{{/crossLink}}`ed.
+   * "KeyframeProperty"}}{{/crossLink}}` back to an actor after it was
+   * `{{#crossLink "KeyframeProperty/detach"}}{{/crossLink}}`ed.
    * @method addKeyframeProperty
-   * @param {Rekapi.KeyframeProperty} keyframeProperty
+   * @param {KeyframeProperty} keyframeProperty
    * @chainable
    */
   addKeyframeProperty (keyframeProperty) {
@@ -996,7 +996,7 @@ export default class Actor extends Tweenable {
    * __[Example](../../../../examples/actor_export_timeline.html)__
    * @method exportTimeline
    * @return {Object} A serializable Object of this actor's timeline property
-   * tracks and `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`s.
+   * tracks and `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`s.
    */
   exportTimeline () {
     var exportData = {
@@ -1026,7 +1026,7 @@ export default class Actor extends Tweenable {
    * @method importTimeline
    * @param {Object} actorData Any object that has the same data format as the
    * object generated from `{{#crossLink
-   * "Rekapi.Actor/exportTimeline:method"}}{{/crossLink}}`.
+   * "Actor/exportTimeline:method"}}{{/crossLink}}`.
    */
   importTimeline (actorData) {
     _.each(actorData.propertyTracks, propertyTrack => {
@@ -1044,14 +1044,14 @@ export default class Actor extends Tweenable {
 Object.assign(Actor.prototype, {
   /*!
    * @method _beforeKeyframePropertyInterpolate
-   * @param {Rekapi.KeyframeProperty} keyframeProperty
+   * @param {KeyframeProperty} keyframeProperty
    * @abstract
    */
   _beforeKeyframePropertyInterpolate: noop,
 
   /*!
    * @method _afterKeyframePropertyInterpolate
-   * @param {Rekapi.KeyframeProperty} keyframeProperty
+   * @param {KeyframeProperty} keyframeProperty
    * @param {Object} interpolatedObject
    * @abstract
    */

@@ -51,8 +51,7 @@ interpolated for you.  It is a powerful way to construct a complex animation.
 
 Using Rekapi boils down to four steps:
 
-* Define one or more `Rekapi.Actor` instances (generally referred to as
-  "actors")
+* Define one or more `Actor` instances (generally referred to as "actors")
 * Instantiate and add the actors to a `Rekapi` instance
 * Define keyframe states for the actors
 * Play the animation
@@ -63,11 +62,11 @@ The `Rekapi` Object  manages the state and playback of an animation.  An
 instance of `Rekapi` acts as a conductor for the various actors associated with
 it.
 
-## `Rekapi.Actor`
+## `Actor`
 
 The actors are the individual visual components of an animation.  A circle
 moving from left to right is an actor.  A square that moves up and down is
-another, separate actor.  Actors are represented by the `Rekapi.Actor` Object.
+another, separate actor.  Actors are represented by the `Actor` Object.
 
 ## Playback control APIs
 

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { Tweenable, setBezierFunction } from 'shifty';
+import Actor from './rekapi.actor';
 
 const UPDATE_TIME = 1000 / 60;
 
@@ -205,11 +206,11 @@ export const renderers = [];
  * plain object (`{}`), the animation will not render anything and
  * `this.renderer` will be `undefined`.  If this is a reference to a
  * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D),
- * `{{#crossLink "Rekapi.CanvasRenderer"}}{{/crossLink}}` will be initialized
+ * `{{#crossLink "CanvasRenderer"}}{{/crossLink}}` will be initialized
  * as `this.renderer` for HTML5 canvas-based rendering.  This this is a
- * reference to a DOM element, `{{#crossLink
- * "Rekapi.DOMRenderer"}}{{/crossLink}}` will be initialized as
- * `this.renderer` for either a DOM or CSS `@keyframe`-based rendering.
+ * reference to a DOM element, `{{#crossLink "DOMRenderer"}}{{/crossLink}}`
+ * will be initialized as `this.renderer` for either a DOM or CSS
+ * `@keyframe`-based rendering.
  * @constructor
  * @chainable
  */
@@ -282,15 +283,15 @@ export default class Rekapi {
    * reference to this `Rekapi` instance as `this.rekapi`.
    *
    * @method addActor
-   * @param {Rekapi.Actor|Object} actor If this is an `Object`, it is used to
+   * @param {Actor|Object} actor If this is an `Object`, it is used to
    * as the constructor parameters for a new `{{#crossLink
-   * "Rekapi.Actor"}}{{/crossLink}}` instance that is created by this method.
-   * @return {Rekapi.Actor} The actor that was added.
+   * "Actor"}}{{/crossLink}}` instance that is created by this method.
+   * @return {Actor} The actor that was added.
    */
   addActor (actor) {
-    const rekapiActor = actor instanceof Rekapi.Actor ?
+    const rekapiActor = actor instanceof Actor ?
       actor :
-      new Rekapi.Actor(actor);
+      new Actor(actor);
 
     // You can't add an actor more than once.
     if (_.contains(this._actors, rekapiActor)) {
@@ -317,7 +318,7 @@ export default class Rekapi {
    * of IDs for all actors in the animation.
    * @method getActor
    * @param {number} actorId
-   * @return {Rekapi.Actor}
+   * @return {Actor}
    */
   getActor (actorId) {
     return this._actors[actorId];
@@ -356,8 +357,8 @@ export default class Rekapi {
    * only removes the link between it and the `Rekapi` instance.  This method
    * calls the actor's `teardown` method, if it is defined.
    * @method removeActor
-   * @param {Rekapi.Actor} actor
-   * @return {Rekapi.Actor}
+   * @param {Actor} actor
+   * @return {Actor}
    */
   removeActor (actor) {
     // Remove the link between Rekapi and actor
@@ -375,7 +376,7 @@ export default class Rekapi {
   /**
    * Remove all actors from the animation.
    * @method removeAllActors
-   * @return {Array.<Rekapi.Actor>}
+   * @return {Array.<Actor>}
    */
   removeAllActors () {
     return _.map(this.getAllActors(), this.removeActor, this);
@@ -610,35 +611,35 @@ export default class Rekapi {
    * - __beforeUpdate__: Fires each frame before all actors are rendered.
    * - __afterUpdate__: Fires each frame after all actors are rendered.
    * - __addActor__: Fires when an actor is added.  `opt_data` is the
-   *   {{#crossLink "Rekapi.Actor"}}{{/crossLink}} that was added.
+   *   {{#crossLink "Actor"}}{{/crossLink}} that was added.
    * - __removeActor__: Fires when an actor is removed.  `opt_data` is the
-   *   {{#crossLink "Rekapi.Actor"}}{{/crossLink}} that was removed.
+   *   {{#crossLink "Actor"}}{{/crossLink}} that was removed.
    * - __beforeAddKeyframeProperty__: Fires just before the point where a
-   *   {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}} is added to the
+   *   {{#crossLink "KeyframeProperty"}}{{/crossLink}} is added to the
    *   timeline.  This event is called before any modifications to the timeline
    *   are done.
    * - __addKeyframeProperty__: Fires when a keyframe property is added.
-   *   `opt_data` is the {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}
+   *   `opt_data` is the {{#crossLink "KeyframeProperty"}}{{/crossLink}}
    *   that was added.
    * - __beforeRemoveKeyframeProperty__: Fires just before the point where a
-   *   {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}} is removed.  This
+   *   {{#crossLink "KeyframeProperty"}}{{/crossLink}} is removed.  This
    *   event is called before any modifications to the timeline are done.
    * - __removeKeyframeProperty__: Fires when a {{#crossLink
-   *   "Rekapi.KeyframeProperty"}}{{/crossLink}} is removed.  This event is
+   *   "KeyframeProperty"}}{{/crossLink}} is removed.  This event is
    *   fired _before_ the internal state of the keyframe (but not the timeline,
    *   in contrast to the `beforeRemoveKeyframeProperty` event) has been
    *   updated to reflect the keyframe property removal (this is in contrast to
    *   `removeKeyframePropertyComplete`).  `opt_data` is the {{#crossLink
-   *   "Rekapi.KeyframeProperty"}}{{/crossLink}} that was removed.
+   *   "KeyframeProperty"}}{{/crossLink}} that was removed.
    * - __removeKeyframePropertyComplete__: Fires when a {{#crossLink
-   *   "Rekapi.KeyframeProperty"}}{{/crossLink}} has finished being removed
+   *   "KeyframeProperty"}}{{/crossLink}} has finished being removed
    *   from the timeline.  Unlike `removeKeyframeProperty`, this is fired
    *   _after_ the internal state of Rekapi has been updated to reflect the
    *   removal of the keyframe property. `opt_data` is the {{#crossLink
-   *   "Rekapi.KeyframeProperty"}}{{/crossLink}} that was removed.
+   *   "KeyframeProperty"}}{{/crossLink}} that was removed.
    * - __addKeyframePropertyTrack__: Fires when the a keyframe is added to an
    *   actor that creates a new keyframe property track.  `opt_data` is the
-   *   {{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}
+   *   {{#crossLink "KeyframeProperty"}}{{/crossLink}}
    *   that was added to create the property track.  A reference to the actor
    *   that the keyframe property is associated with can be accessed via
    *   `opt_data.actor` and the track name that was added can be determined via
@@ -756,7 +757,7 @@ export default class Rekapi {
     );
 
     _.each(rekapiData.actors, actorData => {
-      const actor = new Rekapi.Actor();
+      const actor = new Actor();
       actor.importTimeline(actorData);
       this.addActor(actor);
     });

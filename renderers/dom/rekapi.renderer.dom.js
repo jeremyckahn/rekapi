@@ -105,9 +105,9 @@ const vendorPrefix = (() => {
 })();
 
 /**
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @return {string} The default CSS class that is targeted by `{{#crossLink
- * "Rekapi.DOMRenderer/getCss:method"}}{{/crossLink}}` if a custom class is
+ * "DOMRenderer/getCss:method"}}{{/crossLink}}` if a custom class is
  * not specified.  This may be useful for getting a standard and consistent
  * CSS class name for an actor's DOM element.
  */
@@ -200,7 +200,7 @@ const setTransformStyles = (element, transformValue) =>
   );
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {HTMLElement} element
  * @param {Object} state
  */
@@ -231,7 +231,7 @@ const actorRender = (actor, element, state) => {
 };
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  */
 const actorTeardown = actor => {
   const { context } = actor;
@@ -247,7 +247,7 @@ const actorTeardown = actor => {
  * tweenable value.  Transform "3d(" to "__THREED__" to prevent this, and
  * transform it back in _afterKeyframePropertyInterpolate.
  *
- * @param {Rekapi.KeyframeProperty} keyframeProperty
+ * @param {KeyframeProperty} keyframeProperty
  */
 const _beforeKeyframePropertyInterpolate = keyframeProperty => {
   if (keyframeProperty.name !== 'transform') {
@@ -263,7 +263,7 @@ const _beforeKeyframePropertyInterpolate = keyframeProperty => {
 };
 
 /*!
- * @param {Rekapi.KeyframeProperty} keyframeProperty
+ * @param {KeyframeProperty} keyframeProperty
  * @param {Object} interpolatedObject
  */
 const _afterKeyframePropertyInterpolate = (keyframeProperty, interpolatedObject) => {
@@ -283,7 +283,7 @@ const _afterKeyframePropertyInterpolate = (keyframeProperty, interpolatedObject)
 
 /*!
  * @param {Rekapi} rekapi
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  */
 const onAddActor = (rekapi, actor) => {
   const { context } = actor;
@@ -342,7 +342,7 @@ ${''  }}`,
   ).join('\n');
 
 /*!
- * @param {Rekapi.KeyframeProperty} property
+ * @param {KeyframeProperty} property
  * @param {number} fromPercent
  * @param {number} toPercent
  * @return {string}
@@ -400,7 +400,7 @@ export const combineTranfromProperties = (propsToSerialize, transformNames) => {
 };
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {string=} targetProp
  * @return {string}
  */
@@ -415,12 +415,12 @@ export const serializeActorStep = (actor, targetProp = undefined) =>
     '{') + '}';
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {number} increments
  * @param {number} incrementSize
  * @param {number} actorStart
  * @param {number} fromPercent
- * @param {Rekapi.KeyframeProperty=} fromProp
+ * @param {KeyframeProperty=} fromProp
  * @return {Array.<string>}
  */
 export const generateActorTrackSegment = (
@@ -452,7 +452,7 @@ export const generateActorTrackSegment = (
 };
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {number} steps
  * @return {string}
  */
@@ -460,7 +460,7 @@ const generateCombinedActorKeyframes = (actor, steps) =>
   generateActorTrackSegment(actor, steps + 1, 100 / steps, 0, 0).join('\n');
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {string} track
  * @param {number} actorStart
  * @return {string|undefined}
@@ -481,7 +481,7 @@ export const simulateLeadingWait = (actor, track, actorStart) => {
 };
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {string} track
  * @param {number} actorStart
  * @param {number} actorEnd
@@ -503,7 +503,7 @@ export const simulateTrailingWait = (actor, track, actorStart, actorEnd) => {
 };
 
 /*!
- * @param {Rekapi.KeyframeProperty} property
+ * @param {KeyframeProperty} property
  * @param {number} actorStart
  * @param {number} actorLength
  * @return {number}
@@ -512,10 +512,10 @@ const calculateStepPercent = (property, actorStart, actorLength) =>
   ((property.millisecond - actorStart) / actorLength) * 100;
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {number} actorStart
- * @param {Rekapi.KeyframeProperty} fromProp
- * @param {Rekapi.KeyframeProperty} toProp
+ * @param {KeyframeProperty} fromProp
+ * @param {KeyframeProperty} toProp
  * @param {number} fromPercent
  * @param {number} toPercent
  * @return {Array.<string>}
@@ -538,8 +538,8 @@ const generateActorTrackWaitSegment = (
   );
 
 /*!
- * @param {Rekapi.KeyframeProperty} property
- * @param {Rekapi.KeyframeProperty} nextProperty
+ * @param {KeyframeProperty} property
+ * @param {KeyframeProperty} nextProperty
  * @return {boolean}
  */
 const isSegmentAWait = (property, nextProperty) =>
@@ -547,7 +547,7 @@ const isSegmentAWait = (property, nextProperty) =>
     property.value === nextProperty.value;
 
 /*!
- * @param {Rekapi.KeyframeProperty} property
+ * @param {KeyframeProperty} property
  * @return {boolean}
  */
 export const canOptimizeKeyframeProperty = property =>
@@ -560,7 +560,7 @@ export const canOptimizeKeyframeProperty = property =>
       );
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {number} steps
  * @param {string} track
  * @return {string}
@@ -664,7 +664,7 @@ export const generateActorKeyframes = (actor, steps, track) => {
 };
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {string} animName
  * @param {number} steps
  * @param {boolean} doCombineProperties
@@ -694,7 +694,7 @@ export const generateBoilerplatedKeyframes = (
     ).join('\n');
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {string} animName
  * @param {string} prefix
  * @param {boolean} doCombineProperties
@@ -747,7 +747,7 @@ export const generateAnimationIterationProperty = (
    };`;
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {string} animName
  * @param {string} vendor
  * @param {boolean} doCombineProperties
@@ -784,7 +784,7 @@ export const generateCSSAnimationProperties = (
 };
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {string} animName
  * @param {boolean} doCombineProperties
  * @param {Array.<string>=} vendors
@@ -815,7 +815,7 @@ ${  vendors.map(vendor =>
 }`;
 
 /*!
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @return {boolean}
  */
 export const canOptimizeAnyKeyframeProperties = (actor) =>
@@ -830,7 +830,7 @@ export const canOptimizeAnyKeyframeProperties = (actor) =>
 
 /*!
  * Creates the CSS `@keyframes` for an individual actor.
- * @param {Rekapi.Actor} actor
+ * @param {Actor} actor
  * @param {Object=} options Same as options for Rekapi.prototype.toCSS.
  * @return {string}
  */
@@ -871,7 +871,7 @@ export const getActorCSS = (actor, options = {}) => {
 
 export default class DOMRenderer {
   /**
-   * `Rekapi.DOMRenderer` allows you to animate DOM elements.  This is achieved
+   * `DOMRenderer` allows you to animate DOM elements.  This is achieved
    * either by browser-accelerated [CSS `@keyframe`
    * animations](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes),
    * or by traditional inline style updates on every frame (like how
@@ -884,7 +884,7 @@ export default class DOMRenderer {
    * it is generally always available:
    *
    *     var rekapi = new Rekapi(document.body);
-   *     rekapi.renderer instanceof Rekapi.DOMRenderer; // true
+   *     rekapi.renderer instanceof DOMRenderer; // true
    *
    * There are separate APIs for playing inline style animations and CSS
    * `@keyframe` animations.  Advantages of playing an animation with CSS
@@ -909,7 +909,7 @@ export default class DOMRenderer {
    * style animations, but CSS `@keyframe` may give you better performance.
    * Choose whichever approach makes the most sense for your needs.
    *
-   * `Rekapi.DOMRenderer` can gracefully fall back to an inline style animation
+   * `DOMRenderer` can gracefully fall back to an inline style animation
    * if CSS `@keyframe` animations are not supported by the browser:
    *
    *      var rekapi = new Rekapi(document.body);
@@ -940,20 +940,20 @@ export default class DOMRenderer {
    * "Rekapi/play:method"}}{{/crossLink}}`, `{{#crossLink
    * "Rekapi/playFrom:method"}}{{/crossLink}}` and `{{#crossLink
    * "Rekapi/update:method"}}{{/crossLink}}`.  CSS `@keyframe` playback cannot
-   * be controlled in all browsers, so `Rekapi.DOMRenderer` defines analogous,
+   * be controlled in all browsers, so `DOMRenderer` defines analogous,
    * renderer-specific CSS playback methods that you should use:
    *
-   *   - {{#crossLink "Rekapi.DOMRenderer/play:method"}}{{/crossLink}}
-   *   - {{#crossLink "Rekapi.DOMRenderer/isPlaying:method"}}{{/crossLink}}
-   *   - {{#crossLink "Rekapi.DOMRenderer/stop:method"}}{{/crossLink}}
+   *   - {{#crossLink "DOMRenderer/play:method"}}{{/crossLink}}
+   *   - {{#crossLink "DOMRenderer/isPlaying:method"}}{{/crossLink}}
+   *   - {{#crossLink "DOMRenderer/stop:method"}}{{/crossLink}}
    *
-   * __Note__: `Rekapi.DOMRenderer` is added to the `{{#crossLink
+   * __Note__: `DOMRenderer` is added to the `{{#crossLink
    * "Rekapi"}}{{/crossLink}}` instance automatically as `this.renderer`,
    * there is no reason to call the constructor yourself in most cases.
    *
    * __[Example](/renderers/dom/sample/play-many-actors.html)__
    *
-   * @class Rekapi.DOMRenderer
+   * @class DOMRenderer
    * @param {Rekapi} rekapi
    * @constructor
    */
@@ -1074,13 +1074,12 @@ export default class DOMRenderer {
   /**
    * Prerender and cache the CSS animation so that it is immediately ready to
    * be used when it is needed in the future.  The function signature is
-   * identical to {{#crossLink
-   * "Rekapi.DOMRenderer/play:method"}}{{/crossLink}}.  This is necessary to
-   * play a CSS animation and will be automatically called for you if you don't
-   * call it manually, but calling it ahead of time (such as on page load) will
-   * prevent any perceived lag when a CSS `@keyframe` animation is started.
-   * The prerendered animation is cached for reuse until the timeline or a
-   * keyframe is modified.
+   * identical to {{#crossLink "DOMRenderer/play:method"}}{{/crossLink}}.  This
+   * is necessary to play a CSS animation and will be automatically called for
+   * you if you don't call it manually, but calling it ahead of time (such as
+   * on page load) will prevent any perceived lag when a CSS `@keyframe`
+   * animation is started.  The prerendered animation is cached for reuse until
+   * the timeline or a keyframe is modified.
    *
    * @method prerender
    * @param {number=} iterations How many times the animation should loop.
@@ -1124,7 +1123,7 @@ export default class DOMRenderer {
    * CSS transform string components are order-dependent, but JavaScript object
    * properties have an unpredictable order.  Rekapi must combine transform
    * properties supplied to `{{#crossLink
-   * "Rekapi.Actor/keyframe:method"}}{{/crossLink}}` (as shown above) into a
+   * "Actor/keyframe:method"}}{{/crossLink}}` (as shown above) into a
    * single string when it renders each frame.  This method lets you change
    * that order from the default.  The supported array values for
    * `orderedTransforms` are:
@@ -1155,8 +1154,8 @@ export default class DOMRenderer {
    * This example and the one above it are equivalent.
    *
    * @method setActorTransformOrder
-   * @param {Rekapi.Actor} actor
-   * @param {Array(string)} orderedTransforms The array of transform names.
+   * @param {Actor} actor @param {Array(string)} orderedTransforms The
+   * array of transform names.
    * @return {Rekapi}
    */
   setActorTransformOrder (actor, orderedTransforms) {

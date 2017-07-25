@@ -36,6 +36,7 @@
     <script>
 
       function init () {
+        const { Rekapi, Actor } = rekapi;
         var container = document.getElementById('animation-container');
 
         var rekapi = new Rekapi(document.body);
@@ -45,7 +46,7 @@
           child = document.createElement('li');
           children.push(child);
           container.appendChild(child);
-          actor = new Rekapi.Actor({ context: child });
+          actor = new Actor({ context: child });
           rekapi.addActor(actor);
           actor
             .keyframe(0, {

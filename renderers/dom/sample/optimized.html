@@ -20,9 +20,10 @@
     </div>
     <script>
 
+      const { Rekapi, Actor } = rekapi;
       var rekapi = new Rekapi(document.body);
       var actorDiv = document.getElementById('actor-1');
-      var actor = new Rekapi.Actor({ context: actorDiv });
+      var actor = new Actor({ context: actorDiv });
       rekapi.addActor(actor);
 
       actor

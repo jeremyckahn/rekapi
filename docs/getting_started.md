@@ -6,6 +6,7 @@ instance.  Canvas animations require a 2D `<canvas>` context to render to,
 which gets passed to the `Rekapi` constructor:
 
 ````javascript
+const { Rekapi, Actor } from 'rekapi';
 var context = document.getElementsByTagName('canvas')[0].getContext('2d');
 var rekapi = new Rekapi(context);
 ````
@@ -18,7 +19,7 @@ add some actors.
 Here's the boilerplate for an actor:
 
 ````javascript
-var actor = new Rekapi.Actor({
+var actor = new Actor({
 
   // Called every frame.  Receives a reference to the canvas context, and the
   // actor's state.
@@ -36,7 +37,7 @@ rendered as a circle to the canvas:
 var context = document.getElementsByTagName('canvas')[0].getContext('2d');
 var rekapi = new Rekapi(context);
 
-var actor = new Rekapi.Actor({
+var actor = new Actor({
   // Draws a circle.
   'render': function (context, state) {
     context.beginPath();
@@ -144,7 +145,7 @@ Copy/paste/save this onto your computer to see a simple Rekapi animation:
   var context = document.getElementsByTagName('canvas')[0].getContext('2d');
   var rekapi = new Rekapi(context);
 
-  var actor = new Rekapi.Actor({
+  var actor = new Actor({
     // Draws a circle.
     'render': function (context, state) {
       context.beginPath();

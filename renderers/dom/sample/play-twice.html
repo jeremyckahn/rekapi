@@ -17,8 +17,9 @@
   <body>
     <div id="actor-1"></div>
     <script>
+      const { Rekapi, Actor } = rekapi;
       var rekapi = new Rekapi(document.body);
-      var actor = new Rekapi.Actor({
+      var actor = new Actor({
         context: document.getElementById('actor-1')
       });
       rekapi.addActor(actor);

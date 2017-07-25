@@ -26,14 +26,14 @@ const dimension = (canvas, heightOrWidth, newSize = undefined) => {
 
 /*!
  * Takes care of some pre-rendering tasks for canvas animations.
- * @param {Rekapi.CanvasRenderer} canvasRenderer
+ * @param {CanvasRenderer} canvasRenderer
  */
 const beforeRender = canvasRenderer => canvasRenderer.clear();
 
 /*!
  * Render all the `Actor`s at whatever position they are currently in.
  * @param {Rekapi}
- * @param {Rekapi.CanvasRenderer} canvasRenderer
+ * @param {CanvasRenderer} canvasRenderer
  * @return {Rekapi}
  */
 const render = (rekapi, canvasRenderer) => {
@@ -63,8 +63,8 @@ const render = (rekapi, canvasRenderer) => {
 };
 
 /*!
- * @param {Rekapi.Actor} actor
- * @param {Rekapi.CanvasRenderer} canvasRenderer
+ * @param {Actor} actor
+ * @param {CanvasRenderer} canvasRenderer
  */
 const addActor = (actor, canvasRenderer) => {
   const { id } = actor;
@@ -73,8 +73,8 @@ const addActor = (actor, canvasRenderer) => {
 };
 
 /*!
- * @param {Rekapi.Actor} actor
- * @param {Rekapi.CanvasRenderer} canvasRenderer
+ * @param {Actor} actor
+ * @param {CanvasRenderer} canvasRenderer
  */
 const removeActor = (actor, canvasRenderer) => {
   canvasRenderer._renderOrder = _.without(canvasRenderer._renderOrder, actor.id);
@@ -95,16 +95,16 @@ export default class CanvasRenderer {
    *
    *     var context = document.createElement('canvas').getContext('2d');
    *     var rekapi = new Rekapi(context);
-   *     rekapi.renderer instanceof Rekapi.CanvasRenderer; // true
+   *     rekapi.renderer instanceof CanvasRenderer; // true
    *
-   * `Rekapi.CanvasRenderer` adds some canvas-specific events you can bind to
+   * `CanvasRenderer` adds some canvas-specific events you can bind to
    * with `{{#crossLink "Rekapi/on:method"}}{{/crossLink}}` (and unbind from
    * with `{{#crossLink "Rekapi/off:method"}}{{/crossLink}}`:
    *
    *  - __beforeRender__: Fires just before an actor is rendered to the canvas.
    *  - __afterRender__: Fires just after an actor is rendered to the canvas.
    *
-   * __Note__: `Rekapi.CanvasRenderer` is added to the `{{#crossLink
+   * __Note__: `CanvasRenderer` is added to the `{{#crossLink
    * "Rekapi"}}{{/crossLink}}` instance automatically as `this.renderer`, there
    * is no reason to call the constructor yourself in most cases.
    *
@@ -118,7 +118,7 @@ export default class CanvasRenderer {
    * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
    * that would have been provided to the `{{#crossLink
    * "Rekapi"}}{{/crossLink}}` constructor instead is provided as the second
-   * parameter to `Rekapi.CanvasRenderer`:
+   * parameter to `CanvasRenderer`:
    *
    *
    *     var canvasContext = document.querySelector('canvas').getContext('2d');
@@ -126,12 +126,12 @@ export default class CanvasRenderer {
    *     // No context gets passed to the Rekapi constructor
    *     var rekapi = new Rekapi();
    *
-   *     // Initialize Rekapi.CanvasRenderer manually and give it a
+   *     // Initialize CanvasRenderer manually and give it a
    *     // CanvasRenderingContext2D.  You can name it anything you want on the
    *     // Rekapi instance.
    *     rekapi.canvasRenderer =
-   *         new Rekapi.CanvasRenderer(rekapi, canvasContext);
-   * @class Rekapi.CanvasRenderer
+   *         new CanvasRenderer(rekapi, canvasContext);
+   * @class CanvasRenderer
    * @param {Rekapi} rekapi
    * @param {CanvasRenderingContext2D=} context
    * @constructor
@@ -198,15 +198,15 @@ export default class CanvasRenderer {
    *
    *
    * This method has no effect if an order function is set with `{{#crossLink
-   * "Rekapi.CanvasRenderer/setOrderFunction:method"}}{{/crossLink}}`.
+   * "CanvasRenderer/setOrderFunction:method"}}{{/crossLink}}`.
    *
    * __[Example](../../../../examples/canvas_move_actor_to_layer.html)__
    * @method moveActorToLayer
-   * @param {Rekapi.Actor} actor
+   * @param {Actor} actor
    * @param {number} layer This should be within `0` and the total number of
    * actors in the animation.  That number can be found with `{{#crossLink
    * "Rekapi/getActorCount:method"}}{{/crossLink}}`.
-   * @return {Rekapi.Actor}
+   * @return {Actor}
    */
   moveActorToLayer (actor, layer) {
     if (layer < this._renderOrder.length && layer > -1) {
@@ -222,13 +222,13 @@ export default class CanvasRenderer {
    * called each frame before the actors are rendered.
    *
    * The following example assumes that all actors are circles that have a
-   * `radius` `{{#crossLink "Rekapi.KeyframeProperty"}}{{/crossLink}}`.  The
+   * `radius` `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`.  The
    * circles will be rendered in order of the value of their `radius`, from
    * smallest to largest.  This has the effect of layering larger circles on
    * top of smaller circles, thus giving a sense of perspective.
    *
    * If a render order function is specified, `{{#crossLink
-   * "Rekapi.CanvasRenderer/moveActorToLayer:method"}}{{/crossLink}}` will have
+   * "CanvasRenderer/moveActorToLayer:method"}}{{/crossLink}}` will have
    * no effect.
    *
    *     rekapi.renderer.setOrderFunction(function (actor) {
@@ -236,7 +236,7 @@ export default class CanvasRenderer {
    *     });
    * __[Example](../../../../examples/canvas_set_order_function.html)__
    * @method setOrderFunction
-   * @param {function(Rekapi.Actor)} sortFunction
+   * @param {function(Actor)} sortFunction
    * @return {Rekapi}
    */
   setOrderFunction (sortFunction) {
@@ -246,7 +246,7 @@ export default class CanvasRenderer {
 
   /**
    * Remove the order function set by `{{#crossLink
-   * "Rekapi.CanvasRenderer/setOrderFunction:method"}}{{/crossLink}}`.  The
+   * "CanvasRenderer/setOrderFunction:method"}}{{/crossLink}}`.  The
    * render order defaults back to the order in which the actors were added to
    * the animation.
    *
