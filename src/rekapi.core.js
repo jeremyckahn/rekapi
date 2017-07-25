@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Tweenable, setBezierFunction } from 'shifty';
-import Actor from './rekapi.actor';
+import { Actor } from './rekapi.actor';
 
 const UPDATE_TIME = 1000 / 60;
 
@@ -214,7 +214,7 @@ export const renderers = [];
  * @constructor
  * @chainable
  */
-export default class Rekapi {
+export class Rekapi {
   constructor (context = {}) {
     this.context = context;
     this._actors = {};

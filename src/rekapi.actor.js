@@ -1,7 +1,7 @@
 import _, { noop } from 'lodash';
 import { Tweenable } from 'shifty';
 import { composeEasingObject } from '../node_modules/shifty/src/tweenable';
-import KeyframeProperty from './rekapi.keyframe-property';
+import { KeyframeProperty } from './rekapi.keyframe-property';
 import {
   fireEvent,
   invalidateAnimationLength,
@@ -223,7 +223,7 @@ const cleanupAfterKeyframeModification = actor => {
  *   `{{#crossLink "Rekapi/removeActor:method"}}{{/crossLink}}`.
  * @constructor
  */
-export default class Actor extends Tweenable {
+export class Actor extends Tweenable {
 
   constructor (config = {}) {
     super();

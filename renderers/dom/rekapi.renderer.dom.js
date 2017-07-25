@@ -869,7 +869,7 @@ export const getActorCSS = (actor, options = {}) => {
   ].join('\n');
 };
 
-export default class DOMRenderer {
+export class DOMRenderer {
   /**
    * `DOMRenderer` allows you to animate DOM elements.  This is achieved
    * either by browser-accelerated [CSS `@keyframe`

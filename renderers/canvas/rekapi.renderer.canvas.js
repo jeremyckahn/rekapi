@@ -84,7 +84,7 @@ const removeActor = (actor, canvasRenderer) => {
 // CANVAS RENDERER OBJECT
 //
 
-export default class CanvasRenderer {
+export class CanvasRenderer {
 
   /**
    * You can use Rekapi to render animations to an HTML5 `<canvas>`.  To do so,

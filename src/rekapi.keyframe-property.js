@@ -6,7 +6,7 @@ import {
 
 const DEFAULT_EASING = 'linear';
 
-export default class KeyframeProperty {
+export class KeyframeProperty {
   /**
    * Represents an individual component of an actor's keyframe state.  In most
    * cases you won't need to deal with this object directly, as the
