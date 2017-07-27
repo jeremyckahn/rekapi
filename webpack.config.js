@@ -10,7 +10,7 @@ module.exports = Object.assign(commonConfig, {
     path: path.join(__dirname, 'dist'),
     publicPath: '/assets/',
     filename: 'rekapi.js',
-    library: 'Rekapi',
+    library: 'rekapi',
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
