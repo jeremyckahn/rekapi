@@ -3,7 +3,7 @@ import { Tweenable } from 'shifty';
 import Rekapi, {
   renderers,
   fireEvent
-} from '../../src/rekapi';
+} from '../rekapi';
 
 const { now } = Tweenable;
 

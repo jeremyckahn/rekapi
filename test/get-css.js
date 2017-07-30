@@ -24,7 +24,7 @@ import {
   generateOptimizedKeyframeSegment,
   getActorCSS,
   transformFunctions
-} from '../renderers/dom/rekapi.renderer.dom';
+} from '../src/renderers/dom';
 
 import { Rekapi, Actor, DOMRenderer } from '../src/main';
 import {

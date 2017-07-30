@@ -2,7 +2,7 @@ import _ from 'lodash';
 import Rekapi, {
   renderers,
   fireEvent
-} from '../../src/rekapi';
+} from '../rekapi';
 
 // PRIVATE UTILITY FUNCTIONS
 //
