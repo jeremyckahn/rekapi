@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { interpolate } from 'shifty';
 import {
   fireEvent
-} from './rekapi.core';
+} from './rekapi';
 
 const DEFAULT_EASING = 'linear';
 

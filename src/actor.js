@@ -1,12 +1,12 @@
 import _, { noop } from 'lodash';
 import { Tweenable } from 'shifty';
 import { composeEasingObject } from '../node_modules/shifty/src/tweenable';
-import { KeyframeProperty } from './rekapi.keyframe-property';
+import { KeyframeProperty } from './keyframe-property';
 import {
   fireEvent,
   invalidateAnimationLength,
   DEFAULT_EASING
-} from './rekapi.core';
+} from './rekapi';
 
 /*!
  * @param {Object} obj

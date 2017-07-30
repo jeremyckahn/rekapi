@@ -14,7 +14,7 @@ import {
   calculateLoopPosition,
   updateToMillisecond,
   updateToCurrentMillisecond
-} from '../src/rekapi.core';
+} from '../src/rekapi';
 
 describe('Rekapi', () => {
   let rekapi, actor, actor2;

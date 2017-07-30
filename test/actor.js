@@ -14,7 +14,7 @@ import {
 import {
   updateToMillisecond,
   updateToCurrentMillisecond
-} from '../src/rekapi.core';
+} from '../src/rekapi';
 
 describe('Actor', () => {
   let rekapi, actor;

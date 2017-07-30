@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Tweenable, setBezierFunction } from 'shifty';
-import { Actor } from './rekapi.actor';
+import { Actor } from './actor';
 
 const UPDATE_TIME = 1000 / 60;
 
