@@ -74,7 +74,6 @@ const BEZIERS = {
 const INJECTED_STYLE_REMOVAL_BUFFER_MS = 250;
 
 const R_3D_RULE = /3d\(/g;
-const R_3D_TOKEN = /__THREED__/g;
 const _3D_RULE = '3d(';
 const _3D_TOKEN = '__THREED__';
 
