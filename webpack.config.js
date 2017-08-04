@@ -15,15 +15,6 @@ module.exports = Object.assign(commonConfig, {
     umdNamedDefine: true
   },
   plugins: [
-    new Webpack.optimize.UglifyJsPlugin({
-      compress: {
-        dead_code: true,
-        unused: true
-      },
-      output: {
-        comments: false
-      }
-    }),
     new Webpack.BannerPlugin(version)
   ]
 });
