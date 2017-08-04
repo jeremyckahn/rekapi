@@ -1,3 +1,6 @@
+/**
+* @namespace rekapi
+*/
 export { Rekapi } from './rekapi';
 export { Actor } from './actor';
 export { KeyframeProperty } from './keyframe-property';

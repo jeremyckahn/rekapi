@@ -200,7 +200,6 @@ export const renderers = [];
  * If this is a rendered animation, the appropriate renderer is accessible as
  * `this.renderer`.  If provided, a reference to `context` is accessible
  * as `this.context`.
- * @class Rekapi
  * @param {Object|CanvasRenderingContext2D|HTMLElement=} context This
  * determines how to render the animation.  If this is not provided or is a
  * plain object (`{}`), the animation will not render anything and
@@ -211,7 +210,7 @@ export const renderers = [];
  * reference to a DOM element, `{{#crossLink "DOMRenderer"}}{{/crossLink}}`
  * will be initialized as `this.renderer` for either a DOM or CSS
  * `@keyframe`-based rendering.
- * @constructor
+ * @constructs rekapi.Rekapi
  * @chainable
  */
 export class Rekapi {
@@ -282,7 +281,7 @@ export class Rekapi {
    * Add an actor to the animation.  Decorates the added `actor` with a
    * reference to this `Rekapi` instance as `this.rekapi`.
    *
-   * @method addActor
+   * @method rekapi.Rekapi#addActor
    * @param {Actor|Object} actor If this is an `Object`, it is used to
    * as the constructor parameters for a new `{{#crossLink
    * "Actor"}}{{/crossLink}}` instance that is created by this method.
@@ -316,7 +315,7 @@ export class Rekapi {
    * Get a reference to an actor from the animation by its `id`.  You can use
    * `{{#crossLink "Rekapi/getActorIds:method"}}{{/crossLink}}` to get a list
    * of IDs for all actors in the animation.
-   * @method getActor
+   * @method rekapi.Rekapi#getActor
    * @param {number} actorId
    * @return {Actor}
    */
@@ -327,7 +326,7 @@ export class Rekapi {
   /**
    * Retrieve the `id`'s of all actors in an animation.
    *
-   * @method getActorIds
+   * @method rekapi.Rekapi#getActorIds
    * @return {Array(number)}
    */
   getActorIds () {
@@ -336,7 +335,7 @@ export class Rekapi {
 
   /**
    * Retrieve all actors in the animation as an Object.
-   * @method getAllActors
+   * @method rekapi.Rekapi#getAllActors
    * @return {Object} The keys of this Object correspond to the Actors' `id`s.
    */
   getAllActors () {
@@ -345,7 +344,7 @@ export class Rekapi {
 
   /**
    * Return the number of actors in the animation.
-   * @method getActorCount
+   * @method rekapi.Rekapi#getActorCount
    * @return {number}
    */
   getActorCount () {
@@ -356,7 +355,7 @@ export class Rekapi {
    * Remove an actor from the animation.  This does not destroy the actor, it
    * only removes the link between it and the `Rekapi` instance.  This method
    * calls the actor's `teardown` method, if it is defined.
-   * @method removeActor
+   * @method rekapi.Rekapi#removeActor
    * @param {Actor} actor
    * @return {Actor}
    */
@@ -375,7 +374,7 @@ export class Rekapi {
 
   /**
    * Remove all actors from the animation.
-   * @method removeAllActors
+   * @method rekapi.Rekapi#removeAllActors
    * @return {Array.<Actor>}
    */
   removeAllActors () {
@@ -386,7 +385,7 @@ export class Rekapi {
    * Play the animation.
    *
    * __[Example](../../../../examples/play.html)__
-   * @method play
+   * @method rekapi.Rekapi#play
    * @param {number=} iterations If omitted, the animation will loop
    * endlessly.
    * @chainable
@@ -418,7 +417,7 @@ export class Rekapi {
    * Move to a specific millisecond on the timeline and play from there.
    *
    * __[Example](../../../../examples/play_from.html)__
-   * @method playFrom
+   * @method rekapi.Rekapi#playFrom
    * @param {number} millisecond
    * @param {number=} iterations Works as it does in {{#crossLink
    * "Rekapi/play:method"}}{{/crossLink}}.
@@ -438,7 +437,7 @@ export class Rekapi {
    * "Rekapi/update:method"}}{{/crossLink}}.
    *
    * __[Example](../../../../examples/play_from_current.html)__
-   * @method playFromCurrent
+   * @method rekapi.Rekapi#playFromCurrent
    * @param {number=} iterations Works as it does in {{#crossLink
    * "Rekapi/play:method"}}{{/crossLink}}.
    * @chainable
@@ -452,7 +451,7 @@ export class Rekapi {
    * left off with {{#crossLink "Rekapi/play:method"}}{{/crossLink}}.
    *
    * __[Example](../../../../examples/pause.html)__
-   * @method pause
+   * @method rekapi.Rekapi#pause
    * @param pause
    * @chainable
    */
@@ -476,7 +475,7 @@ export class Rekapi {
    * if {{#crossLink "Rekapi/play:method"}}{{/crossLink}} is called.
    *
    * __[Example](../../../../examples/stop.html)__
-   * @method stop
+   * @method rekapi.Rekapi#stop
    * @chainable
    */
   stop () {
@@ -495,7 +494,7 @@ export class Rekapi {
   }
 
   /**
-   * @method isPlaying
+   * @method rekapi.Rekapi#isPlaying
    * @return {boolean} Whether or not the animation is playing (meaning not paused or
    * stopped).
    */
@@ -504,7 +503,7 @@ export class Rekapi {
   }
 
   /**
-   * @method isPaused
+   * @method rekapi.Rekapi#isPaused
    * @return {boolean} Whether or not the animation is paused (meaning not playing or
    * stopped).
    */
@@ -513,7 +512,7 @@ export class Rekapi {
   }
 
   /**
-   * @method isStopped
+   * @method rekapi.Rekapi#isStopped
    * @return {boolean} Whether or not the animation is stopped (meaning not playing or
    * paused).
    */
@@ -525,7 +524,7 @@ export class Rekapi {
    * Render an animation frame at a specific point in the timeline.
    *
    * __[Example](../../../../examples/update.html)__
-   * @method update
+   * @method rekapi.Rekapi#update
    * @param {number=} millisecond The point in the timeline at which to
    * render.  If omitted, this renders the last millisecond that was rendered
    * (it's a re-render).
@@ -559,7 +558,7 @@ export class Rekapi {
 
   /**
    * __[Example](../../../../examples/get_last_position_updated.html)__
-   * @method getLastPositionUpdated
+   * @method rekapi.Rekapi#getLastPositionUpdated
    * @return {number} The normalized timeline position (between 0 and 1) that
    * was last rendered.
    */
@@ -568,7 +567,7 @@ export class Rekapi {
   }
 
   /**
-   * @method getLastMillisecondUpdated
+   * @method rekapi.Rekapi#getLastMillisecondUpdated
    * @return {number} The millisecond that was last rendered.
    */
   getLastMillisecondUpdated () {
@@ -576,7 +575,7 @@ export class Rekapi {
   }
 
   /**
-   * @method getAnimationLength
+   * @method rekapi.Rekapi#getAnimationLength
    * @return {number} The length of the animation timeline, in milliseconds.
    */
   getAnimationLength () {
@@ -596,7 +595,7 @@ export class Rekapi {
    * Bind a handler function to a Rekapi event.
    *
    * __[Example](../../../../examples/bind.html)__
-   * @method on
+   * @method rekapi.Rekapi#on
    * @param {string} eventName Valid values are:
    *
    * - __animationComplete__: Fires when all animation loops have completed.
@@ -671,7 +670,7 @@ export class Rekapi {
    * Manually fire a Rekapi event, thereby calling all bound event handlers.
    * @param {string} eventName The name of the event to trigger.
    * @param {any=} data Optional data to provide to `eventName` handlers.
-   * @method trigger
+   * @method rekapi.Rekapi#trigger
    * @chainable
    */
   trigger (eventName, data) {
@@ -684,7 +683,7 @@ export class Rekapi {
    * Unbind one or more handlers from a Rekapi event.
    *
    * __[Example](../../../../examples/unbind.html)__
-   * @method off
+   * @method rekapi.Rekapi#off
    * @param {string} eventName Valid values correspond to the list under
    * {{#crossLink "Rekapi/on:method"}}{{/crossLink}}.
    * @param {Function=} handler If omitted, all handler functions bound to
@@ -707,7 +706,7 @@ export class Rekapi {
    * Export the timeline to a JSON-serializable `Object`.
    *
    * __[Example](../../../examples/export_timeline.html)__
-   * @method exportTimeline
+   * @method rekapi.Rekapi#exportTimeline
    * @return {Object} This data can later be consumed by {{#crossLink
    * "Rekapi/importTimeline:method"}}{{/crossLink}}.
    */
@@ -741,7 +740,7 @@ export class Rekapi {
    * animation (for sending to a server for persistence, for example) and later
    * recreating an identical animation.
    *
-   * @method importTimeline
+   * @method rekapi.Rekapi#importTimeline
    * @param {Object} rekapiData Any object that has the same data format as the
    * object generated from Rekapi#exportTimeline.
    */
@@ -765,7 +764,7 @@ export class Rekapi {
 
   /**
    * Get a list of event names that this Rekapi instance supports.
-   * @method getEventNames
+   * @method rekapi.Rekapi#getEventNames
    * @return Array(string)
    */
   getEventNames () {

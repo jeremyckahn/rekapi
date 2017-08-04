@@ -1,5 +1,7 @@
 # Getting started with Rekapi
 
+## [Download](../rekapi.js) • [Source](https://github.com/jeremyckahn/rekapi)
+
 Although Rekapi is renderer-agnostic, it's easiest to get started by making a
 simple `<canvas>` animation.  The first step is to make a new `Rekapi`
 instance.  Canvas animations require a 2D `<canvas>` context to render to,

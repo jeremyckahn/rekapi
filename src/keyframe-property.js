@@ -6,22 +6,21 @@ import {
 
 const DEFAULT_EASING = 'linear';
 
+/**
+ * Represents an individual component of an actor's keyframe state.  In most
+ * cases you won't need to deal with this object directly, as the
+ * `{{#crossLink "Actor"}}{{/crossLink}}` APIs abstract a lot of what
+ * this Object does away for you.
+ * @param {number} millisecond Where on the animation timeline this
+ * `KeyframeProperty` is.
+ * @param {string} name The property's name, such as `"x"` or `"opacity"`.
+ * @param {number|string|Function} value The value that this
+ * `KeyframeProperty` represents.
+ * @param {string=} easing The easing curve at which this
+ * `KeyframeProperty` should be animated to.  Defaults to `"linear"`.
+ * @constructs rekapi.KeyframeProperty
+ */
 export class KeyframeProperty {
-  /**
-   * Represents an individual component of an actor's keyframe state.  In most
-   * cases you won't need to deal with this object directly, as the
-   * `{{#crossLink "Actor"}}{{/crossLink}}` APIs abstract a lot of what
-   * this Object does away for you.
-   * @class KeyframeProperty
-   * @param {number} millisecond Where on the animation timeline this
-   * `KeyframeProperty` is.
-   * @param {string} name The property's name, such as `"x"` or `"opacity"`.
-   * @param {number|string|Function} value The value that this
-   * `KeyframeProperty` represents.
-   * @param {string=} easing The easing curve at which this
-   * `KeyframeProperty` should be animated to.  Defaults to `"linear"`.
-   * @constructor
-   */
   constructor (millisecond, name, value, easing = DEFAULT_EASING) {
     this.id = _.uniqueId('keyframeProperty_');
     this.hasFired = null;
@@ -37,7 +36,7 @@ export class KeyframeProperty {
 
   /**
    * Modify this `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`.
-   * @method modifyWith
+   * @method rekapi.KeyframeProperty#modifyWith
    * @param {Object} newProperties Valid values correspond to `{{#crossLink
    * "KeyframeProperty"}}{{/crossLink}}`'s constructor parameters:
    *   - __millisecond__ (_number_)
@@ -61,7 +60,7 @@ export class KeyframeProperty {
    * "KeyframeProperty"}}{{/crossLink}}` that follows it in the
    * animation timeline, but it is valid to specify a value outside of this
    * range.
-   * @method getValueAt
+   * @method rekapi.KeyframeProperty#getValueAt
    * @param {number} millisecond The millisecond in the animation timeline to
    * compute the state value for.
    * @return {number}
@@ -99,7 +98,7 @@ export class KeyframeProperty {
    * `{{#crossLink "Actor"}}{{/crossLink}}`'s property track.  Property
    * tracks are just linked lists of `{{#crossLink
    * "KeyframeProperty"}}{{/crossLink}}`s.
-   * @method linkToNext
+   * @method rekapi.KeyframeProperty#linkToNext
    * @param {KeyframeProperty=} nextProperty The `{{#crossLink
    * "KeyframeProperty"}}{{/crossLink}}` that should immediately follow
    * this one on the animation timeline.
@@ -115,7 +114,7 @@ export class KeyframeProperty {
    * "Actor"}}{{/crossLink}}` methods and triggers the `{{#crossLink
    * "Rekapi/on:method"}}removeKeyframeProperty{{/crossLink}}` event on the
    * associated `{{#crossLink "Rekapi"}}{{/crossLink}}` instance.
-   * @method detach
+   * @method rekapi.KeyframeProperty#detach
    * @chainable
    */
   detach () {
@@ -132,7 +131,7 @@ export class KeyframeProperty {
 
   /**
    * __[Example](../../../../examples/keyprop_export_property_data.html)__
-   * @method exportPropertyData
+   * @method rekapi.KeyframeProperty#exportPropertyData
    * @return {Object} A serializable Object representation of this
    * `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`.
    */
@@ -143,7 +142,7 @@ export class KeyframeProperty {
   /*!
    * Whether or not this is a function keyframe and should be invoked for the
    * current frame.  Helper method for Actor.
-   * @method shouldInvokeForMillisecond
+   * @method rekapi.KeyframeProperty#shouldInvokeForMillisecond
    * @return {boolean}
    */
   shouldInvokeForMillisecond (millisecond) {
@@ -155,7 +154,7 @@ export class KeyframeProperty {
 
   /**
    * Assuming this is a function keyframe, call the function.
-   * @method invoke
+   * @method rekapi.KeyframeProperty#invoke
    * @return {*} Whatever value is returned from the keyframe function that was
    * set for this `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`.
    */
