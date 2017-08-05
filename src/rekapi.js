@@ -10,10 +10,10 @@ export const DEFAULT_EASING = 'linear';
  * Fire an event bound to a Rekapi.
  * @param {Rekapi} rekapi
  * @param {string} eventName
- * @param {Object=} opt_data Optional event-specific data
+ * @param {Object=} data Optional event-specific data
  */
-export const fireEvent = (rekapi, eventName, opt_data) =>
-  rekapi._events[eventName].forEach(handler => handler(rekapi, opt_data));
+export const fireEvent = (rekapi, eventName, data = {}) =>
+  rekapi._events[eventName].forEach(handler => handler(rekapi, data));
 
 /*!
  * @param {Rekapi} rekapi
@@ -601,16 +601,16 @@ export class Rekapi {
    *   "Rekapi/stop}ped.
    * - __beforeUpdate__: Fires each frame before all actors are rendered.
    * - __afterUpdate__: Fires each frame after all actors are rendered.
-   * - __addActor__: Fires when an actor is added.  `opt_data` is the
+   * - __addActor__: Fires when an actor is added.  `data` is the
    *   {@link Actor} that was added.
-   * - __removeActor__: Fires when an actor is removed.  `opt_data` is the
+   * - __removeActor__: Fires when an actor is removed.  `data` is the
    *   {@link Actor} that was removed.
    * - __beforeAddKeyframeProperty__: Fires just before the point where a
    *   {@link KeyframeProperty} is added to the
    *   timeline.  This event is called before any modifications to the timeline
    *   are done.
    * - __addKeyframeProperty__: Fires when a keyframe property is added.
-   *   `opt_data` is the {@link KeyframeProperty}
+   *   `data` is the {@link KeyframeProperty}
    *   that was added.
    * - __beforeRemoveKeyframeProperty__: Fires just before the point where a
    *   {@link KeyframeProperty} is removed.  This
@@ -620,32 +620,32 @@ export class Rekapi {
    *   fired _before_ the internal state of the keyframe (but not the timeline,
    *   in contrast to the `beforeRemoveKeyframeProperty` event) has been
    *   updated to reflect the keyframe property removal (this is in contrast to
-   *   `removeKeyframePropertyComplete`).  `opt_data` is the {@link
+   *   `removeKeyframePropertyComplete`).  `data` is the {@link
    *   "KeyframeProperty} that was removed.
    * - __removeKeyframePropertyComplete__: Fires when a {@link
    *   "KeyframeProperty} has finished being removed
    *   from the timeline.  Unlike `removeKeyframeProperty`, this is fired
    *   _after_ the internal state of Rekapi has been updated to reflect the
-   *   removal of the keyframe property. `opt_data` is the {@link
+   *   removal of the keyframe property. `data` is the {@link
    *   "KeyframeProperty} that was removed.
    * - __addKeyframePropertyTrack__: Fires when the a keyframe is added to an
-   *   actor that creates a new keyframe property track.  `opt_data` is the
+   *   actor that creates a new keyframe property track.  `data` is the
    *   {@link KeyframeProperty}
    *   that was added to create the property track.  A reference to the actor
    *   that the keyframe property is associated with can be accessed via
-   *   `opt_data.actor` and the track name that was added can be determined via
-   *   `opt_data.name`.
+   *   `data.actor` and the track name that was added can be determined via
+   *   `data.name`.
    * - __removeKeyframePropertyTrack__: Fires when the last keyframe property
    *   in an actor's keyframe property track is removed.  Rekapi automatically
    *   removes property tracks when they are emptied out, which causes this
-   *   event to be fired.  `opt_data` is the name of the track that was
+   *   event to be fired.  `data` is the name of the track that was
    *   removed.
    * - __timelineModified__: Fires when a keyframe is added, modified or
    *   removed.
    * - __animationLooped__: Fires when an animation loop ends and a new one
    *   begins.
    * @param {Function(Rekapi,Object=)} handler Receives the Rekapi instance as
-   * the first parameter and event-specific data as the second (`opt_data`).
+   * the first parameter and event-specific data as the second (`data`).
    * @chainable
    */
   on (eventName, handler) {

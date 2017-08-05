@@ -292,7 +292,7 @@ export class Actor extends Tweenable {
    *
    * ## Easing
    *
-   * `opt_easing`, if provided, can be a string or an Object.  If `opt_easing`
+   * `easing`, if provided, can be a string or an Object.  If `easing`
    * is a string, all animated properties will have the same easing curve
    * applied to them.  For example:
    *
@@ -455,7 +455,7 @@ export class Actor extends Tweenable {
   /**
    * Augment the `value` or `easing` of the `{@link rekapi.KeyframeProperty}`s
    * at a given millisecond.  Any `{@link rekapi.KeyframeProperty}`s omitted in
-   * `state` or `opt_easing` are not modified.
+   * `state` or `easing` are not modified.
    *
    *     actor.keyframe(0, {
    *       'x': 10,
@@ -671,7 +671,7 @@ export class Actor extends Tweenable {
 
   /**
    * @method rekapi.Actor#getStart
-   * @param {string=} opt_trackName Optionally scope the lookup to a particular
+   * @param {string=} trackName Optionally scope the lookup to a particular
    * track.
    * @return {number} The millisecond of the first animating state of an actor
    * (for instance, if the actor's first keyframe is later than millisecond
