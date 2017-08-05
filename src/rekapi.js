@@ -211,7 +211,6 @@ export const renderers = [];
  * will be initialized as `this.renderer` for either a DOM or CSS
  * `@keyframe`-based rendering.
  * @constructs rekapi.Rekapi
- * @chainable
  */
 export class Rekapi {
   constructor (context = {}) {
@@ -387,7 +386,6 @@ export class Rekapi {
    * @method rekapi.Rekapi#play
    * @param {number=} iterations If omitted, the animation will loop
    * endlessly.
-   * @chainable
    */
   play (iterations = -1) {
     cancelLoop(this);
@@ -419,7 +417,6 @@ export class Rekapi {
    * @param {number} millisecond
    * @param {number=} iterations Works as it does in {@link
    * rekapi.Rekapi#play}.
-   * @chainable
    */
   playFrom (millisecond, iterations) {
     this.play(iterations);
@@ -437,7 +434,6 @@ export class Rekapi {
    * @method rekapi.Rekapi#playFromCurrent
    * @param {number=} iterations Works as it does in {@link
    * rekapi.Rekapi#play}.
-   * @chainable
    */
   playFromCurrent (iterations) {
     return this.playFrom(this._lastUpdatedMillisecond, iterations);
@@ -449,7 +445,6 @@ export class Rekapi {
    *
    * @method rekapi.Rekapi#pause
    * @param pause
-   * @chainable
    */
   pause () {
     if (this._playState === PAUSED) {
@@ -471,7 +466,6 @@ export class Rekapi {
    * if {@link Rekapi/play} is called.
    *
    * @method rekapi.Rekapi#stop
-   * @chainable
    */
   stop () {
     this._playState = STOPPED;
@@ -525,7 +519,6 @@ export class Rekapi {
    * @param {boolean=} doResetLaterFnKeyframes If true, allow all function
    * keyframes later in the timeline to be run again.  This is a low-level
    * feature, it should not be `true` (or even provided) for most use cases.
-   * @chainable
    */
   update (
     millisecond = this._lastUpdatedMillisecond,
@@ -646,7 +639,6 @@ export class Rekapi {
    *   begins.
    * @param {Function(Rekapi,Object=)} handler Receives the Rekapi instance as
    * the first parameter and event-specific data as the second (`data`).
-   * @chainable
    */
   on (eventName, handler) {
     if (!this._events[eventName]) {
@@ -663,7 +655,6 @@ export class Rekapi {
    * @param {string} eventName The name of the event to trigger.
    * @param {any=} data Optional data to provide to `eventName` handlers.
    * @method rekapi.Rekapi#trigger
-   * @chainable
    */
   trigger (eventName, data) {
     fireEvent(this, eventName, data);
@@ -679,7 +670,6 @@ export class Rekapi {
    * {@link Rekapi/on}.
    * @param {Function=} handler If omitted, all handler functions bound to
    * `eventName` are unbound.
-   * @chainable
    */
   off (eventName, handler) {
     if (!this._events[eventName]) {

@@ -325,7 +325,6 @@ export class Actor extends Tweenable {
    * the delay between when the function is called and when it was scheduled.
    * @param {string|Object=} easing Optional easing string or Object.  If
    * `state` is a function, this is ignored.
-   * @chainable
    */
   keyframe (millisecond, state, easing = DEFAULT_EASING) {
     if (state instanceof Function) {
@@ -397,7 +396,6 @@ export class Actor extends Tweenable {
    * to.
    * @param {number} copyFrom The timeline millisecond to copy
    * KeyframeProperties from.
-   * @chainable
    */
   copyKeyframe (copyTo, copyFrom) {
     // Build the configuation objects to be passed to Actor#keyframe
@@ -480,7 +478,6 @@ export class Actor extends Tweenable {
    * @param {number} millisecond
    * @param {Object} state
    * @param {Object=} easing
-   * @chainable
    */
   modifyKeyframe (millisecond, state, easing = {}) {
     _.each(this._propertyTracks, (propertyTrack, trackName) => {
@@ -515,7 +512,6 @@ export class Actor extends Tweenable {
    * @method rekapi.Actor#removeKeyframe
    * @param {number} millisecond The location on the timeline of the keyframe
    * to remove.
-   * @chainable
    */
   removeKeyframe (millisecond) {
     _.each(this._propertyTracks, (propertyTrack, propertyName) => {
@@ -546,7 +542,6 @@ export class Actor extends Tweenable {
    * foregoes firing events.
    *
    * @method rekapi.Actor#removeAllKeyframes
-   * @chainable
    */
   removeAllKeyframes () {
     _.each(this._propertyTracks, propertyTrack =>
@@ -593,7 +588,6 @@ export class Actor extends Tweenable {
    * rekapi.KeyframeProperty}` to modify.
    * @param {Object} newProperties The properties to augment the `{@link
    * rekapi.KeyframeProperty}` with.
-   * @chainable
    */
   modifyKeyframeProperty (property, millisecond, newProperties) {
     const keyframeProperty = this.getKeyframeProperty(property, millisecond);
@@ -748,7 +742,6 @@ export class Actor extends Tweenable {
    * until (relative to the start of the animation timeline).  If this number
    * is less than the value returned from `{@link rekapi.Actor#getLength}`,
    * this method does nothing.
-   * @chainable
    */
   wait (until) {
     const end = this.getEnd();
@@ -805,7 +798,6 @@ export class Actor extends Tweenable {
    * rekapi.KeyframeProperty#detach}`ed.
    * @method rekapi.Actor#addKeyframeProperty
    * @param {KeyframeProperty} keyframeProperty
-   * @chainable
    */
   addKeyframeProperty (keyframeProperty) {
     if (this.rekapi) {
@@ -861,7 +853,6 @@ export class Actor extends Tweenable {
    * @method rekapi.Actor#setActive
    * @param {number} millisecond The time at which to change the actor's active state
    * @param {boolean} isActive Whether the actor should be active or inactive
-   * @chainable
    */
   setActive (millisecond, isActive) {
     const hasActiveTrack = !!this._propertyTracks._active;
@@ -885,7 +876,6 @@ export class Actor extends Tweenable {
    * @param {number} millisecond
    * @param {boolean=} resetLaterFnKeyframes If true, allow all function
    * keyframes later in the timeline to be run again.
-   * @chainable
    */
   _updateState (millisecond, resetLaterFnKeyframes = false) {
     const start = this.getStart();
