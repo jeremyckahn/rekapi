@@ -384,7 +384,6 @@ export class Rekapi {
   /**
    * Play the animation.
    *
-   * __[Example](../../../../examples/play.html)__
    * @method rekapi.Rekapi#play
    * @param {number=} iterations If omitted, the animation will loop
    * endlessly.
@@ -416,7 +415,6 @@ export class Rekapi {
   /**
    * Move to a specific millisecond on the timeline and play from there.
    *
-   * __[Example](../../../../examples/play_from.html)__
    * @method rekapi.Rekapi#playFrom
    * @param {number} millisecond
    * @param {number=} iterations Works as it does in {@link
@@ -436,7 +434,6 @@ export class Rekapi {
    * Play from the last frame that was rendered with {@link
    * rekapi.Rekapi#update}.
    *
-   * __[Example](../../../../examples/play_from_current.html)__
    * @method rekapi.Rekapi#playFromCurrent
    * @param {number=} iterations Works as it does in {@link
    * rekapi.Rekapi#play}.
@@ -450,7 +447,6 @@ export class Rekapi {
    * Pause the animation.  A "paused" animation can be resumed from where it
    * left off with {@link Rekapi/play}.
    *
-   * __[Example](../../../../examples/pause.html)__
    * @method rekapi.Rekapi#pause
    * @param pause
    * @chainable
@@ -474,7 +470,6 @@ export class Rekapi {
    * Stop the animation.  A "stopped" animation will start from the beginning
    * if {@link Rekapi/play} is called.
    *
-   * __[Example](../../../../examples/stop.html)__
    * @method rekapi.Rekapi#stop
    * @chainable
    */
@@ -523,7 +518,6 @@ export class Rekapi {
   /**
    * Render an animation frame at a specific point in the timeline.
    *
-   * __[Example](../../../../examples/update.html)__
    * @method rekapi.Rekapi#update
    * @param {number=} millisecond The point in the timeline at which to
    * render.  If omitted, this renders the last millisecond that was rendered
@@ -557,7 +551,6 @@ export class Rekapi {
   }
 
   /**
-   * __[Example](../../../../examples/get_last_position_updated.html)__
    * @method rekapi.Rekapi#getLastPositionUpdated
    * @return {number} The normalized timeline position (between 0 and 1) that
    * was last rendered.
@@ -594,7 +587,6 @@ export class Rekapi {
   /**
    * Bind a handler function to a Rekapi event.
    *
-   * __[Example](../../../../examples/bind.html)__
    * @method rekapi.Rekapi#on
    * @param {string} eventName Valid values are:
    *
@@ -682,7 +674,6 @@ export class Rekapi {
   /**
    * Unbind one or more handlers from a Rekapi event.
    *
-   * __[Example](../../../../examples/unbind.html)__
    * @method rekapi.Rekapi#off
    * @param {string} eventName Valid values correspond to the list under
    * {@link Rekapi/on}.
@@ -705,7 +696,6 @@ export class Rekapi {
   /**
    * Export the timeline to a JSON-serializable `Object`.
    *
-   * __[Example](../../../examples/export_timeline.html)__
    * @method rekapi.Rekapi#exportTimeline
    * @return {Object} This data can later be consumed by {@link
    * "Rekapi/importTimeline}.

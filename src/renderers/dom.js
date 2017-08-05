@@ -946,8 +946,6 @@ export const getActorCSS = (actor, options = {}) => {
  * automatically as `this.renderer`, there is no reason to call the constructor
  * yourself in most cases.
  *
- * __[Example](/renderers/dom/sample/play-many-actors.html)__
- *
  * @class DOMRenderer
  * @param {Rekapi} rekapi
  * @constructs rekapi.DOMRenderer

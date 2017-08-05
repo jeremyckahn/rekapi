@@ -392,7 +392,6 @@ export class Actor extends Tweenable {
    *     // Return the actor to its original position
    *     actor.copyKeyframe(2000, 0);
    *
-   * __[Example](../../../../examples/actor_copy_keyframe.html)__
    * @method rekapi.Actor#copyKeyframe
    * @param {number} copyTo The timeline millisecond to copy KeyframeProperties
    * to.
@@ -427,7 +426,6 @@ export class Actor extends Tweenable {
    * pattern is to use `{@link rekapi.Actor#hasKeyframeAt}` to see if there is
    * already a keyframe at the requested `to` destination.
    *
-   * __[Example](../../../../examples/actor_move_keyframe.html)__
    * @method rekapi.Actor#moveKeyframe
    * @param {number} from The millisecond of the keyframe to be moved.
    * @param {number} to The millisecond of where the keyframe should be moved
@@ -478,7 +476,6 @@ export class Actor extends Tweenable {
    *       'x': 'easeFrom'
    *     });
    *
-   * __[Example](../../../../examples/actor_modify_keyframe.html)__
    * @method rekapi.Actor#modifyKeyframe
    * @param {number} millisecond
    * @param {Object} state
@@ -515,7 +512,6 @@ export class Actor extends Tweenable {
    * Remove all `{@link rekapi.KeyframeProperty}`s set
    * on the actor at a given millisecond in the animation.
    *
-   * __[Example](../../../../examples/actor_remove_keyframe.html)__
    * @method rekapi.Actor#removeKeyframe
    * @param {number} millisecond The location on the timeline of the keyframe
    * to remove.
@@ -549,7 +545,6 @@ export class Actor extends Tweenable {
    * rekapi.Actor#removeKeyframeProperty}` many times individually, but
    * foregoes firing events.
    *
-   * __[Example](../../../../examples/actor_remove_all_keyframes.html)__
    * @method rekapi.Actor#removeAllKeyframes
    * @chainable
    */
@@ -591,7 +586,6 @@ export class Actor extends Tweenable {
    * Internally, this calls `{@link rekapi.KeyframeProperty#modifyWith}` and
    * then performs some cleanup.
    *
-   * __[Example](../../../../examples/actor_modify_keyframe_property.html)__
    * @method rekapi.Actor#modifyKeyframeProperty
    * @param {string} property The name of the `{@link rekapi.KeyframeProperty}`
    * to modify.
@@ -749,7 +743,6 @@ export class Actor extends Tweenable {
    * Internally, this method copies the final state of the actor in the
    * timeline to the millisecond defined by `until`.
    *
-   * __[Example](../../../../examples/actor_wait.html)__
    * @method rekapi.Actor#wait
    * @param {number} until At what point in the animation the Actor should wait
    * until (relative to the start of the animation timeline).  If this number
@@ -981,7 +974,6 @@ export class Actor extends Tweenable {
   }
 
   /**
-   * __[Example](../../../../examples/actor_export_timeline.html)__
    * @method rekapi.Actor#exportTimeline
    * @return {Object} A serializable Object of this actor's timeline property
    * tracks and `{@link rekapi.KeyframeProperty}`s.

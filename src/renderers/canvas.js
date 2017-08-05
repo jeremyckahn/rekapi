@@ -197,7 +197,6 @@ export class CanvasRenderer {
    * This method has no effect if an order function is set with `{@link
    * rekapi.CanvasRenderer#setOrderFunction}`.
    *
-   * __[Example](../../../../examples/canvas_move_actor_to_layer.html)__
    * @method rekapi.CanvasRenderer#moveActorToLayer
    * @param {Actor} actor
    * @param {number} layer This should be within `0` and the total number of
@@ -230,7 +229,6 @@ export class CanvasRenderer {
    *     rekapi.renderer.setOrderFunction(function (actor) {
    *       return actor.get().radius;
    *     });
-   * __[Example](../../../../examples/canvas_set_order_function.html)__
    * @method rekapi.CanvasRenderer#setOrderFunction
    * @param {function(Actor)} sortFunction
    * @return {Rekapi}
@@ -245,7 +243,6 @@ export class CanvasRenderer {
    * rekapi.CanvasRenderer#setOrderFunction}`.  The render order defaults back
    * to the order in which the actors were added to the animation.
    *
-   * __[Example](../../../../examples/canvas_unset_order_function.html)__
    * @method rekapi.CanvasRenderer#unsetOrderFunction
    * @return {Rekapi}
    */

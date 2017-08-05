@@ -123,7 +123,6 @@ export class KeyframeProperty {
   }
 
   /**
-   * __[Example](../../../../examples/keyprop_export_property_data.html)__
    * @method rekapi.KeyframeProperty#exportPropertyData
    * @return {Object} A serializable Object representation of this
    * `{@link rekapi.KeyframeProperty}`.
