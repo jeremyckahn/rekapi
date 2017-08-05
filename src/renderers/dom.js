@@ -105,10 +105,10 @@ const vendorPrefix = (() => {
 
 /*!
  * @param {Actor} actor
- * @return {string} The default CSS class that is targeted by `{{#crossLink
- * "DOMRenderer/getCss:method"}}{{/crossLink}}` if a custom class is
- * not specified.  This may be useful for getting a standard and consistent
- * CSS class name for an actor's DOM element.
+ * @return {string} The default CSS class that is targeted by `{@link
+ * rekapi.DOMRenderer#getCss}` if a custom class is not specified.  This may be
+ * useful for getting a standard and consistent CSS class name for an actor's
+ * DOM element.
  */
 const getActorClassName = actor => `actor-${actor.id}`;
 
@@ -877,9 +877,8 @@ export const getActorCSS = (actor, options = {}) => {
  * are defined with the same API in either case, but you can gracefully fall
  * back to the inline style approach if CSS `@keyframe` animations are not
  * supported by the browser or not preferred.  To render animations with the
- * DOM, just supply any DOM element to the `{{#crossLink
- * "Rekapi"}}{{/crossLink}}` constructor.  You may use `document.body`, since
- * it is generally always available:
+ * DOM, just supply any DOM element to the `{@link rekapi.Rekapi}` constructor.
+ * You may use `document.body`, since it is generally always available:
  *
  *     var rekapi = new Rekapi(document.body);
  *     rekapi.renderer instanceof DOMRenderer; // true
@@ -900,7 +899,7 @@ export const getActorCSS = (actor, options = {}) => {
  *   - Generating the CSS for `@keyframe` animations can take a noticeable
  *   amount of time.  This blocks all other logic, including rendering, so
  *   you may have to be clever with how to spend the cycles to do it.
- *   - No `{{#crossLink "Rekapi/on:method"}}events{{/crossLink}}` can be
+ *   - No `[events]{@link rekapi.Rekapi#on}` can be
  *   bound to CSS `@keyframe` animations.
  *
  * So, the results are a little more predictable and flexible with inline
@@ -932,22 +931,20 @@ export const getActorCSS = (actor, options = {}) => {
  *
  * ## `@keyframe` animations work differently than inline style animations
  *
- * Inline style animations are compatible with all of the playback and
- * timeline control methods defined by `{{#crossLink
- * "Rekapi"}}{{/crossLink}}`, such as `{{#crossLink
- * "Rekapi/play:method"}}{{/crossLink}}`, `{{#crossLink
- * "Rekapi/playFrom:method"}}{{/crossLink}}` and `{{#crossLink
- * "Rekapi/update:method"}}{{/crossLink}}`.  CSS `@keyframe` playback cannot
- * be controlled in all browsers, so `DOMRenderer` defines analogous,
- * renderer-specific CSS playback methods that you should use:
+ * Inline style animations are compatible with all of the playback and timeline
+ * control methods defined by `{@link rekapi.Rekapi}`, such as `{@link
+ * rekapi.Rekapi#play}`, `{@link rekapi.Rekapi#playFrom}` and `{@link
+ * rekapi.Rekapi#update}`.  CSS `@keyframe` playback cannot be controlled in
+ * all browsers, so `DOMRenderer` defines analogous, renderer-specific CSS
+ * playback methods that you should use:
  *
- *   - {{#crossLink "DOMRenderer/play:method"}}{{/crossLink}}
- *   - {{#crossLink "DOMRenderer/isPlaying:method"}}{{/crossLink}}
- *   - {{#crossLink "DOMRenderer/stop:method"}}{{/crossLink}}
+ *   - {@link rekapi.DOMRenderer#play}
+ *   - {@link rekapi.DOMRenderer#isPlaying}
+ *   - {@link rekapi.DOMRenderer#stop}
  *
- * __Note__: `DOMRenderer` is added to the `{{#crossLink
- * "Rekapi"}}{{/crossLink}}` instance automatically as `this.renderer`,
- * there is no reason to call the constructor yourself in most cases.
+ * __Note__: `DOMRenderer` is added to the `{@link rekapi.Rekapi}` instance
+ * automatically as `this.renderer`, there is no reason to call the constructor
+ * yourself in most cases.
  *
  * __[Example](/renderers/dom/sample/play-many-actors.html)__
  *
@@ -994,9 +991,8 @@ export class DOMRenderer {
   /**
    * Play the Rekapi animation as a CSS `@keyframe` animation.
    *
-   * Note that this is different from `{{#crossLink
-   * "Rekapi/play:method"}}{{/crossLink}}`.  This method only applies to CSS
-   * `@keyframe` animations.
+   * Note that this is different from `{@link rekapi.Rekapi#play}`.  This
+   * method only applies to CSS `@keyframe` animations.
    * @method rekapi.DOMRenderer#play
    * @param {number=} iterations How many times the animation should loop.
    * This can be `null` or `0` if you want to loop the animation endlessly but
@@ -1033,9 +1029,8 @@ export class DOMRenderer {
    * Stop a CSS `@keyframe` animation.  This also removes any `<style>`
    * elements that were dynamically injected into the DOM.
    *
-   * Note that this is different from
-   * `{{#crossLink "Rekapi/stop:method"}}{{/crossLink}}`.  This method only
-   * applies to CSS `@keyframe` animations.
+   * Note that this is different from `{@link rekapi.Rekapi#stop}`.  This
+   * method only applies to CSS `@keyframe` animations.
    * @method rekapi.DOMRenderer#stop
    * @param {boolean=} goToEnd If true, skip to the end of the animation.
    * If false or omitted, set inline styles on the actor elements to keep them
@@ -1073,7 +1068,7 @@ export class DOMRenderer {
   /**
    * Prerender and cache the CSS animation so that it is immediately ready to
    * be used when it is needed in the future.  The function signature is
-   * identical to {{#crossLink "DOMRenderer/play:method"}}{{/crossLink}}.  This
+   * identical to {@link rekapi.DOMRenderer#play}.  This
    * is necessary to play a CSS animation and will be automatically called for
    * you if you don't call it manually, but calling it ahead of time (such as
    * on page load) will prevent any perceived lag when a CSS `@keyframe`
@@ -1121,10 +1116,9 @@ export class DOMRenderer {
    *
    * CSS transform string components are order-dependent, but JavaScript object
    * properties have an unpredictable order.  Rekapi must combine transform
-   * properties supplied to `{{#crossLink
-   * "Actor/keyframe:method"}}{{/crossLink}}` (as shown above) into a
-   * single string when it renders each frame.  This method lets you change
-   * that order from the default.  The supported array values for
+   * properties supplied to `{@link rekapi.Actor#keyframe}` (as shown above)
+   * into a single string when it renders each frame.  This method lets you
+   * change that order from the default.  The supported array values for
    * `orderedTransforms` are:
    *
    * - `translateX`

@@ -9,7 +9,7 @@ const DEFAULT_EASING = 'linear';
 /**
  * Represents an individual component of an actor's keyframe state.  In most
  * cases you won't need to deal with this object directly, as the
- * `{{#crossLink "Actor"}}{{/crossLink}}` APIs abstract a lot of what
+ * `{@link rekapi.Actor}` APIs abstract a lot of what
  * this Object does away for you.
  * @param {number} millisecond Where on the animation timeline this
  * `KeyframeProperty` is.
@@ -35,10 +35,10 @@ export class KeyframeProperty {
   }
 
   /**
-   * Modify this `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`.
+   * Modify this `{@link rekapi.KeyframeProperty}`.
    * @method rekapi.KeyframeProperty#modifyWith
-   * @param {Object} newProperties Valid values correspond to `{{#crossLink
-   * "KeyframeProperty"}}{{/crossLink}}`'s constructor parameters:
+   * @param {Object} newProperties Valid values correspond to `{@link
+   * rekapi.KeyframeProperty}`'s constructor parameters:
    *   - __millisecond__ (_number_)
    *   - __name__ (_string_)
    *   - __value__ (_number|string_)
@@ -49,17 +49,14 @@ export class KeyframeProperty {
   }
 
   /**
-   * Calculate the midpoint between this `{{#crossLink
-   * "KeyframeProperty"}}{{/crossLink}}` and the next `{{#crossLink
-   * "KeyframeProperty"}}{{/crossLink}}` in a `{{#crossLink
-   * "Actor"}}{{/crossLink}}`'s property track.
+   * Calculate the midpoint between this `{@link rekapi.KeyframeProperty}` and
+   * the next `{@link rekapi.KeyframeProperty}` in a `{@link rekapi.Actor}`'s
+   * property track.
    *
-   * In just about all cases, `millisecond` should be between this
-   * `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`'s `millisecond`
-   * and the `millisecond` of the `{{#crossLink
-   * "KeyframeProperty"}}{{/crossLink}}` that follows it in the
-   * animation timeline, but it is valid to specify a value outside of this
-   * range.
+   * In just about all cases, `millisecond` should be between this `{@link
+   * rekapi.KeyframeProperty}`'s `millisecond` and the `millisecond` of the
+   * `{@link rekapi.KeyframeProperty}` that follows it in the animation
+   * timeline, but it is valid to specify a value outside of this range.
    * @method rekapi.KeyframeProperty#getValueAt
    * @param {number} millisecond The millisecond in the animation timeline to
    * compute the state value for.
@@ -93,27 +90,23 @@ export class KeyframeProperty {
   }
 
   /**
-   * Create the reference to the `{{#crossLink
-   * "KeyframeProperty"}}{{/crossLink}}` that follows this one on a
-   * `{{#crossLink "Actor"}}{{/crossLink}}`'s property track.  Property
-   * tracks are just linked lists of `{{#crossLink
-   * "KeyframeProperty"}}{{/crossLink}}`s.
+   * Create the reference to the `{@link rekapi.KeyframeProperty}` that follows
+   * this one on a `{@link rekapi.Actor}`'s property track.  Property tracks
+   * are just linked lists of `{@link rekapi.KeyframeProperty}`s.
    * @method rekapi.KeyframeProperty#linkToNext
-   * @param {KeyframeProperty=} nextProperty The `{{#crossLink
-   * "KeyframeProperty"}}{{/crossLink}}` that should immediately follow
-   * this one on the animation timeline.
+   * @param {KeyframeProperty=} nextProperty The `{@link
+   * rekapi.KeyframeProperty}` that should immediately follow this one on the
+   * animation timeline.
    */
   linkToNext (nextProperty = null) {
     this.nextProperty = nextProperty;
   }
 
   /**
-   * Disassociates this `{{#crossLink
-   * "KeyframeProperty"}}{{/crossLink}}` from its `{{#crossLink
-   * "Actor"}}{{/crossLink}}`.  This is called by various `{{#crossLink
-   * "Actor"}}{{/crossLink}}` methods and triggers the `{{#crossLink
-   * "Rekapi/on:method"}}removeKeyframeProperty{{/crossLink}}` event on the
-   * associated `{{#crossLink "Rekapi"}}{{/crossLink}}` instance.
+   * Disassociates this `{@link rekapi.KeyframeProperty}` from its `{@link
+   * rekapi.Actor}`.  This is called by various `{@link rekapi.Actor}` methods
+   * and triggers the `[removeKeyframeProperty]{@link rekapi.Rekapi#on}` event
+   * on the associated `{@link rekapi.Rekapi}` instance.
    * @method rekapi.KeyframeProperty#detach
    * @chainable
    */
@@ -133,7 +126,7 @@ export class KeyframeProperty {
    * __[Example](../../../../examples/keyprop_export_property_data.html)__
    * @method rekapi.KeyframeProperty#exportPropertyData
    * @return {Object} A serializable Object representation of this
-   * `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`.
+   * `{@link rekapi.KeyframeProperty}`.
    */
   exportPropertyData () {
     return _.pick(this, ['millisecond', 'name', 'value', 'easing']);
@@ -156,7 +149,7 @@ export class KeyframeProperty {
    * Assuming this is a function keyframe, call the function.
    * @method rekapi.KeyframeProperty#invoke
    * @return {*} Whatever value is returned from the keyframe function that was
-   * set for this `{{#crossLink "KeyframeProperty"}}{{/crossLink}}`.
+   * set for this `{@link rekapi.KeyframeProperty}`.
    */
   invoke () {
     const drift = this.actor.rekapi._loopPosition - this.millisecond;

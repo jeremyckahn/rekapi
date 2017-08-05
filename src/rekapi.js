@@ -200,14 +200,14 @@ export const renderers = [];
  * If this is a rendered animation, the appropriate renderer is accessible as
  * `this.renderer`.  If provided, a reference to `context` is accessible
  * as `this.context`.
- * @param {Object|CanvasRenderingContext2D|HTMLElement=} context This
+ * @param {(Object|CanvasRenderingContext2D|HTMLElement)=} context This
  * determines how to render the animation.  If this is not provided or is a
  * plain object (`{}`), the animation will not render anything and
  * `this.renderer` will be `undefined`.  If this is a reference to a
  * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D),
- * `{{#crossLink "CanvasRenderer"}}{{/crossLink}}` will be initialized
+ * `{@link rekapi.CanvasRenderer}` will be initialized
  * as `this.renderer` for HTML5 canvas-based rendering.  This this is a
- * reference to a DOM element, `{{#crossLink "DOMRenderer"}}{{/crossLink}}`
+ * reference to a DOM element, `{@link rekapi.DOMRenderer}`
  * will be initialized as `this.renderer` for either a DOM or CSS
  * `@keyframe`-based rendering.
  * @constructs rekapi.Rekapi
@@ -283,8 +283,8 @@ export class Rekapi {
    *
    * @method rekapi.Rekapi#addActor
    * @param {Actor|Object} actor If this is an `Object`, it is used to
-   * as the constructor parameters for a new `{{#crossLink
-   * "Actor"}}{{/crossLink}}` instance that is created by this method.
+   * as the constructor parameters for a new `{@link rekapi.Actor}` instance that is
+   * created by this method.
    * @return {Actor} The actor that was added.
    */
   addActor (actor) {
@@ -313,7 +313,7 @@ export class Rekapi {
 
   /**
    * Get a reference to an actor from the animation by its `id`.  You can use
-   * `{{#crossLink "Rekapi/getActorIds:method"}}{{/crossLink}}` to get a list
+   * `{@link rekapi.Rekapi#getActorIds}` to get a list
    * of IDs for all actors in the animation.
    * @method rekapi.Rekapi#getActor
    * @param {number} actorId
@@ -419,8 +419,8 @@ export class Rekapi {
    * __[Example](../../../../examples/play_from.html)__
    * @method rekapi.Rekapi#playFrom
    * @param {number} millisecond
-   * @param {number=} iterations Works as it does in {{#crossLink
-   * "Rekapi/play:method"}}{{/crossLink}}.
+   * @param {number=} iterations Works as it does in {@link
+   * rekapi.Rekapi#play}.
    * @chainable
    */
   playFrom (millisecond, iterations) {
@@ -433,13 +433,13 @@ export class Rekapi {
   }
 
   /**
-   * Play from the last frame that was rendered with {{#crossLink
-   * "Rekapi/update:method"}}{{/crossLink}}.
+   * Play from the last frame that was rendered with {@link
+   * rekapi.Rekapi#update}.
    *
    * __[Example](../../../../examples/play_from_current.html)__
    * @method rekapi.Rekapi#playFromCurrent
-   * @param {number=} iterations Works as it does in {{#crossLink
-   * "Rekapi/play:method"}}{{/crossLink}}.
+   * @param {number=} iterations Works as it does in {@link
+   * rekapi.Rekapi#play}.
    * @chainable
    */
   playFromCurrent (iterations) {
@@ -448,7 +448,7 @@ export class Rekapi {
 
   /**
    * Pause the animation.  A "paused" animation can be resumed from where it
-   * left off with {{#crossLink "Rekapi/play:method"}}{{/crossLink}}.
+   * left off with {@link Rekapi/play}.
    *
    * __[Example](../../../../examples/pause.html)__
    * @method rekapi.Rekapi#pause
@@ -472,7 +472,7 @@ export class Rekapi {
 
   /**
    * Stop the animation.  A "stopped" animation will start from the beginning
-   * if {{#crossLink "Rekapi/play:method"}}{{/crossLink}} is called.
+   * if {@link Rekapi/play} is called.
    *
    * __[Example](../../../../examples/stop.html)__
    * @method rekapi.Rekapi#stop
@@ -601,44 +601,44 @@ export class Rekapi {
    * - __animationComplete__: Fires when all animation loops have completed.
    * - __playStateChange__: Fires when the animation is played, paused, or
    *   stopped.
-   * - __play__: Fires when the animation is {{#crossLink
-   *   "Rekapi/play:method"}}{{/crossLink}}ed.
-   * - __pause__: Fires when the animation is {{#crossLink
-   *   "Rekapi/pause:method"}}{{/crossLink}}d.
-   * - __stop__: Fires when the animation is {{#crossLink
-   *   "Rekapi/stop:method"}}{{/crossLink}}ped.
+   * - __play__: Fires when the animation is {@link
+   *   "Rekapi/play}ed.
+   * - __pause__: Fires when the animation is {@link
+   *   "Rekapi/pause}d.
+   * - __stop__: Fires when the animation is {@link
+   *   "Rekapi/stop}ped.
    * - __beforeUpdate__: Fires each frame before all actors are rendered.
    * - __afterUpdate__: Fires each frame after all actors are rendered.
    * - __addActor__: Fires when an actor is added.  `opt_data` is the
-   *   {{#crossLink "Actor"}}{{/crossLink}} that was added.
+   *   {@link Actor} that was added.
    * - __removeActor__: Fires when an actor is removed.  `opt_data` is the
-   *   {{#crossLink "Actor"}}{{/crossLink}} that was removed.
+   *   {@link Actor} that was removed.
    * - __beforeAddKeyframeProperty__: Fires just before the point where a
-   *   {{#crossLink "KeyframeProperty"}}{{/crossLink}} is added to the
+   *   {@link KeyframeProperty} is added to the
    *   timeline.  This event is called before any modifications to the timeline
    *   are done.
    * - __addKeyframeProperty__: Fires when a keyframe property is added.
-   *   `opt_data` is the {{#crossLink "KeyframeProperty"}}{{/crossLink}}
+   *   `opt_data` is the {@link KeyframeProperty}
    *   that was added.
    * - __beforeRemoveKeyframeProperty__: Fires just before the point where a
-   *   {{#crossLink "KeyframeProperty"}}{{/crossLink}} is removed.  This
+   *   {@link KeyframeProperty} is removed.  This
    *   event is called before any modifications to the timeline are done.
-   * - __removeKeyframeProperty__: Fires when a {{#crossLink
-   *   "KeyframeProperty"}}{{/crossLink}} is removed.  This event is
+   * - __removeKeyframeProperty__: Fires when a {@link
+   *   "KeyframeProperty} is removed.  This event is
    *   fired _before_ the internal state of the keyframe (but not the timeline,
    *   in contrast to the `beforeRemoveKeyframeProperty` event) has been
    *   updated to reflect the keyframe property removal (this is in contrast to
-   *   `removeKeyframePropertyComplete`).  `opt_data` is the {{#crossLink
-   *   "KeyframeProperty"}}{{/crossLink}} that was removed.
-   * - __removeKeyframePropertyComplete__: Fires when a {{#crossLink
-   *   "KeyframeProperty"}}{{/crossLink}} has finished being removed
+   *   `removeKeyframePropertyComplete`).  `opt_data` is the {@link
+   *   "KeyframeProperty} that was removed.
+   * - __removeKeyframePropertyComplete__: Fires when a {@link
+   *   "KeyframeProperty} has finished being removed
    *   from the timeline.  Unlike `removeKeyframeProperty`, this is fired
    *   _after_ the internal state of Rekapi has been updated to reflect the
-   *   removal of the keyframe property. `opt_data` is the {{#crossLink
-   *   "KeyframeProperty"}}{{/crossLink}} that was removed.
+   *   removal of the keyframe property. `opt_data` is the {@link
+   *   "KeyframeProperty} that was removed.
    * - __addKeyframePropertyTrack__: Fires when the a keyframe is added to an
    *   actor that creates a new keyframe property track.  `opt_data` is the
-   *   {{#crossLink "KeyframeProperty"}}{{/crossLink}}
+   *   {@link KeyframeProperty}
    *   that was added to create the property track.  A reference to the actor
    *   that the keyframe property is associated with can be accessed via
    *   `opt_data.actor` and the track name that was added can be determined via
@@ -685,7 +685,7 @@ export class Rekapi {
    * __[Example](../../../../examples/unbind.html)__
    * @method rekapi.Rekapi#off
    * @param {string} eventName Valid values correspond to the list under
-   * {{#crossLink "Rekapi/on:method"}}{{/crossLink}}.
+   * {@link Rekapi/on}.
    * @param {Function=} handler If omitted, all handler functions bound to
    * `eventName` are unbound.
    * @chainable
@@ -707,8 +707,8 @@ export class Rekapi {
    *
    * __[Example](../../../examples/export_timeline.html)__
    * @method rekapi.Rekapi#exportTimeline
-   * @return {Object} This data can later be consumed by {{#crossLink
-   * "Rekapi/importTimeline:method"}}{{/crossLink}}.
+   * @return {Object} This data can later be consumed by {@link
+   * "Rekapi/importTimeline}.
    */
   exportTimeline () {
     const exportData = {
@@ -733,8 +733,8 @@ export class Rekapi {
   }
 
   /**
-   * Import data that was created by {{#crossLink
-   * "Rekapi/exportTimeline:method"}}{{/crossLink}}.  This sets up all actors,
+   * Import data that was created by {@link
+   * "Rekapi/exportTimeline}.  This sets up all actors,
    * keyframes, and custom easing curves specified in the `rekapiData`
    * parameter.  These two methods collectively allow you serialize an
    * animation (for sending to a server for persistence, for example) and later
