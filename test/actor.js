@@ -527,7 +527,7 @@ describe('Actor', () => {
     it('returns list of track names', () => {
       actor.keyframe(0, { a: 1, b: 2, c: 3, d: 4 });
 
-      var trackNames = actor.getTrackNames().sort();
+      const trackNames = actor.getTrackNames().sort();
 
       assert.equal(trackNames[0], 'a');
       assert.equal(trackNames[1], 'b');
@@ -561,7 +561,7 @@ describe('Actor', () => {
         .keyframe(0, { x: 1, y: 10 })
         .keyframe(1000, { x: 2, y: 20 });
 
-      var importActor = new Actor();
+      const importActor = new Actor();
       importActor.importTimeline(actor.exportTimeline());
 
       const firstImportXKeyProp = importActor.getKeyframeProperty('x', 0);
@@ -773,7 +773,7 @@ describe('Actor', () => {
 
     describe('#_resetFnKeyframesFromMillisecond', () => {
       it('resets function keyframes later but not before specified millisecond', () => {
-        var callCount = 0;
+        let callCount = 0;
         actor
           .keyframe(10, {
             'function': () => callCount++

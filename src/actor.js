@@ -979,7 +979,7 @@ export class Actor extends Tweenable {
    * tracks and `{@link rekapi.KeyframeProperty}`s.
    */
   exportTimeline () {
-    var exportData = {
+    const exportData = {
       start: this.getStart(),
       end: this.getEnd(),
       trackNames: this.getTrackNames(),

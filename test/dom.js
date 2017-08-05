@@ -82,7 +82,7 @@ describe('DOM renderer', () => {
 
       rekapi.update(50);
 
-      var transformChunks = actor.get().transform.match(/(\d|\.)+/g);
+      const transformChunks = actor.get().transform.match(/(\d|\.)+/g);
 
       assert.equal(
         transformChunks[1],

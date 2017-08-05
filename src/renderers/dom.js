@@ -880,7 +880,7 @@ export const getActorCSS = (actor, options = {}) => {
  * DOM, just supply any DOM element to the `{@link rekapi.Rekapi}` constructor.
  * You may use `document.body`, since it is generally always available:
  *
- *     var rekapi = new Rekapi(document.body);
+ *     const rekapi = new Rekapi(document.body);
  *     rekapi.renderer instanceof DOMRenderer; // true
  *
  * There are separate APIs for playing inline style animations and CSS
@@ -909,10 +909,10 @@ export const getActorCSS = (actor, options = {}) => {
  * `DOMRenderer` can gracefully fall back to an inline style animation
  * if CSS `@keyframe` animations are not supported by the browser:
  *
- *      var rekapi = new Rekapi(document.body);
+ *      const rekapi = new Rekapi(document.body);
  *
  *      // Each actor needs a reference to the DOM element it represents
- *      var actor = rekapi.addActor({
+ *      const actor = rekapi.addActor({
  *        context: document.getElementById('actor-1')
  *      });
  *

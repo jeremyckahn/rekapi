@@ -91,8 +91,8 @@ const removeActor = (actor, canvasRenderer) => {
  * instance to the `{@link rekapi.Rekapi}` constructor to
  * automatically set up the renderer:
  *
- *     var context = document.createElement('canvas').getContext('2d');
- *     var rekapi = new Rekapi(context);
+ *     const context = document.createElement('canvas').getContext('2d');
+ *     const rekapi = new Rekapi(context);
  *     rekapi.renderer instanceof CanvasRenderer; // true
  *
  * `CanvasRenderer` adds some canvas-specific events you can bind to
@@ -118,16 +118,15 @@ const removeActor = (actor, canvasRenderer) => {
  * instead is provided as the second parameter to `CanvasRenderer`:
  *
  *
- *     var canvasContext = document.querySelector('canvas').getContext('2d');
+ *     const canvasContext = document.querySelector('canvas').getContext('2d');
  *
  *     // No context gets passed to the Rekapi constructor
- *     var rekapi = new Rekapi();
+ *     const rekapi = new Rekapi();
  *
  *     // Initialize CanvasRenderer manually and give it a
  *     // CanvasRenderingContext2D.  You can name it anything you want on the
  *     // Rekapi instance.
- *     rekapi.canvasRenderer =
- *         new CanvasRenderer(rekapi, canvasContext);
+ *     rekapi.canvasRenderer = new CanvasRenderer(rekapi, canvasContext);
  * @param {Rekapi} rekapi
  * @param {CanvasRenderingContext2D=} context
  * @constructs rekapi.CanvasRenderer
