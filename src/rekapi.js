@@ -25,7 +25,7 @@ export const invalidateAnimationLength = rekapi =>
 /*!
  * Determines which iteration of the loop the animation is currently in.
  * @param {Rekapi} rekapi
- * @param {number} timeSinceStart
+ * @param {Number} timeSinceStart
  */
 export const determineCurrentLoopIteration = (rekapi, timeSinceStart) => {
   const animationLength = rekapi.getAnimationLength();
@@ -40,7 +40,7 @@ export const determineCurrentLoopIteration = (rekapi, timeSinceStart) => {
 /*!
  * Calculate how many milliseconds since the animation began.
  * @param {Rekapi} rekapi
- * @return {number}
+ * @return {Number}
  */
 export const calculateTimeSinceStart = rekapi =>
   Tweenable.now() - rekapi._loopTimestamp;
@@ -48,8 +48,8 @@ export const calculateTimeSinceStart = rekapi =>
 /*!
  * Determines if the animation is complete or not.
  * @param {Rekapi} rekapi
- * @param {number} currentLoopIteration
- * @return {boolean}
+ * @param {Number} currentLoopIteration
+ * @return {Boolean}
  */
 export const isAnimationComplete = (rekapi, currentLoopIteration) =>
   currentLoopIteration >= rekapi._timesToIterate
@@ -58,7 +58,7 @@ export const isAnimationComplete = (rekapi, currentLoopIteration) =>
 /*!
  * Stops the animation if it is complete.
  * @param {Rekapi} rekapi
- * @param {number} currentLoopIteration
+ * @param {Number} currentLoopIteration
  */
 export const updatePlayState = (rekapi, currentLoopIteration) => {
   if (isAnimationComplete(rekapi, currentLoopIteration)) {
@@ -71,9 +71,9 @@ export const updatePlayState = (rekapi, currentLoopIteration) => {
  * Calculate how far in the animation loop `rekapi` is, in milliseconds,
  * based on the current time.  Also overflows into a new loop if necessary.
  * @param {Rekapi} rekapi
- * @param {number} forMillisecond
- * @param {number} currentLoopIteration
- * @return {number}
+ * @param {Number} forMillisecond
+ * @param {Number} currentLoopIteration
+ * @return {Number}
  */
 export const calculateLoopPosition = (rekapi, forMillisecond, currentLoopIteration) => {
   const animationLength = rekapi.getAnimationLength();
@@ -90,7 +90,7 @@ export const calculateLoopPosition = (rekapi, forMillisecond, currentLoopIterati
  * Updates the `rekapi` state internally and accounts for how many loop
  * iterations the animation runs for.
  * @param {Rekapi} rekapi
- * @param {number} forMillisecond
+ * @param {Number} forMillisecond
  */
 export const updateToMillisecond = (rekapi, forMillisecond) => {
   const currentIteration = determineCurrentLoopIteration(rekapi, forMillisecond);
@@ -205,11 +205,10 @@ export const renderers = [];
  * plain object (`{}`), the animation will not render anything and
  * `this.renderer` will be `undefined`.  If this is a reference to a
  * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D),
- * `{@link rekapi.CanvasRenderer}` will be initialized
- * as `this.renderer` for HTML5 canvas-based rendering.  This this is a
- * reference to a DOM element, `{@link rekapi.DOMRenderer}`
- * will be initialized as `this.renderer` for either a DOM or CSS
- * `@keyframe`-based rendering.
+ * `{@link rekapi.CanvasRenderer}` will be initialized as `this.renderer` for
+ * HTML5 canvas-based rendering.  If this is a reference to a DOM element,
+ * `{@link rekapi.DOMRenderer}` will be initialized as `this.renderer` for
+ * either a DOM or CSS `@keyframe`-based rendering.
  * @constructs rekapi.Rekapi
  */
 export class Rekapi {
@@ -315,7 +314,7 @@ export class Rekapi {
    * `{@link rekapi.Rekapi#getActorIds}` to get a list
    * of IDs for all actors in the animation.
    * @method rekapi.Rekapi#getActor
-   * @param {number} actorId
+   * @param {Number} actorId
    * @return {Actor}
    */
   getActor (actorId) {
@@ -326,7 +325,7 @@ export class Rekapi {
    * Retrieve the `id`'s of all actors in an animation.
    *
    * @method rekapi.Rekapi#getActorIds
-   * @return {Array(number)}
+   * @return {Array(Number)}
    */
   getActorIds () {
     return _.pluck(this._actors, 'id');
@@ -342,9 +341,8 @@ export class Rekapi {
   }
 
   /**
-   * Return the number of actors in the animation.
    * @method rekapi.Rekapi#getActorCount
-   * @return {number}
+   * @return {Number} The number of actors in the animation.
    */
   getActorCount () {
     return _.size(this._actors);
@@ -384,7 +382,7 @@ export class Rekapi {
    * Play the animation.
    *
    * @method rekapi.Rekapi#play
-   * @param {number=} iterations If omitted, the animation will loop
+   * @param {Number=} iterations If omitted, the animation will loop
    * endlessly.
    */
   play (iterations = -1) {
@@ -414,8 +412,8 @@ export class Rekapi {
    * Move to a specific millisecond on the timeline and play from there.
    *
    * @method rekapi.Rekapi#playFrom
-   * @param {number} millisecond
-   * @param {number=} iterations Works as it does in {@link
+   * @param {Number} millisecond
+   * @param {Number=} iterations Works as it does in {@link
    * rekapi.Rekapi#play}.
    */
   playFrom (millisecond, iterations) {
@@ -432,7 +430,7 @@ export class Rekapi {
    * rekapi.Rekapi#update}.
    *
    * @method rekapi.Rekapi#playFromCurrent
-   * @param {number=} iterations Works as it does in {@link
+   * @param {Number=} iterations Works as it does in {@link
    * rekapi.Rekapi#play}.
    */
   playFromCurrent (iterations) {
@@ -441,7 +439,7 @@ export class Rekapi {
 
   /**
    * Pause the animation.  A "paused" animation can be resumed from where it
-   * left off with {@link Rekapi/play}.
+   * left off with {@link rekapi.Rekapi#play}.
    *
    * @method rekapi.Rekapi#pause
    * @param pause
@@ -463,7 +461,7 @@ export class Rekapi {
 
   /**
    * Stop the animation.  A "stopped" animation will start from the beginning
-   * if {@link Rekapi/play} is called.
+   * if {@link rekapi.Rekapi#play} is called.
    *
    * @method rekapi.Rekapi#stop
    */
@@ -484,7 +482,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#isPlaying
-   * @return {boolean} Whether or not the animation is playing (meaning not paused or
+   * @return {Boolean} Whether or not the animation is playing (meaning not paused or
    * stopped).
    */
   isPlaying () {
@@ -493,7 +491,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#isPaused
-   * @return {boolean} Whether or not the animation is paused (meaning not playing or
+   * @return {Boolean} Whether or not the animation is paused (meaning not playing or
    * stopped).
    */
   isPaused () {
@@ -502,7 +500,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#isStopped
-   * @return {boolean} Whether or not the animation is stopped (meaning not playing or
+   * @return {Boolean} Whether or not the animation is stopped (meaning not playing or
    * paused).
    */
   isStopped () {
@@ -513,10 +511,10 @@ export class Rekapi {
    * Render an animation frame at a specific point in the timeline.
    *
    * @method rekapi.Rekapi#update
-   * @param {number=} millisecond The point in the timeline at which to
+   * @param {Number=} millisecond The point in the timeline at which to
    * render.  If omitted, this renders the last millisecond that was rendered
    * (it's a re-render).
-   * @param {boolean=} doResetLaterFnKeyframes If true, allow all function
+   * @param {Boolean=} doResetLaterFnKeyframes If true, allow all function
    * keyframes later in the timeline to be run again.  This is a low-level
    * feature, it should not be `true` (or even provided) for most use cases.
    */
@@ -545,7 +543,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#getLastPositionUpdated
-   * @return {number} The normalized timeline position (between 0 and 1) that
+   * @return {Number} The normalized timeline position (between 0 and 1) that
    * was last rendered.
    */
   getLastPositionUpdated () {
@@ -554,7 +552,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#getLastMillisecondUpdated
-   * @return {number} The millisecond that was last rendered.
+   * @return {Number} The millisecond that was last rendered.
    */
   getLastMillisecondUpdated () {
     return this._lastUpdatedMillisecond;
@@ -562,7 +560,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#getAnimationLength
-   * @return {number} The length of the animation timeline, in milliseconds.
+   * @return {Number} The length of the animation timeline, in milliseconds.
    */
   getAnimationLength () {
     if (!this._animationLengthValid) {
@@ -586,48 +584,42 @@ export class Rekapi {
    * - __animationComplete__: Fires when all animation loops have completed.
    * - __playStateChange__: Fires when the animation is played, paused, or
    *   stopped.
-   * - __play__: Fires when the animation is {@link
-   *   "Rekapi/play}ed.
-   * - __pause__: Fires when the animation is {@link
-   *   "Rekapi/pause}d.
-   * - __stop__: Fires when the animation is {@link
-   *   "Rekapi/stop}ped.
+   * - __play__: Fires when the animation is {@link rekapi.Rekapi#play}ed.
+   * - __pause__: Fires when the animation is {@link rekapi.Rekapi#pause}d.
+   * - __stop__: Fires when the animation is {@link rekapi.Rekapi#stop}ped.
    * - __beforeUpdate__: Fires each frame before all actors are rendered.
    * - __afterUpdate__: Fires each frame after all actors are rendered.
    * - __addActor__: Fires when an actor is added.  `data` is the
-   *   {@link Actor} that was added.
-   * - __removeActor__: Fires when an actor is removed.  `data` is the
-   *   {@link Actor} that was removed.
+   *   {@link rekapi.Actor} that was added.
+   * - __removeActor__: Fires when an actor is removed.  `data` is the {@link
+   *   rekapi.Actor} that was removed.
    * - __beforeAddKeyframeProperty__: Fires just before the point where a
-   *   {@link KeyframeProperty} is added to the
-   *   timeline.  This event is called before any modifications to the timeline
-   *   are done.
+   *   {@link rekapi.KeyframeProperty} is added to the timeline.  This event is
+   *   called before any modifications to the timeline are done.
    * - __addKeyframeProperty__: Fires when a keyframe property is added.
-   *   `data` is the {@link KeyframeProperty}
-   *   that was added.
+   *   `data` is the {@link rekapi.KeyframeProperty} that was added.
    * - __beforeRemoveKeyframeProperty__: Fires just before the point where a
-   *   {@link KeyframeProperty} is removed.  This
+   *   {@link rekapi.KeyframeProperty} is removed.  This
    *   event is called before any modifications to the timeline are done.
-   * - __removeKeyframeProperty__: Fires when a {@link
-   *   "KeyframeProperty} is removed.  This event is
-   *   fired _before_ the internal state of the keyframe (but not the timeline,
-   *   in contrast to the `beforeRemoveKeyframeProperty` event) has been
-   *   updated to reflect the keyframe property removal (this is in contrast to
+   * - __removeKeyframeProperty__: Fires when a {@link rekapi.KeyframeProperty}
+   *   is removed.  This event is fired _before_ the internal state of the
+   *   keyframe (but not the timeline, in contrast to the
+   *   `beforeRemoveKeyframeProperty` event) has been updated to reflect the
+   *   keyframe property removal (this is in contrast to
    *   `removeKeyframePropertyComplete`).  `data` is the {@link
-   *   "KeyframeProperty} that was removed.
+   *   rekapi.KeyframeProperty} that was removed.
    * - __removeKeyframePropertyComplete__: Fires when a {@link
-   *   "KeyframeProperty} has finished being removed
-   *   from the timeline.  Unlike `removeKeyframeProperty`, this is fired
-   *   _after_ the internal state of Rekapi has been updated to reflect the
-   *   removal of the keyframe property. `data` is the {@link
-   *   "KeyframeProperty} that was removed.
+   *   rekapi.KeyframeProperty} has finished being removed from the timeline.
+   *   Unlike `removeKeyframeProperty`, this is fired _after_ the internal
+   *   state of Rekapi has been updated to reflect the removal of the keyframe
+   *   property. `data` is the {@link rekapi.KeyframeProperty} that was
+   *   removed.
    * - __addKeyframePropertyTrack__: Fires when the a keyframe is added to an
-   *   actor that creates a new keyframe property track.  `data` is the
-   *   {@link KeyframeProperty}
-   *   that was added to create the property track.  A reference to the actor
-   *   that the keyframe property is associated with can be accessed via
-   *   `data.actor` and the track name that was added can be determined via
-   *   `data.name`.
+   *   actor that creates a new keyframe property track.  `data` is the {@link
+   *   rekapi.KeyframeProperty} that was added to create the property track.  A
+   *   reference to the actor that the keyframe property is associated with can
+   *   be accessed via `data.actor` and the track name that was added can be
+   *   determined via `data.name`.
    * - __removeKeyframePropertyTrack__: Fires when the last keyframe property
    *   in an actor's keyframe property track is removed.  Rekapi automatically
    *   removes property tracks when they are emptied out, which causes this
@@ -667,7 +659,7 @@ export class Rekapi {
    *
    * @method rekapi.Rekapi#off
    * @param {string} eventName Valid values correspond to the list under
-   * {@link Rekapi/on}.
+   * {@link rekapi.Rekapi#on}.
    * @param {Function=} handler If omitted, all handler functions bound to
    * `eventName` are unbound.
    */
@@ -688,7 +680,7 @@ export class Rekapi {
    *
    * @method rekapi.Rekapi#exportTimeline
    * @return {Object} This data can later be consumed by {@link
-   * "Rekapi/importTimeline}.
+   * rekapi.Rekapi#importTimeline}.
    */
   exportTimeline () {
     const exportData = {
@@ -713,16 +705,15 @@ export class Rekapi {
   }
 
   /**
-   * Import data that was created by {@link
-   * "Rekapi/exportTimeline}.  This sets up all actors,
-   * keyframes, and custom easing curves specified in the `rekapiData`
-   * parameter.  These two methods collectively allow you serialize an
-   * animation (for sending to a server for persistence, for example) and later
-   * recreating an identical animation.
+   * Import data that was created by {@link rekapi.Rekapi#exportTimeline}.
+   * This sets up all actors, keyframes, and custom easing curves specified in
+   * the `rekapiData` parameter.  These two methods collectively allow you
+   * serialize an animation (for sending to a server for persistence, for
+   * example) and later recreating an identical animation.
    *
    * @method rekapi.Rekapi#importTimeline
    * @param {Object} rekapiData Any object that has the same data format as the
-   * object generated from Rekapi#exportTimeline.
+   * object generated from {@link rekapi.Rekapi#exportTimeline}.
    */
   importTimeline (rekapiData) {
     _.each(rekapiData.curves, (curve, curveName) =>
