@@ -412,7 +412,7 @@ describe('Actor', () => {
       actor.keyframe(0, { x: 10 });
       actor.removeKeyframeProperty('x', 0);
 
-      assert.equal(actor.getPropertiesInTrack('x'), undefined);
+      assert.equal(actor.getPropertiesInTrack('x').length, 0);
     });
   });
 
@@ -432,7 +432,7 @@ describe('Actor', () => {
         .keyframe(1000, {})
         .keyframe(2000, {});
 
-      assert.equal(actor.getPropertiesInTrack('x'), undefined);
+      assert.equal(actor.getPropertiesInTrack('x').length, 0);
     });
   });
 

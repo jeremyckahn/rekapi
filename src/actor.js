@@ -648,18 +648,13 @@ export class Actor extends Tweenable {
   }
 
   /**
-   * Get all of the `{@link rekapi.KeyframeProperty}`s
-   * for a track.
+   * Get all of the `{@link rekapi.KeyframeProperty}`s for a track.
    * @method rekapi.Actor#getPropertiesInTrack
    * @param {string} trackName The track name to query.
-   * @return {(Array(rekapi.KeyframeProperty)|undefined)}
+   * @return {Array(rekapi.KeyframeProperty)}
    */
   getPropertiesInTrack (trackName) {
-    const propertyTrack = this._propertyTracks[trackName];
-
-    if (propertyTrack) {
-      return propertyTrack.slice(0);
-    }
+    return (this._propertyTracks[trackName] || []).slice(0);
   }
 
   /**
