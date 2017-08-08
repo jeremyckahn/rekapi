@@ -280,7 +280,7 @@ export class Rekapi {
    * reference to this `Rekapi` instance as `this.rekapi`.
    *
    * @method rekapi.Rekapi#addActor
-   * @param {Actor|Object} actor If this is an `Object`, it is used to
+   * @param {(Actor|Object)} actor If this is an `Object`, it is used to
    * as the constructor parameters for a new `{@link rekapi.Actor}` instance that is
    * created by this method.
    * @return {Actor} The actor that was added.

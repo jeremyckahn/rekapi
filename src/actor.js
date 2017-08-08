@@ -27,7 +27,7 @@ const fire = (actor, event, data) =>
  * Retrieves the most recent property cache entry for a given millisecond.
  * @param {Actor} actor
  * @param {number} millisecond
- * @return {Object|undefined} undefined if there is no property cache for
+ * @return {(Object|undefined)} undefined if there is no property cache for
  * the millisecond, i.e. an empty cache.
  */
 const getPropertyCacheEntryForMillisecond = (actor, millisecond) => {
@@ -203,23 +203,21 @@ const cleanupAfterKeyframeModification = actor => {
  * An actor represents an individual component of an animation.  An animation
  * may have one or many actors.
  *
- * @param {Object=} config Valid properties:
- *   - __context__ (_Object|CanvasRenderingContext2D|HTMLElement_): The
- *   rendering context for this actor. If omitted, this Actor gets the parent
- *   `{@link rekapi.Rekapi}` instance's `context` when it is
- *   added with `{@link rekapi.Rekapi#addActor}`.
- *   - __setup__ (_Function_): A function that gets called when the actor is
- *     added to an animation with
- *     `{@link rekapi.Rekapi#addActor}`.
- *   - __render__ (_Function(Object, Object)_): A function that gets called
- *   every time the actor's state is updated (once every frame). This
- *   function should do something meaningful with state of the actor (for
- *   example, visually rendering to the screen).  This function receives two
- *   parameters: The first is a reference to the actor's `context` and the
- *   second is an Object containing the current state properties.
- *   - __teardown__ (_Function_): A function that gets called when the actor
- *   is removed from an animation with
- *   `{@link rekapi.Rekapi#removeActor}`.
+ * @param {Object} [config]
+ * @param {(Object|CanvasRenderingContext2D|HTMLElement)} [config.context] The
+ * rendering context for this actor. If omitted, this Actor gets the parent
+ * `{@link rekapi.Rekapi}` instance's `context` when it is added with `{@link
+ * rekapi.Rekapi#addActor}`.
+ * @param {Function} [config.setup] A function that gets called when the actor
+ * is added to an animation with `{@link rekapi.Rekapi#addActor}`.
+ * @param {Function(Object, Object)} [config.render] A function that gets
+ * called every time the actor's state is updated (once every frame). This
+ * function should do something meaningful with state of the actor (for
+ * example, visually rendering to the screen).  This function receives two
+ * parameters: The first is a reference to the actor's `context` and the second
+ * is an Object containing the current state properties.
+ * @param {Function} [config.teardown] A function that gets called when the
+ * actor is removed from an animation with `{@link rekapi.Rekapi#removeActor}`.
  * @constructs rekapi.Actor
  */
 export class Actor extends Tweenable {
@@ -317,13 +315,13 @@ export class Actor extends Tweenable {
    * omitted, all properties will default to `linear`.
    * @method rekapi.Actor#keyframe
    * @param {number} millisecond Where on the timeline to set the keyframe.
-   * @param {Object|Function(number)} state The state properties of the
+   * @param {(Object|Function(number))} state The state properties of the
    * keyframe.  If this is an Object, the properties will be interpolated
    * between this and those of the following keyframe for a given point on the
    * animation timeline.  If this is a function, it will be executed at the
    * specified keyframe.  The function will receive a number that represents
    * the delay between when the function is called and when it was scheduled.
-   * @param {string|Object=} easing Optional easing string or Object.  If
+   * @param {(string|Object=)} easing Optional easing string or Object.  If
    * `state` is a function, this is ignored.
    */
   keyframe (millisecond, state, easing = DEFAULT_EASING) {
@@ -392,10 +390,10 @@ export class Actor extends Tweenable {
    *     actor.copyKeyframe(2000, 0);
    *
    * @method rekapi.Actor#copyKeyframe
-   * @param {number} copyTo The timeline millisecond to copy KeyframeProperties
-   * to.
-   * @param {number} copyFrom The timeline millisecond to copy
-   * KeyframeProperties from.
+   * @param {number} copyTo The timeline millisecond to copy {@link
+   * rekapi.KeyframeProperty}s to.
+   * @param {number} copyFrom The timeline millisecond to copy {@link
+   * rekapi.KeyframeProperty}s from.
    */
   copyKeyframe (copyTo, copyFrom) {
     // Build the configuation objects to be passed to Actor#keyframe
@@ -566,9 +564,10 @@ export class Actor extends Tweenable {
    * @param {string} property The name of the property track.
    * @param {number} millisecond The millisecond of the property in the
    * timeline.
-   * @return {KeyframeProperty|undefined} A `{@link rekapi.KeyframeProperty}`
-   * that is stored on the actor, as specified by the `property` and
-   * `millisecond` parameters. This is `undefined` if no properties were found.
+   * @return {(rekapi.KeyframeProperty|undefined)} A `{@link
+   * rekapi.KeyframeProperty}` that is stored on the actor, as specified by the
+   * `property` and `millisecond` parameters. This is `undefined` if no
+   * properties were found.
    */
   getKeyframeProperty (property, millisecond) {
     const propertyTrack = this._propertyTracks[property];
@@ -616,8 +615,8 @@ export class Actor extends Tweenable {
    * to remove.
    * @param {number} millisecond Where in the timeline the `{@link
    * rekapi.KeyframeProperty}` to remove is.
-   * @return {KeyframeProperty|undefined} The removed KeyframeProperty,
-   * if one was found.
+   * @return {(rekapi.KeyframeProperty|undefined)} The removed
+   * KeyframeProperty, if one was found.
    */
   removeKeyframeProperty (property, millisecond) {
     const { _propertyTracks } = this;
@@ -653,7 +652,7 @@ export class Actor extends Tweenable {
    * for a track.
    * @method rekapi.Actor#getPropertiesInTrack
    * @param {string} trackName The track name to query.
-   * @return {KeyframeProperty[]|undefined}
+   * @return {(Array(rekapi.KeyframeProperty)|undefined)}
    */
   getPropertiesInTrack (trackName) {
     const propertyTrack = this._propertyTracks[trackName];
@@ -797,7 +796,7 @@ export class Actor extends Tweenable {
    * `{@link rekapi.KeyframeProperty}` back to an actor after it was `{@link
    * rekapi.KeyframeProperty#detach}`ed.
    * @method rekapi.Actor#addKeyframeProperty
-   * @param {KeyframeProperty} keyframeProperty
+   * @param {rekapi.KeyframeProperty} keyframeProperty
    */
   addKeyframeProperty (keyframeProperty) {
     if (this.rekapi) {
