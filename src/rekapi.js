@@ -280,7 +280,7 @@ export class Rekapi {
    * reference to this `Rekapi` instance as `this.rekapi`.
    *
    * @method rekapi.Rekapi#addActor
-   * @param {(Actor|Object)} [actor] If this is an `Object`, it is used to as
+   * @param {(Actor|Object)} [actor={}] If this is an `Object`, it is used to as
    * the constructor parameters for a new `{@link rekapi.Actor}` instance that
    * is created by this method.
    * @return {Actor} The actor that was added.
@@ -442,7 +442,6 @@ export class Rekapi {
    * left off with {@link rekapi.Rekapi#play}.
    *
    * @method rekapi.Rekapi#pause
-   * @param pause
    */
   pause () {
     if (this._playState === PAUSED) {
@@ -576,61 +575,67 @@ export class Rekapi {
   }
 
   /**
+   * @callback rekapi.Rekapi.onCallback
+   * @param {rekapi.Rekapi} rekapi This `{@link rekapi.Rekapi}` instance
+   * @param {Object} data Data provided from the event (see `{@link
+   * rekapi.Rekapi#on}` for a list).
+   */
+
+  /**
    * Bind a handler function to a Rekapi event.
    *
    * @method rekapi.Rekapi#on
    * @param {string} eventName Valid values are:
    *
-   * - __animationComplete__: Fires when all animation loops have completed.
-   * - __playStateChange__: Fires when the animation is played, paused, or
+   * - `"animationComplete"`: Fires when all animation loops have completed.
+   * - `"playStateChange"`: Fires when the animation is played, paused, or
    *   stopped.
-   * - __play__: Fires when the animation is {@link rekapi.Rekapi#play}ed.
-   * - __pause__: Fires when the animation is {@link rekapi.Rekapi#pause}d.
-   * - __stop__: Fires when the animation is {@link rekapi.Rekapi#stop}ped.
-   * - __beforeUpdate__: Fires each frame before all actors are rendered.
-   * - __afterUpdate__: Fires each frame after all actors are rendered.
-   * - __addActor__: Fires when an actor is added.  `data` is the
+   * - `"play"`: Fires when the animation is {@link rekapi.Rekapi#play}ed.
+   * - `"pause"`: Fires when the animation is {@link rekapi.Rekapi#pause}d.
+   * - `"stop"`: Fires when the animation is {@link rekapi.Rekapi#stop}ped.
+   * - `"beforeUpdate"`: Fires each frame before all actors are rendered.
+   * - `"afterUpdate"`: Fires each frame after all actors are rendered.
+   * - `"addActor"`: Fires when an actor is added.  `data` is the
    *   {@link rekapi.Actor} that was added.
-   * - __removeActor__: Fires when an actor is removed.  `data` is the {@link
+   * - `"removeActor"`: Fires when an actor is removed.  `data` is the {@link
    *   rekapi.Actor} that was removed.
-   * - __beforeAddKeyframeProperty__: Fires just before the point where a
+   * - `"beforeAddKeyframeProperty"`: Fires just before the point where a
    *   {@link rekapi.KeyframeProperty} is added to the timeline.  This event is
    *   called before any modifications to the timeline are done.
-   * - __addKeyframeProperty__: Fires when a keyframe property is added.
+   * - `"addKeyframeProperty"`: Fires when a keyframe property is added.
    *   `data` is the {@link rekapi.KeyframeProperty} that was added.
-   * - __beforeRemoveKeyframeProperty__: Fires just before the point where a
+   * - `"beforeRemoveKeyframeProperty"`: Fires just before the point where a
    *   {@link rekapi.KeyframeProperty} is removed.  This
    *   event is called before any modifications to the timeline are done.
-   * - __removeKeyframeProperty__: Fires when a {@link rekapi.KeyframeProperty}
+   * - `"removeKeyframeProperty"`: Fires when a {@link rekapi.KeyframeProperty}
    *   is removed.  This event is fired _before_ the internal state of the
    *   keyframe (but not the timeline, in contrast to the
    *   `beforeRemoveKeyframeProperty` event) has been updated to reflect the
    *   keyframe property removal (this is in contrast to
    *   `removeKeyframePropertyComplete`).  `data` is the {@link
    *   rekapi.KeyframeProperty} that was removed.
-   * - __removeKeyframePropertyComplete__: Fires when a {@link
+   * - `"removeKeyframePropertyComplete"`: Fires when a {@link
    *   rekapi.KeyframeProperty} has finished being removed from the timeline.
    *   Unlike `removeKeyframeProperty`, this is fired _after_ the internal
    *   state of Rekapi has been updated to reflect the removal of the keyframe
    *   property. `data` is the {@link rekapi.KeyframeProperty} that was
    *   removed.
-   * - __addKeyframePropertyTrack__: Fires when the a keyframe is added to an
+   * - `"addKeyframePropertyTrack"`: Fires when the a keyframe is added to an
    *   actor that creates a new keyframe property track.  `data` is the {@link
    *   rekapi.KeyframeProperty} that was added to create the property track.  A
    *   reference to the actor that the keyframe property is associated with can
    *   be accessed via `data.actor` and the track name that was added can be
    *   determined via `data.name`.
-   * - __removeKeyframePropertyTrack__: Fires when the last keyframe property
+   * - `"removeKeyframePropertyTrack"`: Fires when the last keyframe property
    *   in an actor's keyframe property track is removed.  Rekapi automatically
    *   removes property tracks when they are emptied out, which causes this
    *   event to be fired.  `data` is the name of the track that was
    *   removed.
-   * - __timelineModified__: Fires when a keyframe is added, modified or
+   * - `"timelineModified"`: Fires when a keyframe is added, modified or
    *   removed.
-   * - __animationLooped__: Fires when an animation loop ends and a new one
+   * - `"animationLooped"`: Fires when an animation loop ends and a new one
    *   begins.
-   * @param {Function(Rekapi,Object=)} handler Receives the Rekapi instance as
-   * the first parameter and event-specific data as the second (`data`).
+   * @param {rekapi.Rekapi.onCallback} handler The event handler function.
    */
   on (eventName, handler) {
     if (!this._events[eventName]) {
@@ -660,7 +665,7 @@ export class Rekapi {
    * @method rekapi.Rekapi#off
    * @param {string} eventName Valid values correspond to the list under
    * {@link rekapi.Rekapi#on}.
-   * @param {Function=} handler If omitted, all handler functions bound to
+   * @param {Function} [handler] If omitted, all handler functions bound to
    * `eventName` are unbound.
    */
   off (eventName, handler) {
