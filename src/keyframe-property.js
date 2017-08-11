@@ -11,14 +11,19 @@ const DEFAULT_EASING = 'linear';
  * cases you won't need to deal with this object directly, as the
  * `{@link rekapi.Actor}` APIs abstract a lot of what
  * this Object does away for you.
- * @param {number} millisecond Where on the animation timeline this
- * `KeyframeProperty` is.
- * @param {string} name The property's name, such as `"x"` or `"opacity"`.
- * @param {number|string|Function} value The value that this
- * `KeyframeProperty` represents.
- * @param {string=} easing The easing curve at which this
- * `KeyframeProperty` should be animated to.  Defaults to `"linear"`.
+ * @param {number} millisecond
+ * @param {string} name
+ * @param {number|string|rekapi.Actor.keyframeCallback} value
+ * @param {string} [easing="linear"]
  * @constructs rekapi.KeyframeProperty
+ *
+ * @property {number} millisecond Where on the animation timeline this
+ * `KeyframeProperty` is.
+ * @property {string} name The property's name, such as `"x"` or `"opacity"`.
+ * @property {number|string|rekapi.Actor.keyframeCallback} value The value that
+ * this `KeyframeProperty` represents.
+ * @property {string} easing The easing curve at which this `KeyframeProperty`
+ * should be animated to.
  */
 export class KeyframeProperty {
   constructor (millisecond, name, value, easing = DEFAULT_EASING) {

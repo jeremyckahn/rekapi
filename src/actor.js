@@ -260,8 +260,8 @@ export class Actor extends Tweenable {
    * keyframe's state.  These properties can be any value that can be tweened
    * by [Shifty](http://jeremyckahn.github.io/shifty/doc/) (numbers,
    * RGB/hexadecimal color strings, and CSS property strings).  `state` can
-   * also be a function, but this works differently (see "Function keyframes"
-   * below).
+   * also be a [function]{@link rekapi.Actor.keyframeCallback}, but
+   * [this works differently]{@tutorial keyframes-in-depth}.
    *
    * __Note:__ Internally, this creates `{@link rekapi.KeyframeProperty}`s and
    * places them on a "track." These `{@link rekapi.KeyframeProperty}`s are managed
