@@ -10,7 +10,7 @@ export const DEFAULT_EASING = 'linear';
  * Fire an event bound to a Rekapi.
  * @param {Rekapi} rekapi
  * @param {string} eventName
- * @param {Object=} data Optional event-specific data
+ * @param {Object} [data={}] Optional event-specific data
  */
 export const fireEvent = (rekapi, eventName, data = {}) =>
   rekapi._events[eventName].forEach(handler => handler(rekapi, data));
@@ -200,7 +200,7 @@ export const renderers = [];
  * If this is a rendered animation, the appropriate renderer is accessible as
  * `this.renderer`.  If provided, a reference to `context` is accessible
  * as `this.context`.
- * @param {(Object|CanvasRenderingContext2D|HTMLElement)=} context This
+ * @param {(Object|CanvasRenderingContext2D|HTMLElement)} [context] This
  * determines how to render the animation.  If this is not provided or is a
  * plain object (`{}`), the animation will not render anything and
  * `this.renderer` will be `undefined`.  If this is a reference to a
@@ -382,7 +382,7 @@ export class Rekapi {
    * Play the animation.
    *
    * @method rekapi.Rekapi#play
-   * @param {Number=} iterations If omitted, the animation will loop
+   * @param {Number} [iterations=-1] If omitted, the animation will loop
    * endlessly.
    */
   play (iterations = -1) {
@@ -413,7 +413,7 @@ export class Rekapi {
    *
    * @method rekapi.Rekapi#playFrom
    * @param {Number} millisecond
-   * @param {Number=} iterations Works as it does in {@link
+   * @param {Number} [iterations] Works as it does in {@link
    * rekapi.Rekapi#play}.
    */
   playFrom (millisecond, iterations) {
@@ -430,7 +430,7 @@ export class Rekapi {
    * rekapi.Rekapi#update}.
    *
    * @method rekapi.Rekapi#playFromCurrent
-   * @param {Number=} iterations Works as it does in {@link
+   * @param {Number} [iterations] Works as it does in {@link
    * rekapi.Rekapi#play}.
    */
   playFromCurrent (iterations) {
@@ -510,12 +510,13 @@ export class Rekapi {
    * Render an animation frame at a specific point in the timeline.
    *
    * @method rekapi.Rekapi#update
-   * @param {Number=} millisecond The point in the timeline at which to
-   * render.  If omitted, this renders the last millisecond that was rendered
-   * (it's a re-render).
-   * @param {Boolean=} doResetLaterFnKeyframes If true, allow all function
-   * keyframes later in the timeline to be run again.  This is a low-level
-   * feature, it should not be `true` (or even provided) for most use cases.
+   * @param {Number} [millisecond=this._lastUpdatedMillisecond] The point in
+   * the timeline at which to render.  If omitted, this renders the last
+   * millisecond that was rendered (it's a re-render).
+   * @param {Boolean} [doResetLaterFnKeyframes=false] If true, allow all
+   * function keyframes later in the timeline to be run again.  This is a
+   * low-level feature, it should not be `true` (or even provided) for most use
+   * cases.
    */
   update (
     millisecond = this._lastUpdatedMillisecond,
@@ -650,7 +651,7 @@ export class Rekapi {
   /**
    * Manually fire a Rekapi event, thereby calling all bound event handlers.
    * @param {string} eventName The name of the event to trigger.
-   * @param {any=} data Optional data to provide to `eventName` handlers.
+   * @param {any} [data] Optional data to provide to `eventName` handlers.
    * @method rekapi.Rekapi#trigger
    */
   trigger (eventName, data) {
