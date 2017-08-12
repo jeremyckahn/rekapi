@@ -21,19 +21,14 @@ inherited from keyframe `0`.
 ## Function keyframes
 
 Instead of providing an Object to be used to interpolate state values, you can
-provide a function to be called at a specific point on the timeline.  This
-function does not need to return a value, as it does not get used to render the
-actor state.  Function keyframes are called once per animation loop and do not
-have any tweening relationship with one another.  This is a primarily a
-mechanism for scheduling arbitrary code to be executed at specific points in an
-animation.
+provide [a function]{@link rekapi.keyframeFunction} to be called at a specific
+point on the timeline.  This function does not need to return a value, as it
+does not get used to render the actor state.  Function keyframes are called
+once per animation loop and do not have any tweening relationship with one
+another.  This is a primarily a mechanism for scheduling arbitrary code to be
+executed at specific points in an animation.
 
-    // drift is the number of milliseconds that this function was executed
-    // after the scheduled time.  There is typically some amount of delay
-    // due to the nature of JavaScript timers.
-    actor.keyframe(1000, function (drift) {
-      console.log(this); // Logs the actor instance
-    });
+    actor.keyframe(1000, actor => console.log(actor));
 
 ## Easing
 

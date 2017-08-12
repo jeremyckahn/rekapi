@@ -156,7 +156,7 @@ export class KeyframeProperty {
    */
   invoke () {
     const drift = this.actor.rekapi._loopPosition - this.millisecond;
-    const returnValue = this.value.call(this.actor, drift);
+    const returnValue = this.value(this.actor, drift);
     this.hasFired = true;
 
     return returnValue;

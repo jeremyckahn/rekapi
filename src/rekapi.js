@@ -220,8 +220,11 @@ export const renderers = [];
 
 /**
  * @callback rekapi.keyframeFunction
+ * @param {rekapi.Actor} actor The `{@link rekapi.Actor}` to which this
+ * `{@link rekapi.keyframeFunction}` was provided.
  * @param {number} drift A number that represents the delay between when the
- * function is called and when it was scheduled.
+ * function is called and when it was scheduled. There is typically some amount
+ * of delay due to the nature of JavaScript timers.
  */
 
 /**

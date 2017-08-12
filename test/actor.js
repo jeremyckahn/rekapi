@@ -699,8 +699,8 @@ describe('Actor', () => {
       it('receives drift and context', () => {
         let receivedDrift, context;
 
-        actor.keyframe(0, function (drift) {
-          context = this;
+        actor.keyframe(0, function (actor, drift) {
+          context = actor;
           receivedDrift = drift;
         });
 
