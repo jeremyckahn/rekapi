@@ -11,19 +11,12 @@ const DEFAULT_EASING = 'linear';
  * cases you won't need to deal with this object directly, as the
  * {@link rekapi.Actor} APIs abstract a lot of what
  * this Object does away for you.
- * @param {number} millisecond
- * @param {string} name
- * @param {number|string|rekapi.keyframeFunction} value
- * @param {string} [easing="linear"]
+ * @param {number} millisecond Sets {@link rekapi.KeyframeProperty#millisecond}
+ * @param {string} name Sets {@link rekapi.KeyframeProperty#name}
+ * @param {number|string|rekapi.keyframeFunction} value Sets {@link
+ * rekapi.KeyframeProperty#value}
+ * @param {string} [easing="linear"] Sets {@link rekapi.KeyframeProperty#easing}
  * @constructs rekapi.KeyframeProperty
- *
- * @property {number} millisecond Where on the animation timeline this
- * `KeyframeProperty` is.
- * @property {string} name The property's name, such as `"x"` or `"opacity"`.
- * @property {number|string|rekapi.keyframeFunction} value The value that
- * this `KeyframeProperty` represents.
- * @property {string} easing The easing curve at which this `KeyframeProperty`
- * should be animated to.
  */
 export class KeyframeProperty {
   constructor (millisecond, name, value, easing = DEFAULT_EASING) {
@@ -32,9 +25,26 @@ export class KeyframeProperty {
     this.nextProperty = null;
 
     Object.assign(this, {
+      /**
+       * @member {number} rekapi.KeyframeProperty#millisecond Where on the
+       * animation timeline this {@link rekapi.KeyframeProperty} is.
+       */
       millisecond,
+      /**
+       * @member {string} rekapi.KeyframeProperty#name The property's name,
+       * such as `"x"` or `"opacity"`.
+       */
       name,
+      /**
+       * @member {number|string|rekapi.keyframeFunction}
+       * rekapi.KeyframeProperty#value The value that this {@link
+       * rekapi.KeyframeProperty} represents.
+       */
       value,
+      /**
+       * @member {string} rekapi.KeyframeProperty#easing The easing curve at
+       * which this {@link rekapi.KeyframeProperty} should be animated to.
+       */
       easing
     });
   }

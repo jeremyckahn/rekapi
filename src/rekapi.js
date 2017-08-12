@@ -209,7 +209,6 @@ export const renderers = [];
  * HTML5 canvas-based rendering.  If this is a reference to a DOM element,
  * {@link rekapi.DOMRenderer} will be initialized as `this.renderer` for
  * either a DOM or CSS `@keyframe`-based rendering.
- * @property {Array.<rekapi.renderer>} renderers
  * @constructs rekapi.Rekapi
  */
 export class Rekapi {

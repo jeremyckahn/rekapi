@@ -210,7 +210,7 @@ const cleanupAfterKeyframeModification = actor => {
  * rekapi.Rekapi#addActor}.
  * @param {Function} [config.setup] A function that gets called when the actor
  * is added to an animation with {@link rekapi.Rekapi#addActor}.
- * @param {rekapi.renderActor} [config.render] See {@link rekapi.renderActor}
+ * @param {rekapi.render} [config.render] See {@link rekapi.render}
  * @param {Function} [config.teardown] A function that gets called when the
  * actor is removed from an animation with {@link rekapi.Rekapi#removeActor}.
  * @constructs rekapi.Actor

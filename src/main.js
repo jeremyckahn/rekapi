@@ -1,27 +1,30 @@
 /**
-* @namespace rekapi
-*/
+ * @namespace rekapi
+ */
 
 /**
+ * An Object that provides utilities for rendering a {@link rekapi.Actor}.
  * @typedef {Object} rekapi.renderer
- * @property {rekapi.renderActor} render A function that renders a {@link
+ * @property {rekapi.render} render A function that renders a {@link
  * rekapi.Actor}.
  */
 
 /**
+ * A function that is called when an event is fired.  See {@link
+ * rekapi.Rekapi#on} for a list of valid events.
  * @callback rekapi.eventHandler
- * @param {rekapi.Rekapi} rekapi This {@link rekapi.Rekapi} instance
+ * @param {rekapi.Rekapi} rekapi A {@link rekapi.Rekapi} instance.
  * @param {Object} data Data provided from the event (see {@link
- * rekapi.Rekapi#on} for a list).
+ * rekapi.Rekapi#on} for details).
  */
 
 /**
  * A function that gets called every time the actor's state is updated (once
- * every frame). This function should do something meaningful with state of the
- * actor (for example, visually rendering to the screen).
- * @callback rekapi.renderActor
- * @param {Object} context This actor's `context` Object.
- * @param {Object} state This actor's current state properties.
+ * every frame). This function should do something meaningful with the state of
+ * the actor (for example, visually rendering to the screen).
+ * @callback rekapi.render
+ * @param {Object} context An actor's {@link rekapi.Actor#context} Object.
+ * @param {Object} state An actor's current state properties.
  */
 
 /**
