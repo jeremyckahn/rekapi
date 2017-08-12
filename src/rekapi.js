@@ -197,6 +197,34 @@ const PLAYING = 'playing';
 export const renderers = [];
 
 /**
+ * @typedef {Object} rekapi.renderer
+ * @property {rekapi.renderActor} render A function that renders a {@link
+ * rekapi.Actor}.
+ */
+
+/**
+ * @callback rekapi.eventHandler
+ * @param {rekapi.Rekapi} rekapi This `{@link rekapi.Rekapi}` instance
+ * @param {Object} data Data provided from the event (see `{@link
+ * rekapi.Rekapi#on}` for a list).
+ */
+
+/**
+ * A function that gets called every time the actor's state is updated (once
+ * every frame). This function should do something meaningful with state of the
+ * actor (for example, visually rendering to the screen).
+ * @callback rekapi.renderActor
+ * @param {Object} context This actor's `context` Object.
+ * @param {Object} state This actor's current state properties.
+ */
+
+/**
+ * @callback rekapi.keyframeFunction
+ * @param {number} drift A number that represents the delay between when the
+ * function is called and when it was scheduled.
+ */
+
+/**
  * If this is a rendered animation, the appropriate renderer is accessible as
  * `this.renderer`.  If provided, a reference to `context` is accessible
  * as `this.context`.
@@ -209,6 +237,7 @@ export const renderers = [];
  * HTML5 canvas-based rendering.  If this is a reference to a DOM element,
  * `{@link rekapi.DOMRenderer}` will be initialized as `this.renderer` for
  * either a DOM or CSS `@keyframe`-based rendering.
+ * @property {Array.<rekapi.renderer>} renderers
  * @constructs rekapi.Rekapi
  */
 export class Rekapi {
@@ -576,13 +605,6 @@ export class Rekapi {
   }
 
   /**
-   * @callback rekapi.Rekapi.onCallback
-   * @param {rekapi.Rekapi} rekapi This `{@link rekapi.Rekapi}` instance
-   * @param {Object} data Data provided from the event (see `{@link
-   * rekapi.Rekapi#on}` for a list).
-   */
-
-  /**
    * Bind a handler function to a Rekapi event.
    *
    * @method rekapi.Rekapi#on
@@ -636,7 +658,7 @@ export class Rekapi {
    *   removed.
    * - `"animationLooped"`: Fires when an animation loop ends and a new one
    *   begins.
-   * @param {rekapi.Rekapi.onCallback} handler The event handler function.
+   * @param {rekapi.eventHandler} handler The event handler function.
    */
   on (eventName, handler) {
     if (!this._events[eventName]) {

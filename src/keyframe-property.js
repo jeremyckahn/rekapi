@@ -13,14 +13,14 @@ const DEFAULT_EASING = 'linear';
  * this Object does away for you.
  * @param {number} millisecond
  * @param {string} name
- * @param {number|string|rekapi.Actor.keyframeCallback} value
+ * @param {number|string|rekapi.keyframeFunction} value
  * @param {string} [easing="linear"]
  * @constructs rekapi.KeyframeProperty
  *
  * @property {number} millisecond Where on the animation timeline this
  * `KeyframeProperty` is.
  * @property {string} name The property's name, such as `"x"` or `"opacity"`.
- * @property {number|string|rekapi.Actor.keyframeCallback} value The value that
+ * @property {number|string|rekapi.keyframeFunction} value The value that
  * this `KeyframeProperty` represents.
  * @property {string} easing The easing curve at which this `KeyframeProperty`
  * should be animated to.

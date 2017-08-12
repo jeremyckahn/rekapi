@@ -200,15 +200,6 @@ const cleanupAfterKeyframeModification = actor => {
 };
 
 /**
- * A function that gets called every time the actor's state is updated (once
- * every frame). This function should do something meaningful with state of the
- * actor (for example, visually rendering to the screen).
- * @callback rekapi.Actor.renderActor
- * @param {Object} context This actor's `context` Object.
- * @param {Object} state This actor's current state properties.
- */
-
-/**
  * An actor represents an individual component of an animation.  An animation
  * may have one or many actors.
  *
@@ -219,8 +210,7 @@ const cleanupAfterKeyframeModification = actor => {
  * rekapi.Rekapi#addActor}`.
  * @param {Function} [config.setup] A function that gets called when the actor
  * is added to an animation with `{@link rekapi.Rekapi#addActor}`.
- * @param {rekapi.Actor.renderActor} [config.render] See `{@link
- * rekapi.Actor.renderActor}`
+ * @param {rekapi.renderActor} [config.render] See `{@link rekapi.renderActor}`
  * @param {Function} [config.teardown] A function that gets called when the
  * actor is removed from an animation with `{@link rekapi.Rekapi#removeActor}`.
  * @constructs rekapi.Actor
@@ -246,22 +236,16 @@ export class Actor extends Tweenable {
   }
 
   /**
-   * @callback rekapi.Actor.keyframeCallback
-   * @param {number} drift A number that represents the delay between when the
-   * function is called and when it was scheduled.
-   */
-
-  /**
    * Create a keyframe for the actor.  The animation timeline begins at `0`.
    * The timeline's length will automatically "grow" to accommodate new
    * keyframes as they are added.
    *
-   * `state` should contain all of the properties that define this
-   * keyframe's state.  These properties can be any value that can be tweened
-   * by [Shifty](http://jeremyckahn.github.io/shifty/doc/) (numbers,
+   * `state` should contain all of the properties that define this keyframe's
+   * state.  These properties can be any value that can be tweened by
+   * [Shifty](http://jeremyckahn.github.io/shifty/doc/) (numbers,
    * RGB/hexadecimal color strings, and CSS property strings).  `state` can
-   * also be a [function]{@link rekapi.Actor.keyframeCallback}, but
-   * [this works differently]{@tutorial keyframes-in-depth}.
+   * also be a [function]{@link rekapi.keyframeFunction}, but [this works
+   * differently]{@tutorial keyframes-in-depth}.
    *
    * __Note:__ Internally, this creates `{@link rekapi.KeyframeProperty}`s and
    * places them on a "track." These `{@link rekapi.KeyframeProperty}`s are managed
@@ -270,12 +254,11 @@ export class Actor extends Tweenable {
    * ## [Click to learn about keyframes in depth]{@tutorial keyframes-in-depth}
    * @method rekapi.Actor#keyframe
    * @param {number} millisecond Where on the timeline to set the keyframe.
-   * @param {(Object|rekapi.Actor.keyframeCallback)} state The state properties
-   * of the keyframe.  If this is an Object, the properties will be
-   * interpolated between this and those of the following keyframe for a given
-   * point on the animation timeline.  If this is a function (`{@link
-   * rekapi.Actor.keyframeCallback}`), it will be called at the specified
-   * keyframe.
+   * @param {(Object|rekapi.keyframeFunction)} state The state properties of
+   * the keyframe.  If this is an Object, the properties will be interpolated
+   * between this and those of the following keyframe for a given point on the
+   * animation timeline.  If this is a function (`{@link
+   * rekapi.keyframeFunction}`), it will be called at the specified keyframe.
    * @param {(string|Object)} [easing] Optional easing string or Object.  If
    * `state` is a function, this is ignored.
    */
