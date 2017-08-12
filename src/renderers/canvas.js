@@ -88,7 +88,7 @@ const removeActor = (actor, canvasRenderer) => {
  * You can use Rekapi to render animations to an HTML5 `<canvas>`.  To do so,
  * just provide a
  * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
- * instance to the `{@link rekapi.Rekapi}` constructor to
+ * instance to the {@link rekapi.Rekapi} constructor to
  * automatically set up the renderer:
  *
  *     const context = document.createElement('canvas').getContext('2d');
@@ -96,13 +96,13 @@ const removeActor = (actor, canvasRenderer) => {
  *     rekapi.renderer instanceof CanvasRenderer; // true
  *
  * `CanvasRenderer` adds some canvas-specific events you can bind to
- * with `{@link rekapi.Rekapi#on}` (and unbind from
- * with `{@link rekapi.Rekapi#off}`:
+ * with {@link rekapi.Rekapi#on} (and unbind from
+ * with {@link rekapi.Rekapi#off}:
  *
  *  - __beforeRender__: Fires just before an actor is rendered to the canvas.
  *  - __afterRender__: Fires just after an actor is rendered to the canvas.
  *
- * __Note__: `CanvasRenderer` is added to the `{@link rekapi.Rekapi}` instance
+ * __Note__: `CanvasRenderer` is added to the {@link rekapi.Rekapi} instance
  * automatically as `this.renderer`, there is no reason to call the constructor
  * yourself in most cases.
  *
@@ -111,10 +111,10 @@ const removeActor = (actor, canvasRenderer) => {
  * Rekapi supports multiple renderers per instance.  Do do this, you must not
  * provide a
  * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
- * to the `{@link rekapi.Rekapi}` constructor, you must
+ * to the {@link rekapi.Rekapi} constructor, you must
  * instead initialize the renderer yourself.  The
  * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
- * that would have been provided to the `{@link rekapi.Rekapi}` constructor
+ * that would have been provided to the {@link rekapi.Rekapi} constructor
  * instead is provided as the second parameter to `CanvasRenderer`:
  *
  *
@@ -188,19 +188,19 @@ export class CanvasRenderer {
   /**
    * Move an actor around within the render order list.  Each actor is rendered
    * in order of its layer (layers and actors have a 1:1 relationship).  The
-   * later an actor is added to an animation (with `{@link
-   * rekapi.Rekapi#addActor}`), the higher its layer.  Lower layers (starting
+   * later an actor is added to an animation (with {@link
+   * rekapi.Rekapi#addActor}), the higher its layer.  Lower layers (starting
    * with 0) are rendered earlier.
    *
    *
-   * This method has no effect if an order function is set with `{@link
-   * rekapi.CanvasRenderer#setOrderFunction}`.
+   * This method has no effect if an order function is set with {@link
+   * rekapi.CanvasRenderer#setOrderFunction}.
    *
    * @method rekapi.CanvasRenderer#moveActorToLayer
    * @param {Actor} actor
    * @param {number} layer This should be within `0` and the total number of
-   * actors in the animation.  That number can be found with `{@link
-   * rekapi.Rekapi#getActorCount}`.
+   * actors in the animation.  That number can be found with {@link
+   * rekapi.Rekapi#getActorCount}.
    * @return {Actor}
    */
   moveActorToLayer (actor, layer) {
@@ -217,13 +217,13 @@ export class CanvasRenderer {
    * called each frame before the actors are rendered.
    *
    * The following example assumes that all actors are circles that have a
-   * `radius` `{@link rekapi.KeyframeProperty}`.  The circles will be rendered
+   * `radius` {@link rekapi.KeyframeProperty}.  The circles will be rendered
    * in order of the value of their `radius`, from smallest to largest.  This
    * has the effect of layering larger circles on top of smaller circles, thus
    * giving a sense of perspective.
    *
-   * If a render order function is specified, `{@link
-   * rekapi.CanvasRenderer#moveActorToLayer}` will have no effect.
+   * If a render order function is specified, {@link
+   * rekapi.CanvasRenderer#moveActorToLayer} will have no effect.
    *
    *     rekapi.renderer.setOrderFunction(function (actor) {
    *       return actor.get().radius;
@@ -238,8 +238,8 @@ export class CanvasRenderer {
   }
 
   /**
-   * Remove the order function set by `{@link
-   * rekapi.CanvasRenderer#setOrderFunction}`.  The render order defaults back
+   * Remove the order function set by {@link
+   * rekapi.CanvasRenderer#setOrderFunction}.  The render order defaults back
    * to the order in which the actors were added to the animation.
    *
    * @method rekapi.CanvasRenderer#unsetOrderFunction

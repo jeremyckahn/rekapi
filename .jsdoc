@@ -5,6 +5,7 @@
     "readme": "index.md"
   },
   "templates": {
+    "cleverLinks": true,
     "default": {
       "useLongnameInNav": true
     }

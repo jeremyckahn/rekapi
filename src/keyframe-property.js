@@ -9,7 +9,7 @@ const DEFAULT_EASING = 'linear';
 /**
  * Represents an individual component of an actor's keyframe state.  In most
  * cases you won't need to deal with this object directly, as the
- * `{@link rekapi.Actor}` APIs abstract a lot of what
+ * {@link rekapi.Actor} APIs abstract a lot of what
  * this Object does away for you.
  * @param {number} millisecond
  * @param {string} name
@@ -40,10 +40,10 @@ export class KeyframeProperty {
   }
 
   /**
-   * Modify this `{@link rekapi.KeyframeProperty}`.
+   * Modify this {@link rekapi.KeyframeProperty}.
    * @method rekapi.KeyframeProperty#modifyWith
-   * @param {Object} newProperties Valid values correspond to `{@link
-   * rekapi.KeyframeProperty}`'s constructor parameters:
+   * @param {Object} newProperties Valid values correspond to {@link
+   * rekapi.KeyframeProperty}'s constructor parameters:
    *   - __millisecond__ (_number_)
    *   - __name__ (_string_)
    *   - __value__ (_number|string_)
@@ -54,13 +54,13 @@ export class KeyframeProperty {
   }
 
   /**
-   * Calculate the midpoint between this `{@link rekapi.KeyframeProperty}` and
-   * the next `{@link rekapi.KeyframeProperty}` in a `{@link rekapi.Actor}`'s
+   * Calculate the midpoint between this {@link rekapi.KeyframeProperty} and
+   * the next {@link rekapi.KeyframeProperty} in a {@link rekapi.Actor}'s
    * property track.
    *
-   * In just about all cases, `millisecond` should be between this `{@link
-   * rekapi.KeyframeProperty}`'s `millisecond` and the `millisecond` of the
-   * `{@link rekapi.KeyframeProperty}` that follows it in the animation
+   * In just about all cases, `millisecond` should be between this {@link
+   * rekapi.KeyframeProperty}'s `millisecond` and the `millisecond` of the
+   * {@link rekapi.KeyframeProperty} that follows it in the animation
    * timeline, but it is valid to specify a value outside of this range.
    * @method rekapi.KeyframeProperty#getValueAt
    * @param {number} millisecond The millisecond in the animation timeline to
@@ -95,12 +95,12 @@ export class KeyframeProperty {
   }
 
   /**
-   * Create the reference to the `{@link rekapi.KeyframeProperty}` that follows
-   * this one on a `{@link rekapi.Actor}`'s property track.  Property tracks
-   * are just linked lists of `{@link rekapi.KeyframeProperty}`s.
+   * Create the reference to the {@link rekapi.KeyframeProperty} that follows
+   * this one on a {@link rekapi.Actor}'s property track.  Property tracks
+   * are just linked lists of {@link rekapi.KeyframeProperty}s.
    * @method rekapi.KeyframeProperty#linkToNext
-   * @param {KeyframeProperty=} nextProperty The `{@link
-   * rekapi.KeyframeProperty}` that should immediately follow this one on the
+   * @param {KeyframeProperty=} nextProperty The {@link
+   * rekapi.KeyframeProperty} that should immediately follow this one on the
    * animation timeline.
    */
   linkToNext (nextProperty = null) {
@@ -108,10 +108,10 @@ export class KeyframeProperty {
   }
 
   /**
-   * Disassociates this `{@link rekapi.KeyframeProperty}` from its `{@link
-   * rekapi.Actor}`.  This is called by various `{@link rekapi.Actor}` methods
-   * and triggers the `[removeKeyframeProperty]{@link rekapi.Rekapi#on}` event
-   * on the associated `{@link rekapi.Rekapi}` instance.
+   * Disassociates this {@link rekapi.KeyframeProperty} from its {@link
+   * rekapi.Actor}.  This is called by various {@link rekapi.Actor} methods
+   * and triggers the `[removeKeyframeProperty]{@link rekapi.Rekapi#on} event
+   * on the associated {@link rekapi.Rekapi} instance.
    * @method rekapi.KeyframeProperty#detach
    */
   detach () {
@@ -129,7 +129,7 @@ export class KeyframeProperty {
   /**
    * @method rekapi.KeyframeProperty#exportPropertyData
    * @return {Object} A serializable Object representation of this
-   * `{@link rekapi.KeyframeProperty}`.
+   * {@link rekapi.KeyframeProperty}.
    */
   exportPropertyData () {
     return _.pick(this, ['millisecond', 'name', 'value', 'easing']);
@@ -152,7 +152,7 @@ export class KeyframeProperty {
    * Assuming this is a function keyframe, call the function.
    * @method rekapi.KeyframeProperty#invoke
    * @return {*} Whatever value is returned from the keyframe function that was
-   * set for this `{@link rekapi.KeyframeProperty}`.
+   * set for this {@link rekapi.KeyframeProperty}.
    */
   invoke () {
     const drift = this.actor.rekapi._loopPosition - this.millisecond;

@@ -10,9 +10,9 @@
 
 /**
  * @callback rekapi.eventHandler
- * @param {rekapi.Rekapi} rekapi This `{@link rekapi.Rekapi}` instance
- * @param {Object} data Data provided from the event (see `{@link
- * rekapi.Rekapi#on}` for a list).
+ * @param {rekapi.Rekapi} rekapi This {@link rekapi.Rekapi} instance
+ * @param {Object} data Data provided from the event (see {@link
+ * rekapi.Rekapi#on} for a list).
  */
 
 /**
@@ -26,8 +26,8 @@
 
 /**
  * @callback rekapi.keyframeFunction
- * @param {rekapi.Actor} actor The `{@link rekapi.Actor}` to which this
- * `{@link rekapi.keyframeFunction}` was provided.
+ * @param {rekapi.Actor} actor The {@link rekapi.Actor} to which this
+ * {@link rekapi.keyframeFunction} was provided.
  * @param {number} drift A number that represents the delay between when the
  * function is called and when it was scheduled. There is typically some amount
  * of delay due to the nature of JavaScript timers.

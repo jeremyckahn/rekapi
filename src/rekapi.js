@@ -202,12 +202,12 @@ export const renderers = [];
  * as `this.context`.
  * @param {(Object|CanvasRenderingContext2D|HTMLElement)} [context] This
  * determines how to render the animation.  If this is not provided or is a
- * plain object (`{}`), the animation will not render anything and
+ * plain object ({}), the animation will not render anything and
  * `this.renderer` will be `undefined`.  If this is a reference to a
  * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D),
- * `{@link rekapi.CanvasRenderer}` will be initialized as `this.renderer` for
+ * {@link rekapi.CanvasRenderer} will be initialized as `this.renderer` for
  * HTML5 canvas-based rendering.  If this is a reference to a DOM element,
- * `{@link rekapi.DOMRenderer}` will be initialized as `this.renderer` for
+ * {@link rekapi.DOMRenderer} will be initialized as `this.renderer` for
  * either a DOM or CSS `@keyframe`-based rendering.
  * @property {Array.<rekapi.renderer>} renderers
  * @constructs rekapi.Rekapi
@@ -282,7 +282,7 @@ export class Rekapi {
    *
    * @method rekapi.Rekapi#addActor
    * @param {(Actor|Object)} [actor={}] If this is an `Object`, it is used to as
-   * the constructor parameters for a new `{@link rekapi.Actor}` instance that
+   * the constructor parameters for a new {@link rekapi.Actor} instance that
    * is created by this method.
    * @return {Actor} The actor that was added.
    */
@@ -312,7 +312,7 @@ export class Rekapi {
 
   /**
    * Get a reference to an actor from the animation by its `id`.  You can use
-   * `{@link rekapi.Rekapi#getActorIds}` to get a list
+   * {@link rekapi.Rekapi#getActorIds} to get a list
    * of IDs for all actors in the animation.
    * @method rekapi.Rekapi#getActor
    * @param {Number} actorId

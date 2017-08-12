@@ -105,8 +105,8 @@ const vendorPrefix = (() => {
 
 /*!
  * @param {Actor} actor
- * @return {string} The default CSS class that is targeted by `{@link
- * rekapi.DOMRenderer#getCss}` if a custom class is not specified.  This may be
+ * @return {string} The default CSS class that is targeted by {@link
+ * rekapi.DOMRenderer#getCss} if a custom class is not specified.  This may be
  * useful for getting a standard and consistent CSS class name for an actor's
  * DOM element.
  */
@@ -877,7 +877,7 @@ export const getActorCSS = (actor, options = {}) => {
  * are defined with the same API in either case, but you can gracefully fall
  * back to the inline style approach if CSS `@keyframe` animations are not
  * supported by the browser or not preferred.  To render animations with the
- * DOM, just supply any DOM element to the `{@link rekapi.Rekapi}` constructor.
+ * DOM, just supply any DOM element to the {@link rekapi.Rekapi} constructor.
  * You may use `document.body`, since it is generally always available:
  *
  *     const rekapi = new Rekapi(document.body);
@@ -899,7 +899,7 @@ export const getActorCSS = (actor, options = {}) => {
  *   - Generating the CSS for `@keyframe` animations can take a noticeable
  *   amount of time.  This blocks all other logic, including rendering, so
  *   you may have to be clever with how to spend the cycles to do it.
- *   - No `[events]{@link rekapi.Rekapi#on}` can be
+ *   - No [events]{@link rekapi.Rekapi#on} can be
  *   bound to CSS `@keyframe` animations.
  *
  * So, the results are a little more predictable and flexible with inline
@@ -932,9 +932,9 @@ export const getActorCSS = (actor, options = {}) => {
  * ## `@keyframe` animations work differently than inline style animations
  *
  * Inline style animations are compatible with all of the playback and timeline
- * control methods defined by `{@link rekapi.Rekapi}`, such as `{@link
- * rekapi.Rekapi#play}`, `{@link rekapi.Rekapi#playFrom}` and `{@link
- * rekapi.Rekapi#update}`.  CSS `@keyframe` playback cannot be controlled in
+ * control methods defined by {@link rekapi.Rekapi}, such as {@link
+ * rekapi.Rekapi#play}, {@link rekapi.Rekapi#playFrom} and {@link
+ * rekapi.Rekapi#update}.  CSS `@keyframe` playback cannot be controlled in
  * all browsers, so `DOMRenderer` defines analogous, renderer-specific CSS
  * playback methods that you should use:
  *
@@ -942,7 +942,7 @@ export const getActorCSS = (actor, options = {}) => {
  *   - {@link rekapi.DOMRenderer#isPlaying}
  *   - {@link rekapi.DOMRenderer#stop}
  *
- * __Note__: `DOMRenderer` is added to the `{@link rekapi.Rekapi}` instance
+ * __Note__: `DOMRenderer` is added to the {@link rekapi.Rekapi} instance
  * automatically as `this.renderer`, there is no reason to call the constructor
  * yourself in most cases.
  *
@@ -989,7 +989,7 @@ export class DOMRenderer {
   /**
    * Play the Rekapi animation as a CSS `@keyframe` animation.
    *
-   * Note that this is different from `{@link rekapi.Rekapi#play}`.  This
+   * Note that this is different from {@link rekapi.Rekapi#play}.  This
    * method only applies to CSS `@keyframe` animations.
    * @method rekapi.DOMRenderer#play
    * @param {number=} iterations How many times the animation should loop.
@@ -1027,7 +1027,7 @@ export class DOMRenderer {
    * Stop a CSS `@keyframe` animation.  This also removes any `<style>`
    * elements that were dynamically injected into the DOM.
    *
-   * Note that this is different from `{@link rekapi.Rekapi#stop}`.  This
+   * Note that this is different from {@link rekapi.Rekapi#stop}.  This
    * method only applies to CSS `@keyframe` animations.
    * @method rekapi.DOMRenderer#stop
    * @param {boolean=} goToEnd If true, skip to the end of the animation.
@@ -1114,7 +1114,7 @@ export class DOMRenderer {
    *
    * CSS transform string components are order-dependent, but JavaScript object
    * properties have an unpredictable order.  Rekapi must combine transform
-   * properties supplied to `{@link rekapi.Actor#keyframe}` (as shown above)
+   * properties supplied to {@link rekapi.Actor#keyframe} (as shown above)
    * into a single string when it renders each frame.  This method lets you
    * change that order from the default.  The supported array values for
    * `orderedTransforms` are:
