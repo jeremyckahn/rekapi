@@ -230,7 +230,6 @@ export class Actor extends Tweenable {
       setup: config.setup || noop,
       render: config.render || noop,
       teardown: config.teardown || noop,
-      data: {},
       wasActive: true
     });
   }
