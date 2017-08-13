@@ -213,6 +213,10 @@ export const renderers = [];
  */
 export class Rekapi {
   constructor (context = {}) {
+    /**
+     * @member {Object} rekapi.Rekapi#context The rendering context for an
+     * animation.
+     */
     this.context = context;
     this._actors = {};
     this._playState = STOPPED;

@@ -203,21 +203,23 @@ const cleanupAfterKeyframeModification = actor => {
  * An actor represents an individual component of an animation.  An animation
  * may have one or many actors.
  *
- * @param {Object} [config]
- * @param {(Object|CanvasRenderingContext2D|HTMLElement)} [config.context] The
- * rendering context for this actor. If omitted, this Actor gets the parent
- * {@link rekapi.Rekapi} instance's `context` when it is added with {@link
- * rekapi.Rekapi#addActor}.
- * @param {Function} [config.setup] A function that gets called when the actor
- * is added to an animation with {@link rekapi.Rekapi#addActor}.
- * @param {rekapi.render} [config.render] See {@link rekapi.render}
- * @param {Function} [config.teardown] A function that gets called when the
- * actor is removed from an animation with {@link rekapi.Rekapi#removeActor}.
+ * @param {Object} [config={}]
+ * @param {(Object|CanvasRenderingContext2D|HTMLElement)} [config.context] Sets
+ * {@link rekapi.Actor#context}.
+ * @param {Function} [config.setup] Sets {@link rekapi.Actor#setup}.
+ * @param {rekapi.render} [config.render] Sets {@link rekapi.Actor#render}.
+ * @param {Function} [config.teardown] Sets {@link rekapi.Actor#teardown}.
  * @constructs rekapi.Actor
  */
 export class Actor extends Tweenable {
   constructor (config = {}) {
     super();
+
+    /**
+     * @member {rekapi.Rekapi|undefined} rekapi.Actor#rekapi The {@link
+     * rekapi.Rekapi} instance to which this {@link rekapi.Actor} belongs, if
+     * any.
+     */
 
     Object.assign(this, {
       _propertyTracks: {},
@@ -225,11 +227,46 @@ export class Actor extends Tweenable {
       _timelineFunctionCache: [],
       _timelinePropertyCacheValid: false,
       _keyframeProperties: {},
+
+      /**
+       * @member {string} rekapi.Actor#id The unique ID of this {@link rekapi.Actor}.
+       */
       id: _.uniqueId(),
-      context: config.context, // This may be undefined
+
+      /**
+        * @member {(Object|CanvasRenderingContext2D|HTMLElement|undefined)}
+        * [rekapi.Actor#context] If this {@link rekapi.Actor} was created by or
+        * provided as an argument to {@link rekapi.Rekapi#addActor}, then this
+        * member is a reference to that {@link rekapi.Rekapi}'s {@link
+        * rekapi.Rekapi#context}.
+        */
+      context: config.context,
+
+      /**
+       * @member {Function} rekapi.Actor#setup Gets called when an actor is
+       * added to an animation by {@link rekapi.Rekapi#addActor}.
+       */
       setup: config.setup || noop,
+
+      /**
+       * @member {rekapi.render} rekapi.Actor#render The function that renders
+       * this {@link rekapi.Actor}.
+       */
       render: config.render || noop,
+
+      /**
+       * @member {Function} rekapi.Actor#teardown Gets called when an actor is
+       * removed from an animation by {@link rekapi.Rekapi#removeActor}.
+       */
       teardown: config.teardown || noop,
+
+      /**
+       * @member {boolean} rekapi.Actor#wasActive A flag that records whether
+       * this {@link rekapi.Actor} had any state in the previous updated cycle.
+       * Handy for immediate-mode renderers (such as {@link
+       * rekapi.CanvasRenderer}) to prevent unintended renders after the actor
+       * has no state.
+       */
       wasActive: true
     });
   }
