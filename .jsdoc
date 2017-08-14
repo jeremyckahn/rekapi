@@ -2,7 +2,8 @@
   "plugins": ["plugins/markdown"],
   "opts": {
     "destination": "dist/doc",
-    "readme": "index.md"
+    "readme": "index.md",
+    "tutorials": "tutorials"
   },
   "templates": {
     "cleverLinks": true,

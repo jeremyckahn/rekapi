@@ -32,7 +32,7 @@
     "test:watch": "nodemon --exec \"npm test\" --watch src --watch renderers --watch test",
     "lint": "jshint src",
     "start": "webpack-dev-server --config webpack.test.config.js",
-    "doc": "jsdoc -c .jsdoc src/*.js src/renderers/*.js --tutorials tutorials"
+    "doc": "jsdoc -c .jsdoc src/*.js src/renderers/*.js"
   },
   "license": "MIT",
   "dependencies": {
