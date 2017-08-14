@@ -25,7 +25,7 @@ export const invalidateAnimationLength = rekapi =>
 /*!
  * Determines which iteration of the loop the animation is currently in.
  * @param {Rekapi} rekapi
- * @param {Number} timeSinceStart
+ * @param {number} timeSinceStart
  */
 export const determineCurrentLoopIteration = (rekapi, timeSinceStart) => {
   const animationLength = rekapi.getAnimationLength();
@@ -40,7 +40,7 @@ export const determineCurrentLoopIteration = (rekapi, timeSinceStart) => {
 /*!
  * Calculate how many milliseconds since the animation began.
  * @param {Rekapi} rekapi
- * @return {Number}
+ * @return {number}
  */
 export const calculateTimeSinceStart = rekapi =>
   Tweenable.now() - rekapi._loopTimestamp;
@@ -48,8 +48,8 @@ export const calculateTimeSinceStart = rekapi =>
 /*!
  * Determines if the animation is complete or not.
  * @param {Rekapi} rekapi
- * @param {Number} currentLoopIteration
- * @return {Boolean}
+ * @param {number} currentLoopIteration
+ * @return {boolean}
  */
 export const isAnimationComplete = (rekapi, currentLoopIteration) =>
   currentLoopIteration >= rekapi._timesToIterate
@@ -58,7 +58,7 @@ export const isAnimationComplete = (rekapi, currentLoopIteration) =>
 /*!
  * Stops the animation if it is complete.
  * @param {Rekapi} rekapi
- * @param {Number} currentLoopIteration
+ * @param {number} currentLoopIteration
  */
 export const updatePlayState = (rekapi, currentLoopIteration) => {
   if (isAnimationComplete(rekapi, currentLoopIteration)) {
@@ -71,9 +71,9 @@ export const updatePlayState = (rekapi, currentLoopIteration) => {
  * Calculate how far in the animation loop `rekapi` is, in milliseconds,
  * based on the current time.  Also overflows into a new loop if necessary.
  * @param {Rekapi} rekapi
- * @param {Number} forMillisecond
- * @param {Number} currentLoopIteration
- * @return {Number}
+ * @param {number} forMillisecond
+ * @param {number} currentLoopIteration
+ * @return {number}
  */
 export const calculateLoopPosition = (rekapi, forMillisecond, currentLoopIteration) => {
   const animationLength = rekapi.getAnimationLength();
@@ -90,7 +90,7 @@ export const calculateLoopPosition = (rekapi, forMillisecond, currentLoopIterati
  * Updates the `rekapi` state internally and accounts for how many loop
  * iterations the animation runs for.
  * @param {Rekapi} rekapi
- * @param {Number} forMillisecond
+ * @param {number} forMillisecond
  */
 export const updateToMillisecond = (rekapi, forMillisecond) => {
   const currentIteration = determineCurrentLoopIteration(rekapi, forMillisecond);
@@ -280,14 +280,15 @@ export class Rekapi {
   }
 
   /**
-   * Add an actor to the animation.  Decorates the added `actor` with a
-   * reference to this `Rekapi` instance as `this.rekapi`.
+   * Add a {@link rekapi.Actor} to the animation.  Decorates the added {@link
+   * rekapi.Actor} with a reference to this {@link rekapi.Rekapi} instance as
+   * {@link rekapi.Actor#rekapi}.
    *
    * @method rekapi.Rekapi#addActor
-   * @param {(Actor|Object)} [actor={}] If this is an `Object`, it is used to as
+   * @param {(rekapi.Actor|Object)} [actor={}] If this is an `Object`, it is used to as
    * the constructor parameters for a new {@link rekapi.Actor} instance that
    * is created by this method.
-   * @return {Actor} The actor that was added.
+   * @return {rekapi.Actor} The {@link rekapi.Actor} that was added.
    */
   addActor (actor = {}) {
     const rekapiActor = actor instanceof Actor ?
@@ -314,31 +315,29 @@ export class Rekapi {
   }
 
   /**
-   * Get a reference to an actor from the animation by its `id`.  You can use
-   * {@link rekapi.Rekapi#getActorIds} to get a list
-   * of IDs for all actors in the animation.
    * @method rekapi.Rekapi#getActor
-   * @param {Number} actorId
-   * @return {Actor}
+   * @param {number} actorId
+   * @return {rekapi.Actor} A reference to an actor from the animation by its
+   * `id`.  You can use {@link rekapi.Rekapi#getActorIds} to get a list of IDs
+   * for all actors in the animation.
    */
   getActor (actorId) {
     return this._actors[actorId];
   }
 
   /**
-   * Retrieve the `id`'s of all actors in an animation.
-   *
    * @method rekapi.Rekapi#getActorIds
-   * @return {Array(Number)}
+   * @return {Array.<number>} The `id`'s of all {@link rekapi.Actor}`s in the
+   * animation.
    */
   getActorIds () {
     return _.pluck(this._actors, 'id');
   }
 
   /**
-   * Retrieve all actors in the animation as an Object.
    * @method rekapi.Rekapi#getAllActors
-   * @return {Object} The keys of this Object correspond to the Actors' `id`s.
+   * @return {Object.<rekapi.Actor>} All {@link rekapi.Actor}s in the animation. The keys of
+   * this Object are {@link rekapi.Actor#id}s.
    */
   getAllActors () {
     return _.clone(this._actors);
@@ -346,7 +345,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#getActorCount
-   * @return {Number} The number of actors in the animation.
+   * @return {number} The number of {@link rekapi.Actor}`s in the animation.
    */
   getActorCount () {
     return _.size(this._actors);
@@ -354,11 +353,12 @@ export class Rekapi {
 
   /**
    * Remove an actor from the animation.  This does not destroy the actor, it
-   * only removes the link between it and the `Rekapi` instance.  This method
-   * calls the actor's `teardown` method, if it is defined.
+   * only removes the link between it and this {@link rekapi.Rekapi} instance.
+   * This method calls the actor's {@link rekapi.Actor#teardown} method, if
+   * defined.
    * @method rekapi.Rekapi#removeActor
-   * @param {Actor} actor
-   * @return {Actor}
+   * @param {rekapi.Actor} actor
+   * @return {rekapi.Actor} The {@link rekapi.Actor} that was removed.
    */
   removeActor (actor) {
     // Remove the link between Rekapi and actor
@@ -374,9 +374,10 @@ export class Rekapi {
   }
 
   /**
-   * Remove all actors from the animation.
+   * Remove all {@link rekapi.Actor}s from the animation.
    * @method rekapi.Rekapi#removeAllActors
-   * @return {Array.<Actor>}
+   * @return {Array.<rekapi.Actor>} The {@link rekapi.Actor}s that were
+   * removed.
    */
   removeAllActors () {
     return _.map(this.getAllActors(), this.removeActor, this);
@@ -386,7 +387,7 @@ export class Rekapi {
    * Play the animation.
    *
    * @method rekapi.Rekapi#play
-   * @param {Number} [iterations=-1] If omitted, the animation will loop
+   * @param {number} [iterations=-1] If omitted, the animation will loop
    * endlessly.
    */
   play (iterations = -1) {
@@ -416,8 +417,8 @@ export class Rekapi {
    * Move to a specific millisecond on the timeline and play from there.
    *
    * @method rekapi.Rekapi#playFrom
-   * @param {Number} millisecond
-   * @param {Number} [iterations] Works as it does in {@link
+   * @param {number} millisecond
+   * @param {number} [iterations] Works as it does in {@link
    * rekapi.Rekapi#play}.
    */
   playFrom (millisecond, iterations) {
@@ -434,7 +435,7 @@ export class Rekapi {
    * rekapi.Rekapi#update}.
    *
    * @method rekapi.Rekapi#playFromCurrent
-   * @param {Number} [iterations] Works as it does in {@link
+   * @param {number} [iterations] Works as it does in {@link
    * rekapi.Rekapi#play}.
    */
   playFromCurrent (iterations) {
@@ -485,7 +486,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#isPlaying
-   * @return {Boolean} Whether or not the animation is playing (meaning not paused or
+   * @return {boolean} Whether or not the animation is playing (meaning not paused or
    * stopped).
    */
   isPlaying () {
@@ -494,7 +495,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#isPaused
-   * @return {Boolean} Whether or not the animation is paused (meaning not playing or
+   * @return {boolean} Whether or not the animation is paused (meaning not playing or
    * stopped).
    */
   isPaused () {
@@ -503,7 +504,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#isStopped
-   * @return {Boolean} Whether or not the animation is stopped (meaning not playing or
+   * @return {boolean} Whether or not the animation is stopped (meaning not playing or
    * paused).
    */
   isStopped () {
@@ -514,13 +515,13 @@ export class Rekapi {
    * Render an animation frame at a specific point in the timeline.
    *
    * @method rekapi.Rekapi#update
-   * @param {Number} [millisecond=this._lastUpdatedMillisecond] The point in
+   * @param {number} [millisecond=this._lastUpdatedMillisecond] The point in
    * the timeline at which to render.  If omitted, this renders the last
    * millisecond that was rendered (it's a re-render).
-   * @param {Boolean} [doResetLaterFnKeyframes=false] If true, allow all
-   * function keyframes later in the timeline to be run again.  This is a
-   * low-level feature, it should not be `true` (or even provided) for most use
-   * cases.
+   * @param {boolean} [doResetLaterFnKeyframes=false] If `true`, allow all
+   * {@link rekapi.keyframeFunction}s later in the timeline to be run again.
+   * This is a low-level feature, it should not be `true` (or even provided)
+   * for most use cases.
    */
   update (
     millisecond = this._lastUpdatedMillisecond,
@@ -547,7 +548,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#getLastPositionUpdated
-   * @return {Number} The normalized timeline position (between 0 and 1) that
+   * @return {number} The normalized timeline position (between 0 and 1) that
    * was last rendered.
    */
   getLastPositionUpdated () {
@@ -556,7 +557,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#getLastMillisecondUpdated
-   * @return {Number} The millisecond that was last rendered.
+   * @return {number} The millisecond that was last rendered.
    */
   getLastMillisecondUpdated () {
     return this._lastUpdatedMillisecond;
@@ -564,7 +565,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#getAnimationLength
-   * @return {Number} The length of the animation timeline, in milliseconds.
+   * @return {number} The length of the animation timeline, in milliseconds.
    */
   getAnimationLength () {
     if (!this._animationLengthValid) {
@@ -580,8 +581,7 @@ export class Rekapi {
   }
 
   /**
-   * Bind a handler function to a Rekapi event.
-   *
+   * Bind a {@link rekapi.eventHandler} function to a Rekapi event.
    * @method rekapi.Rekapi#on
    * @param {string} eventName Valid values are:
    *
@@ -646,9 +646,11 @@ export class Rekapi {
   }
 
   /**
-   * Manually fire a Rekapi event, thereby calling all bound event handlers.
+   * Manually fire a Rekapi event, thereby calling all {@link
+   * rekapi.eventHandler}s bound to that event.
    * @param {string} eventName The name of the event to trigger.
-   * @param {any} [data] Optional data to provide to `eventName` handlers.
+   * @param {any} [data] Optional data to provide to the `eventName` {@link
+   * rekapi.eventHandler}s.
    * @method rekapi.Rekapi#trigger
    */
   trigger (eventName, data) {
@@ -659,12 +661,12 @@ export class Rekapi {
 
   /**
    * Unbind one or more handlers from a Rekapi event.
-   *
    * @method rekapi.Rekapi#off
    * @param {string} eventName Valid values correspond to the list under
    * {@link rekapi.Rekapi#on}.
-   * @param {Function} [handler] If omitted, all handler functions bound to
-   * `eventName` are unbound.
+   * @param {rekapi.eventHandler} [handler] A reference to the {@link
+   * rekapi.eventHandler} to unbind.  If omitted, all {@link
+   * rekapi.eventHandler}s bound to `eventName` are unbound.
    */
   off (eventName, handler) {
     if (!this._events[eventName]) {
@@ -679,7 +681,7 @@ export class Rekapi {
   }
 
   /**
-   * Export the timeline to a JSON-serializable `Object`.
+   * Export the timeline to a `JSON.stringify`-friendly `Object`.
    *
    * @method rekapi.Rekapi#exportTimeline
    * @return {Object} This data can later be consumed by {@link
@@ -737,9 +739,9 @@ export class Rekapi {
   }
 
   /**
-   * Get a list of event names that this Rekapi instance supports.
    * @method rekapi.Rekapi#getEventNames
-   * @return Array(string)
+   * @return {Array.<string>} The list of event names that this Rekapi instance
+   * supports.
    */
   getEventNames () {
     return Object.keys(this._events);
