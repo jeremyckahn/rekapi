@@ -200,22 +200,29 @@ export const renderers = [];
  * If this is a rendered animation, the appropriate renderer is accessible as
  * `this.renderer`.  If provided, a reference to `context` is accessible
  * as `this.context`.
- * @param {(Object|CanvasRenderingContext2D|HTMLElement)} [context] This
- * determines how to render the animation.  If this is not provided or is a
- * plain object ({}), the animation will not render anything and
- * `this.renderer` will be `undefined`.  If this is a reference to a
+ * @param {(Object|CanvasRenderingContext2D|HTMLElement)} [context={}] Sets
+ * {@link rekapi.Rekapi#context}. This determines how to render the animation.
+ *
+ * * If this is not provided or is a plain object (`{}`), the animation will
+ * not render anything and {@link rekapi.Rekapi#renderer} will be `undefined`.
+ * * If this is a
  * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D),
- * {@link rekapi.CanvasRenderer} will be initialized as `this.renderer` for
- * HTML5 canvas-based rendering.  If this is a reference to a DOM element,
- * {@link rekapi.DOMRenderer} will be initialized as `this.renderer` for
- * either a DOM or CSS `@keyframe`-based rendering.
+ * {@link rekapi.Rekapi#renderer} will be a {@link rekapi.CanvasRenderer}.
+ * * If this is a DOM element, {@link rekapi.Rekapi#renderer} will be a {@link
+ * rekapi.DOMRenderer}.
  * @constructs rekapi.Rekapi
  */
 export class Rekapi {
   constructor (context = {}) {
     /**
-     * @member {Object} rekapi.Rekapi#context The rendering context for an
-     * animation.
+     * @member {(rekapi.renderer|undefined)} rekapi.Rekapi#renderer An instance
+     * of a {@link rekapi.renderer} class, as determined by the `context`
+     * parameter provided to the {@link rekapi.Rekapi} constructor.
+     */
+
+    /**
+     * @member {(Object|CanvasRenderingContext2D|HTMLElement)}
+     * rekapi.Rekapi#context The rendering context for an animation.
      */
     this.context = context;
     this._actors = {};
