@@ -264,5 +264,5 @@ renderers.push(rekapi => {
     return;
   }
 
-  rekapi.renderer = new CanvasRenderer(rekapi);
+  return new CanvasRenderer(rekapi);
 });

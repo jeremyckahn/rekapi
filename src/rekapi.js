@@ -215,12 +215,6 @@ export const renderers = [];
 export class Rekapi {
   constructor (context = {}) {
     /**
-     * @member {(rekapi.renderer|undefined)} rekapi.Rekapi#renderer An instance
-     * of a {@link rekapi.renderer} class, as determined by the `context`
-     * parameter provided to the {@link rekapi.Rekapi} constructor.
-     */
-
-    /**
      * @member {(Object|CanvasRenderingContext2D|HTMLElement)}
      * rekapi.Rekapi#context The rendering context for an animation.
      */
@@ -283,7 +277,12 @@ export class Rekapi {
       updateToCurrentMillisecond(this);
     };
 
-    renderers.forEach(renderer => renderer(this));
+    /**
+     * @member {(rekapi.renderer|undefined)} rekapi.Rekapi#renderer An instance
+     * of a {@link rekapi.renderer} class, as determined by the `context`
+     * parameter provided to the {@link rekapi.Rekapi} constructor.
+     */
+    renderers.some(renderer => this.renderer = renderer(this));
   }
 
   /**

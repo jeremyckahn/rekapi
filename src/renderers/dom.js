@@ -1207,10 +1207,8 @@ export class DOMRenderer {
 /*!
  * @param {Rekapi} rekapi
  */
-renderers.push(rekapi => {
+renderers.push(rekapi =>
   // Node.nodeType 1 is an ELEMENT_NODE.
   // https://developer.mozilla.org/en-US/docs/Web/API/Node.nodeType
-  if (rekapi.context.nodeType === 1) {
-    rekapi.renderer = new DOMRenderer(rekapi);
-  }
-});
+  rekapi.context.nodeType === 1 && new DOMRenderer(rekapi)
+);
