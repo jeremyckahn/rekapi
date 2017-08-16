@@ -333,7 +333,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#getActorIds
-   * @return {Array.<number>} The `id`'s of all {@link rekapi.Actor}`s in the
+   * @return {Array.<number>} The `id`s of all {@link rekapi.Actor}`s in the
    * animation.
    */
   getActorIds () {
@@ -351,7 +351,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#getActorCount
-   * @return {number} The number of {@link rekapi.Actor}`s in the animation.
+   * @return {number} The number of {@link rekapi.Actor}s in the animation.
    */
   getActorCount () {
     return _.size(this._actors);
