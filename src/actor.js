@@ -362,16 +362,16 @@ export class Actor extends Tweenable {
    *       });
    *
    *     // Return the actor to its original position
-   *     actor.copyKeyframe(2000, 0);
+   *     actor.copyKeyframe(0, 2000);
    *
    * @method rekapi.Actor#copyKeyframe
-   * @param {number} copyTo The timeline millisecond to copy {@link
-   * rekapi.KeyframeProperty}s to.
    * @param {number} copyFrom The timeline millisecond to copy {@link
    * rekapi.KeyframeProperty}s from.
+   * @param {number} copyTo The timeline millisecond to copy {@link
+   * rekapi.KeyframeProperty}s to.
    * @return {rekapi.Actor}
    */
-  copyKeyframe (copyTo, copyFrom) {
+  copyKeyframe (copyFrom, copyTo) {
     // Build the configuation objects to be passed to Actor#keyframe
     const sourcePositions = {};
     const sourceEasings = {};

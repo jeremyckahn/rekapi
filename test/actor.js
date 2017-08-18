@@ -257,7 +257,7 @@ describe('Actor', () => {
           x: 'easeInQuad'
         });
 
-      actor.copyKeyframe(1000, 0);
+      actor.copyKeyframe(0, 1000);
 
       const { _propertyTracks } = actor;
 
