@@ -280,12 +280,14 @@ export class Actor extends Tweenable {
    * state.  These properties can be any value that can be tweened by
    * [Shifty](http://jeremyckahn.github.io/shifty/doc/) (numbers,
    * RGB/hexadecimal color strings, and CSS property strings).  `state` can
-   * also be a [function]{@link rekapi.keyframeFunction}, but [this works
-   * differently]{@tutorial keyframes-in-depth}.
+   * also be a [function]{@link rekapi.keyframeFunction}, but
+   * [this works differently]{@tutorial keyframes-in-depth}.
    *
    * __Note:__ Internally, this creates {@link rekapi.KeyframeProperty}s and
-   * places them on a "track." These {@link rekapi.KeyframeProperty}s are managed
-   * for you by the {@link rekapi.Actor} APIs.
+   * places them on a "track." Tracks are automatically named to match the
+   * relevant {@link rekapi.KeyframeProperty#name}s.  These {@link
+   * rekapi.KeyframeProperty}s are managed for you by the {@link rekapi.Actor}
+   * APIs.
    *
    * ## [Click to learn about keyframes in depth]{@tutorial keyframes-in-depth}
    * @method rekapi.Actor#keyframe
@@ -294,7 +296,8 @@ export class Actor extends Tweenable {
    * the keyframe.  If this is an Object, the properties will be interpolated
    * between this and those of the following keyframe for a given point on the
    * animation timeline.  If this is a function ({@link
-   * rekapi.keyframeFunction}), it will be called at the specified keyframe.
+   * rekapi.keyframeFunction}), it will be called at the keyframe specified by
+   * `millisecond`.
    * @param {(string|Object)} [easing] Optional easing string or Object.  If
    * `state` is a function, this is ignored.
    * @return {rekapi.Actor}
@@ -621,7 +624,8 @@ export class Actor extends Tweenable {
   /**
    *
    * @method rekapi.Actor#getTrackNames
-   * @return {Array(string)} A list of all the track names for an actor.
+   * @return {Array.<rekapi.KeyframeProperty#name>} A list of all the track
+   * names for a {@link rekapi.Actor}.
    */
   getTrackNames () {
     return Object.keys(this._propertyTracks);
@@ -641,9 +645,9 @@ export class Actor extends Tweenable {
    * @method rekapi.Actor#getStart
    * @param {rekapi.KeyframeProperty#name} [trackName] Optionally scope the
    * lookup to a particular track.
-   * @return {number} The millisecond of the first animating state of an actor
-   * (for instance, if the actor's first keyframe is later than millisecond
-   * `0`).  If there are no keyframes, this returns `0`.
+   * @return {number} The millisecond of the first animating state of a {@link
+   * rekapi.Actor} (for instance, if the first keyframe is later than
+   * millisecond `0`).  If there are no keyframes, this is `0`.
    */
   getStart (trackName = undefined) {
     const { _propertyTracks } = this;
