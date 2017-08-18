@@ -18,7 +18,7 @@ const getMillisecond = obj => obj.millisecond;
 /*!
  * @param {Actor} actor
  * @param {string} event
- * @param {any=} data
+ * @param {any} [data]
  */
 const fire = (actor, event, data) =>
   actor.rekapi && fireEvent(actor.rekapi, event, data);
@@ -325,8 +325,8 @@ export class Actor extends Tweenable {
   /**
    * @method rekapi.Actor#hasKeyframeAt
    * @param {number} millisecond Point on the timeline to query.
-   * @param {string=} trackName Optionally scope the lookup to a particular
-   * track.
+   * @param {rekapi.KeyframeProperty#name} [trackName] Optionally scope the
+   * lookup to a particular track.
    * @return {boolean} Whether or not the actor has any {@link
    * rekapi.KeyframeProperty}s set at `millisecond`.
    */
@@ -451,7 +451,7 @@ export class Actor extends Tweenable {
    * @method rekapi.Actor#modifyKeyframe
    * @param {number} millisecond
    * @param {Object} state
-   * @param {Object=} easing
+   * @param {Object} [easing={}]
    * @return {rekapi.Actor}
    */
   modifyKeyframe (millisecond, state, easing = {}) {
@@ -630,7 +630,7 @@ export class Actor extends Tweenable {
   /**
    * Get all of the {@link rekapi.KeyframeProperty}s for a track.
    * @method rekapi.Actor#getPropertiesInTrack
-   * @param {string} trackName The track name to query.
+   * @param {rekapi.KeyframeProperty#name} trackName The track name to query.
    * @return {Array(rekapi.KeyframeProperty)}
    */
   getPropertiesInTrack (trackName) {
@@ -639,8 +639,8 @@ export class Actor extends Tweenable {
 
   /**
    * @method rekapi.Actor#getStart
-   * @param {string=} trackName Optionally scope the lookup to a particular
-   * track.
+   * @param {rekapi.KeyframeProperty#name} [trackName] Optionally scope the
+   * lookup to a particular track.
    * @return {number} The millisecond of the first animating state of an actor
    * (for instance, if the actor's first keyframe is later than millisecond
    * `0`).  If there are no keyframes, this returns `0`.
@@ -673,8 +673,8 @@ export class Actor extends Tweenable {
 
   /**
    * @method rekapi.Actor#getEnd
-   * @param {string=} trackName Optionally scope the lookup to a particular
-   * keyframe track.
+   * @param {rekapi.KeyframeProperty#name} [trackName] Optionally scope the
+   * lookup to a particular keyframe track.
    * @return {number} The millisecond of the last state of an actor (the point
    * in the timeline in which it is done animating).  If there are no
    * keyframes, this is `0`.
@@ -697,8 +697,8 @@ export class Actor extends Tweenable {
 
   /**
    * @method rekapi.Actor#getLength
-   * @param {string=} trackName Optionally scope the lookup to a particular
-   * track.
+   * @param {rekapi.KeyframeProperty#name} [trackName] Optionally scope the
+   * lookup to a particular track.
    * @return {number} The length of time in milliseconds that the actor
    * animates for.
    */
@@ -851,7 +851,7 @@ export class Actor extends Tweenable {
    * Calculate and set the actor's position at `millisecond` in the animation.
    * @method rekapi.Actor#_updateState
    * @param {number} millisecond
-   * @param {boolean=} resetLaterFnKeyframes If true, allow all function
+   * @param {boolean} [resetLaterFnKeyframes] If true, allow all function
    * keyframes later in the timeline to be run again.
    */
   _updateState (millisecond, resetLaterFnKeyframes = false) {
@@ -941,9 +941,10 @@ export class Actor extends Tweenable {
   }
 
   /**
+   * Export this {@link rekapi.Actor} to a `JSON.stringify`-friendly `Object`.
    * @method rekapi.Actor#exportTimeline
-   * @return {Object} A serializable Object of this actor's timeline property
-   * tracks and {@link rekapi.KeyframeProperty}s.
+   * @return {Object} This data can later be consumed by {@link
+   * rekapi.Actor#importTimeline}.
    */
   exportTimeline () {
     const exportData = {
