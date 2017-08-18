@@ -395,6 +395,7 @@ export class Rekapi {
    * @method rekapi.Rekapi#play
    * @param {number} [iterations=-1] If omitted, the animation will loop
    * endlessly.
+   * @return {rekapi.Rekapi}
    */
   play (iterations = -1) {
     cancelLoop(this);
@@ -426,6 +427,7 @@ export class Rekapi {
    * @param {number} millisecond
    * @param {number} [iterations] Works as it does in {@link
    * rekapi.Rekapi#play}.
+   * @return {rekapi.Rekapi}
    */
   playFrom (millisecond, iterations) {
     this.play(iterations);
@@ -443,6 +445,7 @@ export class Rekapi {
    * @method rekapi.Rekapi#playFromCurrent
    * @param {number} [iterations] Works as it does in {@link
    * rekapi.Rekapi#play}.
+   * @return {rekapi.Rekapi}
    */
   playFromCurrent (iterations) {
     return this.playFrom(this._lastUpdatedMillisecond, iterations);
@@ -453,6 +456,7 @@ export class Rekapi {
    * left off with {@link rekapi.Rekapi#play}.
    *
    * @method rekapi.Rekapi#pause
+   * @return {rekapi.Rekapi}
    */
   pause () {
     if (this._playState === PAUSED) {
@@ -474,6 +478,7 @@ export class Rekapi {
    * if {@link rekapi.Rekapi#play} is called.
    *
    * @method rekapi.Rekapi#stop
+   * @return {rekapi.Rekapi}
    */
   stop () {
     this._playState = STOPPED;
@@ -528,6 +533,7 @@ export class Rekapi {
    * {@link rekapi.keyframeFunction}s later in the timeline to be run again.
    * This is a low-level feature, it should not be `true` (or even provided)
    * for most use cases.
+   * @return {rekapi.Rekapi}
    */
   update (
     millisecond = this._lastUpdatedMillisecond,
@@ -640,6 +646,7 @@ export class Rekapi {
    * - `"animationLooped"`: Fires when an animation loop ends and a new one
    *   begins.
    * @param {rekapi.eventHandler} handler The event handler function.
+   * @return {rekapi.Rekapi}
    */
   on (eventName, handler) {
     if (!this._events[eventName]) {
@@ -658,6 +665,7 @@ export class Rekapi {
    * @param {any} [data] Optional data to provide to the `eventName` {@link
    * rekapi.eventHandler}s.
    * @method rekapi.Rekapi#trigger
+   * @return {rekapi.Rekapi}
    */
   trigger (eventName, data) {
     fireEvent(this, eventName, data);
@@ -673,10 +681,11 @@ export class Rekapi {
    * @param {rekapi.eventHandler} [handler] A reference to the {@link
    * rekapi.eventHandler} to unbind.  If omitted, all {@link
    * rekapi.eventHandler}s bound to `eventName` are unbound.
+   * @return {rekapi.Rekapi}
    */
   off (eventName, handler) {
     if (!this._events[eventName]) {
-      return;
+      return this;
     }
 
     this._events[eventName] = handler ?

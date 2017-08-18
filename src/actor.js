@@ -200,8 +200,8 @@ const cleanupAfterKeyframeModification = actor => {
 };
 
 /**
- * An actor represents an individual component of an animation.  An animation
- * may have one or many actors.
+ * A {@link rekapi.Actor} represents an individual component of an animation.
+ * An animation may have one or many {@link rekapi.Actor}s.
  *
  * @param {Object} [config={}]
  * @param {(Object|CanvasRenderingContext2D|HTMLElement)} [config.context] Sets
@@ -297,6 +297,7 @@ export class Actor extends Tweenable {
    * rekapi.keyframeFunction}), it will be called at the specified keyframe.
    * @param {(string|Object)} [easing] Optional easing string or Object.  If
    * `state` is a function, this is ignored.
+   * @return {rekapi.Actor}
    */
   keyframe (millisecond, state, easing = DEFAULT_EASING) {
     if (state instanceof Function) {
@@ -368,6 +369,7 @@ export class Actor extends Tweenable {
    * rekapi.KeyframeProperty}s to.
    * @param {number} copyFrom The timeline millisecond to copy {@link
    * rekapi.KeyframeProperty}s from.
+   * @return {rekapi.Actor}
    */
   copyKeyframe (copyTo, copyFrom) {
     // Build the configuation objects to be passed to Actor#keyframe
@@ -450,6 +452,7 @@ export class Actor extends Tweenable {
    * @param {number} millisecond
    * @param {Object} state
    * @param {Object=} easing
+   * @return {rekapi.Actor}
    */
   modifyKeyframe (millisecond, state, easing = {}) {
     _.each(this._propertyTracks, (propertyTrack, trackName) => {
@@ -484,6 +487,7 @@ export class Actor extends Tweenable {
    * @method rekapi.Actor#removeKeyframe
    * @param {number} millisecond The location on the timeline of the keyframe
    * to remove.
+   * @return {rekapi.Actor}
    */
   removeKeyframe (millisecond) {
     _.each(this._propertyTracks, (propertyTrack, propertyName) => {
@@ -514,6 +518,7 @@ export class Actor extends Tweenable {
    * foregoes firing events.
    *
    * @method rekapi.Actor#removeAllKeyframes
+   * @return {rekapi.Actor}
    */
   removeAllKeyframes () {
     _.each(this._propertyTracks, propertyTrack =>
@@ -561,6 +566,7 @@ export class Actor extends Tweenable {
    * rekapi.KeyframeProperty} to modify.
    * @param {Object} newProperties The properties to augment the {@link
    * rekapi.KeyframeProperty} with.
+   * @return {rekapi.Actor}
    */
   modifyKeyframeProperty (property, millisecond, newProperties) {
     const keyframeProperty = this.getKeyframeProperty(property, millisecond);
@@ -710,6 +716,7 @@ export class Actor extends Tweenable {
    * until (relative to the start of the animation timeline).  If this number
    * is less than the value returned from {@link rekapi.Actor#getLength},
    * this method does nothing.
+   * @return {rekapi.Actor}
    */
   wait (until) {
     const end = this.getEnd();
@@ -758,14 +765,15 @@ export class Actor extends Tweenable {
   }
 
   /**
-   * Associate a {@link rekapi.KeyframeProperty} to this actor.  Augments the
-   * {@link rekapi.KeyframeProperty} to maintain a link between the two
-   * objects.  This is a lower-level method, and it is generally better to use
-   * {@link rekapi.Actor#keyframe}.  This is mostly useful for adding a
+   * Associate a {@link rekapi.KeyframeProperty} to this {@link rekapi.Actor}.
+   * Updates {@link rekapi.KeyframeProperty#actor} to maintain a link between
+   * the two objects.  This is a lower-level method and it is generally better
+   * to use {@link rekapi.Actor#keyframe}.  This is mostly useful for adding a
    * {@link rekapi.KeyframeProperty} back to an actor after it was {@link
    * rekapi.KeyframeProperty#detach}ed.
    * @method rekapi.Actor#addKeyframeProperty
    * @param {rekapi.KeyframeProperty} keyframeProperty
+   * @return {rekapi.Actor}
    */
   addKeyframeProperty (keyframeProperty) {
     if (this.rekapi) {
@@ -821,6 +829,7 @@ export class Actor extends Tweenable {
    * @method rekapi.Actor#setActive
    * @param {number} millisecond The time at which to change the actor's active state
    * @param {boolean} isActive Whether the actor should be active or inactive
+   * @return {rekapi.Actor}
    */
   setActive (millisecond, isActive) {
     const hasActiveTrack = !!this._propertyTracks._active;

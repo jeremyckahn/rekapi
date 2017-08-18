@@ -22,6 +22,18 @@ export class KeyframeProperty {
   constructor (millisecond, name, value, easing = DEFAULT_EASING) {
     this.id = _.uniqueId('keyframeProperty_');
     this.hasFired = null;
+
+    /**
+     * @member {(rekapi.Actor|undefined)} rekapi.KeyframeProperty#actor The
+     * {@link rekapi.Actor} to which this {@link actor.KeyframeProperty}
+     * belongs, if any.
+     */
+
+    /**
+     * @member {(rekapi.KeyframeProperty|null)}
+     * rekapi.KeyframeProperty#nextProperty A reference to the {@link
+      * rekapi.KeyframeProperty} that follows this one in a property track.
+     */
     this.nextProperty = null;
 
     Object.assign(this, {
