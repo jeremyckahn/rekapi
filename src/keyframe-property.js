@@ -7,32 +7,45 @@ import {
 const DEFAULT_EASING = 'linear';
 
 /**
- * Represents an individual component of an actor's keyframe state.  In most
- * cases you won't need to deal with this object directly, as the
- * {@link rekapi.Actor} APIs abstract a lot of what
- * this Object does away for you.
- * @param {number} millisecond Sets {@link rekapi.KeyframeProperty#millisecond}
- * @param {string} name Sets {@link rekapi.KeyframeProperty#name}
- * @param {number|string|rekapi.keyframeFunction} value Sets {@link
- * rekapi.KeyframeProperty#value}
- * @param {string} [easing="linear"] Sets {@link rekapi.KeyframeProperty#easing}
+ * Represents an individual component of an {@link rekapi.Actor}'s keyframe
+ * state.  In most cases you won't need to deal with this object directly, as
+ * the {@link rekapi.Actor} APIs abstract a lot of what this Object does away
+ * for you.
+ * @param {number} millisecond Sets {@link
+ * rekapi.KeyframeProperty#millisecond}.
+ * @param {string} name Sets {@link rekapi.KeyframeProperty#name}.
+ * @param {(number|string|boolean|rekapi.keyframeFunction)} value Sets {@link
+ * rekapi.KeyframeProperty#value}.
+ * @param {string} [easing="linear"] Sets {@link
+ * rekapi.KeyframeProperty#easing}.
  * @constructs rekapi.KeyframeProperty
  */
 export class KeyframeProperty {
   constructor (millisecond, name, value, easing = DEFAULT_EASING) {
+    /**
+     * @member {string} rekapi.KeyframeProperty#id The unique ID of this {@link
+     * rekapi.KeyframeProperty}.
+     */
     this.id = _.uniqueId('keyframeProperty_');
+
+    /**
+     * @member {boolean} rekapi.KeyframeProperty#hasFired Flag to determine if
+     * this {@link rekapi.KeyframeProperty}'s {@link rekapi.keyframeFunction}
+     * should be invoked in the current animation loop.
+     */
     this.hasFired = null;
 
     /**
      * @member {(rekapi.Actor|undefined)} rekapi.KeyframeProperty#actor The
-     * {@link rekapi.Actor} to which this {@link actor.KeyframeProperty}
+     * {@link rekapi.Actor} to which this {@link rekapi.KeyframeProperty}
      * belongs, if any.
      */
 
     /**
      * @member {(rekapi.KeyframeProperty|null)}
      * rekapi.KeyframeProperty#nextProperty A reference to the {@link
-      * rekapi.KeyframeProperty} that follows this one in a property track.
+      * rekapi.KeyframeProperty} that follows this one in a {@link
+      * rekapi.Actor}'s property track.
      */
     this.nextProperty = null;
 
@@ -43,19 +56,19 @@ export class KeyframeProperty {
        */
       millisecond,
       /**
-       * @member {string} rekapi.KeyframeProperty#name The property's name,
-       * such as `"x"` or `"opacity"`.
+       * @member {string} rekapi.KeyframeProperty#name This {@link
+       * rekapi.KeyframeProperty}'s name, such as `"x"` or `"opacity"`.
        */
       name,
       /**
-       * @member {number|string|rekapi.keyframeFunction}
+       * @member {number|string|boolean|rekapi.keyframeFunction}
        * rekapi.KeyframeProperty#value The value that this {@link
        * rekapi.KeyframeProperty} represents.
        */
       value,
       /**
-       * @member {string} rekapi.KeyframeProperty#easing The easing curve at
-       * which this {@link rekapi.KeyframeProperty} should be animated to.
+       * @member {string} rekapi.KeyframeProperty#easing The easing curve by
+       * which this {@link rekapi.KeyframeProperty} should be animated.
        */
       easing
     });
@@ -64,12 +77,14 @@ export class KeyframeProperty {
   /**
    * Modify this {@link rekapi.KeyframeProperty}.
    * @method rekapi.KeyframeProperty#modifyWith
-   * @param {Object} newProperties Valid values correspond to {@link
-   * rekapi.KeyframeProperty}'s constructor parameters:
-   *   - __millisecond__ (_number_)
-   *   - __name__ (_string_)
-   *   - __value__ (_number|string_)
-   *   - __easing__ (_string_)
+   * @param {Object} newProperties Valid values are:
+   * @param {number} [newProperties.millisecond] Sets {@link
+   * rekapi.KeyframeProperty#millisecond}.
+   * @param {string} [newProperties.name] Sets {@link rekapi.KeyframeProperty#name}.
+   * @param {(number|string|boolean|rekapi.keyframeFunction)} [newProperties.value] Sets {@link
+   * rekapi.KeyframeProperty#value}.
+   * @param {string} [newProperties.easing] Sets {@link
+   * rekapi.KeyframeProperty#easing}.
    */
   modifyWith (newProperties) {
     Object.assign(this, newProperties);
@@ -87,7 +102,7 @@ export class KeyframeProperty {
    * @method rekapi.KeyframeProperty#getValueAt
    * @param {number} millisecond The millisecond in the animation timeline to
    * compute the state value for.
-   * @return {number}
+   * @return {(number|string|boolean|rekapi.keyframeFunction|rekapi.KeyframeProperty#value)}
    */
   getValueAt (millisecond) {
     const nextProperty = this.nextProperty;
@@ -132,7 +147,7 @@ export class KeyframeProperty {
   /**
    * Disassociates this {@link rekapi.KeyframeProperty} from its {@link
    * rekapi.Actor}.  This is called by various {@link rekapi.Actor} methods
-   * and triggers the `[removeKeyframeProperty]{@link rekapi.Rekapi#on} event
+   * and triggers the [removeKeyframeProperty]{@link rekapi.Rekapi#on} event
    * on the associated {@link rekapi.Rekapi} instance.
    * @method rekapi.KeyframeProperty#detach
    */
@@ -149,9 +164,10 @@ export class KeyframeProperty {
   }
 
   /**
+   * Export this {@link rekapi.KeyframeProperty} to a `JSON.stringify`-friendly
+   * `Object`.
    * @method rekapi.KeyframeProperty#exportPropertyData
-   * @return {Object} A serializable Object representation of this
-   * {@link rekapi.KeyframeProperty}.
+   * @return {Object}
    */
   exportPropertyData () {
     return _.pick(this, ['millisecond', 'name', 'value', 'easing']);
@@ -171,10 +187,11 @@ export class KeyframeProperty {
   }
 
   /**
-   * Assuming this is a function keyframe, call the function.
+   * Calls {@link rekapi.KeyframeProperty#value} if it is a {@link
+   * rekapi.keyframeFunction}.
    * @method rekapi.KeyframeProperty#invoke
-   * @return {*} Whatever value is returned from the keyframe function that was
-   * set for this {@link rekapi.KeyframeProperty}.
+   * @return {any} Whatever value is returned for this {@link
+   * rekapi.KeyframeProperty}'s {@link rekapi.keyframeFunction}.
    */
   invoke () {
     const drift = this.actor.rekapi._loopPosition - this.millisecond;

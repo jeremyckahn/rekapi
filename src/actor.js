@@ -265,7 +265,8 @@ export class Actor extends Tweenable {
        * this {@link rekapi.Actor} had any state in the previous updated cycle.
        * Handy for immediate-mode renderers (such as {@link
        * rekapi.CanvasRenderer}) to prevent unintended renders after the actor
-       * has no state.
+       * has no state. Also used to prevent redundant {@link
+       * rekapi.keyframeFunction} calls.
        */
       wasActive: true
     });
