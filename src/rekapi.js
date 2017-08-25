@@ -204,12 +204,13 @@ export const renderers = [];
  * {@link rekapi.Rekapi#context}. This determines how to render the animation.
  *
  * * If this is not provided or is a plain object (`{}`), the animation will
- * not render anything and {@link rekapi.Rekapi#renderer} will be `undefined`.
+ * not render anything and {@link rekapi.Rekapi#renderers} will be `undefined`.
  * * If this is a
  * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D),
- * {@link rekapi.Rekapi#renderer} will be a {@link rekapi.CanvasRenderer}.
- * * If this is a DOM element, {@link rekapi.Rekapi#renderer} will be a {@link
- * rekapi.DOMRenderer}.
+ * {@link rekapi.Rekapi#renderers} will contain a {@link
+ * rekapi.CanvasRenderer}.
+ * * If this is a DOM element, {@link rekapi.Rekapi#renderers} will contain a
+ * {@link rekapi.DOMRenderer}.
  * @constructs rekapi.Rekapi
  */
 export class Rekapi {
@@ -278,11 +279,13 @@ export class Rekapi {
     };
 
     /**
-     * @member {(rekapi.renderer|undefined)} rekapi.Rekapi#renderer An instance
-     * of a {@link rekapi.renderer} class, as determined by the `context`
+     * @member {Array.<rekapi.renderer>} rekapi.Rekapi#renderers Instances of
+     * {@link rekapi.renderer} classes, as determined by the `context`
      * parameter provided to the {@link rekapi.Rekapi} constructor.
      */
-    renderers.some(renderer => this.renderer = renderer(this));
+    this.renderers = renderers
+      .map(renderer => renderer(this))
+      .filter(_ => _);
   }
 
   /**
@@ -539,7 +542,9 @@ export class Rekapi {
     millisecond = this._lastUpdatedMillisecond,
     doResetLaterFnKeyframes = false
   ) {
-    const skipRender = this.renderer && this.renderer._batchRendering;
+    const skipRender = this.renderers.some(
+      renderer => renderer._batchRendering
+    );
 
     fireEvent(this, 'beforeUpdate');
 

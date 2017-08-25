@@ -1,7 +1,11 @@
 /* global describe:true, it:true, before:true, beforeEach:true, afterEach:true, after:true */
 import assert from 'assert';
 import { contains } from 'lodash';
-import { setupTestRekapi, setupTestActor } from './test-utils';
+import {
+  setupTestRekapi,
+  setupTestActor,
+  getDomRendererInstance
+} from './test-utils';
 
 import {
   TRANSFORM_TOKEN,
@@ -881,7 +885,7 @@ describe('DOMRenderer#getCss', () => {
         rekapi.addActor(domActor);
         rekapi.addActor(nonDOMActor);
 
-        const css = rekapi.renderer.getCss();
+        const css = getDomRendererInstance(rekapi).getCss();
         const singleLineCss = css.split('\n').join('');
 
         assert(!!singleLineCss.match('actor-' + domActor.id));

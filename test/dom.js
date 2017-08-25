@@ -1,7 +1,11 @@
 /* global describe:true, it:true, before:true, beforeEach:true, afterEach:true, after:true */
 import assert from 'assert';
 import { contains } from 'lodash';
-import { setupTestRekapi, setupTestActor } from './test-utils';
+import {
+  setupTestRekapi,
+  setupTestActor,
+  getDomRendererInstance
+} from './test-utils';
 
 import { Rekapi, DOMRenderer } from '../src/main';
 import {
@@ -128,19 +132,19 @@ describe('DOM renderer', () => {
   describe('#setTransformOrder', () => {
     it('throws an exception if given an unknown/unsupported transform function', () => {
       assert.throws(() =>
-        rekapi.renderer.setActorTransformOrder(actor, ['foo', 'bar', 'rotate'])
+        getDomRendererInstance(rekapi).setActorTransformOrder(actor, ['foo', 'bar', 'rotate'])
       );
     });
 
     it('sets a transform property order', () => {
       const order = ['rotate', 'translateY', 'translateX'];
-      rekapi.renderer.setActorTransformOrder(actor, order);
+      getDomRendererInstance(rekapi).setActorTransformOrder(actor, order);
       assert.deepEqual(actor._transformOrder, order);
     });
 
     it('ignores duplicate values passed to setTransformOrder', () => {
       const order = ['rotate', 'translateX', 'rotate'];
-      rekapi.renderer.setActorTransformOrder(actor, order);
+      getDomRendererInstance(rekapi).setActorTransformOrder(actor, order);
       assert.deepEqual(actor._transformOrder, ['rotate', 'translateX']);
     });
 
@@ -157,7 +161,7 @@ describe('DOM renderer', () => {
           rotate: '150deg'
         });
 
-      rekapi.renderer.setActorTransformOrder(
+      getDomRendererInstance(rekapi).setActorTransformOrder(
         actor, ['rotate', 'translateY', 'translateX']
       );
 
