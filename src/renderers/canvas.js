@@ -105,28 +105,6 @@ const removeActor = (actor, canvasRenderer) => {
  * __Note__: `CanvasRenderer` is added to the {@link rekapi.Rekapi} instance
  * automatically as `this.renderer`, there is no reason to call the constructor
  * yourself in most cases.
- *
- * ## Multiple renderers
- *
- * Rekapi supports multiple renderers per instance.  Do do this, you must not
- * provide a
- * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
- * to the {@link rekapi.Rekapi} constructor, you must
- * instead initialize the renderer yourself.  The
- * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D)
- * that would have been provided to the {@link rekapi.Rekapi} constructor
- * instead is provided as the second parameter to `CanvasRenderer`:
- *
- *
- *     const canvasContext = document.querySelector('canvas').getContext('2d');
- *
- *     // No context gets passed to the Rekapi constructor
- *     const rekapi = new Rekapi();
- *
- *     // Initialize CanvasRenderer manually and give it a
- *     // CanvasRenderingContext2D.  You can name it anything you want on the
- *     // Rekapi instance.
- *     rekapi.canvasRenderer = new CanvasRenderer(rekapi, canvasContext);
  * @param {Rekapi} rekapi
  * @param {CanvasRenderingContext2D=} context
  * @constructs rekapi.CanvasRenderer
