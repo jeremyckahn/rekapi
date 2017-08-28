@@ -193,7 +193,7 @@ const PLAYING = 'playing';
  * the Rekapi constructor.  This array is populated by modules in the
  * renderers/ directory.
  */
-export const renderers = [];
+export const rendererBootstrappers = [];
 
 /**
  * If this is a rendered animation, the appropriate renderer is accessible as
@@ -201,9 +201,11 @@ export const renderers = [];
  * as `this.context`.
  * @param {(Object|CanvasRenderingContext2D|HTMLElement)} [context={}] Sets
  * {@link rekapi.Rekapi#context}. This determines how to render the animation.
+ * {@link rekapi.Rekapi} will also automatically set up all necessary {@link
+ * rekapi.Rekapi#renderers} based on this value:
  *
  * * If this is not provided or is a plain object (`{}`), the animation will
- * not render anything and {@link rekapi.Rekapi#renderers} will be `undefined`.
+ * not render anything and {@link rekapi.Rekapi#renderers} will be empty.
  * * If this is a
  * [`CanvasRenderingContext2D`](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D),
  * {@link rekapi.Rekapi#renderers} will contain a {@link
@@ -279,10 +281,12 @@ export class Rekapi {
 
     /**
      * @member {Array.<rekapi.renderer>} rekapi.Rekapi#renderers Instances of
-     * {@link rekapi.renderer} classes, as determined by the `context`
-     * parameter provided to the {@link rekapi.Rekapi} constructor.
+     * {@link rekapi.renderer} classes, as inferred by the `context`
+     * parameter provided to the {@link rekapi.Rekapi} constructor.  You can
+     * add more renderers to this list manually; see the {@tutorial
+     * multiple-renderers} tutorial for an example.
      */
-    this.renderers = renderers
+    this.renderers = rendererBootstrappers
       .map(renderer => renderer(this))
       .filter(_ => _);
   }

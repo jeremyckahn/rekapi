@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Tweenable } from 'shifty';
 import Rekapi, {
-  renderers,
+  rendererBootstrappers,
   fireEvent
 } from '../rekapi';
 
@@ -1207,7 +1207,7 @@ export class DOMRenderer {
 /*!
  * @param {Rekapi} rekapi
  */
-renderers.push(rekapi =>
+rendererBootstrappers.push(rekapi =>
   // Node.nodeType 1 is an ELEMENT_NODE.
   // https://developer.mozilla.org/en-US/docs/Web/API/Node.nodeType
   rekapi.context.nodeType === 1 && new DOMRenderer(rekapi)

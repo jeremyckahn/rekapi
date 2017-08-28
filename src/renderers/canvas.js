@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import Rekapi, {
-  renderers,
+  rendererBootstrappers,
   fireEvent
 } from '../rekapi';
 
@@ -235,7 +235,7 @@ export class CanvasRenderer {
  * functions.
  * @param {Rekapi} rekapi
  */
-renderers.push(rekapi => {
+rendererBootstrappers.push(rekapi => {
   if (typeof CanvasRenderingContext2D === 'undefined' ||
     !(rekapi.context instanceof CanvasRenderingContext2D)) {
 
