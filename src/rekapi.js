@@ -17,7 +17,6 @@ export const fireEvent = (rekapi, eventName, data = {}) =>
 
 /*!
  * @param {Rekapi} rekapi
- * @param {Underscore} _
  */
 export const invalidateAnimationLength = rekapi =>
   rekapi._animationLengthValid = false;

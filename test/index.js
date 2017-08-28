@@ -1,4 +1,4 @@
-import './core';
+import './rekapi';
 import './actor';
 import './keyframe-property';
 import './canvas';
