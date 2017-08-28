@@ -3,8 +3,7 @@ import assert from 'assert';
 import { contains } from 'lodash';
 import {
   setupTestRekapi,
-  setupTestActor,
-  getCanvasRendererInstance
+  setupTestActor
 } from './test-utils';
 
 import { Rekapi, CanvasRenderer } from '../src/main';
@@ -40,19 +39,19 @@ describe('Canvas renderer', () => {
 
   describe('renderOrder array', () => {
     it('is populated as actors are added', () => {
-      assert.equal(getCanvasRendererInstance(rekapi)._renderOrder[0], actor.id);
+      assert.equal(rekapi.getRendererInstance(CanvasRenderer)._renderOrder[0], actor.id);
     });
 
     it('is emptied as actors are removed', () => {
       rekapi.removeActor(actor);
-      assert.equal(getCanvasRendererInstance(rekapi)._renderOrder.length, 0);
+      assert.equal(rekapi.getRendererInstance(CanvasRenderer)._renderOrder.length, 0);
     });
 
     describe('compatibility with Rekapi#removeActor', () => {
       it('is updated when Rekapi#removeActor is called', () => {
         rekapi.removeActor(actor);
 
-        assert.equal(getCanvasRendererInstance(rekapi)._renderOrder.indexOf(actor.id), -1);
+        assert.equal(rekapi.getRendererInstance(CanvasRenderer)._renderOrder.indexOf(actor.id), -1);
       });
     });
   });
@@ -60,19 +59,19 @@ describe('Canvas renderer', () => {
   describe('#moveActorToLayer', () => {
     it('can move actors to the beginning of the list', () => {
       actor2 = setupTestActor(rekapi);
-      getCanvasRendererInstance(rekapi).moveActorToLayer(actor2, 0);
+      rekapi.getRendererInstance(CanvasRenderer).moveActorToLayer(actor2, 0);
 
-      assert.equal(getCanvasRendererInstance(rekapi)._renderOrder[0], actor2.id);
-      assert.equal(getCanvasRendererInstance(rekapi)._renderOrder[1], actor.id);
+      assert.equal(rekapi.getRendererInstance(CanvasRenderer)._renderOrder[0], actor2.id);
+      assert.equal(rekapi.getRendererInstance(CanvasRenderer)._renderOrder[1], actor.id);
       assert.equal(rekapi.getActorCount(), 2);
     });
 
     it('can move actors to the end of the list', () => {
       actor2 = setupTestActor(rekapi);
-      getCanvasRendererInstance(rekapi).moveActorToLayer(actor, 1);
+      rekapi.getRendererInstance(CanvasRenderer).moveActorToLayer(actor, 1);
 
-      assert.equal(getCanvasRendererInstance(rekapi)._renderOrder[0], actor2.id);
-      assert.equal(getCanvasRendererInstance(rekapi)._renderOrder[1], actor.id);
+      assert.equal(rekapi.getRendererInstance(CanvasRenderer)._renderOrder[0], actor2.id);
+      assert.equal(rekapi.getRendererInstance(CanvasRenderer)._renderOrder[1], actor.id);
       assert.equal(rekapi.getActorCount(), 2);
     });
   });

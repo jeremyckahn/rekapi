@@ -3,7 +3,7 @@ import assert from 'assert';
 import { contains } from 'lodash';
 import { setupTestRekapi, setupTestActor } from './test-utils';
 
-import { Rekapi, Actor } from '../src/main';
+import { Rekapi, Actor, DOMRenderer } from '../src/main';
 import { Tweenable, setBezierFunction, unsetBezierFunction } from 'shifty';
 
 import {
@@ -521,6 +521,17 @@ describe('Rekapi', () => {
   describe('#getEventNames', () => {
     it('returns a list of event names', () => {
       assert.deepEqual(rekapi.getEventNames().sort(), Object.keys(rekapi._events).sort());
+    });
+  });
+
+  describe('#getRendererInstance', () => {
+    it('returns an instance of the specified renderer if one was set up', () => {
+      rekapi = setupTestRekapi(document.createElement('div'));
+      assert(rekapi.getRendererInstance(DOMRenderer) instanceof DOMRenderer);
+    });
+
+    it('returns undefined if no matching instance was found', () => {
+      assert.equal(rekapi.getRendererInstance(DOMRenderer), undefined);
     });
   });
 

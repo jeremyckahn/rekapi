@@ -765,4 +765,20 @@ export class Rekapi {
   getEventNames () {
     return Object.keys(this._events);
   }
+
+  /**
+   * Get a reference to a {@link rekapi.renderer} that was initialized for this
+   * animation.
+   * @method rekapi.Rekapi#getRendererInstance
+   * @param {rekapi.renderer} rendererConstructor The type of {@link
+   * rekapi.renderer} subclass (such as {@link rekapi.CanvasRenderer} or {@link
+   * rekapi.DOMRenderer}) to look up an instance of.
+   * @return {rekapi.renderer|undefined} The matching {@link rekapi.renderer},
+   * if any.
+   */
+  getRendererInstance (rendererConstructor) {
+    return this.renderers.filter(renderer =>
+      renderer instanceof rendererConstructor
+    )[0];
+  }
 }

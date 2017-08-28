@@ -3,8 +3,7 @@ import assert from 'assert';
 import { contains } from 'lodash';
 import {
   setupTestRekapi,
-  setupTestActor,
-  getDomRendererInstance
+  setupTestActor
 } from './test-utils';
 
 import {
@@ -885,7 +884,7 @@ describe('DOMRenderer#getCss', () => {
         rekapi.addActor(domActor);
         rekapi.addActor(nonDOMActor);
 
-        const css = getDomRendererInstance(rekapi).getCss();
+        const css = rekapi.getRendererInstance(DOMRenderer).getCss();
         const singleLineCss = css.split('\n').join('');
 
         assert(!!singleLineCss.match('actor-' + domActor.id));
