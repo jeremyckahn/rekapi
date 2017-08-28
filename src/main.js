@@ -36,6 +36,13 @@
  * of delay due to the nature of JavaScript timers.
  */
 
+/**
+ * @callback rekapi.actorSortFunction
+ * @param {rekapi.Actor} actor A {@link rekapi.Actor} that should expose a
+ * `number` value to sort by.
+ * @return {number}
+ */
+
 export { Rekapi } from './rekapi';
 export { Actor } from './actor';
 export { KeyframeProperty } from './keyframe-property';
