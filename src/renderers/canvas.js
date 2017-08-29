@@ -109,7 +109,7 @@ const removeActor = (actor, canvasRenderer) => {
  * __Note__: {@link rekapi.CanvasRenderer} is added to {@link
  * rekapi.Rekapi#renderers} automatically, there is no reason to call the
  * constructor yourself in most cases.
- * @param {Rekapi} rekapi The {@link rekapi.Rekapi} instance to render for.
+ * @param {rekapi.Rekapi} rekapi The {@link rekapi.Rekapi} instance to render for.
  * @param {CanvasRenderingContext2D=} context See [the canvas
  * docs](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D).
  * @constructs rekapi.CanvasRenderer
@@ -160,7 +160,7 @@ export class CanvasRenderer {
   /**
    * Erase the `<canvas>`.
    * @method rekapi.CanvasRenderer#clear
-   * @return {Rekapi}
+   * @return {rekapi.Rekapi}
    */
   clear () {
     this.canvasContext.clearRect(0, 0, this.width(), this.height());
@@ -183,7 +183,7 @@ export class CanvasRenderer {
    * @param {number} layer This should be within `0` and the total number of
    * {@link rekapi.Actor}s in the animation.  That number can be found with
    * {@link rekapi.Rekapi#getActorCount}.
-   * @return {Actor}
+   * @return {rekapi.Actor}
    */
   moveActorToLayer (actor, layer) {
     if (layer < this._renderOrder.length && layer > -1) {
@@ -212,7 +212,7 @@ export class CanvasRenderer {
    *     );
    * @method rekapi.CanvasRenderer#setOrderFunction
    * @param {rekapi.actorSortFunction} sortFunction
-   * @return {Rekapi}
+   * @return {rekapi.Rekapi}
    */
   setOrderFunction (sortFunction) {
     this._renderOrderSorter = sortFunction;
@@ -226,7 +226,7 @@ export class CanvasRenderer {
    * animation.
    *
    * @method rekapi.CanvasRenderer#unsetOrderFunction
-   * @return {Rekapi}
+   * @return {rekapi.Rekapi}
    */
   unsetOrderFunction () {
     this._renderOrderSorter = null;
