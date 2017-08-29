@@ -891,7 +891,7 @@ export const getActorCSS = (actor, options = {}) => {
  * __Note__: {@link rekapi.DOMRenderer} is added to {@link
  * rekapi.Rekapi#renderers} automatically, there is no reason to call the
  * constructor yourself in most cases.
- * @param {rekapi.Rekapi} rekapi
+ * @param {rekapi.Rekapi} rekapi The {@link rekapi.Rekapi} instance to render for.
  * @constructor rekapi.DOMRenderer
  */
 export class DOMRenderer {
@@ -933,16 +933,17 @@ export class DOMRenderer {
   /**
    * Play the Rekapi animation as a CSS `@keyframe` animation.
    *
-   * Note that this is different from {@link rekapi.Rekapi#play}.  This
-   * method only applies to CSS `@keyframe` animations.
+   * Note that this is not the same as {@link rekapi.Rekapi#play}.  That method
+   * controls inline style animations, while this method controls CSS
+   * `@keyframe` animations.
    * @method rekapi.DOMRenderer#play
-   * @param {number=} iterations How many times the animation should loop.
+   * @param {number} [iterations] How many times the animation should loop.
    * This can be `null` or `0` if you want to loop the animation endlessly but
    * also specify a value for `fps`.
-   * @param {number=} fps How many `@keyframes` to generate per second of
-   * the animation.  A higher value results in a more precise CSS animation,
-   * but it will take longer to generate.  The default value is `30`.  You
-   * should not need to go higher than `60`.
+   * @param {number} [fps] How many `@keyframes` to generate per second of the
+   * animation.  A higher value results in a more precise CSS animation, but it
+   * will take longer to generate.  The default value is `30`.  You should not
+   * need to go higher than `60`.
    */
   play (iterations = undefined, fps = undefined) {
     if (this.isPlaying()) {
@@ -971,12 +972,13 @@ export class DOMRenderer {
    * Stop a CSS `@keyframe` animation.  This also removes any `<style>`
    * elements that were dynamically injected into the DOM.
    *
-   * Note that this is different from {@link rekapi.Rekapi#stop}.  This
-   * method only applies to CSS `@keyframe` animations.
+   * Note that this is not the same as {@link rekapi.Rekapi#stop}.  That method
+   * controls inline style animations, while this method controls CSS
+   * `@keyframe` animations.
    * @method rekapi.DOMRenderer#stop
-   * @param {boolean=} goToEnd If true, skip to the end of the animation.
-   * If false or omitted, set inline styles on the actor elements to keep them
-   * in their current position.
+   * @param {boolean=} goToEnd If true, skip to the end of the animation.  If
+   * false or omitted, set inline styles on the {@link rekapi.Actor} elements
+   * to keep them in their current position.
    */
   stop (goToEnd = undefined) {
     if (this.isPlaying()) {
@@ -1058,23 +1060,13 @@ export class DOMRenderer {
    *
    * CSS transform string components are order-dependent, but JavaScript object
    * properties have an unpredictable order.  Rekapi must combine transform
-   * properties supplied to {@link rekapi.Actor#keyframe} (as shown above)
-   * into a single string when it renders each frame.  This method lets you
-   * change that order from the default.  The supported array values for
-   * `orderedTransforms` are:
+   * properties supplied to {@link rekapi.Actor#keyframe} (as shown above) into
+   * a single string when it renders each frame.  This method lets you change
+   * that order from the default.
    *
-   * - `translateX`
-   * - `translateY`
-   * - `translateZ`
-   * - `scale`
-   * - `scaleX`
-   * - `scaleY`
-   * - `rotate`
-   * - `skewX`
-   * - `skewY`
-   *
-   * If you prefer a more standards-oriented approach, Rekapi also supports
-   * combining the transform components yourself:
+   * However, if you prefer a more standards-oriented approach, Rekapi also
+   * supports combining the transform components yourself, obviating the need
+   * for {@link rekapi.DOMRenderer#setActorTransformOrder} entirely:
    *
    *     actor
    *       .keyframe(0, {
@@ -1085,13 +1077,26 @@ export class DOMRenderer {
    *       }, {
    *         transform: 'easeOutExpo easeInSine elastic'
    *       });
-   *
-   * This example and the one above it are equivalent.
-   *
    * @method rekapi.DOMRenderer#setActorTransformOrder
-   * @param {Actor} actor @param {Array(string)} orderedTransforms The
-   * array of transform names.
-   * @return {Rekapi}
+   * @param {rekapi.Actor} actor The {@link rekapi.Actor} to apply the new
+   * transform order to.
+   * @param {Array.<string>} orderedTransforms The array of transform names.
+   * The supported array values (and default order) are:
+   *
+   * - `translateX`
+   * - `translateY`
+   * - `translateZ`
+   * - `scale`
+   * - `scaleX`
+   * - `scaleY`
+   * - `perspective`
+   * - `rotate`
+   * - `rotateX`
+   * - `rotateY`
+   * - `rotateZ`
+   * - `skewX`
+   * - `skewY`
+   * @return {rekapi.Rekapi}
    */
   setActorTransformOrder (actor, orderedTransforms) {
     const unrecognizedTransforms = _.reject(orderedTransforms, isTransformFunction);
@@ -1107,32 +1112,33 @@ export class DOMRenderer {
   }
 
   /**
-   * Converts Rekapi animations to CSS `@keyframes`.
+   * Convert the animation to CSS `@keyframes`.
    * @method rekapi.DOMRenderer#getCss
-   * @param {Object=} options
-   *   * __vendors__ _(Array(string))_: Defaults to `['w3']`.  The browser vendors you
-   *   want to support. Valid values are:
-   *     * `'microsoft'`
-   *     * `'mozilla'`
-   *     * `'opera'`
-   *     * `'w3'`
-   *     * `'webkit'`
+   * @param {Object} [options={}]
+   * @param {Array.<string>} [options.vendors=['w3']] The browser vendors you
+   * want to support. Valid values are:
+   *   * `'microsoft'`
+   *   * `'mozilla'`
+   *   * `'opera'`
+   *   * `'w3'`
+   *   * `'webkit'`
    *
    *
-   *   * __fps__ _(number)_: Defaults to 30.  Defines the number of CSS
-   *   `@keyframe` frames rendered per second of an animation.  CSS `@keyframes`
-   *   are comprised of a series of explicitly defined steps, and more steps
-   *   will allow for a more complex animation.  More steps will also result in
-   *   a larger CSS string, and more time needed to generate the string.
-   *   * __name__ _(string)_: Define a custom name for your animation.  This
-   *   becomes the class name targeted by the generated CSS.
-   *   * __isCentered__ _(boolean)_: If `true`, the generated CSS will contain
-   *   `transform-origin: 0 0;`, which centers the DOM element along the path of
-   *   motion.  If `false` or omitted, no `transform-origin` rule is specified
-   *   and the element is aligned to the path of motion with its top-left
-   *   corner.
-   *   * __iterations__ _(number)_: How many times the generated animation
-   *   should repeat.  If omitted, the animation will loop indefinitely.
+   * @param {number} [options.fps=30]  Defines the number of CSS `@keyframe` frames
+   * rendered per second of an animation.  CSS `@keyframes` are comprised of a
+   * series of explicitly defined steps, and more steps will allow for a more
+   * complex animation.  More steps will also result in a larger CSS string,
+   * and more time needed to generate the string.
+   * @param {string} [options.name] Define a custom name for your animation.
+   * This becomes the class name targeted by the generated CSS.
+   * @param {boolean} [options.isCentered] If `true`, the generated CSS will
+   * contain `transform-origin: 0 0;`, which centers the DOM element along the
+   * path of motion.  If `false` or omitted, no `transform-origin` rule is
+   * specified and the element is aligned to the path of motion by its top-left
+   * corner.
+   * @param {number} [options.iterations] How many times the generated
+   * animation should repeat.  If omitted, the animation will loop
+   * indefinitely.
    * @return {string}
    */
   getCss (options = {}) {
