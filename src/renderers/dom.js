@@ -870,10 +870,10 @@ export const getActorCSS = (actor, options = {}) => {
 
 /**
  * {@link rekapi.DOMRenderer} allows you to animate DOM elements.  This is
- * achieved either by browser-accelerated [CSS `@keyframe`
+ * achieved either by [CSS `@keyframe`
  * animations](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes), or
- * by traditional inline style updates — keyframes are defined with the same
- * API in either case.  To render animations with the DOM, just supply any DOM
+ * by per-frame inline style updates — keyframes are defined with the same API
+ * in either case.  To render animations with the DOM, just supply any DOM
  * element to the {@link rekapi.Rekapi} constructor.  You may use
  * `document.body`, since it is generally always available:
  *
@@ -884,64 +884,9 @@ export const getActorCSS = (actor, options = {}) => {
  *     const domRenderer = rekapi.getRendererInstance(DOMRenderer);
  *
  * There are separate APIs for playing inline style animations and CSS
- * `@keyframe` animations.  Advantages of playing an animation with CSS
- * `@keyframes`:
- *
- *   - Generally smoother animations.
- *   - The JavaScript thread is freed from performing animation updates,
- *   making it available for other logic.
- *
- * Disadvantages:
- *
- *   - Limited playback control: You can only play and stop an animation, you
- *   cannot jump to or start from a specific point in the timeline.
- *   - Generating the CSS for `@keyframe` animations can take a noticeable
- *   amount of time.  This blocks all other logic, including rendering, so
- *   you may have to be clever with how to spend the cycles to do it.
- *   - No [events]{@link rekapi.Rekapi#on} can be
- *   bound to CSS `@keyframe` animations.
- *
- * So, the results are a little more predictable and flexible with inline style
- * animations, but CSS `@keyframe` may give you better performance.  Choose
- * whichever approach makes the most sense for your needs.
- *
- * {@link rekapi.DOMRenderer} can gracefully fall back to an inline style
- * animation if CSS `@keyframe` animations are not supported by the browser:
- *
- *      import { Rekapi, DOMRenderer } from 'rekapi';
- *
- *      const rekapi = new Rekapi(document.body);
- *
- *      // Each actor needs a reference to the DOM element it represents
- *      const actor = rekapi.addActor({
- *        context: document.querySelector('div')
- *      });
- *
- *      actor
- *        .keyframe(0,    { left: '0px'   })
- *        .keyframe(1000, { left: '250px' }, 'easeOutQuad');
- *
- *      // Feature detect for CSS @keyframe support
- *      if (rekapi.renderer.canAnimateWithCSS()) {
- *        // Animate with CSS @keyframes
- *        rekapi.getRendererInstance(DOMRenderer).play();
- *      } else {
- *        // Animate with inline styles instead
- *        rekapi.play();
- *      }
- *
- * ## `@keyframe` animations work differently than inline style animations
- *
- * Inline style animations are compatible with all of the playback and timeline
- * control methods defined by {@link rekapi.Rekapi}, such as {@link
- * rekapi.Rekapi#play}, {@link rekapi.Rekapi#playFrom} and {@link
- * rekapi.Rekapi#update}.  CSS `@keyframe` playback cannot be controlled in all
- * browsers, so {@link rekapi.DOMRenderer} defines analogous, renderer-specific
- * CSS playback methods that you should use:
- *
- *   - {@link rekapi.DOMRenderer#play}
- *   - {@link rekapi.DOMRenderer#isPlaying}
- *   - {@link rekapi.DOMRenderer#stop}
+ * `@keyframe` animations.  For a detailed breakdown of how to choose between
+ * these two APIs and use {@link rekapi.DOMRenderer} effectively, check out the
+ * {@tutorial dom-rendering-in-depth} tutorial.
  *
  * __Note__: {@link rekapi.DOMRenderer} is added to {@link
  * rekapi.Rekapi#renderers} automatically, there is no reason to call the
