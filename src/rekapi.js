@@ -555,7 +555,7 @@ export class Rekapi {
     _.each(this._actors, actor => {
       actor._updateState(millisecond, doResetLaterFnKeyframes);
 
-      if (!skipRender && actor.wasActive && typeof actor.render === 'function') {
+      if (!skipRender && actor.wasActive) {
         actor.render(actor.context, actor.get());
       }
     });

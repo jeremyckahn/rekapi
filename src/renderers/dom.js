@@ -893,6 +893,7 @@ export const getActorCSS = (actor, options = {}) => {
  * constructor yourself in most cases.
  * @param {rekapi.Rekapi} rekapi The {@link rekapi.Rekapi} instance to render for.
  * @constructor rekapi.DOMRenderer
+ * @extends {rekapi.renderer}
  */
 export class DOMRenderer {
   constructor (rekapi) {

@@ -113,6 +113,7 @@ const removeActor = (actor, canvasRenderer) => {
  * @param {CanvasRenderingContext2D=} context See [the canvas
  * docs](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D).
  * @constructor rekapi.CanvasRenderer
+ * @extends {rekapi.renderer}
  */
 export class CanvasRenderer {
 
