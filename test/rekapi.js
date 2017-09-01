@@ -38,7 +38,7 @@ describe('Rekapi', () => {
 
   describe('#addActor', () => {
     it('adds actors', () => {
-      assert.equal(rekapi._actors[actor.id], actor);
+      assert.equal(rekapi._actors[0], actor);
     });
 
     it('only adds actors once', () => {
@@ -66,7 +66,7 @@ describe('Rekapi', () => {
     it('removes an actor', () => {
       rekapi.removeActor(actor);
 
-      assert.equal(rekapi._actors[actor.id], undefined);
+      assert.equal(rekapi._actors.length, 0);
     });
   });
 
@@ -75,7 +75,7 @@ describe('Rekapi', () => {
       setupTestActor(rekapi);
       const removedActors = rekapi.removeAllActors();
 
-      assert.equal(Object.keys(rekapi._actors).length, 0);
+      assert.equal(rekapi._actors.length, 0);
       assert.equal(
         removedActors.filter(actor => actor instanceof Actor).length,
         2
@@ -99,8 +99,8 @@ describe('Rekapi', () => {
       actor2 = setupTestActor(rekapi);
       const actors = rekapi.getAllActors();
 
-      assert.equal(actors[actor.id], actor);
-      assert.equal(actors[actor2.id], actor2);
+      assert.equal(actors[0], actor);
+      assert.equal(actors[1], actor2);
     });
   });
 

@@ -107,7 +107,7 @@ export const updateToMillisecond = (rekapi, forMillisecond) => {
     // Reset function keyframes
     const lookupObject = { name: 'function' };
 
-    _.each(rekapi._actors, actor => {
+    rekapi._actors.forEach(actor => {
       const fnKeyframes = _.where(actor._keyframeProperties, lookupObject);
       const lastFnKeyframe = _.last(fnKeyframes);
 
@@ -221,7 +221,7 @@ export class Rekapi {
      * rekapi.Rekapi#context The rendering context for an animation.
      */
     this.context = context;
-    this._actors = {};
+    this._actors = [];
     this._playState = STOPPED;
 
     this._events = {
@@ -316,7 +316,7 @@ export class Rekapi {
     rekapiActor.rekapi = this;
 
     // Store a reference to the actor internally
-    this._actors[rekapiActor.id] = rekapiActor;
+    this._actors.push(rekapiActor);
 
     invalidateAnimationLength(this);
     rekapiActor.setup();
@@ -334,7 +334,7 @@ export class Rekapi {
    * for all actors in the animation.
    */
   getActor (actorId) {
-    return this._actors[actorId];
+    return this._actors.filter(actor => actor.id === actorId)[0];
   }
 
   /**
@@ -343,7 +343,7 @@ export class Rekapi {
    * animation.
    */
   getActorIds () {
-    return _.pluck(this._actors, 'id');
+    return this._actors.map(actor => actor.id);
   }
 
   /**
@@ -352,7 +352,7 @@ export class Rekapi {
    * this Object are {@link rekapi.Actor#id}s.
    */
   getAllActors () {
-    return _.clone(this._actors);
+    return this._actors.slice();
   }
 
   /**
@@ -360,7 +360,7 @@ export class Rekapi {
    * @return {number} The number of {@link rekapi.Actor}s in the animation.
    */
   getActorCount () {
-    return _.size(this._actors);
+    return this._actors.length;
   }
 
   /**
@@ -374,7 +374,7 @@ export class Rekapi {
    */
   removeActor (actor) {
     // Remove the link between Rekapi and actor
-    delete this._actors[actor.id];
+    this._actors = _.without(this._actors, actor);
     delete actor.rekapi;
 
     actor.teardown();
@@ -439,7 +439,9 @@ export class Rekapi {
     this.play(iterations);
     this._loopTimestamp = Tweenable.now() - millisecond;
 
-    _.invoke(this._actors, '_resetFnKeyframesFromMillisecond', millisecond);
+    this._actors.forEach(
+      actor => actor._resetFnKeyframesFromMillisecond(millisecond)
+    );
 
     return this;
   }
@@ -491,7 +493,7 @@ export class Rekapi {
     cancelLoop(this);
 
     // Also kill any shifty tweens that are running.
-    _.each(this._actors, actor =>
+    this._actors.forEach(actor =>
       actor._resetFnKeyframesFromMillisecond(0)
     );
 
@@ -552,7 +554,7 @@ export class Rekapi {
     fireEvent(this, 'beforeUpdate');
 
     // Update and render each of the actors
-    _.each(this._actors, actor => {
+    this._actors.forEach(actor => {
       actor._updateState(millisecond, doResetLaterFnKeyframes);
 
       if (!skipRender && actor.wasActive) {
@@ -591,7 +593,7 @@ export class Rekapi {
     if (!this._animationLengthValid) {
       this._animationLength = Math.max.apply(
         Math,
-        _.map(this._actors, actor => actor.getEnd())
+        this._actors.map(actor => actor.getEnd())
       );
 
       this._animationLengthValid = true;
@@ -713,7 +715,7 @@ export class Rekapi {
   exportTimeline () {
     const exportData = {
       duration: this.getAnimationLength(),
-      actors: _.map(this._actors, actor => actor.exportTimeline())
+      actors: this._actors.map(actor => actor.exportTimeline())
     };
 
 
