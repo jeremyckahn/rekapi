@@ -219,10 +219,30 @@ export class Rekapi {
     /**
      * @member {(Object|CanvasRenderingContext2D|HTMLElement)}
      * rekapi.Rekapi#context The rendering context for an animation.
+     * @default {}
      */
     this.context = context;
     this._actors = [];
     this._playState = STOPPED;
+
+    /**
+     * @member {(rekapi.actorSortFunction|null)} rekapi.Rekapi#sort Optional
+     * function for sorting the render order of {@link rekapi.Actor}s.  If set,
+     * this is called each frame before the {@link rekapi.Actor}s are rendered.
+     * If not set, {@link rekapi.Actor}s will render in the order they were
+     * added via {@link rekapi.Rekapi#addActor}.
+     *
+     * The following example assumes that all {@link rekapi.Actor}s are circles
+     * that have a `radius` {@link rekapi.KeyframeProperty}.  The circles will
+     * be rendered in order of the value of their `radius`, from smallest to
+     * largest.  This has the effect of layering larger circles on top of
+     * smaller circles, thus giving a sense of perspective.
+     *
+     *     const rekapi = new Rekapi();
+     *     rekapi.sort = actor => actor.get().radius;
+     * @default null
+     */
+    this.sort = null;
 
     this._events = {
       animationComplete: [],
@@ -547,17 +567,17 @@ export class Rekapi {
     millisecond = this._lastUpdatedMillisecond,
     doResetLaterFnKeyframes = false
   ) {
-    const skipRender = this.renderers.some(
-      renderer => renderer._batchRendering
-    );
-
     fireEvent(this, 'beforeUpdate');
 
+    const renderOrder = this.sort ?
+      _.sortBy(this._actors, this.sort) :
+      this._actors;
+
     // Update and render each of the actors
-    this._actors.forEach(actor => {
+    renderOrder.forEach(actor => {
       actor._updateState(millisecond, doResetLaterFnKeyframes);
 
-      if (!skipRender && actor.wasActive) {
+      if (actor.wasActive) {
         actor.render(actor.context, actor.get());
       }
     });
@@ -786,5 +806,28 @@ export class Rekapi {
     return this.renderers.filter(renderer =>
       renderer instanceof rendererConstructor
     )[0];
+  }
+
+  /**
+   * Move a {@link rekapi.Actor} around within the internal render order list.
+   * By default, a {@link rekapi.Actor} is rendered in the order it was added
+   * with {@link rekapi.Rekapi#addActor}.
+   *
+   * This method has no effect if {@link rekapi.Rekapi#sort} is set.
+   *
+   * @method rekapi.Rekapi#moveActorToPosition
+   * @param {rekapi.Actor} actor
+   * @param {number} layer This should be within `0` and the total number of
+   * {@link rekapi.Actor}s in the animation.  That number can be found with
+   * {@link rekapi.Rekapi#getActorCount}.
+   * @return {rekapi.Rekapi}
+   */
+  moveActorToPosition (actor, position) {
+    if (position < this._actors.length && position > -1) {
+      this._actors = _.without(this._actors, actor);
+      this._actors.splice(position, 0, actor);
+    }
+
+    return this;
   }
 }

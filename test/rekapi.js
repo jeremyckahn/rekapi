@@ -727,4 +727,24 @@ describe('Rekapi', () => {
       assert.equal(testActor2.get().x, 100);
     });
   });
+
+  describe('#moveActorToPosition', () => {
+    it('can move actors to the beginning of the list', () => {
+      actor2 = setupTestActor(rekapi);
+      rekapi.moveActorToPosition(actor2, 0);
+
+      assert.equal(rekapi._actors[0], actor2);
+      assert.equal(rekapi._actors[1], actor);
+      assert.equal(rekapi.getActorCount(), 2);
+    });
+
+    it('can move actors to the end of the list', () => {
+      actor2 = setupTestActor(rekapi);
+      rekapi.moveActorToPosition(actor, 1);
+
+      assert.equal(rekapi._actors[0], actor2);
+      assert.equal(rekapi._actors[1], actor);
+      assert.equal(rekapi.getActorCount(), 2);
+    });
+  });
 });
