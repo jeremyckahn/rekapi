@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Tutorial: Getting Started</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Tutorial: Getting Started</h1>
+
+    <section>
+
+<header>
+    
+
+    <h2>Getting Started</h2>
+</header>
+
+<article>
+    <p>Although Rekapi is renderer-agnostic, it's easiest to get started by making a
+simple <code>&lt;canvas&gt;</code> animation.  The first step is to make a new <a href="rekapi.Rekapi.html"><code>rekapi.Rekapi</code></a> instance.  Canvas animations require a 2D <code>&lt;canvas&gt;</code> context to
+render to, which gets passed to the <a href="rekapi.Rekapi.html"><code>rekapi.Rekapi</code></a> constructor:</p>
+<pre class="prettyprint source lang-javascript"><code>import { Rekapi, Actor } from 'rekapi';
+
+const context = document.querySelector('canvas').getContext('2d');
+const rekapi = new Rekapi(context);</code></pre><p>You now have a <a href="rekapi.Rekapi.html"><code>rekapi.Rekapi</code></a> instance, but it won't do anything until
+you define and add some <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>s.</p>
+<h2>Defining actors</h2><p>Here's the boilerplate for a <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>:</p>
+<pre class="prettyprint source lang-javascript"><code>const actor = new Actor({
+
+  // Called every frame.  Receives a reference to the canvas context, and the
+  // actor's state.
+  render: (context, state) => {
+
+  }
+
+});</code></pre><p>Here's a more complete example of an actor that renders a circle to the canvas:</p>
+<pre class="prettyprint source lang-javascript"><code>const actor = new Actor({
+  render: (context, state) => {
+    // Rekapi was given a canvas as a context, so `context` here is a
+    // CanvasRenderingContext2D.
+
+    context.beginPath();
+    context.arc(
+      state.x,
+      state.y,
+      state.radius,
+      0,
+      Math.PI*2,
+      true
+    );
+
+    context.fillStyle = state.color;
+    context.fill();
+    context.closePath();
+  }
+});</code></pre><p>The <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>'s <code>render</code> method can be whatever you want — in this
+case it's just drawing a circle.  The idea is that the <code>context</code> and <code>state</code>
+parameters are provided by Rekapi on every frame update, and then rendered to
+the <code>&lt;canvas&gt;</code> by <a href="rekapi.Actor.html#render"><code>rekapi.Actor#render</code></a> method.</p>
+<p>Now that you have a <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a> instance, you just need to add it to
+animation with <a href="rekapi.Rekapi.html#addActor"><code>rekapi.Rekapi#addActor</code></a>:</p>
+<pre class="prettyprint source lang-javascript"><code>rekapi.addActor(actor);</code></pre><p>Now you can define some keyframes!</p>
+<h2>Defining keyframes</h2><p>A keyframe is a way of saying &quot;at a given point in time, the actor should have
+a particular state.&quot;  Let's begin by giving <code>actor</code> a starting keyframe:</p>
+<pre class="prettyprint source lang-javascript"><code>actor.keyframe(0, {
+  x: 50,
+  y: 50
+});</code></pre><p><a href="rekapi.Actor.html#keyframe"><code>rekapi.Actor#keyframe</code></a> is a method that takes two to three parameters -</p>
+<ol>
+<li>Which millisecond on the animation timeline the keyframe should be placed.</li>
+<li>An Object whose properties define the state that the actor should have.</li>
+<li>A string that specifies which
+<a href="https://github.com/jeremyckahn/shifty">Shifty</a> easing formula to use -
+&quot;linear&quot; is the default.</li>
+</ol>
+<p>The above snippet says, &quot;at zero milliseconds into the animation, place <code>actor</code>
+at <code>x</code> 50, and <code>y</code> 50.  Continuing with that, animate it to another point on
+the canvas:</p>
+<pre class="prettyprint source lang-javascript"><code>actor.keyframe(0, {
+    x: 50,
+    y: 50
+  })
+  .keyframe(1000, {
+    x: 200,
+    y: 100
+  }, 'easeOutExpo');</code></pre><p>The animation defined here will last one second, as the final keyframe is
+set at 1000 milliseconds.  It will have a nice <code>easeOutExpo</code> ease applied to
+it, as you can see in the third parameter.  Individual tweens (that is,
+keyframed animation segments) get their easing curves from the keyframe they
+are animating to, not animating from.</p>
+<p>Rekapi inherits all of <a href="https://github.com/jeremyckahn/shifty/blob/master/src/easing-functions.js">Shifty's easing
+functions</a>.</p>
+<h2>Playing the animation</h2><p>So now you've set up a sweet animation!  Let's run it and see what it looks
+like:</p>
+<pre class="prettyprint source lang-javascript"><code>rekapi.play();</code></pre><p>And the animation will just loop continuously.  You can also pass a <code>number</code> to
+<a href="rekapi.Rekapi.html#play"><code>rekapi.Rekapi#play</code></a> to define how many times to play before stopping,
+like so:</p>
+<pre class="prettyprint source lang-javascript"><code>rekapi.play(3);</code></pre><p>This will play the animation three times and stop.  When an animation stops, it
+will just sit at the last frame that was rendered.  You can control the
+animation playback with <a href="rekapi.Rekapi.html#pause"><code>rekapi.Rekapi#pause</code></a> and <a href="rekapi.Rekapi.html#stop"><code>rekapi.Rekapi#stop</code></a>`.</p>
+</article>
+
+</section>
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="rekapi.Actor.html">Actor</a></li><li><a href="rekapi.CanvasRenderer.html">CanvasRenderer</a></li><li><a href="rekapi.DOMRenderer.html">DOMRenderer</a></li><li><a href="rekapi.KeyframeProperty.html">KeyframeProperty</a></li><li><a href="rekapi.Rekapi.html">Rekapi</a></li></ul><h3>Namespaces</h3><ul><li><a href="rekapi.html">rekapi</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-dom-rendering-in-depth.html">DOM Rendering in Depth</a></li><li><a href="tutorial-getting-started.html">Getting Started</a></li><li><a href="tutorial-keyframes-in-depth.html">Keyframes in Depth</a></li><li><a href="tutorial-multiple-renderers.html">Multiple Renderers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Sat Sep 02 2017 15:33:31 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

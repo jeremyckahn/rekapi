@@ -1,0 +1,1886 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: KeyframeProperty</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: KeyframeProperty</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>
+            <span class="ancestors"><a href="rekapi.html">rekapi</a>.</span>KeyframeProperty<span class="signature">(millisecond, name, value, easing<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>Represents an individual component of an <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>'s keyframe
+state.  In most cases you won't need to deal with this object directly, as
+the <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a> APIs abstract a lot of what this Object does away
+for you.</p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="KeyframeProperty"><span class="type-signature"></span>new KeyframeProperty<span class="signature">(millisecond, name, value, easing<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>millisecond</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Sets <a href="rekapi.KeyframeProperty.html#millisecond"><code>rekapi.KeyframeProperty#millisecond</code></a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Sets <a href="rekapi.KeyframeProperty.html#name"><code>rekapi.KeyframeProperty#name</code></a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+|
+
+<span class="param-type">boolean</span>
+|
+
+<span class="param-type"><a href="rekapi.html#.keyframeFunction">rekapi.keyframeFunction</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last"><p>Sets <a href="rekapi.KeyframeProperty.html#value"><code>rekapi.KeyframeProperty#value</code></a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>easing</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    "linear"
+                
+                </td>
+            
+
+            <td class="description last"><p>Sets <a href="rekapi.KeyframeProperty.html#easing"><code>rekapi.KeyframeProperty#easing</code></a>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line23">line 23</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="actor"><span class="type-signature"></span>actor<span class="type-signature"> :<a href="rekapi.Actor.html">rekapi.Actor</a>|undefined</span></h4>
+
+
+
+
+<div class="description">
+    <p>The
+<a href="rekapi.Actor.html"><code>rekapi.Actor</code></a> to which this <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>
+belongs, if any.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="rekapi.Actor.html">rekapi.Actor</a></span>
+|
+
+<span class="param-type">undefined</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line38">line 38</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="easing"><span class="type-signature"></span>easing<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    <p>The easing curve by
+which this <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> should be animated.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line69">line 69</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="hasFired"><span class="type-signature"></span>hasFired<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+<div class="description">
+    <p>Flag to determine if
+this <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>'s <a href="rekapi.html#.keyframeFunction"><code>rekapi.keyframeFunction</code></a>
+should be invoked in the current animation loop.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line31">line 31</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    <p>The unique ID of this <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="millisecond"><span class="type-signature"></span>millisecond<span class="type-signature"> :number</span></h4>
+
+
+
+
+<div class="description">
+    <p>Where on the
+animation timeline this <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> is.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="name"><span class="type-signature"></span>name<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    <p>This <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>'s name, such as <code>&quot;x&quot;</code> or <code>&quot;opacity&quot;</code>.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">string</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line58">line 58</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="nextProperty"><span class="type-signature"></span>nextProperty<span class="type-signature"> :<a href="rekapi.KeyframeProperty.html">rekapi.KeyframeProperty</a>|null</span></h4>
+
+
+
+
+<div class="description">
+    <p>A reference to the <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> that follows this one in a <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>'s property track.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><a href="rekapi.KeyframeProperty.html">rekapi.KeyframeProperty</a></span>
+|
+
+<span class="param-type">null</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line44">line 44</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="value"><span class="type-signature"></span>value<span class="type-signature"> :number|string|boolean|<a href="rekapi.html#.keyframeFunction">rekapi.keyframeFunction</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>The value that this <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> represents.</p>
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+|
+
+<span class="param-type">boolean</span>
+|
+
+<span class="param-type"><a href="rekapi.html#.keyframeFunction">rekapi.keyframeFunction</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line63">line 63</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="detach"><span class="type-signature"></span>detach<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Disassociates this <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> from its <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>.  This is called by various <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a> methods
+and triggers the <a href="rekapi.Rekapi.html#on"><code>removeKeyframeProperty</code></a> event
+on the associated <a href="rekapi.Rekapi.html"><code>rekapi.Rekapi</code></a> instance.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line147">line 147</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="exportPropertyData"><span class="type-signature"></span>exportPropertyData<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Export this <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> to a <code>JSON.stringify</code>-friendly
+<code>Object</code>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line166">line 166</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Object</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getValueAt"><span class="type-signature"></span>getValueAt<span class="signature">(millisecond)</span><span class="type-signature"> &rarr; {number|string|boolean|<a href="rekapi.html#.keyframeFunction">rekapi.keyframeFunction</a>|<a href="rekapi.KeyframeProperty.html#value">rekapi.KeyframeProperty#value</a>}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Calculate the midpoint between this <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> and
+the next <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> in a <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>'s
+property track.</p>
+<p>In just about all cases, <code>millisecond</code> should be between this <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>'s <code>millisecond</code> and the <code>millisecond</code> of the
+<a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> that follows it in the animation
+timeline, but it is valid to specify a value outside of this range.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>millisecond</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The millisecond in the animation timeline to
+compute the state value for.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line93">line 93</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+|
+
+<span class="param-type">boolean</span>
+|
+
+<span class="param-type"><a href="rekapi.html#.keyframeFunction">rekapi.keyframeFunction</a></span>
+|
+
+<span class="param-type"><a href="rekapi.KeyframeProperty.html#value">rekapi.KeyframeProperty#value</a></span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="invoke"><span class="type-signature"></span>invoke<span class="signature">()</span><span class="type-signature"> &rarr; {any}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Calls <a href="rekapi.KeyframeProperty.html#value"><code>rekapi.KeyframeProperty#value</code></a> if it is a <a href="rekapi.html#.keyframeFunction"><code>rekapi.keyframeFunction</code></a>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line189">line 189</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>Whatever value is returned for this <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>'s <a href="rekapi.html#.keyframeFunction"><code>rekapi.keyframeFunction</code></a>.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">any</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="linkToNext"><span class="type-signature"></span>linkToNext<span class="signature">(nextProperty<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Create the reference to the <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> that follows
+this one on a <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>'s property track.  Property tracks
+are just linked lists of <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>s.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>nextProperty</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">KeyframeProperty</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> that should immediately follow this one on the
+animation timeline.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line134">line 134</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="modifyWith"><span class="type-signature"></span>modifyWith<span class="signature">(newProperties)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Modify this <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>newProperties</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Valid values are:</p>
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>millisecond</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Sets <a href="rekapi.KeyframeProperty.html#millisecond"><code>rekapi.KeyframeProperty#millisecond</code></a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Sets <a href="rekapi.KeyframeProperty.html#name"><code>rekapi.KeyframeProperty#name</code></a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+|
+
+<span class="param-type">boolean</span>
+|
+
+<span class="param-type"><a href="rekapi.html#.keyframeFunction">rekapi.keyframeFunction</a></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Sets <a href="rekapi.KeyframeProperty.html#value"><code>rekapi.KeyframeProperty#value</code></a>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>easing</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Sets <a href="rekapi.KeyframeProperty.html#easing"><code>rekapi.KeyframeProperty#easing</code></a>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line77">line 77</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="rekapi.Actor.html">Actor</a></li><li><a href="rekapi.CanvasRenderer.html">CanvasRenderer</a></li><li><a href="rekapi.DOMRenderer.html">DOMRenderer</a></li><li><a href="rekapi.KeyframeProperty.html">KeyframeProperty</a></li><li><a href="rekapi.Rekapi.html">Rekapi</a></li></ul><h3>Namespaces</h3><ul><li><a href="rekapi.html">rekapi</a></li></ul><h3>Tutorials</h3><ul><li><a href="tutorial-dom-rendering-in-depth.html">DOM Rendering in Depth</a></li><li><a href="tutorial-getting-started.html">Getting Started</a></li><li><a href="tutorial-keyframes-in-depth.html">Keyframes in Depth</a></li><li><a href="tutorial-multiple-renderers.html">Multiple Renderers</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Sat Sep 02 2017 15:33:31 GMT-0700 (PDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

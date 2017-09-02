@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: KeyframeProperty</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: KeyframeProperty</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>KeyframeProperty<span class="signature">(millisecond, name, value, easing<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>KeyframeProperty</p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="KeyframeProperty"><span class="type-signature"></span>new KeyframeProperty<span class="signature">(millisecond, name, value, easing<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Represents an individual component of an actor's keyframe state.  In most
+cases you won't need to deal with this object directly, as the
+<code>{{#crossLink &quot;Actor&quot;}}{{/crossLink}}</code> APIs abstract a lot of what
+this Object does away for you.</p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>millisecond</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>Where on the animation timeline this
+<code>KeyframeProperty</code> is.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The property's name, such as <code>&quot;x&quot;</code> or <code>&quot;opacity&quot;</code>.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>value</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+|
+
+<span class="param-type">string</span>
+|
+
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The value that this
+<code>KeyframeProperty</code> represents.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>easing</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last"><p>The easing curve at which this
+<code>KeyframeProperty</code> should be animated to.  Defaults to <code>&quot;linear&quot;</code>.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="keyframe-property.js.html">keyframe-property.js</a>, <a href="keyframe-property.js.html#line25">line 25</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Actor.html">Actor</a></li><li><a href="KeyframeProperty_KeyframeProperty.html">KeyframeProperty#KeyframeProperty</a></li><li><a href="Rekapi.html">Rekapi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addActor">addActor</a></li><li><a href="global.html#addKeyframeProperty">addKeyframeProperty</a></li><li><a href="global.html#copyKeyframe">copyKeyframe</a></li><li><a href="global.html#detach">detach</a></li><li><a href="global.html#exportPropertyData">exportPropertyData</a></li><li><a href="global.html#exportTimeline">exportTimeline</a></li><li><a href="global.html#getActor">getActor</a></li><li><a href="global.html#getActorCount">getActorCount</a></li><li><a href="global.html#getActorIds">getActorIds</a></li><li><a href="global.html#getAllActors">getAllActors</a></li><li><a href="global.html#getAnimationLength">getAnimationLength</a></li><li><a href="global.html#getEnd">getEnd</a></li><li><a href="global.html#getEventNames">getEventNames</a></li><li><a href="global.html#getKeyframeProperty">getKeyframeProperty</a></li><li><a href="global.html#getLastMillisecondUpdated">getLastMillisecondUpdated</a></li><li><a href="global.html#getLastPositionUpdated">getLastPositionUpdated</a></li><li><a href="global.html#getLength">getLength</a></li><li><a href="global.html#getPropertiesInTrack">getPropertiesInTrack</a></li><li><a href="global.html#getStart">getStart</a></li><li><a href="global.html#getTrackNames">getTrackNames</a></li><li><a href="global.html#getValueAt">getValueAt</a></li><li><a href="global.html#hasKeyframeAt">hasKeyframeAt</a></li><li><a href="global.html#importTimeline">importTimeline</a></li><li><a href="global.html#invoke">invoke</a></li><li><a href="global.html#isPaused">isPaused</a></li><li><a href="global.html#isPlaying">isPlaying</a></li><li><a href="global.html#isStopped">isStopped</a></li><li><a href="global.html#keyframe">keyframe</a></li><li><a href="global.html#linkToNext">linkToNext</a></li><li><a href="global.html#modifyKeyframe">modifyKeyframe</a></li><li><a href="global.html#modifyKeyframeProperty">modifyKeyframeProperty</a></li><li><a href="global.html#modifyWith">modifyWith</a></li><li><a href="global.html#moveKeyframe">moveKeyframe</a></li><li><a href="global.html#off">off</a></li><li><a href="global.html#on">on</a></li><li><a href="global.html#pause">pause</a></li><li><a href="global.html#play">play</a></li><li><a href="global.html#playFrom">playFrom</a></li><li><a href="global.html#playFromCurrent">playFromCurrent</a></li><li><a href="global.html#removeActor">removeActor</a></li><li><a href="global.html#removeAllActors">removeAllActors</a></li><li><a href="global.html#removeAllKeyframes">removeAllKeyframes</a></li><li><a href="global.html#removeKeyframe">removeKeyframe</a></li><li><a href="global.html#removeKeyframeProperty">removeKeyframeProperty</a></li><li><a href="global.html#stop">stop</a></li><li><a href="global.html#trigger">trigger</a></li><li><a href="global.html#update">update</a></li><li><a href="global.html#wait">wait</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Fri Aug 04 2017 07:55:09 GMT-0500 (CDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
