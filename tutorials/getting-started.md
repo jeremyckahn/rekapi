@@ -41,13 +41,13 @@ const actor = new Actor({
     context.arc(
       state.x,
       state.y,
-      state.radius,
+      25,
       0,
       Math.PI*2,
       true
     );
 
-    context.fillStyle = state.color;
+    context.fillStyle = '#f0f';
     context.fill();
     context.closePath();
   }
@@ -133,3 +133,6 @@ This will play the animation three times and stop.  When an animation stops, it
 will just sit at the last frame that was rendered.  You can control the
 animation playback with {@link rekapi.Rekapi#pause} and {@link
 rekapi.Rekapi#stop}`.
+
+<p data-height="346" data-theme-id="0" data-slug-hash="brZbXE" data-default-tab="js,result" data-user="jeremyckahn" data-embed-version="2" data-pen-title="Rekapi: Getting started" class="codepen">See the Pen <a href="https://codepen.io/jeremyckahn/pen/brZbXE/">Rekapi: Getting started</a> by Jeremy Kahn (<a href="https://codepen.io/jeremyckahn">@jeremyckahn</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
