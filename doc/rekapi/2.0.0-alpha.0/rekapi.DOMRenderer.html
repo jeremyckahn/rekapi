@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>DOMRenderer - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Tutorials</li><li class="nav-item"><a href="tutorial-dom-rendering-in-depth.html">DOM Rendering in Depth</a></li><li class="nav-item"><a href="tutorial-getting-started.html">Getting Started</a></li><li class="nav-item"><a href="tutorial-keyframes-in-depth.html">Keyframes in Depth</a></li><li class="nav-item"><a href="tutorial-multiple-renderers.html">Multiple Renderers</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="rekapi.Actor.html">Actor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#addKeyframeProperty">addKeyframeProperty</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#copyKeyframe">copyKeyframe</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#exportTimeline">exportTimeline</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#getEnd">getEnd</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#getKeyframeProperty">getKeyframeProperty</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#getLength">getLength</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#getPropertiesInTrack">getPropertiesInTrack</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#getStart">getStart</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#getTrackNames">getTrackNames</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#hasKeyframeAt">hasKeyframeAt</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#importTimeline">importTimeline</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#keyframe">keyframe</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#modifyKeyframe">modifyKeyframe</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#modifyKeyframeProperty">modifyKeyframeProperty</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#moveKeyframe">moveKeyframe</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#removeAllKeyframes">removeAllKeyframes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#removeKeyframe">removeKeyframe</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#removeKeyframeProperty">removeKeyframeProperty</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#wait">wait</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="rekapi.CanvasRenderer.html">CanvasRenderer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.CanvasRenderer.html#clear">clear</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.CanvasRenderer.html#height">height</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.CanvasRenderer.html#width">width</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html">DOMRenderer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#canAnimateWithCSS">canAnimateWithCSS</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#getCss">getCss</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#isPlaying">isPlaying</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#play">play</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#prerender">prerender</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#setActorTransformOrder">setActorTransformOrder</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#stop">stop</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html">KeyframeProperty</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html#detach">detach</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html#exportPropertyData">exportPropertyData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html#getValueAt">getValueAt</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html#invoke">invoke</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html#linkToNext">linkToNext</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html#modifyWith">modifyWith</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="rekapi.Rekapi.html">Rekapi</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#addActor">addActor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#exportTimeline">exportTimeline</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getActor">getActor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getActorCount">getActorCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getActorIds">getActorIds</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getAllActors">getAllActors</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getAnimationLength">getAnimationLength</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getEventNames">getEventNames</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getLastMillisecondUpdated">getLastMillisecondUpdated</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getLastPositionUpdated">getLastPositionUpdated</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getRendererInstance">getRendererInstance</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#importTimeline">importTimeline</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#isPaused">isPaused</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#isPlaying">isPlaying</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#isStopped">isStopped</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#moveActorToPosition">moveActorToPosition</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#off">off</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#on">on</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#pause">pause</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#play">play</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#playFrom">playFrom</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#playFromCurrent">playFromCurrent</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#removeActor">removeActor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#removeAllActors">removeAllActors</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#stop">stop</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#trigger">trigger</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#update">update</a></span></li><li class="nav-heading">Namespaces</li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="rekapi.html">rekapi</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">DOMRenderer</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="rekapi.html">rekapi</a>.</span>
+        
+        DOMRenderer
+        </h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="DOMRenderer"><span class="type-signature"></span>new DOMRenderer<span class="signature">(rekapi)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p><a href="rekapi.DOMRenderer.html"><code>rekapi.DOMRenderer</code></a> allows you to animate DOM elements.  This is
+achieved either by <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes">CSS <code>@keyframe</code>
+animations</a>, or
+by per-frame inline style updates — keyframes are defined with the same API
+in either case.  To render animations with the DOM, just supply any DOM
+element to the <a href="rekapi.Rekapi.html"><code>rekapi.Rekapi</code></a> constructor.  You may use
+<code>document.body</code>, since it is generally always available:</p>
+<pre class="prettyprint source"><code>const rekapi = new Rekapi(document.body);</code></pre><p> To use this renderer's API, get a reference to the initialized object:</p>
+<pre class="prettyprint source"><code>const domRenderer = rekapi.getRendererInstance(DOMRenderer);</code></pre><p>There are separate APIs for playing inline style animations and CSS
+<code>@keyframe</code> animations.  For a detailed breakdown of how to choose between
+these two APIs and use <a href="rekapi.DOMRenderer.html"><code>rekapi.DOMRenderer</code></a> effectively, check out the
+<a href="tutorial-dom-rendering-in-depth.html">DOM Rendering in Depth</a> tutorial.</p>
+<p><strong>Note</strong>: <a href="rekapi.DOMRenderer.html"><code>rekapi.DOMRenderer</code></a> is added to <a href="rekapi.Rekapi.html#renderers"><code>rekapi.Rekapi#renderers</code></a> automatically, there is no reason to call the
+constructor yourself in most cases.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="renderers_dom.js.html">renderers/dom.js</a>, <a href="renderers_dom.js.html#line871">line 871</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>rekapi</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="rekapi.Rekapi.html">rekapi.Rekapi</a></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The <a href="rekapi.Rekapi.html"><code>rekapi.Rekapi</code></a> instance to render for.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li><a href="rekapi.html#.renderer">rekapi.renderer</a></li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="canAnimateWithCSS"><span class="type-signature"></span>canAnimateWithCSS<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="renderers_dom.js.html">renderers/dom.js</a>, <a href="renderers_dom.js.html#line922">line 922</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>boolean</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>Whether or not the browser supports CSS <code>@keyframe</code>
+animations.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getCss"><span class="type-signature"></span>getCss<span class="signature">(options<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Convert the animation to CSS <code>@keyframes</code>.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="renderers_dom.js.html">renderers/dom.js</a>, <a href="renderers_dom.js.html#line1112">line 1112</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>options</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last">
+                
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>vendors</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Array.&lt;string></code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    ['w3']
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>The browser vendors you
+want to support. Valid values are:</p>
+<ul>
+<li><code>'microsoft'</code></li>
+<li><code>'mozilla'</code></li>
+<li><code>'opera'</code></li>
+<li><code>'w3'</code></li>
+<li><code>'webkit'</code></li>
+</ul>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fps</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    30
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>Defines the number of CSS <code>@keyframe</code> frames
+rendered per second of an animation.  CSS <code>@keyframes</code> are comprised of a
+series of explicitly defined steps, and more steps will allow for a more
+complex animation.  More steps will also result in a larger CSS string,
+and more time needed to generate the string.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>Define a custom name for your animation.
+This becomes the class name targeted by the generated CSS.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>isCentered</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>boolean</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>If <code>true</code>, the generated CSS will
+contain <code>transform-origin: 0 0;</code>, which centers the DOM element along the
+path of motion.  If <code>false</code> or omitted, no <code>transform-origin</code> rule is
+specified and the element is aligned to the path of motion by its top-left
+corner.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>iterations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                <p>How many times the generated
+animation should repeat.  If omitted, the animation will loop
+indefinitely.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>string</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="isPlaying"><span class="type-signature"></span>isPlaying<span class="signature">()</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="renderers_dom.js.html">renderers/dom.js</a>, <a href="renderers_dom.js.html#line1002">line 1002</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>boolean</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>Whether or not a CSS <code>@keyframe</code> animation is running.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="play"><span class="type-signature"></span>play<span class="signature">(iterations<span class="signature-attributes">opt</span>, fps<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Play the Rekapi animation as a CSS <code>@keyframe</code> animation.</p>
+<p>Note that this is not the same as <a href="rekapi.Rekapi.html#play"><code>rekapi.Rekapi#play</code></a>.  That method
+controls inline style animations, while this method controls CSS
+<code>@keyframe</code> animations.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="renderers_dom.js.html">renderers/dom.js</a>, <a href="renderers_dom.js.html#line931">line 931</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>How many times the animation should loop.
+This can be <code>null</code> or <code>0</code> if you want to loop the animation endlessly but
+also specify a value for <code>fps</code>.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fps</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>How many <code>@keyframes</code> to generate per second of the
+animation.  A higher value results in a more precise CSS animation, but it
+will take longer to generate.  The default value is <code>30</code>.  You should not
+need to go higher than <code>60</code>.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="prerender"><span class="type-signature"></span>prerender<span class="signature">(iterations<span class="signature-attributes">opt</span>, fps<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {string}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Prerender and cache the CSS animation so that it is immediately ready to
+be used when it is needed in the future.  The function signature is
+identical to <a href="rekapi.DOMRenderer.html#play"><code>rekapi.DOMRenderer#play</code></a>.  This
+is necessary to play a CSS animation and will be automatically called for
+you if you don't call it manually, but calling it ahead of time (such as
+on page load) will prevent any perceived lag when a CSS <code>@keyframe</code>
+animation is started.  The prerendered animation is cached for reuse until
+the timeline or a keyframe is modified.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="renderers_dom.js.html">renderers/dom.js</a>, <a href="renderers_dom.js.html#line1010">line 1010</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>iterations</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>How many times the animation should loop.
+This can be <code>null</code> or <code>0</code> if you want to loop the animation endlessly but
+also specify a value for <code>fps</code>.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>fps</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>How many <code>@keyframes</code> to generate per second of
+the animation.  A higher value results in a more precise CSS animation,
+but it will take longer to generate.  The default value is <code>30</code>.  You
+should not need to go higher than <code>60</code>.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>string</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>The prerendered CSS string.  You likely won't need this,
+as it is also cached internally.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="setActorTransformOrder"><span class="type-signature"></span>setActorTransformOrder<span class="signature">(actor, orderedTransforms)</span><span class="type-signature"> &rarr; {<a href="rekapi.Rekapi.html">rekapi.Rekapi</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>You can decouple transform components in order to animate each property
+with its own easing curve:</p>
+<pre class="prettyprint source"><code>actor
+  .keyframe(0, {
+    translateX: '0px',
+    translateY: '0px',
+    rotate: '0deg'
+  })
+  .keyframe(1500, {
+    translateX: '200px',
+    translateY: '200px',
+    rotate: '90deg'
+  }, {
+    translateX: 'easeOutExpo',
+    translateY: 'easeInSine',
+    rotate: 'elastic'
+  });</code></pre><p>CSS transform string components are order-dependent, but JavaScript object
+properties have an unpredictable order.  Rekapi must combine transform
+properties supplied to <a href="rekapi.Actor.html#keyframe"><code>rekapi.Actor#keyframe</code></a> (as shown above) into
+a single string when it renders each frame.  This method lets you change
+that order from the default.</p>
+<p>However, if you prefer a more standards-oriented approach, Rekapi also
+supports combining the transform components yourself, obviating the need
+for <a href="rekapi.DOMRenderer.html#setActorTransformOrder"><code>rekapi.DOMRenderer#setActorTransformOrder</code></a> entirely:</p>
+<pre class="prettyprint source"><code>actor
+  .keyframe(0, {
+    transform: 'translateX(0px) translateY(0px) rotate(0deg)'
+  })
+  .keyframe(1500, {
+    transform: 'translateX(200px) translateY(200px) rotate(90deg)'
+  }, {
+    transform: 'easeOutExpo easeInSine elastic'
+  });</code></pre>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="renderers_dom.js.html">renderers/dom.js</a>, <a href="renderers_dom.js.html#line1039">line 1039</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>actor</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="rekapi.Actor.html">rekapi.Actor</a></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a> to apply the new
+transform order to.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>orderedTransforms</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Array.&lt;string></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The array of transform names.
+The supported array values (and default order) are:</p>
+<ul>
+<li><code>translateX</code></li>
+<li><code>translateY</code></li>
+<li><code>translateZ</code></li>
+<li><code>scale</code></li>
+<li><code>scaleX</code></li>
+<li><code>scaleY</code></li>
+<li><code>perspective</code></li>
+<li><code>rotate</code></li>
+<li><code>rotateX</code></li>
+<li><code>rotateY</code></li>
+<li><code>rotateZ</code></li>
+<li><code>skewX</code></li>
+<li><code>skewY</code></li>
+</ul>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="rekapi.Rekapi.html">rekapi.Rekapi</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="stop"><span class="type-signature"></span>stop<span class="signature">(goToEnd<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Stop a CSS <code>@keyframe</code> animation.  This also removes any <code>&lt;style&gt;</code>
+elements that were dynamically injected into the DOM.</p>
+<p>Note that this is not the same as <a href="rekapi.Rekapi.html#stop"><code>rekapi.Rekapi#stop</code></a>.  That method
+controls inline style animations, while this method controls CSS
+<code>@keyframe</code> animations.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="renderers_dom.js.html">renderers/dom.js</a>, <a href="renderers_dom.js.html#line969">line 969</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>goToEnd</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>boolean</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>If true, skip to the end of the animation.  If
+false or omitted, set inline styles on the <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a> elements
+to keep them in their current position.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Sun Sep 03 2017 10:40:02 GMT-0700 (PDT) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>
