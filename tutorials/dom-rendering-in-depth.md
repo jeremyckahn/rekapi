@@ -60,3 +60,6 @@ CSS playback methods that you should use:
   - {@link rekapi.DOMRenderer#play}
   - {@link rekapi.DOMRenderer#isPlaying}
   - {@link rekapi.DOMRenderer#stop}
+
+<p data-height="816" data-theme-id="0" data-slug-hash="MvKJJW" data-default-tab="result" data-user="jeremyckahn" data-embed-version="2" data-pen-title="Rekapi demo: Playing many actors" class="codepen">See the Pen <a href="https://codepen.io/jeremyckahn/pen/MvKJJW/">Rekapi demo: Playing many actors</a> by Jeremy Kahn (<a href="https://codepen.io/jeremyckahn">@jeremyckahn</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>

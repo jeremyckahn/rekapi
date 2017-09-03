@@ -70,3 +70,6 @@ domActor
 
 rekapi.play();
 ```
+
+<p data-height="442" data-theme-id="0" data-slug-hash="GvZZRg" data-default-tab="js,result" data-user="jeremyckahn" data-embed-version="2" data-pen-title="Rekapi demo: Multiple renderers" class="codepen">See the Pen <a href="https://codepen.io/jeremyckahn/pen/GvZZRg/">Rekapi demo: Multiple renderers</a> by Jeremy Kahn (<a href="https://codepen.io/jeremyckahn">@jeremyckahn</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
