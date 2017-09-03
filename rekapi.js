@@ -1,4 +1,4 @@
-/*! 1.7.4 */
+/*! 2.0.0-0 */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -489,8 +489,7 @@ var Rekapi = exports.Rekapi = function () {
 
     /**
      * @method rekapi.Rekapi#getAllActors
-     * @return {Object.<rekapi.Actor>} All {@link rekapi.Actor}s in the animation. The keys of
-     * this Object are {@link rekapi.Actor#id}s.
+     * @return {Array.<rekapi.Actor>} All {@link rekapi.Actor}s in the animation.
      */
 
   }, {
@@ -545,7 +544,11 @@ var Rekapi = exports.Rekapi = function () {
   }, {
     key: 'removeAllActors',
     value: function removeAllActors() {
-      return _lodash2.default.map(this.getAllActors(), this.removeActor, this);
+      var _this2 = this;
+
+      return this.getAllActors().map(function (actor) {
+        return _this2.removeActor(actor);
+      });
     }
 
     /**
@@ -946,7 +949,7 @@ var Rekapi = exports.Rekapi = function () {
   }, {
     key: 'importTimeline',
     value: function importTimeline(rekapiData) {
-      var _this2 = this;
+      var _this3 = this;
 
       _lodash2.default.each(rekapiData.curves, function (curve, curveName) {
         return (0, _shifty.setBezierFunction)(curveName, curve.x1, curve.y1, curve.x2, curve.y2);
@@ -955,7 +958,7 @@ var Rekapi = exports.Rekapi = function () {
       _lodash2.default.each(rekapiData.actors, function (actorData) {
         var actor = new _actor.Actor();
         actor.importTimeline(actorData);
-        _this2.addActor(actor);
+        _this3.addActor(actor);
       });
     }
 
@@ -8388,7 +8391,7 @@ var ensurePropertyCacheValid = function ensurePropertyCacheValid(actor) {
 
   // Build the cache map
 
-  var props = _lodash2.default.values(actor._keyframeProperties).sort(function (a, b) {
+  var props = Object.values(actor._keyframeProperties).sort(function (a, b) {
     return a.millisecond - b.millisecond;
   });
 
@@ -10547,6 +10550,8 @@ var getActorCSS = exports.getActorCSS = function getActorCSS(actor) {
 
 var DOMRenderer = exports.DOMRenderer = function () {
   function DOMRenderer(rekapi) {
+    var _this = this;
+
     _classCallCheck(this, DOMRenderer);
 
     Object.assign(this, {
@@ -10566,10 +10571,9 @@ var DOMRenderer = exports.DOMRenderer = function () {
       _stopSetTimeoutHandle: null
     });
 
-    rekapi.on('timelineModified', _lodash2.default.bind(function () {
-      this._cachedCSS = null;
-    }, this));
-
+    rekapi.on('timelineModified', function () {
+      return _this._cachedCSS = null;
+    });
     rekapi.on('addActor', onAddActor);
   }
 
