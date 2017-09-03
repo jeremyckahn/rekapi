@@ -7,55 +7,46 @@ would like to make changes to the code yourself, read on!
 
 ## Getting started
 
-To get started with hacking on Rekapi, you'll need to get all of the
+To get started with working on Rekapi, you'll need to get all of the
 dependencies:
 
-````
+```
 $: npm install
-````
+```
 
-## Branches
+## Pull Requests and branches
 
-Development takes place in the `develop` branch.  If you would like to make any
-changes, please create a new branch based off of `develop` and target any Pull
-Requests into that.
-
-## Versioning
-
-Rekapi uses [SemVer](http://semver.org/) for versioning.  If you modify the
-source code, please adhere to this convention (in all likelihood you will only
-need to modify the rightmost digit by one).  To change the version, you'll need
-to update the version in `package.json` (look for the line that says
-`version`).
+The project maintainer ([@jeremyckahn](https://github.com/jeremyckahn)) manages
+releases.  `master` contains the latest stable code, and `develop` contains
+commits that are ahead of (newer than) `master` that have yet to be officially
+released (built and tagged).  *When making a Pull Request, please branch off of
+`develop` and request to merge back into it.*  `master` is only merged into
+from `develop`.
 
 ## Building
 
-````
+```
 $: npm run build
-````
+```
 
 A note about the `dist/` directory:  You should not modify the files in this
 directory manually, as your changes will be overwritten by the build process.
-The Rekapi source files are in `src/` and the various `ext/` extension
-directories.
+The Rekapi source files are in the `src/` directory.
 
 ## Testing
 
 Please make sure that all tests pass before submitting a Pull Request.  To run
-the tests on the command line (requires [PhantomJS](http://phantomjs.org/)):
+the tests on the command line:
 
-````
+```
 $: npm run test
-````
-
-You can also run the tests in the browser.  They are in `tests/`.  If you are
-adding a feature or fixing a bug, please add a test!
+```
 
 ## Style
 
-Please adhere to the [style guide](docs/styleguide.md).  To automatically check
-for style issues or other potential problems, you can run:
+Please try to remain consitent with existing code.  To automatically check for
+style issues or other potential problems, you can run:
 
-````
+```
 $: npm run lint
-````
+```
