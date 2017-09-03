@@ -3,12 +3,12 @@
   "opts": {
     "destination": "dist/doc",
     "readme": "index.md",
-    "tutorials": "tutorials"
+    "tutorials": "tutorials",
+    "template": "node_modules/minami"
   },
   "templates": {
     "cleverLinks": true,
-    "default": {
-      "useLongnameInNav": false
-    }
+    "useLongnameInNav": false,
+    "showInheritedInNav": true
   }
 }
