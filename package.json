@@ -38,6 +38,10 @@
     "preversion": "npm run lint && npm test",
     "postversion": "git push && git push --tags && npm run deploy && npm publish"
   },
+  "files": [
+    "src",
+    "dist"
+  ],
   "license": "MIT",
   "dependencies": {
     "lodash": "~2.4.1",
