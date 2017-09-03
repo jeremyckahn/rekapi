@@ -41,7 +41,6 @@
   "license": "MIT",
   "dependencies": {
     "lodash": "~2.4.1",
-    "requirejs": "2.1.10",
     "shifty": "2.1.1"
   }
 }
