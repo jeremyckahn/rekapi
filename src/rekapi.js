@@ -368,8 +368,7 @@ export class Rekapi {
 
   /**
    * @method rekapi.Rekapi#getAllActors
-   * @return {Object.<rekapi.Actor>} All {@link rekapi.Actor}s in the animation. The keys of
-   * this Object are {@link rekapi.Actor#id}s.
+   * @return {Array.<rekapi.Actor>} All {@link rekapi.Actor}s in the animation.
    */
   getAllActors () {
     return this._actors.slice();
@@ -412,7 +411,7 @@ export class Rekapi {
    * removed.
    */
   removeAllActors () {
-    return _.map(this.getAllActors(), this.removeActor, this);
+    return this.getAllActors().map(actor => this.removeActor(actor));
   }
 
   /**

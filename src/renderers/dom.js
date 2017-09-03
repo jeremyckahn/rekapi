@@ -915,10 +915,7 @@ export class DOMRenderer {
       _stopSetTimeoutHandle: null
     });
 
-    rekapi.on('timelineModified', _.bind(function () {
-      this._cachedCSS = null;
-    }, this));
-
+    rekapi.on('timelineModified', () => this._cachedCSS = null);
     rekapi.on('addActor', onAddActor);
   }
 

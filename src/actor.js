@@ -125,7 +125,7 @@ const ensurePropertyCacheValid = actor => {
   const { _timelinePropertyCache, _timelineFunctionCache } = actor;
 
   // Build the cache map
-  const props = _.values(actor._keyframeProperties)
+  const props = Object.values(actor._keyframeProperties)
     .sort((a, b) => a.millisecond - b.millisecond);
 
   let curCacheEntry = getLatestProperties(actor, 0);
