@@ -1,6 +1,6 @@
 {
   "name": "rekapi",
-  "version": "1.7.4",
+  "version": "2.0.0-alpha.0",
   "homepage": "http://rekapi.com",
   "author": "Jeremy Kahn <jeremyckahn@gmail.com>",
   "description": "A keyframe animation library for JavaScript",
@@ -13,26 +13,38 @@
     }
   ],
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-bump": "0.0.13",
-    "grunt-cli": "^0.1.13",
-    "grunt-contrib-concat": "0.1.3",
-    "grunt-contrib-copy": "0.4.0",
-    "grunt-contrib-jshint": "0.8.0",
-    "grunt-contrib-qunit": "1.2.0",
-    "grunt-contrib-uglify": "0.3.0",
-    "grunt-contrib-watch": "0.3.1",
-    "grunt-contrib-yuidoc": "^0.5.2"
+    "babel-core": "^6.22.1",
+    "babel-loader": "^6.2.10",
+    "babel-preset-es2015": "^6.22.0",
+    "gh-pages": "^1.0.0",
+    "jquery": "^3.2.1",
+    "jsdoc": "^3.5.3",
+    "jsdom": "^11.0.0",
+    "jsdom-global": "^3.0.2",
+    "jshint": "^2.9.4",
+    "mocha": "^3.2.0",
+    "nodemon": "^1.11.0",
+    "webpack": "2.5.1",
+    "webpack-dev-server": "2.4.5"
   },
   "scripts": {
-    "build": "./node_modules/grunt-cli/bin/grunt build",
-    "bump": "./node_modules/grunt-cli/bin/grunt bump",
-    "test": "./node_modules/grunt-cli/bin/grunt qunit",
-    "lint": "./node_modules/grunt-cli/bin/grunt jshint"
+    "build": "webpack",
+    "start": "webpack-dev-server --config webpack.test.config.js",
+    "test": "mocha -r jsdom-global/register ./node_modules/babel-core/register.js test/index.js",
+    "test:watch": "nodemon --exec \"npm test\" --watch src --watch renderers --watch test",
+    "doc": "jsdoc -c .jsdoc src/*.js src/renderers/*.js",
+    "lint": "jshint src",
+    "deploy": "npm run build && npm run doc && gh-pages -d dist -b gh-pages",
+    "preversion": "npm run lint && npm test",
+    "postversion": "git push && git push --tags && npm run deploy && npm publish"
   },
+  "files": [
+    "src",
+    "dist"
+  ],
   "license": "MIT",
   "dependencies": {
-    "shifty": "1.5.0",
-    "requirejs": "2.1.10"
+    "lodash": "~2.4.1",
+    "shifty": "2.1.1"
   }
 }
