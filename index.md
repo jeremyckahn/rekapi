@@ -20,6 +20,9 @@ bundled with renderers for the HTML DOM and HTML5 2D `<canvas>`.
 
 Rekapi officially supports Evergreen browsers and is published as a UMD module.
 
+<p data-height="575" data-theme-id="0" data-slug-hash="gxEOJm" data-default-tab="js,result" data-user="jeremyckahn" data-embed-version="2" data-pen-title="Rekapi Confetti" class="codepen">See the Pen <a href="https://codepen.io/jeremyckahn/pen/gxEOJm/">Rekapi Confetti</a> by Jeremy Kahn (<a href="https://codepen.io/jeremyckahn">@jeremyckahn</a>) on <a href="https://codepen.io">CodePen</a>.</p>
+<script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+
 ## What is keyframing?
 
 Keyframing is an animation technique for defining states at specific points in
