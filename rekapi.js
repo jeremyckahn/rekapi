@@ -74,7 +74,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/assets/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 10);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -203,23 +203,21 @@ var updateToMillisecond = exports.updateToMillisecond = function updateToMillise
   var keyframeResetList = [];
 
   if (currentIteration > rekapi._latestIteration) {
-    (function () {
-      fireEvent(rekapi, 'animationLooped');
+    fireEvent(rekapi, 'animationLooped');
 
-      // Reset function keyframes
-      var lookupObject = { name: 'function' };
+    // Reset function keyframes
+    var lookupObject = { name: 'function' };
 
-      rekapi._actors.forEach(function (actor) {
-        var fnKeyframes = _lodash2.default.where(actor._keyframeProperties, lookupObject);
-        var lastFnKeyframe = _lodash2.default.last(fnKeyframes);
+    rekapi._actors.forEach(function (actor) {
+      var fnKeyframes = _lodash2.default.where(actor._keyframeProperties, lookupObject);
+      var lastFnKeyframe = _lodash2.default.last(fnKeyframes);
 
-        if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
-          lastFnKeyframe.invoke();
-        }
+      if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
+        lastFnKeyframe.invoke();
+      }
 
-        keyframeResetList = keyframeResetList.concat(fnKeyframes);
-      });
-    })();
+      keyframeResetList = keyframeResetList.concat(fnKeyframes);
+    });
   }
 
   rekapi._latestIteration = currentIteration;
@@ -8258,7 +8256,7 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 var _shifty = __webpack_require__(2);
 
-var _tweenable = __webpack_require__(13);
+var _tweenable = __webpack_require__(12);
 
 var _keyframeProperty = __webpack_require__(5);
 
@@ -9812,8 +9810,6 @@ exports.DOMRenderer = exports.getActorCSS = exports.canOptimizeAnyKeyframeProper
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _lodash = __webpack_require__(1);
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -10163,25 +10159,19 @@ var combineTranfromProperties = exports.combineTranfromProperties = function com
   if (_lodash2.default.isEmpty(_lodash2.default.pick.apply(_lodash2.default, [propsToSerialize].concat(transformFunctions)))) {
     return propsToSerialize;
   } else {
-    var _ret = function () {
-      var serializedProps = _lodash2.default.clone(propsToSerialize);
+    var serializedProps = _lodash2.default.clone(propsToSerialize);
 
-      serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(function (combinedProperties, transformFunction) {
-        if (_lodash2.default.has(serializedProps, transformFunction)) {
-          combinedProperties += ' ' + transformFunction + '(' + serializedProps[transformFunction] + ')';
+    serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(function (combinedProperties, transformFunction) {
+      if (_lodash2.default.has(serializedProps, transformFunction)) {
+        combinedProperties += ' ' + transformFunction + '(' + serializedProps[transformFunction] + ')';
 
-          delete serializedProps[transformFunction];
-        }
+        delete serializedProps[transformFunction];
+      }
 
-        return combinedProperties;
-      }, '').slice(1);
+      return combinedProperties;
+    }, '').slice(1);
 
-      return {
-        v: serializedProps
-      };
-    }();
-
-    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+    return serializedProps;
   }
 };
 
@@ -10853,62 +10843,6 @@ _rekapi.rendererBootstrappers.push(function (rekapi) {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _rekapi = __webpack_require__(0);
-
-Object.defineProperty(exports, 'Rekapi', {
-  enumerable: true,
-  get: function get() {
-    return _rekapi.Rekapi;
-  }
-});
-
-var _actor = __webpack_require__(4);
-
-Object.defineProperty(exports, 'Actor', {
-  enumerable: true,
-  get: function get() {
-    return _actor.Actor;
-  }
-});
-
-var _keyframeProperty = __webpack_require__(5);
-
-Object.defineProperty(exports, 'KeyframeProperty', {
-  enumerable: true,
-  get: function get() {
-    return _keyframeProperty.KeyframeProperty;
-  }
-});
-
-var _canvas = __webpack_require__(8);
-
-Object.defineProperty(exports, 'CanvasRenderer', {
-  enumerable: true,
-  get: function get() {
-    return _canvas.CanvasRenderer;
-  }
-});
-
-var _dom = __webpack_require__(9);
-
-Object.defineProperty(exports, 'DOMRenderer', {
-  enumerable: true,
-  get: function get() {
-    return _dom.DOMRenderer;
-  }
-});
-
-/***/ }),
-/* 11 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
 /*
 object-assign
 (c) Sindre Sorhus
@@ -11001,7 +10935,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 };
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11210,7 +11144,7 @@ var easeTo = exports.easeTo = function easeTo(pos) {
 };
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11227,11 +11161,11 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 exports.tween = tween;
 
-var _easingFunctions = __webpack_require__(12);
+var _easingFunctions = __webpack_require__(11);
 
 var easingFunctions = _interopRequireWildcard(_easingFunctions);
 
-var _objectAssign = __webpack_require__(11);
+var _objectAssign = __webpack_require__(10);
 
 var _objectAssign2 = _interopRequireDefault(_objectAssign);
 
@@ -11799,6 +11733,62 @@ function tween() {
   return promise;
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ }),
+/* 13 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _rekapi = __webpack_require__(0);
+
+Object.defineProperty(exports, 'Rekapi', {
+  enumerable: true,
+  get: function get() {
+    return _rekapi.Rekapi;
+  }
+});
+
+var _actor = __webpack_require__(4);
+
+Object.defineProperty(exports, 'Actor', {
+  enumerable: true,
+  get: function get() {
+    return _actor.Actor;
+  }
+});
+
+var _keyframeProperty = __webpack_require__(5);
+
+Object.defineProperty(exports, 'KeyframeProperty', {
+  enumerable: true,
+  get: function get() {
+    return _keyframeProperty.KeyframeProperty;
+  }
+});
+
+var _canvas = __webpack_require__(8);
+
+Object.defineProperty(exports, 'CanvasRenderer', {
+  enumerable: true,
+  get: function get() {
+    return _canvas.CanvasRenderer;
+  }
+});
+
+var _dom = __webpack_require__(9);
+
+Object.defineProperty(exports, 'DOMRenderer', {
+  enumerable: true,
+  get: function get() {
+    return _dom.DOMRenderer;
+  }
+});
 
 /***/ })
 /******/ ]);
