@@ -1,4 +1,4 @@
-/*! 2.0.0 */
+/*! 2.0.1 */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -74,7 +74,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "/assets/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 13);
+/******/ 	return __webpack_require__(__webpack_require__.s = 11);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -203,21 +203,23 @@ var updateToMillisecond = exports.updateToMillisecond = function updateToMillise
   var keyframeResetList = [];
 
   if (currentIteration > rekapi._latestIteration) {
-    fireEvent(rekapi, 'animationLooped');
+    (function () {
+      fireEvent(rekapi, 'animationLooped');
 
-    // Reset function keyframes
-    var lookupObject = { name: 'function' };
+      // Reset function keyframes
+      var lookupObject = { name: 'function' };
 
-    rekapi._actors.forEach(function (actor) {
-      var fnKeyframes = _lodash2.default.where(actor._keyframeProperties, lookupObject);
-      var lastFnKeyframe = _lodash2.default.last(fnKeyframes);
+      rekapi._actors.forEach(function (actor) {
+        var fnKeyframes = _lodash2.default.where(actor._keyframeProperties, lookupObject);
+        var lastFnKeyframe = _lodash2.default.last(fnKeyframes);
 
-      if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
-        lastFnKeyframe.invoke();
-      }
+        if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
+          lastFnKeyframe.invoke();
+        }
 
-      keyframeResetList = keyframeResetList.concat(fnKeyframes);
-    });
+        keyframeResetList = keyframeResetList.concat(fnKeyframes);
+      });
+    })();
   }
 
   rekapi._latestIteration = currentIteration;
@@ -7723,7 +7725,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
   var _ = runInContext();
 
   // some AMD build optimizers like r.js check for condition patterns like the following:
-  if ("function" == 'function' && _typeof(__webpack_require__(7)) == 'object' && __webpack_require__(7)) {
+  if ("function" == 'function' && _typeof(__webpack_require__(8)) == 'object' && __webpack_require__(8)) {
     // Expose Lo-Dash to the global object even when an AMD loader is present in
     // case Lo-Dash is loaded with a RequireJS shim config.
     // See http://requirejs.org/docs/api.html#config-shim
@@ -7762,7 +7764,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! 2.1.1 */
+/*! 2.1.2 */
 !function (t, e) {
   "object" == ( false ? "undefined" : _typeof(exports)) && "object" == ( false ? "undefined" : _typeof(module)) ? module.exports = e() :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (e),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
@@ -7784,17 +7786,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       };return e.d(n, "a", n), n;
     }, e.o = function (t, e) {
       return Object.prototype.hasOwnProperty.call(t, e);
-    }, e.p = "/assets/", e(e.s = 7);
+    }, e.p = "/assets/", e(e.s = 6);
   }([function (t, e, n) {
     "use strict";
     (function (t) {
-      function r(t, e) {
+      function r(t) {
+        if (t && t.__esModule) return t;var e = {};if (null != t) for (var n in t) {
+          Object.prototype.hasOwnProperty.call(t, n) && (e[n] = t[n]);
+        }return e.default = t, e;
+      }function i(t, e) {
         if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function");
-      }function i() {
+      }function o() {
         var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {},
-            e = new g(),
+            e = new M(),
             n = e.tween(t);return n.tweenable = e, n;
-      }Object.defineProperty(e, "__esModule", { value: !0 }), e.Tweenable = e.composeEasingObject = e.tweenProps = e.clone = e.each = void 0;var o = function () {
+      }Object.defineProperty(e, "__esModule", { value: !0 }), e.Tweenable = e.composeEasingObject = e.tweenProps = e.clone = e.each = void 0;var u = function () {
         function t(t, e) {
           for (var n = 0; n < e.length; n++) {
             var r = e[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, r.key, r);
@@ -7803,56 +7809,54 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           return n && t(e.prototype, n), r && t(e, r), e;
         };
       }(),
-          u = "function" == typeof Symbol && "symbol" == _typeof(Symbol.iterator) ? function (t) {
+          a = "function" == typeof Symbol && "symbol" == _typeof(Symbol.iterator) ? function (t) {
         return typeof t === "undefined" ? "undefined" : _typeof(t);
       } : function (t) {
         return t && "function" == typeof Symbol && t.constructor === Symbol && t !== Symbol.prototype ? "symbol" : typeof t === "undefined" ? "undefined" : _typeof(t);
-      };e.tween = i;var a = n(6),
-          s = function (t) {
-        if (t && t.__esModule) return t;var e = {};if (null != t) for (var n in t) {
-          Object.prototype.hasOwnProperty.call(t, n) && (e[n] = t[n]);
-        }return e.default = t, e;
-      }(a),
-          c = n(1),
-          f = function (t) {
+      };e.tween = o;var c = n(5),
+          s = r(c),
+          f = n(1),
+          h = function (t) {
         return t && t.__esModule ? t : { default: t };
-      }(c),
-          h = "undefined" != typeof window ? window : t,
-          l = h.requestAnimationFrame || h.webkitRequestAnimationFrame || h.oRequestAnimationFrame || h.msRequestAnimationFrame || h.mozCancelRequestAnimationFrame && h.mozRequestAnimationFrame || setTimeout,
-          p = function p() {},
-          d = e.each = function (t, e) {
+      }(f),
+          l = n(7),
+          p = r(l),
+          d = "undefined" != typeof window ? window : t,
+          m = d.requestAnimationFrame || d.webkitRequestAnimationFrame || d.oRequestAnimationFrame || d.msRequestAnimationFrame || d.mozCancelRequestAnimationFrame && d.mozRequestAnimationFrame || setTimeout,
+          _ = function _() {},
+          v = e.each = function (t, e) {
         Object.keys(t).forEach(e);
       },
-          m = e.clone = function (t) {
-        return (0, f.default)({}, t);
+          y = e.clone = function (t) {
+        return (0, h.default)({}, t);
       },
-          _ = m(s),
-          v = function v(t, e, n, r) {
+          w = y(s),
+          g = function g(t, e, n, r) {
         return t + (e - t) * n(r);
       },
-          y = e.tweenProps = function (t, e, n, r, i, o, u) {
-        var a = t < o ? 0 : (t - o) / i;return d(e, function (t) {
+          b = e.tweenProps = function (t, e, n, r, i, o, u) {
+        var a = t < o ? 0 : (t - o) / i;return v(e, function (t) {
           var i = u[t],
-              o = "function" == typeof i ? i : _[i];e[t] = v(n[t], r[t], o, a);
+              o = "function" == typeof i ? i : w[i];e[t] = g(n[t], r[t], o, a);
         }), e;
       },
-          w = e.composeEasingObject = function (t) {
+          O = e.composeEasingObject = function (t) {
         var e = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "linear",
             n = {},
-            r = void 0 === e ? "undefined" : u(e);return "string" === r || "function" === r ? d(t, function (t) {
+            r = void 0 === e ? "undefined" : a(e);return "string" === r || "function" === r ? v(t, function (t) {
           return n[t] = e;
-        }) : d(t, function (t) {
+        }) : v(t, function (t) {
           return n[t] = n[t] || e[t] || "linear";
         }), n;
       },
-          g = e.Tweenable = function () {
+          M = e.Tweenable = function () {
         function t() {
           var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {},
-              n = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : void 0;r(this, t), this._currentState = e, this._configured = !1, this._scheduleFunction = l, void 0 !== n && this.setConfig(n);
-        }return o(t, [{ key: "_applyFilter", value: function value(e) {
+              n = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : void 0;i(this, t), this._currentState = e, this._configured = !1, this._scheduleFunction = m, void 0 !== n && this.setConfig(n);
+        }return u(t, [{ key: "_applyFilter", value: function value(e) {
             var n = this,
                 r = t.filters,
-                i = this._filterArgs;d(r, function (t) {
+                i = this._filterArgs;v(r, function (t) {
               var o = r[t][e];void 0 !== o && o.apply(n, i);
             });
           } }, { key: "_timeoutHandler", value: function value(e) {
@@ -7862,23 +7866,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 o = this._currentState,
                 u = this._timestamp,
                 a = this._duration,
-                s = this._targetState,
-                c = this._step,
+                c = this._targetState,
+                s = this._step,
                 f = u + i + a,
-                l = Math.min(e || t.now(), f),
-                p = l >= f,
-                d = a - (f - l);this.isPlaying() && (p ? (c(s, this._attachment, d), this.stop(!0)) : (this._scheduleId = this._scheduleFunction.call(h, function () {
+                h = Math.min(e || t.now(), f),
+                l = h >= f,
+                p = a - (f - h);this.isPlaying() && (l ? (s(c, this._attachment, p), this.stop(!0)) : (this._scheduleId = this._scheduleFunction.call(d, function () {
               return n._timeoutHandler.apply(n, r);
-            }, 1e3 / 60), this._applyFilter("beforeTween"), l < u + i ? (l = 1, a = 1, u = 1) : u += i, y(l, o, this._originalState, s, a, u, this._easing), this._applyFilter("afterTween"), c(o, this._attachment, d)));
+            }, 1e3 / 60), this._applyFilter("beforeTween"), h < u + i ? (h = 1, a = 1, u = 1) : u += i, b(h, o, this._originalState, c, a, u, this._easing), this._applyFilter("afterTween"), s(o, this._attachment, p)));
           } }, { key: "tween", value: function value() {
             var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : void 0;return this._isTweening ? this : (void 0 === e && this._configured || this.setConfig(e), this._timestamp = t.now(), this._start(this.get(), this._attachment), this.resume());
           } }, { key: "setConfig", value: function value() {
             var t = this,
-                e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};this._configured = !0, this._attachment = e.attachment, (0, f.default)(this, { _pausedAtTime: null, _scheduleId: null, _delay: e.delay || 0, _start: e.start || p, _step: e.step || p, _duration: e.duration || 500, _currentState: m(e.from || this.get()) }), (0, f.default)(this, { _originalState: this.get(), _targetState: m(e.to || this.get()) });var n = this._currentState;this._targetState = (0, f.default)({}, n, this._targetState), this._easing = w(n, e.easing), this._filterArgs = [n, this._originalState, this._targetState, this._easing], this._applyFilter("tweenCreated");var r = e.promise || Promise;return this._promise = new r(function (e, n) {
+                e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};this._configured = !0, this._attachment = e.attachment, (0, h.default)(this, { _pausedAtTime: null, _scheduleId: null, _delay: e.delay || 0, _start: e.start || _, _step: e.step || _, _duration: e.duration || 500, _currentState: y(e.from || this.get()) }), (0, h.default)(this, { _originalState: this.get(), _targetState: y(e.to || this.get()) });var n = this._currentState;this._targetState = (0, h.default)({}, n, this._targetState), this._easing = O(n, e.easing), this._filterArgs = [n, this._originalState, this._targetState, this._easing], this._applyFilter("tweenCreated");var r = e.promise || Promise;return this._promise = new r(function (e, n) {
               t._resolve = e, t._reject = n;
-            }), this._promise.catch(p), this;
+            }), this._promise.catch(_), this;
           } }, { key: "get", value: function value() {
-            return m(this._currentState);
+            return y(this._currentState);
           } }, { key: "set", value: function value(t) {
             this._currentState = t;
           } }, { key: "pause", value: function value() {
@@ -7887,21 +7891,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             return this._isPaused && (this._timestamp += t.now() - this._pausedAtTime), this._isPaused = !1, this._isTweening = !0, this._timeoutHandler(), this._promise;
           } }, { key: "seek", value: function value(e) {
             e = Math.max(e, 0);var n = t.now();return this._timestamp + e === 0 ? this : (this._timestamp = n - e, this.isPlaying() || (this._isTweening = !0, this._isPaused = !1, this._timeoutHandler(n), this.pause()), this);
-          } }, { key: "stop", value: function value(t) {
-            return this._isTweening = !1, this._isPaused = !1, (h.cancelAnimationFrame || h.webkitCancelAnimationFrame || h.oCancelAnimationFrame || h.msCancelAnimationFrame || h.mozCancelRequestAnimationFrame || h.clearTimeout)(this._scheduleId), t ? (this._applyFilter("beforeTween"), y(1, this._currentState, this._originalState, this._targetState, 1, 0, this._easing), this._applyFilter("afterTween"), this._applyFilter("afterTweenEnd"), this._resolve(this._currentState, this._attachment)) : this._reject(this._currentState, this._attachment), this;
+          } }, { key: "stop", value: function value() {
+            var t = arguments.length > 0 && void 0 !== arguments[0] && arguments[0];return this._isTweening = !1, this._isPaused = !1, (d.cancelAnimationFrame || d.webkitCancelAnimationFrame || d.oCancelAnimationFrame || d.msCancelAnimationFrame || d.mozCancelRequestAnimationFrame || d.clearTimeout)(this._scheduleId), t ? (this._applyFilter("beforeTween"), b(1, this._currentState, this._originalState, this._targetState, 1, 0, this._easing), this._applyFilter("afterTween"), this._applyFilter("afterTweenEnd"), this._resolve(this._currentState, this._attachment)) : this._reject(this._currentState, this._attachment), this;
           } }, { key: "isPlaying", value: function value() {
             return this._isTweening && !this._isPaused;
           } }, { key: "setScheduleFunction", value: function value(t) {
             this._scheduleFunction = t;
           } }, { key: "dispose", value: function value() {
-            var t = this;d(this, function (e) {
+            var t = this;v(this, function (e) {
               return delete t[e];
             });
           } }]), t;
-      }();(0, f.default)(g, { formulas: _, filters: {}, now: Date.now || function (t) {
+      }();(0, h.default)(M, { formulas: w, filters: { token: p }, now: Date.now || function (t) {
           return +new Date();
         } });
-    }).call(e, n(5));
+    }).call(e, n(4));
   }, function (t, e, n) {
     "use strict";
     function r(t) {
@@ -7921,33 +7925,33 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return !1;
       }
     }() ? Object.assign : function (t, e) {
-      for (var n, a, s = r(t), c = 1; c < arguments.length; c++) {
-        n = Object(arguments[c]);for (var f in n) {
-          o.call(n, f) && (s[f] = n[f]);
+      for (var n, a, c = r(t), s = 1; s < arguments.length; s++) {
+        n = Object(arguments[s]);for (var f in n) {
+          o.call(n, f) && (c[f] = n[f]);
         }if (i) {
           a = i(n);for (var h = 0; h < a.length; h++) {
-            u.call(n, a[h]) && (s[a[h]] = n[a[h]]);
+            u.call(n, a[h]) && (c[a[h]] = n[a[h]]);
           }
         }
-      }return s;
+      }return c;
     };
   }, function (t, e, n) {
     "use strict";
     function r(t, e, n, r, i, o) {
       var u = 0,
           a = 0,
-          s = 0,
           c = 0,
+          s = 0,
           f = 0,
           h = 0,
           l = function l(t) {
-        return ((u * t + a) * t + s) * t;
+        return ((u * t + a) * t + c) * t;
       },
           p = function p(t) {
-        return ((c * t + f) * t + h) * t;
+        return ((s * t + f) * t + h) * t;
       },
           d = function d(t) {
-        return (3 * u * t + 2 * a) * t + s;
+        return (3 * u * t + 2 * a) * t + c;
       },
           m = function m(t) {
         return t >= 0 ? t : 0 - t;
@@ -7963,7 +7967,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }if (n = 0, r = 1, (i = t) < n) return n;if (i > r) return r;for (; n < r;) {
           if (o = l(i), m(o - t) < e) return i;t > o ? n = i : r = i, i = .5 * (r - n) + n;
         }return i;
-      };return s = 3 * e, a = 3 * (r - e) - s, u = 1 - s - a, h = 3 * n, f = 3 * (i - n) - h, c = 1 - h - f, function (t, e) {
+      };return c = 3 * e, a = 3 * (r - e) - c, u = 1 - c - a, h = 3 * n, f = 3 * (i - n) - h, s = 1 - h - f, function (t, e) {
         return p(_(t, e));
       }(t, function (t) {
         return 1 / (200 * t);
@@ -7988,120 +7992,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         i = new r.Tweenable();i._filterArgs = [];e.interpolate = function (t, e, n, o) {
       var u = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : 0,
           a = (0, r.clone)(t),
-          s = (0, r.composeEasingObject)(t, o);i.set({}), i._filterArgs = [a, t, e, s], i._applyFilter("tweenCreated"), i._applyFilter("beforeTween");var c = (0, r.tweenProps)(n, a, t, e, 1, u, s);return i._applyFilter("afterTween"), c;
-    };
-  }, function (t, e, n) {
-    "use strict";
-    function r(t) {
-      return parseInt(t, 16);
-    }function i(t, e, n) {
-      [t, e, n].forEach(_), this._tokenData = g(t);
-    }function o(t, e, n, r) {
-      var i = this._tokenData;S(r, i), [t, e, n].forEach(function (t) {
-        return b(t, i);
-      });
-    }function u(t, e, n, r) {
-      var i = this._tokenData;[t, e, n].forEach(function (t) {
-        return F(t, i);
-      }), k(r, i);
-    }Object.defineProperty(e, "__esModule", { value: !0 }), e.tweenCreated = i, e.beforeTween = o, e.afterTween = u;var a = n(0),
-        s = function () {
-      var t = /[0-9.\-]+/g.source,
-          e = /,\s*/.source;return new RegExp("rgb\\(" + t + e + t + e + t + "\\)", "g");
-    }(),
-        c = /#([0-9]|[a-f]){3,6}/gi,
-        f = function f(t, e) {
-      return t.map(function (t, n) {
-        return "_" + e + "_" + n;
-      });
-    },
-        h = function h(t) {
-      var e = t.match(/([^\-0-9\.]+)/g);return e ? (1 === e.length || t.charAt(0).match(/(\d|\-|\.)/)) && e.unshift("") : e = ["", ""], e.join("VAL");
-    },
-        l = function l(t) {
-      return t = t.replace(/#/, ""), 3 === t.length && (t = t.split(""), t = t[0] + t[0] + t[1] + t[1] + t[2] + t[2]), [r(t.substr(0, 2)), r(t.substr(2, 2)), r(t.substr(4, 2))];
-    },
-        p = function p(t) {
-      return "rgb(" + l(t).join(",") + ")";
-    },
-        d = function d(t, e, n) {
-      var r = e.match(t),
-          i = e.replace(t, "VAL");return r && r.forEach(function (t) {
-        return i = i.replace("VAL", n(t));
-      }), i;
-    },
-        m = function m(t) {
-      return d(c, t, p);
-    },
-        _ = function _(t) {
-      (0, a.each)(t, function (e) {
-        var n = t[e];"string" == typeof n && n.match(c) && (t[e] = m(n));
-      });
-    },
-        v = function v(t) {
-      var e = t.match(/[0-9.\-]+/g).map(Math.floor);return "" + t.match(/^.*\(/)[0] + e.join(",") + ")";
-    },
-        y = function y(t) {
-      return d(s, t, v);
-    },
-        w = function w(t) {
-      return t.match(/[0-9.\-]+/g);
-    },
-        g = function g(t) {
-      var e = {};return (0, a.each)(t, function (n) {
-        var r = t[n];"string" == typeof r && (e[n] = { formatString: h(r), chunkNames: f(w(r), n) });
-      }), e;
-    },
-        b = function b(t, e) {
-      (0, a.each)(e, function (n) {
-        w(t[n]).forEach(function (r, i) {
-          return t[e[n].chunkNames[i]] = +r;
-        }), delete t[n];
-      });
-    },
-        M = function M(t, e) {
-      var n = {};return e.forEach(function (e) {
-        n[e] = t[e], delete t[e];
-      }), n;
-    },
-        O = function O(t, e) {
-      return e.map(function (e) {
-        return t[e];
-      });
-    },
-        j = function j(t, e) {
-      return e.forEach(function (e) {
-        return t = t.replace("VAL", +e.toFixed(4));
-      }), t;
-    },
-        F = function F(t, e) {
-      (0, a.each)(e, function (n) {
-        var r = e[n],
-            i = r.chunkNames,
-            o = r.formatString,
-            u = j(o, O(M(t, i), i));t[n] = y(u);
-      });
-    },
-        S = function S(t, e) {
-      (0, a.each)(e, function (n) {
-        var r = e[n].chunkNames,
-            i = t[n];"string" == typeof i ? function () {
-          var e = i.split(" "),
-              n = e[e.length - 1];r.forEach(function (r, i) {
-            return t[r] = e[i] || n;
-          });
-        }() : r.forEach(function (e) {
-          return t[e] = i;
-        }), delete t[n];
-      });
-    },
-        k = function k(t, e) {
-      (0, a.each)(e, function (n) {
-        var r = e[n].chunkNames,
-            i = (r.length, t[r[0]]);t[n] = "string" == typeof i ? r.map(function (e) {
-          var n = t[e];return delete t[e], n;
-        }).join(" ") : i;
-      });
+          c = (0, r.composeEasingObject)(t, o);i.set({}), i._filterArgs = [a, t, e, c], i._applyFilter("tweenCreated"), i._applyFilter("beforeTween");var s = (0, r.tweenProps)(n, a, t, e, 1, u, c);return i._applyFilter("afterTween"), s;
     };
   }, function (t, e, n) {
     "use strict";
@@ -8192,15 +8083,130 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
   }, function (t, e, n) {
     "use strict";
-    Object.defineProperty(e, "__esModule", { value: !0 }), e.unsetBezierFunction = e.setBezierFunction = e.interpolate = e.tween = e.Tweenable = void 0;var r = n(0),
-        i = n(3),
-        o = n(2),
-        u = n(4),
-        a = function (t) {
-      if (t && t.__esModule) return t;var e = {};if (null != t) for (var n in t) {
-        Object.prototype.hasOwnProperty.call(t, n) && (e[n] = t[n]);
-      }return e.default = t, e;
-    }(u);r.Tweenable.filters.token = a, e.Tweenable = r.Tweenable, e.tween = r.tween, e.interpolate = i.interpolate, e.setBezierFunction = o.setBezierFunction, e.unsetBezierFunction = o.unsetBezierFunction;
+    Object.defineProperty(e, "__esModule", { value: !0 });var r = n(0);Object.defineProperty(e, "Tweenable", { enumerable: !0, get: function get() {
+        return r.Tweenable;
+      } }), Object.defineProperty(e, "tween", { enumerable: !0, get: function get() {
+        return r.tween;
+      } });var i = n(3);Object.defineProperty(e, "interpolate", { enumerable: !0, get: function get() {
+        return i.interpolate;
+      } });var o = n(2);Object.defineProperty(e, "setBezierFunction", { enumerable: !0, get: function get() {
+        return o.setBezierFunction;
+      } }), Object.defineProperty(e, "unsetBezierFunction", { enumerable: !0, get: function get() {
+        return o.unsetBezierFunction;
+      } });
+  }, function (t, e, n) {
+    "use strict";
+    function r(t) {
+      return parseInt(t, 16);
+    }function i(t, e, n) {
+      [t, e, n].forEach(_), this._tokenData = g(t);
+    }function o(t, e, n, r) {
+      var i = this._tokenData;S(r, i), [t, e, n].forEach(function (t) {
+        return b(t, i);
+      });
+    }function u(t, e, n, r) {
+      var i = this._tokenData;[t, e, n].forEach(function (t) {
+        return F(t, i);
+      }), P(r, i);
+    }Object.defineProperty(e, "__esModule", { value: !0 }), e.tweenCreated = i, e.beforeTween = o, e.afterTween = u;var a = n(0),
+        c = function () {
+      var t = /[0-9.\-]+/g.source,
+          e = /,\s*/.source;return new RegExp("rgb\\(" + t + e + t + e + t + "\\)", "g");
+    }(),
+        s = /#([0-9]|[a-f]){3,6}/gi,
+        f = function f(t, e) {
+      return t.map(function (t, n) {
+        return "_" + e + "_" + n;
+      });
+    },
+        h = function h(t) {
+      var e = t.match(/([^\-0-9\.]+)/g);return e ? (1 === e.length || t.charAt(0).match(/(\d|\-|\.)/)) && e.unshift("") : e = ["", ""], e.join("VAL");
+    },
+        l = function l(t) {
+      return t = t.replace(/#/, ""), 3 === t.length && (t = t.split(""), t = t[0] + t[0] + t[1] + t[1] + t[2] + t[2]), [r(t.substr(0, 2)), r(t.substr(2, 2)), r(t.substr(4, 2))];
+    },
+        p = function p(t) {
+      return "rgb(" + l(t).join(",") + ")";
+    },
+        d = function d(t, e, n) {
+      var r = e.match(t),
+          i = e.replace(t, "VAL");return r && r.forEach(function (t) {
+        return i = i.replace("VAL", n(t));
+      }), i;
+    },
+        m = function m(t) {
+      return d(s, t, p);
+    },
+        _ = function _(t) {
+      (0, a.each)(t, function (e) {
+        var n = t[e];"string" == typeof n && n.match(s) && (t[e] = m(n));
+      });
+    },
+        v = function v(t) {
+      var e = t.match(/[0-9.\-]+/g).map(Math.floor);return "" + t.match(/^.*\(/)[0] + e.join(",") + ")";
+    },
+        y = function y(t) {
+      return d(c, t, v);
+    },
+        w = function w(t) {
+      return t.match(/[0-9.\-]+/g);
+    },
+        g = function g(t) {
+      var e = {};return (0, a.each)(t, function (n) {
+        var r = t[n];"string" == typeof r && (e[n] = { formatString: h(r), chunkNames: f(w(r), n) });
+      }), e;
+    },
+        b = function b(t, e) {
+      (0, a.each)(e, function (n) {
+        w(t[n]).forEach(function (r, i) {
+          return t[e[n].chunkNames[i]] = +r;
+        }), delete t[n];
+      });
+    },
+        O = function O(t, e) {
+      var n = {};return e.forEach(function (e) {
+        n[e] = t[e], delete t[e];
+      }), n;
+    },
+        M = function M(t, e) {
+      return e.map(function (e) {
+        return t[e];
+      });
+    },
+        j = function j(t, e) {
+      return e.forEach(function (e) {
+        return t = t.replace("VAL", +e.toFixed(4));
+      }), t;
+    },
+        F = function F(t, e) {
+      (0, a.each)(e, function (n) {
+        var r = e[n],
+            i = r.chunkNames,
+            o = r.formatString,
+            u = j(o, M(O(t, i), i));t[n] = y(u);
+      });
+    },
+        S = function S(t, e) {
+      (0, a.each)(e, function (n) {
+        var r = e[n].chunkNames,
+            i = t[n];"string" == typeof i ? function () {
+          var e = i.split(" "),
+              n = e[e.length - 1];r.forEach(function (r, i) {
+            return t[r] = e[i] || n;
+          });
+        }() : r.forEach(function (e) {
+          return t[e] = i;
+        }), delete t[n];
+      });
+    },
+        P = function P(t, e) {
+      (0, a.each)(e, function (n) {
+        var r = e[n].chunkNames,
+            i = (r.length, t[r[0]]);t[n] = "string" == typeof i ? r.map(function (e) {
+          var n = t[e];return delete t[e], n;
+        }).join(" ") : i;
+      });
+    };
   }]);
 });
 //# sourceMappingURL=shifty.js.map
@@ -8256,7 +8262,7 @@ var _lodash2 = _interopRequireDefault(_lodash);
 
 var _shifty = __webpack_require__(2);
 
-var _tweenable = __webpack_require__(12);
+var _tweenable = __webpack_require__(7);
 
 var _keyframeProperty = __webpack_require__(5);
 
@@ -9630,6 +9636,565 @@ module.exports = function (module) {
 
 /***/ }),
 /* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+/* WEBPACK VAR INJECTION */(function(global) {
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Tweenable = exports.composeEasingObject = exports.tweenProps = exports.clone = exports.each = undefined;
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+exports.tween = tween;
+
+var _easingFunctions = __webpack_require__(13);
+
+var easingFunctions = _interopRequireWildcard(_easingFunctions);
+
+var _objectAssign = __webpack_require__(12);
+
+var _objectAssign2 = _interopRequireDefault(_objectAssign);
+
+var _token = __webpack_require__(14);
+
+var token = _interopRequireWildcard(_token);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// CONSTANTS
+var DEFAULT_EASING = 'linear';
+var DEFAULT_DURATION = 500;
+var UPDATE_TIME = 1000 / 60;
+var root = typeof window !== 'undefined' ? window : global;
+
+// requestAnimationFrame() shim by Paul Irish (modified for Shifty)
+// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+var DEFAULT_SCHEDULE_FUNCTION = root.requestAnimationFrame || root.webkitRequestAnimationFrame || root.oRequestAnimationFrame || root.msRequestAnimationFrame || root.mozCancelRequestAnimationFrame && root.mozRequestAnimationFrame || setTimeout;
+
+var noop = function noop() {};
+
+/**
+ * Handy shortcut for doing a for-in loop. This is not a "normal" each
+ * function, it is optimized for Shifty.  The iterator function only receives
+ * the property name, not the value.
+ * @param {Object} obj
+ * @param {Function(string)} fn
+ * @private
+ */
+var each = exports.each = function each(obj, fn) {
+  Object.keys(obj).forEach(fn);
+};
+
+/**
+ * @param {Object} obj
+ * @return {Object}
+ * @private
+ */
+var clone = exports.clone = function clone(obj) {
+  return (0, _objectAssign2.default)({}, obj);
+};
+
+var formulas = clone(easingFunctions);
+
+/**
+ * Tweens a single property.
+ * @param {number} start The value that the tween started from.
+ * @param {number} end The value that the tween should end at.
+ * @param {Function} easingFunc The easing curve to apply to the tween.
+ * @param {number} position The normalized position (between 0.0 and 1.0) to
+ * calculate the midpoint of 'start' and 'end' against.
+ * @return {number} The tweened value.
+ * @private
+ */
+var tweenProp = function tweenProp(start, end, easingFunc, position) {
+  return start + (end - start) * easingFunc(position);
+};
+
+/**
+ * Calculates the interpolated tween values of an Object for a given
+ * timestamp.
+ * @param {Number} forPosition The position to compute the state for.
+ * @param {Object} currentState Current state properties.
+ * @param {Object} originalState: The original state properties the Object is
+ * tweening from.
+ * @param {Object} targetState: The destination state properties the Object
+ * is tweening to.
+ * @param {number} duration: The length of the tween in milliseconds.
+ * @param {number} timestamp: The UNIX epoch time at which the tween began.
+ * @param {Object.<string|function>} easing: This Object's keys must correspond
+ * to the keys in targetState.
+ * @private
+ */
+var tweenProps = exports.tweenProps = function tweenProps(forPosition, currentState, originalState, targetState, duration, timestamp, easing) {
+  var normalizedPosition = forPosition < timestamp ? 0 : (forPosition - timestamp) / duration;
+
+  each(currentState, function (key) {
+    var easingObjectProp = easing[key];
+    var easingFn = typeof easingObjectProp === 'function' ? easingObjectProp : formulas[easingObjectProp];
+
+    currentState[key] = tweenProp(originalState[key], targetState[key], easingFn, normalizedPosition);
+  });
+
+  return currentState;
+};
+
+/**
+ * Creates a usable easing Object from a string, a function or another easing
+ * Object.  If `easing` is an Object, then this function clones it and fills
+ * in the missing properties with `"linear"`.
+ * @param {Object.<string|Function>} fromTweenParams
+ * @param {Object|string|Function} easing
+ * @return {Object.<string|Function>}
+ * @private
+ */
+var composeEasingObject = exports.composeEasingObject = function composeEasingObject(fromTweenParams) {
+  var easing = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DEFAULT_EASING;
+
+  var composedEasing = {};
+  var typeofEasing = typeof easing === 'undefined' ? 'undefined' : _typeof(easing);
+
+  if (typeofEasing === 'string' || typeofEasing === 'function') {
+    each(fromTweenParams, function (prop) {
+      return composedEasing[prop] = easing;
+    });
+  } else {
+    each(fromTweenParams, function (prop) {
+      return composedEasing[prop] = composedEasing[prop] || easing[prop] || DEFAULT_EASING;
+    });
+  }
+
+  return composedEasing;
+};
+
+var Tweenable = exports.Tweenable = function () {
+  /**
+   * @param {Object} [initialState={}] The values that the initial tween should
+   * start at if a `from` value is not provided to {@link
+   * shifty.Tweenable#tween} or {@link shifty.Tweenable#setConfig}.
+   * @param {shifty.tweenConfig} [config] Configuration object to be passed to
+   * {@link shifty.Tweenable#setConfig}.
+   * @constructs shifty.Tweenable
+   */
+  function Tweenable() {
+    var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+    var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
+
+    _classCallCheck(this, Tweenable);
+
+    this._currentState = initialState;
+    this._configured = false;
+    this._scheduleFunction = DEFAULT_SCHEDULE_FUNCTION;
+
+    // To prevent unnecessary calls to setConfig do not set default
+    // configuration here.  Only set default configuration immediately before
+    // tweening if none has been set.
+    if (config !== undefined) {
+      this.setConfig(config);
+    }
+  }
+
+  /**
+   * Applies a filter to Tweenable instance.
+   * @param {shifty.Tweenable} tweenable The `Tweenable` instance to call the filter
+   * upon.
+   * @param {string} filterName The name of the filter to apply.
+   * @private
+   */
+
+
+  _createClass(Tweenable, [{
+    key: '_applyFilter',
+    value: function _applyFilter(filterName) {
+      var _this = this;
+
+      var filters = Tweenable.filters;
+      var args = this._filterArgs;
+
+      each(filters, function (name) {
+        var filter = filters[name][filterName];
+
+        if (typeof filter !== 'undefined') {
+          filter.apply(_this, args);
+        }
+      });
+    }
+
+    /**
+     * Handles the update logic for one step of a tween.
+     * @param {number} [currentTimeOverride] Needed for accurate timestamp in
+     * shifty.Tweenable#seek.
+     * @private
+     */
+
+  }, {
+    key: '_timeoutHandler',
+    value: function _timeoutHandler(currentTimeOverride) {
+      var _this2 = this,
+          _arguments = arguments;
+
+      var delay = this._delay;
+      var currentState = this._currentState;
+      var timestamp = this._timestamp;
+      var duration = this._duration;
+      var targetState = this._targetState;
+      var step = this._step;
+
+      var endTime = timestamp + delay + duration;
+      var currentTime = Math.min(currentTimeOverride || Tweenable.now(), endTime);
+      var hasEnded = currentTime >= endTime;
+      var offset = duration - (endTime - currentTime);
+
+      if (this.isPlaying()) {
+        if (hasEnded) {
+          step(targetState, this._attachment, offset);
+          this.stop(true);
+        } else {
+          // This function needs to be .call-ed because it is a native method in
+          // some environments:
+          // http://stackoverflow.com/a/9678166
+          this._scheduleId = this._scheduleFunction.call(root, function () {
+            return _this2._timeoutHandler.apply(_this2, _arguments);
+          }, UPDATE_TIME);
+
+          this._applyFilter('beforeTween');
+
+          // If the animation has not yet reached the start point (e.g., there was
+          // delay that has not yet completed), just interpolate the starting
+          // position of the tween.
+          if (currentTime < timestamp + delay) {
+            currentTime = 1;
+            duration = 1;
+            timestamp = 1;
+          } else {
+            timestamp += delay;
+          }
+
+          tweenProps(currentTime, currentState, this._originalState, targetState, duration, timestamp, this._easing);
+
+          this._applyFilter('afterTween');
+          step(currentState, this._attachment, offset);
+        }
+      }
+    }
+
+    /**
+     * Configure and start a tween.
+     * @method shifty.Tweenable#tween
+     * @param {shifty.tweenConfig} [config] Gets passed to {@link
+     * shifty.Tweenable#setConfig}
+     * @return {Promise}
+     */
+
+  }, {
+    key: 'tween',
+    value: function tween() {
+      var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
+
+      if (this._isTweening) {
+        return this;
+      }
+
+      // Only set default config if no configuration has been set previously and
+      // none is provided now.
+      if (config !== undefined || !this._configured) {
+        this.setConfig(config);
+      }
+
+      this._timestamp = Tweenable.now();
+      this._start(this.get(), this._attachment);
+      return this.resume();
+    }
+
+    /**
+     * Configure a tween that will start at some point in the future.
+     * @method shifty.Tweenable#setConfig
+     * @param {shifty.tweenConfig} [config={}]
+     * @return {shifty.Tweenable}
+     */
+
+  }, {
+    key: 'setConfig',
+    value: function setConfig() {
+      var _this3 = this;
+
+      var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+      this._configured = true;
+
+      // Attach something to this Tweenable instance (e.g.: a DOM element, an
+      // object, a string, etc.);
+      this._attachment = this._attachment || config.attachment;
+
+      // Init the internal state
+      (0, _objectAssign2.default)(this, {
+        _pausedAtTime: null,
+        _scheduleId: null,
+        _delay: config.delay || this._delay || 0,
+        _start: config.start || this._start || noop,
+        _step: config.step || this._step || noop,
+        _duration: config.duration || this._duration || DEFAULT_DURATION,
+        _currentState: clone(config.from || this.get())
+      });
+
+      // Separate Object.assign here; it depends on _currentState being set above
+      (0, _objectAssign2.default)(this, {
+        _originalState: this.get(),
+        _targetState: clone(config.to || this.get())
+      });
+
+      var currentState = this._currentState;
+      // Ensure that there is always something to tween to.
+      this._targetState = (0, _objectAssign2.default)({}, currentState, this._targetState);
+
+      this._easing = this._easing || composeEasingObject(currentState, config.easing);
+      this._filterArgs = [currentState, this._originalState, this._targetState, this._easing];
+      this._applyFilter('tweenCreated');
+
+      var Promised = config.promise || Promise;
+      this._promise = new Promised(function (resolve, reject) {
+        _this3._resolve = resolve;
+        _this3._reject = reject;
+      });
+
+      // Needed to silence (harmless) logged errors when a .catch handler is not
+      // added by downsteam code
+      this._promise.catch(noop);
+
+      return this;
+    }
+
+    /**
+     * @method shifty.Tweenable#get
+     * @return {Object} The current state.
+     */
+
+  }, {
+    key: 'get',
+    value: function get() {
+      return clone(this._currentState);
+    }
+
+    /**
+     * Set the current state.
+     * @method shifty.Tweenable#set
+     * @param {Object} state The state to set.
+     */
+
+  }, {
+    key: 'set',
+    value: function set(state) {
+      this._currentState = state;
+    }
+
+    /**
+     * Pause a tween.  Paused tweens can be resumed from the point at which they
+     * were paused.  This is different from {@link shifty.Tweenable#stop}, as
+     * that method causes a tween to start over when it is resumed.
+     * @method shifty.Tweenable#pause
+     * @return {shifty.Tweenable}
+     */
+
+  }, {
+    key: 'pause',
+    value: function pause() {
+      this._pausedAtTime = Tweenable.now();
+      this._isPaused = true;
+
+      return this;
+    }
+
+    /**
+     * Resume a paused tween.
+     * @method shifty.Tweenable#resume
+     * @return {Promise}
+     */
+
+  }, {
+    key: 'resume',
+    value: function resume() {
+      if (this._isPaused) {
+        this._timestamp += Tweenable.now() - this._pausedAtTime;
+      }
+
+      this._isPaused = false;
+      this._isTweening = true;
+      this._timeoutHandler();
+
+      return this._promise;
+    }
+
+    /**
+     * Move the state of the animation to a specific point in the tween's
+     * timeline.  If the animation is not running, this will cause {@link
+     * shifty.stepFunction} handlers to be called.
+     * @method shifty.Tweenable#seek
+     * @param {millisecond} millisecond The millisecond of the animation to seek
+     * to.  This must not be less than `0`.
+     * @return {shifty.Tweenable}
+     */
+
+  }, {
+    key: 'seek',
+    value: function seek(millisecond) {
+      millisecond = Math.max(millisecond, 0);
+      var currentTime = Tweenable.now();
+
+      if (this._timestamp + millisecond === 0) {
+        return this;
+      }
+
+      this._timestamp = currentTime - millisecond;
+
+      if (!this.isPlaying()) {
+        this._isTweening = true;
+        this._isPaused = false;
+
+        // If the animation is not running, call _timeoutHandler to make sure that
+        // any step handlers are run.
+        this._timeoutHandler(currentTime);
+
+        this.pause();
+      }
+
+      return this;
+    }
+
+    /**
+     * Stops and cancels a tween.
+     * @param {boolean} [gotoEnd] If `false`, the tween just stops at its current
+     * state, and the tween promise is not resolved.  If `true`, the tweened
+     * object's values are instantly set to the target values, and the promise is
+     * resolved.
+     * @method shifty.Tweenable#stop
+     * @return {shifty.Tweenable}
+     */
+
+  }, {
+    key: 'stop',
+    value: function stop() {
+      var gotoEnd = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
+
+      this._isTweening = false;
+      this._isPaused = false;
+
+      (root.cancelAnimationFrame || root.webkitCancelAnimationFrame || root.oCancelAnimationFrame || root.msCancelAnimationFrame || root.mozCancelRequestAnimationFrame || root.clearTimeout)(this._scheduleId);
+
+      if (gotoEnd) {
+        this._applyFilter('beforeTween');
+        tweenProps(1, this._currentState, this._originalState, this._targetState, 1, 0, this._easing);
+        this._applyFilter('afterTween');
+        this._applyFilter('afterTweenEnd');
+        this._resolve(this._currentState, this._attachment);
+      } else {
+        this._reject(this._currentState, this._attachment);
+      }
+
+      return this;
+    }
+
+    /**
+     * Whether or not a tween is running.
+     * @method shifty.Tweenable#isPlaying
+     * @return {boolean}
+     */
+
+  }, {
+    key: 'isPlaying',
+    value: function isPlaying() {
+      return this._isTweening && !this._isPaused;
+    }
+
+    /**
+     * Set a custom schedule function.
+     *
+     * By default,
+     * [`requestAnimationFrame`](https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame)
+     * is used if available, otherwise
+     * [`setTimeout`](https://developer.mozilla.org/en-US/docs/Web/API/Window.setTimeout)
+     * is used.
+     * @method shifty.Tweenable#setScheduleFunction
+     * @param {Function(Function,number)} scheduleFunction The function to be
+     * used to schedule the next frame to be rendered.
+     */
+
+  }, {
+    key: 'setScheduleFunction',
+    value: function setScheduleFunction(scheduleFunction) {
+      this._scheduleFunction = scheduleFunction;
+    }
+
+    /**
+     * `delete` all "own" properties.  Call this when the {@link
+     * shifty.Tweenable} instance is no longer needed to free memory.
+     * @method shifty.Tweenable#dispose
+     */
+
+  }, {
+    key: 'dispose',
+    value: function dispose() {
+      var _this4 = this;
+
+      each(this, function (prop) {
+        return delete _this4[prop];
+      });
+    }
+  }]);
+
+  return Tweenable;
+}();
+
+(0, _objectAssign2.default)(Tweenable, {
+  formulas: formulas,
+
+  filters: { token: token },
+
+  /**
+   * @method shifty.Tweenable.now
+   * @static
+   * @returns {number} The current timestamp
+   */
+  now: Date.now || function (_) {
+    return +new Date();
+  }
+});
+
+/**
+ * @method shifty.tween
+ * @param {shifty.tweenConfig} [config={}]
+ * @description Standalone convenience method that functions identically to
+ * {@link shifty.Tweenable#tween}.  You can use this to create tweens without
+ * needing to set up a {@link shifty.Tweenable} instance.
+ *
+ *     import { tween } from 'shifty';
+ *
+ *     tween({ from: { x: 0 }, to: { x: 10 } }).then(
+ *       () => console.log('All done!')
+ *     );
+ *
+ * @returns {Promise}
+ */
+function tween() {
+  var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+  var tweenable = new Tweenable();
+  var promise = tweenable.tween(config);
+  promise.tweenable = tweenable;
+
+  return promise;
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
+
+/***/ }),
+/* 8 */
 /***/ (function(module, exports) {
 
 /* WEBPACK VAR INJECTION */(function(__webpack_amd_options__) {/* globals __webpack_amd_options__ */
@@ -9638,7 +10203,7 @@ module.exports = __webpack_amd_options__;
 /* WEBPACK VAR INJECTION */}.call(exports, {}))
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9797,7 +10362,7 @@ _rekapi.rendererBootstrappers.push(function (rekapi) {
 });
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9809,6 +10374,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.DOMRenderer = exports.getActorCSS = exports.canOptimizeAnyKeyframeProperties = exports.generateCSSClass = exports.generateCSSAnimationProperties = exports.generateAnimationIterationProperty = exports.generateAnimationNameProperty = exports.generateBoilerplatedKeyframes = exports.generateActorKeyframes = exports.canOptimizeKeyframeProperty = exports.simulateTrailingWait = exports.simulateLeadingWait = exports.generateActorTrackSegment = exports.serializeActorStep = exports.combineTranfromProperties = exports.generateOptimizedKeyframeSegment = exports.applyVendorBoilerplates = exports.applyVendorPropertyPrefixes = exports.VENDOR_TOKEN = exports.TRANSFORM_TOKEN = exports.transformFunctions = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _lodash = __webpack_require__(1);
 
@@ -10159,19 +10726,25 @@ var combineTranfromProperties = exports.combineTranfromProperties = function com
   if (_lodash2.default.isEmpty(_lodash2.default.pick.apply(_lodash2.default, [propsToSerialize].concat(transformFunctions)))) {
     return propsToSerialize;
   } else {
-    var serializedProps = _lodash2.default.clone(propsToSerialize);
+    var _ret = function () {
+      var serializedProps = _lodash2.default.clone(propsToSerialize);
 
-    serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(function (combinedProperties, transformFunction) {
-      if (_lodash2.default.has(serializedProps, transformFunction)) {
-        combinedProperties += ' ' + transformFunction + '(' + serializedProps[transformFunction] + ')';
+      serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(function (combinedProperties, transformFunction) {
+        if (_lodash2.default.has(serializedProps, transformFunction)) {
+          combinedProperties += ' ' + transformFunction + '(' + serializedProps[transformFunction] + ')';
 
-        delete serializedProps[transformFunction];
-      }
+          delete serializedProps[transformFunction];
+        }
 
-      return combinedProperties;
-    }, '').slice(1);
+        return combinedProperties;
+      }, '').slice(1);
 
-    return serializedProps;
+      return {
+        v: serializedProps
+      };
+    }();
+
+    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
   }
 };
 
@@ -10839,7 +11412,63 @@ _rekapi.rendererBootstrappers.push(function (rekapi) {
 });
 
 /***/ }),
-/* 10 */
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _rekapi = __webpack_require__(0);
+
+Object.defineProperty(exports, 'Rekapi', {
+  enumerable: true,
+  get: function get() {
+    return _rekapi.Rekapi;
+  }
+});
+
+var _actor = __webpack_require__(4);
+
+Object.defineProperty(exports, 'Actor', {
+  enumerable: true,
+  get: function get() {
+    return _actor.Actor;
+  }
+});
+
+var _keyframeProperty = __webpack_require__(5);
+
+Object.defineProperty(exports, 'KeyframeProperty', {
+  enumerable: true,
+  get: function get() {
+    return _keyframeProperty.KeyframeProperty;
+  }
+});
+
+var _canvas = __webpack_require__(9);
+
+Object.defineProperty(exports, 'CanvasRenderer', {
+  enumerable: true,
+  get: function get() {
+    return _canvas.CanvasRenderer;
+  }
+});
+
+var _dom = __webpack_require__(10);
+
+Object.defineProperty(exports, 'DOMRenderer', {
+  enumerable: true,
+  get: function get() {
+    return _dom.DOMRenderer;
+  }
+});
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10935,7 +11564,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 };
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10957,6 +11586,30 @@ Object.defineProperty(exports, "__esModule", {
  *  TERMS OF USE - EASING EQUATIONS
  *  Open source under the BSD License.
  *  Easing Equations (c) 2003 Robert Penner, all rights reserved.
+ */
+
+/**
+ * @member shifty.Tweenable.formulas
+ * @description A static Object of {@link shifty.easingFunction}s that can by
+ * used by Shifty. The default values are defined in
+ * [`easing-functions.js`](easing-functions.js.html), but you can add your own
+ * {@link shifty.easingFunction}s by defining them as keys to this Object.
+ *
+ * Shifty ships with an implementation of [Robert Penner's easing
+ * equations](http://robertpenner.com/easing/), as adapted from
+ * [Scripty2](https://github.com/madrobby/scripty2/blob/master/src/effects/transitions/penner.js)'s
+ * implementation.
+ * <p data-height="934" data-theme-id="0" data-slug-hash="wqObdO"
+ * data-default-tab="js,result" data-user="jeremyckahn" data-embed-version="2"
+ * data-pen-title="Shifty - Easing formula names" class="codepen">See the Pen <a
+ * href="https://codepen.io/jeremyckahn/pen/wqObdO/">Shifty - Easing formula
+ * names</a> by Jeremy Kahn (<a
+ * href="https://codepen.io/jeremyckahn">@jeremyckahn</a>) on <a
+ * href="https://codepen.io">CodePen</a>.</p>
+ * <script async
+ * src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
+ * @type {Object.<shifty.easingFunction>}
+ * @static
  */
 var linear = exports.linear = function linear(pos) {
   return pos;
@@ -11144,651 +11797,400 @@ var easeTo = exports.easeTo = function easeTo(pos) {
 };
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(global) {
+
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Tweenable = exports.composeEasingObject = exports.tweenProps = exports.clone = exports.each = undefined;
+exports.tweenCreated = tweenCreated;
+exports.beforeTween = beforeTween;
+exports.afterTween = afterTween;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _tweenable = __webpack_require__(7);
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+var R_NUMBER_COMPONENT = /(\d|\-|\.)/;
+var R_FORMAT_CHUNKS = /([^\-0-9\.]+)/g;
+var R_UNFORMATTED_VALUES = /[0-9.\-]+/g;
+var R_RGB = function () {
+  var number = R_UNFORMATTED_VALUES.source;
+  var comma = /,\s*/.source;
 
-exports.tween = tween;
+  return new RegExp('rgb\\(' + number + comma + number + comma + number + '\\)', 'g');
+}();
+var R_RGB_PREFIX = /^.*\(/;
+var R_HEX = /#([0-9]|[a-f]){3,6}/gi;
+var VALUE_PLACEHOLDER = 'VAL';
 
-var _easingFunctions = __webpack_require__(11);
-
-var easingFunctions = _interopRequireWildcard(_easingFunctions);
-
-var _objectAssign = __webpack_require__(10);
-
-var _objectAssign2 = _interopRequireDefault(_objectAssign);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-// CONSTANTS
-var DEFAULT_EASING = 'linear';
-var DEFAULT_DURATION = 500;
-var UPDATE_TIME = 1000 / 60;
-var root = typeof window !== 'undefined' ? window : global;
-
-// requestAnimationFrame() shim by Paul Irish (modified for Shifty)
-// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-var DEFAULT_SCHEDULE_FUNCTION = root.requestAnimationFrame || root.webkitRequestAnimationFrame || root.oRequestAnimationFrame || root.msRequestAnimationFrame || root.mozCancelRequestAnimationFrame && root.mozRequestAnimationFrame || setTimeout;
-
-var noop = function noop() {};
+// HELPERS
 
 /**
- * Handy shortcut for doing a for-in loop. This is not a "normal" each
- * function, it is optimized for Shifty.  The iterator function only receives
- * the property name, not the value.
- * @param {Object} obj
- * @param {Function(string)} fn
- * @private
- */
-var each = exports.each = function each(obj, fn) {
-  Object.keys(obj).forEach(fn);
-};
-
-/**
- * @param {Object} obj
- * @return {Object}
- * @private
- */
-var clone = exports.clone = function clone(obj) {
-  return (0, _objectAssign2.default)({}, obj);
-};
-
-/**
- * This object contains all of the tweens available to Shifty.  It is
- * extensible - simply attach properties to the `Tweenable.formulas`
- * Object following the same format as `linear`.
+ * @param {Array.number} rawValues
+ * @param {string} prefix
  *
- * `pos` should be a normalized `number` (between 0 and 1).
- * @type {Object(function)}
+ * @return {Array.<string>}
  * @private
  */
-var formulas = clone(easingFunctions);
-
-/**
- * Tweens a single property.
- * @param {number} start The value that the tween started from.
- * @param {number} end The value that the tween should end at.
- * @param {Function} easingFunc The easing curve to apply to the tween.
- * @param {number} position The normalized position (between 0.0 and 1.0) to
- * calculate the midpoint of 'start' and 'end' against.
- * @return {number} The tweened value.
- * @private
- */
-var tweenProp = function tweenProp(start, end, easingFunc, position) {
-  return start + (end - start) * easingFunc(position);
+var getFormatChunksFrom = function getFormatChunksFrom(rawValues, prefix) {
+  return rawValues.map(function (val, i) {
+    return '_' + prefix + '_' + i;
+  });
 };
 
 /**
- * Calculates the interpolated tween values of an Object for a given
- * timestamp.
- * @param {Number} forPosition The position to compute the state for.
- * @param {Object} currentState Current state properties.
- * @param {Object} originalState: The original state properties the Object is
- * tweening from.
- * @param {Object} targetState: The destination state properties the Object
- * is tweening to.
- * @param {number} duration: The length of the tween in milliseconds.
- * @param {number} timestamp: The UNIX epoch time at which the tween began.
- * @param {Object} easing: This Object's keys must correspond to the keys in
- * targetState.
+ * @param {string} formattedString
+ *
+ * @return {string}
  * @private
  */
-var tweenProps = exports.tweenProps = function tweenProps(forPosition, currentState, originalState, targetState, duration, timestamp, easing) {
-  var normalizedPosition = forPosition < timestamp ? 0 : (forPosition - timestamp) / duration;
+var getFormatStringFrom = function getFormatStringFrom(formattedString) {
+  var chunks = formattedString.match(R_FORMAT_CHUNKS);
 
-  each(currentState, function (key) {
-    var easingObjectProp = easing[key];
-    var easingFn = typeof easingObjectProp === 'function' ? easingObjectProp : formulas[easingObjectProp];
+  if (!chunks) {
+    // chunks will be null if there were no tokens to parse in
+    // formattedString (for example, if formattedString is '2').  Coerce
+    // chunks to be useful here.
+    chunks = ['', ''];
 
-    currentState[key] = tweenProp(originalState[key], targetState[key], easingFn, normalizedPosition);
+    // If there is only one chunk, assume that the string is a number
+    // followed by a token...
+    // NOTE: This may be an unwise assumption.
+  } else if (chunks.length === 1 ||
+  // ...or if the string starts with a number component (".", "-", or a
+  // digit)...
+  formattedString.charAt(0).match(R_NUMBER_COMPONENT)) {
+
+    // ...prepend an empty string here to make sure that the formatted number
+    // is properly replaced by VALUE_PLACEHOLDER
+    chunks.unshift('');
+  }
+
+  return chunks.join(VALUE_PLACEHOLDER);
+};
+
+/**
+ * Convert a base-16 number to base-10.
+ *
+ * @param {Number|String} hex The value to convert
+ *
+ * @returns {Number} The base-10 equivalent of `hex`.
+ * @private
+ */
+function hexToDec(hex) {
+  return parseInt(hex, 16);
+}
+
+/**
+ * Convert a hexadecimal string to an array with three items, one each for
+ * the red, blue, and green decimal values.
+ *
+ * @param {string} hex A hexadecimal string.
+ *
+ * @returns {Array.<number>} The converted Array of RGB values if `hex` is a
+ * valid string, or an Array of three 0's.
+ * @private
+ */
+var hexToRGBArray = function hexToRGBArray(hex) {
+  hex = hex.replace(/#/, '');
+
+  // If the string is a shorthand three digit hex notation, normalize it to
+  // the standard six digit notation
+  if (hex.length === 3) {
+    hex = hex.split('');
+    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+  }
+
+  return [hexToDec(hex.substr(0, 2)), hexToDec(hex.substr(2, 2)), hexToDec(hex.substr(4, 2))];
+};
+
+/**
+ * @param {string} hexString
+ *
+ * @return {string}
+ * @private
+ */
+var convertHexToRGB = function convertHexToRGB(hexString) {
+  return 'rgb(' + hexToRGBArray(hexString).join(',') + ')';
+};
+
+/**
+ * TODO: Can this be rewritten to leverage String#replace more efficiently?
+ * Runs a filter operation on all chunks of a string that match a RegExp
+ *
+ * @param {RegExp} pattern
+ * @param {string} unfilteredString
+ * @param {function(string)} filter
+ *
+ * @return {string}
+ * @private
+ */
+var filterStringChunks = function filterStringChunks(pattern, unfilteredString, filter) {
+  var patternMatches = unfilteredString.match(pattern);
+  var filteredString = unfilteredString.replace(pattern, VALUE_PLACEHOLDER);
+
+  if (patternMatches) {
+    patternMatches.forEach(function (match) {
+      return filteredString = filteredString.replace(VALUE_PLACEHOLDER, filter(match));
+    });
+  }
+
+  return filteredString;
+};
+
+/**
+ * @param {string} str
+ *
+ * @return {string}
+ * @private
+ */
+var sanitizeHexChunksToRGB = function sanitizeHexChunksToRGB(str) {
+  return filterStringChunks(R_HEX, str, convertHexToRGB);
+};
+
+/**
+ * Convert all hex color values within a string to an rgb string.
+ *
+ * @param {Object} stateObject
+ *
+ * @return {Object} The modified obj
+ * @private
+ */
+var sanitizeObjectForHexProps = function sanitizeObjectForHexProps(stateObject) {
+  (0, _tweenable.each)(stateObject, function (prop) {
+    var currentProp = stateObject[prop];
+
+    if (typeof currentProp === 'string' && currentProp.match(R_HEX)) {
+      stateObject[prop] = sanitizeHexChunksToRGB(currentProp);
+    }
+  });
+};
+
+/**
+ * @param {string} rgbChunk
+ *
+ * @return {string}
+ * @private
+ */
+var sanitizeRGBChunk = function sanitizeRGBChunk(rgbChunk) {
+  var numbers = rgbChunk.match(R_UNFORMATTED_VALUES).map(Math.floor);
+  var prefix = rgbChunk.match(R_RGB_PREFIX)[0];
+
+  return '' + prefix + numbers.join(',') + ')';
+};
+
+/**
+ * Check for floating point values within rgb strings and round them.
+ *
+ * @param {string} formattedString
+ *
+ * @return {string}
+ * @private
+ */
+var sanitizeRGBChunks = function sanitizeRGBChunks(formattedString) {
+  return filterStringChunks(R_RGB, formattedString, sanitizeRGBChunk);
+};
+
+/**
+ * Note: It's the duty of the caller to convert the Array elements of the
+ * return value into numbers.  This is a performance optimization.
+ *
+ * @param {string} formattedString
+ *
+ * @return {Array.<string>|null}
+ * @private
+ */
+var getValuesFrom = function getValuesFrom(formattedString) {
+  return formattedString.match(R_UNFORMATTED_VALUES);
+};
+
+/**
+ * @param {Object} stateObject
+ *
+ * @return {Object} An Object of formatSignatures that correspond to
+ * the string properties of stateObject
+ * @private
+ */
+var getFormatSignatures = function getFormatSignatures(stateObject) {
+  var signatures = {};
+
+  (0, _tweenable.each)(stateObject, function (propertyName) {
+    var property = stateObject[propertyName];
+
+    if (typeof property === 'string') {
+      signatures[propertyName] = {
+        formatString: getFormatStringFrom(property),
+        chunkNames: getFormatChunksFrom(getValuesFrom(property), propertyName)
+      };
+    }
   });
 
-  return currentState;
+  return signatures;
 };
 
 /**
- * Creates a usable easing Object from a string, a function or another easing
- * Object.  If `easing` is an Object, then this function clones it and fills
- * in the missing properties with `"linear"`.
- * @param {Object.<string|Function>} fromTweenParams
- * @param {Object|string|Function} easing
- * @return {Object.<string|Function>}
+ * @param {Object} stateObject
+ * @param {Object} formatSignatures
  * @private
  */
-var composeEasingObject = exports.composeEasingObject = function composeEasingObject(fromTweenParams) {
-  var easing = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : DEFAULT_EASING;
-
-  var composedEasing = {};
-  var typeofEasing = typeof easing === 'undefined' ? 'undefined' : _typeof(easing);
-
-  if (typeofEasing === 'string' || typeofEasing === 'function') {
-    each(fromTweenParams, function (prop) {
-      return composedEasing[prop] = easing;
+var expandFormattedProperties = function expandFormattedProperties(stateObject, formatSignatures) {
+  (0, _tweenable.each)(formatSignatures, function (propertyName) {
+    getValuesFrom(stateObject[propertyName]).forEach(function (number, i) {
+      return stateObject[formatSignatures[propertyName].chunkNames[i]] = +number;
     });
-  } else {
-    each(fromTweenParams, function (prop) {
-      return composedEasing[prop] = composedEasing[prop] || easing[prop] || DEFAULT_EASING;
-    });
-  }
 
-  return composedEasing;
+    delete stateObject[propertyName];
+  });
 };
 
-var Tweenable = exports.Tweenable = function () {
-  /**
-   * @constructs shifty.Tweenable
-   * @param {Object=} initialState The values that the initial tween should
-   * start at if a `from` object is not provided to `tween` or `setConfig`.
-   * @param {Object=} config Configuration object to be passed to
-   * [`setConfig`]{@link shifty.Tweenable#setConfig}.
-   */
-  function Tweenable() {
-    var initialState = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-    var config = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : undefined;
-
-    _classCallCheck(this, Tweenable);
-
-    this._currentState = initialState;
-    this._configured = false;
-    this._scheduleFunction = DEFAULT_SCHEDULE_FUNCTION;
-
-    // To prevent unnecessary calls to setConfig do not set default
-    // configuration here.  Only set default configuration immediately before
-    // tweening if none has been set.
-    if (config !== undefined) {
-      this.setConfig(config);
-    }
-  }
-
-  /**
-   * Applies a filter to Tweenable instance.
-   * @param {Tweenable} tweenable The `Tweenable` instance to call the filter
-   * upon.
-   * @param {String} filterName The name of the filter to apply.
-   * @private
-   */
-
-
-  _createClass(Tweenable, [{
-    key: '_applyFilter',
-    value: function _applyFilter(filterName) {
-      var _this = this;
-
-      var filters = Tweenable.filters;
-      var args = this._filterArgs;
-
-      each(filters, function (name) {
-        var filter = filters[name][filterName];
-
-        if (typeof filter !== 'undefined') {
-          filter.apply(_this, args);
-        }
-      });
-    }
-
-    /**
-     * Handles the update logic for one step of a tween.
-     * @param {number=} currentTimeOverride Needed for accurate timestamp in
-     * shifty.Tweenable#seek.
-     * @private
-     */
-
-  }, {
-    key: '_timeoutHandler',
-    value: function _timeoutHandler(currentTimeOverride) {
-      var _this2 = this,
-          _arguments = arguments;
-
-      var delay = this._delay;
-      var currentState = this._currentState;
-      var timestamp = this._timestamp;
-      var duration = this._duration;
-      var targetState = this._targetState;
-      var step = this._step;
-
-      var endTime = timestamp + delay + duration;
-      var currentTime = Math.min(currentTimeOverride || Tweenable.now(), endTime);
-      var hasEnded = currentTime >= endTime;
-      var offset = duration - (endTime - currentTime);
-
-      if (this.isPlaying()) {
-        if (hasEnded) {
-          step(targetState, this._attachment, offset);
-          this.stop(true);
-        } else {
-          // This function needs to be .call-ed because it is a native method in
-          // some environments:
-          // http://stackoverflow.com/a/9678166
-          this._scheduleId = this._scheduleFunction.call(root, function () {
-            return _this2._timeoutHandler.apply(_this2, _arguments);
-          }, UPDATE_TIME);
-
-          this._applyFilter('beforeTween');
-
-          // If the animation has not yet reached the start point (e.g., there was
-          // delay that has not yet completed), just interpolate the starting
-          // position of the tween.
-          if (currentTime < timestamp + delay) {
-            currentTime = 1;
-            duration = 1;
-            timestamp = 1;
-          } else {
-            timestamp += delay;
-          }
-
-          tweenProps(currentTime, currentState, this._originalState, targetState, duration, timestamp, this._easing);
-
-          this._applyFilter('afterTween');
-          step(currentState, this._attachment, offset);
-        }
-      }
-    }
-
-    /**
-     * Configure and start a tween.
-     * @method shifty.Tweenable#tween
-     * @param {Object=} config See `config` options for `{@link
-     * shifty.Tweenable#setConfig}`
-     * @return {Promise}
-     */
-
-  }, {
-    key: 'tween',
-    value: function tween() {
-      var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : undefined;
-
-      if (this._isTweening) {
-        return this;
-      }
-
-      // Only set default config if no configuration has been set previously and
-      // none is provided now.
-      if (config !== undefined || !this._configured) {
-        this.setConfig(config);
-      }
-
-      this._timestamp = Tweenable.now();
-      this._start(this.get(), this._attachment);
-      return this.resume();
-    }
-
-    /**
-     * Configure a tween that will start at some point in the future.
-     *
-     * @method shifty.Tweenable#setConfig
-     * @param {Object} config See below
-     * @property {Object=} config.from Starting position.  If omitted, `{@link
-     * shifty.Tweenable#get}` is used.
-     * @property {Object=} config.to Ending position.
-     * @property {number=} config.duration How many milliseconds to animate for.
-     * @property {number=} config.delay  How many milliseconds to wait before
-     * starting
-     * the tween.
-     * @property {Function(Object, *)=} config.start Function to execute when the
-     * tween begins.  Receives the state of the tween as the first parameter and
-     * `attachment` as the second parameter.
-     * @property {Function(Object, *, number)=} config.step Function to execute
-     * on every tick.  Receives `get` as the first parameter, `attachment` as the
-     * second parameter, and the time elapsed since the start of the tween as the
-     * third.  This function is not called on the final step of the animation.
-     * @property {Object.<string|Function|string|Function>=} config.easing Easing
-     * curve name(s) or function(s) to use for the tween.
-     * @property {*=} config.attachment Cached value that is passed to the
-     * `step`/`start` functions.
-     * @property {Function} config.promise Promise constructor for when you want
-     * to use Promise library or polyfill Promises in unsupported environments.
-     * @return {Tweenable}
-     */
-
-  }, {
-    key: 'setConfig',
-    value: function setConfig() {
-      var _this3 = this;
-
-      var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-
-      this._configured = true;
-
-      // Attach something to this Tweenable instance (e.g.: a DOM element, an
-      // object, a string, etc.);
-      this._attachment = config.attachment;
-
-      // Init the internal state
-      (0, _objectAssign2.default)(this, {
-        _pausedAtTime: null,
-        _scheduleId: null,
-        _delay: config.delay || 0,
-        _start: config.start || noop,
-        _step: config.step || noop,
-        _duration: config.duration || DEFAULT_DURATION,
-        _currentState: clone(config.from || this.get())
-      });
-
-      // Separate Object.assign here; it depends on _currentState being set above
-      (0, _objectAssign2.default)(this, {
-        _originalState: this.get(),
-        _targetState: clone(config.to || this.get())
-      });
-
-      var currentState = this._currentState;
-      // Ensure that there is always something to tween to.
-      this._targetState = (0, _objectAssign2.default)({}, currentState, this._targetState);
-
-      this._easing = composeEasingObject(currentState, config.easing);
-      this._filterArgs = [currentState, this._originalState, this._targetState, this._easing];
-      this._applyFilter('tweenCreated');
-
-      var Promised = config.promise || Promise;
-      this._promise = new Promised(function (resolve, reject) {
-        _this3._resolve = resolve;
-        _this3._reject = reject;
-      });
-
-      // Needed to silence (harmless) logged errors when a .catch handler is not
-      // added by downsteam code
-      this._promise.catch(noop);
-
-      return this;
-    }
-
-    /**
-     * @method shifty.Tweenable#get
-     * @return {Object} The current state.
-     */
-
-  }, {
-    key: 'get',
-    value: function get() {
-      return clone(this._currentState);
-    }
-
-    /**
-     * @method shifty.Tweenable#set
-     * @param {Object} state The state to set.
-     * @description Set the current state.
-     */
-
-  }, {
-    key: 'set',
-    value: function set(state) {
-      this._currentState = state;
-    }
-
-    /**
-     * Pause a tween.  Paused tweens can be resumed from the point at which they
-     * were paused.  This is different from `stop`, as that method causes a tween
-     * to start over when it is resumed.
-     * @method shifty.Tweenable#pause
-     * @return {Tweenable}
-     */
-
-  }, {
-    key: 'pause',
-    value: function pause() {
-      this._pausedAtTime = Tweenable.now();
-      this._isPaused = true;
-
-      return this;
-    }
-
-    /**
-     * Resume a paused tween.
-     * @method shifty.Tweenable#resume
-     * @return {Promise}
-     */
-
-  }, {
-    key: 'resume',
-    value: function resume() {
-      if (this._isPaused) {
-        this._timestamp += Tweenable.now() - this._pausedAtTime;
-      }
-
-      this._isPaused = false;
-      this._isTweening = true;
-      this._timeoutHandler();
-
-      return this._promise;
-    }
-
-    /**
-     * Move the state of the animation to a specific point in the tween's
-     * timeline.  If the animation is not running, this will cause the `step`
-     * handlers to be called.
-     * @method shifty.Tweenable#seek
-     * @param {millisecond} millisecond The millisecond of the animation to seek
-     * to.  This must not be less than `0`.
-     * @return {Tweenable}
-     */
-
-  }, {
-    key: 'seek',
-    value: function seek(millisecond) {
-      millisecond = Math.max(millisecond, 0);
-      var currentTime = Tweenable.now();
-
-      if (this._timestamp + millisecond === 0) {
-        return this;
-      }
-
-      this._timestamp = currentTime - millisecond;
-
-      if (!this.isPlaying()) {
-        this._isTweening = true;
-        this._isPaused = false;
-
-        // If the animation is not running, call _timeoutHandler to make sure that
-        // any step handlers are run.
-        this._timeoutHandler(currentTime);
-
-        this.pause();
-      }
-
-      return this;
-    }
-
-    /**
-     * Stops and cancels a tween.
-     * @param {boolean=} gotoEnd If `false` or omitted, the tween just stops at
-     * its current state, and the tween promise is not resolved.  If `true`, the
-     * tweened object's values are instantly set to the target values, and the
-     * promise is resolved.
-     * @method shifty.Tweenable#stop
-     * @return {Tweenable}
-     */
-
-  }, {
-    key: 'stop',
-    value: function stop(gotoEnd) {
-      this._isTweening = false;
-      this._isPaused = false;
-
-      (root.cancelAnimationFrame || root.webkitCancelAnimationFrame || root.oCancelAnimationFrame || root.msCancelAnimationFrame || root.mozCancelRequestAnimationFrame || root.clearTimeout)(this._scheduleId);
-
-      if (gotoEnd) {
-        this._applyFilter('beforeTween');
-        tweenProps(1, this._currentState, this._originalState, this._targetState, 1, 0, this._easing);
-        this._applyFilter('afterTween');
-        this._applyFilter('afterTweenEnd');
-        this._resolve(this._currentState, this._attachment);
-      } else {
-        this._reject(this._currentState, this._attachment);
-      }
-
-      return this;
-    }
-
-    /**
-     * Whether or not a tween is running.
-     * @method shifty.Tweenable#isPlaying
-     * @return {boolean}
-     */
-
-  }, {
-    key: 'isPlaying',
-    value: function isPlaying() {
-      return this._isTweening && !this._isPaused;
-    }
-
-    /**
-     * Set a custom schedule function.
-     *
-     * If a custom function is not set,
-     * [`requestAnimationFrame`](https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame)
-     * is used if available, otherwise
-     * [`setTimeout`](https://developer.mozilla.org/en-US/docs/Web/API/Window.setTimeout)
-     * is used.
-     * @method shifty.Tweenable#setScheduleFunction
-     * @param {Function(Function,number)} scheduleFunction The function to be
-     * used to schedule the next frame to be rendered.
-     */
-
-  }, {
-    key: 'setScheduleFunction',
-    value: function setScheduleFunction(scheduleFunction) {
-      this._scheduleFunction = scheduleFunction;
-    }
-
-    /**
-     * `delete` all "own" properties.  Call this when the `Tweenable` instance
-     * is no longer needed to free memory.
-     * @method shifty.Tweenable#dispose
-     */
-
-  }, {
-    key: 'dispose',
-    value: function dispose() {
-      var _this4 = this;
-
-      each(this, function (prop) {
-        return delete _this4[prop];
-      });
-    }
-  }]);
-
-  return Tweenable;
-}();
-
-(0, _objectAssign2.default)(Tweenable, {
-  /**
-   * @memberof shifty.Tweenable
-   * @type {Object.<Function(number)>}
-   * @static
-   * @description A static Object of easing functions that can by used by
-   * Shifty.
-   */
-  formulas: formulas,
-  filters: {},
-
-  /**
-   * @memberof shifty.Tweenable
-   * @function
-   * @static
-   * @description Returns the current timestamp
-   * @returns {number}
-   */
-  now: Date.now || function (_) {
-    return +new Date();
-  }
-});
+/**
+ * @param {Object} stateObject
+ * @param {Array.<string>} chunkNames
+ *
+ * @return {Object} The extracted value chunks.
+ * @private
+ */
+var extractPropertyChunks = function extractPropertyChunks(stateObject, chunkNames) {
+  var extractedValues = {};
+
+  chunkNames.forEach(function (chunkName) {
+    extractedValues[chunkName] = stateObject[chunkName];
+    delete stateObject[chunkName];
+  });
+
+  return extractedValues;
+};
 
 /**
- * @method shifty.tween
- * @param {Object=} config See `config` options for `{@link
- * shifty.Tweenable#setConfig}`
- * @description Standalone convenience method that functions identically to
- * [`shifty.Tweenable#tween`]{@link shifty.Tweenable#tween}.  You can use this to create
- * tweens without needing to set up a `{@link shifty.Tweenable}` instance.
+ * @param {Object} stateObject
+ * @param {Array.<string>} chunkNames
  *
- *     import { tween } from 'shifty';
- *
- *     tween({ from: { x: 0 }, to: { x: 10 } }).then(
- *       () => console.log('All done!')
- *     );
- *
- * @returns {Promise}
+ * @return {Array.<number>}
+ * @private
  */
-function tween() {
-  var config = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+var getValuesList = function getValuesList(stateObject, chunkNames) {
+  return chunkNames.map(function (chunkName) {
+    return stateObject[chunkName];
+  });
+};
 
-  var tweenable = new Tweenable();
-  var promise = tweenable.tween(config);
-  promise.tweenable = tweenable;
+/**
+ * @param {string} formatString
+ * @param {Array.<number>} rawValues
+ *
+ * @return {string}
+ * @private
+ */
+var getFormattedValues = function getFormattedValues(formatString, rawValues) {
+  rawValues.forEach(function (rawValue) {
+    return formatString = formatString.replace(VALUE_PLACEHOLDER, +rawValue.toFixed(4));
+  });
 
-  return promise;
+  return formatString;
+};
+
+/**
+ * @param {Object} stateObject
+ * @param {Object} formatSignatures
+ * @private
+ */
+var collapseFormattedProperties = function collapseFormattedProperties(stateObject, formatSignatures) {
+  (0, _tweenable.each)(formatSignatures, function (prop) {
+    var _formatSignatures$pro = formatSignatures[prop],
+        chunkNames = _formatSignatures$pro.chunkNames,
+        formatString = _formatSignatures$pro.formatString;
+
+
+    var currentProp = getFormattedValues(formatString, getValuesList(extractPropertyChunks(stateObject, chunkNames), chunkNames));
+
+    stateObject[prop] = sanitizeRGBChunks(currentProp);
+  });
+};
+
+/**
+ * @param {Object} easingObject
+ * @param {Object} tokenData
+ * @private
+ */
+var expandEasingObject = function expandEasingObject(easingObject, tokenData) {
+  (0, _tweenable.each)(tokenData, function (prop) {
+    var chunkNames = tokenData[prop].chunkNames;
+
+    var easing = easingObject[prop];
+
+    if (typeof easing === 'string') {
+      (function () {
+        var easingNames = easing.split(' ');
+        var defaultEasing = easingNames[easingNames.length - 1];
+
+        chunkNames.forEach(function (chunkName, i) {
+          return easingObject[chunkName] = easingNames[i] || defaultEasing;
+        });
+      })();
+    } else {
+      // easing is a function
+      chunkNames.forEach(function (chunkName) {
+        return easingObject[chunkName] = easing;
+      });
+    }
+
+    delete easingObject[prop];
+  });
+};
+
+/**
+ * @param {Object} easingObject
+ * @param {Object} tokenData
+ * @private
+ */
+var collapseEasingObject = function collapseEasingObject(easingObject, tokenData) {
+  (0, _tweenable.each)(tokenData, function (prop) {
+    var chunkNames = tokenData[prop].chunkNames;
+    var length = chunkNames.length;
+
+    var firstEasing = easingObject[chunkNames[0]];
+
+    if (typeof firstEasing === 'string') {
+      easingObject[prop] = chunkNames.map(function (chunkName) {
+        var easingName = easingObject[chunkName];
+        delete easingObject[chunkName];
+
+        return easingName;
+      }).join(' ');
+    } else {
+      // firstEasing is a function
+      easingObject[prop] = firstEasing;
+    }
+  });
+};
+
+function tweenCreated(currentState, fromState, toState) {
+  [currentState, fromState, toState].forEach(sanitizeObjectForHexProps);
+
+  this._tokenData = getFormatSignatures(currentState);
 }
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3)))
 
-/***/ }),
-/* 13 */
-/***/ (function(module, exports, __webpack_require__) {
+function beforeTween(currentState, fromState, toState, easingObject) {
+  var _tokenData = this._tokenData;
 
-"use strict";
+  expandEasingObject(easingObject, _tokenData);
 
+  [currentState, fromState, toState].forEach(function (state) {
+    return expandFormattedProperties(state, _tokenData);
+  });
+}
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+function afterTween(currentState, fromState, toState, easingObject) {
+  var _tokenData = this._tokenData;
 
-var _rekapi = __webpack_require__(0);
+  [currentState, fromState, toState].forEach(function (state) {
+    return collapseFormattedProperties(state, _tokenData);
+  });
 
-Object.defineProperty(exports, 'Rekapi', {
-  enumerable: true,
-  get: function get() {
-    return _rekapi.Rekapi;
-  }
-});
-
-var _actor = __webpack_require__(4);
-
-Object.defineProperty(exports, 'Actor', {
-  enumerable: true,
-  get: function get() {
-    return _actor.Actor;
-  }
-});
-
-var _keyframeProperty = __webpack_require__(5);
-
-Object.defineProperty(exports, 'KeyframeProperty', {
-  enumerable: true,
-  get: function get() {
-    return _keyframeProperty.KeyframeProperty;
-  }
-});
-
-var _canvas = __webpack_require__(8);
-
-Object.defineProperty(exports, 'CanvasRenderer', {
-  enumerable: true,
-  get: function get() {
-    return _canvas.CanvasRenderer;
-  }
-});
-
-var _dom = __webpack_require__(9);
-
-Object.defineProperty(exports, 'DOMRenderer', {
-  enumerable: true,
-  get: function get() {
-    return _dom.DOMRenderer;
-  }
-});
+  collapseEasingObject(easingObject, _tokenData);
+}
 
 /***/ })
 /******/ ]);
