@@ -91,6 +91,10 @@ const isInt = number => number % 1 === 0;
  * @return {string}
  */
 const vendorPrefix = (() => {
+  if (typeof document === 'undefined') {
+    return;
+  }
+
   const { style } = document.body;
 
   return (
