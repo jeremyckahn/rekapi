@@ -312,10 +312,11 @@ export class Actor extends Tweenable {
         new KeyframeProperty(
           millisecond,
           name,
-          value, typeof easing === 'string' ?
+          value,
+          typeof easing === 'string' ?
             easing :
             (easing[name] || DEFAULT_EASING)
-          )
+        )
       )
     );
 
