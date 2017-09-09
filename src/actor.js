@@ -1,6 +1,5 @@
 import _, { noop } from 'lodash';
 import { Tweenable } from 'shifty';
-import { composeEasingObject } from '../node_modules/shifty/src/tweenable';
 import { KeyframeProperty } from './keyframe-property';
 import {
   fireEvent,
@@ -125,7 +124,7 @@ const ensurePropertyCacheValid = actor => {
   const { _timelinePropertyCache, _timelineFunctionCache } = actor;
 
   // Build the cache map
-  const props = Object.values(actor._keyframeProperties)
+  const props = _.values(actor._keyframeProperties)
     .sort((a, b) => a.millisecond - b.millisecond);
 
   let curCacheEntry = getLatestProperties(actor, 0);
@@ -308,11 +307,16 @@ export class Actor extends Tweenable {
       state = { 'function': state };
     }
 
-    const easingObject = composeEasingObject(state, easing);
-
     _.each(state, (value, name) =>
       this.addKeyframeProperty(
-        new KeyframeProperty(millisecond, name, value, easingObject[name])
+        new KeyframeProperty(
+          millisecond,
+          name,
+          value,
+          typeof easing === 'string' ?
+            easing :
+            (easing[name] || DEFAULT_EASING)
+        )
       )
     );
 
