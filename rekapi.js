@@ -203,23 +203,21 @@ var updateToMillisecond = exports.updateToMillisecond = function updateToMillise
   var keyframeResetList = [];
 
   if (currentIteration > rekapi._latestIteration) {
-    (function () {
-      fireEvent(rekapi, 'animationLooped');
+    fireEvent(rekapi, 'animationLooped');
 
-      // Reset function keyframes
-      var lookupObject = { name: 'function' };
+    // Reset function keyframes
+    var lookupObject = { name: 'function' };
 
-      rekapi._actors.forEach(function (actor) {
-        var fnKeyframes = _lodash2.default.where(actor._keyframeProperties, lookupObject);
-        var lastFnKeyframe = _lodash2.default.last(fnKeyframes);
+    rekapi._actors.forEach(function (actor) {
+      var fnKeyframes = _lodash2.default.where(actor._keyframeProperties, lookupObject);
+      var lastFnKeyframe = _lodash2.default.last(fnKeyframes);
 
-        if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
-          lastFnKeyframe.invoke();
-        }
+      if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
+        lastFnKeyframe.invoke();
+      }
 
-        keyframeResetList = keyframeResetList.concat(fnKeyframes);
-      });
-    })();
+      keyframeResetList = keyframeResetList.concat(fnKeyframes);
+    });
   }
 
   rekapi._latestIteration = currentIteration;
@@ -7764,7 +7762,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-/*! 2.1.2 */
+/*! 2.1.1 */
 !function (t, e) {
   "object" == ( false ? "undefined" : _typeof(exports)) && "object" == ( false ? "undefined" : _typeof(module)) ? module.exports = e() :  true ? !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_FACTORY__ = (e),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
@@ -7786,21 +7784,17 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
       };return e.d(n, "a", n), n;
     }, e.o = function (t, e) {
       return Object.prototype.hasOwnProperty.call(t, e);
-    }, e.p = "/assets/", e(e.s = 6);
+    }, e.p = "/assets/", e(e.s = 7);
   }([function (t, e, n) {
     "use strict";
     (function (t) {
-      function r(t) {
-        if (t && t.__esModule) return t;var e = {};if (null != t) for (var n in t) {
-          Object.prototype.hasOwnProperty.call(t, n) && (e[n] = t[n]);
-        }return e.default = t, e;
-      }function i(t, e) {
+      function r(t, e) {
         if (!(t instanceof e)) throw new TypeError("Cannot call a class as a function");
-      }function o() {
+      }function i() {
         var t = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {},
-            e = new M(),
+            e = new g(),
             n = e.tween(t);return n.tweenable = e, n;
-      }Object.defineProperty(e, "__esModule", { value: !0 }), e.Tweenable = e.composeEasingObject = e.tweenProps = e.clone = e.each = void 0;var u = function () {
+      }Object.defineProperty(e, "__esModule", { value: !0 }), e.Tweenable = e.composeEasingObject = e.tweenProps = e.clone = e.each = void 0;var o = function () {
         function t(t, e) {
           for (var n = 0; n < e.length; n++) {
             var r = e[n];r.enumerable = r.enumerable || !1, r.configurable = !0, "value" in r && (r.writable = !0), Object.defineProperty(t, r.key, r);
@@ -7809,54 +7803,56 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
           return n && t(e.prototype, n), r && t(e, r), e;
         };
       }(),
-          a = "function" == typeof Symbol && "symbol" == _typeof(Symbol.iterator) ? function (t) {
+          u = "function" == typeof Symbol && "symbol" == _typeof(Symbol.iterator) ? function (t) {
         return typeof t === "undefined" ? "undefined" : _typeof(t);
       } : function (t) {
         return t && "function" == typeof Symbol && t.constructor === Symbol && t !== Symbol.prototype ? "symbol" : typeof t === "undefined" ? "undefined" : _typeof(t);
-      };e.tween = o;var c = n(5),
-          s = r(c),
-          f = n(1),
-          h = function (t) {
+      };e.tween = i;var a = n(6),
+          s = function (t) {
+        if (t && t.__esModule) return t;var e = {};if (null != t) for (var n in t) {
+          Object.prototype.hasOwnProperty.call(t, n) && (e[n] = t[n]);
+        }return e.default = t, e;
+      }(a),
+          c = n(1),
+          f = function (t) {
         return t && t.__esModule ? t : { default: t };
-      }(f),
-          l = n(7),
-          p = r(l),
-          d = "undefined" != typeof window ? window : t,
-          m = d.requestAnimationFrame || d.webkitRequestAnimationFrame || d.oRequestAnimationFrame || d.msRequestAnimationFrame || d.mozCancelRequestAnimationFrame && d.mozRequestAnimationFrame || setTimeout,
-          _ = function _() {},
-          v = e.each = function (t, e) {
+      }(c),
+          h = "undefined" != typeof window ? window : t,
+          l = h.requestAnimationFrame || h.webkitRequestAnimationFrame || h.oRequestAnimationFrame || h.msRequestAnimationFrame || h.mozCancelRequestAnimationFrame && h.mozRequestAnimationFrame || setTimeout,
+          p = function p() {},
+          d = e.each = function (t, e) {
         Object.keys(t).forEach(e);
       },
-          y = e.clone = function (t) {
-        return (0, h.default)({}, t);
+          m = e.clone = function (t) {
+        return (0, f.default)({}, t);
       },
-          w = y(s),
-          g = function g(t, e, n, r) {
+          _ = m(s),
+          v = function v(t, e, n, r) {
         return t + (e - t) * n(r);
       },
-          b = e.tweenProps = function (t, e, n, r, i, o, u) {
-        var a = t < o ? 0 : (t - o) / i;return v(e, function (t) {
+          y = e.tweenProps = function (t, e, n, r, i, o, u) {
+        var a = t < o ? 0 : (t - o) / i;return d(e, function (t) {
           var i = u[t],
-              o = "function" == typeof i ? i : w[i];e[t] = g(n[t], r[t], o, a);
+              o = "function" == typeof i ? i : _[i];e[t] = v(n[t], r[t], o, a);
         }), e;
       },
-          O = e.composeEasingObject = function (t) {
+          w = e.composeEasingObject = function (t) {
         var e = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : "linear",
             n = {},
-            r = void 0 === e ? "undefined" : a(e);return "string" === r || "function" === r ? v(t, function (t) {
+            r = void 0 === e ? "undefined" : u(e);return "string" === r || "function" === r ? d(t, function (t) {
           return n[t] = e;
-        }) : v(t, function (t) {
+        }) : d(t, function (t) {
           return n[t] = n[t] || e[t] || "linear";
         }), n;
       },
-          M = e.Tweenable = function () {
+          g = e.Tweenable = function () {
         function t() {
           var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {},
-              n = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : void 0;i(this, t), this._currentState = e, this._configured = !1, this._scheduleFunction = m, void 0 !== n && this.setConfig(n);
-        }return u(t, [{ key: "_applyFilter", value: function value(e) {
+              n = arguments.length > 1 && void 0 !== arguments[1] ? arguments[1] : void 0;r(this, t), this._currentState = e, this._configured = !1, this._scheduleFunction = l, void 0 !== n && this.setConfig(n);
+        }return o(t, [{ key: "_applyFilter", value: function value(e) {
             var n = this,
                 r = t.filters,
-                i = this._filterArgs;v(r, function (t) {
+                i = this._filterArgs;d(r, function (t) {
               var o = r[t][e];void 0 !== o && o.apply(n, i);
             });
           } }, { key: "_timeoutHandler", value: function value(e) {
@@ -7866,23 +7862,23 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
                 o = this._currentState,
                 u = this._timestamp,
                 a = this._duration,
-                c = this._targetState,
-                s = this._step,
+                s = this._targetState,
+                c = this._step,
                 f = u + i + a,
-                h = Math.min(e || t.now(), f),
-                l = h >= f,
-                p = a - (f - h);this.isPlaying() && (l ? (s(c, this._attachment, p), this.stop(!0)) : (this._scheduleId = this._scheduleFunction.call(d, function () {
+                l = Math.min(e || t.now(), f),
+                p = l >= f,
+                d = a - (f - l);this.isPlaying() && (p ? (c(s, this._attachment, d), this.stop(!0)) : (this._scheduleId = this._scheduleFunction.call(h, function () {
               return n._timeoutHandler.apply(n, r);
-            }, 1e3 / 60), this._applyFilter("beforeTween"), h < u + i ? (h = 1, a = 1, u = 1) : u += i, b(h, o, this._originalState, c, a, u, this._easing), this._applyFilter("afterTween"), s(o, this._attachment, p)));
+            }, 1e3 / 60), this._applyFilter("beforeTween"), l < u + i ? (l = 1, a = 1, u = 1) : u += i, y(l, o, this._originalState, s, a, u, this._easing), this._applyFilter("afterTween"), c(o, this._attachment, d)));
           } }, { key: "tween", value: function value() {
             var e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : void 0;return this._isTweening ? this : (void 0 === e && this._configured || this.setConfig(e), this._timestamp = t.now(), this._start(this.get(), this._attachment), this.resume());
           } }, { key: "setConfig", value: function value() {
             var t = this,
-                e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};this._configured = !0, this._attachment = e.attachment, (0, h.default)(this, { _pausedAtTime: null, _scheduleId: null, _delay: e.delay || 0, _start: e.start || _, _step: e.step || _, _duration: e.duration || 500, _currentState: y(e.from || this.get()) }), (0, h.default)(this, { _originalState: this.get(), _targetState: y(e.to || this.get()) });var n = this._currentState;this._targetState = (0, h.default)({}, n, this._targetState), this._easing = O(n, e.easing), this._filterArgs = [n, this._originalState, this._targetState, this._easing], this._applyFilter("tweenCreated");var r = e.promise || Promise;return this._promise = new r(function (e, n) {
+                e = arguments.length > 0 && void 0 !== arguments[0] ? arguments[0] : {};this._configured = !0, this._attachment = e.attachment, (0, f.default)(this, { _pausedAtTime: null, _scheduleId: null, _delay: e.delay || 0, _start: e.start || p, _step: e.step || p, _duration: e.duration || 500, _currentState: m(e.from || this.get()) }), (0, f.default)(this, { _originalState: this.get(), _targetState: m(e.to || this.get()) });var n = this._currentState;this._targetState = (0, f.default)({}, n, this._targetState), this._easing = w(n, e.easing), this._filterArgs = [n, this._originalState, this._targetState, this._easing], this._applyFilter("tweenCreated");var r = e.promise || Promise;return this._promise = new r(function (e, n) {
               t._resolve = e, t._reject = n;
-            }), this._promise.catch(_), this;
+            }), this._promise.catch(p), this;
           } }, { key: "get", value: function value() {
-            return y(this._currentState);
+            return m(this._currentState);
           } }, { key: "set", value: function value(t) {
             this._currentState = t;
           } }, { key: "pause", value: function value() {
@@ -7891,21 +7887,21 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
             return this._isPaused && (this._timestamp += t.now() - this._pausedAtTime), this._isPaused = !1, this._isTweening = !0, this._timeoutHandler(), this._promise;
           } }, { key: "seek", value: function value(e) {
             e = Math.max(e, 0);var n = t.now();return this._timestamp + e === 0 ? this : (this._timestamp = n - e, this.isPlaying() || (this._isTweening = !0, this._isPaused = !1, this._timeoutHandler(n), this.pause()), this);
-          } }, { key: "stop", value: function value() {
-            var t = arguments.length > 0 && void 0 !== arguments[0] && arguments[0];return this._isTweening = !1, this._isPaused = !1, (d.cancelAnimationFrame || d.webkitCancelAnimationFrame || d.oCancelAnimationFrame || d.msCancelAnimationFrame || d.mozCancelRequestAnimationFrame || d.clearTimeout)(this._scheduleId), t ? (this._applyFilter("beforeTween"), b(1, this._currentState, this._originalState, this._targetState, 1, 0, this._easing), this._applyFilter("afterTween"), this._applyFilter("afterTweenEnd"), this._resolve(this._currentState, this._attachment)) : this._reject(this._currentState, this._attachment), this;
+          } }, { key: "stop", value: function value(t) {
+            return this._isTweening = !1, this._isPaused = !1, (h.cancelAnimationFrame || h.webkitCancelAnimationFrame || h.oCancelAnimationFrame || h.msCancelAnimationFrame || h.mozCancelRequestAnimationFrame || h.clearTimeout)(this._scheduleId), t ? (this._applyFilter("beforeTween"), y(1, this._currentState, this._originalState, this._targetState, 1, 0, this._easing), this._applyFilter("afterTween"), this._applyFilter("afterTweenEnd"), this._resolve(this._currentState, this._attachment)) : this._reject(this._currentState, this._attachment), this;
           } }, { key: "isPlaying", value: function value() {
             return this._isTweening && !this._isPaused;
           } }, { key: "setScheduleFunction", value: function value(t) {
             this._scheduleFunction = t;
           } }, { key: "dispose", value: function value() {
-            var t = this;v(this, function (e) {
+            var t = this;d(this, function (e) {
               return delete t[e];
             });
           } }]), t;
-      }();(0, h.default)(M, { formulas: w, filters: { token: p }, now: Date.now || function (t) {
+      }();(0, f.default)(g, { formulas: _, filters: {}, now: Date.now || function (t) {
           return +new Date();
         } });
-    }).call(e, n(4));
+    }).call(e, n(5));
   }, function (t, e, n) {
     "use strict";
     function r(t) {
@@ -7925,33 +7921,33 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         return !1;
       }
     }() ? Object.assign : function (t, e) {
-      for (var n, a, c = r(t), s = 1; s < arguments.length; s++) {
-        n = Object(arguments[s]);for (var f in n) {
-          o.call(n, f) && (c[f] = n[f]);
+      for (var n, a, s = r(t), c = 1; c < arguments.length; c++) {
+        n = Object(arguments[c]);for (var f in n) {
+          o.call(n, f) && (s[f] = n[f]);
         }if (i) {
           a = i(n);for (var h = 0; h < a.length; h++) {
-            u.call(n, a[h]) && (c[a[h]] = n[a[h]]);
+            u.call(n, a[h]) && (s[a[h]] = n[a[h]]);
           }
         }
-      }return c;
+      }return s;
     };
   }, function (t, e, n) {
     "use strict";
     function r(t, e, n, r, i, o) {
       var u = 0,
           a = 0,
-          c = 0,
           s = 0,
+          c = 0,
           f = 0,
           h = 0,
           l = function l(t) {
-        return ((u * t + a) * t + c) * t;
+        return ((u * t + a) * t + s) * t;
       },
           p = function p(t) {
-        return ((s * t + f) * t + h) * t;
+        return ((c * t + f) * t + h) * t;
       },
           d = function d(t) {
-        return (3 * u * t + 2 * a) * t + c;
+        return (3 * u * t + 2 * a) * t + s;
       },
           m = function m(t) {
         return t >= 0 ? t : 0 - t;
@@ -7967,7 +7963,7 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         }if (n = 0, r = 1, (i = t) < n) return n;if (i > r) return r;for (; n < r;) {
           if (o = l(i), m(o - t) < e) return i;t > o ? n = i : r = i, i = .5 * (r - n) + n;
         }return i;
-      };return c = 3 * e, a = 3 * (r - e) - c, u = 1 - c - a, h = 3 * n, f = 3 * (i - n) - h, s = 1 - h - f, function (t, e) {
+      };return s = 3 * e, a = 3 * (r - e) - s, u = 1 - s - a, h = 3 * n, f = 3 * (i - n) - h, c = 1 - h - f, function (t, e) {
         return p(_(t, e));
       }(t, function (t) {
         return 1 / (200 * t);
@@ -7992,7 +7988,120 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
         i = new r.Tweenable();i._filterArgs = [];e.interpolate = function (t, e, n, o) {
       var u = arguments.length > 4 && void 0 !== arguments[4] ? arguments[4] : 0,
           a = (0, r.clone)(t),
-          c = (0, r.composeEasingObject)(t, o);i.set({}), i._filterArgs = [a, t, e, c], i._applyFilter("tweenCreated"), i._applyFilter("beforeTween");var s = (0, r.tweenProps)(n, a, t, e, 1, u, c);return i._applyFilter("afterTween"), s;
+          s = (0, r.composeEasingObject)(t, o);i.set({}), i._filterArgs = [a, t, e, s], i._applyFilter("tweenCreated"), i._applyFilter("beforeTween");var c = (0, r.tweenProps)(n, a, t, e, 1, u, s);return i._applyFilter("afterTween"), c;
+    };
+  }, function (t, e, n) {
+    "use strict";
+    function r(t) {
+      return parseInt(t, 16);
+    }function i(t, e, n) {
+      [t, e, n].forEach(_), this._tokenData = g(t);
+    }function o(t, e, n, r) {
+      var i = this._tokenData;S(r, i), [t, e, n].forEach(function (t) {
+        return b(t, i);
+      });
+    }function u(t, e, n, r) {
+      var i = this._tokenData;[t, e, n].forEach(function (t) {
+        return F(t, i);
+      }), k(r, i);
+    }Object.defineProperty(e, "__esModule", { value: !0 }), e.tweenCreated = i, e.beforeTween = o, e.afterTween = u;var a = n(0),
+        s = function () {
+      var t = /[0-9.\-]+/g.source,
+          e = /,\s*/.source;return new RegExp("rgb\\(" + t + e + t + e + t + "\\)", "g");
+    }(),
+        c = /#([0-9]|[a-f]){3,6}/gi,
+        f = function f(t, e) {
+      return t.map(function (t, n) {
+        return "_" + e + "_" + n;
+      });
+    },
+        h = function h(t) {
+      var e = t.match(/([^\-0-9\.]+)/g);return e ? (1 === e.length || t.charAt(0).match(/(\d|\-|\.)/)) && e.unshift("") : e = ["", ""], e.join("VAL");
+    },
+        l = function l(t) {
+      return t = t.replace(/#/, ""), 3 === t.length && (t = t.split(""), t = t[0] + t[0] + t[1] + t[1] + t[2] + t[2]), [r(t.substr(0, 2)), r(t.substr(2, 2)), r(t.substr(4, 2))];
+    },
+        p = function p(t) {
+      return "rgb(" + l(t).join(",") + ")";
+    },
+        d = function d(t, e, n) {
+      var r = e.match(t),
+          i = e.replace(t, "VAL");return r && r.forEach(function (t) {
+        return i = i.replace("VAL", n(t));
+      }), i;
+    },
+        m = function m(t) {
+      return d(c, t, p);
+    },
+        _ = function _(t) {
+      (0, a.each)(t, function (e) {
+        var n = t[e];"string" == typeof n && n.match(c) && (t[e] = m(n));
+      });
+    },
+        v = function v(t) {
+      var e = t.match(/[0-9.\-]+/g).map(Math.floor);return "" + t.match(/^.*\(/)[0] + e.join(",") + ")";
+    },
+        y = function y(t) {
+      return d(s, t, v);
+    },
+        w = function w(t) {
+      return t.match(/[0-9.\-]+/g);
+    },
+        g = function g(t) {
+      var e = {};return (0, a.each)(t, function (n) {
+        var r = t[n];"string" == typeof r && (e[n] = { formatString: h(r), chunkNames: f(w(r), n) });
+      }), e;
+    },
+        b = function b(t, e) {
+      (0, a.each)(e, function (n) {
+        w(t[n]).forEach(function (r, i) {
+          return t[e[n].chunkNames[i]] = +r;
+        }), delete t[n];
+      });
+    },
+        M = function M(t, e) {
+      var n = {};return e.forEach(function (e) {
+        n[e] = t[e], delete t[e];
+      }), n;
+    },
+        O = function O(t, e) {
+      return e.map(function (e) {
+        return t[e];
+      });
+    },
+        j = function j(t, e) {
+      return e.forEach(function (e) {
+        return t = t.replace("VAL", +e.toFixed(4));
+      }), t;
+    },
+        F = function F(t, e) {
+      (0, a.each)(e, function (n) {
+        var r = e[n],
+            i = r.chunkNames,
+            o = r.formatString,
+            u = j(o, O(M(t, i), i));t[n] = y(u);
+      });
+    },
+        S = function S(t, e) {
+      (0, a.each)(e, function (n) {
+        var r = e[n].chunkNames,
+            i = t[n];"string" == typeof i ? function () {
+          var e = i.split(" "),
+              n = e[e.length - 1];r.forEach(function (r, i) {
+            return t[r] = e[i] || n;
+          });
+        }() : r.forEach(function (e) {
+          return t[e] = i;
+        }), delete t[n];
+      });
+    },
+        k = function k(t, e) {
+      (0, a.each)(e, function (n) {
+        var r = e[n].chunkNames,
+            i = (r.length, t[r[0]]);t[n] = "string" == typeof i ? r.map(function (e) {
+          var n = t[e];return delete t[e], n;
+        }).join(" ") : i;
+      });
     };
   }, function (t, e, n) {
     "use strict";
@@ -8083,130 +8192,15 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
     };
   }, function (t, e, n) {
     "use strict";
-    Object.defineProperty(e, "__esModule", { value: !0 });var r = n(0);Object.defineProperty(e, "Tweenable", { enumerable: !0, get: function get() {
-        return r.Tweenable;
-      } }), Object.defineProperty(e, "tween", { enumerable: !0, get: function get() {
-        return r.tween;
-      } });var i = n(3);Object.defineProperty(e, "interpolate", { enumerable: !0, get: function get() {
-        return i.interpolate;
-      } });var o = n(2);Object.defineProperty(e, "setBezierFunction", { enumerable: !0, get: function get() {
-        return o.setBezierFunction;
-      } }), Object.defineProperty(e, "unsetBezierFunction", { enumerable: !0, get: function get() {
-        return o.unsetBezierFunction;
-      } });
-  }, function (t, e, n) {
-    "use strict";
-    function r(t) {
-      return parseInt(t, 16);
-    }function i(t, e, n) {
-      [t, e, n].forEach(_), this._tokenData = g(t);
-    }function o(t, e, n, r) {
-      var i = this._tokenData;S(r, i), [t, e, n].forEach(function (t) {
-        return b(t, i);
-      });
-    }function u(t, e, n, r) {
-      var i = this._tokenData;[t, e, n].forEach(function (t) {
-        return F(t, i);
-      }), P(r, i);
-    }Object.defineProperty(e, "__esModule", { value: !0 }), e.tweenCreated = i, e.beforeTween = o, e.afterTween = u;var a = n(0),
-        c = function () {
-      var t = /[0-9.\-]+/g.source,
-          e = /,\s*/.source;return new RegExp("rgb\\(" + t + e + t + e + t + "\\)", "g");
-    }(),
-        s = /#([0-9]|[a-f]){3,6}/gi,
-        f = function f(t, e) {
-      return t.map(function (t, n) {
-        return "_" + e + "_" + n;
-      });
-    },
-        h = function h(t) {
-      var e = t.match(/([^\-0-9\.]+)/g);return e ? (1 === e.length || t.charAt(0).match(/(\d|\-|\.)/)) && e.unshift("") : e = ["", ""], e.join("VAL");
-    },
-        l = function l(t) {
-      return t = t.replace(/#/, ""), 3 === t.length && (t = t.split(""), t = t[0] + t[0] + t[1] + t[1] + t[2] + t[2]), [r(t.substr(0, 2)), r(t.substr(2, 2)), r(t.substr(4, 2))];
-    },
-        p = function p(t) {
-      return "rgb(" + l(t).join(",") + ")";
-    },
-        d = function d(t, e, n) {
-      var r = e.match(t),
-          i = e.replace(t, "VAL");return r && r.forEach(function (t) {
-        return i = i.replace("VAL", n(t));
-      }), i;
-    },
-        m = function m(t) {
-      return d(s, t, p);
-    },
-        _ = function _(t) {
-      (0, a.each)(t, function (e) {
-        var n = t[e];"string" == typeof n && n.match(s) && (t[e] = m(n));
-      });
-    },
-        v = function v(t) {
-      var e = t.match(/[0-9.\-]+/g).map(Math.floor);return "" + t.match(/^.*\(/)[0] + e.join(",") + ")";
-    },
-        y = function y(t) {
-      return d(c, t, v);
-    },
-        w = function w(t) {
-      return t.match(/[0-9.\-]+/g);
-    },
-        g = function g(t) {
-      var e = {};return (0, a.each)(t, function (n) {
-        var r = t[n];"string" == typeof r && (e[n] = { formatString: h(r), chunkNames: f(w(r), n) });
-      }), e;
-    },
-        b = function b(t, e) {
-      (0, a.each)(e, function (n) {
-        w(t[n]).forEach(function (r, i) {
-          return t[e[n].chunkNames[i]] = +r;
-        }), delete t[n];
-      });
-    },
-        O = function O(t, e) {
-      var n = {};return e.forEach(function (e) {
-        n[e] = t[e], delete t[e];
-      }), n;
-    },
-        M = function M(t, e) {
-      return e.map(function (e) {
-        return t[e];
-      });
-    },
-        j = function j(t, e) {
-      return e.forEach(function (e) {
-        return t = t.replace("VAL", +e.toFixed(4));
-      }), t;
-    },
-        F = function F(t, e) {
-      (0, a.each)(e, function (n) {
-        var r = e[n],
-            i = r.chunkNames,
-            o = r.formatString,
-            u = j(o, M(O(t, i), i));t[n] = y(u);
-      });
-    },
-        S = function S(t, e) {
-      (0, a.each)(e, function (n) {
-        var r = e[n].chunkNames,
-            i = t[n];"string" == typeof i ? function () {
-          var e = i.split(" "),
-              n = e[e.length - 1];r.forEach(function (r, i) {
-            return t[r] = e[i] || n;
-          });
-        }() : r.forEach(function (e) {
-          return t[e] = i;
-        }), delete t[n];
-      });
-    },
-        P = function P(t, e) {
-      (0, a.each)(e, function (n) {
-        var r = e[n].chunkNames,
-            i = (r.length, t[r[0]]);t[n] = "string" == typeof i ? r.map(function (e) {
-          var n = t[e];return delete t[e], n;
-        }).join(" ") : i;
-      });
-    };
+    Object.defineProperty(e, "__esModule", { value: !0 }), e.unsetBezierFunction = e.setBezierFunction = e.interpolate = e.tween = e.Tweenable = void 0;var r = n(0),
+        i = n(3),
+        o = n(2),
+        u = n(4),
+        a = function (t) {
+      if (t && t.__esModule) return t;var e = {};if (null != t) for (var n in t) {
+        Object.prototype.hasOwnProperty.call(t, n) && (e[n] = t[n]);
+      }return e.default = t, e;
+    }(u);r.Tweenable.filters.token = a, e.Tweenable = r.Tweenable, e.tween = r.tween, e.interpolate = i.interpolate, e.setBezierFunction = o.setBezierFunction, e.unsetBezierFunction = o.unsetBezierFunction;
   }]);
 });
 //# sourceMappingURL=shifty.js.map
@@ -9812,8 +9806,6 @@ exports.DOMRenderer = exports.getActorCSS = exports.canOptimizeAnyKeyframeProper
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _lodash = __webpack_require__(1);
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -10167,25 +10159,19 @@ var combineTranfromProperties = exports.combineTranfromProperties = function com
   if (_lodash2.default.isEmpty(_lodash2.default.pick.apply(_lodash2.default, [propsToSerialize].concat(transformFunctions)))) {
     return propsToSerialize;
   } else {
-    var _ret = function () {
-      var serializedProps = _lodash2.default.clone(propsToSerialize);
+    var serializedProps = _lodash2.default.clone(propsToSerialize);
 
-      serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(function (combinedProperties, transformFunction) {
-        if (_lodash2.default.has(serializedProps, transformFunction)) {
-          combinedProperties += ' ' + transformFunction + '(' + serializedProps[transformFunction] + ')';
+    serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(function (combinedProperties, transformFunction) {
+      if (_lodash2.default.has(serializedProps, transformFunction)) {
+        combinedProperties += ' ' + transformFunction + '(' + serializedProps[transformFunction] + ')';
 
-          delete serializedProps[transformFunction];
-        }
+        delete serializedProps[transformFunction];
+      }
 
-        return combinedProperties;
-      }, '').slice(1);
+      return combinedProperties;
+    }, '').slice(1);
 
-      return {
-        v: serializedProps
-      };
-    }();
-
-    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+    return serializedProps;
   }
 };
 
