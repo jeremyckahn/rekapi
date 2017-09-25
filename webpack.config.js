@@ -14,6 +14,10 @@ module.exports = Object.assign(commonConfig, {
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
+  externals: {
+    shifty: 'shifty',
+    lodash: 'lodash',
+  },
   plugins: [
     new Webpack.BannerPlugin(version)
   ]
