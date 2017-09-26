@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: DOMRenderer</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: DOMRenderer</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>DOMRenderer<span class="signature">(rekapi)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>DOMRenderer</p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="DOMRenderer"><span class="type-signature"></span>new DOMRenderer<span class="signature">(rekapi)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p><code>DOMRenderer</code> allows you to animate DOM elements.  This is achieved
+either by browser-accelerated <a href="https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes">CSS <code>@keyframe</code>
+animations</a>,
+or by traditional inline style updates on every frame (like how
+<a href="http://api.jquery.com/animate/"><code>jQuery.fn.animate</code></a> works).  Animations
+are defined with the same API in either case, but you can gracefully fall
+back to the inline style approach if CSS <code>@keyframe</code> animations are not
+supported by the browser or not preferred.  To render animations with the
+DOM, just supply any DOM element to the <code>{{#crossLink
+&quot;Rekapi&quot;}}{{/crossLink}}</code> constructor.  You may use <code>document.body</code>, since
+it is generally always available:</p>
+<pre class="prettyprint source"><code>var rekapi = new Rekapi(document.body);
+rekapi.renderer instanceof DOMRenderer; // true</code></pre><p>There are separate APIs for playing inline style animations and CSS
+<code>@keyframe</code> animations.  Advantages of playing an animation with CSS
+<code>@keyframes</code>:</p>
+<ul>
+<li>Smoother animations in newer browsers.</li>
+<li>The JavaScript thread is freed from performing animation updates,
+making it available for other logic.</li>
+</ul>
+<p>Disadvantages:</p>
+<ul>
+<li>Not all browsers support CSS <code>@keyframe</code> animations.</li>
+<li>Limited playback control: You can only play and stop an animation, you
+cannot jump to or start from a specific point in the timeline.</li>
+<li>Generating the CSS for <code>@keyframe</code> animations can take a noticeable
+amount of time.  This blocks all other logic, including rendering, so
+you may have to be clever with how to spend the cycles to do it.</li>
+<li>No <code>{{#crossLink &quot;Rekapi/on:method&quot;}}events{{/crossLink}}</code> can be
+bound to CSS <code>@keyframe</code> animations.</li>
+</ul>
+<p>So, the results are a little more predictable and flexible with inline
+style animations, but CSS <code>@keyframe</code> may give you better performance.
+Choose whichever approach makes the most sense for your needs.</p>
+<p><code>DOMRenderer</code> can gracefully fall back to an inline style animation
+if CSS <code>@keyframe</code> animations are not supported by the browser:</p>
+<pre class="prettyprint source"><code> var rekapi = new Rekapi(document.body);
+
+ // Each actor needs a reference to the DOM element it represents
+ var actor = rekapi.addActor({
+   context: document.getElementById('actor-1')
+ });
+
+ actor
+   .keyframe(0,    { left: '0px'   })
+   .keyframe(1000, { left: '250px' }, 'easeOutQuad');
+
+ // Feature detect for CSS @keyframe support
+ if (rekapi.renderer.canAnimateWithCSS()) {
+   // Animate with CSS @keyframes
+   rekapi.renderer.play();
+ } else {
+   // Animate with inline styles instead
+   rekapi.play();
+ }</code></pre><h2><code>@keyframe</code> animations work differently than inline style animations</h2><p>Inline style animations are compatible with all of the playback and
+timeline control methods defined by <code>{{#crossLink
+&quot;Rekapi&quot;}}{{/crossLink}}</code>, such as <code>{{#crossLink
+&quot;Rekapi/play:method&quot;}}{{/crossLink}}</code>, <code>{{#crossLink
+&quot;Rekapi/playFrom:method&quot;}}{{/crossLink}}</code> and <code>{{#crossLink
+&quot;Rekapi/update:method&quot;}}{{/crossLink}}</code>.  CSS <code>@keyframe</code> playback cannot
+be controlled in all browsers, so <code>DOMRenderer</code> defines analogous,
+renderer-specific CSS playback methods that you should use:</p>
+<ul>
+<li>{{#crossLink &quot;DOMRenderer/play:method&quot;}}{{/crossLink}}</li>
+<li>{{#crossLink &quot;DOMRenderer/isPlaying:method&quot;}}{{/crossLink}}</li>
+<li>{{#crossLink &quot;DOMRenderer/stop:method&quot;}}{{/crossLink}}</li>
+</ul>
+<p><strong>Note</strong>: <code>DOMRenderer</code> is added to the <code>{{#crossLink
+&quot;Rekapi&quot;}}{{/crossLink}}</code> instance automatically as <code>this.renderer</code>,
+there is no reason to call the constructor yourself in most cases.</p>
+<p><strong><a href="/renderers/dom/sample/play-many-actors.html">Example</a></strong></p>
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>rekapi</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Rekapi</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="renderers_dom.js.html">renderers/dom.js</a>, <a href="renderers_dom.js.html#line959">line 959</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="DOMRenderer_DOMRenderer.html">DOMRenderer#DOMRenderer</a></li><li><a href="rekapi.Actor.html">rekapi.Actor</a></li><li><a href="rekapi.CanvasRenderer.html">rekapi.CanvasRenderer</a></li><li><a href="rekapi.KeyframeProperty.html">rekapi.KeyframeProperty</a></li><li><a href="rekapi.Rekapi.html">rekapi.Rekapi</a></li></ul><h3>Namespaces</h3><ul><li><a href="rekapi.html">rekapi</a></li></ul><h3>Global</h3><ul><li><a href="global.html#canAnimateWithCSS">canAnimateWithCSS</a></li><li><a href="global.html#combineTranfromProperties">combineTranfromProperties</a></li><li><a href="global.html#getActorClassName">getActorClassName</a></li><li><a href="global.html#getCss">getCss</a></li><li><a href="global.html#isPlaying">isPlaying</a></li><li><a href="global.html#play">play</a></li><li><a href="global.html#prerender">prerender</a></li><li><a href="global.html#setActorTransformOrder">setActorTransformOrder</a></li><li><a href="global.html#stop">stop</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Fri Aug 04 2017 08:16:37 GMT-0500 (CDT)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
