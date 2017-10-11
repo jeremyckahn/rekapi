@@ -728,7 +728,7 @@ export class Rekapi {
    * Export the timeline to a `JSON.stringify`-friendly `Object`.
    *
    * @method rekapi.Rekapi#exportTimeline
-   * @return {Object} This data can later be consumed by {@link
+   * @return {rekapi.timelineData} This data can later be consumed by {@link
    * rekapi.Rekapi#importTimeline}.
    */
   exportTimeline () {
@@ -761,8 +761,8 @@ export class Rekapi {
    * example) and later recreating an identical animation.
    *
    * @method rekapi.Rekapi#importTimeline
-   * @param {Object} rekapiData Any object that has the same data format as the
-   * object generated from {@link rekapi.Rekapi#exportTimeline}.
+   * @param {rekapi.timelineData} rekapiData Any object that has the same data
+   * format as the object generated from {@link rekapi.Rekapi#exportTimeline}.
    */
   importTimeline (rekapiData) {
     _.each(rekapiData.curves, (curve, curveName) =>

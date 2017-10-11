@@ -10,6 +10,43 @@
  */
 
 /**
+ * @typedef {Object} rekapi.propertyData
+ * @property {number|string} value
+ * @property {number} millisecond
+ * @property {string} easing
+ * @property {string} name
+ */
+
+/**
+ * @typedef {Object} rekapi.actorData
+ * @property {Array.<string>} trackNames The values of this array must
+ * correspond 1:1 to the key names in `propertyTracks`.
+ * @property {Object.<Array.<rekapi.propertyData>>} propertyTracks
+ * @property {number} end
+ * @property {number} start
+ */
+
+/**
+ * The properties of this object are used as arguments provided to
+ * [`shifty.setBezierFunction`](http://jeremyckahn.github.io/shifty/doc/shifty.html#.setBezierFunction).
+ * @typedef {Object} rekapi.curveData
+ * @property {number} x1
+ * @property {number} x2
+ * @property {number} y1
+ * @property {number} y2
+ * @property {string} displayName
+ */
+
+/**
+ * The `JSON.stringify`-friendly data format for serializing a Rekapi
+ * animation.
+ * @typedef {Object} rekapi.timelineData
+ * @property {Array.<rekapi.ActorData>} actors
+ * @property {Object.<rekapi.curveData>} curves
+ * @property {number} duration
+ */
+
+/**
  * A function that is called when an event is fired.  See {@link
  * rekapi.Rekapi#on} for a list of valid events.
  * @callback rekapi.eventHandler

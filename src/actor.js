@@ -952,7 +952,7 @@ export class Actor extends Tweenable {
   /**
    * Export this {@link rekapi.Actor} to a `JSON.stringify`-friendly `Object`.
    * @method rekapi.Actor#exportTimeline
-   * @return {Object} This data can later be consumed by {@link
+   * @return {rekapi.actorData} This data can later be consumed by {@link
    * rekapi.Actor#importTimeline}.
    */
   exportTimeline () {
@@ -979,10 +979,9 @@ export class Actor extends Tweenable {
   /**
    * Import an Object to augment this actor's state.  This does not remove
    * keyframe properties before importing new ones.
-   *
    * @method rekapi.Actor#importTimeline
-   * @param {Object} actorData Any object that has the same data format as the
-   * object generated from {@link rekapi.Actor#exportTimeline}.
+   * @param {rekapi.actorData} actorData Any object that has the same data
+   * format as the object generated from {@link rekapi.Actor#exportTimeline}.
    */
   importTimeline (actorData) {
     _.each(actorData.propertyTracks, propertyTrack => {

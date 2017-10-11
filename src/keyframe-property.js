@@ -167,7 +167,7 @@ export class KeyframeProperty {
    * Export this {@link rekapi.KeyframeProperty} to a `JSON.stringify`-friendly
    * `Object`.
    * @method rekapi.KeyframeProperty#exportPropertyData
-   * @return {Object}
+   * @return {rekapi.propertyData}
    */
   exportPropertyData () {
     return _.pick(this, ['millisecond', 'name', 'value', 'easing']);
