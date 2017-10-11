@@ -236,6 +236,7 @@ nav li {
   list-style: none;
   padding: 0;
   margin: 0;
+  white-space: nowrap;
 }
 
 .nav-heading {

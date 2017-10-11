@@ -1,4 +1,4 @@
-/*! 2.0.4 */
+/*! 2.0.5 */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -907,7 +907,7 @@ var Rekapi = exports.Rekapi = function () {
      * Export the timeline to a `JSON.stringify`-friendly `Object`.
      *
      * @method rekapi.Rekapi#exportTimeline
-     * @return {Object} This data can later be consumed by {@link
+     * @return {rekapi.timelineData} This data can later be consumed by {@link
      * rekapi.Rekapi#importTimeline}.
      */
 
@@ -942,8 +942,8 @@ var Rekapi = exports.Rekapi = function () {
      * example) and later recreating an identical animation.
      *
      * @method rekapi.Rekapi#importTimeline
-     * @param {Object} rekapiData Any object that has the same data format as the
-     * object generated from {@link rekapi.Rekapi#exportTimeline}.
+     * @param {rekapi.timelineData} rekapiData Any object that has the same data
+     * format as the object generated from {@link rekapi.Rekapi#exportTimeline}.
      */
 
   }, {
@@ -9249,7 +9249,7 @@ var Actor = exports.Actor = function (_Tweenable) {
     /**
      * Export this {@link rekapi.Actor} to a `JSON.stringify`-friendly `Object`.
      * @method rekapi.Actor#exportTimeline
-     * @return {Object} This data can later be consumed by {@link
+     * @return {rekapi.actorData} This data can later be consumed by {@link
      * rekapi.Actor#importTimeline}.
      */
 
@@ -9279,10 +9279,9 @@ var Actor = exports.Actor = function (_Tweenable) {
     /**
      * Import an Object to augment this actor's state.  This does not remove
      * keyframe properties before importing new ones.
-     *
      * @method rekapi.Actor#importTimeline
-     * @param {Object} actorData Any object that has the same data format as the
-     * object generated from {@link rekapi.Actor#exportTimeline}.
+     * @param {rekapi.actorData} actorData Any object that has the same data
+     * format as the object generated from {@link rekapi.Actor#exportTimeline}.
      */
 
   }, {
@@ -9522,7 +9521,7 @@ var KeyframeProperty = exports.KeyframeProperty = function () {
      * Export this {@link rekapi.KeyframeProperty} to a `JSON.stringify`-friendly
      * `Object`.
      * @method rekapi.KeyframeProperty#exportPropertyData
-     * @return {Object}
+     * @return {rekapi.propertyData}
      */
 
   }, {
