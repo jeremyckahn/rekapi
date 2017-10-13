@@ -150,6 +150,7 @@ export class KeyframeProperty {
    * and triggers the [removeKeyframeProperty]{@link rekapi.Rekapi#on} event
    * on the associated {@link rekapi.Rekapi} instance.
    * @method rekapi.KeyframeProperty#detach
+   * @fires rekapi.removeKeyframeProperty
    */
   detach () {
     const { actor } = this;

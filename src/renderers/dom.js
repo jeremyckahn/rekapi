@@ -946,6 +946,7 @@ export class DOMRenderer {
    * animation.  A higher value results in a more precise CSS animation, but it
    * will take longer to generate.  The default value is `30`.  You should not
    * need to go higher than `60`.
+   * @fires rekapi.play
    */
   play (iterations = undefined, fps = undefined) {
     if (this.isPlaying()) {
@@ -981,6 +982,7 @@ export class DOMRenderer {
    * @param {boolean=} goToEnd If true, skip to the end of the animation.  If
    * false or omitted, set inline styles on the {@link rekapi.Actor} elements
    * to keep them in their current position.
+   * @fires rekapi.stop
    */
   stop (goToEnd = undefined) {
     if (this.isPlaying()) {

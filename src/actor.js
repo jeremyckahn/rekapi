@@ -151,8 +151,8 @@ const ensurePropertyCacheValid = actor => {
 
 /*!
  * Remove any property tracks that are empty.
- *
  * @param {Actor} actor
+ * @fires rekapi.removeKeyframePropertyTrack
  */
 const removeEmptyPropertyTracks = actor => {
   const { _propertyTracks } = actor;
@@ -186,6 +186,7 @@ const sortPropertyTracks = actor => {
  * modification method is called.
  *
  * @param {Actor} actor
+ * @fires rekapi.timelineModified
  */
 const cleanupAfterKeyframeModification = actor => {
   sortPropertyTracks(actor);
@@ -301,6 +302,7 @@ export class Actor extends Tweenable {
    * @param {(string|Object)} [easing] Optional easing string or Object.  If
    * `state` is a function, this is ignored.
    * @return {rekapi.Actor}
+   * @fires rekapi.timelineModified
    */
   keyframe (millisecond, state, easing = DEFAULT_EASING) {
     if (state instanceof Function) {
@@ -496,6 +498,7 @@ export class Actor extends Tweenable {
    * @param {number} millisecond The location on the timeline of the keyframe
    * to remove.
    * @return {rekapi.Actor}
+   * @fires rekapi.timelineModified
    */
   removeKeyframe (millisecond) {
     _.each(this._propertyTracks, (propertyTrack, propertyName) => {
@@ -605,6 +608,8 @@ export class Actor extends Tweenable {
    * rekapi.KeyframeProperty} to remove is.
    * @return {(rekapi.KeyframeProperty|undefined)} The removed
    * KeyframeProperty, if one was found.
+   * @fires rekapi.beforeRemoveKeyframeProperty
+   * @fires rekapi.removeKeyframePropertyComplete
    */
   removeKeyframeProperty (property, millisecond) {
     const { _propertyTracks } = this;
@@ -614,13 +619,13 @@ export class Actor extends Tweenable {
       const index = propertyIndexInTrack(propertyTrack, millisecond);
       const keyframeProperty = propertyTrack[index];
 
-      fireEvent(this.rekapi, 'beforeRemoveKeyframeProperty', keyframeProperty);
+      fire(this, 'beforeRemoveKeyframeProperty', keyframeProperty);
       this._deleteKeyframePropertyAt(propertyTrack, index);
       keyframeProperty.detach();
 
       removeEmptyPropertyTracks(this);
       cleanupAfterKeyframeModification(this);
-      fireEvent(this.rekapi, 'removeKeyframePropertyComplete', keyframeProperty);
+      fire(this, 'removeKeyframePropertyComplete', keyframeProperty);
 
       return keyframeProperty;
     }
@@ -783,10 +788,13 @@ export class Actor extends Tweenable {
    * @method rekapi.Actor#addKeyframeProperty
    * @param {rekapi.KeyframeProperty} keyframeProperty
    * @return {rekapi.Actor}
+   * @fires rekapi.beforeAddKeyframeProperty
+   * @fires rekapi.addKeyframePropertyTrack
+   * @fires rekapi.addKeyframeProperty
    */
   addKeyframeProperty (keyframeProperty) {
     if (this.rekapi) {
-      fireEvent(this.rekapi, 'beforeAddKeyframeProperty', keyframeProperty);
+      fire(this, 'beforeAddKeyframeProperty', keyframeProperty);
     }
 
     keyframeProperty.actor = this;
@@ -799,7 +807,7 @@ export class Actor extends Tweenable {
       _propertyTracks[name] = [keyframeProperty];
 
       if (rekapi) {
-        fireEvent(rekapi, 'addKeyframePropertyTrack', keyframeProperty);
+        fire(this, 'addKeyframePropertyTrack', keyframeProperty);
       }
     } else {
       const index = insertionPointInTrack(_propertyTracks[name], keyframeProperty.millisecond);
@@ -826,7 +834,7 @@ export class Actor extends Tweenable {
     }
 
     if (rekapi) {
-      fireEvent(rekapi, 'addKeyframeProperty', keyframeProperty);
+      fire(this, 'addKeyframeProperty', keyframeProperty);
     }
 
     return this;

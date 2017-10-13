@@ -58,6 +58,7 @@ export const isAnimationComplete = (rekapi, currentLoopIteration) =>
  * Stops the animation if it is complete.
  * @param {Rekapi} rekapi
  * @param {number} currentLoopIteration
+ * @fires rekapi.animationComplete
  */
 export const updatePlayState = (rekapi, currentLoopIteration) => {
   if (isAnimationComplete(rekapi, currentLoopIteration)) {
@@ -90,6 +91,7 @@ export const calculateLoopPosition = (rekapi, forMillisecond, currentLoopIterati
  * iterations the animation runs for.
  * @param {Rekapi} rekapi
  * @param {number} forMillisecond
+ * @fires rekapi.animationLooped
  */
 export const updateToMillisecond = (rekapi, forMillisecond) => {
   const currentIteration = determineCurrentLoopIteration(rekapi, forMillisecond);
@@ -321,6 +323,7 @@ export class Rekapi {
    * the constructor parameters for a new {@link rekapi.Actor} instance that
    * is created by this method.
    * @return {rekapi.Actor} The {@link rekapi.Actor} that was added.
+   * @fires rekapi.addActor
    */
   addActor (actor = {}) {
     const rekapiActor = actor instanceof Actor ?
@@ -390,6 +393,7 @@ export class Rekapi {
    * @method rekapi.Rekapi#removeActor
    * @param {rekapi.Actor} actor
    * @return {rekapi.Actor} The {@link rekapi.Actor} that was removed.
+   * @fires rekapi.removeActor
    */
   removeActor (actor) {
     // Remove the link between Rekapi and actor
@@ -421,6 +425,8 @@ export class Rekapi {
    * @param {number} [iterations=-1] If omitted, the animation will loop
    * endlessly.
    * @return {rekapi.Rekapi}
+   * @fires rekapi.playStateChange
+   * @fires rekapi.play
    */
   play (iterations = -1) {
     cancelLoop(this);
@@ -484,6 +490,8 @@ export class Rekapi {
    *
    * @method rekapi.Rekapi#pause
    * @return {rekapi.Rekapi}
+   * @fires rekapi.playStateChange
+   * @fires rekapi.pause
    */
   pause () {
     if (this._playState === PAUSED) {
@@ -506,6 +514,8 @@ export class Rekapi {
    *
    * @method rekapi.Rekapi#stop
    * @return {rekapi.Rekapi}
+   * @fires rekapi.playStateChange
+   * @fires rekapi.stop
    */
   stop () {
     this._playState = STOPPED;
@@ -561,6 +571,8 @@ export class Rekapi {
    * This is a low-level feature, it should not be `true` (or even provided)
    * for most use cases.
    * @return {rekapi.Rekapi}
+   * @fires rekapi.beforeUpdate
+   * @fires rekapi.afterUpdate
    */
   update (
     millisecond = this._lastUpdatedMillisecond,
@@ -624,56 +636,7 @@ export class Rekapi {
   /**
    * Bind a {@link rekapi.eventHandler} function to a Rekapi event.
    * @method rekapi.Rekapi#on
-   * @param {string} eventName Valid values are:
-   *
-   * - `"animationComplete"`: Fires when all animation loops have completed.
-   * - `"playStateChange"`: Fires when the animation is played, paused, or
-   *   stopped.
-   * - `"play"`: Fires when the animation is {@link rekapi.Rekapi#play}ed.
-   * - `"pause"`: Fires when the animation is {@link rekapi.Rekapi#pause}d.
-   * - `"stop"`: Fires when the animation is {@link rekapi.Rekapi#stop}ped.
-   * - `"beforeUpdate"`: Fires each frame before all actors are rendered.
-   * - `"afterUpdate"`: Fires each frame after all actors are rendered.
-   * - `"addActor"`: Fires when an actor is added.  `data` is the
-   *   {@link rekapi.Actor} that was added.
-   * - `"removeActor"`: Fires when an actor is removed.  `data` is the {@link
-   *   rekapi.Actor} that was removed.
-   * - `"beforeAddKeyframeProperty"`: Fires just before the point where a
-   *   {@link rekapi.KeyframeProperty} is added to the timeline.  This event is
-   *   called before any modifications to the timeline are done.
-   * - `"addKeyframeProperty"`: Fires when a keyframe property is added.
-   *   `data` is the {@link rekapi.KeyframeProperty} that was added.
-   * - `"beforeRemoveKeyframeProperty"`: Fires just before the point where a
-   *   {@link rekapi.KeyframeProperty} is removed.  This
-   *   event is called before any modifications to the timeline are done.
-   * - `"removeKeyframeProperty"`: Fires when a {@link rekapi.KeyframeProperty}
-   *   is removed.  This event is fired _before_ the internal state of the
-   *   keyframe (but not the timeline, in contrast to the
-   *   `beforeRemoveKeyframeProperty` event) has been updated to reflect the
-   *   keyframe property removal (this is in contrast to
-   *   `removeKeyframePropertyComplete`).  `data` is the {@link
-   *   rekapi.KeyframeProperty} that was removed.
-   * - `"removeKeyframePropertyComplete"`: Fires when a {@link
-   *   rekapi.KeyframeProperty} has finished being removed from the timeline.
-   *   Unlike `removeKeyframeProperty`, this is fired _after_ the internal
-   *   state of Rekapi has been updated to reflect the removal of the keyframe
-   *   property. `data` is the {@link rekapi.KeyframeProperty} that was
-   *   removed.
-   * - `"addKeyframePropertyTrack"`: Fires when the a keyframe is added to an
-   *   actor that creates a new keyframe property track.  `data` is the {@link
-   *   rekapi.KeyframeProperty} that was added to create the property track.  A
-   *   reference to the actor that the keyframe property is associated with can
-   *   be accessed via `data.actor` and the track name that was added can be
-   *   determined via `data.name`.
-   * - `"removeKeyframePropertyTrack"`: Fires when the last keyframe property
-   *   in an actor's keyframe property track is removed.  Rekapi automatically
-   *   removes property tracks when they are emptied out, which causes this
-   *   event to be fired.  `data` is the name of the track that was
-   *   removed.
-   * - `"timelineModified"`: Fires when a keyframe is added, modified or
-   *   removed.
-   * - `"animationLooped"`: Fires when an animation loop ends and a new one
-   *   begins.
+   * @param {string} eventName
    * @param {rekapi.eventHandler} handler The event handler function.
    * @return {rekapi.Rekapi}
    */
@@ -695,6 +658,7 @@ export class Rekapi {
    * rekapi.eventHandler}s.
    * @method rekapi.Rekapi#trigger
    * @return {rekapi.Rekapi}
+   * @fires *
    */
   trigger (eventName, data) {
     fireEvent(this, eventName, data);
