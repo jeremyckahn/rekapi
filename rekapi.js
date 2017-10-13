@@ -1,4 +1,4 @@
-/*! 2.0.5 */
+/*! 2.0.6 */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -165,6 +165,7 @@ var isAnimationComplete = exports.isAnimationComplete = function isAnimationComp
  * Stops the animation if it is complete.
  * @param {Rekapi} rekapi
  * @param {number} currentLoopIteration
+ * @fires rekapi.animationComplete
  */
 var updatePlayState = exports.updatePlayState = function updatePlayState(rekapi, currentLoopIteration) {
   if (isAnimationComplete(rekapi, currentLoopIteration)) {
@@ -193,6 +194,7 @@ var calculateLoopPosition = exports.calculateLoopPosition = function calculateLo
  * iterations the animation runs for.
  * @param {Rekapi} rekapi
  * @param {number} forMillisecond
+ * @fires rekapi.animationLooped
  */
 var updateToMillisecond = exports.updateToMillisecond = function updateToMillisecond(rekapi, forMillisecond) {
   var currentIteration = determineCurrentLoopIteration(rekapi, forMillisecond);
@@ -203,23 +205,21 @@ var updateToMillisecond = exports.updateToMillisecond = function updateToMillise
   var keyframeResetList = [];
 
   if (currentIteration > rekapi._latestIteration) {
-    (function () {
-      fireEvent(rekapi, 'animationLooped');
+    fireEvent(rekapi, 'animationLooped');
 
-      // Reset function keyframes
-      var lookupObject = { name: 'function' };
+    // Reset function keyframes
+    var lookupObject = { name: 'function' };
 
-      rekapi._actors.forEach(function (actor) {
-        var fnKeyframes = _lodash2.default.where(actor._keyframeProperties, lookupObject);
-        var lastFnKeyframe = _lodash2.default.last(fnKeyframes);
+    rekapi._actors.forEach(function (actor) {
+      var fnKeyframes = _lodash2.default.where(actor._keyframeProperties, lookupObject);
+      var lastFnKeyframe = _lodash2.default.last(fnKeyframes);
 
-        if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
-          lastFnKeyframe.invoke();
-        }
+      if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
+        lastFnKeyframe.invoke();
+      }
 
-        keyframeResetList = keyframeResetList.concat(fnKeyframes);
-      });
-    })();
+      keyframeResetList = keyframeResetList.concat(fnKeyframes);
+    });
   }
 
   rekapi._latestIteration = currentIteration;
@@ -428,6 +428,7 @@ var Rekapi = exports.Rekapi = function () {
    * the constructor parameters for a new {@link rekapi.Actor} instance that
    * is created by this method.
    * @return {rekapi.Actor} The {@link rekapi.Actor} that was added.
+   * @fires rekapi.addActor
    */
 
 
@@ -517,6 +518,7 @@ var Rekapi = exports.Rekapi = function () {
      * @method rekapi.Rekapi#removeActor
      * @param {rekapi.Actor} actor
      * @return {rekapi.Actor} The {@link rekapi.Actor} that was removed.
+     * @fires rekapi.removeActor
      */
 
   }, {
@@ -558,6 +560,8 @@ var Rekapi = exports.Rekapi = function () {
      * @param {number} [iterations=-1] If omitted, the animation will loop
      * endlessly.
      * @return {rekapi.Rekapi}
+     * @fires rekapi.playStateChange
+     * @fires rekapi.play
      */
 
   }, {
@@ -632,6 +636,8 @@ var Rekapi = exports.Rekapi = function () {
      *
      * @method rekapi.Rekapi#pause
      * @return {rekapi.Rekapi}
+     * @fires rekapi.playStateChange
+     * @fires rekapi.pause
      */
 
   }, {
@@ -657,6 +663,8 @@ var Rekapi = exports.Rekapi = function () {
      *
      * @method rekapi.Rekapi#stop
      * @return {rekapi.Rekapi}
+     * @fires rekapi.playStateChange
+     * @fires rekapi.stop
      */
 
   }, {
@@ -724,6 +732,8 @@ var Rekapi = exports.Rekapi = function () {
      * This is a low-level feature, it should not be `true` (or even provided)
      * for most use cases.
      * @return {rekapi.Rekapi}
+     * @fires rekapi.beforeUpdate
+     * @fires rekapi.afterUpdate
      */
 
   }, {
@@ -796,56 +806,7 @@ var Rekapi = exports.Rekapi = function () {
     /**
      * Bind a {@link rekapi.eventHandler} function to a Rekapi event.
      * @method rekapi.Rekapi#on
-     * @param {string} eventName Valid values are:
-     *
-     * - `"animationComplete"`: Fires when all animation loops have completed.
-     * - `"playStateChange"`: Fires when the animation is played, paused, or
-     *   stopped.
-     * - `"play"`: Fires when the animation is {@link rekapi.Rekapi#play}ed.
-     * - `"pause"`: Fires when the animation is {@link rekapi.Rekapi#pause}d.
-     * - `"stop"`: Fires when the animation is {@link rekapi.Rekapi#stop}ped.
-     * - `"beforeUpdate"`: Fires each frame before all actors are rendered.
-     * - `"afterUpdate"`: Fires each frame after all actors are rendered.
-     * - `"addActor"`: Fires when an actor is added.  `data` is the
-     *   {@link rekapi.Actor} that was added.
-     * - `"removeActor"`: Fires when an actor is removed.  `data` is the {@link
-     *   rekapi.Actor} that was removed.
-     * - `"beforeAddKeyframeProperty"`: Fires just before the point where a
-     *   {@link rekapi.KeyframeProperty} is added to the timeline.  This event is
-     *   called before any modifications to the timeline are done.
-     * - `"addKeyframeProperty"`: Fires when a keyframe property is added.
-     *   `data` is the {@link rekapi.KeyframeProperty} that was added.
-     * - `"beforeRemoveKeyframeProperty"`: Fires just before the point where a
-     *   {@link rekapi.KeyframeProperty} is removed.  This
-     *   event is called before any modifications to the timeline are done.
-     * - `"removeKeyframeProperty"`: Fires when a {@link rekapi.KeyframeProperty}
-     *   is removed.  This event is fired _before_ the internal state of the
-     *   keyframe (but not the timeline, in contrast to the
-     *   `beforeRemoveKeyframeProperty` event) has been updated to reflect the
-     *   keyframe property removal (this is in contrast to
-     *   `removeKeyframePropertyComplete`).  `data` is the {@link
-     *   rekapi.KeyframeProperty} that was removed.
-     * - `"removeKeyframePropertyComplete"`: Fires when a {@link
-     *   rekapi.KeyframeProperty} has finished being removed from the timeline.
-     *   Unlike `removeKeyframeProperty`, this is fired _after_ the internal
-     *   state of Rekapi has been updated to reflect the removal of the keyframe
-     *   property. `data` is the {@link rekapi.KeyframeProperty} that was
-     *   removed.
-     * - `"addKeyframePropertyTrack"`: Fires when the a keyframe is added to an
-     *   actor that creates a new keyframe property track.  `data` is the {@link
-     *   rekapi.KeyframeProperty} that was added to create the property track.  A
-     *   reference to the actor that the keyframe property is associated with can
-     *   be accessed via `data.actor` and the track name that was added can be
-     *   determined via `data.name`.
-     * - `"removeKeyframePropertyTrack"`: Fires when the last keyframe property
-     *   in an actor's keyframe property track is removed.  Rekapi automatically
-     *   removes property tracks when they are emptied out, which causes this
-     *   event to be fired.  `data` is the name of the track that was
-     *   removed.
-     * - `"timelineModified"`: Fires when a keyframe is added, modified or
-     *   removed.
-     * - `"animationLooped"`: Fires when an animation loop ends and a new one
-     *   begins.
+     * @param {string} eventName
      * @param {rekapi.eventHandler} handler The event handler function.
      * @return {rekapi.Rekapi}
      */
@@ -870,6 +831,7 @@ var Rekapi = exports.Rekapi = function () {
      * rekapi.eventHandler}s.
      * @method rekapi.Rekapi#trigger
      * @return {rekapi.Rekapi}
+     * @fires *
      */
 
   }, {
@@ -8387,8 +8349,8 @@ var ensurePropertyCacheValid = function ensurePropertyCacheValid(actor) {
 
 /*!
  * Remove any property tracks that are empty.
- *
  * @param {Actor} actor
+ * @fires rekapi.removeKeyframePropertyTrack
  */
 var removeEmptyPropertyTracks = function removeEmptyPropertyTracks(actor) {
   var _propertyTracks = actor._propertyTracks;
@@ -8423,6 +8385,7 @@ var sortPropertyTracks = function sortPropertyTracks(actor) {
  * modification method is called.
  *
  * @param {Actor} actor
+ * @fires rekapi.timelineModified
  */
 var cleanupAfterKeyframeModification = function cleanupAfterKeyframeModification(actor) {
   sortPropertyTracks(actor);
@@ -8546,6 +8509,7 @@ var Actor = exports.Actor = function (_Tweenable) {
    * @param {(string|Object)} [easing] Optional easing string or Object.  If
    * `state` is a function, this is ignored.
    * @return {rekapi.Actor}
+   * @fires rekapi.timelineModified
    */
 
 
@@ -8751,6 +8715,7 @@ var Actor = exports.Actor = function (_Tweenable) {
      * @param {number} millisecond The location on the timeline of the keyframe
      * to remove.
      * @return {rekapi.Actor}
+     * @fires rekapi.timelineModified
      */
 
   }, {
@@ -8870,6 +8835,8 @@ var Actor = exports.Actor = function (_Tweenable) {
      * rekapi.KeyframeProperty} to remove is.
      * @return {(rekapi.KeyframeProperty|undefined)} The removed
      * KeyframeProperty, if one was found.
+     * @fires rekapi.beforeRemoveKeyframeProperty
+     * @fires rekapi.removeKeyframePropertyComplete
      */
 
   }, {
@@ -8883,13 +8850,13 @@ var Actor = exports.Actor = function (_Tweenable) {
         var index = propertyIndexInTrack(propertyTrack, millisecond);
         var keyframeProperty = propertyTrack[index];
 
-        (0, _rekapi.fireEvent)(this.rekapi, 'beforeRemoveKeyframeProperty', keyframeProperty);
+        fire(this, 'beforeRemoveKeyframeProperty', keyframeProperty);
         this._deleteKeyframePropertyAt(propertyTrack, index);
         keyframeProperty.detach();
 
         removeEmptyPropertyTracks(this);
         cleanupAfterKeyframeModification(this);
-        (0, _rekapi.fireEvent)(this.rekapi, 'removeKeyframePropertyComplete', keyframeProperty);
+        fire(this, 'removeKeyframePropertyComplete', keyframeProperty);
 
         return keyframeProperty;
       }
@@ -9078,13 +9045,16 @@ var Actor = exports.Actor = function (_Tweenable) {
      * @method rekapi.Actor#addKeyframeProperty
      * @param {rekapi.KeyframeProperty} keyframeProperty
      * @return {rekapi.Actor}
+     * @fires rekapi.beforeAddKeyframeProperty
+     * @fires rekapi.addKeyframePropertyTrack
+     * @fires rekapi.addKeyframeProperty
      */
 
   }, {
     key: 'addKeyframeProperty',
     value: function addKeyframeProperty(keyframeProperty) {
       if (this.rekapi) {
-        (0, _rekapi.fireEvent)(this.rekapi, 'beforeAddKeyframeProperty', keyframeProperty);
+        fire(this, 'beforeAddKeyframeProperty', keyframeProperty);
       }
 
       keyframeProperty.actor = this;
@@ -9099,7 +9069,7 @@ var Actor = exports.Actor = function (_Tweenable) {
         _propertyTracks[name] = [keyframeProperty];
 
         if (rekapi) {
-          (0, _rekapi.fireEvent)(rekapi, 'addKeyframePropertyTrack', keyframeProperty);
+          fire(this, 'addKeyframePropertyTrack', keyframeProperty);
         }
       } else {
         var index = insertionPointInTrack(_propertyTracks[name], keyframeProperty.millisecond);
@@ -9120,7 +9090,7 @@ var Actor = exports.Actor = function (_Tweenable) {
       }
 
       if (rekapi) {
-        (0, _rekapi.fireEvent)(rekapi, 'addKeyframeProperty', keyframeProperty);
+        fire(this, 'addKeyframeProperty', keyframeProperty);
       }
 
       return this;
@@ -9500,6 +9470,7 @@ var KeyframeProperty = exports.KeyframeProperty = function () {
      * and triggers the [removeKeyframeProperty]{@link rekapi.Rekapi#on} event
      * on the associated {@link rekapi.Rekapi} instance.
      * @method rekapi.KeyframeProperty#detach
+     * @fires rekapi.removeKeyframeProperty
      */
 
   }, {
@@ -9806,8 +9777,6 @@ Object.defineProperty(exports, "__esModule", {
 exports.DOMRenderer = exports.getActorCSS = exports.canOptimizeAnyKeyframeProperties = exports.generateCSSClass = exports.generateCSSAnimationProperties = exports.generateAnimationIterationProperty = exports.generateAnimationNameProperty = exports.generateBoilerplatedKeyframes = exports.generateActorKeyframes = exports.canOptimizeKeyframeProperty = exports.simulateTrailingWait = exports.simulateLeadingWait = exports.generateActorTrackSegment = exports.serializeActorStep = exports.combineTranfromProperties = exports.generateOptimizedKeyframeSegment = exports.applyVendorBoilerplates = exports.applyVendorPropertyPrefixes = exports.VENDOR_TOKEN = exports.TRANSFORM_TOKEN = exports.transformFunctions = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var _lodash = __webpack_require__(1);
 
@@ -10162,25 +10131,19 @@ var combineTranfromProperties = exports.combineTranfromProperties = function com
   if (_lodash2.default.isEmpty(_lodash2.default.pick.apply(_lodash2.default, [propsToSerialize].concat(transformFunctions)))) {
     return propsToSerialize;
   } else {
-    var _ret = function () {
-      var serializedProps = _lodash2.default.clone(propsToSerialize);
+    var serializedProps = _lodash2.default.clone(propsToSerialize);
 
-      serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(function (combinedProperties, transformFunction) {
-        if (_lodash2.default.has(serializedProps, transformFunction)) {
-          combinedProperties += ' ' + transformFunction + '(' + serializedProps[transformFunction] + ')';
+    serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(function (combinedProperties, transformFunction) {
+      if (_lodash2.default.has(serializedProps, transformFunction)) {
+        combinedProperties += ' ' + transformFunction + '(' + serializedProps[transformFunction] + ')';
 
-          delete serializedProps[transformFunction];
-        }
+        delete serializedProps[transformFunction];
+      }
 
-        return combinedProperties;
-      }, '').slice(1);
+      return combinedProperties;
+    }, '').slice(1);
 
-      return {
-        v: serializedProps
-      };
-    }();
-
-    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+    return serializedProps;
   }
 };
 
@@ -10603,6 +10566,7 @@ var DOMRenderer = exports.DOMRenderer = function () {
      * animation.  A higher value results in a more precise CSS animation, but it
      * will take longer to generate.  The default value is `30`.  You should not
      * need to go higher than `60`.
+     * @fires rekapi.play
      */
 
   }, {
@@ -10638,6 +10602,7 @@ var DOMRenderer = exports.DOMRenderer = function () {
      * @param {boolean=} goToEnd If true, skip to the end of the animation.  If
      * false or omitted, set inline styles on the {@link rekapi.Actor} elements
      * to keep them in their current position.
+     * @fires rekapi.stop
      */
 
   }, {
