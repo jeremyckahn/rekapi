@@ -1,0 +1,4291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Actor - Documentation</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+<body>
+
+<input type="checkbox" id="nav-trigger" class="nav-trigger" />
+<label for="nav-trigger" class="navicon-button x">
+  <div class="navicon"></div>
+</label>
+
+<label for="nav-trigger" class="overlay"></label>
+
+<nav>
+    <li class="nav-link nav-home-link"><a href="index.html">Home</a></li><li class="nav-heading">Tutorials</li><li class="nav-item"><a href="tutorial-dom-rendering-in-depth.html">DOM Rendering in Depth</a></li><li class="nav-item"><a href="tutorial-getting-started.html">Getting Started</a></li><li class="nav-item"><a href="tutorial-keyframes-in-depth.html">Keyframes in Depth</a></li><li class="nav-item"><a href="tutorial-multiple-renderers.html">Multiple Renderers</a></li><li class="nav-heading">Classes</li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="rekapi.Actor.html">Actor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#addKeyframeProperty">addKeyframeProperty</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#copyKeyframe">copyKeyframe</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#exportTimeline">exportTimeline</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#getEnd">getEnd</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#getKeyframeProperty">getKeyframeProperty</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#getLength">getLength</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#getPropertiesInTrack">getPropertiesInTrack</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#getStart">getStart</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#getTrackNames">getTrackNames</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#hasKeyframeAt">hasKeyframeAt</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#importTimeline">importTimeline</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#keyframe">keyframe</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#modifyKeyframe">modifyKeyframe</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#modifyKeyframeProperty">modifyKeyframeProperty</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#moveKeyframe">moveKeyframe</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#removeAllKeyframes">removeAllKeyframes</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#removeKeyframe">removeKeyframe</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#removeKeyframeProperty">removeKeyframeProperty</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Actor.html#wait">wait</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="rekapi.CanvasRenderer.html">CanvasRenderer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.CanvasRenderer.html#clear">clear</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.CanvasRenderer.html#height">height</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.CanvasRenderer.html#width">width</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html">DOMRenderer</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#canAnimateWithCSS">canAnimateWithCSS</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#getCss">getCss</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#isPlaying">isPlaying</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#play">play</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#prerender">prerender</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#setActorTransformOrder">setActorTransformOrder</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.DOMRenderer.html#stop">stop</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html">KeyframeProperty</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html#detach">detach</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html#exportPropertyData">exportPropertyData</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html#getValueAt">getValueAt</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html#invoke">invoke</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html#linkToNext">linkToNext</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.KeyframeProperty.html#modifyWith">modifyWith</a></span></li><li class="nav-heading"><span class="nav-item-type type-class">C</span><span class="nav-item-name"><a href="rekapi.Rekapi.html">Rekapi</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#addActor">addActor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#exportTimeline">exportTimeline</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getActor">getActor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getActorCount">getActorCount</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getActorIds">getActorIds</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getAllActors">getAllActors</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getAnimationLength">getAnimationLength</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getEventNames">getEventNames</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getLastMillisecondUpdated">getLastMillisecondUpdated</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getLastPositionUpdated">getLastPositionUpdated</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#getRendererInstance">getRendererInstance</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#importTimeline">importTimeline</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#isPaused">isPaused</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#isPlaying">isPlaying</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#isStopped">isStopped</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#moveActorToPosition">moveActorToPosition</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#off">off</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#on">on</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#pause">pause</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#play">play</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#playFrom">playFrom</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#playFromCurrent">playFromCurrent</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#removeActor">removeActor</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#removeAllActors">removeAllActors</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#stop">stop</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#trigger">trigger</a></span></li><li class="nav-item"><span class="nav-item-type type-function">F</span><span class="nav-item-name"><a href="rekapi.Rekapi.html#update">update</a></span></li><li class="nav-heading">Namespaces</li><li class="nav-heading"><span class="nav-item-type type-namespace">N</span><span class="nav-item-name"><a href="rekapi.html">rekapi</a></span></li>
+</nav>
+
+<div id="main">
+    
+    <h1 class="page-title">Actor</h1>
+    
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2>
+            <span class="ancestors"><a href="rekapi.html">rekapi</a>.</span>
+        
+        Actor
+        </h2>
+        
+            <div class="class-description"><p>A <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a> represents an individual component of an animation.
+An animation may have one or many <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>s.</p></div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+<div class="section-method">
+
+    
+    <h2>Constructor</h2>
+    
+
+    <h4 class="name" id="Actor"><span class="type-signature"></span>new Actor<span class="signature">(config<span class="signature-attributes">opt</span>)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line214">line 214</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>config</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last">
+                
+                
+                    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>context</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+|
+
+<span class="param-type"><code>CanvasRenderingContext2D</code></span>
+|
+
+<span class="param-type"><code>HTMLElement</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Sets
+<a href="rekapi.Actor.html#context"><code>rekapi.Actor#context</code></a>.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>setup</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Sets <a href="rekapi.Actor.html#setup"><code>rekapi.Actor#setup</code></a>.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>render</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="rekapi.html#.render">rekapi.render</a></code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Sets <a href="rekapi.Actor.html#render"><code>rekapi.Actor#render</code></a>.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>teardown</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>function</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Sets <a href="rekapi.Actor.html#teardown"><code>rekapi.Actor#teardown</code></a>.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="context"><span class="type-signature"></span>context<span class="type-signature"> :Object|CanvasRenderingContext2D|HTMLElement|undefined</span></h4>
+
+
+
+
+<div class="description">
+    <p>If this <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a> was created by or
+provided as an argument to <a href="rekapi.Rekapi.html#addActor"><code>rekapi.Rekapi#addActor</code></a>, then this
+member is a reference to that <a href="rekapi.Rekapi.html"><code>rekapi.Rekapi</code></a>'s <a href="rekapi.Rekapi.html#context"><code>rekapi.Rekapi#context</code></a>.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line236">line 236</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>Object</code></span>
+|
+
+<span class="param-type"><code>CanvasRenderingContext2D</code></span>
+|
+
+<span class="param-type"><code>HTMLElement</code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="id"><span class="type-signature"></span>id<span class="type-signature"> :string</span></h4>
+
+
+
+
+<div class="description">
+    <p>The unique ID of this <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line231">line 231</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>string</code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="rekapi"><span class="type-signature"></span>rekapi<span class="type-signature"> :<a href="rekapi.Rekapi.html">rekapi.Rekapi</a>|undefined</span></h4>
+
+
+
+
+<div class="description">
+    <p>The <a href="rekapi.Rekapi.html"><code>rekapi.Rekapi</code></a> instance to which this <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a> belongs, if
+any.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line218">line 218</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code><a href="rekapi.Rekapi.html">rekapi.Rekapi</a></code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="render"><span class="type-signature"></span>render<span class="type-signature"> :<a href="rekapi.html#.render">rekapi.render</a></span></h4>
+
+
+
+
+<div class="description">
+    <p>The function that renders
+this <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line251">line 251</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code><a href="rekapi.html#.render">rekapi.render</a></code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="setup"><span class="type-signature"></span>setup<span class="type-signature"> :function</span></h4>
+
+
+
+
+<div class="description">
+    <p>Gets called when an actor is
+added to an animation by <a href="rekapi.Rekapi.html#addActor"><code>rekapi.Rekapi#addActor</code></a>.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line245">line 245</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>function</code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="teardown"><span class="type-signature"></span>teardown<span class="type-signature"> :function</span></h4>
+
+
+
+
+<div class="description">
+    <p>Gets called when an actor is
+removed from an animation by <a href="rekapi.Rekapi.html#removeActor"><code>rekapi.Rekapi#removeActor</code></a>.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line257">line 257</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>function</code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="wasActive"><span class="type-signature"></span>wasActive<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+<div class="description">
+    <p>A flag that records whether
+this <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a> had any state in the previous updated cycle.
+Handy for immediate-mode renderers (such as <a href="rekapi.CanvasRenderer.html"><code>rekapi.CanvasRenderer</code></a>) to prevent unintended renders after the actor
+has no state. Also used to prevent redundant <a href="rekapi.html#.keyframeFunction"><code>rekapi.keyframeFunction</code></a> calls.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line263">line 263</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type"><code>boolean</code></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</div>
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="addKeyframeProperty"><span class="type-signature"></span>addKeyframeProperty<span class="signature">(keyframeProperty)</span><span class="type-signature"> &rarr; {<a href="rekapi.Actor.html">rekapi.Actor</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Associate a <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> to this <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>.
+Updates <a href="rekapi.KeyframeProperty.html#actor"><code>rekapi.KeyframeProperty#actor</code></a> to maintain a link between
+the two objects.  This is a lower-level method and it is generally better
+to use <a href="rekapi.Actor.html#keyframe"><code>rekapi.Actor#keyframe</code></a>.  This is mostly useful for adding a
+<a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> back to an actor after it was <a href="rekapi.KeyframeProperty.html#detach"><code>rekapi.KeyframeProperty#detach</code></a>ed.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line772">line 772</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>keyframeProperty</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="rekapi.KeyframeProperty.html">rekapi.KeyframeProperty</a></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="rekapi.Actor.html">rekapi.Actor</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="copyKeyframe"><span class="type-signature"></span>copyKeyframe<span class="signature">(copyFrom, copyTo)</span><span class="type-signature"> &rarr; {<a href="rekapi.Actor.html">rekapi.Actor</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Copies all of the <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>s from one point on the
+actor's timeline to another. This is particularly useful for animating an
+actor back to its original position.</p>
+<pre class="prettyprint source"><code>actor
+  .keyframe(0, {
+    x: 10,
+    y: 15
+  }).keyframe(1000, {
+    x: 50,
+    y: 75
+  });
+
+// Return the actor to its original position
+actor.copyKeyframe(0, 2000);</code></pre>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line354">line 354</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>copyFrom</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The timeline millisecond to copy <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>s from.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>copyTo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The timeline millisecond to copy <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>s to.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="rekapi.Actor.html">rekapi.Actor</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="exportTimeline"><span class="type-signature"></span>exportTimeline<span class="signature">()</span><span class="type-signature"> &rarr; {Object}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Export this <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a> to a <code>JSON.stringify</code>-friendly <code>Object</code>.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line948">line 948</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Object</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>This data can later be consumed by <a href="rekapi.Actor.html#importTimeline"><code>rekapi.Actor#importTimeline</code></a>.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getEnd"><span class="type-signature"></span>getEnd<span class="signature">(trackName<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line679">line 679</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>trackName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="rekapi.KeyframeProperty.html#name">rekapi.KeyframeProperty#name</a></code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Optionally scope the
+lookup to a particular keyframe track.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>number</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>The millisecond of the last state of an actor (the point
+in the timeline in which it is done animating).  If there are no
+keyframes, this is <code>0</code>.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getKeyframeProperty"><span class="type-signature"></span>getKeyframeProperty<span class="signature">(property, millisecond)</span><span class="type-signature"> &rarr; {<a href="rekapi.KeyframeProperty.html">rekapi.KeyframeProperty</a>|undefined}</span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line545">line 545</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>property</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The name of the property track.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>millisecond</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The millisecond of the property in the
+timeline.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="rekapi.KeyframeProperty.html">rekapi.KeyframeProperty</a></code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>A <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> that is stored on the actor, as specified by the
+<code>property</code> and <code>millisecond</code> parameters. This is <code>undefined</code> if no
+properties were found.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getLength"><span class="type-signature"></span>getLength<span class="signature">(trackName<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line703">line 703</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>trackName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="rekapi.KeyframeProperty.html#name">rekapi.KeyframeProperty#name</a></code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Optionally scope the
+lookup to a particular track.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>number</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>The length of time in milliseconds that the actor
+animates for.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getPropertiesInTrack"><span class="type-signature"></span>getPropertiesInTrack<span class="signature">(trackName)</span><span class="type-signature"> &rarr; {Array(rekapi.KeyframeProperty)}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Get all of the <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>s for a track.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line635">line 635</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>trackName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="rekapi.KeyframeProperty.html#name">rekapi.KeyframeProperty#name</a></code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The track name to query.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Array(rekapi.KeyframeProperty)</code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getStart"><span class="type-signature"></span>getStart<span class="signature">(trackName<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line645">line 645</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>trackName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="rekapi.KeyframeProperty.html#name">rekapi.KeyframeProperty#name</a></code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Optionally scope the
+lookup to a particular track.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>number</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>The millisecond of the first animating state of a <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a> (for instance, if the first keyframe is later than
+millisecond <code>0</code>).  If there are no keyframes, this is <code>0</code>.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="getTrackNames"><span class="type-signature"></span>getTrackNames<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;<a href="rekapi.KeyframeProperty.html#name">rekapi.KeyframeProperty#name</a>>}</span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line625">line 625</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>Array.&lt;<a href="rekapi.KeyframeProperty.html#name">rekapi.KeyframeProperty#name</a>></code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>A list of all the track
+names for a <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="hasKeyframeAt"><span class="type-signature"></span>hasKeyframeAt<span class="signature">(millisecond, trackName<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line329">line 329</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>millisecond</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Point on the timeline to query.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>trackName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code><a href="rekapi.KeyframeProperty.html#name">rekapi.KeyframeProperty#name</a></code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Optionally scope the
+lookup to a particular track.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>boolean</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>Whether or not the actor has any <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>s set at <code>millisecond</code>.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="importTimeline"><span class="type-signature"></span>importTimeline<span class="signature">(actorData)</span><span class="type-signature"></span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Import an Object to augment this actor's state.  This does not remove
+keyframe properties before importing new ones.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line975">line 975</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>actorData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Any object that has the same data format as the
+object generated from <a href="rekapi.Actor.html#exportTimeline"><code>rekapi.Actor#exportTimeline</code></a>.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="keyframe"><span class="type-signature"></span>keyframe<span class="signature">(millisecond, state, easing<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="rekapi.Actor.html">rekapi.Actor</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Create a keyframe for the actor.  The animation timeline begins at <code>0</code>.
+The timeline's length will automatically &quot;grow&quot; to accommodate new
+keyframes as they are added.</p>
+<p><code>state</code> should contain all of the properties that define this keyframe's
+state.  These properties can be any value that can be tweened by
+<a href="http://jeremyckahn.github.io/shifty/doc/">Shifty</a> (numbers,
+RGB/hexadecimal color strings, and CSS property strings).  <code>state</code> can
+also be a <a href="rekapi.html#.keyframeFunction"><code>function</code></a>, but
+<a href="tutorial-keyframes-in-depth.html">this works differently</a>.</p>
+<p><strong>Note:</strong> Internally, this creates <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>s and
+places them on a &quot;track.&quot; Tracks are automatically named to match the
+relevant <a href="rekapi.KeyframeProperty.html#name"><code>rekapi.KeyframeProperty#name</code></a>s.  These <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>s are managed for you by the <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>
+APIs.</p>
+<h2><a href="tutorial-keyframes-in-depth.html">Click to learn about keyframes in depth</a></h2>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line275">line 275</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>millisecond</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Where on the timeline to set the keyframe.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+|
+
+<span class="param-type"><code><a href="rekapi.html#.keyframeFunction">rekapi.keyframeFunction</a></code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>The state properties of
+the keyframe.  If this is an Object, the properties will be interpolated
+between this and those of the following keyframe for a given point on the
+animation timeline.  If this is a function (<a href="rekapi.html#.keyframeFunction"><code>rekapi.keyframeFunction</code></a>), it will be called at the keyframe specified by
+<code>millisecond</code>.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>easing</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+|
+
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">
+                <p>Optional easing string or Object.  If
+<code>state</code> is a function, this is ignored.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="rekapi.Actor.html">rekapi.Actor</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="modifyKeyframe"><span class="type-signature"></span>modifyKeyframe<span class="signature">(millisecond, state, easing<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {<a href="rekapi.Actor.html">rekapi.Actor</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Augment the <code>value</code> or <code>easing</code> of the <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>s
+at a given millisecond.  Any <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>s omitted in
+<code>state</code> or <code>easing</code> are not modified.</p>
+<pre class="prettyprint source"><code>actor.keyframe(0, {
+  'x': 10,
+  'y': 20
+}).keyframe(1000, {
+  'x': 20,
+  'y': 40
+}).keyframe(2000, {
+  'x': 30,
+  'y': 60
+})
+
+// Changes the state of the keyframe at millisecond 1000.
+// Modifies the value of 'y' and the easing of 'x.'
+actor.modifyKeyframe(1000, {
+  'y': 150
+}, {
+  'x': 'easeFrom'
+});</code></pre>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line431">line 431</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>millisecond</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>state</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>easing</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    {}
+                
+                </td>
+            
+
+            <td class="description last">
+                
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="rekapi.Actor.html">rekapi.Actor</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="modifyKeyframeProperty"><span class="type-signature"></span>modifyKeyframeProperty<span class="signature">(property, millisecond, newProperties)</span><span class="type-signature"> &rarr; {<a href="rekapi.Actor.html">rekapi.Actor</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Modify a <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> stored on an actor.
+Internally, this calls <a href="rekapi.KeyframeProperty.html#modifyWith"><code>rekapi.KeyframeProperty#modifyWith</code></a> and
+then performs some cleanup.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line561">line 561</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>property</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The name of the <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>
+to modify.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>millisecond</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The timeline millisecond of the <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> to modify.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>newProperties</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>Object</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The properties to augment the <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> with.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="rekapi.Actor.html">rekapi.Actor</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="moveKeyframe"><span class="type-signature"></span>moveKeyframe<span class="signature">(from, to)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Moves all of the <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>s from one point on the
+actor's timeline to another.  Although this method does error checking for
+you to make sure the operation can be safely performed, an effective
+pattern is to use <a href="rekapi.Actor.html#hasKeyframeAt"><code>rekapi.Actor#hasKeyframeAt</code></a> to see if there is
+already a keyframe at the requested <code>to</code> destination.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line398">line 398</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>from</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The millisecond of the keyframe to be moved.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>to</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The millisecond of where the keyframe should be moved
+to.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code>boolean</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>Whether or not the keyframe was successfully moved.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="removeAllKeyframes"><span class="type-signature"></span>removeAllKeyframes<span class="signature">()</span><span class="type-signature"> &rarr; {<a href="rekapi.Actor.html">rekapi.Actor</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Remove all <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>s set
+on the actor.</p>
+<p><strong>NOTE</strong>: This method does <em>not</em> fire the <code>beforeRemoveKeyframeProperty</code>
+or <code>removeKeyframePropertyComplete</code> events.  This method is a bulk
+operation that is more efficient than calling <a href="rekapi.Actor.html#removeKeyframeProperty"><code>rekapi.Actor#removeKeyframeProperty</code></a> many times individually, but
+foregoes firing events.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line514">line 514</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="rekapi.Actor.html">rekapi.Actor</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="removeKeyframe"><span class="type-signature"></span>removeKeyframe<span class="signature">(millisecond)</span><span class="type-signature"> &rarr; {<a href="rekapi.Actor.html">rekapi.Actor</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Remove all <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>s set
+on the actor at a given millisecond in the animation.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line487">line 487</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>millisecond</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The location on the timeline of the keyframe
+to remove.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="rekapi.Actor.html">rekapi.Actor</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="removeKeyframeProperty"><span class="type-signature"></span>removeKeyframeProperty<span class="signature">(property, millisecond)</span><span class="type-signature"> &rarr; {<a href="rekapi.KeyframeProperty.html">rekapi.KeyframeProperty</a>|undefined}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Remove a single <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>
+from the actor.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line594">line 594</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>property</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>string</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>The name of the <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a>
+to remove.</p>
+                
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>millisecond</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>Where in the timeline the <a href="rekapi.KeyframeProperty.html"><code>rekapi.KeyframeProperty</code></a> to remove is.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="rekapi.KeyframeProperty.html">rekapi.KeyframeProperty</a></code></span>
+|
+
+<span class="param-type"><code>undefined</code></span>
+
+
+    </dd>
+</dl>
+
+
+<div class="param-desc">
+    <p>The removed
+KeyframeProperty, if one was found.</p>
+</div>
+
+    
+</div>
+
+
+
+</div>
+        
+            
+<div class="section-method">
+
+    
+
+    <h4 class="name" id="wait"><span class="type-signature"></span>wait<span class="signature">(until)</span><span class="type-signature"> &rarr; {<a href="rekapi.Actor.html">rekapi.Actor</a>}</span></h4>
+
+    
+
+
+
+<div class="description">
+    <p>Extend the last state on this actor's timeline to simulate a pause.
+Internally, this method copies the final state of the actor in the
+timeline to the millisecond defined by <code>until</code>.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="actor.js.html">actor.js</a>, <a href="actor.js.html#line714">line 714</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>until</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><code>number</code></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <p>At what point in the animation the Actor should wait
+until (relative to the start of the animation timeline).  If this number
+is less than the value returned from <a href="rekapi.Actor.html#getLength"><code>rekapi.Actor#getLength</code></a>,
+this method does nothing.</p>
+                
+            </td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="section-returns">
+<h5>Returns:</h5>
+
+        
+
+<dl class="param-type">
+    <dt>
+        Type:
+    </dt>
+    <dd>
+        
+<span class="param-type"><code><a href="rekapi.Actor.html">rekapi.Actor</a></code></span>
+
+
+    </dd>
+</dl>
+
+
+    
+</div>
+
+
+
+</div>
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<br class="clear">
+
+<footer>
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.3</a> on Sun Sep 03 2017 10:40:02 GMT-0700 (PDT) using the Minami theme.
+</footer>
+
+<script>prettyPrint();</script>
+<script src="scripts/linenumber.js"></script>
+</body>
+</html>

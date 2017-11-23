@@ -205,21 +205,23 @@ var updateToMillisecond = exports.updateToMillisecond = function updateToMillise
   var keyframeResetList = [];
 
   if (currentIteration > rekapi._latestIteration) {
-    fireEvent(rekapi, 'animationLooped');
+    (function () {
+      fireEvent(rekapi, 'animationLooped');
 
-    // Reset function keyframes
-    var lookupObject = { name: 'function' };
+      // Reset function keyframes
+      var lookupObject = { name: 'function' };
 
-    rekapi._actors.forEach(function (actor) {
-      var fnKeyframes = _lodash2.default.where(actor._keyframeProperties, lookupObject);
-      var lastFnKeyframe = _lodash2.default.last(fnKeyframes);
+      rekapi._actors.forEach(function (actor) {
+        var fnKeyframes = _lodash2.default.where(actor._keyframeProperties, lookupObject);
+        var lastFnKeyframe = _lodash2.default.last(fnKeyframes);
 
-      if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
-        lastFnKeyframe.invoke();
-      }
+        if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
+          lastFnKeyframe.invoke();
+        }
 
-      keyframeResetList = keyframeResetList.concat(fnKeyframes);
-    });
+        keyframeResetList = keyframeResetList.concat(fnKeyframes);
+      });
+    })();
   }
 
   rekapi._latestIteration = currentIteration;
@@ -9778,6 +9780,8 @@ exports.DOMRenderer = exports.getActorCSS = exports.canOptimizeAnyKeyframeProper
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _lodash = __webpack_require__(1);
 
 var _lodash2 = _interopRequireDefault(_lodash);
@@ -10131,19 +10135,25 @@ var combineTranfromProperties = exports.combineTranfromProperties = function com
   if (_lodash2.default.isEmpty(_lodash2.default.pick.apply(_lodash2.default, [propsToSerialize].concat(transformFunctions)))) {
     return propsToSerialize;
   } else {
-    var serializedProps = _lodash2.default.clone(propsToSerialize);
+    var _ret = function () {
+      var serializedProps = _lodash2.default.clone(propsToSerialize);
 
-    serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(function (combinedProperties, transformFunction) {
-      if (_lodash2.default.has(serializedProps, transformFunction)) {
-        combinedProperties += ' ' + transformFunction + '(' + serializedProps[transformFunction] + ')';
+      serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(function (combinedProperties, transformFunction) {
+        if (_lodash2.default.has(serializedProps, transformFunction)) {
+          combinedProperties += ' ' + transformFunction + '(' + serializedProps[transformFunction] + ')';
 
-        delete serializedProps[transformFunction];
-      }
+          delete serializedProps[transformFunction];
+        }
 
-      return combinedProperties;
-    }, '').slice(1);
+        return combinedProperties;
+      }, '').slice(1);
 
-    return serializedProps;
+      return {
+        v: serializedProps
+      };
+    }();
+
+    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
   }
 };
 
