@@ -47,8 +47,8 @@
  */
 
 /**
- * A function that is called when an event is fired.  See {@link
- * rekapi.Rekapi#on} for a list of valid events.
+ * A function that is called when an event is fired.  See the events listed
+ * below for details on the types of events that Rekapi supports.
  * @callback rekapi.eventHandler
  * @param {rekapi.Rekapi} rekapi A {@link rekapi.Rekapi} instance.
  * @param {Object} data Data provided from the event (see {@link
