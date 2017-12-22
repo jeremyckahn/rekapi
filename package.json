@@ -14,14 +14,14 @@
     }
   ],
   "devDependencies": {
-    "@jeremyckahn/minami": "^1.3.0",
+    "@jeremyckahn/minami": "^1.3.1",
     "babel-core": "^6.22.1",
     "babel-loader": "^6.2.10",
     "babel-preset-es2015": "^6.22.0",
     "concurrently": "^3.5.0",
     "gh-pages": "^1.0.0",
     "jquery": "^3.2.1",
-    "jsdoc": "^3.5.3",
+    "jsdoc": "^3.5.5",
     "jsdom": "^11.0.0",
     "jsdom-global": "^3.0.2",
     "jshint": "^2.9.4",
