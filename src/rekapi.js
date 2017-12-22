@@ -692,13 +692,16 @@ export class Rekapi {
    * Export the timeline to a `JSON.stringify`-friendly `Object`.
    *
    * @method rekapi.Rekapi#exportTimeline
+   * @param {Object} [config]
+   * @param {boolean} [config.withId=false] If `true`, include internal `id`
+   * values in exported data.
    * @return {rekapi.timelineData} This data can later be consumed by {@link
    * rekapi.Rekapi#importTimeline}.
    */
-  exportTimeline () {
+  exportTimeline ({ withId = false } = {}) {
     const exportData = {
       duration: this.getAnimationLength(),
-      actors: this._actors.map(actor => actor.exportTimeline())
+      actors: this._actors.map(actor => actor.exportTimeline({ withId }))
     };
 
 

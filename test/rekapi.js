@@ -170,6 +170,11 @@ describe('Rekapi', () => {
         exportedTimeline.actors[0],
         actor.exportTimeline()
       );
+      assert.equal(typeof exportedTimeline.actors[0].id, 'undefined');
+      assert.equal(
+        typeof exportedTimeline.actors[0].propertyTracks.x[0].id,
+        'undefined'
+      );
     });
 
     it('exports custom easing curves', () => {
@@ -190,6 +195,25 @@ describe('Rekapi', () => {
 
       // Clean up Tweenable
       unsetBezierFunction('custom');
+    });
+
+    describe('withId: true', () => {
+      beforeEach(() => {
+        actor.keyframe(0, {
+          x: 1
+        }).keyframe(1000, {
+          x: 2
+        });
+      });
+
+      it('includes id properties', () => {
+        exportedTimeline = rekapi.exportTimeline({ withId: true });
+        assert.equal(typeof exportedTimeline.actors[0].id, 'string');
+        assert.equal(
+          typeof exportedTimeline.actors[0].propertyTracks.x[0].id,
+          'string'
+        );
+      });
     });
   });
 

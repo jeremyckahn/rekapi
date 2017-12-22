@@ -15,6 +15,7 @@
  * @property {number} millisecond
  * @property {string} easing
  * @property {string} name
+ * @property {string|undefined} id
  */
 
 /**
@@ -24,6 +25,7 @@
  * @property {Object.<Array.<rekapi.propertyData>>} propertyTracks
  * @property {number} end
  * @property {number} start
+ * @property {string|undefined} id
  */
 
 /**
@@ -41,7 +43,7 @@
  * The `JSON.stringify`-friendly data format for serializing a Rekapi
  * animation.
  * @typedef {Object} rekapi.timelineData
- * @property {Array.<rekapi.ActorData>} actors
+ * @property {Array.<rekapi.actorData>} actors
  * @property {Object.<rekapi.curveData>} curves
  * @property {number} duration
  */

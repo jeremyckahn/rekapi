@@ -85,14 +85,25 @@ describe('KeyframeProperty', () => {
   });
 
   describe('#exportPropertyData', () => {
-    it('exports key data points', () => {
+    beforeEach(() => {
       actor.keyframe(0, { x: 1 });
+    });
 
+    it('exports key data points', () => {
       const exportedProp = actor._propertyTracks.x[0].exportPropertyData();
       assert.equal(typeof exportedProp.millisecond, 'number');
       assert.equal(typeof exportedProp.name, 'string');
       assert.equal(typeof exportedProp.value, 'number');
       assert.equal(typeof exportedProp.easing, 'string');
+      assert.equal(typeof exportedProp.id, 'undefined');
+    });
+
+    describe('withId: true', () => {
+      it('includes id property', () => {
+        const exportedProp =
+          actor._propertyTracks.x[0].exportPropertyData({ withId: true });
+        assert.equal(typeof exportedProp.id, 'string');
+      });
     });
   });
 

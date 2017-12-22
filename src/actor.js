@@ -960,10 +960,13 @@ export class Actor extends Tweenable {
   /**
    * Export this {@link rekapi.Actor} to a `JSON.stringify`-friendly `Object`.
    * @method rekapi.Actor#exportTimeline
+   * @param {Object} [config]
+   * @param {boolean} [config.withId=false] If `true`, include internal `id`
+   * values in exported data.
    * @return {rekapi.actorData} This data can later be consumed by {@link
    * rekapi.Actor#importTimeline}.
    */
-  exportTimeline () {
+  exportTimeline ({ withId = false } = {}) {
     const exportData = {
       start: this.getStart(),
       end: this.getEnd(),
@@ -971,11 +974,15 @@ export class Actor extends Tweenable {
       propertyTracks: {}
     };
 
+    if (withId) {
+      exportData.id = this.id;
+    }
+
     _.each(this._propertyTracks, (propertyTrack, trackName) => {
       const track = [];
 
       _.each(propertyTrack, keyframeProperty => {
-        track.push(keyframeProperty.exportPropertyData());
+        track.push(keyframeProperty.exportPropertyData({ withId }));
       });
 
       exportData.propertyTracks[trackName] = track;

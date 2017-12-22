@@ -538,11 +538,13 @@ describe('Actor', () => {
   });
 
   describe('#exportTimeline', () => {
-    it('exports key data points', () => {
+    beforeEach(() => {
       actor
         .keyframe(0, { x: 1, y: 10 })
         .keyframe(1000, { x: 2, y: 20 });
+    });
 
+    it('exports key data points', () => {
       const exportedActorData = actor.exportTimeline();
 
       assert.equal(exportedActorData.start, 0);
@@ -552,6 +554,16 @@ describe('Actor', () => {
       assert.equal(exportedActorData.trackNames.length, 2);
       assert.equal(exportedActorData.propertyTracks.x.length, 2);
       assert.equal(exportedActorData.propertyTracks.y.length, 2);
+      assert.equal(typeof exportedActorData.id, 'undefined');
+      assert.equal(typeof exportedActorData.propertyTracks.x[0].id, 'undefined');
+    });
+
+    describe('withId: true', () => {
+      it('includes id properties', () => {
+        const exportedActorData = actor.exportTimeline({ withId: true });
+        assert.equal(typeof exportedActorData.id, 'string');
+        assert.equal(typeof exportedActorData.propertyTracks.x[0].id, 'string');
+      });
     });
   });
 

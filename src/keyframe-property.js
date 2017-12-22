@@ -168,10 +168,19 @@ export class KeyframeProperty {
    * Export this {@link rekapi.KeyframeProperty} to a `JSON.stringify`-friendly
    * `Object`.
    * @method rekapi.KeyframeProperty#exportPropertyData
+   * @param {Object} [config]
+   * @param {boolean} [config.withId=false] If `true`, include internal `id`
+   * value in exported data.
    * @return {rekapi.propertyData}
    */
-  exportPropertyData () {
-    return _.pick(this, ['millisecond', 'name', 'value', 'easing']);
+  exportPropertyData ({ withId = false } = {}) {
+    const props = ['millisecond', 'name', 'value', 'easing'];
+
+    if (withId) {
+      props.push('id');
+    }
+
+    return _.pick(this, props);
   }
 
   /*!
