@@ -1,4 +1,4 @@
-/*! 2.0.6 */
+/*! 2.1.0 */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
@@ -871,6 +871,9 @@ var Rekapi = exports.Rekapi = function () {
      * Export the timeline to a `JSON.stringify`-friendly `Object`.
      *
      * @method rekapi.Rekapi#exportTimeline
+     * @param {Object} [config]
+     * @param {boolean} [config.withId=false] If `true`, include internal `id`
+     * values in exported data.
      * @return {rekapi.timelineData} This data can later be consumed by {@link
      * rekapi.Rekapi#importTimeline}.
      */
@@ -878,10 +881,14 @@ var Rekapi = exports.Rekapi = function () {
   }, {
     key: 'exportTimeline',
     value: function exportTimeline() {
+      var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref$withId = _ref.withId,
+          withId = _ref$withId === undefined ? false : _ref$withId;
+
       var exportData = {
         duration: this.getAnimationLength(),
         actors: this._actors.map(function (actor) {
-          return actor.exportTimeline();
+          return actor.exportTimeline({ withId: withId });
         })
       };
 
@@ -9221,6 +9228,9 @@ var Actor = exports.Actor = function (_Tweenable) {
     /**
      * Export this {@link rekapi.Actor} to a `JSON.stringify`-friendly `Object`.
      * @method rekapi.Actor#exportTimeline
+     * @param {Object} [config]
+     * @param {boolean} [config.withId=false] If `true`, include internal `id`
+     * values in exported data.
      * @return {rekapi.actorData} This data can later be consumed by {@link
      * rekapi.Actor#importTimeline}.
      */
@@ -9228,6 +9238,10 @@ var Actor = exports.Actor = function (_Tweenable) {
   }, {
     key: 'exportTimeline',
     value: function exportTimeline() {
+      var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref2$withId = _ref2.withId,
+          withId = _ref2$withId === undefined ? false : _ref2$withId;
+
       var exportData = {
         start: this.getStart(),
         end: this.getEnd(),
@@ -9235,11 +9249,15 @@ var Actor = exports.Actor = function (_Tweenable) {
         propertyTracks: {}
       };
 
+      if (withId) {
+        exportData.id = this.id;
+      }
+
       _lodash2.default.each(this._propertyTracks, function (propertyTrack, trackName) {
         var track = [];
 
         _lodash2.default.each(propertyTrack, function (keyframeProperty) {
-          track.push(keyframeProperty.exportPropertyData());
+          track.push(keyframeProperty.exportPropertyData({ withId: withId }));
         });
 
         exportData.propertyTracks[trackName] = track;
@@ -9494,13 +9512,26 @@ var KeyframeProperty = exports.KeyframeProperty = function () {
      * Export this {@link rekapi.KeyframeProperty} to a `JSON.stringify`-friendly
      * `Object`.
      * @method rekapi.KeyframeProperty#exportPropertyData
+     * @param {Object} [config]
+     * @param {boolean} [config.withId=false] If `true`, include internal `id`
+     * value in exported data.
      * @return {rekapi.propertyData}
      */
 
   }, {
     key: 'exportPropertyData',
     value: function exportPropertyData() {
-      return _lodash2.default.pick(this, ['millisecond', 'name', 'value', 'easing']);
+      var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
+          _ref$withId = _ref.withId,
+          withId = _ref$withId === undefined ? false : _ref$withId;
+
+      var props = ['millisecond', 'name', 'value', 'easing'];
+
+      if (withId) {
+        props.push('id');
+      }
+
+      return _lodash2.default.pick(this, props);
     }
 
     /*!
