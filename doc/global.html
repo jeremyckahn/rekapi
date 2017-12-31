@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Keyframes in Depth - Documentation</title>
+    <title>Global - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,54 +29,605 @@
 
 <div id="main">
     
-    <h1 class="page-title">Keyframes in Depth</h1>
+    <h1 class="page-title">Global</h1>
     
 
-    <section>
+    
+
+
+
+
+<section>
 
 <header>
+    
+        <h2>
+        
+        </h2>
+        
     
 </header>
 
 <article>
-    <h2>Keyframe inheritance</h2><p>Keyframes always inherit missing properties from the previous keyframe.  For
-example:</p>
-<pre class="prettyprint source"><code>import { Rekapi, Actor } from 'rekapi';
+    <div class="container-overview">
+    
+        
 
-const rekapi = new Rekapi();
-const actor = rekapi.addActor();
+        
 
-actor.keyframe(0, {
-  x: 100
-}).keyframe(1000, {
-  // Implicitly copies the `x: 100` from above
-  y: 50
-});</code></pre><p>Keyframe <code>1000</code> will have a <code>y</code> of <code>50</code>, and an <code>x</code> of <code>100</code>, because <code>x</code> was
-inherited from keyframe <code>0</code>.</p>
-<h2>Function keyframes</h2><p>Instead of providing an Object to be used to interpolate state values, you can
-provide <a href="rekapi.html#.keyframeFunction"><code>a function</code></a> to be called at a specific
-point on the timeline.  This function does not need to return a value, as it
-does not get used to render the actor state.  Function keyframes are called
-once per animation loop and do not have any tweening relationship with one
-another.  This is a primarily a mechanism for scheduling arbitrary code to be
-executed at specific points in an animation.</p>
-<pre class="prettyprint source"><code>actor.keyframe(1000, actor => console.log(actor));</code></pre><h2>Easing</h2><p><code>easing</code>, if provided, can be a string or an Object.  If <code>easing</code> is a string,
-all animated properties will have the same easing curve applied to them.  For
-example:</p>
-<pre class="prettyprint source"><code>actor.keyframe(1000, { x: 100, y: 100 }, 'easeOutSine');</code></pre><p>Both <code>x</code> and <code>y</code> will have <code>easeOutSine</code> applied to them.  You can also specify
-multiple easing curves with an Object:</p>
-<pre class="prettyprint source"><code>actor.keyframe(1000, {
-    x: 100,
-    y: 100
-  }, {
-    x: 'easeinSine',
-    y: 'easeOutSine'
-  });</code></pre><p><code>x</code> will ease with <code>easeInSine</code>, and <code>y</code> will ease with <code>easeOutSine</code>.  Any
-unspecified properties will ease with <code>linear</code>.  If <code>easing</code> is omitted, all
-properties will default to <code>linear</code>.</p>
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+     
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="clone"><span class="type-signature">(constant) </span>clone<span class="type-signature"></span></h4>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils.js.html">utils.js</a>, <a href="utils.js.html#line5">line 5</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="difference"><span class="type-signature">(constant) </span>difference<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Simplified version of https://lodash.com/docs/4.17.4#difference</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils.js.html">utils.js</a>, <a href="utils.js.html#line13">line 13</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="each"><span class="type-signature">(constant) </span>each<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Simplified version of https://lodash.com/docs/4.17.4#forEach, but only for
+Objects.</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils.js.html">utils.js</a>, <a href="utils.js.html#line22">line 22</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="pick"><span class="type-signature">(constant) </span>pick<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Simplified version of https://lodash.com/docs/4.17.4#pick</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils.js.html">utils.js</a>, <a href="utils.js.html#line39">line 39</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="reject"><span class="type-signature">(constant) </span>reject<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Simplified version of https://lodash.com/docs/4.17.4#reject</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils.js.html">utils.js</a>, <a href="utils.js.html#line59">line 59</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="uniq"><span class="type-signature">(constant) </span>uniq<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Simplified version of https://lodash.com/docs/4.17.4#uniq</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils.js.html">utils.js</a>, <a href="utils.js.html#line66">line 66</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="uniqueId"><span class="type-signature">(constant) </span>uniqueId<span class="type-signature"></span></h4>
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils.js.html">utils.js</a>, <a href="utils.js.html#line80">line 80</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+</div>
+
+        
+            
+<div class="section-members">
+<h4 class="name" id="without"><span class="type-signature">(constant) </span>without<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Simplified version of https://lodash.com/docs/4.17.4#without</p>
+</div>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="utils.js.html">utils.js</a>, <a href="utils.js.html#line88">line 88</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+</div>
+
+        
+    
+
+    
+
+    
+
+    
 </article>
 
 </section>
+
+
+
 
 </div>
 

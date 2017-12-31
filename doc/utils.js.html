@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Keyframes in Depth - Documentation</title>
+    <title>utils.js - Documentation</title>
 
     <script src="scripts/prettify/prettify.js"></script>
     <script src="scripts/prettify/lang-css.js"></script>
@@ -29,54 +29,111 @@
 
 <div id="main">
     
-    <h1 class="page-title">Keyframes in Depth</h1>
+    <h1 class="page-title">utils.js</h1>
     
 
+    
+
+
+
+    
     <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * @param {Object} obj
+ * @return {Object}
+ */
+export const clone = obj => Object.assign({}, obj);
 
-<header>
-    
-</header>
+/**
+ * Simplified version of https://lodash.com/docs/4.17.4#difference
+ * @param {Array.&lt;any>} arr
+ * @param {Array.&lt;any>} values
+ * @return {Array.&lt;any>}
+ */
+export const difference = (arr, values) =>
+  arr.filter(value => !~values.indexOf(value));
 
-<article>
-    <h2>Keyframe inheritance</h2><p>Keyframes always inherit missing properties from the previous keyframe.  For
-example:</p>
-<pre class="prettyprint source"><code>import { Rekapi, Actor } from 'rekapi';
+/**
+ * Simplified version of https://lodash.com/docs/4.17.4#forEach, but only for
+ * Objects.
+ * @param {Object.&lt;any>} obj
+ * @param {Function(any)} fn
+ */
+export const each = (obj, fn) =>
+  Object.keys(obj).forEach(key => fn(obj[key], key));
 
-const rekapi = new Rekapi();
-const actor = rekapi.addActor();
+/*!
+ * Simplified version of https://lodash.com/docs/4.17.4#intersection
+ * @param {Array.&lt;any>} arr1
+ * @param {Array.&lt;any>} arr2
+ * @return {Array.&lt;any>}
+ */
+export const intersection =
+  (arr1, arr2) => arr1.filter(el => ~arr2.indexOf(el));
 
-actor.keyframe(0, {
-  x: 100
-}).keyframe(1000, {
-  // Implicitly copies the `x: 100` from above
-  y: 50
-});</code></pre><p>Keyframe <code>1000</code> will have a <code>y</code> of <code>50</code>, and an <code>x</code> of <code>100</code>, because <code>x</code> was
-inherited from keyframe <code>0</code>.</p>
-<h2>Function keyframes</h2><p>Instead of providing an Object to be used to interpolate state values, you can
-provide <a href="rekapi.html#.keyframeFunction"><code>a function</code></a> to be called at a specific
-point on the timeline.  This function does not need to return a value, as it
-does not get used to render the actor state.  Function keyframes are called
-once per animation loop and do not have any tweening relationship with one
-another.  This is a primarily a mechanism for scheduling arbitrary code to be
-executed at specific points in an animation.</p>
-<pre class="prettyprint source"><code>actor.keyframe(1000, actor => console.log(actor));</code></pre><h2>Easing</h2><p><code>easing</code>, if provided, can be a string or an Object.  If <code>easing</code> is a string,
-all animated properties will have the same easing curve applied to them.  For
-example:</p>
-<pre class="prettyprint source"><code>actor.keyframe(1000, { x: 100, y: 100 }, 'easeOutSine');</code></pre><p>Both <code>x</code> and <code>y</code> will have <code>easeOutSine</code> applied to them.  You can also specify
-multiple easing curves with an Object:</p>
-<pre class="prettyprint source"><code>actor.keyframe(1000, {
-    x: 100,
-    y: 100
-  }, {
-    x: 'easeinSine',
-    y: 'easeOutSine'
-  });</code></pre><p><code>x</code> will ease with <code>easeInSine</code>, and <code>y</code> will ease with <code>easeOutSine</code>.  Any
-unspecified properties will ease with <code>linear</code>.  If <code>easing</code> is omitted, all
-properties will default to <code>linear</code>.</p>
-</article>
+/**
+ * Simplified version of https://lodash.com/docs/4.17.4#pick
+ * @param {Object.&lt;any>} obj
+ * @param {Array.&lt;string>} keyNames
+ */
+export const pick = (obj, keyNames) =>
+  keyNames.reduce(
+    (acc, keyName) => {
+      const val = obj[keyName];
 
-</section>
+      if (typeof val !== 'undefined') {
+        acc[keyName] = val;
+      }
+
+      return acc;
+    },
+    {}
+  );
+
+/**
+ * Simplified version of https://lodash.com/docs/4.17.4#reject
+ * @param {Array.&lt;any>} arr
+ * @param {Function(any)} fn
+ * @return {Array.&lt;any>}
+ */
+export const reject = (arr, fn) => arr.filter(el => !fn(el));
+
+/**
+ * Simplified version of https://lodash.com/docs/4.17.4#uniq
+ * @param {Array.&lt;any>} arr
+ * @return {Array.&lt;any>}
+ */
+export const uniq = arr =>
+  arr.reduce((acc, value) => {
+    if (!~acc.indexOf(value)) {
+      acc.push(value);
+    }
+
+    return acc;
+  }, []);
+
+let incrementer = 0;
+/**
+ * @param {string} [prefix]
+ * @return {string}
+ */
+export const uniqueId = (prefix = '') => prefix + incrementer++;
+
+/**
+ * Simplified version of https://lodash.com/docs/4.17.4#without
+ * @param {Array.&lt;any>} array
+ * @param {...any} values
+ * @return {Array.&lt;any>}
+ */
+export const without = (array, ...values) =>
+  array.filter(value => !~values.indexOf(value));
+</code></pre>
+        </article>
+    </section>
+
+
+
 
 </div>
 
