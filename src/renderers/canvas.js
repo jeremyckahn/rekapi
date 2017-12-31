@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import Rekapi, {
   rendererBootstrappers
 } from '../rekapi';

@@ -14,7 +14,20 @@ module.exports = Object.assign(commonConfig, {
     libraryTarget: 'umd',
     umdNamedDefine: true
   },
+  externals: {
+    shifty: 'shifty'
+  },
   plugins: [
+    new Webpack.optimize.UglifyJsPlugin({
+      compress: {
+        dead_code: true,
+        unused: true
+      },
+      output: {
+        comments: false
+      },
+      sourceMap: true
+    }),
     new Webpack.BannerPlugin(version)
   ]
 });

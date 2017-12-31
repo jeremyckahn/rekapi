@@ -1,9 +1,19 @@
-import _ from 'lodash';
 import { Tweenable } from 'shifty';
 import Rekapi, {
   rendererBootstrappers,
   fireEvent
 } from '../rekapi';
+
+import {
+  clone,
+  difference,
+  each,
+  intersection,
+  pick,
+  reject,
+  uniq,
+  without
+} from '../utils';
 
 const { now } = Tweenable;
 
@@ -127,7 +137,7 @@ const getActorClassName = actor => `actor-${actor.id}`;
 const forceStyleReset = rekapi => {
   const dummyDiv = document.createElement('div');
 
-  _.each(rekapi.getAllActors(), actor => {
+  rekapi.getAllActors().forEach(actor => {
     if (actor.context.nodeType === 1) {
       const { context } = actor;
       const { parentElement } = context;
@@ -167,7 +177,7 @@ const setStyle = (element, styleName, styleValue) =>
  * @param {string} name A transform function name
  * @return {boolean}
  */
-const isTransformFunction = name => _.contains(transformFunctions, name);
+const isTransformFunction = name => ~transformFunctions.indexOf(name);
 
 /*!
  * Builds a concatenated string of given transform property values in order.
@@ -180,7 +190,7 @@ const isTransformFunction = name => _.contains(transformFunctions, name);
 const buildTransformValue = (orderedTransforms, transformProperties) => {
   const transformComponents = [];
 
-  _.each(orderedTransforms, functionName => {
+  orderedTransforms.forEach(functionName => {
     if (transformProperties[functionName] !== undefined) {
       transformComponents.push(
         `${functionName}(${transformProperties[functionName]})`
@@ -212,23 +222,23 @@ const actorRender = (actor, element, state) => {
   // TODO:  Optimize the following code so that propertyNames is not looped
   // over twice.
   const transformFunctionNames = propertyNames.filter(isTransformFunction);
-  const otherProperties = _.pick(
+  const otherProperties = pick(
     state,
-    _.reject(propertyNames, isTransformFunction)
+    reject(propertyNames, isTransformFunction)
   );
 
   if (transformFunctionNames.length) {
     setTransformStyles(element,
       buildTransformValue(
         actor._transformOrder,
-        _.pick(state, transformFunctionNames)
+        pick(state, transformFunctionNames)
       )
     );
   } else if (state.transform) {
     setTransformStyles(element, state.transform);
   }
 
-  _.each(otherProperties, (styleValue, styleName) =>
+  each(otherProperties, (styleValue, styleName) =>
     setStyle(element, styleName, styleValue)
   );
 };
@@ -240,7 +250,7 @@ const actorTeardown = actor => {
   const { context } = actor;
   const classList = context.className.match(/\S+/g);
   const sanitizedClassList =
-    _.without(classList, getActorClassName(actor));
+    without(classList, getActorClassName(actor));
   context.className = sanitizedClassList.join(' ');
 };
 
@@ -377,18 +387,13 @@ export const generateOptimizedKeyframeSegment = (
  * @param {Array.<string>} transformNames
  * @return {Object}
  */
-export const combineTranfromProperties = (propsToSerialize, transformNames) => {
-  if (_.isEmpty(
-    _.pick.apply(_, [propsToSerialize].concat(transformFunctions))
-    )
-  ) {
-    return propsToSerialize;
-  } else {
-    const serializedProps = _.clone(propsToSerialize);
+export const combineTransformProperties = (propsToSerialize, transformNames) => {
+  if (Object.keys(pick(propsToSerialize, transformFunctions)).length) {
+    const serializedProps = clone(propsToSerialize);
 
     serializedProps[TRANSFORM_TOKEN] = transformNames.reduce(
       (combinedProperties, transformFunction) => {
-      if (_.has(serializedProps, transformFunction)) {
+      if (serializedProps.hasOwnProperty(transformFunction)) {
         combinedProperties +=
           ` ${transformFunction}(${serializedProps[transformFunction]})`;
 
@@ -399,6 +404,8 @@ export const combineTranfromProperties = (propsToSerialize, transformNames) => {
     }, '').slice(1);
 
     return serializedProps;
+  } else {
+    return propsToSerialize;
   }
 };
 
@@ -407,15 +414,25 @@ export const combineTranfromProperties = (propsToSerialize, transformNames) => {
  * @param {string=} targetProp
  * @return {string}
  */
-export const serializeActorStep = (actor, targetProp = undefined) =>
-  _.reduce(
-    combineTranfromProperties(
-      targetProp ? { [targetProp]: actor.get()[targetProp] } : actor.get(),
-      actor._transformOrder
-    ),
-    (serializedProps, val, key) =>
-      `${serializedProps}${key === 'transform' ? TRANSFORM_TOKEN : key}:${val};`,
-    '{') + '}';
+export const serializeActorStep = (actor, targetProp = undefined) => {
+  const transformProperties = combineTransformProperties(
+    targetProp ?
+      { [targetProp]: actor.get()[targetProp] } :
+      actor.get(),
+    actor._transformOrder
+  );
+
+  const data = Object.keys(transformProperties)
+    .reduce(
+      (acc, key) =>
+        `${acc}${
+          key === 'transform' ? TRANSFORM_TOKEN : key
+        }:${transformProperties[key]};`,
+      ''
+  );
+
+  return `{${data}}`;
+};
 
 /*!
  * @param {Actor} actor
@@ -491,7 +508,7 @@ export const simulateLeadingWait = (actor, track, actorStart) => {
  * @return {string|undefined}
  */
 export const simulateTrailingWait = (actor, track, actorStart, actorEnd) => {
-  const lastProp = _.last(actor._propertyTracks[track]);
+  const [ lastProp ] = actor._propertyTracks[track].slice(-1);
 
   if (lastProp !== undefined && lastProp.millisecond !== actorEnd) {
     return generateActorTrackSegment(
@@ -717,8 +734,8 @@ export const generateAnimationNameProperty = (
   } else {
     const trackNames = actor.getTrackNames();
 
-    const trackNamesToPrint = _.intersection(trackNames, transformFunctions).length ?
-      _.difference(trackNames, transformFunctions).concat('transform') :
+    const trackNamesToPrint = intersection(trackNames, transformFunctions).length ?
+      difference(trackNames, transformFunctions).concat('transform') :
       trackNames;
 
     renderedName = trackNamesToPrint.reduce(
@@ -822,11 +839,11 @@ ${  vendors.map(vendor =>
  * @return {boolean}
  */
 export const canOptimizeAnyKeyframeProperties = (actor) =>
-  _.any(
-    actor._keyframeProperties,
-    canOptimizeKeyframeProperty
+  Object.keys(actor._keyframeProperties).some(
+    property =>
+      canOptimizeKeyframeProperty(actor._keyframeProperties[property])
   ) &&
-  !_.intersection(
+  !intersection(
     Object.keys(actor._propertyTracks),
     transformFunctions
   ).length;
@@ -1103,14 +1120,14 @@ export class DOMRenderer {
    * @return {rekapi.Rekapi}
    */
   setActorTransformOrder (actor, orderedTransforms) {
-    const unrecognizedTransforms = _.reject(orderedTransforms, isTransformFunction);
+    const unrecognizedTransforms = reject(orderedTransforms, isTransformFunction);
 
     if (unrecognizedTransforms.length) {
       throw `Unknown or unsupported transform functions: ${unrecognizedTransforms.join(', ')}`;
     }
 
     // Ignore duplicate transform function names in the array
-    actor._transformOrder = _.uniq(orderedTransforms);
+    actor._transformOrder = uniq(orderedTransforms);
 
     return this.rekapi;
   }
@@ -1148,7 +1165,7 @@ export class DOMRenderer {
   getCss (options = {}) {
     const animationCSS = [];
 
-    _.each(this.rekapi.getAllActors(), actor => {
+    this.rekapi.getAllActors().forEach(actor => {
       if (actor.context.nodeType === 1) {
         animationCSS.push(getActorCSS(actor, options));
       }

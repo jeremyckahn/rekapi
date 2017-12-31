@@ -16,7 +16,7 @@ import {
   generateCSSAnimationProperties,
   generateActorKeyframes,
   generateActorTrackSegment,
-  combineTranfromProperties,
+  combineTransformProperties,
   serializeActorStep,
   generateAnimationNameProperty,
   generateAnimationIterationProperty,
@@ -535,9 +535,9 @@ describe('DOMRenderer#getCss', () => {
       });
     });
 
-    describe('combineTranfromProperties', () => {
+    describe('combineTransformProperties', () => {
       it('can combine transform properties into a single property', () => {
-        const combinedProperty = combineTranfromProperties({
+        const combinedProperty = combineTransformProperties({
           translateX: '10px',
           translateY: '20px'
         }, transformFunctions);
@@ -553,7 +553,7 @@ describe('DOMRenderer#getCss', () => {
       });
 
       it('can combine transform properties into a single property and leave non-tranform properties unchanged', () => {
-        const combinedProperty = combineTranfromProperties({
+        const combinedProperty = combineTransformProperties({
           translateX: '10px',
           translateY: '20px',
           foo: 'bar'

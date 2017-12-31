@@ -1,3 +1,4 @@
+import './utils';
 import './rekapi';
 import './actor';
 import './keyframe-property';

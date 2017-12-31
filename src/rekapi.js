@@ -1,6 +1,11 @@
-import _ from 'lodash';
 import { Tweenable, setBezierFunction } from 'shifty';
 import { Actor } from './actor';
+
+import {
+  each,
+  pick,
+  without
+} from './utils';
 
 const UPDATE_TIME = 1000 / 60;
 
@@ -101,23 +106,34 @@ export const updateToMillisecond = (rekapi, forMillisecond) => {
 
   rekapi._loopPosition = loopPosition;
 
-  let keyframeResetList = [];
+  const keyframeResetList = [];
 
   if (currentIteration > rekapi._latestIteration) {
     fireEvent(rekapi, 'animationLooped');
 
-    // Reset function keyframes
-    const lookupObject = { name: 'function' };
-
     rekapi._actors.forEach(actor => {
-      const fnKeyframes = _.where(actor._keyframeProperties, lookupObject);
-      const lastFnKeyframe = _.last(fnKeyframes);
+
+      const { _keyframeProperties } = actor;
+      const fnKeyframes = Object.keys(_keyframeProperties).reduce(
+        (acc, propertyId) => {
+          const property = _keyframeProperties[propertyId];
+
+          if (property.name === 'function') {
+            acc.push(property);
+          }
+
+          return acc;
+        },
+        []
+      );
+
+      const lastFnKeyframe = fnKeyframes[fnKeyframes.length - 1];
 
       if (lastFnKeyframe && !lastFnKeyframe.hasFired) {
         lastFnKeyframe.invoke();
       }
 
-      keyframeResetList = keyframeResetList.concat(fnKeyframes);
+      keyframeResetList.push(...fnKeyframes);
     });
   }
 
@@ -125,7 +141,7 @@ export const updateToMillisecond = (rekapi, forMillisecond) => {
   rekapi.update(loopPosition, true);
   updatePlayState(rekapi, currentIteration);
 
-  _.each(keyframeResetList, fnKeyframe => {
+  keyframeResetList.forEach(fnKeyframe => {
     fnKeyframe.hasFired = false;
   });
 };
@@ -331,7 +347,7 @@ export class Rekapi {
       new Actor(actor);
 
     // You can't add an actor more than once.
-    if (_.contains(this._actors, rekapiActor)) {
+    if (~this._actors.indexOf(rekapiActor)) {
       return rekapiActor;
     }
 
@@ -397,7 +413,7 @@ export class Rekapi {
    */
   removeActor (actor) {
     // Remove the link between Rekapi and actor
-    this._actors = _.without(this._actors, actor);
+    this._actors = without(this._actors, actor);
     delete actor.rekapi;
 
     actor.teardown();
@@ -580,8 +596,10 @@ export class Rekapi {
   ) {
     fireEvent(this, 'beforeUpdate');
 
-    const renderOrder = this.sort ?
-      _.sortBy(this._actors, this.sort) :
+    const { sort } = this;
+
+    const renderOrder = sort ?
+      this._actors.sort((a, b) => sort(a) - sort(b)) :
       this._actors;
 
     // Update and render each of the actors
@@ -682,7 +700,7 @@ export class Rekapi {
     }
 
     this._events[eventName] = handler ?
-      _.without(this._events[eventName], handler) :
+      without(this._events[eventName], handler) :
       [];
 
     return this;
@@ -704,18 +722,22 @@ export class Rekapi {
       actors: this._actors.map(actor => actor.exportTimeline({ withId }))
     };
 
+    const { formulas } = Tweenable;
 
-    const curves = {};
+    const filteredFormulas = Object.keys(formulas).filter(
+      formulaName => typeof formulas[formulaName].x1 === 'number'
+    );
 
-    _.chain(Tweenable.formulas)
-      .filter(formula => typeof formula.x1 === 'number')
-      .each(curve =>
-        curves[curve.displayName] =
-          _.pick(curve, 'displayName', 'x1', 'y1', 'x2', 'y2')
-      )
-      .value();
+    const pickProps = ['displayName', 'x1', 'y1', 'x2', 'y2'];
 
-    exportData.curves = curves;
+    exportData.curves = filteredFormulas.reduce((acc, formulaName) => {
+        const formula = formulas[formulaName];
+        acc[formula.displayName] = pick(formula, pickProps);
+
+        return acc;
+      },
+      {}
+    );
 
     return exportData;
   }
@@ -732,7 +754,7 @@ export class Rekapi {
    * format as the object generated from {@link rekapi.Rekapi#exportTimeline}.
    */
   importTimeline (rekapiData) {
-    _.each(rekapiData.curves, (curve, curveName) =>
+    each(rekapiData.curves, (curve, curveName) =>
       setBezierFunction(
         curveName,
         curve.x1,
@@ -742,7 +764,7 @@ export class Rekapi {
       )
     );
 
-    _.each(rekapiData.actors, actorData => {
+    rekapiData.actors.forEach(actorData => {
       const actor = new Actor();
       actor.importTimeline(actorData);
       this.addActor(actor);
@@ -790,7 +812,7 @@ export class Rekapi {
    */
   moveActorToPosition (actor, position) {
     if (position < this._actors.length && position > -1) {
-      this._actors = _.without(this._actors, actor);
+      this._actors = without(this._actors, actor);
       this._actors.splice(position, 0, actor);
     }
 

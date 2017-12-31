@@ -1,4 +1,3 @@
-import _, { noop } from 'lodash';
 import { Tweenable } from 'shifty';
 import { KeyframeProperty } from './keyframe-property';
 import {
@@ -6,6 +5,17 @@ import {
   invalidateAnimationLength,
   DEFAULT_EASING
 } from './rekapi';
+
+import {
+  clone,
+  each,
+  pick,
+  uniqueId
+} from './utils';
+
+import sortedIndexBy from 'lodash.sortedindexby';
+
+const noop = () => {};
 
 /*!
  * @param {Object} obj
@@ -31,7 +41,7 @@ const fire = (actor, event, data) =>
  */
 const getPropertyCacheEntryForMillisecond = (actor, millisecond) => {
   const { _timelinePropertyCache } = actor;
-  const index = _.sortedIndex(
+  const index = sortedIndexBy(
     _timelinePropertyCache,
     { _millisecond: millisecond },
     obj => obj._millisecond
@@ -56,7 +66,7 @@ const getPropertyCacheEntryForMillisecond = (actor, millisecond) => {
  * @return {number} index
  */
 const insertionPointInTrack = (track, millisecond) =>
-  _.sortedIndex(track, { millisecond }, getMillisecond);
+  sortedIndexBy(track, { millisecond }, getMillisecond);
 
 /*!
  * Gets all of the current and most recent Rekapi.KeyframeProperties for a
@@ -68,7 +78,7 @@ const insertionPointInTrack = (track, millisecond) =>
 const getLatestProperties = (actor, forMillisecond) => {
   const latestProperties = {};
 
-  _.each(actor._propertyTracks, (propertyTrack, propertyName) => {
+  each(actor._propertyTracks, (propertyTrack, propertyName) => {
     const index = insertionPointInTrack(propertyTrack, forMillisecond);
 
     latestProperties[propertyName] =
@@ -121,10 +131,15 @@ const ensurePropertyCacheValid = actor => {
   actor._timelinePropertyCache = [];
   actor._timelineFunctionCache = [];
 
-  const { _timelinePropertyCache, _timelineFunctionCache } = actor;
+  const {
+    _keyframeProperties,
+    _timelineFunctionCache,
+    _timelinePropertyCache
+  } = actor;
 
   // Build the cache map
-  const props = _.values(actor._keyframeProperties)
+  const props = Object.keys(_keyframeProperties)
+    .map(key => _keyframeProperties[key])
     .sort((a, b) => a.millisecond - b.millisecond);
 
   let curCacheEntry = getLatestProperties(actor, 0);
@@ -134,7 +149,7 @@ const ensurePropertyCacheValid = actor => {
 
   props.forEach(property => {
     if (property.millisecond !== curCacheEntry._millisecond) {
-      curCacheEntry = _.clone(curCacheEntry);
+      curCacheEntry = clone(curCacheEntry);
       curCacheEntry._millisecond = property.millisecond;
       _timelinePropertyCache.push(curCacheEntry);
     }
@@ -170,8 +185,10 @@ const removeEmptyPropertyTracks = actor => {
  * @param {Actor} actor
  */
 const sortPropertyTracks = actor => {
-  _.each(actor._propertyTracks, (propertyTrack, trackName) => {
-    propertyTrack = _.sortBy(propertyTrack, 'millisecond');
+  each(actor._propertyTracks, (propertyTrack, trackName) => {
+    propertyTrack = propertyTrack.sort(
+      (a, b) => a.millisecond - b.millisecond
+    );
 
     propertyTrack.forEach((keyframeProperty, i) =>
       keyframeProperty.linkToNext(propertyTrack[i + 1])
@@ -231,7 +248,7 @@ export class Actor extends Tweenable {
       /**
        * @member {string} rekapi.Actor#id The unique ID of this {@link rekapi.Actor}.
        */
-      id: _.uniqueId(),
+      id: uniqueId(),
 
       /**
         * @member {(Object|CanvasRenderingContext2D|HTMLElement|undefined)}
@@ -309,7 +326,7 @@ export class Actor extends Tweenable {
       state = { 'function': state };
     }
 
-    _.each(state, (value, name) =>
+    each(state, (value, name) =>
       this.addKeyframeProperty(
         new KeyframeProperty(
           millisecond,
@@ -348,7 +365,7 @@ export class Actor extends Tweenable {
     }
 
     const propertyTracks = trackName ?
-      _.pick(_propertyTracks, trackName) :
+      pick(_propertyTracks, [trackName]) :
       _propertyTracks;
 
     return Object.keys(propertyTracks).some(track =>
@@ -386,7 +403,7 @@ export class Actor extends Tweenable {
     const sourcePositions = {};
     const sourceEasings = {};
 
-    _.each(this._propertyTracks, (propertyTrack, trackName) => {
+    each(this._propertyTracks, (propertyTrack, trackName) => {
       const keyframeProperty =
         this.getKeyframeProperty(trackName, copyFrom);
 
@@ -421,7 +438,7 @@ export class Actor extends Tweenable {
 
     // Move each of the relevant KeyframeProperties to the new location in the
     // timeline
-    _.each(this._propertyTracks, (propertyTrack, trackName) => {
+    each(this._propertyTracks, (propertyTrack, trackName) => {
       const oldIndex = propertyIndexInTrack(propertyTrack, from);
 
       if (oldIndex !== -1) {
@@ -465,7 +482,7 @@ export class Actor extends Tweenable {
    * @return {rekapi.Actor}
    */
   modifyKeyframe (millisecond, state, easing = {}) {
-    _.each(this._propertyTracks, (propertyTrack, trackName) => {
+    each(this._propertyTracks, (propertyTrack, trackName) => {
       const property = this.getKeyframeProperty(trackName, millisecond);
 
       if (property) {
@@ -501,7 +518,7 @@ export class Actor extends Tweenable {
    * @fires rekapi.timelineModified
    */
   removeKeyframe (millisecond) {
-    _.each(this._propertyTracks, (propertyTrack, propertyName) => {
+    each(this._propertyTracks, (propertyTrack, propertyName) => {
       const index = propertyIndexInTrack(propertyTrack, millisecond);
 
       if (index !== -1) {
@@ -532,11 +549,11 @@ export class Actor extends Tweenable {
    * @return {rekapi.Actor}
    */
   removeAllKeyframes () {
-    _.each(this._propertyTracks, propertyTrack =>
+    each(this._propertyTracks, propertyTrack =>
       propertyTrack.length = 0
     );
 
-    _.each(this._keyframeProperties, keyframeProperty =>
+    each(this._keyframeProperties, keyframeProperty =>
       keyframeProperty.detach()
     );
 
@@ -673,7 +690,7 @@ export class Actor extends Tweenable {
     } else {
       // Loop over all property tracks and accumulate the first
       // keyframeProperties from non-empty tracks
-      _.each(_propertyTracks, propertyTrack => {
+      each(_propertyTracks, propertyTrack => {
         if (propertyTrack.length) {
           starts.push(propertyTrack[0].millisecond);
         }
@@ -700,7 +717,7 @@ export class Actor extends Tweenable {
       { [trackName]: this._propertyTracks[trackName] } :
       this._propertyTracks;
 
-    _.each(tracksToInspect, propertyTrack => {
+    each(tracksToInspect, propertyTrack => {
       if (propertyTrack.length) {
         endingTracks.push(propertyTrack[propertyTrack.length - 1].millisecond);
       }
@@ -743,7 +760,7 @@ export class Actor extends Tweenable {
     const serializedProps = {};
     const serializedEasings = {};
 
-    _.each(latestProps, (latestProp, propName) => {
+    each(latestProps, (latestProp, propName) => {
       serializedProps[propName] = latestProp.value;
       serializedEasings[propName] = latestProp.easing;
     });
@@ -880,11 +897,11 @@ export class Actor extends Tweenable {
 
     ensurePropertyCacheValid(this);
 
-    const propertyCacheEntry =
-      _.omit(
-        getPropertyCacheEntryForMillisecond(this, millisecond),
-        '_millisecond'
-      );
+    const propertyCacheEntry = clone(
+      getPropertyCacheEntryForMillisecond(this, millisecond)
+    );
+
+    delete propertyCacheEntry._millisecond;
 
     // All actors are active at time 0 unless otherwise specified;
     // make sure a future time deactivation doesn't deactive the actor
@@ -903,7 +920,7 @@ export class Actor extends Tweenable {
 
     if (start === end) {
       // If there is only one keyframe, use that for the state of the actor
-      _.each(propertyCacheEntry, (keyframeProperty, propName) => {
+      each(propertyCacheEntry, (keyframeProperty, propName) => {
         if (keyframeProperty.shouldInvokeForMillisecond(millisecond)) {
           keyframeProperty.invoke();
           keyframeProperty.hasFired = false;
@@ -914,7 +931,7 @@ export class Actor extends Tweenable {
       });
 
     } else {
-      _.each(propertyCacheEntry, (keyframeProperty, propName) => {
+      each(propertyCacheEntry, (keyframeProperty, propName) => {
         if (this._beforeKeyframePropertyInterpolate !== noop) {
           this._beforeKeyframePropertyInterpolate(keyframeProperty);
         }
@@ -950,7 +967,7 @@ export class Actor extends Tweenable {
   _resetFnKeyframesFromMillisecond (millisecond) {
     const cache = this._timelineFunctionCache;
     const { length } = cache;
-    let index = _.sortedIndex(cache, { millisecond: millisecond }, getMillisecond);
+    let index = sortedIndexBy(cache, { millisecond: millisecond }, getMillisecond);
 
     while (index < length) {
       cache[index++].hasFired = false;
@@ -978,10 +995,10 @@ export class Actor extends Tweenable {
       exportData.id = this.id;
     }
 
-    _.each(this._propertyTracks, (propertyTrack, trackName) => {
+    each(this._propertyTracks, (propertyTrack, trackName) => {
       const track = [];
 
-      _.each(propertyTrack, keyframeProperty => {
+      propertyTrack.forEach(keyframeProperty => {
         track.push(keyframeProperty.exportPropertyData({ withId }));
       });
 
@@ -999,8 +1016,8 @@ export class Actor extends Tweenable {
    * format as the object generated from {@link rekapi.Actor#exportTimeline}.
    */
   importTimeline (actorData) {
-    _.each(actorData.propertyTracks, propertyTrack => {
-      _.each(propertyTrack, property => {
+    each(actorData.propertyTracks, propertyTrack => {
+      propertyTrack.forEach(property => {
         this.keyframe(
           property.millisecond,
           { [property.name]: property.value },

@@ -26,6 +26,7 @@
     "jsdom-global": "^3.0.2",
     "jshint": "^2.9.4",
     "live-server": "^1.2.0",
+    "lodash": "~2.4.1",
     "mocha": "^3.2.0",
     "nodemon": "^1.11.0",
     "request": "^2.83.0",
@@ -52,7 +53,7 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "lodash": "~2.4.1",
+    "lodash.sortedindexby": "^4.6.0",
     "shifty": "2.1.1"
   }
 }

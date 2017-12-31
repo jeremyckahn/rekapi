@@ -1,8 +1,11 @@
-import _ from 'lodash';
 import { interpolate } from 'shifty';
 import {
   fireEvent
 } from './rekapi';
+import {
+  pick,
+  uniqueId
+} from './utils';
 
 const DEFAULT_EASING = 'linear';
 
@@ -26,7 +29,7 @@ export class KeyframeProperty {
      * @member {string} rekapi.KeyframeProperty#id The unique ID of this {@link
      * rekapi.KeyframeProperty}.
      */
-    this.id = _.uniqueId('keyframeProperty_');
+    this.id = uniqueId('keyframeProperty_');
 
     /**
      * @member {boolean} rekapi.KeyframeProperty#hasFired Flag to determine if
@@ -180,7 +183,7 @@ export class KeyframeProperty {
       props.push('id');
     }
 
-    return _.pick(this, props);
+    return pick(this, props);
   }
 
   /*!
