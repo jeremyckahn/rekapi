@@ -35,6 +35,7 @@
   },
   "scripts": {
     "build": "webpack",
+    "ci": "npm test && npm run lint",
     "start": "webpack-dev-server --config webpack.test.config.js",
     "test": "mocha -r jsdom-global/register ./node_modules/babel-core/register.js test/index.js",
     "test:watch": "nodemon --exec \"npm test\" --watch src --watch renderers --watch test",
