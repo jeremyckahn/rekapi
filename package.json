@@ -22,7 +22,7 @@
     "gh-pages": "^1.0.0",
     "jquery": "^3.2.1",
     "jsdoc": "^3.5.5",
-    "jsdom": "11.0.0",
+    "jsdom": "16.5.0",
     "jsdom-global": "^3.0.2",
     "jshint": "^2.9.4",
     "live-server": "^1.2.0",
