@@ -332,7 +332,7 @@ export class Actor extends Tweenable {
           millisecond,
           name,
           value,
-          typeof easing === 'string' ?
+          typeof easing === 'string' || Array.isArray(easing) ?
             easing :
             (easing[name] || DEFAULT_EASING)
         )
