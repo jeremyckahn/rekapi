@@ -3,13 +3,12 @@
  */
 
 /**
- * @external shifty.easingFunction
- * @see {@link https://jeremyckahn.github.io/shifty/doc/shifty.html#.tweenConfig}
- */
-
-/**
+ * Either the name of an [easing
+ * curve](https://jeremyckahn.github.io/shifty/doc/Tweenable.html#.formulas) or
+ * an array of four `number`s (`[x1, y1, x2, y2]`) that represent the points of
+ * a [Bezier curve](https://cubic-bezier.com/).
  * @typedef rekapi.easingOption
- * @type {string|shifty.easingFunction|Object<string|shifty.easingFunction>|Array.<number>}
+ * @type {string|Array.<number>}
  * @see {@link https://jeremyckahn.github.io/shifty/doc/tutorial-easing-function-in-depth.html}
  */
 
