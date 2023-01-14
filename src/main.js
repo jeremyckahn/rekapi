@@ -3,6 +3,17 @@
  */
 
 /**
+ * @external shifty.easingFunction
+ * @see {@link https://jeremyckahn.github.io/shifty/doc/shifty.html#.tweenConfig}
+ */
+
+/**
+ * @typedef rekapi.easingOption
+ * @type {string|shifty.easingFunction|Object<string|shifty.easingFunction>|Array.<number>}
+ * @see {@link https://jeremyckahn.github.io/shifty/doc/tutorial-easing-function-in-depth.html}
+ */
+
+/**
  * An Object that provides utilities for rendering a {@link rekapi.Actor}.
  * @typedef {Object} rekapi.renderer
  * @property {rekapi.render} render A function that renders a {@link

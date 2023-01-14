@@ -316,8 +316,8 @@ export class Actor extends Tweenable {
    * animation timeline.  If this is a function ({@link
    * rekapi.keyframeFunction}), it will be called at the keyframe specified by
    * `millisecond`.
-   * @param {(string|Object)} [easing] Optional easing string or Object.  If
-   * `state` is a function, this is ignored.
+   * @param {rekapi.easingOption} [easing] Optional easing string or Object.
+   * If `state` is a function, this is ignored.
    * @return {rekapi.Actor}
    * @fires rekapi.timelineModified
    */
