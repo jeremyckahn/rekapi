@@ -45,9 +45,12 @@ render to, which gets passed to the <a href="rekapi.Rekapi.html"><code>rekapi.Re
 <pre class="prettyprint source lang-javascript"><code>import { Rekapi, Actor } from 'rekapi';
 
 const context = document.querySelector('canvas').getContext('2d');
-const rekapi = new Rekapi(context);</code></pre><p>You now have a <a href="rekapi.Rekapi.html"><code>rekapi.Rekapi</code></a> instance, but it won't do anything until
+const rekapi = new Rekapi(context);
+</code></pre>
+<p>You now have a <a href="rekapi.Rekapi.html"><code>rekapi.Rekapi</code></a> instance, but it won't do anything until
 you define and add some <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>s.</p>
-<h2>Defining actors</h2><p>Here's the boilerplate for a <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>:</p>
+<h2>Defining actors</h2>
+<p>Here's the boilerplate for a <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>:</p>
 <pre class="prettyprint source lang-javascript"><code>const actor = new Actor({
 
   // Called every frame.  Receives a reference to the canvas context, and the
@@ -56,7 +59,9 @@ you define and add some <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a
 
   }
 
-});</code></pre><p>Here's a more complete example of an actor that renders a circle to the canvas:</p>
+});
+</code></pre>
+<p>Here's a more complete example of an actor that renders a circle to the canvas:</p>
 <pre class="prettyprint source lang-javascript"><code>const actor = new Actor({
   render: (context, state) => {
     // Rekapi was given a canvas as a context, so `context` here is a
@@ -76,19 +81,26 @@ you define and add some <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a
     context.fill();
     context.closePath();
   }
-});</code></pre><p>The <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>'s <code>render</code> method can be whatever you want — in this
+});
+</code></pre>
+<p>The <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a>'s <code>render</code> method can be whatever you want — in this
 case it's just drawing a circle.  The idea is that the <code>context</code> and <code>state</code>
 parameters are provided by Rekapi on every frame update, and then rendered to
 the <code>&lt;canvas&gt;</code> by <a href="rekapi.Actor.html#render"><code>rekapi.Actor#render</code></a> method.</p>
 <p>Now that you have a <a href="rekapi.Actor.html"><code>rekapi.Actor</code></a> instance, you just need to add it to
 animation with <a href="rekapi.Rekapi.html#addActor"><code>rekapi.Rekapi#addActor</code></a>:</p>
-<pre class="prettyprint source lang-javascript"><code>rekapi.addActor(actor);</code></pre><p>Now you can define some keyframes!</p>
-<h2>Defining keyframes</h2><p>A keyframe is a way of saying &quot;at a given point in time, the actor should have
+<pre class="prettyprint source lang-javascript"><code>rekapi.addActor(actor);
+</code></pre>
+<p>Now you can define some keyframes!</p>
+<h2>Defining keyframes</h2>
+<p>A keyframe is a way of saying &quot;at a given point in time, the actor should have
 a particular state.&quot;  Let's begin by giving <code>actor</code> a starting keyframe:</p>
 <pre class="prettyprint source lang-javascript"><code>actor.keyframe(0, {
   x: 50,
   y: 50
-});</code></pre><p><a href="rekapi.Actor.html#keyframe"><code>rekapi.Actor#keyframe</code></a> is a method that takes two to three parameters -</p>
+});
+</code></pre>
+<p><a href="rekapi.Actor.html#keyframe"><code>rekapi.Actor#keyframe</code></a> is a method that takes two to three parameters -</p>
 <ol>
 <li>Which millisecond on the animation timeline the keyframe should be placed.</li>
 <li>An Object whose properties define the state that the actor should have.</li>
@@ -106,22 +118,29 @@ the canvas:</p>
   .keyframe(1000, {
     x: 200,
     y: 100
-  }, 'easeOutExpo');</code></pre><p>The animation defined here will last one second, as the final keyframe is
+  }, 'easeOutExpo');
+</code></pre>
+<p>The animation defined here will last one second, as the final keyframe is
 set at 1000 milliseconds.  It will have a nice <code>easeOutExpo</code> ease applied to
 it, as you can see in the third parameter.  Individual tweens (that is,
 keyframed animation segments) get their easing curves from the keyframe they
 are animating to, not animating from.</p>
 <p>Rekapi inherits all of <a href="https://github.com/jeremyckahn/shifty/blob/master/src/easing-functions.js">Shifty's easing
 functions</a>.</p>
-<h2>Playing the animation</h2><p>So now you've set up a sweet animation!  Let's run it and see what it looks
+<h2>Playing the animation</h2>
+<p>So now you've set up a sweet animation!  Let's run it and see what it looks
 like:</p>
-<pre class="prettyprint source lang-javascript"><code>rekapi.play();</code></pre><p>And the animation will just loop continuously.  You can also pass a <code>number</code> to
+<pre class="prettyprint source lang-javascript"><code>rekapi.play();
+</code></pre>
+<p>And the animation will just loop continuously.  You can also pass a <code>number</code> to
 <a href="rekapi.Rekapi.html#play"><code>rekapi.Rekapi#play</code></a> to define how many times to play before stopping,
 like so:</p>
-<pre class="prettyprint source lang-javascript"><code>rekapi.play(3);</code></pre><p>This will play the animation three times and stop.  When an animation stops, it
+<pre class="prettyprint source lang-javascript"><code>rekapi.play(3);
+</code></pre>
+<p>This will play the animation three times and stop.  When an animation stops, it
 will just sit at the last frame that was rendered.  You can control the
 animation playback with <a href="rekapi.Rekapi.html#pause"><code>rekapi.Rekapi#pause</code></a> and <a href="rekapi.Rekapi.html#stop"><code>rekapi.Rekapi#stop</code></a>`.</p>
-<p><p data-height="346" data-theme-id="0" data-slug-hash="brZbXE" data-default-tab="js,result" data-user="jeremyckahn" data-embed-version="2" data-pen-title="Rekapi: Getting started" class="codepen">See the Pen <a href="https://codepen.io/jeremyckahn/pen/brZbXE/">Rekapi: Getting started</a> by Jeremy Kahn (<a href="https://codepen.io/jeremyckahn">@jeremyckahn</a>) on <a href="https://codepen.io">CodePen</a>.</p></p>
+<p data-height="346" data-theme-id="0" data-slug-hash="brZbXE" data-default-tab="js,result" data-user="jeremyckahn" data-embed-version="2" data-pen-title="Rekapi: Getting started" class="codepen">See the Pen <a href="https://codepen.io/jeremyckahn/pen/brZbXE/">Rekapi: Getting started</a> by Jeremy Kahn (<a href="https://codepen.io/jeremyckahn">@jeremyckahn</a>) on <a href="https://codepen.io">CodePen</a>.</p>
 <script async src="https://production-assets.codepen.io/assets/embed/ei.js"></script>
 </article>
 
@@ -132,7 +151,7 @@ animation playback with <a href="rekapi.Rekapi.html#pause"><code>rekapi.Rekapi#p
 <br class="clear">
 
 <footer>
-    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Dec 31 2017 16:55:09 GMT-0600 (CST) using the Minami theme.
+    Generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.6.6</a> on Sat Jan 14 2023 12:00:28 GMT-0600 (Central Standard Time) using the Minami theme.
 </footer>
 
 <script>prettyPrint();</script>
