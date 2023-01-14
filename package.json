@@ -55,6 +55,6 @@
   "license": "MIT",
   "dependencies": {
     "lodash.sortedindexby": "^4.6.0",
-    "shifty": "^2.6.0"
+    "shifty": "^2.20.0"
   }
 }
