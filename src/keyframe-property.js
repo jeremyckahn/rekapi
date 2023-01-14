@@ -19,7 +19,7 @@ const DEFAULT_EASING = 'linear';
  * @param {string} name Sets {@link rekapi.KeyframeProperty#name}.
  * @param {(number|string|boolean|rekapi.keyframeFunction)} value Sets {@link
  * rekapi.KeyframeProperty#value}.
- * @param {string} [easing="linear"] Sets {@link
+ * @param {rekapi.easingOption} [easing="linear"] Sets {@link
  * rekapi.KeyframeProperty#easing}.
  * @constructs rekapi.KeyframeProperty
  */
@@ -70,8 +70,9 @@ export class KeyframeProperty {
        */
       value,
       /**
-       * @member {string} rekapi.KeyframeProperty#easing The easing curve by
-       * which this {@link rekapi.KeyframeProperty} should be animated.
+       * @member {rekapi.easingOption} rekapi.KeyframeProperty#easing The
+       * easing curve by which this {@link rekapi.KeyframeProperty} should be
+       * animated.
        */
       easing
     });
