@@ -21,7 +21,7 @@ export default defineConfig({
   test: {
     environment: 'jsdom',
     include: ['test/**/*.js'],
-    exclude: ['test/index.js', 'test/test-utils.js', 'test/setup.js', 'test/canvas.js'],
+    exclude: ['test/index.js', 'test/test-utils.js', 'test/setup.js'],
     globals: true,
     setupFiles: ['test/setup.js'],
   },
