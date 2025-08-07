@@ -1,6 +1,5 @@
 /* global describe:true, it:true, before:true, beforeEach:true, afterEach:true, after:true */
 import assert from 'assert';
-import { contains } from 'lodash';
 import {
   setupTestRekapi,
   setupTestActor
@@ -13,16 +12,24 @@ import {
   setBezierFunction,
   unsetBezierFunction
 } from 'shifty';
+import { beforeAll, afterAll } from 'vitest';
 
 describe('Canvas renderer', () => {
-  class CanvasRenderingContext2D {}
+  class CanvasRenderingContext2D {
+    constructor () {
+      this.canvas = {
+        style: {},
+        getContext: () => ({})
+      };
+    }
+  }
   let rekapi, actor, actor2;
 
-  before(() =>
+  beforeAll(() =>
     global.CanvasRenderingContext2D = CanvasRenderingContext2D
   );
 
-  after(() =>
+  afterAll(() =>
     delete global.CanvasRenderingContext2D
   );
 

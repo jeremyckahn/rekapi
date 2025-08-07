@@ -1,6 +1,6 @@
 /* global describe:true, it:true, before:true, beforeEach:true, afterEach:true, after:true */
 import assert from 'assert';
-import { contains } from 'lodash';
+import { beforeAll, afterAll } from 'vitest';
 import {
   setupTestRekapi,
   setupTestActor
@@ -45,7 +45,7 @@ describe('DOMRenderer#getCss', () => {
     actor = setupTestActor(rekapi);
   });
 
-  before(() => {
+  beforeAll(() => {
     /**
      * This is used to prevent optimization to make certain functions easier to
      * test.
@@ -55,7 +55,7 @@ describe('DOMRenderer#getCss', () => {
     };
   });
 
-  after(() => {
+  afterAll(() => {
     delete Tweenable.formulas.fakeLinear;
   });
 
