@@ -1,4 +1,5 @@
-import Rekapi, {
+import {
+  Rekapi,
   rendererBootstrappers
 } from '../rekapi';
 

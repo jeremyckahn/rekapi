@@ -14,17 +14,19 @@ import {
   unsetBezierFunction
 } from 'shifty';
 
+import { vi } from 'vitest';
+
 describe('Canvas renderer', () => {
-  class CanvasRenderingContext2D {}
+  const MockCanvasRenderingContext2D = vi.fn(() => ({
+    canvas: {
+      style: {},
+      getContext: () => ({})
+    }
+  }));
+
+  vi.stubGlobal('CanvasRenderingContext2D', MockCanvasRenderingContext2D);
+
   let rekapi, actor, actor2;
-
-  before(() =>
-    global.CanvasRenderingContext2D = CanvasRenderingContext2D
-  );
-
-  after(() =>
-    delete global.CanvasRenderingContext2D
-  );
 
   beforeEach(() => {
     rekapi = setupTestRekapi(new CanvasRenderingContext2D());

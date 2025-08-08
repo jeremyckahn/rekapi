@@ -1,6 +1,5 @@
 /* global describe:true, it:true, before:true, beforeEach:true, afterEach:true, after:true */
 import assert from 'assert';
-import { contains } from 'lodash';
 import {
   setupTestRekapi,
   setupTestActor
@@ -122,7 +121,7 @@ describe('DOM renderer', () => {
       rekapi.update(0);
 
       assert.equal(
-        actor.context.getAttribute('style').match(/transform.*;/)[0],
+        actor.context.getAttribute('style').match(/transform:.*?;/)[0],
         'transform: scale(0);'
       );
     });

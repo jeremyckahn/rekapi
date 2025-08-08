@@ -1,5 +1,6 @@
 import { Tweenable } from 'shifty';
-import Rekapi, {
+import {
+  Rekapi,
   rendererBootstrappers,
   fireEvent
 } from '../rekapi';
