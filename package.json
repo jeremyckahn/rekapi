@@ -32,7 +32,7 @@
     "build": "vite build",
     "ci": "npm test && npm run lint",
     "start": "vite dev",
-    "test": "c8 vitest",
+    "test": "c8 vitest run",
     "test:watch": "vitest --watch",
     "doc": "jsdoc -c .jsdoc src/*.js src/renderers/*.js",
     "doc:view": "live-server dist/doc --port=9124",
