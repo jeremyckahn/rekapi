@@ -40,8 +40,7 @@
     "doc:live": "concurrently --kill-others \"npm run doc:watch\" \"npm run doc:view\"",
     "lint": "jshint src",
     "deploy": "npm run build && npm run doc && gh-pages -d dist -b gh-pages",
-    "preversion": "npm run lint && npm test",
-    "postversion": "git push && git push --tags && npm run deploy && npm publish"
+    "preversion": "npm run lint && npm test"
   },
   "files": [
     "src",
