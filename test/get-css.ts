@@ -1,4 +1,4 @@
-/* global describe:true, it:true, before:true, beforeEach:true, afterEach:true, after:true */
+/* global describe:true, it:true, beforeEach:true, afterEach:true */
 import assert from 'assert';
 import { beforeAll, afterAll } from 'vitest';
 import {
@@ -8,12 +8,10 @@ import {
 
 import {
   TRANSFORM_TOKEN,
-  VENDOR_TOKEN,
   applyVendorBoilerplates,
   applyVendorPropertyPrefixes,
   generateBoilerplatedKeyframes,
   generateCSSClass,
-  generateCSSAnimationProperties,
   generateActorKeyframes,
   generateActorTrackSegment,
   combineTransformProperties,
@@ -25,20 +23,17 @@ import {
   canOptimizeKeyframeProperty,
   canOptimizeAnyKeyframeProperties,
   generateOptimizedKeyframeSegment,
-  getActorCSS,
   transformFunctions
 } from '../src/renderers/dom';
 
 import { Rekapi, Actor, DOMRenderer } from '../src/main';
 import {
   Tweenable,
-  interpolate,
-  setBezierFunction,
-  unsetBezierFunction
 } from 'shifty';
 
 describe('DOMRenderer#getCss', () => {
-  let rekapi, actor, actor2;
+  let rekapi: Rekapi;
+  let actor: Actor;
 
   beforeEach(() => {
     rekapi = setupTestRekapi(document.createElement('div'));

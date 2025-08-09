@@ -1,17 +1,12 @@
-/* global describe:true, it:true, before:true, beforeEach:true, afterEach:true */
+/* global describe:true, it:true, beforeEach:true */
 import assert from 'assert';
 import { setupTestRekapi, setupTestActor } from './test-utils';
 
-import { Rekapi, KeyframeProperty } from '../src/main';
-import {
-  Tweenable,
-  interpolate,
-  setBezierFunction,
-  unsetBezierFunction
-} from 'shifty';
+import { Actor, KeyframeProperty, Rekapi } from '../src/main';
 
 describe('KeyframeProperty', () => {
-  let rekapi, actor;
+  let rekapi: Rekapi;
+  let actor: Actor;
 
   beforeEach(() => {
     rekapi = setupTestRekapi();

@@ -1,23 +1,15 @@
-/* global describe:true, it:true, before:true, beforeEach:true, afterEach:true */
+/* global describe:true, it:true, beforeEach:true */
 import assert from 'assert';
-import { contains } from 'lodash';
 import { setupTestRekapi, setupTestActor } from './test-utils';
 
 import { Rekapi, Actor, KeyframeProperty } from '../src/main';
-import {
-  Tweenable,
-  interpolate,
-  setBezierFunction,
-  unsetBezierFunction
-} from 'shifty';
+import { interpolate } from 'shifty';
 
-import {
-  updateToMillisecond,
-  updateToCurrentMillisecond
-} from '../src/rekapi';
+import { updateToCurrentMillisecond } from '../src/rekapi';
 
 describe('Actor', () => {
-  let rekapi, actor;
+  let rekapi: Rekapi;
+  let actor: Actor;
 
   beforeEach(() => {
     rekapi = setupTestRekapi();
