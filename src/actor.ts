@@ -459,12 +459,10 @@ export class Actor extends Tweenable {
     const sourcePositions: { [key: string]: unknown } = {};
     const sourceEasings: { [key: string]: unknown } = {};
 
-    each(
-      this._propertyTracks,
-      (propertyTrack: KeyframeProperty[], trackName: string) => {
-        const keyframeProperty = this.getKeyframeProperty(trackName, copyFrom);
+    each(this._propertyTracks, (propertyTrack, trackName) => {
+      const keyframeProperty = this.getKeyframeProperty(trackName, copyFrom);
 
-        if (keyframeProperty) {
+      if (keyframeProperty) {
           sourcePositions[trackName] = keyframeProperty.value;
           sourceEasings[trackName] = keyframeProperty.easing;
         }
@@ -496,14 +494,13 @@ export class Actor extends Tweenable {
 
     // Move each of the relevant KeyframeProperties to the new location in the
     // timeline
-    each(this._propertyTracks, (propertyTrack: KeyframeProperty[]) => {
+    each(this._propertyTracks, (propertyTrack) => {
       const oldIndex = propertyIndexInTrack(propertyTrack, from);
 
       if (oldIndex !== -1) {
-          propertyTrack[oldIndex].millisecond = to;
-        }
+        propertyTrack[oldIndex].millisecond = to;
       }
-    );
+    });
 
     cleanupAfterKeyframeModification(this);
 
@@ -545,12 +542,10 @@ export class Actor extends Tweenable {
     state: Record<string, unknown>,
     easing: Record<string, string> = {}
   ) {
-    each(
-      this._propertyTracks,
-      (propertyTrack: KeyframeProperty[], trackName: string) => {
-        const property = this.getKeyframeProperty(trackName, millisecond);
+    each(this._propertyTracks, (propertyTrack, trackName) => {
+      const property = this.getKeyframeProperty(trackName, millisecond);
 
-        if (property) {
+      if (property) {
           property.modifyWith({
             value: state[trackName],
             easing: easing[trackName],
@@ -765,7 +760,7 @@ export class Actor extends Tweenable {
     } else {
       // Loop over all property tracks and accumulate the first
       // keyframeProperties from non-empty tracks
-      each(_propertyTracks, (propertyTrack: KeyframeProperty[]) => {
+      each(_propertyTracks, (propertyTrack) => {
         if (propertyTrack.length) {
           starts.push(propertyTrack[0].millisecond);
         }
@@ -1144,7 +1139,7 @@ export class Actor extends Tweenable {
    * @param {KeyframeProperty} _keyframeProperty
    * @abstract
    */
-  _beforeKeyframePropertyInterpolate(_: KeyframeProperty): void {
+  _beforeKeyframePropertyInterpolate(_keyframeProperty: KeyframeProperty): void {
     // NOOP
   }
 
@@ -1155,8 +1150,8 @@ export class Actor extends Tweenable {
    * @abstract
    */
   _afterKeyframePropertyInterpolate(
-    __: KeyframeProperty,
-    ___: { [key: string]: unknown }
+    _keyframeProperty: KeyframeProperty,
+    _interpolatedObject: { [key: string]: unknown }
   ): void {
     // NOOP
   }

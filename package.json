@@ -5,6 +5,7 @@
   "author": "Jeremy Kahn <jeremyckahn@gmail.com>",
   "description": "A keyframe animation library for JavaScript",
   "main": "dist/rekapi.js",
+  "type": "module",
   "contributors": [
     {
       "name": "Franck Lecollinet"
