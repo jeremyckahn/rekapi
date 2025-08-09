@@ -1,11 +1,7 @@
 import { interpolate } from 'shifty';
-import {
-  fireEvent
-} from './rekapi';
-import {
-  pick,
-  uniqueId
-} from './utils';
+import { fireEvent, Rekapi } from './rekapi';
+import { pick, uniqueId } from './utils';
+import { Actor } from './actor';
 
 const DEFAULT_EASING = 'linear';
 
@@ -24,7 +20,21 @@ const DEFAULT_EASING = 'linear';
  * @constructs rekapi.KeyframeProperty
  */
 export class KeyframeProperty {
-  constructor (millisecond, name, value, easing = DEFAULT_EASING) {
+  id: string;
+  hasFired: boolean | null = null;
+  actor: (Actor & { rekapi: Rekapi }) | null = null;
+  nextProperty: KeyframeProperty | null = null;
+  millisecond!: number;
+  name!: string;
+  value!: number | string | boolean | ((...args: unknown[]) => void);
+  easing: string | Record<string, string>;
+
+  constructor(
+    millisecond: number,
+    name: string,
+    value: KeyframeProperty['value'],
+    easing: KeyframeProperty['easing'] = DEFAULT_EASING
+  ) {
     /**
      * @member {string} rekapi.KeyframeProperty#id The unique ID of this {@link
      * rekapi.KeyframeProperty}.
@@ -47,8 +57,8 @@ export class KeyframeProperty {
     /**
      * @member {(rekapi.KeyframeProperty|null)}
      * rekapi.KeyframeProperty#nextProperty A reference to the {@link
-      * rekapi.KeyframeProperty} that follows this one in a {@link
-      * rekapi.Actor}'s property track.
+     * rekapi.KeyframeProperty} that follows this one in a {@link
+     * rekapi.Actor}'s property track.
      */
     this.nextProperty = null;
 
@@ -74,7 +84,7 @@ export class KeyframeProperty {
        * easing curve by which this {@link rekapi.KeyframeProperty} should be
        * animated.
        */
-      easing
+      easing,
     });
   }
 
@@ -90,7 +100,7 @@ export class KeyframeProperty {
    * @param {string} [newProperties.easing] Sets {@link
    * rekapi.KeyframeProperty#easing}.
    */
-  modifyWith (newProperties) {
+  modifyWith(newProperties: Partial<KeyframeProperty>) {
     Object.assign(this, newProperties);
   }
 
@@ -108,7 +118,7 @@ export class KeyframeProperty {
    * compute the state value for.
    * @return {(number|string|boolean|rekapi.keyframeFunction|rekapi.KeyframeProperty#value)}
    */
-  getValueAt (millisecond) {
+  getValueAt(millisecond: number) {
     const nextProperty = this.nextProperty;
 
     if (typeof this.value === 'boolean') {
@@ -125,8 +135,8 @@ export class KeyframeProperty {
         (boundedMillisecond - this.millisecond) / delta;
 
       return interpolate(
-        { [name]: this.value },
-        { [name]: nextProperty.value },
+        { [name]: this.value as number },
+        { [name]: nextProperty.value as number },
         interpolatePosition,
         nextProperty.easing
       )[name];
@@ -144,7 +154,7 @@ export class KeyframeProperty {
    * rekapi.KeyframeProperty} that should immediately follow this one on the
    * animation timeline.
    */
-  linkToNext (nextProperty = null) {
+  linkToNext(nextProperty: KeyframeProperty | null = null) {
     this.nextProperty = nextProperty;
   }
 
@@ -156,7 +166,7 @@ export class KeyframeProperty {
    * @method rekapi.KeyframeProperty#detach
    * @fires rekapi.removeKeyframeProperty
    */
-  detach () {
+  detach() {
     const { actor } = this;
 
     if (actor && actor.rekapi) {
@@ -177,14 +187,14 @@ export class KeyframeProperty {
    * value in exported data.
    * @return {rekapi.propertyData}
    */
-  exportPropertyData ({ withId = false } = {}) {
+  exportPropertyData({ withId = false } = {}) {
     const props = ['millisecond', 'name', 'value', 'easing'];
 
     if (withId) {
       props.push('id');
     }
 
-    return pick(this, props);
+    return pick(this, props as (keyof this)[]);
   }
 
   /*!
@@ -193,8 +203,9 @@ export class KeyframeProperty {
    * @method rekapi.KeyframeProperty#shouldInvokeForMillisecond
    * @return {boolean}
    */
-  shouldInvokeForMillisecond (millisecond) {
-    return (millisecond >= this.millisecond &&
+  shouldInvokeForMillisecond(millisecond: number) {
+    return (
+      millisecond >= this.millisecond &&
       this.name === 'function' &&
       !this.hasFired
     );
@@ -207,9 +218,14 @@ export class KeyframeProperty {
    * @return {any} Whatever value is returned for this {@link
    * rekapi.KeyframeProperty}'s {@link rekapi.keyframeFunction}.
    */
-  invoke () {
+  invoke() {
+    // @ts-expect-error -- Unsure how to type this properly
     const drift = this.actor.rekapi._loopPosition - this.millisecond;
-    const returnValue = this.value(this.actor, drift);
+    // @ts-expect-error -- Unsure how to type this properly
+    const returnValue = (this.value as (...args: unknown[]) => void)(
+      this.actor,
+      drift
+    );
     this.hasFired = true;
 
     return returnValue;

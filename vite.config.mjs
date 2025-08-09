@@ -4,7 +4,7 @@ import { resolve } from 'path';
 export default defineConfig({
   build: {
     lib: {
-      entry: resolve(__dirname, 'src/main.js'),
+      entry: resolve(__dirname, 'src/main.ts'),
       name: 'rekapi',
       fileName: 'rekapi',
       formats: ['umd'],
@@ -20,9 +20,9 @@ export default defineConfig({
   },
   test: {
     environment: 'jsdom',
-    include: ['test/**/*.js'],
-    exclude: ['test/index.js', 'test/test-utils.js', 'test/setup.js'],
+    include: ['test/**/*.ts'],
+    exclude: ['test/index.ts', 'test/test-utils.ts', 'test/setup.ts'],
     globals: true,
-    setupFiles: ['test/setup.js'],
+    setupFiles: ['test/setup.ts'],
   },
 });

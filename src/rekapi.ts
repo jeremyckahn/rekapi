@@ -1,11 +1,8 @@
 import { Tweenable, setBezierFunction } from 'shifty';
-import { Actor } from './actor';
+import { Actor, KapiActor } from './actor';
 
-import {
-  each,
-  pick,
-  without
-} from './utils';
+import { each, pick, without } from './utils';
+import { KeyframeProperty } from './keyframe-property';
 
 const UPDATE_TIME = 1000 / 60;
 
@@ -17,21 +14,31 @@ export const DEFAULT_EASING = 'linear';
  * @param {string} eventName
  * @param {Object} [data={}] Optional event-specific data
  */
-export const fireEvent = (rekapi, eventName, data = {}) =>
-  rekapi._events[eventName].forEach(handler => handler(rekapi, data));
+export const fireEvent = (
+  rekapi: Rekapi,
+  eventName: string,
+  data: unknown = {}
+) => {
+  if (rekapi._events[eventName]) {
+    rekapi._events[eventName].forEach((handler: (rekapi: Rekapi, data: unknown) => void) => handler(rekapi, data));
+  }
+};
 
 /*!
  * @param {Rekapi} rekapi
  */
-export const invalidateAnimationLength = rekapi =>
-  rekapi._animationLengthValid = false;
+export const invalidateAnimationLength = (rekapi: Rekapi) =>
+  (rekapi._animationLengthValid = false);
 
 /*!
  * Determines which iteration of the loop the animation is currently in.
  * @param {Rekapi} rekapi
  * @param {number} timeSinceStart
  */
-export const determineCurrentLoopIteration = (rekapi, timeSinceStart) => {
+export const determineCurrentLoopIteration = (
+  rekapi: Rekapi,
+  timeSinceStart: number
+) => {
   const animationLength = rekapi.getAnimationLength();
 
   if (animationLength === 0) {
@@ -46,7 +53,7 @@ export const determineCurrentLoopIteration = (rekapi, timeSinceStart) => {
  * @param {Rekapi} rekapi
  * @return {number}
  */
-export const calculateTimeSinceStart = rekapi =>
+export const calculateTimeSinceStart = (rekapi: Rekapi) =>
   Tweenable.now() - rekapi._loopTimestamp;
 
 /*!
@@ -55,9 +62,12 @@ export const calculateTimeSinceStart = rekapi =>
  * @param {number} currentLoopIteration
  * @return {boolean}
  */
-export const isAnimationComplete = (rekapi, currentLoopIteration) =>
-  currentLoopIteration >= rekapi._timesToIterate
-    && rekapi._timesToIterate !== -1;
+export const isAnimationComplete = (
+  rekapi: Rekapi,
+  currentLoopIteration: number
+) =>
+  currentLoopIteration >= rekapi._timesToIterate &&
+  rekapi._timesToIterate !== -1;
 
 /*!
  * Stops the animation if it is complete.
@@ -65,7 +75,10 @@ export const isAnimationComplete = (rekapi, currentLoopIteration) =>
  * @param {number} currentLoopIteration
  * @fires rekapi.animationComplete
  */
-export const updatePlayState = (rekapi, currentLoopIteration) => {
+export const updatePlayState = (
+  rekapi: Rekapi,
+  currentLoopIteration: number
+) => {
   if (isAnimationComplete(rekapi, currentLoopIteration)) {
     rekapi.stop();
     fireEvent(rekapi, 'animationComplete');
@@ -80,14 +93,18 @@ export const updatePlayState = (rekapi, currentLoopIteration) => {
  * @param {number} currentLoopIteration
  * @return {number}
  */
-export const calculateLoopPosition = (rekapi, forMillisecond, currentLoopIteration) => {
+export const calculateLoopPosition = (
+  rekapi: Rekapi,
+  forMillisecond: number,
+  currentLoopIteration: number
+) => {
   const animationLength = rekapi.getAnimationLength();
 
-  return animationLength === 0 ?
-    0 :
-    isAnimationComplete(rekapi, currentLoopIteration) ?
-      animationLength :
-      forMillisecond % animationLength;
+  return animationLength === 0
+    ? 0
+    : isAnimationComplete(rekapi, currentLoopIteration)
+    ? animationLength
+    : forMillisecond % animationLength;
 };
 
 /*!
@@ -98,21 +115,22 @@ export const calculateLoopPosition = (rekapi, forMillisecond, currentLoopIterati
  * @param {number} forMillisecond
  * @fires rekapi.animationLooped
  */
-export const updateToMillisecond = (rekapi, forMillisecond) => {
+export const updateToMillisecond = (rekapi: Rekapi, forMillisecond: number) => {
   const currentIteration = determineCurrentLoopIteration(rekapi, forMillisecond);
   const loopPosition = calculateLoopPosition(
-    rekapi, forMillisecond, currentIteration
+    rekapi,
+    forMillisecond,
+    currentIteration
   );
 
   rekapi._loopPosition = loopPosition;
 
-  const keyframeResetList = [];
+  const keyframeResetList: KeyframeProperty[] = [];
 
   if (currentIteration > rekapi._latestIteration) {
     fireEvent(rekapi, 'animationLooped');
 
-    rekapi._actors.forEach(actor => {
-
+    rekapi._actors.forEach((actor) => {
       const { _keyframeProperties } = actor;
       const fnKeyframes = Object.keys(_keyframeProperties).reduce(
         (acc, propertyId) => {
@@ -124,7 +142,7 @@ export const updateToMillisecond = (rekapi, forMillisecond) => {
 
           return acc;
         },
-        []
+        [] as KeyframeProperty[]
       );
 
       const lastFnKeyframe = fnKeyframes[fnKeyframes.length - 1];
@@ -141,7 +159,7 @@ export const updateToMillisecond = (rekapi, forMillisecond) => {
   rekapi.update(loopPosition, true);
   updatePlayState(rekapi, currentIteration);
 
-  keyframeResetList.forEach(fnKeyframe => {
+  keyframeResetList.forEach((fnKeyframe) => {
     fnKeyframe.hasFired = false;
   });
 };
@@ -151,7 +169,7 @@ export const updateToMillisecond = (rekapi, forMillisecond) => {
  * and update based on that time.
  * @param {Rekapi} rekapi
  */
-export const updateToCurrentMillisecond = rekapi =>
+export const updateToCurrentMillisecond = (rekapi: Rekapi) =>
   updateToMillisecond(rekapi, calculateTimeSinceStart(rekapi));
 
 /*!
@@ -159,36 +177,37 @@ export const updateToCurrentMillisecond = rekapi =>
  * then calls itself continuously.
  * @param {Rekapi} rekapi
  */
-const tick = rekapi =>
+const tick = (rekapi: Rekapi) =>
   // Need to check for .call presence to get around an IE limitation.  See
   // annotation for cancelLoop for more info.
-  rekapi._loopId = rekapi._scheduleUpdate.call ?
-    rekapi._scheduleUpdate.call(global, rekapi._updateFn, UPDATE_TIME) :
-    setTimeout(rekapi._updateFn, UPDATE_TIME);
+  (rekapi._loopId = rekapi._scheduleUpdate.call
+    ? rekapi._scheduleUpdate.call(self, rekapi._updateFn, UPDATE_TIME)
+    : setTimeout(rekapi._updateFn, UPDATE_TIME));
 
 /*!
  * @return {Function}
  */
-const getUpdateMethod = () =>
+const getUpdateMethod = (): ((callback: FrameRequestCallback) => number) =>
   // requestAnimationFrame() shim by Paul Irish (modified for Rekapi)
   // http://paulirish.com/2011/requestanimationframe-for-smart-animating/
-  global.requestAnimationFrame       ||
-  global.webkitRequestAnimationFrame ||
-  global.oRequestAnimationFrame      ||
-  global.msRequestAnimationFrame     ||
-  (global.mozCancelRequestAnimationFrame && global.mozRequestAnimationFrame) ||
-  global.setTimeout;
+  self.requestAnimationFrame ||
+  (self as unknown as Window).webkitRequestAnimationFrame ||
+  (self as Window).oRequestAnimationFrame ||
+  (self as Window).msRequestAnimationFrame ||
+  ((self as Window).mozCancelRequestAnimationFrame &&
+    (self as Window).mozRequestAnimationFrame) ||
+  self.setTimeout;
 
 /*!
  * @return {Function}
  */
-const getCancelMethod = () =>
-  global.cancelAnimationFrame           ||
-  global.webkitCancelAnimationFrame     ||
-  global.oCancelAnimationFrame          ||
-  global.msCancelAnimationFrame         ||
-  global.mozCancelRequestAnimationFrame ||
-  global.clearTimeout;
+const getCancelMethod = (): ((handle: number) => void) =>
+  self.cancelAnimationFrame ||
+  (self as unknown as Window).webkitCancelAnimationFrame ||
+  (self as Window).oCancelAnimationFrame ||
+  (self as Window).msCancelAnimationFrame ||
+  (self as Window).mozCancelRequestAnimationFrame ||
+  self.clearTimeout;
 
 /*!
  * Cancels an update loop.  This abstraction is needed to get around the fact
@@ -197,10 +216,10 @@ const getCancelMethod = () =>
  * Function.prototype.call cannot be used upon it.
  * @param {Rekapi} rekapi
  */
-const cancelLoop = rekapi =>
-  rekapi._cancelUpdate.call ?
-    rekapi._cancelUpdate.call(global, rekapi._loopId) :
-    clearTimeout(rekapi._loopId);
+const cancelLoop = (rekapi: Rekapi) =>
+  rekapi._cancelUpdate.call
+    ? rekapi._cancelUpdate.call(self, rekapi._loopId)
+    : clearTimeout(rekapi._loopId as number);
 
 const STOPPED = 'stopped';
 const PAUSED = 'paused';
@@ -211,7 +230,7 @@ const PLAYING = 'playing';
  * the Rekapi constructor.  This array is populated by modules in the
  * renderers/ directory.
  */
-export const rendererBootstrappers = [];
+export const rendererBootstrappers: ((rekapi: Rekapi) => unknown)[] = [];
 
 /**
  * If this is a rendered animation, the appropriate renderer is accessible as
@@ -233,7 +252,45 @@ export const rendererBootstrappers = [];
  * @constructs rekapi.Rekapi
  */
 export class Rekapi {
-  constructor (context = {}) {
+  context: unknown;
+  _actors: Actor[] = [];
+  _playState: string = STOPPED;
+  sort: ((actor: Actor) => number) | null = null;
+  _events: { [key: string]: ((...args: unknown[]) => void)[] } = {
+    animationComplete: [],
+    playStateChange: [],
+    play: [],
+    pause: [],
+    stop: [],
+    beforeUpdate: [],
+    afterUpdate: [],
+    addActor: [],
+    removeActor: [],
+    beforeAddKeyframeProperty: [],
+    addKeyframeProperty: [],
+    removeKeyframeProperty: [],
+    removeKeyframePropertyComplete: [],
+    beforeRemoveKeyframeProperty: [],
+    addKeyframePropertyTrack: [],
+    removeKeyframePropertyTrack: [],
+    timelineModified: [],
+    animationLooped: [],
+  };
+  _timesToIterate = -1;
+  _animationLength = 0;
+  _animationLengthValid = false;
+  _loopId: number | null = null;
+  _loopTimestamp: number = 0;
+  _pausedAtTime: number | null = null;
+  _lastUpdatedMillisecond = 0;
+  _latestIteration = 0;
+  _loopPosition: number | null = null;
+  _scheduleUpdate: (callback: FrameRequestCallback) => number;
+  _cancelUpdate: (handle: number) => void;
+  _updateFn: () => void;
+  renderers: unknown[];
+
+  constructor(context: unknown = {}) {
     /**
      * @member {(Object|CanvasRenderingContext2D|HTMLElement)}
      * rekapi.Rekapi#context The rendering context for an animation.
@@ -280,7 +337,7 @@ export class Rekapi {
       addKeyframePropertyTrack: [],
       removeKeyframePropertyTrack: [],
       timelineModified: [],
-      animationLooped: []
+      animationLooped: [],
     };
 
     // How many times to loop the animation before stopping
@@ -294,7 +351,7 @@ export class Rekapi {
     this._loopId = null;
 
     // The UNIX time at which the animation loop started
-    this._loopTimestamp = null;
+    this._loopTimestamp = 0;
 
     // Used for maintaining position when the animation is paused
     this._pausedAtTime = null;
@@ -325,8 +382,8 @@ export class Rekapi {
      * multiple-renderers} tutorial for an example.
      */
     this.renderers = rendererBootstrappers
-      .map(renderer => renderer(this))
-      .filter(_ => _);
+      .map((renderer) => renderer(this))
+      .filter((renderer) => renderer);
   }
 
   /**
@@ -341,10 +398,8 @@ export class Rekapi {
    * @return {rekapi.Actor} The {@link rekapi.Actor} that was added.
    * @fires rekapi.addActor
    */
-  addActor (actor = {}) {
-    const rekapiActor = actor instanceof Actor ?
-      actor :
-      new Actor(actor);
+  addActor(actor: KapiActor = {} as KapiActor) {
+    const rekapiActor = actor instanceof Actor ? actor : new Actor(actor);
 
     // You can't add an actor more than once.
     if (~this._actors.indexOf(rekapiActor)) {
@@ -372,8 +427,8 @@ export class Rekapi {
    * `id`.  You can use {@link rekapi.Rekapi#getActorIds} to get a list of IDs
    * for all actors in the animation.
    */
-  getActor (actorId) {
-    return this._actors.filter(actor => actor.id === actorId)[0];
+  getActor(actorId: string) {
+    return this._actors.filter((actor) => actor.id === actorId)[0];
   }
 
   /**
@@ -381,15 +436,15 @@ export class Rekapi {
    * @return {Array.<number>} The `id`s of all {@link rekapi.Actor}`s in the
    * animation.
    */
-  getActorIds () {
-    return this._actors.map(actor => actor.id);
+  getActorIds() {
+    return this._actors.map((actor) => actor.id);
   }
 
   /**
    * @method rekapi.Rekapi#getAllActors
    * @return {Array.<rekapi.Actor>} All {@link rekapi.Actor}s in the animation.
    */
-  getAllActors () {
+  getAllActors() {
     return this._actors.slice();
   }
 
@@ -397,7 +452,7 @@ export class Rekapi {
    * @method rekapi.Rekapi#getActorCount
    * @return {number} The number of {@link rekapi.Actor}s in the animation.
    */
-  getActorCount () {
+  getActorCount() {
     return this._actors.length;
   }
 
@@ -411,7 +466,7 @@ export class Rekapi {
    * @return {rekapi.Actor} The {@link rekapi.Actor} that was removed.
    * @fires rekapi.removeActor
    */
-  removeActor (actor) {
+  removeActor(actor: Actor) {
     // Remove the link between Rekapi and actor
     this._actors = without(this._actors, actor);
     delete actor.rekapi;
@@ -430,8 +485,8 @@ export class Rekapi {
    * @return {Array.<rekapi.Actor>} The {@link rekapi.Actor}s that were
    * removed.
    */
-  removeAllActors () {
-    return this.getAllActors().map(actor => this.removeActor(actor));
+  removeAllActors() {
+    return this.getAllActors().map((actor) => this.removeActor(actor));
   }
 
   /**
@@ -444,13 +499,13 @@ export class Rekapi {
    * @fires rekapi.playStateChange
    * @fires rekapi.play
    */
-  play (iterations = -1) {
+  play(iterations = -1) {
     cancelLoop(this);
 
     if (this._playState === PAUSED) {
       // Move the playhead to the correct position in the timeline if resuming
       // from a pause
-      this._loopTimestamp += Tweenable.now() - this._pausedAtTime;
+      this._loopTimestamp += Tweenable.now() - (this._pausedAtTime as number);
     } else {
       this._loopTimestamp = Tweenable.now();
     }
@@ -476,12 +531,12 @@ export class Rekapi {
    * rekapi.Rekapi#play}.
    * @return {rekapi.Rekapi}
    */
-  playFrom (millisecond, iterations) {
+  playFrom(millisecond: number, iterations: number) {
     this.play(iterations);
     this._loopTimestamp = Tweenable.now() - millisecond;
 
-    this._actors.forEach(
-      actor => actor._resetFnKeyframesFromMillisecond(millisecond)
+    this._actors.forEach((actor) =>
+      actor._resetFnKeyframesFromMillisecond(millisecond)
     );
 
     return this;
@@ -496,7 +551,7 @@ export class Rekapi {
    * rekapi.Rekapi#play}.
    * @return {rekapi.Rekapi}
    */
-  playFromCurrent (iterations) {
+  playFromCurrent(iterations: number) {
     return this.playFrom(this._lastUpdatedMillisecond, iterations);
   }
 
@@ -509,7 +564,7 @@ export class Rekapi {
    * @fires rekapi.playStateChange
    * @fires rekapi.pause
    */
-  pause () {
+  pause() {
     if (this._playState === PAUSED) {
       return this;
     }
@@ -533,12 +588,12 @@ export class Rekapi {
    * @fires rekapi.playStateChange
    * @fires rekapi.stop
    */
-  stop () {
+  stop() {
     this._playState = STOPPED;
     cancelLoop(this);
 
     // Also kill any shifty tweens that are running.
-    this._actors.forEach(actor =>
+    this._actors.forEach((actor) =>
       actor._resetFnKeyframesFromMillisecond(0)
     );
 
@@ -553,7 +608,7 @@ export class Rekapi {
    * @return {boolean} Whether or not the animation is playing (meaning not paused or
    * stopped).
    */
-  isPlaying () {
+  isPlaying() {
     return this._playState === PLAYING;
   }
 
@@ -562,7 +617,7 @@ export class Rekapi {
    * @return {boolean} Whether or not the animation is paused (meaning not playing or
    * stopped).
    */
-  isPaused () {
+  isPaused() {
     return this._playState === PAUSED;
   }
 
@@ -571,7 +626,7 @@ export class Rekapi {
    * @return {boolean} Whether or not the animation is stopped (meaning not playing or
    * paused).
    */
-  isStopped () {
+  isStopped() {
     return this._playState === STOPPED;
   }
 
@@ -590,7 +645,7 @@ export class Rekapi {
    * @fires rekapi.beforeUpdate
    * @fires rekapi.afterUpdate
    */
-  update (
+  update(
     millisecond = this._lastUpdatedMillisecond,
     doResetLaterFnKeyframes = false
   ) {
@@ -598,12 +653,12 @@ export class Rekapi {
 
     const { sort } = this;
 
-    const renderOrder = sort ?
-      this._actors.sort((a, b) => sort(a) - sort(b)) :
-      this._actors;
+    const renderOrder = sort
+      ? this._actors.sort((a, b) => sort(a) - sort(b))
+      : this._actors;
 
     // Update and render each of the actors
-    renderOrder.forEach(actor => {
+    renderOrder.forEach((actor) => {
       actor._updateState(millisecond, doResetLaterFnKeyframes);
 
       if (actor.wasActive) {
@@ -622,15 +677,15 @@ export class Rekapi {
    * @return {number} The normalized timeline position (between 0 and 1) that
    * was last rendered.
    */
-  getLastPositionUpdated () {
-    return (this._lastUpdatedMillisecond / this.getAnimationLength());
+  getLastPositionUpdated() {
+    return this._lastUpdatedMillisecond / this.getAnimationLength();
   }
 
   /**
    * @method rekapi.Rekapi#getLastMillisecondUpdated
    * @return {number} The millisecond that was last rendered.
    */
-  getLastMillisecondUpdated () {
+  getLastMillisecondUpdated() {
     return this._lastUpdatedMillisecond;
   }
 
@@ -638,11 +693,10 @@ export class Rekapi {
    * @method rekapi.Rekapi#getAnimationLength
    * @return {number} The length of the animation timeline, in milliseconds.
    */
-  getAnimationLength () {
+  getAnimationLength() {
     if (!this._animationLengthValid) {
-      this._animationLength = Math.max.apply(
-        Math,
-        this._actors.map(actor => actor.getEnd())
+      this._animationLength = Math.max(
+        ...this._actors.map((actor) => actor.getEnd())
       );
 
       this._animationLengthValid = true;
@@ -658,7 +712,7 @@ export class Rekapi {
    * @param {rekapi.eventHandler} handler The event handler function.
    * @return {rekapi.Rekapi}
    */
-  on (eventName, handler) {
+  on(eventName: string, handler: (...args: unknown[]) => void) {
     if (!this._events[eventName]) {
       return this;
     }
@@ -678,7 +732,7 @@ export class Rekapi {
    * @return {rekapi.Rekapi}
    * @fires *
    */
-  trigger (eventName, data) {
+  trigger(eventName: string, data?: unknown) {
     fireEvent(this, eventName, data);
 
     return this;
@@ -694,14 +748,14 @@ export class Rekapi {
    * rekapi.eventHandler}s bound to `eventName` are unbound.
    * @return {rekapi.Rekapi}
    */
-  off (eventName, handler) {
+  off(eventName: string, handler?: (...args: unknown[]) => void) {
     if (!this._events[eventName]) {
       return this;
     }
 
-    this._events[eventName] = handler ?
-      without(this._events[eventName], handler) :
-      [];
+    this._events[eventName] = handler
+      ? without(this._events[eventName], handler)
+      : [];
 
     return this;
   }
@@ -716,22 +770,27 @@ export class Rekapi {
    * @return {rekapi.timelineData} This data can later be consumed by {@link
    * rekapi.Rekapi#importTimeline}.
    */
-  exportTimeline ({ withId = false } = {}) {
-    const exportData = {
+  exportTimeline({ withId = false } = {}) {
+    const exportData: Record<string, unknown> = {
       duration: this.getAnimationLength(),
-      actors: this._actors.map(actor => actor.exportTimeline({ withId }))
+      actors: this._actors.map((actor) => actor.exportTimeline({ withId })),
     };
 
     const { formulas } = Tweenable;
 
     const filteredFormulas = Object.keys(formulas).filter(
-      formulaName => typeof formulas[formulaName].x1 === 'number'
+      (formulaName) =>
+        typeof (formulas as Record<string, { x1: number }>)[formulaName].x1 ===
+        'number'
     );
 
     const pickProps = ['displayName', 'x1', 'y1', 'x2', 'y2'];
 
-    exportData.curves = filteredFormulas.reduce((acc, formulaName) => {
-        const formula = formulas[formulaName];
+    exportData.curves = filteredFormulas.reduce(
+      (acc: Record<string, unknown>, formulaName) => {
+        const formula = (
+          formulas as Record<string, { displayName: string }>
+        )[formulaName];
         acc[formula.displayName] = pick(formula, pickProps);
 
         return acc;
@@ -753,18 +812,22 @@ export class Rekapi {
    * @param {rekapi.timelineData} rekapiData Any object that has the same data
    * format as the object generated from {@link rekapi.Rekapi#exportTimeline}.
    */
-  importTimeline (rekapiData) {
-    each(rekapiData.curves, (curve, curveName) =>
-      setBezierFunction(
-        curveName,
-        curve.x1,
-        curve.y1,
-        curve.x2,
-        curve.y2
-      )
+  importTimeline(
+    rekapiData: Pick<
+      ReturnType<Rekapi['exportTimeline']>,
+      'curves' | 'actors'
+    >
+  ) {
+    each(
+      rekapiData.curves as Record<
+        string,
+        { x1: number; y1: number; x2: number; y2: number }
+      >,
+      (curve, curveName) =>
+        setBezierFunction(curveName, curve.x1, curve.y1, curve.x2, curve.y2)
     );
 
-    rekapiData.actors.forEach(actorData => {
+    (rekapiData.actors as KapiActor[]).forEach((actorData) => {
       const actor = new Actor();
       actor.importTimeline(actorData);
       this.addActor(actor);
@@ -776,7 +839,7 @@ export class Rekapi {
    * @return {Array.<string>} The list of event names that this Rekapi instance
    * supports.
    */
-  getEventNames () {
+  getEventNames() {
     return Object.keys(this._events);
   }
 
@@ -790,10 +853,12 @@ export class Rekapi {
    * @return {rekapi.renderer|undefined} The matching {@link rekapi.renderer},
    * if any.
    */
-  getRendererInstance (rendererConstructor) {
-    return this.renderers.filter(renderer =>
-      renderer instanceof rendererConstructor
-    )[0];
+  getRendererInstance<T>(
+    rendererConstructor: new (...args: unknown[]) => T
+  ): T {
+    return this.renderers.filter(
+      (renderer) => renderer instanceof rendererConstructor
+    )[0] as T;
   }
 
   /**
@@ -810,7 +875,7 @@ export class Rekapi {
    * {@link rekapi.Rekapi#getActorCount}.
    * @return {rekapi.Rekapi}
    */
-  moveActorToPosition (actor, position) {
+  moveActorToPosition(actor: Actor, position: number) {
     if (position < this._actors.length && position > -1) {
       this._actors = without(this._actors, actor);
       this._actors.splice(position, 0, actor);
