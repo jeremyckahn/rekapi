@@ -3,9 +3,15 @@ import assert from 'assert';
 import { setupTestRekapi, setupTestActor } from './test-utils';
 
 import { Rekapi, Actor, KeyframeProperty } from '../src/main';
-import { interpolate } from 'shifty';
+import {
+  Tweenable,
+  interpolate,
+} from 'shifty';
 
-import { updateToCurrentMillisecond } from '../src/rekapi';
+import {
+  updateToMillisecond,
+  updateToCurrentMillisecond,
+} from '../src/rekapi';
 
 describe('Actor', () => {
   let rekapi: Rekapi;
