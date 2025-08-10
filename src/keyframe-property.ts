@@ -1,5 +1,5 @@
 import { interpolate } from 'shifty';
-import { fireEvent, Rekapi } from './rekapi';
+import { fireEvent } from './rekapi';
 import { pick, uniqueId } from './utils';
 import { Actor } from './actor';
 
@@ -22,7 +22,7 @@ const DEFAULT_EASING = 'linear';
 export class KeyframeProperty {
   id: string;
   hasFired: boolean | null = null;
-  actor: (Actor & { rekapi: Rekapi }) | null = null;
+  actor: Actor | null = null;
   nextProperty: KeyframeProperty | null = null;
   millisecond!: number;
   name!: string;

@@ -29,7 +29,10 @@ export interface RekapiActor extends Tweenable {
 
 export interface KapiProperty {
   millisecond: number;
-  [key: string]: unknown;
+  name: string;
+  value: unknown;
+  easing: unknown;
+  id?: string;
 }
 
 export interface TimelinePropertyCacheEntry {
@@ -66,8 +69,7 @@ const getPropertyCacheEntryForMillisecond = (
   const { _timelinePropertyCache } = actor;
   const index = sortedIndexBy(
     _timelinePropertyCache,
-    { _millisecond: millisecond },
-    // @ts-expect-error --- The lodash types are not perfect
+    { _millisecond: millisecond } as TimelinePropertyCacheEntry,
     (obj) => obj._millisecond
   );
 
@@ -263,7 +265,7 @@ const cleanupAfterKeyframeModification = (actor: Actor) => {
  * @constructs rekapi.Actor
  */
 export class Actor extends Tweenable {
-  context!: KapiActor['context'];
+  context: KapiActor['context'];
   id!: KapiActor['id'];
   rekapi: KapiActor['rekapi'];
   render: KapiActor['render'];
