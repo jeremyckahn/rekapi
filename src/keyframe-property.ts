@@ -219,9 +219,7 @@ export class KeyframeProperty {
    * rekapi.KeyframeProperty}'s {@link rekapi.keyframeFunction}.
    */
   invoke() {
-    // @ts-expect-error -- Unsure how to type this properly
-    const drift = this.actor.rekapi._loopPosition - this.millisecond;
-    // @ts-expect-error -- Unsure how to type this properly
+    const drift = (this.actor?.rekapi?._loopPosition ?? 0) - this.millisecond;
     const returnValue = (this.value as (...args: unknown[]) => void)(
       this.actor,
       drift

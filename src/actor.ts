@@ -923,7 +923,6 @@ export class Actor extends Tweenable {
           throw new Error(
             `Cannot add duplicate ${name} keyframe property @ ${newMillisecond}ms`
           );
-          // @ts-expect-error -- rekapi is not typed on the actor yet
         } else if (rekapi && rekapi._warnOnOutOfOrderKeyframes) {
           console.warn(
             new Error(

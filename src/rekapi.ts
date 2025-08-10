@@ -285,6 +285,7 @@ export class Rekapi {
   _lastUpdatedMillisecond = 0;
   _latestIteration = 0;
   _loopPosition: number | null = null;
+  _warnOnOutOfOrderKeyframes?: boolean;
   _scheduleUpdate: (callback: FrameRequestCallback) => number;
   _cancelUpdate: (handle: number) => void;
   _updateFn: () => void;
