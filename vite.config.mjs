@@ -6,7 +6,7 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'src/main.js'),
       name: 'rekapi',
-      fileName: 'rekapi',
+      fileName: () => 'rekapi.js',
       formats: ['umd'],
     },
     rollupOptions: {
