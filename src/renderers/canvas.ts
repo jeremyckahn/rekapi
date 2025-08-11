@@ -1,20 +1,21 @@
-import {
-  Rekapi,
-  rendererBootstrappers
-} from '../rekapi';
+import { Rekapi, rendererBootstrappers } from '../rekapi';
 
 // PRIVATE UTILITY FUNCTIONS
 //
 
 /*!
  * Gets (and optionally sets) height or width on a canvas.
- * @param {HTMLCanvas} canvas
+ * @param {HTMLCanvasElement} canvas
  * @param {string} heightOrWidth The dimension (either "height" or "width")
  * to get or set.
  * @param {number=} newSize The new value to set for `dimension`.
  * @return {number}
  */
-const dimension = (canvas, heightOrWidth, newSize = undefined) => {
+const dimension = (
+  canvas: HTMLCanvasElement,
+  heightOrWidth: 'height' | 'width',
+  newSize?: number
+) => {
   if (newSize !== undefined) {
     canvas[heightOrWidth] = newSize;
     canvas.style[heightOrWidth] = `${newSize}px`;
@@ -49,11 +50,13 @@ const dimension = (canvas, heightOrWidth, newSize = undefined) => {
  * @extends {rekapi.renderer}
  */
 export class CanvasRenderer {
+  rekapi!: Rekapi;
+  canvasContext!: CanvasRenderingContext2D;
 
-  constructor (rekapi, context = undefined) {
+  constructor(rekapi: Rekapi, context?: CanvasRenderingContext2D) {
     Object.assign(this, {
       rekapi,
-      canvasContext: context || rekapi.context
+      canvasContext: context || rekapi.context,
     });
 
     rekapi.on('beforeUpdate', () => this.clear());
@@ -65,7 +68,7 @@ export class CanvasRenderer {
    * @param {number} [height] The height to optionally set.
    * @return {number}
    */
-  height (height = undefined) {
+  height(height?: number) {
     return dimension(this.canvasContext.canvas, 'height', height);
   }
 
@@ -75,7 +78,7 @@ export class CanvasRenderer {
    * @param {number} [width] The width to optionally set.
    * @return {number}
    */
-  width (width = undefined) {
+  width(width?: number) {
     return dimension(this.canvasContext.canvas, 'width', width);
   }
 
@@ -84,7 +87,7 @@ export class CanvasRenderer {
    * @method rekapi.CanvasRenderer#clear
    * @return {rekapi.CanvasRenderer}
    */
-  clear () {
+  clear() {
     this.canvasContext.clearRect(0, 0, this.width(), this.height());
 
     return this;
@@ -97,10 +100,11 @@ export class CanvasRenderer {
  * functions.
  * @param {Rekapi} rekapi
  */
-rendererBootstrappers.push(rekapi => {
-  if (typeof CanvasRenderingContext2D === 'undefined' ||
-    !(rekapi.context instanceof CanvasRenderingContext2D)) {
-
+rendererBootstrappers.push((rekapi: Rekapi) => {
+  if (
+    typeof CanvasRenderingContext2D === 'undefined' ||
+    !(rekapi.context instanceof CanvasRenderingContext2D)
+  ) {
     return;
   }
 

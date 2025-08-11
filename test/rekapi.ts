@@ -1,6 +1,5 @@
-/* global describe:true, it:true, before:true, beforeEach:true, afterEach:true */
+/* global describe:true, it:true, beforeEach:true, afterEach:true */
 import assert from 'assert';
-import { includes } from 'lodash';
 import { setupTestRekapi, setupTestActor } from './test-utils';
 
 import { Rekapi, Actor, DOMRenderer } from '../src/main';
@@ -13,11 +12,13 @@ import {
   updatePlayState,
   calculateLoopPosition,
   updateToMillisecond,
-  updateToCurrentMillisecond
+  updateToCurrentMillisecond,
 } from '../src/rekapi';
 
 describe('Rekapi', () => {
-  let rekapi, actor, actor2;
+  let rekapi: Rekapi;
+  let actor: Actor;
+  let actor2: Actor;
 
   beforeEach(() => {
     rekapi = setupTestRekapi();
@@ -89,8 +90,8 @@ describe('Rekapi', () => {
       const ids = rekapi.getActorIds();
 
       assert.equal(ids.length, 2);
-      assert(includes(ids, actor.id));
-      assert(includes(ids, actor2.id));
+      assert(ids.includes(actor.id));
+      assert(ids.includes(actor2.id));
     });
   });
 
@@ -620,7 +621,7 @@ describe('Rekapi', () => {
           .keyframe(0, { x: 1 })
           .keyframe(2000, { x: 2 });
 
-        let calculatedMillisecond = calculateLoopPosition(rekapi, 1000, 0);
+        const calculatedMillisecond = calculateLoopPosition(rekapi, 1000, 0);
 
         assert.equal(calculatedMillisecond, 1000);
       });
@@ -630,7 +631,7 @@ describe('Rekapi', () => {
           .keyframe(0, { x: 1 })
           .keyframe(2000, { x: 2 });
 
-        let calculatedMillisecond = calculateLoopPosition(rekapi, 2500, 1);
+        const calculatedMillisecond = calculateLoopPosition(rekapi, 2500, 1);
 
         assert.equal(calculatedMillisecond, 500);
       });
