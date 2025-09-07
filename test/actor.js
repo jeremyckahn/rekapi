@@ -7,8 +7,6 @@ import { Rekapi, Actor, KeyframeProperty } from '../src/main';
 import {
   Tweenable,
   interpolate,
-  setBezierFunction,
-  unsetBezierFunction
 } from 'shifty';
 
 import {
@@ -43,16 +41,16 @@ describe('Actor', () => {
           });
 
           actor._updateState(0);
-          assert.equal(actor.get().x, 0);
-          assert.equal(actor.get().y, 0);
+          assert.equal(actor.state.x, 0);
+          assert.equal(actor.state.y, 0);
 
           actor._updateState(500);
-          assert.equal(actor.get().x, 50);
-          assert.equal(actor.get().y, 50);
+          assert.equal(actor.state.x, 50);
+          assert.equal(actor.state.y, 50);
 
           actor._updateState(1000);
-          assert.equal(actor.get().x, 100);
-          assert.equal(actor.get().y, 100);
+          assert.equal(actor.state.x, 100);
+          assert.equal(actor.state.y, 100);
         });
       });
 
@@ -67,18 +65,18 @@ describe('Actor', () => {
           });
 
           actor._updateState(1000);
-          assert.equal(actor.get().x, 0);
-          assert.equal(actor.get().y, 0);
+          assert.equal(actor.state.x, 0);
+          assert.equal(actor.state.y, 0);
 
           actor._updateState(1500);
 
-          assert.equal(actor.get().x, 50);
-          assert.equal(actor.get().y, 50,
+          assert.equal(actor.state.x, 50);
+          assert.equal(actor.state.y, 50,
             'Value "y" was properly interpolated at position 0.5');
 
           actor._updateState(2000);
-          assert.equal(actor.get().x, 100);
-          assert.equal(actor.get().y, 100);
+          assert.equal(actor.state.x, 100);
+          assert.equal(actor.state.y, 100);
         });
 
         describe('property look-ahead', () => {
@@ -91,7 +89,7 @@ describe('Actor', () => {
               });
 
               actor._updateState(500);
-              assert.equal(actor.get().y, 100);
+              assert.equal(actor.state.y, 100);
             });
           });
 
@@ -104,7 +102,7 @@ describe('Actor', () => {
               });
 
               actor._updateState(500);
-              assert.equal(actor.get().y, 100);
+              assert.equal(actor.state.y, 100);
             });
           });
         });
@@ -120,7 +118,7 @@ describe('Actor', () => {
         });
 
         actor._updateState(500);
-        assert.equal(actor.get().x, 100);
+        assert.equal(actor.state.x, 100);
       });
     });
 
@@ -137,13 +135,13 @@ describe('Actor', () => {
           interpolate({ x: 0 }, { x: 100 }, 0.5, 'easeInSine');
 
         actor._updateState(500);
-        assert.equal(actor.get().x, tweenableComparator.x);
+        assert.equal(actor.state.x, tweenableComparator.x);
 
         tweenableComparator =
           interpolate({ x: 100 }, { x: 200 }, 0.5, 'easeOutCirc');
 
         actor._updateState(1500);
-        assert.equal(actor.get().x, tweenableComparator.x);
+        assert.equal(actor.state.x, tweenableComparator.x);
       });
     });
 
@@ -157,15 +155,15 @@ describe('Actor', () => {
 
         actor._updateState(100);
         assert(actor.wasActive);
-        assert.equal(actor.get().x, 10);
+        assert.equal(actor.state.x, 10);
 
         actor._updateState(500);
         assert.equal(actor.wasActive, false);
-        assert.equal(actor.get().x, 10);
+        assert.equal(actor.state.x, 10);
 
         actor._updateState(900);
         assert(actor.wasActive);
-        assert.equal(actor.get().x, 90);
+        assert.equal(actor.state.x, 90);
       });
     });
   });
