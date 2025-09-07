@@ -48,6 +48,7 @@
   ],
   "license": "MIT",
   "dependencies": {
+    "global": "^4.4.0",
     "lodash.sortedindexby": "^4.6.0",
     "shifty": "^3.0.6"
   }
