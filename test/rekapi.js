@@ -4,7 +4,7 @@ import { includes } from 'lodash';
 import { setupTestRekapi, setupTestActor } from './test-utils';
 
 import { Rekapi, Actor, DOMRenderer } from '../src/main';
-import { Tweenable, setBezierFunction, unsetBezierFunction } from 'shifty';
+import { Tweenable, setBezierFunction } from 'shifty';
 
 import {
   determineCurrentLoopIteration,
@@ -194,7 +194,7 @@ describe('Rekapi', () => {
         });
 
       // Clean up Tweenable
-      unsetBezierFunction('custom');
+      delete Tweenable.easing.custom
     });
 
     describe('withId: true', () => {
@@ -241,19 +241,19 @@ describe('Rekapi', () => {
       exportedTimeline = rekapi.exportTimeline();
 
       // Reset for a clean test
-      unsetBezierFunction('custom');
+      delete Tweenable.easing.custom
 
       targetRekapi = new Rekapi();
       targetRekapi.importTimeline(exportedTimeline);
 
-      assert.equal(typeof Tweenable.formulas.custom, 'function');
-      assert.equal(Tweenable.formulas.custom.x1, 0);
-      assert.equal(Tweenable.formulas.custom.y1, 0.25);
-      assert.equal(Tweenable.formulas.custom.x2, 0.5);
-      assert.equal(Tweenable.formulas.custom.y2, 0.75);
+      assert.equal(typeof Tweenable.easing.custom, 'function');
+      assert.equal(Tweenable.easing.custom.x1, 0);
+      assert.equal(Tweenable.easing.custom.y1, 0.25);
+      assert.equal(Tweenable.easing.custom.x2, 0.5);
+      assert.equal(Tweenable.easing.custom.y2, 0.75);
 
       // Clean up Tweenable
-      unsetBezierFunction('custom');
+      delete Tweenable.easing.custom
     });
   });
 
@@ -344,7 +344,7 @@ describe('Rekapi', () => {
           .keyframe(1000, { x: 10 });
 
         rekapi.update(500);
-        assert.equal(actor.get().x, 5);
+        assert.equal(actor.state.x, 5);
       });
     });
 
@@ -358,7 +358,7 @@ describe('Rekapi', () => {
         rekapi._lastUpdatedMillisecond = 500;
 
         rekapi.update();
-        assert.equal(actor.get().x, 5);
+        assert.equal(actor.state.x, 5);
       });
 
       it('resets function keyframes that come later in the timeline', () => {
@@ -576,15 +576,15 @@ describe('Rekapi', () => {
 
         Tweenable.now = () => 500;
         updateToCurrentMillisecond(rekapi);
-        assert.equal(actor.get().x, 50);
+        assert.equal(actor.state.x, 50);
 
         Tweenable.now = () => 1500;
         updateToCurrentMillisecond(rekapi);
-        assert.equal(actor.get().x, 50);
+        assert.equal(actor.state.x, 50);
 
         Tweenable.now = () => 2500;
         updateToCurrentMillisecond(rekapi);
-        assert.equal(actor.get().x, 100);
+        assert.equal(actor.state.x, 100);
       });
 
       it('correctly calculates position based on time in an infinite loop', () => {
@@ -602,15 +602,15 @@ describe('Rekapi', () => {
 
         Tweenable.now = () => 500;
         updateToCurrentMillisecond(rekapi);
-        assert.equal(actor.get().x, 50);
+        assert.equal(actor.state.x, 50);
 
         Tweenable.now = () => 1500;
         updateToCurrentMillisecond(rekapi);
-        assert.equal(actor.get().x, 50);
+        assert.equal(actor.state.x, 50);
 
         Tweenable.now = () => 10000000500;
         updateToCurrentMillisecond(rekapi);
-        assert.equal(actor.get().x, 50);
+        assert.equal(actor.state.x, 50);
       });
     });
 
@@ -741,14 +741,14 @@ describe('Rekapi', () => {
       Tweenable.now = () => 250;
       updateToCurrentMillisecond(rekapi);
 
-      assert.equal(actor.get().x, 25);
-      assert.equal(testActor2.get().x, 50);
+      assert.equal(actor.state.x, 25);
+      assert.equal(testActor2.state.x, 50);
 
       Tweenable.now = () => 750;
       updateToCurrentMillisecond(rekapi);
 
-      assert.equal(actor.get().x, 75);
-      assert.equal(testActor2.get().x, 100);
+      assert.equal(actor.state.x, 75);
+      assert.equal(testActor2.state.x, 100);
     });
   });
 

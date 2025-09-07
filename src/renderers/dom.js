@@ -418,8 +418,8 @@ export const combineTransformProperties = (propsToSerialize, transformNames) => 
 export const serializeActorStep = (actor, targetProp = undefined) => {
   const transformProperties = combineTransformProperties(
     targetProp ?
-      { [targetProp]: actor.get()[targetProp] } :
-      actor.get(),
+      { [targetProp]: actor.state[targetProp] } :
+      actor.state,
     actor._transformOrder
   );
 

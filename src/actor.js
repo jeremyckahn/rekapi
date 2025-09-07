@@ -951,7 +951,7 @@ export class Actor extends Tweenable {
       });
     }
 
-    this.set(interpolatedObject);
+    this.setState(interpolatedObject);
 
     if (!resetLaterFnKeyframes) {
       this._resetFnKeyframesFromMillisecond(millisecond);
