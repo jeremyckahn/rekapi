@@ -730,9 +730,9 @@ export class Rekapi {
 
     const pickProps = ['displayName', 'x1', 'y1', 'x2', 'y2'];
 
-    exportData.curves = filteredFormulas.reduce((acc, formulaName) => {
-        const formula = easing[formulaName];
-        acc[formula.displayName] = pick(formula, pickProps);
+    exportData.curves = filteredFormulas.reduce((acc, easingName) => {
+        const easingFn = easing[easingName];
+        acc[easingFn.displayName] = pick(easingFn, pickProps);
 
         return acc;
       },
