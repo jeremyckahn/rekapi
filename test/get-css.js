@@ -32,9 +32,6 @@ import {
 import { Rekapi, Actor, DOMRenderer } from '../src/main';
 import {
   Tweenable,
-  interpolate,
-  setBezierFunction,
-  unsetBezierFunction
 } from 'shifty';
 
 describe('DOMRenderer#getCss', () => {
@@ -50,13 +47,13 @@ describe('DOMRenderer#getCss', () => {
      * This is used to prevent optimization to make certain functions easier to
      * test.
      */
-    Tweenable.formulas.fakeLinear = function (pos) {
+    Tweenable.easing.fakeLinear = function (pos) {
       return pos;
     };
   });
 
   afterAll(() => {
-    delete Tweenable.formulas.fakeLinear;
+    delete Tweenable.easing.fakeLinear;
   });
 
   describe('private helper methods', () => {

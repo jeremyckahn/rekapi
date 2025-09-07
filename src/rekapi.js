@@ -257,7 +257,7 @@ export class Rekapi {
      * smaller circles, thus giving a sense of perspective.
      *
      *     const rekapi = new Rekapi();
-     *     rekapi.sort = actor => actor.get().radius;
+     *     rekapi.sort = actor => actor.state.radius;
      * @default null
      */
     this.sort = null;
@@ -607,7 +607,7 @@ export class Rekapi {
       actor._updateState(millisecond, doResetLaterFnKeyframes);
 
       if (actor.wasActive) {
-        actor.render(actor.context, actor.get());
+        actor.render(actor.context, actor.state);
       }
     });
 
@@ -722,16 +722,16 @@ export class Rekapi {
       actors: this._actors.map(actor => actor.exportTimeline({ withId }))
     };
 
-    const { formulas } = Tweenable;
+    const { easing } = Tweenable;
 
-    const filteredFormulas = Object.keys(formulas).filter(
-      formulaName => typeof formulas[formulaName].x1 === 'number'
+    const filteredFormulas = Object.keys(easing).filter(
+      easingName => typeof easing[easingName].x1 === 'number'
     );
 
     const pickProps = ['displayName', 'x1', 'y1', 'x2', 'y2'];
 
     exportData.curves = filteredFormulas.reduce((acc, formulaName) => {
-        const formula = formulas[formulaName];
+        const formula = easing[formulaName];
         acc[formula.displayName] = pick(formula, pickProps);
 
         return acc;

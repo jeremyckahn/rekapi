@@ -84,7 +84,7 @@ describe('DOM renderer', () => {
 
       rekapi.update(50);
 
-      const transformChunks = actor.get().transform.match(/(\d|\.)+/g);
+      const transformChunks = actor.state.transform.match(/(\d|\.)+/g);
 
       assert.equal(
         transformChunks[1],
@@ -108,7 +108,7 @@ describe('DOM renderer', () => {
       rekapi.update(50);
 
       assert.equal(
-        actor.get().transform.match(/(\d|\.)+/g),
+        actor.state.transform.match(/(\d|\.)+/g),
         interpolate({x:3}, {x:6}, 0.5, 'linear').x
       );
     });
