@@ -1,4 +1,4 @@
-import global from 'global/window.js'
+import global from 'global/window.js';
 import { Tweenable, setBezierFunction } from 'shifty';
 import { Actor } from './actor';
 
