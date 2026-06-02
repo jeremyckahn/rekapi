@@ -17,12 +17,14 @@ import {
 import { vi } from 'vitest';
 
 describe('Canvas renderer', () => {
-  const MockCanvasRenderingContext2D = vi.fn(() => ({
-    canvas: {
-      style: {},
-      getContext: () => ({})
-    }
-  }));
+  const MockCanvasRenderingContext2D = vi.fn(function() {
+    return {
+      canvas: {
+        style: {},
+        getContext: () => ({})
+      }
+    };
+  });
 
   vi.stubGlobal('CanvasRenderingContext2D', MockCanvasRenderingContext2D);
 

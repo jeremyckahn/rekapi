@@ -26,7 +26,7 @@
     "node-abort-controller": "^1.1.0",
     "nodemon": "^3.1.10",
     "vite": "^7.0.6",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.8"
   },
   "scripts": {
     "build": "vite build",
